@@ -1,0 +1,2362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Review Quest</title>
+<style>
+/* =========================================================================
+   DESIGN TOKENS
+   Warm dawn palette + a "postmark" motif (this is a personal lesson-review
+   postcard from teacher to student, so every screen carries a small
+   hand-stamped date badge). Change --bg / --ink / accents to re-skin.
+   ========================================================================= */
+:root{
+  --bg-top:#fff7ec;
+  --bg-bottom:#ffd9c0;
+  --ink:#3a2e4d;
+  --ink-soft:#6e5f87;
+  --ink-faint:#a99cc4;
+  --surface:rgba(255,255,255,0.60);
+  --surface-strong:rgba(255,255,255,0.86);
+  --border:rgba(58,46,77,0.14);
+  --teal:#4bb6a8;
+  --teal-dark:#2f9284;
+  --teal-tint:rgba(75,182,168,0.16);
+  --gold:#e8a94c;
+  --gold-dark:#c1832a;
+  --gold-tint:rgba(232,169,76,0.18);
+  --coral:#f0785c;
+  --coral-dark:#d3563c;
+  --coral-tint:rgba(240,120,92,0.16);
+  --shadow-lg:0 24px 60px -24px rgba(58,46,77,0.38);
+  --shadow-sm:0 8px 20px -10px rgba(58,46,77,0.28);
+  --radius-lg:26px;
+  --radius-md:18px;
+  --radius-sm:12px;
+  --radius-pill:999px;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic","Noto Sans JP","Meiryo",sans-serif;
+}
+
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:var(--font);
+  color:var(--ink);
+  min-height:100vh;
+  background:linear-gradient(160deg,var(--bg-top) 0%,var(--bg-bottom) 100%);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+button,input{font-family:inherit;}
+h1,h2,h3,p{margin:0;}
+ul{margin:0;padding:0;list-style:none;}
+
+/* soft ambient blobs behind everything, purely decorative */
+.bg-decor{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+.blob{position:absolute;border-radius:50%;filter:blur(60px);opacity:0.55;}
+.blob--a{width:360px;height:360px;background:var(--teal);top:-120px;left:-100px;}
+.blob--b{width:420px;height:420px;background:var(--gold);bottom:-160px;right:-120px;}
+
+.app{position:relative;z-index:1;max-width:480px;margin:0 auto;min-height:100vh;padding:22px 16px 40px;padding-top:max(22px, env(safe-area-inset-top));display:flex;flex-direction:column;}
+
+:focus-visible{outline:2px solid var(--teal-dark);outline-offset:2px;}
+
+/* =========================================================================
+   SCREENS
+   ========================================================================= */
+.screen{display:none;flex:1;flex-direction:column;}
+.screen--active{display:flex;}
+
+.card{
+  position:relative;
+  background:var(--surface);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  border:1px solid rgba(255,255,255,0.6);
+  border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-lg);
+  padding:28px 24px;
+}
+
+/* postmark badge -- the recurring signature element */
+.postmark{position:absolute;top:-16px;right:-8px;pointer-events:none;}
+.postmark__ring{
+  width:82px;height:82px;border-radius:50%;
+  border:2px dashed var(--ink-faint);
+  background:rgba(255,255,255,0.65);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transform:rotate(-9deg);
+  gap:2px;
+}
+.postmark-date{font-weight:800;font-size:1.05rem;letter-spacing:0.01em;color:var(--ink);}
+.postmark__label{font-size:0.46rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-soft);text-align:center;line-height:1.3;padding:0 6px;}
+
+.eyebrow{font-size:0.7rem;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--teal-dark);margin-bottom:10px;}
+.display-title{font-size:clamp(1.55rem,6vw,2rem);font-weight:800;letter-spacing:-0.01em;line-height:1.18;margin-bottom:12px;}
+.subtitle-en{font-size:0.98rem;color:var(--ink);line-height:1.55;margin-bottom:6px;}
+.subtitle-jp{font-size:0.9rem;color:var(--ink-soft);line-height:1.6;margin-bottom:22px;}
+
+/* welcome-screen controls */
+.settings-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;}
+.toggle-chip{
+  flex:1;min-width:130px;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  padding:12px 14px;border-radius:var(--radius-pill);
+  border:1px solid var(--border);background:var(--surface-strong);
+  font-size:0.85rem;font-weight:600;color:var(--ink);
+  cursor:pointer;transition:transform .15s ease, background .2s ease, box-shadow .2s ease;
+}
+.toggle-chip:active{transform:scale(0.96);}
+.toggle-chip[data-on="false"]{background:rgba(255,255,255,0.35);color:var(--ink-soft);}
+.toggle-chip[data-on="true"]{box-shadow:0 0 0 2px var(--teal-tint) inset;}
+
+.hint-mode-row{margin-bottom:24px;}
+.hint-mode-label{font-size:0.78rem;font-weight:700;color:var(--ink-soft);margin-bottom:8px;}
+.segmented{display:flex;background:rgba(255,255,255,0.5);border-radius:var(--radius-pill);padding:4px;border:1px solid var(--border);}
+.segmented__option{
+  flex:1;padding:10px 8px;border:none;background:transparent;border-radius:var(--radius-pill);
+  font-size:0.8rem;font-weight:700;color:var(--ink-soft);cursor:pointer;transition:all .2s ease;
+}
+.segmented__option--active{background:var(--ink);color:#fff9f0;box-shadow:var(--shadow-sm);}
+
+/* buttons */
+.btn{
+  border:none;border-radius:var(--radius-pill);font-weight:700;cursor:pointer;
+  transition:transform .12s ease, box-shadow .2s ease, background .2s ease;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+}
+.btn:active{transform:scale(0.96);}
+.btn--primary{background:linear-gradient(135deg,var(--teal),var(--teal-dark));color:#fff;box-shadow:0 14px 30px -12px rgba(47,146,132,0.55);}
+.btn--large{width:100%;padding:16px 20px;font-size:1.02rem;}
+.btn--block{width:100%;padding:14px 18px;font-size:0.95rem;margin-top:14px;}
+.btn--ghost{background:var(--surface-strong);color:var(--ink);border:1px solid var(--border);padding:10px 16px;font-size:0.82rem;}
+.btn--sm{padding:8px 14px;font-size:0.78rem;}
+.btn--secondary{background:var(--surface-strong);color:var(--ink);border:1px solid var(--border);}
+
+/* =========================================================================
+   QUIZ HEADER
+   ========================================================================= */
+.quiz-header{margin-bottom:16px;}
+.quiz-header__top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.lesson-tag{font-size:0.68rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-soft);background:var(--surface-strong);padding:6px 12px;border-radius:var(--radius-pill);border:1px solid var(--border);}
+.mini-toggles{display:flex;gap:8px;}
+.mini-toggle{width:34px;height:34px;border-radius:50%;border:1px solid var(--border);background:var(--surface-strong);font-size:0.95rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .15s ease, opacity .2s ease;}
+.mini-toggle:active{transform:scale(0.9);}
+.mini-toggle[data-on="false"]{opacity:0.4;}
+
+.progress-track{height:8px;border-radius:var(--radius-pill);background:rgba(58,46,77,0.1);overflow:hidden;margin-bottom:10px;}
+.progress-fill{height:100%;width:0%;border-radius:var(--radius-pill);background:linear-gradient(90deg,var(--gold),var(--teal));transition:width .45s cubic-bezier(.4,0,.2,1);}
+
+.stat-row{display:flex;gap:8px;}
+.stat-chip{font-size:0.78rem;font-weight:700;color:var(--ink);background:var(--surface-strong);border:1px solid var(--border);padding:6px 12px;border-radius:var(--radius-pill);transition:transform .18s ease;}
+.stat-chip--bump{animation:scoreBump .4s ease;}
+
+/* =========================================================================
+   STAGE / QUESTION CARD
+   ========================================================================= */
+.stage{position:relative;flex:1;}
+.q-card{
+  background:var(--surface);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  border:1px solid rgba(255,255,255,0.6);
+  border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-lg);
+  padding:22px 20px;
+  animation:cardEnter .42s cubic-bezier(.22,1,.36,1);
+}
+
+.quote-bubble{background:var(--surface-strong);border-radius:var(--radius-md);padding:14px 16px;margin-bottom:16px;position:relative;border:1px solid var(--border);}
+.quote-mark{position:absolute;top:-6px;left:12px;font-size:2rem;color:var(--gold);font-weight:800;line-height:1;}
+.quote-en{font-size:0.92rem;font-style:italic;color:var(--ink);line-height:1.5;padding-left:6px;}
+
+.q-prompt{margin-bottom:16px;}
+.q-prompt__row{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;}
+.q-prompt__en{font-size:1.08rem;font-weight:700;line-height:1.4;flex:1;}
+.q-prompt__jp{font-size:0.86rem;color:var(--ink-soft);line-height:1.55;}
+
+.jp-pill{
+  flex:none;border:1px solid var(--border);background:var(--surface-strong);
+  color:var(--ink-soft);font-size:0.62rem;font-weight:800;letter-spacing:0.04em;
+  padding:4px 9px;border-radius:var(--radius-pill);cursor:pointer;transition:all .18s ease;
+}
+.jp-pill--sm{font-size:0.55rem;padding:3px 7px;margin-left:8px;}
+.jp-pill--active{background:var(--teal);color:#fff;border-color:var(--teal);}
+
+.jp-panel{max-height:0;opacity:0;overflow:hidden;transition:max-height .3s ease, opacity .22s ease, margin-top .3s ease;margin-top:0;}
+.jp-panel.is-open{max-height:240px;opacity:1;margin-top:6px;}
+
+/* choices */
+.choices{display:flex;flex-direction:column;gap:10px;margin-bottom:6px;}
+.choice-wrap{}
+.choice{
+  display:flex;align-items:center;gap:10px;
+  width:100%;text-align:left;padding:13px 14px;border-radius:var(--radius-md);
+  background:var(--surface-strong);border:1.5px solid var(--border);
+  cursor:pointer;transition:transform .14s ease, border-color .2s ease, box-shadow .2s ease, background .2s ease;
+  position:relative;overflow:visible;
+}
+.choice:hover{border-color:var(--teal);transform:translateY(-1px);}
+.choice:active{transform:scale(0.98);}
+.choice-letter{flex:none;width:24px;height:24px;border-radius:50%;background:var(--ink);color:#fff9f0;font-size:0.7rem;font-weight:800;display:flex;align-items:center;justify-content:center;}
+.choice-en{flex:1;font-size:0.92rem;font-weight:600;}
+.choices.is-locked .choice{pointer-events:none;}
+.choice--selected.choice--correct{border-color:var(--teal);background:var(--teal-tint);animation:glowPulse .6s ease;}
+.choice--selected.choice--wrong{border-color:var(--coral);background:var(--coral-tint);animation:shake .45s ease;}
+.choice--reveal-correct{border-color:var(--teal);background:var(--teal-tint);}
+.choice-jp{font-size:0.78rem;color:var(--ink-soft);padding:0 4px;}
+
+/* hint */
+.hint-row{margin:14px 0 4px;}
+.hint-panel{max-height:0;opacity:0;overflow:hidden;transition:max-height .32s ease, opacity .24s ease, margin .32s ease;background:var(--gold-tint);border-radius:var(--radius-md);margin-top:0;}
+.hint-panel.is-open{max-height:260px;opacity:1;margin-top:10px;padding:12px 14px;}
+.hint-en{font-size:0.86rem;font-weight:600;color:var(--ink);margin-bottom:4px;}
+.hint-jp{font-size:0.8rem;color:var(--ink-soft);}
+.hint-footer{display:flex;align-items:center;justify-content:space-between;margin-top:8px;}
+.hint-countdown{font-size:0.72rem;color:var(--gold-dark);font-weight:700;}
+.hint-close{border:none;background:rgba(58,46,77,0.1);color:var(--ink);width:22px;height:22px;border-radius:50%;cursor:pointer;font-size:0.7rem;}
+
+/* feedback / explanation */
+.answer-area{margin-top:8px;}
+.feedback-banner{padding:10px 14px;border-radius:var(--radius-md);font-weight:700;font-size:0.92rem;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.feedback-banner--good{background:var(--teal-tint);color:var(--teal-dark);}
+.feedback-banner--bad{background:var(--coral-tint);color:var(--coral-dark);}
+.feedback-jp{display:block;font-size:0.76rem;font-weight:600;margin-top:2px;opacity:0.85;}
+.explanation-panel{background:var(--surface-strong);border:1px solid var(--border);border-radius:var(--radius-md);padding:14px;}
+.explanation-en{font-size:0.88rem;line-height:1.5;margin-bottom:6px;}
+.explanation-jp{font-size:0.82rem;color:var(--ink-soft);line-height:1.55;}
+
+/* position grid mini-game */
+.position-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:4px 0 4px;}
+.grid-cell{aspect-ratio:1/1;border-radius:var(--radius-sm);border:1.5px solid var(--border);background:var(--surface-strong);cursor:pointer;transition:transform .15s ease, border-color .2s ease, background .2s ease;}
+.grid-cell:hover{border-color:var(--teal);}
+.grid-cell:active{transform:scale(0.92);}
+.position-grid.is-locked .grid-cell{pointer-events:none;}
+.grid-cell--correct{background:var(--teal-tint);border-color:var(--teal);animation:glowPulse .6s ease;}
+.grid-cell--wrong{background:var(--coral-tint);border-color:var(--coral);animation:shake .45s ease;}
+
+/* matching */
+.match-progress{font-size:0.8rem;font-weight:700;color:var(--ink-soft);margin-bottom:10px;}
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:4px;}
+.match-col{display:flex;flex-direction:column;gap:8px;}
+.match-card{
+  padding:10px 10px;border-radius:var(--radius-sm);border:1.5px solid var(--border);
+  background:var(--surface-strong);font-size:0.76rem;font-weight:600;text-align:left;cursor:pointer;
+  transition:transform .14s ease, border-color .18s ease, background .18s ease, opacity .3s ease;
+  min-height:44px;display:flex;align-items:center;
+}
+.match-card:active{transform:scale(0.95);}
+.match-card--selected{border-color:var(--gold);background:var(--gold-tint);transform:scale(1.03);}
+.match-card--matched{border-color:var(--teal);background:var(--teal-tint);opacity:0.6;pointer-events:none;animation:matchPop .4s ease;}
+.match-card--wrong{border-color:var(--coral);background:var(--coral-tint);animation:shake .45s ease;}
+
+/* typing */
+.typing-jp-prompt{background:var(--surface-strong);border-radius:var(--radius-md);padding:16px;text-align:center;margin-bottom:16px;border:1px solid var(--border);}
+.typing-jp-label{font-size:0.66rem;font-weight:800;letter-spacing:0.1em;color:var(--ink-faint);text-transform:uppercase;margin-bottom:6px;}
+.typing-jp-text{font-size:1.15rem;font-weight:700;line-height:1.5;}
+.typing-input-row{display:flex;gap:8px;}
+.typing-input{flex:1;padding:13px 14px;border-radius:var(--radius-md);border:1.5px solid var(--border);background:var(--surface-strong);font-size:0.92rem;color:var(--ink);}
+.typing-input:focus{border-color:var(--teal);}
+.typing-input--shake{animation:shake .4s ease;}
+
+/* streak popup */
+.streak-popup{
+  position:fixed;top:18px;left:50%;transform:translateX(-50%) translateY(-140%);
+  background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:#fff;
+  padding:12px 22px;border-radius:var(--radius-pill);font-weight:800;font-size:0.9rem;
+  box-shadow:0 16px 34px -12px rgba(193,131,42,0.6);z-index:50;transition:transform .38s cubic-bezier(.34,1.56,.64,1);
+}
+.streak-popup.show{transform:translateX(-50%) translateY(0);}
+
+/* confetti */
+.confetti-layer{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:60;}
+.confetti-piece{position:absolute;top:-20px;width:8px;height:14px;border-radius:2px;opacity:0.9;animation:confettiFall linear forwards;}
+
+/* sparkles on correct */
+.sparkle{position:absolute;font-size:0.9rem;pointer-events:none;animation:sparklePop .7s ease forwards;}
+
+/* results & review */
+.results-card{text-align:center;}
+.result-stats{display:flex;gap:10px;margin:18px 0;}
+.result-stat{flex:1;background:var(--surface-strong);border:1px solid var(--border);border-radius:var(--radius-md);padding:14px 8px;}
+.result-stat__value{font-size:1.3rem;font-weight:800;color:var(--teal-dark);}
+.result-stat__label{font-size:0.66rem;color:var(--ink-soft);font-weight:700;letter-spacing:0.04em;text-transform:uppercase;margin-top:2px;}
+.weak-points{text-align:left;background:var(--gold-tint);border-radius:var(--radius-md);padding:14px 16px;margin-bottom:16px;}
+.weak-points__title{font-size:0.78rem;font-weight:800;color:var(--gold-dark);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;}
+.weak-points__item{font-size:0.85rem;color:var(--ink);margin-bottom:4px;}
+.encourage-en{font-size:0.98rem;font-weight:700;margin-bottom:6px;line-height:1.5;}
+.encourage-jp{font-size:0.86rem;color:var(--ink-soft);line-height:1.55;margin-bottom:18px;}
+.nav-row{display:flex;flex-direction:column;gap:10px;}
+
+.review-title{font-size:clamp(1.3rem,5vw,1.6rem);font-weight:800;margin-bottom:4px;}
+.review-subtitle{font-size:0.86rem;color:var(--ink-soft);margin-bottom:18px;}
+.review-grid{display:flex;flex-direction:column;gap:12px;margin-bottom:18px;}
+.review-card{background:var(--surface-strong);border:1px solid var(--border);border-radius:var(--radius-md);padding:14px 16px;}
+.review-card__en{font-size:1rem;font-weight:700;margin-bottom:2px;}
+.review-card__jp{font-size:0.86rem;color:var(--ink-soft);margin-bottom:6px;}
+.review-card__usage{font-size:0.78rem;color:var(--teal-dark);font-weight:600;}
+.review-card__usage-jp{font-size:0.76rem;color:var(--ink-soft);margin-top:2px;}
+.teacher-note{background:var(--gold-tint);border-radius:var(--radius-md);padding:16px;margin-bottom:18px;}
+.teacher-note__label{font-size:0.68rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:var(--gold-dark);margin-bottom:8px;}
+.teacher-note__en{font-size:0.86rem;line-height:1.55;margin-bottom:6px;}
+.teacher-note__jp{font-size:0.8rem;color:var(--ink-soft);line-height:1.55;}
+
+/* =========================================================================
+   ADDED IN THIS VERSION — back button, question navigator, retry buttons,
+   "Today's Focus" mini card, floating decoration, per-question category
+   tag, and mobile-readability tweaks.
+   Nothing above this block was changed; these rules either add new
+   components or re-declare a couple of properties on existing classes
+   (CSS cascade lets a later rule adjust just the properties it names,
+   everything else the original rule set stays in effect).
+   ========================================================================= */
+
+/* header: back button + navigator strip */
+.quiz-header__left{display:flex;align-items:center;gap:8px;}
+.mini-toggle:disabled{opacity:0.25;cursor:not-allowed;}
+.stat-row{margin-bottom:8px;}
+
+.qnav{display:flex;gap:6px;overflow-x:auto;padding:2px 2px 6px;-webkit-overflow-scrolling:touch;scrollbar-width:thin;}
+.qnav::-webkit-scrollbar{height:4px;}
+.qnav::-webkit-scrollbar-thumb{background:rgba(58,46,77,0.22);border-radius:4px;}
+.qnav__pill{
+  flex:none;width:32px;height:32px;border-radius:50%;
+  border:1.5px solid var(--border);background:var(--surface-strong);
+  font-size:0.72rem;font-weight:700;color:var(--ink-soft);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  transition:transform .15s ease, border-color .2s ease, background .2s ease, color .2s ease;
+}
+.qnav__pill:active{transform:scale(0.9);}
+.qnav__pill--current{border-color:var(--ink);color:var(--ink);background:#fff;box-shadow:0 0 0 2px rgba(58,46,77,0.18);transform:scale(1.08);}
+.qnav__pill--correct{background:var(--teal-tint);border-color:var(--teal);color:var(--teal-dark);}
+.qnav__pill--wrong{background:var(--coral-tint);border-color:var(--coral);color:var(--coral-dark);}
+
+/* retry button (two-line label: English + Japanese) */
+.btn-jp{display:block;font-size:0.72rem;font-weight:600;opacity:0.85;margin-top:2px;line-height:1.3;}
+
+/* small category chip shown at the top of each question card */
+.q-cat-tag-row{margin-bottom:10px;}
+.q-cat-tag{display:inline-block;font-size:0.62rem;font-weight:800;letter-spacing:0.06em;text-transform:uppercase;color:var(--teal-dark);background:var(--teal-tint);padding:4px 10px;border-radius:var(--radius-pill);}
+
+/* matching toolbar: progress text + reset button share a row */
+.match-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;}
+.match-toolbar .match-progress{margin-bottom:0;}
+
+/* "Today's Focus" mini card on the welcome screen */
+.focus-card{background:var(--surface-strong);border:1px dashed var(--ink-faint);border-radius:var(--radius-md);padding:14px 16px;margin-bottom:18px;}
+.focus-card__label{font-size:0.68rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:var(--gold-dark);margin-bottom:8px;}
+.focus-card__chips{display:flex;flex-wrap:wrap;gap:6px;}
+.focus-chip{font-size:0.74rem;font-weight:700;color:var(--ink);background:var(--gold-tint);padding:5px 11px;border-radius:var(--radius-pill);}
+
+/* premium ambient accents: quiet moving rings instead of distracting emojis
+   v3 fix: removed the center/top logo completely. The previous Q badge
+   overlapped the card/title area on some screen sizes. These accents stay
+   only around the edges, so the main card remains clean. */
+.ambient-accent{
+  position:absolute;
+  border-radius:34px;
+  border:1px solid rgba(255,255,255,0.45);
+  background:linear-gradient(135deg,rgba(255,255,255,0.16),rgba(255,255,255,0.04));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.24),0 18px 60px -34px rgba(58,46,77,0.45);
+  opacity:0.34;
+  animation:ambientDrift 16s ease-in-out infinite;
+}
+.ambient-accent::before{
+  content:"";
+  position:absolute;
+  width:8px;height:8px;border-radius:50%;
+  background:var(--teal);
+  opacity:0.35;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+}
+.ambient-accent--1{width:92px;height:38px;top:15%;left:6%;transform:rotate(-14deg);animation-delay:0s;}
+.ambient-accent--2{width:124px;height:48px;right:5%;top:37%;transform:rotate(18deg);animation-delay:2s;}
+.ambient-accent--3{width:78px;height:78px;left:8%;bottom:14%;border-radius:50%;animation-delay:4s;}
+.ambient-accent--4{width:106px;height:42px;right:10%;bottom:7%;transform:rotate(-8deg);animation-delay:6s;}
+
+/* mobile-readability tweaks: bigger JP tap targets, no iOS input zoom */
+.jp-pill{padding:6px 11px;font-size:0.66rem;}
+.jp-pill--sm{padding:5px 9px;font-size:0.6rem;margin-left:6px;}
+.match-card{font-size:0.82rem;padding:12px 12px;}
+.typing-input{font-size:16px;}
+
+
+
+/* =========================================================================
+   OFFICIAL FIRST-TRY SCORING + MISTAKE PRACTICE
+   - Final score is based only on the first attempt.
+   - Retry is kept for learning, but it never repairs the official score.
+   - Results screen can launch a mini round with only first-try mistakes.
+   ========================================================================= */
+.wrong-review{
+  text-align:left;background:var(--surface-strong);border:1px solid var(--border);
+  border-radius:var(--radius-md);padding:14px 16px;margin:0 0 16px;
+}
+.wrong-review__title{font-size:0.8rem;font-weight:800;color:var(--coral-dark);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;}
+.wrong-review__subtitle{font-size:0.8rem;color:var(--ink-soft);line-height:1.45;margin-bottom:10px;}
+.wrong-review__list{display:flex;flex-direction:column;gap:8px;margin-bottom:12px;}
+.wrong-review__item{background:rgba(240,120,92,0.08);border:1px solid rgba(240,120,92,0.18);border-radius:var(--radius-sm);padding:10px 11px;}
+.wrong-review__q{display:inline-block;font-size:0.68rem;font-weight:800;color:var(--coral-dark);margin-bottom:3px;}
+.wrong-review__text{font-size:0.84rem;color:var(--ink);line-height:1.4;font-weight:650;}
+.wrong-review__cat{font-size:0.72rem;color:var(--ink-soft);margin-top:3px;}
+.official-score-note{font-size:0.72rem;color:var(--ink-soft);line-height:1.4;margin-top:7px;text-align:center;}
+
+/* =========================================================================
+   LIVING / PREMIUM VISUAL POLISH (v4) — visual-only additions.
+   Nothing here touches layout structure, data-action wiring, or game logic;
+   it only adds pseudo-elements, new keyframes, and re-declares a couple of
+   properties (position/overflow) so existing elements can host a tap-ripple
+   or shimmer. Every rule is additive or property-only — no selector here
+   removes or overrides behaviour, only appearance.
+   NOTE: .postmark deliberately overflows its .card corner by design, and
+   sparkles deliberately fly outside .choice / .grid-cell / .match-card, so
+   neither .card nor .q-card gets overflow:hidden here — that's intentional,
+   not an oversight.
+   ========================================================================= */
+
+/* remove the default gray tap flash on mobile so the custom ripple reads clean */
+.btn,.mini-toggle,.toggle-chip,.segmented__option,.qnav__pill,.order-chip,.jp-pill,
+.choice,.grid-cell,.match-card{
+  -webkit-tap-highlight-color:transparent;
+}
+
+/* shared tap-ripple: a soft radial flash that blooms on press and settles
+   back out on release. Uses ::before so it never fights with any ::after
+   a class might already rely on. */
+.btn,.btn,.mini-toggle,.toggle-chip,.segmented__option,.qnav__pill,.order-chip,.jp-pill,
+.grid-cell,.match-card{
+  position:relative;
+}
+.btn::before,.mini-toggle::before,.toggle-chip::before,.segmented__option::before,
+.qnav__pill::before,.order-chip::before,.jp-pill::before,
+.choice::before,.grid-cell::before,.match-card::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+  background:radial-gradient(circle at 50% 50%, rgba(255,255,255,0.65) 0%, rgba(255,255,255,0) 68%);
+  opacity:0;
+  transform:scale(0.5);
+  transition:opacity .5s ease, transform .5s ease;
+  pointer-events:none;
+}
+.btn:active::before,.mini-toggle:active::before,.toggle-chip:active::before,
+.segmented__option:active::before,.qnav__pill:active::before,.order-chip:active::before,
+.jp-pill:active::before,.choice:active::before,.grid-cell:active::before,.match-card:active::before{
+  opacity:1;
+  transform:scale(1.15);
+  transition:none;
+}
+
+/* primary button: a slow light gleam sweeps across every few seconds, so
+   the main call-to-action reads as alive even before anyone touches it */
+.btn--primary{position:relative;overflow:hidden;}
+.btn--primary::after{
+  content:"";
+  position:absolute;
+  top:0; left:-60%;
+  width:40%; height:100%;
+  background:linear-gradient(120deg, transparent, rgba(255,255,255,0.55), transparent);
+  transform:skewX(-18deg);
+  animation:btnShimmer 2.7s ease-in-out infinite;
+  pointer-events:none;
+}
+
+/* postmark badge: a slow, quiet breathing glow keeps it from looking static */
+.postmark__ring{animation:postmarkBreathe 5.5s ease-in-out infinite;}
+
+/* premium gradient title — falls back to the original solid ink color on
+   any browser that doesn't support background-clip:text */
+@supports (background-clip:text) or (-webkit-background-clip:text){
+  .display-title{
+    background:linear-gradient(135deg, var(--ink) 0%, var(--teal-dark) 55%, var(--gold-dark) 100%);
+    background-size:200% 200%;
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    animation:titleGradientShift 7s ease-in-out infinite;
+  }
+}
+
+/* sentence-builder tokens pop in as they land in the sentence strip */
+.order-token{animation:tokenPop .28s cubic-bezier(.34,1.56,.64,1);}
+
+/* question navigator: a tiny corner dot instead of covering the number, so
+   correct vs. still-needs-work is visible at a glance */
+.qnav__pill--correct::after,.qnav__pill--wrong::after{
+  content:"";
+  position:absolute;
+  top:-2px; right:-2px;
+  width:9px; height:9px;
+  border-radius:50%;
+  border:1.5px solid #fff9f0;
+}
+.qnav__pill--correct::after{background:var(--teal);}
+.qnav__pill--wrong::after{background:var(--coral);}
+
+/* progress bar: a quiet moving highlight instead of a flat fill */
+.progress-fill{position:relative;overflow:hidden;}
+.progress-fill::after{
+  content:"";
+  position:absolute; inset:0;
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,0.55), transparent);
+  width:50%;
+  animation:progressShimmer 2.2s ease-in-out infinite;
+}
+
+/* sparkles read a little richer without changing their motion or timing */
+.sparkle{font-size:1.05rem;filter:drop-shadow(0 0 4px rgba(255,255,255,0.75));}
+
+/* confetti: a mix of squares, circles, and ribbons instead of one shape */
+.confetti-piece:nth-child(3n){border-radius:50%;}
+.confetti-piece:nth-child(4n){width:6px;height:16px;border-radius:1px;}
+.confetti-piece:nth-child(5n){width:10px;height:10px;border-radius:3px;}
+
+/* results screen: stats pop in one after another instead of appearing flat */
+.result-stat{animation:popIn .5s cubic-bezier(.22,1,.36,1) backwards;}
+.result-stat:nth-child(1){animation-delay:.05s;}
+.result-stat:nth-child(2){animation-delay:.15s;}
+.result-stat:nth-child(3){animation-delay:.25s;}
+
+/* review screen: cards ease in one by one */
+.review-card{animation:reviewCardIn .45s ease backwards;}
+.review-card:nth-child(1){animation-delay:.04s;}
+.review-card:nth-child(2){animation-delay:.10s;}
+.review-card:nth-child(3){animation-delay:.16s;}
+.review-card:nth-child(4){animation-delay:.22s;}
+.review-card:nth-child(5){animation-delay:.28s;}
+.review-card:nth-child(6){animation-delay:.34s;}
+.review-card:nth-child(7){animation-delay:.40s;}
+.review-card:nth-child(8){animation-delay:.46s;}
+.review-card:nth-child(9){animation-delay:.52s;}
+.review-card:nth-child(10){animation-delay:.58s;}
+
+/* two extra ambient accents deepen the background without adding clutter */
+.ambient-accent--5{width:70px;height:70px;border-radius:50%;right:16%;top:8%;animation-delay:1s;}
+.ambient-accent--6{width:96px;height:40px;left:4%;top:52%;transform:rotate(10deg);animation-delay:5s;}
+
+/* small bounce for a few static emoji so the chrome feels a touch more alive */
+.emoji-pop{display:inline-block;animation:emojiPop 2.8s ease-in-out infinite;}
+
+/* gentle hover lift on desktop only — this never sticks on touch devices */
+@media (hover:hover) and (pointer:fine){
+  .result-stat:hover,.review-card:hover,.wrong-review__item:hover{
+    transform:translateY(-2px);
+    box-shadow:var(--shadow-sm);
+  }
+  .focus-chip:hover{transform:translateY(-1px);background:var(--gold);color:#fff;}
+  .result-stat,.review-card,.wrong-review__item,.focus-chip{transition:transform .2s ease, box-shadow .2s ease, background .2s ease, color .2s ease;}
+}
+
+
+
+
+.teacher-signature{font-size:0.72rem;color:var(--ink-soft);text-align:center;line-height:1.45;margin-top:14px;opacity:0.88;}
+.teacher-signature strong{color:var(--teal-dark);font-weight:800;}
+
+
+.hub-return-link{position:fixed;left:14px;bottom:14px;z-index:45;display:inline-flex;align-items:center;gap:6px;padding:9px 12px;border-radius:999px;background:rgba(255,255,255,0.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(58,46,77,0.14);box-shadow:0 10px 26px -16px rgba(58,46,77,0.45);color:var(--ink);text-decoration:none;font-size:0.76rem;font-weight:800;}
+.hub-return-link:active{transform:scale(0.96);}
+@media (max-width:420px){.hub-return-link{left:10px;bottom:10px;font-size:0.7rem;padding:8px 10px;}}
+
+/* =========================================================================
+   KEYFRAMES
+   ========================================================================= */
+@keyframes cardEnter{from{opacity:0;transform:translateY(18px) scale(0.98);}to{opacity:1;transform:translateY(0) scale(1);}}
+@keyframes shake{0%,100%{transform:translateX(0);}20%{transform:translateX(-7px);}40%{transform:translateX(6px);}60%{transform:translateX(-4px);}80%{transform:translateX(3px);}}
+@keyframes glowPulse{0%{box-shadow:0 0 0 0 rgba(75,182,168,0.5);}70%{box-shadow:0 0 0 14px rgba(75,182,168,0);}100%{box-shadow:0 0 0 0 rgba(75,182,168,0);}}
+@keyframes scoreBump{0%{transform:scale(1);}40%{transform:scale(1.22);}100%{transform:scale(1);}}
+@keyframes matchPop{0%{transform:scale(1);}45%{transform:scale(1.08);}100%{transform:scale(1);}}
+@keyframes sparklePop{0%{opacity:1;transform:translate(0,0) scale(0.6);}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(1.1);}}
+@keyframes confettiFall{to{transform:translateY(112vh) rotate(400deg);opacity:0.2;}}
+@keyframes ambientDrift{0%,100%{translate:0 0;scale:1;}50%{translate:0 -14px;scale:1.035;}}
+@keyframes btnShimmer{0%{left:-60%;}42%{left:130%;}100%{left:130%;}}
+@keyframes postmarkBreathe{0%,100%{transform:rotate(-9deg) scale(1);}50%{transform:rotate(-9deg) scale(1.035);}}
+@keyframes titleGradientShift{0%,100%{background-position:0% 50%;}50%{background-position:100% 50%;}}
+@keyframes tokenPop{0%{transform:scale(0.6);opacity:0;}60%{transform:scale(1.08);opacity:1;}100%{transform:scale(1);opacity:1;}}
+@keyframes progressShimmer{0%{transform:translateX(-120%);}100%{transform:translateX(320%);}}
+@keyframes popIn{0%{opacity:0;transform:translateY(10px) scale(0.92);}100%{opacity:1;transform:translateY(0) scale(1);}}
+@keyframes reviewCardIn{0%{opacity:0;transform:translateY(12px);}100%{opacity:1;transform:translateY(0);}}
+@keyframes emojiPop{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-2px) rotate(-6deg);}}
+
+
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:0.001ms !important;animation-iteration-count:1 !important;transition-duration:0.001ms !important;}
+}
+
+@media (min-width:520px){
+  .app{padding-top:48px;}
+}
+
+/* desktop/laptop: center the card vertically instead of hugging the top,
+   so short cards don't leave a big empty gap under them */
+@media (min-width:820px){
+  .app{justify-content:center;}
+}
+
+
+/* V7 lively correct-answer emoji burst: bigger, clearer, and visible for about 2 seconds */
+.sparkle{
+  position:absolute;
+  z-index:80;
+  font-size:clamp(1.8rem,4.2vw,2.7rem) !important;
+  line-height:1;
+  pointer-events:none;
+  opacity:0;
+  filter:drop-shadow(0 6px 10px rgba(0,0,0,0.18)) drop-shadow(0 0 10px rgba(255,255,255,0.95));
+  animation:sparklePop 2.05s cubic-bezier(.18,.89,.32,1.18) forwards !important;
+  will-change:transform,opacity;
+}
+.sparkle--hero{font-size:clamp(2.4rem,5.5vw,3.4rem) !important;}
+@keyframes sparklePop{
+  0%{opacity:0;transform:translate(0,10px) scale(.45) rotate(-12deg);}
+  12%{opacity:1;transform:translate(0,-4px) scale(1.26) rotate(4deg);}
+  35%{opacity:1;transform:translate(calc(var(--dx) * .35),calc(var(--dy) * .35)) scale(1.08) rotate(-3deg);}
+  72%{opacity:1;transform:translate(calc(var(--dx) * .78),calc(var(--dy) * .78)) scale(1) rotate(6deg);}
+  100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(.95) rotate(10deg);}
+}
+.partial-actions{max-width:680px;margin:14px auto 0;padding:0 2px;}
+.partial-card{padding:14px;border-radius:18px;background:rgba(255,255,255,.78);border:1px solid rgba(58,46,77,.12);box-shadow:0 12px 25px rgba(58,46,77,.08);}
+.partial-note{margin-top:8px;font-size:.78rem;line-height:1.5;color:var(--ink-soft);font-weight:700;text-align:center;}
+.result-note{margin:8px auto 0;max-width:560px;font-size:.8rem;line-height:1.55;color:var(--ink-soft);font-weight:700;}
+
+</style>
+</head>
+<body>
+
+<div class="bg-decor" aria-hidden="true">
+  <div class="blob blob--a"></div>
+  <div class="blob blob--b"></div>
+  <span class="ambient-accent ambient-accent--1"></span>
+  <span class="ambient-accent ambient-accent--2"></span>
+  <span class="ambient-accent ambient-accent--3"></span>
+  <span class="ambient-accent ambient-accent--4"></span>
+  <span class="ambient-accent ambient-accent--5"></span>
+  <span class="ambient-accent ambient-accent--6"></span>
+</div>
+
+<a class="hub-return-link" href="../../index.html">← Review Hub</a>
+
+<div class="app" id="app">
+
+  <!-- ===================================================================
+       WELCOME SCREEN
+       =================================================================== -->
+  <section id="screen-welcome" class="screen screen--active">
+    <div class="card">
+      <div class="postmark" aria-hidden="true">
+        <div class="postmark__ring">
+          <span class="postmark-date js-postmark-date">·</span>
+          <span class="postmark__label">Lesson Review</span>
+        </div>
+      </div>
+      <p class="eyebrow">Private Lesson Review</p>
+      <h1 class="display-title" id="welcome-title"></h1>
+      <p class="subtitle-en" id="welcome-subtitle-en"></p>
+      <p class="subtitle-jp" id="welcome-subtitle-jp"></p>
+
+      <!-- "Today's Focus" mini card, built from quizData.categoryLabels -->
+      <div class="focus-card">
+        <p class="focus-card__label">Today's Focus / 今日のフォーカス</p>
+        <div class="focus-card__chips" id="focus-chips"></div>
+      </div>
+
+      <div class="settings-row">
+        <button class="toggle-chip" id="toggle-sound" data-action="toggle-sound" data-on="true">🔊 Sound: ON</button>
+        <button class="toggle-chip" id="toggle-vibration" data-action="toggle-vibration" data-on="true">📳 Vibration: ON</button>
+      </div>
+
+      <div class="hint-mode-row">
+        <p class="hint-mode-label">Hint Mode / ヒントの表示方法</p>
+        <div class="segmented" role="radiogroup" aria-label="Hint mode">
+          <button class="segmented__option segmented__option--active" data-action="set-hint-mode" data-mode="auto">Auto-close (5s)</button>
+          <button class="segmented__option" data-action="set-hint-mode" data-mode="manual">Keep Open</button>
+        </div>
+      </div>
+
+      <div class="nav-row">
+        <button class="btn btn--primary btn--large" data-action="start-quiz">Start Review →</button>
+        <button class="btn btn--secondary btn--large" data-action="go-review"><span class="emoji-pop">📖</span> Review Key Phrases<span class="btn-jp">先に復習する</span></button>
+      </div>
+    <p class="teacher-signature">Created by <strong>Tahmid</strong> for Takiwaki-san</p>
+    </div>
+  </section>
+
+  <!-- ===================================================================
+       QUIZ SCREEN
+       =================================================================== -->
+  <section id="screen-quiz" class="screen">
+    <header class="quiz-header">
+      <div class="quiz-header__top">
+        <div class="quiz-header__left">
+          <button class="mini-toggle" id="btn-home" data-action="go-home" aria-label="Home"><span class="emoji-pop">⌂</span></button>
+          <button class="mini-toggle" id="btn-back" data-action="go-back" aria-label="Previous question" disabled>←</button>
+          <span class="lesson-tag js-lesson-tag">Review</span>
+        </div>
+        <div class="mini-toggles">
+          <button class="mini-toggle" id="mini-toggle-sound" data-action="toggle-sound" data-on="true" aria-label="Toggle sound"><span class="emoji-pop">🔊</span></button>
+          <button class="mini-toggle" id="mini-toggle-vibration" data-action="toggle-vibration" data-on="true" aria-label="Toggle vibration"><span class="emoji-pop">📳</span></button>
+        </div>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+      <div class="stat-row">
+        <span class="stat-chip" id="stat-position">Q1/1</span>
+        <span class="stat-chip stat-chip--score" id="stat-score">⭐ 0</span>
+        <span class="stat-chip stat-chip--streak" id="stat-streak">🔥 0</span>
+      </div>
+      <!-- Question navigator: tap any number to jump straight to that question -->
+      <div class="qnav" id="qnav" role="tablist" aria-label="Question navigator"></div>
+    </header>
+
+    <div class="stage" id="stage"><!-- question card injected by renderStage() --></div>
+    <div class="partial-actions" id="partial-actions" aria-live="polite"></div>
+  </section>
+
+  <!-- ===================================================================
+       RESULTS SCREEN
+       =================================================================== -->
+  <section id="screen-results" class="screen">
+    <div class="card results-card">
+      <div class="postmark" aria-hidden="true">
+        <div class="postmark__ring">
+          <span class="postmark-date js-postmark-date">·</span>
+          <span class="postmark__label">Lesson Review</span>
+        </div>
+      </div>
+      <p class="eyebrow" id="results-eyebrow">Mission Complete</p>
+      <h1 class="display-title" id="results-title">Nice work today! <span class="emoji-pop">🎉</span></h1>
+      <p class="result-note" id="result-note"></p>
+
+      <div class="result-stats">
+        <div class="result-stat">
+          <div class="result-stat__value" id="result-score">0</div>
+          <div class="result-stat__label">Score</div>
+        </div>
+        <div class="result-stat">
+          <div class="result-stat__value" id="result-accuracy">0%</div>
+          <div class="result-stat__label">Accuracy</div>
+        </div>
+        <div class="result-stat">
+          <div class="result-stat__value" id="result-streak">0</div>
+          <div class="result-stat__label">Best Streak</div>
+        </div>
+      </div>
+
+
+
+      <div class="wrong-review" id="wrong-review" hidden>
+        <p class="wrong-review__title">Mistake Practice / 間違えた問題だけ復習</p>
+        <p class="wrong-review__subtitle">Official score is based on the first try. Retry is for practice only.</p>
+        <div class="wrong-review__list" id="wrong-review-list"></div>
+        <button class="btn btn--primary btn--large" data-action="retry-mistakes">🎯 Practice only mistakes<span class="btn-jp">間違えた問題だけもう一回</span></button>
+        <p class="official-score-note">Retry practice will start a separate mini round and will not change this official score.</p>
+      </div>
+      <div class="weak-points" id="weak-points" hidden>
+        <p class="weak-points__title">Focus Next Time / 次に見直すところ</p>
+        <div id="weak-points-list"></div>
+      </div>
+
+      <p class="encourage-en" id="encourage-en"></p>
+      <p class="encourage-jp" id="encourage-jp"></p>
+
+      <div class="nav-row">
+        <button class="btn btn--primary btn--large" data-action="restart-quiz">🔁 Try Again</button>
+        <button class="btn btn--secondary btn--large" data-action="go-review">📖 Review Key Phrases</button>
+        <button class="btn btn--secondary btn--large" data-action="go-home">⌂ Home<span class="btn-jp">ホームに戻る</span></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================================
+       REVIEW SCREEN
+       =================================================================== -->
+  <section id="screen-review" class="screen">
+    <div class="card">
+      <p class="eyebrow">Today's Recap</p>
+      <h2 class="review-title">Review Key Phrases</h2>
+      <p class="review-subtitle">今日の復習</p>
+
+      <div class="review-grid" id="review-grid"></div>
+
+      <div class="teacher-note">
+        <p class="teacher-note__label">Teacher's Note</p>
+        <p class="teacher-note__en" id="teacher-note-en"></p>
+        <p class="teacher-note__jp" id="teacher-note-jp"></p>
+      </div>
+
+      <div class="nav-row">
+        <button class="btn btn--primary btn--large" data-action="start-quiz">Start Quiz →<span class="btn-jp">クイズを始める</span></button>
+        <button class="btn btn--secondary btn--large" data-action="go-home">⌂ Home<span class="btn-jp">ホームに戻る</span></button>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<div class="streak-popup" id="streak-popup"></div>
+<div class="confetti-layer" id="confetti-layer" aria-hidden="true"></div>
+
+<script>
+/* =========================================================================
+   ============================  LESSON CONTENT  ==========================
+   Everything the tutor edits lives in `quizData` below. To make a NEW quiz
+   for a different lesson: copy this file, keep everything under
+   "GAME ENGINE" untouched, and replace only the `quizData` object.
+   ^ EDIT HERE FOR FUTURE LESSONS: swap the whole quizData object below and
+     nothing else needs to change — the engine reads question count, scoring,
+     matching pairs, and weak-point categories straight from this object.
+
+   Structure recap:
+   - type "mcq"      : normal 4-choice question
+   - type "situation" : same as mcq, but shows a quoted line first
+   - type "grid"      : 3x3 position-word mini-game (tap the right box)
+   - type "matching"  : tap an English card + a Japanese card to pair them
+   - type "typing"    : student sees Japanese, types the natural English
+
+   Every gradable item needs a "cat" (category) key matching one of the
+   keys in `categoryLabels`, so the results screen can report weak spots.
+   ========================================================================= */
+const quizData = {
+
+  // ---- EDIT HERE: Lesson title -----------------------------------------
+  lessonId: "2026-06-29",
+  title: "June 29 Review Quest",
+  subtitle: "Today's mission: master \u201cI heard\u2026\u201d, natural reactions, and position words.",
+  jpSubtitle: "今日のミッション：heard の使い分け、自然なリアクション、位置を表す英語を復習しましょう。",
+
+  // Human-friendly names for the categories used in "cat" below, shown on
+  // the results screen when a topic needs more practice.
+  categoryLabels: {
+    heard: { en: "\u201cI heard\u2026\u201d expressions", jp: "「聞いた」の使い分け" },
+    reactions: { en: "Natural reaction phrases", jp: "自然なリアクション表現" },
+    position: { en: "Position words", jp: "位置を表す言葉" }
+  },
+
+  // ---- EDIT HERE: Questions ----------------------------------------------
+  questions: [
+
+    // ---------------------------------------------------------------- Q1
+    {
+      id: "q1", type: "mcq", cat: "heard",
+      prompt: { en: "Which sentence means 「それ聞こえた」?", jp: "「それ聞こえた」はどれですか？" },
+      choices: [
+        { id: "a", en: "I heard it.", jp: "それ聞こえた。" },
+        { id: "b", en: "I heard that.", jp: "それ聞いたよ。" },
+        { id: "c", en: "I heard about it.", jp: "それについて聞いた。" },
+        { id: "d", en: "I've heard of it.", jp: "名前は聞いたことある。" }
+      ],
+      correct: "a",
+      hint: { en: "Think about sound or voice reaching your ears.", jp: "音や声が耳に入ったイメージです。" },
+      explanation: { en: "\u201cI heard it\u201d is used when you heard a sound, voice, or something someone said.", jp: "\u201cI heard it.\u201d は、音・声・何かが耳に入ったときに使います。「それ聞こえた」という感じです。" }
+    },
+
+    // ---------------------------------------------------------------- Q2
+    {
+      id: "q2", type: "mcq", cat: "heard",
+      prompt: { en: "Which sentence means 「それ聞いたよ」 as information?", jp: "情報として「それ聞いたよ」はどれですか？" },
+      choices: [
+        { id: "a", en: "I heard it.", jp: "それ聞こえた。" },
+        { id: "b", en: "I heard that.", jp: "それ聞いたよ。" },
+        { id: "c", en: "I heard about it.", jp: "それについて聞いた。" },
+        { id: "d", en: "I've heard of it.", jp: "名前は聞いたことある。" }
+      ],
+      correct: "b",
+      hint: { en: "This is about information or content, not just sound.", jp: "音ではなく、内容・情報を聞いた感じです。" },
+      explanation: { en: "\u201cI heard that\u201d is used when you heard some information or content.", jp: "\u201cI heard that.\u201d は、内容や情報を聞いたときに使います。「その話聞いたよ」という感じです。" }
+    },
+
+    // ---------------------------------------------------------------- Q3
+    {
+      id: "q3", type: "mcq", cat: "heard",
+      prompt: { en: "Which sentence means 「それについて聞いた」?", jp: "「それについて聞いた」はどれですか？" },
+      choices: [
+        { id: "a", en: "I heard it.", jp: "それ聞こえた。" },
+        { id: "b", en: "I heard that.", jp: "それ聞いたよ。" },
+        { id: "c", en: "I heard about it.", jp: "それについて聞いた。" },
+        { id: "d", en: "I've heard of it.", jp: "名前は聞いたことある。" }
+      ],
+      correct: "c",
+      hint: { en: "Use this when talking about a topic, event, story, or news.", jp: "話題・出来事・ニュースについて聞いたときに使います。" },
+      explanation: { en: "\u201cI heard about it\u201d means you heard some information about a topic, event, or situation.", jp: "\u201cI heard about it.\u201d は、ある話題や出来事について聞いたときに使います。「そのことについて聞いた」という感じです。" }
+    },
+
+    // ---------------------------------------------------------------- Q4
+    {
+      id: "q4", type: "mcq", cat: "heard",
+      prompt: { en: "Which sentence means 「名前は聞いたことある」?", jp: "「名前は聞いたことある」はどれですか？" },
+      choices: [
+        { id: "a", en: "I heard it.", jp: "それ聞こえた。" },
+        { id: "b", en: "I heard that.", jp: "それ聞いたよ。" },
+        { id: "c", en: "I heard about it.", jp: "それについて聞いた。" },
+        { id: "d", en: "I've heard of it.", jp: "名前は聞いたことある。" }
+      ],
+      correct: "d",
+      hint: { en: "You know the name, but maybe you do not know the details.", jp: "名前や存在は知っているけど、詳しくは知らない感じです。" },
+      explanation: { en: "\u201cI've heard of it\u201d means you know the name or existence of something, but you may not know the details.", jp: "\u201cI've heard of it.\u201d は、名前や存在を聞いたことがあるときに使います。詳しい内容までは知らなくても大丈夫です。" }
+    },
+
+    // ---------------------------------------------------------------- Q5
+    {
+      id: "q5", type: "situation", cat: "heard",
+      situationQuote: { en: "\u201cThere is a new restaurant near the station. Have you heard about it?\u201d" },
+      prompt: { en: "What is the best answer?", jp: "友達が「駅の近くに新しいレストランがあるんだけど、そのこと聞いた？」と言っています。自然な返事はどれですか？" },
+      choices: [
+        { id: "a", en: "I think I heard about it.", jp: "それについて聞いた気がする。" },
+        { id: "b", en: "I think I heard it.", jp: "それが聞こえた気がする。" },
+        { id: "c", en: "I think I heard of that.", jp: "名前は聞いたことある気がする。" },
+        { id: "d", en: "I am hearing it.", jp: "不自然な英語です。" }
+      ],
+      correct: "a",
+      hint: { en: "The friend is asking about a topic or news.", jp: "話題・ニュースについて聞かれています。" },
+      explanation: { en: "\u201cI think I heard about it\u201d is natural because the topic is a new restaurant or news.", jp: "新しいレストランという話題について聞いているので、\u201cI think I heard about it.\u201d が自然です。" }
+    },
+
+    // ---------------------------------------------------------------- Q6
+    {
+      id: "q6", type: "mcq", cat: "reactions",
+      prompt: { en: "Which phrase means 「それなぁ！」?", jp: "「それなぁ！」に近い英語はどれですか？" },
+      choices: [
+        { id: "a", en: "Exactly.", jp: "それなぁ。" },
+        { id: "b", en: "It's okay.", jp: "大丈夫だよ。" },
+        { id: "c", en: "That's tough.", jp: "それは大変だね。" },
+        { id: "d", en: "That sounds good.", jp: "それいいね。" }
+      ],
+      correct: "a",
+      hint: { en: "Use this when you strongly agree.", jp: "強く同意するときに使います。" },
+      explanation: { en: "\u201cExactly\u201d is used when you strongly agree with what someone said.", jp: "\u201cExactly.\u201d は、相手の言ったことに強く同意するときに使います。「それなぁ」「まさにそう」という感じです。" }
+    },
+
+    // ---------------------------------------------------------------- Q7
+    {
+      id: "q7", type: "situation", cat: "reactions",
+      situationQuote: { en: "\u201cLearning English every day is important.\u201d" },
+      prompt: { en: "Choose the best natural reaction.", jp: "友達が「毎日英語を勉強するのは大事だよね」と言いました。自然な反応はどれですか？" },
+      choices: [
+        { id: "a", en: "That's so true.", jp: "それほんとだよね。" },
+        { id: "b", en: "It can't be helped.", jp: "仕方ない。" },
+        { id: "c", en: "I heard it.", jp: "それ聞こえた。" },
+        { id: "d", en: "Top right.", jp: "右上。" }
+      ],
+      correct: "a",
+      hint: { en: "Choose a phrase for agreeing with an opinion.", jp: "意見に共感・同意するときの表現です。" },
+      explanation: { en: "\u201cThat's so true\u201d is a natural reaction when you agree with someone's opinion.", jp: "\u201cThat's so true.\u201d は、相手の意見に共感するときに使えます。「それほんとだよね」という感じです。" }
+    },
+
+    // ---------------------------------------------------------------- Q8
+    {
+      id: "q8", type: "mcq", cat: "reactions",
+      prompt: { en: "Which phrase means 「マジで / ほんとそれ」 casually?", jp: "カジュアルに「マジで / ほんとそれ」はどれですか？" },
+      choices: [
+        { id: "a", en: "For real.", jp: "マジで / ほんとそれ。" },
+        { id: "b", en: "It's okay.", jp: "大丈夫だよ。" },
+        { id: "c", en: "That sounds good.", jp: "それいいね。" },
+        { id: "d", en: "I heard that.", jp: "それ聞いたよ。" }
+      ],
+      correct: "a",
+      hint: { en: "This is casual and conversational.", jp: "カジュアルな会話で使います。" },
+      explanation: { en: "\u201cFor real\u201d is a casual phrase used to show agreement, surprise, or strong feeling.", jp: "\u201cFor real.\u201d はカジュアルな表現で、「マジで」「ほんとそれ」のように使えます。" }
+    },
+
+    // ---------------------------------------------------------------- Q9
+    {
+      id: "q9", type: "mcq", cat: "position",
+      prompt: { en: "What does \u201ctop right\u201d mean?", jp: "\u201ctop right\u201d はどこの位置ですか？" },
+      choices: [
+        { id: "a", en: "右上", jp: "top right" },
+        { id: "b", en: "左上", jp: "top left" },
+        { id: "c", en: "右下", jp: "bottom right" },
+        { id: "d", en: "左下", jp: "bottom left" }
+      ],
+      correct: "a",
+      hint: { en: "Top means 上. Right means 右.", jp: "top = 上、right = 右です。" },
+      explanation: { en: "\u201cTop right\u201d means the upper-right position.", jp: "\u201ctop right\u201d は「右上」という意味です。top が上、right が右です。" }
+    },
+
+    // ---------------------------------------------------------------- Q10 (grid mini-game)
+    {
+      id: "q10", type: "grid", cat: "position",
+      prompt: { en: "Click the bottom left box.", jp: "左下のマスをクリックしてください。" },
+      correctCell: "bottom-left",
+      hint: { en: "Bottom means 下. Left means 左.", jp: "bottom = 下、left = 左です。" },
+      explanation: { en: "\u201cBottom left\u201d is the box in the lower-left corner \u2014 bottom (下) + left (左).", jp: "\u201cbottom left\u201d は左下のマスです。bottom = 下、left = 左です。" }
+    },
+
+    // ---------------------------------------------------------------- Q11 (matching)
+    {
+      id: "q11", type: "matching", cat: "mixed",
+      prompt: { en: "Match the English phrase with the Japanese meaning.", jp: "英語のフレーズと日本語の意味をマッチさせましょう。" },
+      hint: { en: "Think back to the phrases you just reviewed above.", jp: "これまで復習した表現を思い出してみましょう。" },
+      pairs: [
+        { en: "I heard it.", jp: "それ聞こえた。", cat: "heard" },
+        { en: "I heard that.", jp: "それ聞いたよ。", cat: "heard" },
+        { en: "I heard about it.", jp: "それについて聞いた。", cat: "heard" },
+        { en: "I've heard of it.", jp: "名前は聞いたことある。", cat: "heard" },
+        { en: "Exactly.", jp: "それなぁ。", cat: "reactions" },
+        { en: "For real.", jp: "マジで / ほんとそれ。", cat: "reactions" },
+        { en: "top right.", jp: "右上。", cat: "position" },
+        { en: "bottom left.", jp: "左下。", cat: "position" }
+      ]
+    },
+
+    // ---------------------------------------------------------- Q12 (typing x4)
+    {
+      id: "q12a", type: "typing", cat: "heard",
+      promptJP: "「それについて聞いた気がする。」",
+      accepted: ["I think I heard about it"],
+      hint: { en: "This is about a topic or piece of news, not just a sound.", jp: "話題やニュースについてです。音だけではありません。" },
+      explanation: { en: "\u201cI think I heard about it\u201d fits because it's about a topic or story, not a sound.", jp: "話題や出来事について聞いた場合は \u201cI heard about it\u201d を使います。" }
+    },
+    {
+      id: "q12b", type: "typing", cat: "heard",
+      promptJP: "「名前は聞いたことある。」",
+      accepted: ["I've heard of it", "I have heard of it"],
+      hint: { en: "You recognize the name, but maybe not the details.", jp: "名前は知っているけど、詳しくは知らないイメージです。" },
+      explanation: { en: "\u201cI've heard of it\u201d is for names or things you recognize but don't know in detail.", jp: "名前や存在を知っているときは \u201cI've heard of it\u201d が自然です。" }
+    },
+    {
+      id: "q12c", type: "typing", cat: "reactions",
+      promptJP: "「それほんとだよね。」",
+      accepted: ["That's so true"],
+      hint: { en: "This shows warm agreement with someone's opinion.", jp: "相手の意見に温かく同意する表現です。" },
+      explanation: { en: "\u201cThat's so true\u201d is a warm, natural way to agree with someone's feeling or opinion.", jp: "相手の意見に共感するときは \u201cThat's so true\u201d が自然です。" }
+    },
+    {
+      id: "q12d", type: "typing", cat: "position",
+      promptJP: "「右上」",
+      accepted: ["top right"],
+      hint: { en: "Top means 上, right means 右.", jp: "top = 上、right = 右です。" },
+      explanation: { en: "\u201cTop right\u201d describes the upper-right position \u2014 top is 上, right is 右.", jp: "\u201ctop right\u201d は「右上」、top = 上、right = 右です。" }
+    }
+  ],
+
+  // ---- EDIT HERE: Review cards -------------------------------------------
+  reviewCards: [
+    { en: "I heard it.", jp: "それ聞こえた。", usageEn: "Used for sound or voice.", usageJp: "音や声が聞こえたときに使います。" },
+    { en: "I heard that.", jp: "それ聞いたよ。", usageEn: "Used for information or content.", usageJp: "内容や情報を聞いたときに使います。" },
+    { en: "I heard about it.", jp: "それについて聞いた。", usageEn: "Used for topic, news, or story.", usageJp: "話題・ニュース・出来事について聞いたときに使います。" },
+    { en: "I've heard of it.", jp: "名前は聞いたことある。", usageEn: "Used for name or existence.", usageJp: "名前や存在を聞いたことがあるときに使います。" },
+    { en: "Exactly.", jp: "それなぁ。", usageEn: "Strong agreement.", usageJp: "相手の言ったことに強く同意するときに使います。" },
+    { en: "That's so true.", jp: "それほんとだよね。", usageEn: "Agreement with feeling.", usageJp: "相手の意見に共感するときに使います。" },
+    { en: "For real.", jp: "マジで / ほんとそれ。", usageEn: "Casual reaction.", usageJp: "カジュアルな同意や驚きに使えます。" },
+    { en: "top right / bottom left", jp: "右上 / 左下", usageEn: "Used to explain position.", usageJp: "位置を説明するときに使います。" }
+  ],
+
+  // ---- EDIT HERE: Teacher note --------------------------------------------
+  teacherNote: {
+    en: "Today's phrases are short, but they are very useful in real conversation. Try using one reaction phrase naturally next time.",
+    jp: "今日の表現は短いですが、実際の会話でとても使いやすいです。次回はリアクション表現を1つ自然に使ってみましょう。"
+  }
+};
+
+/* =========================================================================
+   =============================  GAME ENGINE  ============================
+   Do not edit below unless changing game logic. This code reads only from
+   `quizData` above, so it works unchanged for any future lesson.
+
+   ARCHITECTURE NOTE (v2): score, streak-per-question, and weak-point stats
+   are derived from `state.records` on demand instead of being incremented
+   live. That is what makes the Back button and the question navigator safe
+   — jumping around never double-counts or loses an answer, because nothing
+   is mutated by simply *looking* at a question again.
+   ========================================================================= */
+(function(){
+  "use strict";
+
+  const GRID_CELLS = ["top-left","top","top-right","left","middle","right","bottom-left","bottom","bottom-right"];
+
+  const state = {
+    current: 0,          // index into state.activeQuestions
+    playCount: 0,         // how many times startQuiz() has run (drives shuffle)
+    maxScore: 0,
+    streak: 0,
+    bestStreak: 0,
+    soundOn: true,
+    vibrationOn: true,
+    hintMode: "auto",
+    activeQuestions: [],  // quizData.questions, original order on play 1, shuffled after
+    records: [],          // one attempt-record per question, see createRecord()
+    resultIndices: null,
+    partialResult: false
+  };
+
+  let audioCtx = null;
+  let sparkleCounter = 0;
+  let hintTimeoutId = null;
+  let hintIntervalId = null;
+
+  /* ---------------------------------------------------------------------
+     AUDIO (Web Audio API only — no external audio files)
+     --------------------------------------------------------------------- */
+  function getAudioCtx(){
+    if(!audioCtx){
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      if(!Ctx) return null;
+      audioCtx = new Ctx();
+    }
+    if(audioCtx.state === "suspended"){ audioCtx.resume(); }
+    return audioCtx;
+  }
+
+  function playTone(opts){
+    if(!state.soundOn) return;
+    const ctx = getAudioCtx();
+    if(!ctx) return;
+    const { freq, freqEnd, duration = 0.15, type = "sine", startTime = 0, gainPeak = 0.16 } = opts;
+    const t0 = ctx.currentTime + startTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, t0);
+    if(freqEnd){
+      osc.frequency.exponentialRampToValueAtTime(Math.max(freqEnd, 24), t0 + duration);
+    }
+    gain.gain.setValueAtTime(0.0001, t0);
+    gain.gain.exponentialRampToValueAtTime(gainPeak, t0 + Math.min(0.018, duration * 0.32));
+    gain.gain.exponentialRampToValueAtTime(0.0001, t0 + duration);
+    osc.connect(gain).connect(ctx.destination);
+    osc.start(t0);
+    osc.stop(t0 + duration + 0.035);
+  }
+
+  function playNoiseBurst(opts){
+    if(!state.soundOn) return;
+    const ctx = getAudioCtx();
+    if(!ctx) return;
+    const { duration = 0.045, startTime = 0, gainPeak = 0.035 } = opts || {};
+    const t0 = ctx.currentTime + startTime;
+    const buffer = ctx.createBuffer(1, Math.max(1, Math.floor(ctx.sampleRate * duration)), ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for(let i=0;i<data.length;i++) data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / data.length, 2.2);
+    const src = ctx.createBufferSource();
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(gainPeak, t0);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t0 + duration);
+    src.buffer = buffer;
+    src.connect(gain).connect(ctx.destination);
+    src.start(t0);
+    src.stop(t0 + duration);
+  }
+
+  function playClick(){
+    playNoiseBurst({ duration: 0.028, gainPeak: 0.025 });
+    playTone({ freq: 1220, freqEnd: 760, duration: 0.055, type: "triangle", gainPeak: 0.085 });
+  }
+  function playHint(){
+    playTone({ freq: 720, duration: 0.12, type: "sine", gainPeak: 0.075 });
+    playTone({ freq: 1080, duration: 0.18, type: "triangle", startTime: 0.08, gainPeak: 0.065 });
+  }
+  function playCorrect(){
+    playTone({ freq: 659, duration: 0.13, type: "sine", gainPeak: 0.13 });
+    playTone({ freq: 880, duration: 0.16, type: "triangle", startTime: 0.075, gainPeak: 0.12 });
+    playTone({ freq: 1318, duration: 0.22, type: "sine", startTime: 0.155, gainPeak: 0.105 });
+    playTone({ freq: 1760, duration: 0.12, type: "sine", startTime: 0.28, gainPeak: 0.052 });
+  }
+  function playWrong(){
+    playTone({ freq: 270, freqEnd: 180, duration: 0.18, type: "triangle", gainPeak: 0.105 });
+    playTone({ freq: 210, freqEnd: 135, duration: 0.24, type: "sine", startTime: 0.13, gainPeak: 0.095 });
+    playNoiseBurst({ duration: 0.055, startTime: 0.03, gainPeak: 0.015 });
+  }
+  function playFinal(){
+    [523,659,784,1046,1318].forEach((f,i)=>playTone({ freq:f, duration:i===4 ? 0.36 : 0.17, type:i===4 ? "triangle" : "sine", startTime:i*0.085, gainPeak:i===4 ? 0.14 : 0.12 }));
+    playNoiseBurst({ duration: 0.12, startTime: 0.18, gainPeak: 0.022 });
+  }
+
+  /* ---------------------------------------------------------------------
+     VIBRATION (Vibration API — silently no-ops if unsupported or off)
+     --------------------------------------------------------------------- */
+  function vibrate(pattern){
+    if(!state.vibrationOn) return;
+    if(navigator.vibrate){
+      try{ navigator.vibrate(pattern); }catch(e){ /* unsupported device, ignore */ }
+    }
+  }
+
+  /* ---------------------------------------------------------------------
+     TEXT NORMALIZATION for typing questions
+     --------------------------------------------------------------------- */
+  function normalizeAnswer(str){
+    return str
+      .normalize("NFKC")
+      .toLowerCase()
+      .replace(/[\u2018\u2019\u00b4`]/g, "'")
+      .replace(/[^a-z0-9'\s]/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function levenshtein(a, b){
+    const m = a.length, n = b.length;
+    const dp = Array.from({ length: m + 1 }, () => new Array(n + 1).fill(0));
+    for(let i=0;i<=m;i++) dp[i][0]=i;
+    for(let j=0;j<=n;j++) dp[0][j]=j;
+    for(let i=1;i<=m;i++){
+      for(let j=1;j<=n;j++){
+        dp[i][j] = Math.min(
+          dp[i-1][j] + 1,
+          dp[i][j-1] + 1,
+          dp[i-1][j-1] + (a[i-1] === b[j-1] ? 0 : 1)
+        );
+      }
+    }
+    return dp[m][n];
+  }
+
+  function checkTypingAnswer(input, accepted){
+    const norm = normalizeAnswer(input);
+    const normNoApos = norm.replace(/'/g, "");
+    let best = "wrong";
+    for(const ans of accepted){
+      const a = normalizeAnswer(ans);
+      const aNoApos = a.replace(/'/g, "");
+      if(norm === a || (normNoApos === aNoApos && normNoApos.length>0)) return "correct";
+      const dist = levenshtein(normNoApos, aNoApos);
+      const threshold = Math.max(2, Math.round(aNoApos.length * 0.2));
+      if(dist <= threshold) best = "almost";
+    }
+    return best;
+  }
+
+  /* ---------------------------------------------------------------------
+     SMALL HELPERS
+     --------------------------------------------------------------------- */
+  function esc(s){
+    return String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
+  }
+  function shuffledIndices(n){
+    const arr = Array.from({ length: n }, (_,i)=>i);
+    for(let i=arr.length-1;i>0;i--){
+      const j = Math.floor(Math.random()*(i+1));
+      [arr[i],arr[j]] = [arr[j],arr[i]];
+    }
+    return arr;
+  }
+  function monthAbbrev(m){
+    return ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"][m];
+  }
+  function formatLessonTag(lessonId){
+    const d = new Date(lessonId + "T00:00:00");
+    if(isNaN(d.getTime())) return "REVIEW QUEST";
+    return monthAbbrev(d.getMonth()) + " " + d.getDate() + " \u00b7 REVIEW QUEST";
+  }
+  function formatPostmarkDate(lessonId){
+    const d = new Date(lessonId + "T00:00:00");
+    if(isNaN(d.getTime())) return "\u2022";
+    return (d.getMonth()+1) + "\u00b7" + d.getDate();
+  }
+
+  /* ---------------------------------------------------------------------
+     SCREEN NAVIGATION
+     --------------------------------------------------------------------- */
+  function showScreen(id){
+    document.querySelectorAll(".screen").forEach(s=>s.classList.remove("screen--active"));
+    document.getElementById(id).classList.add("screen--active");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  /* ---------------------------------------------------------------------
+     STATIC TEXT (populated from quizData so the engine stays lesson-agnostic)
+     --------------------------------------------------------------------- */
+  function populateStaticText(){
+    document.title = quizData.title;
+    document.getElementById("welcome-title").textContent = quizData.title;
+    document.getElementById("welcome-subtitle-en").textContent = quizData.subtitle;
+    document.getElementById("welcome-subtitle-jp").textContent = quizData.jpSubtitle;
+
+    const tag = formatLessonTag(quizData.lessonId);
+    document.querySelectorAll(".js-lesson-tag").forEach(el => el.textContent = tag);
+
+    const pmDate = formatPostmarkDate(quizData.lessonId);
+    document.querySelectorAll(".js-postmark-date").forEach(el => el.textContent = pmDate);
+  }
+
+  function renderFocusChips(){
+    const wrap = document.getElementById("focus-chips");
+    if(!wrap) return;
+    wrap.innerHTML = Object.keys(quizData.categoryLabels).map(key=>{
+      const l = quizData.categoryLabels[key];
+      return '<span class="focus-chip">' + esc(l.en) + '</span>';
+    }).join('');
+  }
+
+  /* ---------------------------------------------------------------------
+     RECORD FACTORY — one attempt-record per question (see architecture
+     note above). This is the "clean attempt-tracking system" that makes
+     Back / navigator jumps / retries all safe.
+     --------------------------------------------------------------------- */
+  function createRecord(q){
+    if(q.type === "matching"){
+      return {
+        type: "matching",
+        pairMatched: new Array(q.pairs.length).fill(false),   // current progress, resets on "Reset"
+        pairFirstResult: new Array(q.pairs.length).fill(null), // permanent, for weak points
+        matchedCount: 0,
+        complete: false,
+        enOrder: null, jpOrder: null,
+        selectedEn: null, selectedJp: null, selectedEnEl: null, selectedJpEl: null,
+        locked: false
+      };
+    }
+    if(q.type === "typing"){
+      return { type: "typing", firstValue: null, firstResult: null, currentValue: "", currentResult: null, retried: false };
+    }
+    if(q.type === "grid"){
+      return { type: "grid", firstCell: null, firstCorrect: null, currentCell: null, currentCorrect: null, retried: false };
+    }
+    // mcq / situation
+    return { type: "mcq", firstChoice: null, firstCorrect: null, currentChoice: null, currentCorrect: null, retried: false };
+  }
+
+  /* ---------------------------------------------------------------------
+     SCORING — fully derived from state.records, never incremented live.
+     --------------------------------------------------------------------- */
+  function computeMaxScore(){
+    let max = 0;
+    state.activeQuestions.forEach(q=>{
+      max += (q.type === "matching") ? q.pairs.length : 1;
+    });
+    return max;
+  }
+
+  function firstScoreForQuestion(q, r){
+    if(!r) return 0;
+    if(q.type === "matching"){
+      return (r.pairFirstResult || []).reduce((total, value) => total + (value === "correct" ? 1 : 0), 0);
+    }
+    if(q.type === "typing") return r.firstResult === "correct" ? 1 : 0;
+    return r.firstCorrect === true ? 1 : 0;
+  }
+
+  function computeScore(){
+    let total = 0;
+    state.activeQuestions.forEach((q,i)=>{
+      total += firstScoreForQuestion(q, state.records[i]);
+    });
+    return total;
+  }
+
+  // Weak points use only each item's FIRST attempt, so a later retry can't
+  // erase an earlier mistake from the diagnostic — see spec requirement.
+  function computeCategoryStats(){
+    const stats = {};
+    function bump(cat, correct){
+      if(!stats[cat]) stats[cat] = { correct: 0, total: 0 };
+      stats[cat].total++;
+      if(correct) stats[cat].correct++;
+    }
+    state.activeQuestions.forEach((q,i)=>{
+      const r = state.records[i];
+      if(q.type === "matching"){
+        q.pairs.forEach((p,j)=>{ if(r.pairFirstResult[j] !== null) bump(p.cat, r.pairFirstResult[j] === "correct"); });
+      } else if(q.type === "typing"){
+        if(r.firstResult !== null) bump(q.cat, r.firstResult === "correct");
+      } else {
+        if(r.firstCorrect !== null) bump(q.cat, r.firstCorrect === true);
+      }
+    });
+    return stats;
+  }
+
+  // Per-question pill status for the navigator: 'unanswered' | 'correct' | 'wrong'
+  function firstAttemptStatus(q, r){
+    if(!r) return "unanswered";
+    if(q.type === "matching"){
+      const first = r.pairFirstResult || [];
+      if(first.some(v => v === "wrong")) return "wrong";
+      if(r.complete && first.length > 0 && first.every(v => v === "correct")) return "correct";
+      if(first.some(v => v !== null)) return "unanswered";
+      return "unanswered";
+    }
+    if(q.type === "typing"){
+      if(r.firstResult === null) return "unanswered";
+      return r.firstResult === "correct" ? "correct" : "wrong";
+    }
+    if(r.firstCorrect === null) return "unanswered";
+    return r.firstCorrect ? "correct" : "wrong";
+  }
+
+  // Per-question pill status for the navigator: 'unanswered' | 'correct' | 'wrong'.
+  // This uses the FIRST attempt, so a later retry cannot turn an official mistake green.
+  function questionStatus(i){
+    return firstAttemptStatus(state.activeQuestions[i], state.records[i]);
+  }
+
+
+  function isQuestionAttempted(q, r){
+    if(!q || !r) return false;
+    if(q.type === "matching") return (r.pairFirstResult || []).some(v => v !== null) || r.complete || r.matchedCount > 0;
+    if(q.type === "typing") return r.firstResult !== null;
+    return r.firstCorrect !== null;
+  }
+
+  function getAttemptedQuestionIndices(){
+    const indices = [];
+    state.activeQuestions.forEach((q,i)=>{ if(isQuestionAttempted(q,state.records[i])) indices.push(i); });
+    return indices;
+  }
+
+  function getCurrentResultIndices(){
+    if(Array.isArray(state.resultIndices)) return state.resultIndices;
+    return state.activeQuestions.map((_,i)=>i);
+  }
+
+  function computeMaxScoreForIndices(indices){
+    let total = 0;
+    indices.forEach(i=>{
+      const q = state.activeQuestions[i];
+      if(q.type === "matching") total += q.pairs.length;
+      else total += 1;
+    });
+    return total;
+  }
+
+  function computeScoreForIndices(indices){
+    let total = 0;
+    indices.forEach(i=>{ total += firstScoreForQuestion(state.activeQuestions[i], state.records[i]); });
+    return total;
+  }
+
+  // Bumps the live streak counter — only ever called the first time a
+  // question (or matching pair) is resolved, never on a retry.
+  function bumpStreak(isCorrect){
+    if(isCorrect){
+      state.streak++;
+      state.bestStreak = Math.max(state.bestStreak, state.streak);
+      if(state.streak > 0 && state.streak % 3 === 0) showStreakPopup(state.streak);
+    } else {
+      state.streak = 0;
+    }
+  }
+
+  /* ---------------------------------------------------------------------
+     HEADER STATS + BACK BUTTON + PROGRESS BAR
+     --------------------------------------------------------------------- */
+  function updateHeaderStats(){
+    const total = state.activeQuestions.length;
+    document.getElementById("stat-position").textContent = "Q" + (state.current+1) + "/" + total;
+    document.getElementById("stat-score").textContent = "\u2b50 " + computeScore();
+    document.getElementById("stat-streak").textContent = "\ud83d\udd25 " + state.streak;
+
+    // progress = how many questions have been attempted at least once,
+    // NOT how far forward the student has navigated — so Back never makes
+    // the bar move backwards in a confusing way.
+    const completed = state.activeQuestions.filter((q,i)=>questionStatus(i) !== "unanswered").length;
+    document.getElementById("progress-fill").style.width = (completed/total*100) + "%";
+
+    const backBtn = document.getElementById("btn-back");
+    if(backBtn) backBtn.disabled = state.current <= 0;
+    renderPartialActions();
+  }
+
+
+  function renderPartialActions(){
+    const wrap = document.getElementById("partial-actions");
+    if(!wrap) return;
+    const attempted = getAttemptedQuestionIndices().length;
+    const total = state.activeQuestions.length;
+    if(attempted > 0 && attempted < total){
+      wrap.innerHTML = '<div class="partial-card">' +
+        '<button class="btn btn--secondary btn--block" data-action="finish-attempted" type="button">&#128204; Finish Attempted Questions<span class="btn-jp">ここまでの結果を見る</span></button>' +
+        '<p class="partial-note">Busy? Check only the questions you answered. Unanswered questions will be ignored.</p>' +
+      '</div>';
+    } else {
+      wrap.innerHTML = "";
+    }
+  }
+
+  function bumpScoreChip(){
+    const el = document.getElementById("stat-score");
+    el.classList.remove("stat-chip--bump");
+    void el.offsetWidth; // restart animation
+    el.classList.add("stat-chip--bump");
+  }
+
+  function showStreakPopup(n){
+    const el = document.getElementById("streak-popup");
+    el.textContent = "\ud83d\udd25 " + n + " in a row! Nice combo!";
+    el.classList.add("show");
+    vibrate([25,30,25]);
+    clearTimeout(showStreakPopup._t);
+    showStreakPopup._t = setTimeout(()=> el.classList.remove("show"), 1700);
+  }
+
+  /* ---------------------------------------------------------------------
+     ====================  QUESTION NAVIGATOR (back / jump)  ==============
+     --------------------------------------------------------------------- */
+  function renderNavigator(){
+    const nav = document.getElementById("qnav");
+    if(!nav) return;
+    const total = state.activeQuestions.length;
+    let html = "";
+    for(let i=0;i<total;i++){
+      const status = questionStatus(i);
+      let cls = "qnav__pill";
+      if(i === state.current) cls += " qnav__pill--current";
+      else if(status === "correct") cls += " qnav__pill--correct";
+      else if(status === "wrong") cls += " qnav__pill--wrong";
+      html += '<button class="' + cls + '" data-action="qnav-jump" data-index="' + i + '" type="button" aria-label="Question ' + (i+1) + '">' + (i+1) + '</button>';
+    }
+    nav.innerHTML = html;
+    const currentPill = nav.querySelector(".qnav__pill--current");
+    if(currentPill) currentPill.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+  }
+
+  function goBack(){
+    if(state.current <= 0) return;
+    state.current--;
+    renderStage();
+  }
+
+  function goHome(){
+    clearHintTimers();
+    showScreen("screen-welcome");
+  }
+
+  function goToIndex(i){
+    if(i < 0 || i >= state.activeQuestions.length || i === state.current) return;
+    state.current = i;
+    renderStage();
+  }
+
+  function goNext(){
+    if(state.current >= state.activeQuestions.length - 1){
+      finishQuiz();
+    } else {
+      state.current++;
+      renderStage();
+    }
+  }
+
+  /* ---------------------------------------------------------------------
+     SPARKLES + CONFETTI (lightweight, no external libs)
+     --------------------------------------------------------------------- */
+  function spawnSparkles(targetEl){
+    if(!targetEl) return;
+    targetEl.style.position = "relative";
+    targetEl.style.overflow = "visible";
+    const glyphs = ["&#10024;","&#127775;","&#127919;","&#128079;","&#128293;","&#128142;","&#128640;","&#128171;","&#9989;","&#127881;","&#127942;","&#128588;"];
+    for(let i=0;i<9;i++){
+      const s = document.createElement("span");
+      s.className = "sparkle" + (i === 0 ? " sparkle--hero" : "");
+      s.innerHTML = glyphs[(sparkleCounter + i) % glyphs.length];
+      const dx = (Math.random()*150-75) + "px";
+      const dy = (-52 - Math.random()*72) + "px";
+      s.style.setProperty("--dx", dx);
+      s.style.setProperty("--dy", dy);
+      s.style.left = (12 + Math.random()*76) + "%";
+      s.style.top = (20 + Math.random()*42) + "%";
+      targetEl.appendChild(s);
+      setTimeout(()=> s.remove(), 2150);
+    }
+    sparkleCounter = (sparkleCounter + 1) % glyphs.length;
+  }
+
+  function spawnConfetti(){
+    const layer = document.getElementById("confetti-layer");
+    const colors = ["#4bb6a8","#e8a94c","#f0785c","#3a2e4d","#fff2df"];
+    const count = 46;
+    for(let i=0;i<count;i++){
+      const piece = document.createElement("div");
+      piece.className = "confetti-piece";
+      piece.style.left = Math.random()*100 + "%";
+      piece.style.background = colors[i % colors.length];
+      const duration = 2.4 + Math.random()*1.6;
+      piece.style.animationDuration = duration + "s";
+      piece.style.transform = "rotate(" + Math.floor(Math.random()*360) + "deg)";
+      layer.appendChild(piece);
+      setTimeout(()=> piece.remove(), duration*1000 + 200);
+    }
+  }
+
+  /* ---------------------------------------------------------------------
+     HINT PANEL
+     --------------------------------------------------------------------- */
+  function clearHintTimers(){
+    clearTimeout(hintTimeoutId);
+    clearInterval(hintIntervalId);
+    hintTimeoutId = null;
+    hintIntervalId = null;
+  }
+
+  function openHint(){
+    const panel = document.getElementById("hint-panel");
+    if(!panel) return;
+    playHint();
+    vibrate(15);
+    panel.classList.add("is-open");
+    const countdownEl = document.getElementById("hint-countdown");
+    clearHintTimers();
+    if(state.hintMode === "auto"){
+      let secondsLeft = 5;
+      countdownEl.textContent = "Hint closes in " + secondsLeft + "\u2026";
+      hintIntervalId = setInterval(()=>{
+        secondsLeft--;
+        if(secondsLeft > 0){
+          countdownEl.textContent = "Hint closes in " + secondsLeft + "\u2026";
+        }
+      }, 1000);
+      hintTimeoutId = setTimeout(closeHint, 5000);
+    } else {
+      countdownEl.textContent = "";
+    }
+  }
+
+  function closeHint(){
+    const panel = document.getElementById("hint-panel");
+    if(panel) panel.classList.remove("is-open");
+    clearHintTimers();
+  }
+
+  /* ---------------------------------------------------------------------
+     JP TOGGLE (generic, used for prompt + choice translations)
+     --------------------------------------------------------------------- */
+  function toggleJp(btn){
+    const targetId = btn.getAttribute("data-target");
+    const panel = document.getElementById(targetId);
+    if(!panel) return;
+    const opening = !panel.classList.contains("is-open");
+    panel.classList.toggle("is-open");
+    btn.classList.toggle("jp-pill--active", opening);
+  }
+
+  /* ---------------------------------------------------------------------
+     SHARED TEMPLATE PIECES
+     --------------------------------------------------------------------- */
+  function categoryTagHtml(q){
+    const label = quizData.categoryLabels[q.cat];
+    if(!label) return "";
+    return '<div class="q-cat-tag-row"><span class="q-cat-tag">' + esc(label.en) + '</span></div>';
+  }
+
+  function promptBlockHtml(q){
+    return (
+      '<div class="q-prompt">' +
+        '<div class="q-prompt__row">' +
+          '<p class="q-prompt__en">' + esc(q.prompt.en) + '</p>' +
+          '<button class="jp-pill" data-action="toggle-jp" data-target="prompt-jp" type="button">JP</button>' +
+        '</div>' +
+        '<p class="q-prompt__jp jp-panel" id="prompt-jp">' + esc(q.prompt.jp) + '</p>' +
+      '</div>'
+    );
+  }
+
+  function hintBlockHtml(q){
+    return (
+      '<div class="hint-row">' +
+        '<button class="btn btn--ghost btn--sm" data-action="show-hint" type="button">\ud83d\udca1 Hint</button>' +
+      '</div>' +
+      '<div class="hint-panel" id="hint-panel">' +
+        '<p class="hint-en">' + esc(q.hint.en) + '</p>' +
+        '<p class="hint-jp">' + esc(q.hint.jp) + '</p>' +
+        '<div class="hint-footer">' +
+          '<span class="hint-countdown" id="hint-countdown"></span>' +
+          '<button class="hint-close" data-action="close-hint" type="button" aria-label="Close hint">\u2715</button>' +
+        '</div>' +
+      '</div>'
+    );
+  }
+
+  function feedbackExplanationHtml(q, isCorrect, label, jp){
+    return (
+      '<div class="feedback-banner ' + (isCorrect ? "feedback-banner--good":"feedback-banner--bad") + '">' +
+        '<span>' + (isCorrect ? "\u2705 " : "\ud83d\udca1 ") + esc(label) +
+          (jp ? '<span class="feedback-jp">' + esc(jp) + '</span>' : '') +
+        '</span>' +
+      '</div>' +
+      '<div class="explanation-panel">' +
+        '<p class="explanation-en">' + esc(q.explanation.en) + '</p>' +
+        '<p class="explanation-jp">' + esc(q.explanation.jp) + '</p>' +
+      '</div>'
+    );
+  }
+
+  function nextButtonHtml(){
+    return '<button class="btn btn--primary btn--block" data-action="next-question" type="button">Next \u2192</button>';
+  }
+
+  // ==================  RETRY LOGIC: button markup  =======================
+  function retryButtonHtml(){
+    return (
+      '<button class="btn btn--secondary btn--block" data-action="retry-question" type="button">' +
+        '\ud83d\udd01 Try this question again' +
+        '<span class="btn-jp">\u3082\u3046\u4e00\u56de\u3053\u306e\u554f\u984c\u3092\u3084\u308b</span>' +
+      '</button>'
+    );
+  }
+
+  function buildAnswerAreaHtml(q, isCorrect, label, jp){
+    let html = feedbackExplanationHtml(q, isCorrect, label, jp);
+    if(!isCorrect) html += retryButtonHtml();
+    html += nextButtonHtml();
+    return html;
+  }
+
+  function standardLabel(isCorrect, retried){
+    if(isCorrect && retried) return { label: "Correct this time!", jp: "\u4eca\u5ea6\u306f\u6b63\u89e3\uff01" };
+    if(isCorrect) return { label: "Correct!", jp: "\u6b63\u89e3\uff01" };
+    return { label: "Not quite!", jp: "\u6b8b\u5ff5\u3001\u3082\u3046\u5c11\u3057\uff01" };
+  }
+
+  // Single source of truth for "what does the answer area look like right
+  // now" — used both right after answering AND when re-rendering a
+  // previously-answered question (Back / navigator jump).
+  function buildAnswerAreaForRecord(q, r){
+    if(q.type === "matching"){
+      if(!r.complete) return "";
+      return (
+        '<div class="feedback-banner feedback-banner--good"><span>\u2705 All matched! Great memory.' +
+        '<span class="feedback-jp">\u5168\u90e8\u30de\u30c3\u30c1\u3067\u304d\u307e\u3057\u305f\uff01</span></span></div>' +
+        nextButtonHtml()
+      );
+    }
+    if(q.type === "typing"){
+      if(r.currentResult === null) return "";
+      const isCorrect = r.currentResult === "correct";
+      let label, jp;
+      if(isCorrect){ label = r.retried ? "You got it!" : "Nice!"; jp = r.retried ? "\u3067\u304d\u307e\u3057\u305f\uff01" : "\u81ea\u7136\u3067\u3059\u3002"; }
+      else if(r.currentResult === "almost"){ label = "Good try."; jp = "Check the phrase once more."; }
+      else { label = "No worries."; jp = "\u3082\u3046\u4e00\u56de\u3084\u3063\u3066\u307f\u3088\u3046\u3002"; }
+      return buildAnswerAreaHtml(q, isCorrect, label, jp);
+    }
+    // mcq / situation / grid
+    if(r.currentCorrect === null) return "";
+    const { label, jp } = standardLabel(r.currentCorrect, r.retried);
+    return buildAnswerAreaHtml(q, r.currentCorrect, label, jp);
+  }
+
+  /* ---------------------------------------------------------------------
+     TYPE-SPECIFIC RENDERERS (all read the record `r` to decide whether to
+     show a fresh interactive question or a locked, already-answered one)
+     --------------------------------------------------------------------- */
+  function renderMcqCard(q, r){
+    const resolved = r.currentCorrect !== null;
+    let html = categoryTagHtml(q);
+    if(q.type === "situation" && q.situationQuote){
+      html += '<div class="quote-bubble"><span class="quote-mark">\u201c</span><p class="quote-en">' + esc(q.situationQuote.en) + '</p></div>';
+    }
+    html += promptBlockHtml(q);
+    html += '<div class="choices' + (resolved ? " is-locked" : "") + '" id="choices-wrap">';
+    q.choices.forEach(c=>{
+      let extra = "";
+      if(resolved){
+        if(c.id === r.currentChoice) extra = " choice--selected " + (r.currentCorrect ? "choice--correct" : "choice--wrong");
+        else if(c.id === q.correct && !r.currentCorrect) extra = " choice--reveal-correct";
+      }
+      html +=
+        '<div class="choice-wrap">' +
+          '<div class="choice' + extra + '" role="button" tabindex="0" data-action="select-choice" data-choice-id="' + c.id + '">' +
+            '<span class="choice-letter">' + c.id.toUpperCase() + '</span>' +
+            '<span class="choice-en">' + esc(c.en) + '</span>' +
+            '<button class="jp-pill jp-pill--sm" data-action="toggle-jp" data-target="choice-jp-' + c.id + '" type="button">JP</button>' +
+          '</div>' +
+          '<p class="choice-jp jp-panel" id="choice-jp-' + c.id + '">' + esc(c.jp) + '</p>' +
+        '</div>';
+    });
+    html += '</div>';
+    html += hintBlockHtml(q);
+    html += '<div class="answer-area" id="answer-area">' + buildAnswerAreaForRecord(q, r) + '</div>';
+    return html;
+  }
+
+  function renderGridCard(q, r){
+    const resolved = r.currentCorrect !== null;
+    let html = categoryTagHtml(q);
+    html += promptBlockHtml(q);
+    html += '<div class="position-grid' + (resolved ? " is-locked" : "") + '" id="position-grid">';
+    GRID_CELLS.forEach(cell=>{
+      let extra = "";
+      if(resolved){
+        if(cell === r.currentCell) extra = " " + (r.currentCorrect ? "grid-cell--correct" : "grid-cell--wrong");
+        else if(cell === q.correctCell && !r.currentCorrect) extra = " grid-cell--correct";
+      }
+      html += '<button class="grid-cell' + extra + '" data-action="grid-cell" data-cell="' + cell + '" aria-label="' + cell + '" type="button"></button>';
+    });
+    html += '</div>';
+    html += hintBlockHtml(q);
+    html += '<div class="answer-area" id="answer-area">' + buildAnswerAreaForRecord(q, r) + '</div>';
+    return html;
+  }
+
+  function renderMatchingCard(q, r){
+    // fresh shuffle order only generated once per attempt; re-renders
+    // (Back / navigator) reuse the same order so cards don't jump around
+    if(!r.enOrder){ r.enOrder = shuffledIndices(q.pairs.length); r.jpOrder = shuffledIndices(q.pairs.length); }
+    r.selectedEn = null; r.selectedJp = null; r.selectedEnEl = null; r.selectedJpEl = null; r.locked = false;
+
+    let html = categoryTagHtml(q);
+    html += promptBlockHtml(q);
+    html += '<div class="match-toolbar">' +
+              '<p class="match-progress" id="match-progress">' + r.matchedCount + '/' + q.pairs.length + ' matched</p>' +
+              '<button class="btn btn--ghost btn--sm" data-action="reset-matching" type="button">\ud83d\udd01 Reset</button>' +
+            '</div>';
+    html += '<div class="match-grid">';
+    html += '<div class="match-col">' + r.enOrder.map(i=>{
+      const matched = r.pairMatched[i];
+      return '<button class="match-card' + (matched ? " match-card--matched" : "") + '" data-action="match-card" data-side="en" data-pair="' + i + '" type="button"' + (matched ? " disabled" : "") + '>' + esc(q.pairs[i].en) + '</button>';
+    }).join('') + '</div>';
+    html += '<div class="match-col">' + r.jpOrder.map(i=>{
+      const matched = r.pairMatched[i];
+      return '<button class="match-card' + (matched ? " match-card--matched" : "") + '" data-action="match-card" data-side="jp" data-pair="' + i + '" type="button"' + (matched ? " disabled" : "") + '>' + esc(q.pairs[i].jp) + '</button>';
+    }).join('') + '</div>';
+    html += '</div>';
+    html += hintBlockHtml(q);
+    html += '<div class="answer-area" id="answer-area">' + buildAnswerAreaForRecord(q, r) + '</div>';
+    return html;
+  }
+
+  function renderTypingCard(q, r){
+    const resolved = r.currentResult !== null;
+    let html = categoryTagHtml(q);
+    html +=
+      '<div class="typing-jp-prompt">' +
+        '<p class="typing-jp-label">Japanese \u2192 English</p>' +
+        '<p class="typing-jp-text">' + esc(q.promptJP) + '</p>' +
+      '</div>' +
+      '<div class="typing-input-row">' +
+        '<input type="text" id="typing-input" class="typing-input" placeholder="Type the natural English phrase\u2026" autocomplete="off" autocapitalize="off" spellcheck="false" value="' + (resolved ? esc(r.currentValue) : "") + '"' + (resolved ? " disabled" : "") + '>' +
+        '<button class="btn btn--primary" data-action="check-typing" type="button"' + (resolved ? " disabled" : "") + '>Check</button>' +
+      '</div>';
+    html += hintBlockHtml(q);
+    html += '<div class="answer-area" id="answer-area">' + buildAnswerAreaForRecord(q, r) + '</div>';
+    return html;
+  }
+
+  /* ---------------------------------------------------------------------
+     STAGE RENDER
+     --------------------------------------------------------------------- */
+  function renderStage(){
+    clearHintTimers();
+    const q = state.activeQuestions[state.current];
+    const r = state.records[state.current];
+    const stage = document.getElementById("stage");
+
+    let inner = "";
+    if(q.type === "mcq" || q.type === "situation") inner = renderMcqCard(q, r);
+    else if(q.type === "grid") inner = renderGridCard(q, r);
+    else if(q.type === "matching") inner = renderMatchingCard(q, r);
+    else if(q.type === "typing") inner = renderTypingCard(q, r);
+
+    stage.innerHTML = '<div class="q-card" id="q-card">' + inner + '</div>';
+    updateHeaderStats();
+    renderNavigator();
+  }
+
+  /* ---------------------------------------------------------------------
+     ANSWER HANDLERS
+     --------------------------------------------------------------------- */
+  function handleChoiceSelect(choiceId){
+    const q = state.activeQuestions[state.current];
+    const r = state.records[state.current];
+    if(r.currentCorrect !== null) return; // already resolved, ignore stray clicks
+    const isCorrect = choiceId === q.correct;
+    r.currentChoice = choiceId;
+    r.currentCorrect = isCorrect;
+    if(r.firstCorrect === null){ r.firstChoice = choiceId; r.firstCorrect = isCorrect; bumpStreak(isCorrect); }
+
+    const wrap = document.getElementById("choices-wrap");
+    wrap.classList.add("is-locked");
+    wrap.querySelectorAll(".choice").forEach(el=>{
+      const id = el.getAttribute("data-choice-id");
+      if(id === choiceId){
+        el.classList.add("choice--selected", isCorrect ? "choice--correct" : "choice--wrong");
+        if(isCorrect) spawnSparkles(el);
+      } else if(id === q.correct && !isCorrect){
+        el.classList.add("choice--reveal-correct");
+      }
+    });
+
+    if(isCorrect){ playCorrect(); vibrate([30,40,30]); }
+    else { playWrong(); vibrate([80,40,80]); }
+
+    document.getElementById("answer-area").innerHTML = buildAnswerAreaForRecord(q, r);
+    updateHeaderStats();
+    renderNavigator();
+    if(isCorrect && !r.retried) bumpScoreChip();
+  }
+
+  function handleGridCell(cell){
+    const q = state.activeQuestions[state.current];
+    const r = state.records[state.current];
+    if(r.currentCorrect !== null) return;
+    const isCorrect = cell === q.correctCell;
+    r.currentCell = cell;
+    r.currentCorrect = isCorrect;
+    if(r.firstCorrect === null){ r.firstCell = cell; r.firstCorrect = isCorrect; bumpStreak(isCorrect); }
+
+    const grid = document.getElementById("position-grid");
+    grid.classList.add("is-locked");
+    grid.querySelectorAll(".grid-cell").forEach(el=>{
+      const c = el.getAttribute("data-cell");
+      if(c === cell){
+        el.classList.add(isCorrect ? "grid-cell--correct" : "grid-cell--wrong");
+        if(isCorrect) spawnSparkles(el);
+      } else if(c === q.correctCell && !isCorrect){
+        el.classList.add("grid-cell--correct");
+      }
+    });
+
+    if(isCorrect){ playCorrect(); vibrate([30,40,30]); }
+    else { playWrong(); vibrate([80,40,80]); }
+
+    document.getElementById("answer-area").innerHTML = buildAnswerAreaForRecord(q, r);
+    updateHeaderStats();
+    renderNavigator();
+    if(isCorrect && !r.retried) bumpScoreChip();
+  }
+
+  function handleMatchCard(side, pairIndex, el){
+    const q = state.activeQuestions[state.current];
+    const r = state.records[state.current];
+    if(r.locked || r.complete) return;
+    if(r.pairMatched[pairIndex]) return;
+
+    playClick();
+    vibrate(15);
+
+    if(side === "en"){
+      if(r.selectedEnEl) r.selectedEnEl.classList.remove("match-card--selected");
+      r.selectedEn = pairIndex; r.selectedEnEl = el;
+      el.classList.add("match-card--selected");
+    } else {
+      if(r.selectedJpEl) r.selectedJpEl.classList.remove("match-card--selected");
+      r.selectedJp = pairIndex; r.selectedJpEl = el;
+      el.classList.add("match-card--selected");
+    }
+
+    if(r.selectedEn !== null && r.selectedJp !== null){
+      const isMatch = r.selectedEn === r.selectedJp;
+      const enEl = r.selectedEnEl, jpEl = r.selectedJpEl;
+
+      if(isMatch){
+        const idx = r.selectedEn;
+        enEl.classList.remove("match-card--selected"); jpEl.classList.remove("match-card--selected");
+        enEl.classList.add("match-card--matched"); jpEl.classList.add("match-card--matched");
+        enEl.disabled = true; jpEl.disabled = true;
+        spawnSparkles(enEl);
+        playCorrect(); vibrate([30,40,30]);
+        r.pairMatched[idx] = true;
+        r.matchedCount++;
+        const firstPairAttempt = r.pairFirstResult[idx] === null;
+        if(firstPairAttempt){ r.pairFirstResult[idx] = "correct"; bumpStreak(true); }
+        const progressEl = document.getElementById("match-progress");
+        if(progressEl) progressEl.textContent = r.matchedCount + "/" + q.pairs.length + " matched";
+        r.selectedEn = null; r.selectedJp = null; r.selectedEnEl = null; r.selectedJpEl = null;
+
+        if(r.matchedCount >= q.pairs.length){
+          r.complete = true;
+          document.getElementById("answer-area").innerHTML = buildAnswerAreaForRecord(q, r);
+        }
+        updateHeaderStats();
+        renderNavigator();
+        if(firstPairAttempt) bumpScoreChip();
+      } else {
+        const missIdx = r.selectedEn; // matches the pair the student's English card actually belongs to
+        enEl.classList.add("match-card--wrong"); jpEl.classList.add("match-card--wrong");
+        playWrong(); vibrate([80,40,80]);
+        if(r.pairFirstResult[missIdx] === null){ r.pairFirstResult[missIdx] = "wrong"; bumpStreak(false); }
+        r.locked = true;
+        updateHeaderStats();
+        renderNavigator();
+        setTimeout(()=>{
+          enEl.classList.remove("match-card--wrong","match-card--selected");
+          jpEl.classList.remove("match-card--wrong","match-card--selected");
+          r.selectedEn = null; r.selectedJp = null; r.selectedEnEl = null; r.selectedJpEl = null;
+          r.locked = false;
+        }, 500);
+      }
+    }
+  }
+
+  // ==================  RETRY LOGIC: reset the matching activity  =========
+  function handleResetMatching(){
+    const q = state.activeQuestions[state.current];
+    const r = state.records[state.current];
+    r.pairMatched = new Array(q.pairs.length).fill(false);
+    r.matchedCount = 0;
+    r.complete = false;
+    r.enOrder = shuffledIndices(q.pairs.length);
+    r.jpOrder = shuffledIndices(q.pairs.length);
+    r.selectedEn = null; r.selectedJp = null; r.locked = false;
+    // r.pairFirstResult is intentionally left untouched — weak points stay accurate
+    playClick(); vibrate(15);
+    renderStage();
+  }
+
+  function handleTypingCheck(){
+    const q = state.activeQuestions[state.current];
+    const r = state.records[state.current];
+    if(r.currentResult !== null) return;
+    const input = document.getElementById("typing-input");
+    const value = input.value.trim();
+    if(!value){
+      input.classList.remove("typing-input--shake");
+      void input.offsetWidth;
+      input.classList.add("typing-input--shake");
+      return;
+    }
+
+    const result = checkTypingAnswer(value, q.accepted);
+    r.currentValue = value;
+    r.currentResult = result;
+    if(r.firstResult === null){ r.firstValue = value; r.firstResult = result; bumpStreak(result === "correct"); }
+
+    input.disabled = true;
+    document.querySelector('[data-action="check-typing"]').disabled = true;
+
+    if(result === "correct"){ playCorrect(); vibrate([30,40,30]); spawnSparkles(input.parentElement); }
+    else if(result === "almost"){ playHint(); vibrate([80,40,80]); }
+    else { playWrong(); vibrate([80,40,80]); }
+
+    document.getElementById("answer-area").innerHTML = buildAnswerAreaForRecord(q, r);
+    updateHeaderStats();
+    renderNavigator();
+    if(result === "correct" && !r.retried) bumpScoreChip();
+  }
+
+  // ==================  RETRY LOGIC: mcq / grid / typing  =================
+  // Clears only the CURRENT attempt fields, so the permanent "first
+  // attempt" fields keep the original mistake visible in weak points.
+  function handleRetryQuestion(){
+    const q = state.activeQuestions[state.current];
+    const r = state.records[state.current];
+    r.retried = true;
+    if(q.type === "mcq" || q.type === "situation"){ r.currentChoice = null; r.currentCorrect = null; }
+    else if(q.type === "grid"){ r.currentCell = null; r.currentCorrect = null; }
+    else if(q.type === "typing"){ r.currentValue = ""; r.currentResult = null; } // input cleared on re-render
+    playClick(); vibrate(15);
+    renderStage();
+  }
+
+  /* ---------------------------------------------------------------------
+     FLOW CONTROL
+     --------------------------------------------------------------------- */
+  // ==================  SHUFFLE LOGIC  =====================================
+  // First playthrough keeps quizData's original order. Every subsequent
+  // "Try Again" reshuffles the question order (matching-card pairs are
+  // always freshly shuffled per attempt regardless, see renderMatchingCard).
+  function shuffleArray(arr){
+    const copy = arr.slice();
+    for(let i=copy.length-1;i>0;i--){
+      const j = Math.floor(Math.random()*(i+1));
+      [copy[i],copy[j]] = [copy[j],copy[i]];
+    }
+    return copy;
+  }
+
+  function startQuiz(){
+    state.activeQuestions = (state.playCount === 0) ? quizData.questions.slice() : shuffleArray(quizData.questions);
+    state.playCount++;
+    state.records = state.activeQuestions.map(createRecord);
+    state.resultIndices = null;
+    state.partialResult = false;
+    state.maxScore = computeMaxScore();
+    state.current = 0;
+    state.streak = 0;
+    state.bestStreak = 0;
+    showScreen("screen-quiz");
+    renderStage();
+  }
+
+  function getWrongQuestionIndices(){
+    const wrong = [];
+    getCurrentResultIndices().forEach(i=>{
+      const status = firstAttemptStatus(state.activeQuestions[i], state.records[i]);
+      if(status === "wrong") wrong.push(i);
+    });
+    return wrong;
+  }
+
+  function summarizeQuestion(q, index){
+    if(q.prompt && q.prompt.en) return q.prompt.en;
+    if(q.promptJP) return "Translate: " + q.promptJP;
+    if(q.type === "matching") return "Match the English and Japanese phrases.";
+    return "Practice item " + (index + 1);
+  }
+
+  function renderWrongReview(){
+    const box = document.getElementById("wrong-review");
+    const list = document.getElementById("wrong-review-list");
+    if(!box || !list) return;
+    const wrong = getWrongQuestionIndices();
+    if(wrong.length === 0){
+      box.hidden = true;
+      list.innerHTML = "";
+      return;
+    }
+    box.hidden = false;
+    list.innerHTML = wrong.map(i=>{
+      const q = state.activeQuestions[i];
+      const labelObj = q.cat && quizData.categoryLabels[q.cat] ? quizData.categoryLabels[q.cat] : null;
+      const catText = labelObj ? (labelObj.en + " / " + labelObj.jp) : "Review item";
+      return '<div class="wrong-review__item">' +
+        '<span class="wrong-review__q">Q' + (i+1) + '</span>' +
+        '<p class="wrong-review__text">' + esc(summarizeQuestion(q, i)) + '</p>' +
+        '<p class="wrong-review__cat">' + esc(catText) + '</p>' +
+      '</div>';
+    }).join('');
+  }
+
+  function startMistakePractice(){
+    const wrong = getWrongQuestionIndices();
+    if(wrong.length === 0) return;
+    state.activeQuestions = wrong.map(i => state.activeQuestions[i]);
+    state.records = state.activeQuestions.map(createRecord);
+    state.resultIndices = null;
+    state.partialResult = false;
+    state.maxScore = computeMaxScore();
+    state.current = 0;
+    state.streak = 0;
+    state.bestStreak = 0;
+    showScreen("screen-quiz");
+    renderStage();
+  }
+
+
+  function finishQuiz(partial = false){
+    const resultIndices = partial ? getAttemptedQuestionIndices() : state.activeQuestions.map((_,i)=>i);
+    if(partial && resultIndices.length === 0) return;
+    state.resultIndices = resultIndices;
+    state.partialResult = partial;
+
+    const total = state.activeQuestions.length;
+    document.getElementById("stat-position").textContent = partial ? ("Partial " + resultIndices.length + "/" + total) : ("Q" + total + "/" + total);
+    document.getElementById("progress-fill").style.width = partial ? (resultIndices.length/total*100) + "%" : "100%";
+
+    const maxScore = computeMaxScoreForIndices(resultIndices);
+    const score = computeScoreForIndices(resultIndices);
+    const accuracy = maxScore > 0 ? Math.round((score / maxScore) * 100) : 0;
+
+    const eyebrow = document.getElementById("results-eyebrow");
+    const title = document.getElementById("results-title");
+    const note = document.getElementById("result-note");
+    if(eyebrow) eyebrow.textContent = partial ? "Partial Result" : "Mission Complete";
+    if(title) title.innerHTML = partial ? "Good stopping point <span class=\"emoji-pop\">&#128204;</span>" : "Nice work today! <span class=\"emoji-pop\">&#127881;</span>";
+    if(note) note.textContent = partial ? "This score checks only the questions you answered. Unanswered questions were ignored." : "Full quiz completed.";
+
+    document.getElementById("result-score").textContent = score + " / " + maxScore;
+    document.getElementById("result-accuracy").textContent = accuracy + "%";
+    document.getElementById("result-streak").textContent = state.bestStreak;
+
+    const catStats = computeCategoryStats();
+    const weakBox = document.getElementById("weak-points");
+    const weakList = document.getElementById("weak-points-list");
+    weakList.innerHTML = "";
+    let anyWeak = false;
+    Object.keys(catStats).forEach(cat=>{
+      const s = catStats[cat];
+      if(s.total > 0 && (s.correct / s.total) < 0.7){
+        const labelObj = quizData.categoryLabels[cat];
+        if(!labelObj) return;
+        anyWeak = true;
+        const item = document.createElement("p");
+        item.className = "weak-points__item";
+        item.textContent = "• " + labelObj.en + " / " + labelObj.jp;
+        weakList.appendChild(item);
+      }
+    });
+    weakBox.hidden = !anyWeak;
+    renderWrongReview();
+
+    let msgEn, msgJp;
+    if(partial){
+      msgEn = "Good choice. You checked only what you finished, so you can come back later without feeling lost.";
+      msgJp = "いい判断です。できたところだけ確認したので、あとで戻りやすくなります。";
+    } else if(accuracy >= 85){
+      msgEn = "Great work! You are getting stronger at natural English reactions.";
+      msgJp = "とても良いです。自然な英語の反応がかなり強くなっています。";
+    } else if(accuracy >= 60){
+      msgEn = "Good review! A little more practice and these phrases will feel automatic.";
+      msgJp = "良い復習です。あと少し練習すると、自然に出てくるようになります。";
+    } else {
+      msgEn = "No problem. These phrases are useful, so try one more round.";
+      msgJp = "大丈夫です。今日の表現は大事なので、もう一回やってみましょう。";
+    }
+    document.getElementById("encourage-en").textContent = msgEn;
+    document.getElementById("encourage-jp").textContent = msgJp;
+
+    showScreen("screen-results");
+    playFinal();
+    vibrate([40,30,40,30,80]);
+    if(!partial) spawnConfetti();
+  }
+
+  function finishAttemptedQuiz(){
+    const attempted = getAttemptedQuestionIndices();
+    if(attempted.length === 0) return;
+    playClick();
+    vibrate([25,30,25]);
+    finishQuiz(true);
+  }
+
+  function renderReview(){
+    const grid = document.getElementById("review-grid");
+    grid.innerHTML = quizData.reviewCards.map(card=>
+      '<div class="review-card">' +
+        '<p class="review-card__en">' + esc(card.en) + '</p>' +
+        '<p class="review-card__jp">' + esc(card.jp) + '</p>' +
+        '<p class="review-card__usage">' + esc(card.usageEn) + '</p>' +
+        '<p class="review-card__usage-jp">' + esc(card.usageJp) + '</p>' +
+      '</div>'
+    ).join('');
+    document.getElementById("teacher-note-en").textContent = quizData.teacherNote.en;
+    document.getElementById("teacher-note-jp").textContent = quizData.teacherNote.jp;
+    showScreen("screen-review");
+  }
+
+  /* ---------------------------------------------------------------------
+     TOGGLES
+     --------------------------------------------------------------------- */
+  function syncToggleUI(){
+    document.querySelectorAll('[data-action="toggle-sound"]').forEach(el=>{
+      el.setAttribute("data-on", state.soundOn ? "true":"false");
+      if(el.classList.contains("toggle-chip")) el.textContent = (state.soundOn ? "\ud83d\udd0a Sound: ON" : "\ud83d\udd07 Sound: OFF");
+    });
+    document.querySelectorAll('[data-action="toggle-vibration"]').forEach(el=>{
+      el.setAttribute("data-on", state.vibrationOn ? "true":"false");
+      if(el.classList.contains("toggle-chip")) el.textContent = (state.vibrationOn ? "\ud83d\udcf3 Vibration: ON" : "\ud83d\udcf3 Vibration: OFF");
+    });
+  }
+
+  function setHintMode(mode){
+    state.hintMode = mode;
+    document.querySelectorAll('[data-action="set-hint-mode"]').forEach(el=>{
+      el.classList.toggle("segmented__option--active", el.getAttribute("data-mode") === mode);
+    });
+  }
+
+  /* ---------------------------------------------------------------------
+     EVENT DELEGATION (single listener for the whole app)
+     --------------------------------------------------------------------- */
+  function handleAction(el){
+    const action = el.getAttribute("data-action");
+    switch(action){
+      case "toggle-sound":
+        state.soundOn = !state.soundOn;
+        syncToggleUI();
+        if(state.soundOn) playClick();
+        vibrate(15);
+        break;
+      case "toggle-vibration":
+        state.vibrationOn = !state.vibrationOn;
+        syncToggleUI();
+        playClick();
+        if(state.vibrationOn) vibrate(15);
+        break;
+      case "set-hint-mode":
+        setHintMode(el.getAttribute("data-mode"));
+        playClick(); vibrate(15);
+        break;
+      case "start-quiz":
+        playClick(); vibrate(20);
+        startQuiz();
+        break;
+      case "toggle-jp":
+        toggleJp(el);
+        playClick(); vibrate(10);
+        break;
+      case "show-hint":
+        openHint();
+        break;
+      case "close-hint":
+        closeHint();
+        playClick(); vibrate(10);
+        break;
+      case "select-choice":
+        playClick(); vibrate(20);
+        handleChoiceSelect(el.getAttribute("data-choice-id"));
+        break;
+      case "grid-cell":
+        playClick(); vibrate(20);
+        handleGridCell(el.getAttribute("data-cell"));
+        break;
+      case "match-card":
+        handleMatchCard(el.getAttribute("data-side"), parseInt(el.getAttribute("data-pair"),10), el);
+        break;
+      case "reset-matching":
+        handleResetMatching();
+        break;
+      case "check-typing":
+        playClick(); vibrate(15);
+        handleTypingCheck();
+        break;
+      case "retry-question":
+        handleRetryQuestion();
+        break;
+      case "next-question":
+        playClick(); vibrate(20);
+        goNext();
+        break;
+      case "finish-attempted":
+        finishAttemptedQuiz();
+        break;
+      // ================  NAVIGATION: Back button + navigator jump  ======
+      case "go-back":
+        playClick(); vibrate(15);
+        goBack();
+        break;
+      case "go-home":
+        playClick(); vibrate(15);
+        goHome();
+        break;
+      case "qnav-jump":
+        playClick(); vibrate(15);
+        goToIndex(parseInt(el.getAttribute("data-index"),10));
+        break;
+      case "retry-mistakes":
+        playClick(); vibrate(20);
+        startMistakePractice();
+        break;
+      case "restart-quiz":
+        playClick(); vibrate(20);
+        startQuiz();
+        break;
+      case "go-review":
+        playClick(); vibrate(15);
+        renderReview();
+        break;
+      case "go-results":
+        playClick(); vibrate(15);
+        showScreen("screen-results");
+        break;
+    }
+  }
+
+  document.addEventListener("click", function(e){
+    const el = e.target.closest("[data-action]");
+    if(!el) return;
+    handleAction(el);
+  });
+
+  document.addEventListener("keydown", function(e){
+    if(e.key !== "Enter" && e.key !== " ") return;
+    const el = e.target.closest('[role="button"][data-action]');
+    if(!el) return;
+    e.preventDefault();
+    handleAction(el);
+  });
+
+  document.addEventListener("keydown", function(e){
+    if(e.key === "Enter" && e.target && e.target.id === "typing-input"){
+      const checkBtn = document.querySelector('[data-action="check-typing"]');
+      if(checkBtn){
+        e.preventDefault();
+        handleAction(checkBtn);
+      }
+    }
+  });
+
+  /* ---------------------------------------------------------------------
+     INIT
+     --------------------------------------------------------------------- */
+  function init(){
+    populateStaticText();
+    renderFocusChips();
+    syncToggleUI();
+    setHintMode(state.hintMode);
+  }
+
+  document.addEventListener("DOMContentLoaded", init);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,3693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Review Quest</title>
+<style>
+/* =========================================================================
+   DESIGN TOKENS
+   Warm dawn palette + a "postmark" motif (this is a personal lesson-review
+   postcard from teacher to student, so every screen carries a small
+   hand-stamped date badge). Change --bg / --ink / accents to re-skin.
+   ========================================================================= */
+:root{
+  --bg-top:#fff7ec;
+  --bg-bottom:#ffd9c0;
+  --ink:#3a2e4d;
+  --ink-soft:#6e5f87;
+  --ink-faint:#a99cc4;
+  --surface:rgba(255,255,255,0.60);
+  --surface-strong:rgba(255,255,255,0.86);
+  --border:rgba(58,46,77,0.14);
+  --teal:#4bb6a8;
+  --teal-dark:#2f9284;
+  --teal-tint:rgba(75,182,168,0.16);
+  --gold:#e8a94c;
+  --gold-dark:#c1832a;
+  --gold-tint:rgba(232,169,76,0.18);
+  --coral:#f0785c;
+  --coral-dark:#d3563c;
+  --coral-tint:rgba(240,120,92,0.16);
+  --shadow-lg:0 24px 60px -24px rgba(58,46,77,0.38);
+  --shadow-sm:0 8px 20px -10px rgba(58,46,77,0.28);
+  --radius-lg:26px;
+  --radius-md:18px;
+  --radius-sm:12px;
+  --radius-pill:999px;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic","Noto Sans JP","Meiryo",sans-serif;
+}
+
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:var(--font);
+  color:var(--ink);
+  min-height:100vh;
+  background:linear-gradient(160deg,var(--bg-top) 0%,var(--bg-bottom) 100%);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+button,input{font-family:inherit;}
+h1,h2,h3,p{margin:0;}
+ul{margin:0;padding:0;list-style:none;}
+
+/* soft ambient blobs behind everything, purely decorative */
+.bg-decor{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+.blob{position:absolute;border-radius:50%;filter:blur(60px);opacity:0.55;}
+.blob--a{width:360px;height:360px;background:var(--teal);top:-120px;left:-100px;}
+.blob--b{width:420px;height:420px;background:var(--gold);bottom:-160px;right:-120px;}
+
+.app{position:relative;z-index:1;max-width:480px;margin:0 auto;min-height:100vh;padding:22px 16px 40px;padding-top:max(22px, env(safe-area-inset-top));display:flex;flex-direction:column;}
+
+:focus-visible{outline:2px solid var(--teal-dark);outline-offset:2px;}
+
+/* =========================================================================
+   SCREENS
+   ========================================================================= */
+.screen{display:none;flex:1;flex-direction:column;}
+.screen--active{display:flex;}
+
+.card{
+  position:relative;
+  background:var(--surface);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  border:1px solid rgba(255,255,255,0.6);
+  border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-lg);
+  padding:28px 24px;
+}
+
+/* postmark badge -- the recurring signature element */
+.postmark{position:absolute;top:-16px;right:-8px;pointer-events:none;}
+.postmark__ring{
+  width:82px;height:82px;border-radius:50%;
+  border:2px dashed var(--ink-faint);
+  background:rgba(255,255,255,0.65);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transform:rotate(-9deg);
+  gap:2px;
+}
+.postmark-date{font-weight:800;font-size:1.05rem;letter-spacing:0.01em;color:var(--ink);}
+.postmark__label{font-size:0.46rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-soft);text-align:center;line-height:1.3;padding:0 6px;}
+
+.eyebrow{font-size:0.7rem;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--teal-dark);margin-bottom:10px;}
+.display-title{font-size:clamp(1.55rem,6vw,2rem);font-weight:800;letter-spacing:-0.01em;line-height:1.18;margin-bottom:12px;}
+.subtitle-en{font-size:0.98rem;color:var(--ink);line-height:1.55;margin-bottom:6px;}
+.subtitle-jp{font-size:0.9rem;color:var(--ink-soft);line-height:1.6;margin-bottom:22px;}
+
+/* welcome-screen controls */
+.settings-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;}
+.toggle-chip{
+  flex:1;min-width:130px;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  padding:12px 14px;border-radius:var(--radius-pill);
+  border:1px solid var(--border);background:var(--surface-strong);
+  font-size:0.85rem;font-weight:600;color:var(--ink);
+  cursor:pointer;transition:transform .15s ease, background .2s ease, box-shadow .2s ease;
+}
+.toggle-chip:active{transform:scale(0.96);}
+.toggle-chip[data-on="false"]{background:rgba(255,255,255,0.35);color:var(--ink-soft);}
+.toggle-chip[data-on="true"]{box-shadow:0 0 0 2px var(--teal-tint) inset;}
+
+.hint-mode-row{margin-bottom:24px;}
+.hint-mode-label{font-size:0.78rem;font-weight:700;color:var(--ink-soft);margin-bottom:8px;}
+.segmented{display:flex;background:rgba(255,255,255,0.5);border-radius:var(--radius-pill);padding:4px;border:1px solid var(--border);}
+.segmented__option{
+  flex:1;padding:10px 8px;border:none;background:transparent;border-radius:var(--radius-pill);
+  font-size:0.8rem;font-weight:700;color:var(--ink-soft);cursor:pointer;transition:all .2s ease;
+}
+.segmented__option--active{background:var(--ink);color:#fff9f0;box-shadow:var(--shadow-sm);}
+
+/* buttons */
+.btn{
+  border:none;border-radius:var(--radius-pill);font-weight:700;cursor:pointer;
+  transition:transform .12s ease, box-shadow .2s ease, background .2s ease;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+}
+.btn:active{transform:scale(0.96);}
+.btn--primary{background:linear-gradient(135deg,var(--teal),var(--teal-dark));color:#fff;box-shadow:0 14px 30px -12px rgba(47,146,132,0.55);}
+.btn--large{width:100%;padding:16px 20px;font-size:1.02rem;}
+.btn--block{width:100%;padding:14px 18px;font-size:0.95rem;margin-top:14px;}
+.btn--ghost{background:var(--surface-strong);color:var(--ink);border:1px solid var(--border);padding:10px 16px;font-size:0.82rem;}
+.btn--sm{padding:8px 14px;font-size:0.78rem;}
+.btn--secondary{background:var(--surface-strong);color:var(--ink);border:1px solid var(--border);}
+
+/* =========================================================================
+   QUIZ HEADER
+   ========================================================================= */
+.quiz-header{margin-bottom:16px;}
+.quiz-header__top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.lesson-tag{font-size:0.68rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-soft);background:var(--surface-strong);padding:6px 12px;border-radius:var(--radius-pill);border:1px solid var(--border);}
+.mini-toggles{display:flex;gap:8px;}
+.mini-toggle{width:34px;height:34px;border-radius:50%;border:1px solid var(--border);background:var(--surface-strong);font-size:0.95rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .15s ease, opacity .2s ease;}
+.mini-toggle:active{transform:scale(0.9);}
+.mini-toggle[data-on="false"]{opacity:0.4;}
+
+.progress-track{height:8px;border-radius:var(--radius-pill);background:rgba(58,46,77,0.1);overflow:hidden;margin-bottom:10px;}
+.progress-fill{height:100%;width:0%;border-radius:var(--radius-pill);background:linear-gradient(90deg,var(--gold),var(--teal));transition:width .45s cubic-bezier(.4,0,.2,1);}
+
+.stat-row{display:flex;gap:8px;}
+.stat-chip{font-size:0.78rem;font-weight:700;color:var(--ink);background:var(--surface-strong);border:1px solid var(--border);padding:6px 12px;border-radius:var(--radius-pill);transition:transform .18s ease;}
+.stat-chip--bump{animation:scoreBump .4s ease;}
+
+/* =========================================================================
+   STAGE / QUESTION CARD
+   ========================================================================= */
+.stage{position:relative;flex:1;}
+.q-card{
+  background:var(--surface);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  border:1px solid rgba(255,255,255,0.6);
+  border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-lg);
+  padding:22px 20px;
+  animation:cardEnter .42s cubic-bezier(.22,1,.36,1);
+}
+
+.quote-bubble{background:var(--surface-strong);border-radius:var(--radius-md);padding:14px 16px;margin-bottom:16px;position:relative;border:1px solid var(--border);}
+.quote-mark{position:absolute;top:-6px;left:12px;font-size:2rem;color:var(--gold);font-weight:800;line-height:1;}
+.quote-en{font-size:0.92rem;font-style:italic;color:var(--ink);line-height:1.5;padding-left:6px;}
+
+.q-prompt{margin-bottom:16px;}
+.q-prompt__row{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;}
+.q-prompt__en{font-size:1.08rem;font-weight:700;line-height:1.4;flex:1;}
+.q-prompt__jp{font-size:0.86rem;color:var(--ink-soft);line-height:1.55;}
+
+.jp-pill{
+  flex:none;border:1px solid var(--border);background:var(--surface-strong);
+  color:var(--ink-soft);font-size:0.62rem;font-weight:800;letter-spacing:0.04em;
+  padding:4px 9px;border-radius:var(--radius-pill);cursor:pointer;transition:all .18s ease;
+}
+.jp-pill--sm{font-size:0.55rem;padding:3px 7px;margin-left:8px;}
+.jp-pill--active{background:var(--teal);color:#fff;border-color:var(--teal);}
+
+.jp-panel{max-height:0;opacity:0;overflow:hidden;transition:max-height .3s ease, opacity .22s ease, margin-top .3s ease;margin-top:0;}
+.jp-panel.is-open{max-height:240px;opacity:1;margin-top:6px;}
+
+/* choices */
+.choices{display:flex;flex-direction:column;gap:10px;margin-bottom:6px;}
+.choice-wrap{}
+.choice{
+  display:flex;align-items:center;gap:10px;
+  width:100%;text-align:left;padding:13px 14px;border-radius:var(--radius-md);
+  background:var(--surface-strong);border:1.5px solid var(--border);
+  cursor:pointer;transition:transform .14s ease, border-color .2s ease, box-shadow .2s ease, background .2s ease;
+  position:relative;overflow:visible;
+}
+.choice:hover{border-color:var(--teal);transform:translateY(-1px);}
+.choice:active{transform:scale(0.98);}
+.choice-letter{flex:none;width:24px;height:24px;border-radius:50%;background:var(--ink);color:#fff9f0;font-size:0.7rem;font-weight:800;display:flex;align-items:center;justify-content:center;}
+.choice-en{flex:1;font-size:0.92rem;font-weight:600;}
+.choices.is-locked .choice{pointer-events:none;}
+.choice--selected.choice--correct{border-color:var(--teal);background:var(--teal-tint);animation:glowPulse .6s ease;}
+.choice--selected.choice--wrong{border-color:var(--coral);background:var(--coral-tint);animation:shake .45s ease;}
+.choice--reveal-correct{border-color:var(--teal);background:var(--teal-tint);}
+.choice-jp{font-size:0.78rem;color:var(--ink-soft);padding:0 4px;}
+
+/* hint */
+.hint-row{margin:14px 0 4px;}
+.hint-panel{max-height:0;opacity:0;overflow:hidden;transition:max-height .32s ease, opacity .24s ease, margin .32s ease;background:var(--gold-tint);border-radius:var(--radius-md);margin-top:0;}
+.hint-panel.is-open{max-height:260px;opacity:1;margin-top:10px;padding:12px 14px;}
+.hint-en{font-size:0.86rem;font-weight:600;color:var(--ink);margin-bottom:4px;}
+.hint-jp{font-size:0.8rem;color:var(--ink-soft);}
+.hint-footer{display:flex;align-items:center;justify-content:space-between;margin-top:8px;}
+.hint-countdown{font-size:0.72rem;color:var(--gold-dark);font-weight:700;}
+.hint-close{border:none;background:rgba(58,46,77,0.1);color:var(--ink);width:22px;height:22px;border-radius:50%;cursor:pointer;font-size:0.7rem;}
+
+/* feedback / explanation */
+.answer-area{margin-top:8px;}
+.feedback-banner{padding:10px 14px;border-radius:var(--radius-md);font-weight:700;font-size:0.92rem;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.feedback-banner--good{background:var(--teal-tint);color:var(--teal-dark);}
+.feedback-banner--bad{background:var(--coral-tint);color:var(--coral-dark);}
+.feedback-jp{display:block;font-size:0.76rem;font-weight:600;margin-top:2px;opacity:0.85;}
+.explanation-panel{background:var(--surface-strong);border:1px solid var(--border);border-radius:var(--radius-md);padding:14px;}
+.explanation-en{font-size:0.88rem;line-height:1.5;margin-bottom:6px;}
+.explanation-jp{font-size:0.82rem;color:var(--ink-soft);line-height:1.55;}
+
+/* position grid mini-game */
+.position-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:4px 0 4px;}
+.grid-cell{aspect-ratio:1/1;border-radius:var(--radius-sm);border:1.5px solid var(--border);background:var(--surface-strong);cursor:pointer;transition:transform .15s ease, border-color .2s ease, background .2s ease;}
+.grid-cell:hover{border-color:var(--teal);}
+.grid-cell:active{transform:scale(0.92);}
+.position-grid.is-locked .grid-cell{pointer-events:none;}
+.grid-cell--correct{background:var(--teal-tint);border-color:var(--teal);animation:glowPulse .6s ease;}
+.grid-cell--wrong{background:var(--coral-tint);border-color:var(--coral);animation:shake .45s ease;}
+
+/* matching */
+.match-progress{font-size:0.8rem;font-weight:700;color:var(--ink-soft);margin-bottom:10px;}
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:4px;}
+.match-col{display:flex;flex-direction:column;gap:8px;}
+.match-card{
+  padding:10px 10px;border-radius:var(--radius-sm);border:1.5px solid var(--border);
+  background:var(--surface-strong);font-size:0.76rem;font-weight:600;text-align:left;cursor:pointer;
+  transition:transform .14s ease, border-color .18s ease, background .18s ease, opacity .3s ease;
+  min-height:44px;display:flex;align-items:center;
+}
+.match-card:active{transform:scale(0.95);}
+.match-card--selected{border-color:var(--gold);background:var(--gold-tint);transform:scale(1.03);}
+.match-card--matched{border-color:var(--teal);background:var(--teal-tint);opacity:0.6;pointer-events:none;animation:matchPop .4s ease;}
+.match-card--wrong{border-color:var(--coral);background:var(--coral-tint);animation:shake .45s ease;}
+
+/* typing */
+.typing-jp-prompt{background:var(--surface-strong);border-radius:var(--radius-md);padding:16px;text-align:center;margin-bottom:16px;border:1px solid var(--border);}
+.typing-jp-label{font-size:0.66rem;font-weight:800;letter-spacing:0.1em;color:var(--ink-faint);text-transform:uppercase;margin-bottom:6px;}
+.typing-jp-text{font-size:1.15rem;font-weight:700;line-height:1.5;}
+.typing-input-row{display:flex;gap:8px;}
+.typing-input{flex:1;padding:13px 14px;border-radius:var(--radius-md);border:1.5px solid var(--border);background:var(--surface-strong);font-size:0.92rem;color:var(--ink);}
+.typing-input:focus{border-color:var(--teal);}
+.typing-input--shake{animation:shake .4s ease;}
+
+/* streak popup */
+.streak-popup{
+  position:fixed;top:18px;left:50%;transform:translateX(-50%) translateY(-140%);
+  background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:#fff;
+  padding:12px 22px;border-radius:var(--radius-pill);font-weight:800;font-size:0.9rem;
+  box-shadow:0 16px 34px -12px rgba(193,131,42,0.6);z-index:50;transition:transform .38s cubic-bezier(.34,1.56,.64,1);
+}
+.streak-popup.show{transform:translateX(-50%) translateY(0);}
+
+/* confetti */
+.confetti-layer{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:60;}
+.confetti-piece{position:absolute;top:-20px;width:8px;height:14px;border-radius:2px;opacity:0.9;animation:confettiFall linear forwards;}
+
+/* sparkles on correct */
+.sparkle{position:absolute;font-size:0.9rem;pointer-events:none;animation:sparklePop .7s ease forwards;}
+
+/* results & review */
+.results-card{text-align:center;}
+.result-stats{display:flex;gap:10px;margin:18px 0;}
+.result-stat{flex:1;background:var(--surface-strong);border:1px solid var(--border);border-radius:var(--radius-md);padding:14px 8px;}
+.result-stat__value{font-size:1.3rem;font-weight:800;color:var(--teal-dark);}
+.result-stat__label{font-size:0.66rem;color:var(--ink-soft);font-weight:700;letter-spacing:0.04em;text-transform:uppercase;margin-top:2px;}
+.weak-points{text-align:left;background:var(--gold-tint);border-radius:var(--radius-md);padding:14px 16px;margin-bottom:16px;}
+.weak-points__title{font-size:0.78rem;font-weight:800;color:var(--gold-dark);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;}
+.weak-points__item{font-size:0.85rem;color:var(--ink);margin-bottom:4px;}
+.encourage-en{font-size:0.98rem;font-weight:700;margin-bottom:6px;line-height:1.5;}
+.encourage-jp{font-size:0.86rem;color:var(--ink-soft);line-height:1.55;margin-bottom:18px;}
+.nav-row{display:flex;flex-direction:column;gap:10px;}
+
+.review-title{font-size:clamp(1.3rem,5vw,1.6rem);font-weight:800;margin-bottom:4px;}
+.review-subtitle{font-size:0.86rem;color:var(--ink-soft);margin-bottom:18px;}
+.review-grid{display:flex;flex-direction:column;gap:12px;margin-bottom:18px;}
+.review-card{background:var(--surface-strong);border:1px solid var(--border);border-radius:var(--radius-md);padding:14px 16px;}
+.review-card__en{font-size:1rem;font-weight:700;margin-bottom:2px;}
+.review-card__jp{font-size:0.86rem;color:var(--ink-soft);margin-bottom:6px;}
+.review-card__usage{font-size:0.78rem;color:var(--teal-dark);font-weight:600;}
+.review-card__usage-jp{font-size:0.76rem;color:var(--ink-soft);margin-top:2px;}
+.teacher-note{background:var(--gold-tint);border-radius:var(--radius-md);padding:16px;margin-bottom:18px;}
+.teacher-note__label{font-size:0.68rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:var(--gold-dark);margin-bottom:8px;}
+.teacher-note__en{font-size:0.86rem;line-height:1.55;margin-bottom:6px;}
+.teacher-note__jp{font-size:0.8rem;color:var(--ink-soft);line-height:1.55;}
+
+/* =========================================================================
+   ADDED IN THIS VERSION — back button, question navigator, retry buttons,
+   "Today's Focus" mini card, floating decoration, per-question category
+   tag, and mobile-readability tweaks.
+   Nothing above this block was changed; these rules either add new
+   components or re-declare a couple of properties on existing classes
+   (CSS cascade lets a later rule adjust just the properties it names,
+   everything else the original rule set stays in effect).
+   ========================================================================= */
+
+/* header: back button + navigator strip */
+.quiz-header__left{display:flex;align-items:center;gap:8px;}
+.mini-toggle:disabled{opacity:0.25;cursor:not-allowed;}
+.stat-row{margin-bottom:8px;}
+
+.qnav{display:flex;gap:6px;overflow-x:auto;padding:2px 2px 6px;-webkit-overflow-scrolling:touch;scrollbar-width:thin;}
+.qnav::-webkit-scrollbar{height:4px;}
+.qnav::-webkit-scrollbar-thumb{background:rgba(58,46,77,0.22);border-radius:4px;}
+.qnav__pill{
+  flex:none;width:32px;height:32px;border-radius:50%;
+  border:1.5px solid var(--border);background:var(--surface-strong);
+  font-size:0.72rem;font-weight:700;color:var(--ink-soft);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  transition:transform .15s ease, border-color .2s ease, background .2s ease, color .2s ease;
+}
+.qnav__pill:active{transform:scale(0.9);}
+.qnav__pill--current{border-color:var(--ink);color:var(--ink);background:#fff;box-shadow:0 0 0 2px rgba(58,46,77,0.18);transform:scale(1.08);}
+.qnav__pill--correct{background:var(--teal-tint);border-color:var(--teal);color:var(--teal-dark);}
+.qnav__pill--wrong{background:var(--coral-tint);border-color:var(--coral);color:var(--coral-dark);}
+
+/* retry button (two-line label: English + Japanese) */
+.btn-jp{display:block;font-size:0.72rem;font-weight:600;opacity:0.85;margin-top:2px;line-height:1.3;}
+
+/* small category chip shown at the top of each question card */
+.q-cat-tag-row{margin-bottom:10px;}
+.q-cat-tag{display:inline-block;font-size:0.62rem;font-weight:800;letter-spacing:0.06em;text-transform:uppercase;color:var(--teal-dark);background:var(--teal-tint);padding:4px 10px;border-radius:var(--radius-pill);}
+
+/* matching toolbar: progress text + reset button share a row */
+.match-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;}
+.match-toolbar .match-progress{margin-bottom:0;}
+
+/* "Today's Focus" mini card on the welcome screen */
+.focus-card{background:var(--surface-strong);border:1px dashed var(--ink-faint);border-radius:var(--radius-md);padding:14px 16px;margin-bottom:18px;}
+.focus-card__label{font-size:0.68rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:var(--gold-dark);margin-bottom:8px;}
+.focus-card__chips{display:flex;flex-wrap:wrap;gap:6px;}
+.focus-chip{font-size:0.74rem;font-weight:700;color:var(--ink);background:var(--gold-tint);padding:5px 11px;border-radius:var(--radius-pill);}
+
+/* premium ambient accents: quiet moving rings instead of distracting emojis
+   v3 fix: removed the center/top logo completely. The previous Q badge
+   overlapped the card/title area on some screen sizes. These accents stay
+   only around the edges, so the main card remains clean. */
+.ambient-accent{
+  position:absolute;
+  border-radius:34px;
+  border:1px solid rgba(255,255,255,0.45);
+  background:linear-gradient(135deg,rgba(255,255,255,0.16),rgba(255,255,255,0.04));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.24),0 18px 60px -34px rgba(58,46,77,0.45);
+  opacity:0.34;
+  animation:ambientDrift 16s ease-in-out infinite;
+}
+.ambient-accent::before{
+  content:"";
+  position:absolute;
+  width:8px;height:8px;border-radius:50%;
+  background:var(--teal);
+  opacity:0.35;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+}
+.ambient-accent--1{width:92px;height:38px;top:15%;left:6%;transform:rotate(-14deg);animation-delay:0s;}
+.ambient-accent--2{width:124px;height:48px;right:5%;top:37%;transform:rotate(18deg);animation-delay:2s;}
+.ambient-accent--3{width:78px;height:78px;left:8%;bottom:14%;border-radius:50%;animation-delay:4s;}
+.ambient-accent--4{width:106px;height:42px;right:10%;bottom:7%;transform:rotate(-8deg);animation-delay:6s;}
+
+/* mobile-readability tweaks: bigger JP tap targets, no iOS input zoom */
+.jp-pill{padding:6px 11px;font-size:0.66rem;}
+.jp-pill--sm{padding:5px 9px;font-size:0.6rem;margin-left:6px;}
+.match-card{font-size:0.82rem;padding:12px 12px;}
+.typing-input{font-size:16px;}
+
+/* Sentence Builder: tap words in the correct order.
+   This is a safe upgrade over drag-and-drop, especially for mobile browsers. */
+.order-builder{background:var(--surface-strong);border:1px solid var(--border);border-radius:var(--radius-md);padding:14px;margin-bottom:4px;}
+.order-target{
+  min-height:54px;
+  border:1.5px dashed rgba(58,46,77,0.22);
+  border-radius:var(--radius-md);
+  background:rgba(255,255,255,0.48);
+  padding:12px;
+  margin-bottom:12px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  align-items:center;
+}
+.order-target--empty{color:var(--ink-soft);font-size:0.84rem;font-weight:600;}
+.order-token{
+  display:inline-flex;
+  align-items:center;
+  padding:7px 10px;
+  border-radius:var(--radius-pill);
+  background:var(--gold-tint);
+  color:var(--ink);
+  font-size:0.82rem;
+  font-weight:700;
+}
+.order-target--correct{border-color:var(--teal);background:var(--teal-tint);animation:glowPulse .6s ease;}
+.order-target--wrong{border-color:var(--coral);background:var(--coral-tint);animation:shake .45s ease;}
+.order-bank{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px;}
+.order-chip{
+  border:1.5px solid var(--border);
+  background:#fff;
+  color:var(--ink);
+  border-radius:var(--radius-pill);
+  padding:9px 12px;
+  font-size:0.84rem;
+  font-weight:800;
+  cursor:pointer;
+  transition:transform .14s ease, border-color .2s ease, background .2s ease, opacity .2s ease;
+}
+.order-chip:hover{border-color:var(--teal);transform:translateY(-1px);}
+.order-chip:active{transform:scale(0.94);}
+.order-chip:disabled{opacity:0.38;cursor:not-allowed;transform:none;}
+.order-tools{display:flex;justify-content:flex-end;}
+.order-answer{
+  margin-top:8px;
+  padding:10px 12px;
+  border-radius:var(--radius-sm);
+  background:var(--teal-tint);
+  color:var(--teal-dark);
+  font-size:0.8rem;
+  font-weight:700;
+  line-height:1.45;
+}
+
+
+
+/* =========================================================================
+   OFFICIAL FIRST-TRY SCORING + MISTAKE PRACTICE
+   - Final score is based only on the first attempt.
+   - Retry is kept for learning, but it never repairs the official score.
+   - Results screen can launch a mini round with only first-try mistakes.
+   ========================================================================= */
+.wrong-review{
+  text-align:left;background:var(--surface-strong);border:1px solid var(--border);
+  border-radius:var(--radius-md);padding:14px 16px;margin:0 0 16px;
+}
+.wrong-review__title{font-size:0.8rem;font-weight:800;color:var(--coral-dark);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;}
+.wrong-review__subtitle{font-size:0.8rem;color:var(--ink-soft);line-height:1.45;margin-bottom:10px;}
+.wrong-review__list{display:flex;flex-direction:column;gap:8px;margin-bottom:12px;}
+.wrong-review__item{background:rgba(240,120,92,0.08);border:1px solid rgba(240,120,92,0.18);border-radius:var(--radius-sm);padding:10px 11px;}
+.wrong-review__q{display:inline-block;font-size:0.68rem;font-weight:800;color:var(--coral-dark);margin-bottom:3px;}
+.wrong-review__text{font-size:0.84rem;color:var(--ink);line-height:1.4;font-weight:650;}
+.wrong-review__cat{font-size:0.72rem;color:var(--ink-soft);margin-top:3px;}
+.official-score-note{font-size:0.72rem;color:var(--ink-soft);line-height:1.4;margin-top:7px;text-align:center;}
+
+/* =========================================================================
+   LIVING / PREMIUM VISUAL POLISH (v4) — visual-only additions.
+   Nothing here touches layout structure, data-action wiring, or game logic;
+   it only adds pseudo-elements, new keyframes, and re-declares a couple of
+   properties (position/overflow) so existing elements can host a tap-ripple
+   or shimmer. Every rule is additive or property-only — no selector here
+   removes or overrides behaviour, only appearance.
+   NOTE: .postmark deliberately overflows its .card corner by design, and
+   sparkles deliberately fly outside .choice / .grid-cell / .match-card, so
+   neither .card nor .q-card gets overflow:hidden here — that's intentional,
+   not an oversight.
+   ========================================================================= */
+
+/* remove the default gray tap flash on mobile so the custom ripple reads clean */
+.btn,.mini-toggle,.toggle-chip,.segmented__option,.qnav__pill,.order-chip,.jp-pill,
+.choice,.grid-cell,.match-card{
+  -webkit-tap-highlight-color:transparent;
+}
+
+/* shared tap-ripple: a soft radial flash that blooms on press and settles
+   back out on release. Uses ::before so it never fights with any ::after
+   a class might already rely on. */
+.btn,.mini-toggle,.toggle-chip,.segmented__option,.qnav__pill,.order-chip,.jp-pill,
+.grid-cell,.match-card{
+  position:relative;
+}
+.btn::before,.mini-toggle::before,.toggle-chip::before,.segmented__option::before,
+.qnav__pill::before,.order-chip::before,.jp-pill::before,
+.choice::before,.grid-cell::before,.match-card::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+  background:radial-gradient(circle at 50% 50%, rgba(255,255,255,0.65) 0%, rgba(255,255,255,0) 68%);
+  opacity:0;
+  transform:scale(0.5);
+  transition:opacity .5s ease, transform .5s ease;
+  pointer-events:none;
+}
+.btn:active::before,.mini-toggle:active::before,.toggle-chip:active::before,
+.segmented__option:active::before,.qnav__pill:active::before,.order-chip:active::before,
+.jp-pill:active::before,.choice:active::before,.grid-cell:active::before,.match-card:active::before{
+  opacity:1;
+  transform:scale(1.15);
+  transition:none;
+}
+
+/* primary button: a slow light gleam sweeps across every few seconds, so
+   the main call-to-action reads as alive even before anyone touches it */
+.btn--primary{position:relative;overflow:hidden;}
+.btn--primary::after{
+  content:"";
+  position:absolute;
+  top:0; left:-60%;
+  width:40%; height:100%;
+  background:linear-gradient(120deg, transparent, rgba(255,255,255,0.55), transparent);
+  transform:skewX(-18deg);
+  animation:btnShimmer 2.7s ease-in-out infinite;
+  pointer-events:none;
+}
+
+/* postmark badge: a slow, quiet breathing glow keeps it from looking static */
+.postmark__ring{animation:postmarkBreathe 5.5s ease-in-out infinite;}
+
+/* premium gradient title — falls back to the original solid ink color on
+   any browser that doesn't support background-clip:text */
+@supports (background-clip:text) or (-webkit-background-clip:text){
+  .display-title{
+    background:linear-gradient(135deg, var(--ink) 0%, var(--teal-dark) 55%, var(--gold-dark) 100%);
+    background-size:200% 200%;
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    animation:titleGradientShift 7s ease-in-out infinite;
+  }
+}
+
+/* sentence-builder tokens pop in as they land in the sentence strip */
+.order-token{animation:tokenPop .28s cubic-bezier(.34,1.56,.64,1);}
+
+/* question navigator: a tiny corner dot instead of covering the number, so
+   correct vs. still-needs-work is visible at a glance */
+.qnav__pill--correct::after,.qnav__pill--wrong::after{
+  content:"";
+  position:absolute;
+  top:-2px; right:-2px;
+  width:9px; height:9px;
+  border-radius:50%;
+  border:1.5px solid #fff9f0;
+}
+.qnav__pill--correct::after{background:var(--teal);}
+.qnav__pill--wrong::after{background:var(--coral);}
+
+/* progress bar: a quiet moving highlight instead of a flat fill */
+.progress-fill{position:relative;overflow:hidden;}
+.progress-fill::after{
+  content:"";
+  position:absolute; inset:0;
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,0.55), transparent);
+  width:50%;
+  animation:progressShimmer 2.2s ease-in-out infinite;
+}
+
+/* sparkles read a little richer without changing their motion or timing */
+.sparkle{font-size:1.05rem;filter:drop-shadow(0 0 4px rgba(255,255,255,0.75));}
+
+/* confetti: a mix of squares, circles, and ribbons instead of one shape */
+.confetti-piece:nth-child(3n){border-radius:50%;}
+.confetti-piece:nth-child(4n){width:6px;height:16px;border-radius:1px;}
+.confetti-piece:nth-child(5n){width:10px;height:10px;border-radius:3px;}
+
+/* results screen: stats pop in one after another instead of appearing flat */
+.result-stat{animation:popIn .5s cubic-bezier(.22,1,.36,1) backwards;}
+.result-stat:nth-child(1){animation-delay:.05s;}
+.result-stat:nth-child(2){animation-delay:.15s;}
+.result-stat:nth-child(3){animation-delay:.25s;}
+
+/* review screen: cards ease in one by one */
+.review-card{animation:reviewCardIn .45s ease backwards;}
+.review-card:nth-child(1){animation-delay:.04s;}
+.review-card:nth-child(2){animation-delay:.10s;}
+.review-card:nth-child(3){animation-delay:.16s;}
+.review-card:nth-child(4){animation-delay:.22s;}
+.review-card:nth-child(5){animation-delay:.28s;}
+.review-card:nth-child(6){animation-delay:.34s;}
+.review-card:nth-child(7){animation-delay:.40s;}
+.review-card:nth-child(8){animation-delay:.46s;}
+.review-card:nth-child(9){animation-delay:.52s;}
+.review-card:nth-child(10){animation-delay:.58s;}
+
+/* two extra ambient accents deepen the background without adding clutter */
+.ambient-accent--5{width:70px;height:70px;border-radius:50%;right:16%;top:8%;animation-delay:1s;}
+.ambient-accent--6{width:96px;height:40px;left:4%;top:52%;transform:rotate(10deg);animation-delay:5s;}
+
+/* small bounce for a few static emoji so the chrome feels a touch more alive */
+.emoji-pop{display:inline-block;animation:emojiPop 2.8s ease-in-out infinite;}
+
+/* gentle hover lift on desktop only — this never sticks on touch devices */
+@media (hover:hover) and (pointer:fine){
+  .result-stat:hover,.review-card:hover,.wrong-review__item:hover{
+    transform:translateY(-2px);
+    box-shadow:var(--shadow-sm);
+  }
+  .focus-chip:hover{transform:translateY(-1px);background:var(--gold);color:#fff;}
+  .result-stat,.review-card,.wrong-review__item,.focus-chip{transition:transform .2s ease, box-shadow .2s ease, background .2s ease, color .2s ease;}
+}
+
+
+.teacher-signature{font-size:0.72rem;color:var(--ink-soft);text-align:center;line-height:1.45;margin-top:14px;opacity:0.88;}
+.teacher-signature strong{color:var(--teal-dark);font-weight:800;}
+
+
+.hub-return-link{position:fixed;left:14px;bottom:14px;z-index:45;display:inline-flex;align-items:center;gap:6px;padding:9px 12px;border-radius:999px;background:rgba(255,255,255,0.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(58,46,77,0.14);box-shadow:0 10px 26px -16px rgba(58,46,77,0.45);color:var(--ink);text-decoration:none;font-size:0.76rem;font-weight:800;}
+.hub-return-link:active{transform:scale(0.96);}
+@media (max-width:420px){.hub-return-link{left:10px;bottom:10px;font-size:0.7rem;padding:8px 10px;}}
+
+
+.order-token{
+  border:1px solid rgba(232,169,76,0.35);
+  cursor:pointer;
+  box-shadow:0 4px 12px -10px rgba(58,46,77,0.35);
+}
+.order-token:active{transform:scale(0.94);}
+.order-token:disabled{cursor:default;}
+.order-tools{gap:8px;align-items:center;}
+.order-check:disabled{opacity:0.38;cursor:not-allowed;box-shadow:none;}
+.order-helper{font-size:0.72rem;color:var(--ink-soft);line-height:1.45;margin-top:8px;}
+
+/* =========================================================================
+   KEYFRAMES
+   ========================================================================= */
+@keyframes cardEnter{from{opacity:0;transform:translateY(18px) scale(0.98);}to{opacity:1;transform:translateY(0) scale(1);}}
+@keyframes shake{0%,100%{transform:translateX(0);}20%{transform:translateX(-7px);}40%{transform:translateX(6px);}60%{transform:translateX(-4px);}80%{transform:translateX(3px);}}
+@keyframes glowPulse{0%{box-shadow:0 0 0 0 rgba(75,182,168,0.5);}70%{box-shadow:0 0 0 14px rgba(75,182,168,0);}100%{box-shadow:0 0 0 0 rgba(75,182,168,0);}}
+@keyframes scoreBump{0%{transform:scale(1);}40%{transform:scale(1.22);}100%{transform:scale(1);}}
+@keyframes matchPop{0%{transform:scale(1);}45%{transform:scale(1.08);}100%{transform:scale(1);}}
+@keyframes sparklePop{0%{opacity:1;transform:translate(0,0) scale(0.6);}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(1.1);}}
+@keyframes confettiFall{to{transform:translateY(112vh) rotate(400deg);opacity:0.2;}}
+@keyframes ambientDrift{0%,100%{translate:0 0;scale:1;}50%{translate:0 -14px;scale:1.035;}}
+@keyframes btnShimmer{0%{left:-60%;}42%{left:130%;}100%{left:130%;}}
+@keyframes postmarkBreathe{0%,100%{transform:rotate(-9deg) scale(1);}50%{transform:rotate(-9deg) scale(1.035);}}
+@keyframes titleGradientShift{0%,100%{background-position:0% 50%;}50%{background-position:100% 50%;}}
+@keyframes tokenPop{0%{transform:scale(0.6);opacity:0;}60%{transform:scale(1.08);opacity:1;}100%{transform:scale(1);opacity:1;}}
+@keyframes progressShimmer{0%{transform:translateX(-120%);}100%{transform:translateX(320%);}}
+@keyframes popIn{0%{opacity:0;transform:translateY(10px) scale(0.92);}100%{opacity:1;transform:translateY(0) scale(1);}}
+@keyframes reviewCardIn{0%{opacity:0;transform:translateY(12px);}100%{opacity:1;transform:translateY(0);}}
+@keyframes emojiPop{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-2px) rotate(-6deg);}}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:0.001ms !important;animation-iteration-count:1 !important;transition-duration:0.001ms !important;}
+}
+
+@media (min-width:520px){
+  .app{padding-top:48px;}
+}
+
+/* desktop/laptop: center the card vertically instead of hugging the top,
+   so short cards don't leave a big empty gap under them */
+@media (min-width:820px){
+  .app{justify-content:center;}
+}
+
+
+/* July 6 V2: visible two-part mission + partial result button */
+.part-picker{
+  margin:18px 0 12px;
+  padding:14px;
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  background:linear-gradient(135deg,rgba(255,255,255,.82),rgba(255,246,232,.66));
+  box-shadow:0 16px 36px rgba(58,46,77,.08);
+}
+.part-picker__label{margin:0 0 10px;font-size:.78rem;font-weight:850;color:var(--ink);letter-spacing:.02em;}
+.part-picker__jp{display:block;margin-top:2px;font-size:.68rem;color:var(--ink-soft);font-weight:700;}
+.part-grid{display:grid;grid-template-columns:1fr;gap:10px;}
+.part-btn{
+  width:100%;text-align:left;border:1px solid var(--border);border-radius:18px;padding:14px 14px;
+  background:rgba(255,255,255,.78);box-shadow:0 10px 24px rgba(58,46,77,.07);cursor:pointer;
+  transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+  position:relative;overflow:hidden;color:var(--ink);
+}
+.part-btn::after{content:"";position:absolute;inset:-60% auto auto -40%;width:70%;height:220%;transform:rotate(24deg);background:linear-gradient(90deg,transparent,rgba(255,255,255,.72),transparent);animation:cardShine 3.1s ease-in-out infinite;}
+.part-btn:hover{transform:translateY(-2px);box-shadow:0 16px 30px rgba(58,46,77,.12);border-color:rgba(75,182,168,.45);}
+.part-btn__top{display:flex;align-items:center;gap:8px;font-size:.9rem;font-weight:900;}
+.part-btn__desc{display:block;margin-top:6px;font-size:.72rem;line-height:1.45;color:var(--ink-soft);font-weight:700;}
+.part-btn--full{background:linear-gradient(135deg,rgba(75,182,168,.16),rgba(232,169,76,.16));}
+.partial-actions{max-width:680px;margin:12px auto 0;padding:0 2px;}
+.partial-card{border:1px dashed rgba(75,182,168,.55);border-radius:18px;padding:12px;background:rgba(255,255,255,.72);box-shadow:0 12px 28px rgba(58,46,77,.08);}
+.partial-card .btn{margin-bottom:6px;}
+.partial-note{margin:0;font-size:.68rem;line-height:1.45;color:var(--ink-soft);font-weight:700;text-align:center;}
+.result-note{margin:8px auto 0;max-width:520px;font-size:.8rem;line-height:1.55;color:var(--ink-soft);font-weight:700;}
+.mode-chip{display:inline-flex;align-items:center;gap:6px;margin:0 auto 12px;padding:7px 10px;border-radius:999px;background:rgba(75,182,168,.14);color:var(--teal-dark);font-size:.7rem;font-weight:850;border:1px solid rgba(75,182,168,.28);}
+@media (min-width:720px){.part-grid{grid-template-columns:repeat(3,1fr);} .part-btn{min-height:142px;}}
+
+
+
+/* V7 lively correct-answer emoji burst: bigger, clearer, and visible for about 2 seconds */
+.sparkle{
+  position:absolute;
+  z-index:80;
+  font-size:clamp(1.8rem,4.2vw,2.7rem) !important;
+  line-height:1;
+  pointer-events:none;
+  opacity:0;
+  filter:drop-shadow(0 6px 10px rgba(0,0,0,0.18)) drop-shadow(0 0 10px rgba(255,255,255,0.95));
+  animation:sparklePop 2.05s cubic-bezier(.18,.89,.32,1.18) forwards !important;
+  will-change:transform,opacity;
+}
+.sparkle--hero{font-size:clamp(2.4rem,5.5vw,3.4rem) !important;}
+@keyframes sparklePop{
+  0%{opacity:0;transform:translate(0,10px) scale(.45) rotate(-12deg);}
+  12%{opacity:1;transform:translate(0,-4px) scale(1.26) rotate(4deg);}
+  35%{opacity:1;transform:translate(calc(var(--dx) * .35),calc(var(--dy) * .35)) scale(1.08) rotate(-3deg);}
+  72%{opacity:1;transform:translate(calc(var(--dx) * .78),calc(var(--dy) * .78)) scale(1) rotate(6deg);}
+  100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(.95) rotate(10deg);}
+}
+.partial-actions{max-width:680px;margin:14px auto 0;padding:0 2px;}
+.partial-card{padding:14px;border-radius:18px;background:rgba(255,255,255,.78);border:1px solid rgba(58,46,77,.12);box-shadow:0 12px 25px rgba(58,46,77,.08);}
+.partial-note{margin-top:8px;font-size:.78rem;line-height:1.5;color:var(--ink-soft);font-weight:700;text-align:center;}
+.result-note{margin:8px auto 0;max-width:560px;font-size:.8rem;line-height:1.55;color:var(--ink-soft);font-weight:700;}
+
+</style>
+</head>
+<body>
+
+<div class="bg-decor" aria-hidden="true">
+  <div class="blob blob--a"></div>
+  <div class="blob blob--b"></div>
+  <span class="ambient-accent ambient-accent--1"></span>
+  <span class="ambient-accent ambient-accent--2"></span>
+  <span class="ambient-accent ambient-accent--3"></span>
+  <span class="ambient-accent ambient-accent--4"></span>
+  <span class="ambient-accent ambient-accent--5"></span>
+  <span class="ambient-accent ambient-accent--6"></span>
+</div>
+
+<a class="hub-return-link" href="../../index.html">← Review Hub</a>
+
+<div class="app" id="app">
+
+  <!-- ===================================================================
+       WELCOME SCREEN
+       =================================================================== -->
+  <section id="screen-welcome" class="screen screen--active">
+    <div class="card">
+      <div class="postmark" aria-hidden="true">
+        <div class="postmark__ring">
+          <span class="postmark-date js-postmark-date">·</span>
+          <span class="postmark__label">Lesson Review</span>
+        </div>
+      </div>
+      <p class="eyebrow">Private Lesson Review</p>
+      <h1 class="display-title" id="welcome-title"></h1>
+      <p class="subtitle-en" id="welcome-subtitle-en"></p>
+      <p class="subtitle-jp" id="welcome-subtitle-jp"></p>
+
+      <!-- "Today's Focus" mini card, built from quizData.categoryLabels -->
+      <div class="focus-card">
+        <p class="focus-card__label">Today's Focus / 今日のフォーカス</p>
+        <div class="focus-card__chips" id="focus-chips"></div>
+      </div>
+
+      <div class="settings-row">
+        <button class="toggle-chip" id="toggle-sound" data-action="toggle-sound" data-on="true">🔊 Sound: ON</button>
+        <button class="toggle-chip" id="toggle-vibration" data-action="toggle-vibration" data-on="true">📳 Vibration: ON</button>
+      </div>
+
+      <div class="hint-mode-row">
+        <p class="hint-mode-label">Hint Mode / ヒントの表示方法</p>
+        <div class="segmented" role="radiogroup" aria-label="Hint mode">
+          <button class="segmented__option segmented__option--active" data-action="set-hint-mode" data-mode="auto">Auto-close (5s)</button>
+          <button class="segmented__option" data-action="set-hint-mode" data-mode="manual">Keep Open</button>
+        </div>
+      </div>
+
+      <div class="part-picker">
+        <p class="part-picker__label">Choose your mission<span class="part-picker__jp">今日の復習を選んでください</span></p>
+        <div class="part-grid">
+          <button class="part-btn" data-action="start-part" data-part="part1" type="button">
+            <span class="part-btn__top">① Part 1</span>
+            <span class="part-btn__desc">Grammar Choices<br>まだ飲んでない / hate + -ing / on Instagram</span>
+          </button>
+          <button class="part-btn" data-action="start-part" data-part="part2" type="button">
+            <span class="part-btn__top">② Part 2</span>
+            <span class="part-btn__desc">Natural Nuance<br>キラキラ / interested vs interesting / on my behalf</span>
+          </button>
+          <button class="part-btn part-btn--full" data-action="start-part" data-part="full" type="button">
+            <span class="part-btn__top">🌟 Full Mission</span>
+            <span class="part-btn__desc">All July 6 questions<br>全部まとめてチャレンジ</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="nav-row">
+        <button class="btn btn--secondary btn--large" data-action="go-review"><span class="emoji-pop">📖</span> Review Key Phrases<span class="btn-jp">先に復習する</span></button>
+      </div>
+    <p class="teacher-signature">Created by <strong>Tahmid</strong> for Takiwaki-san</p>
+    </div>
+  </section>
+
+  <!-- ===================================================================
+       QUIZ SCREEN
+       =================================================================== -->
+  <section id="screen-quiz" class="screen">
+    <header class="quiz-header">
+      <div class="quiz-header__top">
+        <div class="quiz-header__left">
+          <button class="mini-toggle" id="btn-home" data-action="go-home" aria-label="Home"><span class="emoji-pop">⌂</span></button>
+          <button class="mini-toggle" id="btn-back" data-action="go-back" aria-label="Previous question" disabled>←</button>
+          <span class="lesson-tag js-lesson-tag">Review</span>
+        </div>
+        <div class="mini-toggles">
+          <button class="mini-toggle" id="mini-toggle-sound" data-action="toggle-sound" data-on="true" aria-label="Toggle sound"><span class="emoji-pop">🔊</span></button>
+          <button class="mini-toggle" id="mini-toggle-vibration" data-action="toggle-vibration" data-on="true" aria-label="Toggle vibration"><span class="emoji-pop">📳</span></button>
+        </div>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+      <div class="stat-row">
+        <span class="stat-chip" id="stat-position">Q1/1</span>
+        <span class="stat-chip stat-chip--score" id="stat-score">⭐ 0</span>
+        <span class="stat-chip stat-chip--streak" id="stat-streak">🔥 0</span>
+      </div>
+      <!-- Question navigator: tap any number to jump straight to that question -->
+      <div class="qnav" id="qnav" role="tablist" aria-label="Question navigator"></div>
+    </header>
+
+    <div class="stage" id="stage"><!-- question card injected by renderStage() --></div>
+    <div class="partial-actions" id="partial-actions" aria-live="polite"></div>
+  </section>
+
+  <!-- ===================================================================
+       RESULTS SCREEN
+       =================================================================== -->
+  <section id="screen-results" class="screen">
+    <div class="card results-card">
+      <div class="postmark" aria-hidden="true">
+        <div class="postmark__ring">
+          <span class="postmark-date js-postmark-date">·</span>
+          <span class="postmark__label">Lesson Review</span>
+        </div>
+      </div>
+      <p class="eyebrow" id="results-eyebrow">Mission Complete</p>
+      <h1 class="display-title" id="results-title">Nice work today! <span class="emoji-pop">🎉</span></h1>
+      <p class="result-note" id="result-note"></p>
+
+      <div class="result-stats">
+        <div class="result-stat">
+          <div class="result-stat__value" id="result-score">0</div>
+          <div class="result-stat__label">Score</div>
+        </div>
+        <div class="result-stat">
+          <div class="result-stat__value" id="result-accuracy">0%</div>
+          <div class="result-stat__label">Accuracy</div>
+        </div>
+        <div class="result-stat">
+          <div class="result-stat__value" id="result-streak">0</div>
+          <div class="result-stat__label">Best Streak</div>
+        </div>
+      </div>
+
+
+
+      <div class="wrong-review" id="wrong-review" hidden>
+        <p class="wrong-review__title">Mistake Practice / 間違えた問題だけ復習</p>
+        <p class="wrong-review__subtitle">Official score is based on the first try. Retry is for practice only.</p>
+        <div class="wrong-review__list" id="wrong-review-list"></div>
+        <button class="btn btn--primary btn--large" data-action="retry-mistakes">🎯 Practice only mistakes<span class="btn-jp">間違えた問題だけもう一回</span></button>
+        <p class="official-score-note">Retry practice will start a separate mini round and will not change this official score.</p>
+      </div>
+      <div class="weak-points" id="weak-points" hidden>
+        <p class="weak-points__title">Focus Next Time / 次に見直すところ</p>
+        <div id="weak-points-list"></div>
+      </div>
+
+      <p class="encourage-en" id="encourage-en"></p>
+      <p class="encourage-jp" id="encourage-jp"></p>
+
+      <div class="nav-row">
+        <button class="btn btn--primary btn--large" data-action="restart-quiz">🔁 Try Again</button>
+        <button class="btn btn--secondary btn--large" data-action="go-review">📖 Review Key Phrases</button>
+        <button class="btn btn--secondary btn--large" data-action="go-home">⌂ Home<span class="btn-jp">ホームに戻る</span></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================================
+       REVIEW SCREEN
+       =================================================================== -->
+  <section id="screen-review" class="screen">
+    <div class="card">
+      <p class="eyebrow">Today's Recap</p>
+      <h2 class="review-title">Review Key Phrases</h2>
+      <p class="review-subtitle">今日の復習</p>
+
+      <div class="review-grid" id="review-grid"></div>
+
+      <div class="teacher-note">
+        <p class="teacher-note__label">Teacher's Note</p>
+        <p class="teacher-note__en" id="teacher-note-en"></p>
+        <p class="teacher-note__jp" id="teacher-note-jp"></p>
+      </div>
+
+      <div class="nav-row">
+        <button class="btn btn--primary btn--large" data-action="start-quiz">Start Quiz →<span class="btn-jp">クイズを始める</span></button>
+        <button class="btn btn--secondary btn--large" data-action="go-home">⌂ Home<span class="btn-jp">ホームに戻る</span></button>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<div class="streak-popup" id="streak-popup"></div>
+<div class="confetti-layer" id="confetti-layer" aria-hidden="true"></div>
+
+<script>
+/* =========================================================================
+   ============================  LESSON CONTENT  ==========================
+   Everything the tutor edits lives in `quizData` below. To make a NEW quiz
+   for a different lesson: copy this file, keep everything under
+   "GAME ENGINE" untouched, and replace only the `quizData` object.
+   ^ EDIT HERE FOR FUTURE LESSONS: swap the whole quizData object below and
+     nothing else needs to change — the engine reads question count, scoring,
+     matching pairs, and weak-point categories straight from this object.
+
+   Structure recap:
+   - type "mcq"      : normal 4-choice question
+   - type "situation" : same as mcq, but shows a quoted line first
+   - type "grid"      : 3x3 position-word mini-game (tap the right box)
+   - type "matching"  : tap an English card + a Japanese card to pair them
+   - type "typing"    : student sees Japanese, types the natural English
+
+   Every gradable item needs a "cat" (category) key matching one of the
+   keys in `categoryLabels`, so the results screen can report weak spots.
+   ========================================================================= */
+const quizData = {
+  "lessonId": "2026-07-06",
+  "title": "July 6 Two-Part English Quest",
+  "subtitle": "Today's mission: master a long lesson in two parts — grammar choices first, then natural nuance.",
+  "jpSubtitle": "今日のミッション：長いレッスンを2部構成で復習しましょう。Part 1は文法の選び方、Part 2は自然なニュアンスです。",
+  "categoryLabels": {
+    "part1": {
+      "en": "Part 1: Grammar choices",
+      "jp": "Part 1：文法の選び方"
+    },
+    "alcohol": {
+      "en": "Alcohol yet / past",
+      "jp": "まだ飲んでない / 過去形"
+    },
+    "hate": {
+      "en": "hate + -ing",
+      "jp": "hate + 動詞ing"
+    },
+    "prepositions": {
+      "en": "on / in / at",
+      "jp": "on / in / at"
+    },
+    "part2": {
+      "en": "Part 2: Natural nuance",
+      "jp": "Part 2：自然なニュアンス"
+    },
+    "sparkle": {
+      "en": "sparkly words",
+      "jp": "キラキラの言い方"
+    },
+    "interest": {
+      "en": "interested / interesting",
+      "jp": "interested / interesting"
+    },
+    "behalf": {
+      "en": "on my behalf",
+      "jp": "私の代わりに"
+    },
+    "builder": {
+      "en": "Sentence Builder",
+      "jp": "文を組み立てる練習"
+    },
+    "mixed": {
+      "en": "Two-part review",
+      "jp": "2部構成の総復習"
+    }
+  },
+  "questions": [
+    {
+      "id": "q1",
+      "type": "situation",
+      "cat": "alcohol",
+      "prompt": {
+        "en": "Choose the most natural way to say 「今日はまだお酒を飲んでいません」.",
+        "jp": "「今日はまだお酒を飲んでいません」と言う時、一番自然なのはどれですか？"
+      },
+      "choices": [
+        {
+          "id": "a",
+          "en": "I haven’t had any alcohol yet today.",
+          "jp": "今日はまだお酒を飲んでいません。"
+        },
+        {
+          "id": "b",
+          "en": "I didn’t drink alcohol yet today.",
+          "jp": "didn’t + yet が少し不自然です。"
+        },
+        {
+          "id": "c",
+          "en": "I haven’t drink alcohol yet today.",
+          "jp": "haven’t の後は過去分詞が必要です。"
+        },
+        {
+          "id": "d",
+          "en": "I didn’t drank alcohol today.",
+          "jp": "didn’t の後は原形 drink です。"
+        }
+      ],
+      "correct": "a",
+      "hint": {
+        "en": "For まだ〜していない, present perfect + yet is natural.",
+        "jp": "「まだ〜していない」は現在完了 + yet が自然です。"
+      },
+      "explanation": {
+        "en": "“I haven’t had any alcohol yet today” means today is still continuing and up to now you have not drunk.",
+        "jp": "今日がまだ続いていて、今の時点でまだ飲んでいないという意味です。"
+      },
+      "situationQuote": {
+        "en": "It is still early in the day. Someone asks: “Did you drink today?”"
+      }
+    },
+    {
+      "id": "q2",
+      "type": "mcq",
+      "cat": "alcohol",
+      "prompt": {
+        "en": "Which sentence sounds like a finished-day result?",
+        "jp": "一日を振り返って「今日は飲まなかった」と言う感じの文はどれですか？"
+      },
+      "choices": [
+        {
+          "id": "a",
+          "en": "I didn’t drink today.",
+          "jp": "今日は飲まなかった。"
+        },
+        {
+          "id": "b",
+          "en": "I haven’t had any alcohol yet today.",
+          "jp": "まだ今日が続いている感じです。"
+        },
+        {
+          "id": "c",
+          "en": "I don’t drinking today.",
+          "jp": "文法が不自然です。"
+        },
+        {
+          "id": "d",
+          "en": "I didn’t drunk today.",
+          "jp": "didn’t の後は drink です。"
+        }
+      ],
+      "correct": "a",
+      "hint": {
+        "en": "Finished past uses didn’t + verb.",
+        "jp": "終わった過去は didn’t + 動詞の原形です。"
+      },
+      "explanation": {
+        "en": "“I didn’t drink today” is natural when you summarize the day as a result.",
+        "jp": "“I didn’t drink today.” は結果として「今日は飲まなかった」と言う時に自然です。"
+      }
+    },
+    {
+      "id": "q3",
+      "type": "mcq",
+      "cat": "alcohol",
+      "prompt": {
+        "en": "True or False: “I didn’t drink alcohol yet” is the best standard sentence for 「まだ飲んでいない」.",
+        "jp": "True or False：“I didn’t drink alcohol yet” は「まだ飲んでいない」の一番標準的な文です。"
+      },
+      "choices": [
+        {
+          "id": "a",
+          "en": "True",
+          "jp": "正しい"
+        },
+        {
+          "id": "b",
+          "en": "False",
+          "jp": "違う"
+        }
+      ],
+      "correct": "b",
+      "hint": {
+        "en": "Use haven’t ... yet.",
+        "jp": "haven’t ... yet を使います。"
+      },
+      "explanation": {
+        "en": "The standard natural sentence is “I haven’t had any alcohol yet.”",
+        "jp": "標準的には “I haven’t had any alcohol yet.” が自然です。"
+      }
+    },
+    {
+      "id": "q4",
+      "type": "mcq",
+      "cat": "alcohol",
+      "prompt": {
+        "en": "Choose the correct verb change for drink.",
+        "jp": "drink の変化で正しいものを選んでください。"
+      },
+      "choices": [
+        {
+          "id": "a",
+          "en": "drink - drank - drunk",
+          "jp": "原形 - 過去形 - 過去分詞"
+        },
+        {
+          "id": "b",
+          "en": "drink - drunk - drank",
+          "jp": "順番が違います。"
+        },
+        {
+          "id": "c",
+          "en": "drink - drinked - drinked",
+          "jp": "不規則動詞です。"
+        },
+        {
+          "id": "d",
+          "en": "drink - drinking - drank",
+          "jp": "過去分詞ではありません。"
+        }
+      ],
+      "correct": "a",
+      "hint": {
+        "en": "Past is drank. Past participle is drunk.",
+        "jp": "過去形は drank、過去分詞は drunk です。"
+      },
+      "explanation": {
+        "en": "The verb forms are drink, drank, drunk.",
+        "jp": "drink の変化は drink - drank - drunk です。"
+      }
+    },
+    {
+      "id": "q5",
+      "type": "situation",
+      "cat": "hate",
+      "prompt": {
+        "en": "Which sentence is natural?",
+        "jp": "自然な文はどれですか？"
+      },
+      "choices": [
+        {
+          "id": "a",
+          "en": "I hate watching soccer.",
+          "jp": "サッカーを見るのが嫌いです。"
+        },
+        {
+          "id": "b",
+          "en": "I hate watch soccer.",
+          "jp": "hate の後にそのまま原形は置けません。"
+        },
+        {
+          "id": "c",
+          "en": "I hate watched soccer.",
+          "jp": "この形は不自然です。"
+        },
+        {
+          "id": "d",
+          "en": "I hate to soccer watching.",
+          "jp": "語順が不自然です。"
+        }
+      ],
+      "correct": "a",
+      "hint": {
+        "en": "hate + verb-ing.",
+        "jp": "hate + 動詞ing です。"
+      },
+      "explanation": {
+        "en": "Use hate + watching when you mean 「見るのが嫌い」.",
+        "jp": "「見るのが嫌い」は hate + watching が自然です。"
+      },
+      "situationQuote": {
+        "en": "You don’t like watching soccer on TV."
+      }
+    },
+    {
+      "id": "q6",
+      "type": "mcq",
+      "cat": "hate",
+      "prompt": {
+        "en": "Which sentence is a softer way to say you dislike soccer?",
+        "jp": "サッカーがあまり好きではないことをやわらかく言う文はどれですか？"
+      },
+      "choices": [
+        {
+          "id": "a",
+          "en": "I’m not really into soccer.",
+          "jp": "サッカーにはあまり興味がありません。"
+        },
+        {
+          "id": "b",
+          "en": "I hate soccer forever.",
+          "jp": "かなり強すぎます。"
+        },
+        {
+          "id": "c",
+          "en": "I angry soccer.",
+          "jp": "文法が不自然です。"
+        },
+        {
+          "id": "d",
+          "en": "Soccer is my behalf.",
+          "jp": "意味が違います。"
+        }
+      ],
+      "correct": "a",
+      "hint": {
+        "en": "not really into = あまり興味がない.",
+        "jp": "not really into = あまり興味がない。"
+      },
+      "explanation": {
+        "en": "“I’m not really into soccer” is softer than “I hate soccer.”",
+        "jp": "“I’m not really into soccer.” は “I hate soccer.” よりやわらかいです。"
+      }
+    },
+    {
+      "id": "q7",
+      "type": "mcq",
+      "cat": "hate",
+      "prompt": {
+        "en": "Mistake Detective: Which sentence is wrong?",
+        "jp": "ミス発見：間違っている文はどれですか？"
+      },
+      "choices": [
+        {
+          "id": "a",
+          "en": "I hate watch football.",
+          "jp": "hate の後は watching などが必要です。"
+        },
+        {
+          "id": "b",
+          "en": "I hate watching football.",
+          "jp": "自然です。"
+        },
+        {
+          "id": "c",
+          "en": "I hate waiting in line.",
+          "jp": "自然です。"
+        },
+        {
+          "id": "d",
+          "en": "I hate waking up early.",
+          "jp": "自然です。"
+        }
+      ],
+      "correct": "a",
+      "hint": {
+        "en": "Look after hate.",
+        "jp": "hate の後ろを見ましょう。"
+      },
+      "explanation": {
+        "en": "“I hate watch football” is wrong because hate needs a gerund like watching or an infinitive like to watch.",
+        "jp": "hate の後は watching や to watch が必要です。"
+      }
+    },
+    {
+      "id": "q8",
+      "type": "situation",
+      "cat": "prepositions",
+      "prompt": {
+        "en": "Which sentence is natural?",
+        "jp": "自然な文はどれですか？"
+      },
+      "choices": [
+        {
+          "id": "a",
+          "en": "I found this café on Instagram.",
+          "jp": "このカフェをインスタで見つけました。"
+        },
+        {
+          "id": "b",
+          "en": "I found this café in Instagram.",
+          "jp": "普通は不自然です。"
+        },
+        {
+          "id": "c",
+          "en": "I found this café at Instagram.",
+          "jp": "会社・場所の at なので違います。"
+        },
+        {
+          "id": "d",
+          "en": "I found this café of Instagram.",
+          "jp": "前置詞が違います。"
+        }
+      ],
+      "correct": "a",
+      "hint": {
+        "en": "SNS and websites usually use on.",
+        "jp": "SNSやウェブサイトは基本 on を使います。"
+      },
+      "explanation": {
+        "en": "We say on Instagram, on YouTube, on TikTok, on the internet, and on a website.",
+        "jp": "Instagram、YouTube、TikTok、internet、website には基本的に on を使います。"
+      },
+      "situationQuote": {
+        "en": "You found a nice café while using Instagram."
+      }
+    },
+    {
+      "id": "q9",
+      "type": "mcq",
+      "cat": "prepositions",
+      "prompt": {
+        "en": "Which sentence means 「コメント欄の中で見ました」?",
+        "jp": "「コメント欄の中で見ました」はどれですか？"
+      },
+      "choices": [
+        {
+          "id": "a",
+          "en": "I saw it in the comments.",
+          "jp": "コメント欄の中で見ました。"
+        },
+        {
+          "id": "b",
+          "en": "I saw it on the comments.",
+          "jp": "コメント欄の中なら in が自然です。"
+        },
+        {
+          "id": "c",
+          "en": "I saw it at the comments.",
+          "jp": "at は不自然です。"
+        },
+        {
+          "id": "d",
+          "en": "I saw it by comments.",
+          "jp": "意味が違います。"
+        }
+      ],
+      "correct": "a",
+      "hint": {
+        "en": "Inside a section = in.",
+        "jp": "中にある感じは in です。"
+      },
+      "explanation": {
+        "en": "Use in when you mean inside a section, like “in the comments.”",
+        "jp": "コメント欄の中は “in the comments” が自然です。"
+      }
+    },
+    {
+      "id": "q10",
+      "type": "mcq",
+      "cat": "prepositions",
+      "prompt": {
+        "en": "Which sentence means she works for Instagram as a company?",
+        "jp": "彼女がInstagramという会社で働いている、という意味の文はどれですか？"
+      },
+      "choices": [
+        {
+          "id": "a",
+          "en": "She works at Instagram.",
+          "jp": "彼女はInstagram社で働いています。"
+        },
+        {
+          "id": "b",
+          "en": "She works on Instagram.",
+          "jp": "インスタ上で活動している感じになることがあります。"
+        },
+        {
+          "id": "c",
+          "en": "She works in Instagram.",
+          "jp": "普通は不自然です。"
+        },
+        {
+          "id": "d",
+          "en": "She works by Instagram.",
+          "jp": "不自然です。"
+        }
+      ],
+      "correct": "a",
+      "hint": {
+        "en": "For a company/workplace, use at.",
+        "jp": "会社・職場には at を使います。"
+      },
+      "explanation": {
+        "en": "Use at for a company or workplace: She works at Instagram.",
+        "jp": "会社・職場として言う時は at を使います。"
+      }
+    },
+    {
+      "id": "q11",
+      "type": "matching",
+      "cat": "part1",
+      "prompt": {
+        "en": "Part 1 Match: Connect the sentence with the meaning.",
+        "jp": "Part 1 マッチ：英語と日本語を合わせましょう。"
+      },
+      "hint": {
+        "en": "Focus on situation and grammar shape.",
+        "jp": "場面と文法の形に注目しましょう。"
+      },
+      "pairs": [
+        {
+          "en": "I haven’t had any alcohol yet.",
+          "jp": "まだお酒を飲んでいません。",
+          "cat": "part1"
+        },
+        {
+          "en": "I didn’t drink yesterday.",
+          "jp": "昨日は飲みませんでした。",
+          "cat": "part1"
+        },
+        {
+          "en": "I hate watching soccer.",
+          "jp": "サッカーを見るのが嫌いです。",
+          "cat": "part1"
+        },
+        {
+          "en": "I’m not really into soccer.",
+          "jp": "サッカーにはあまり興味がありません。",
+          "cat": "part1"
+        },
+        {
+          "en": "I saw it on Instagram.",
+          "jp": "インスタで見ました。",
+          "cat": "part1"
+        },
+        {
+          "en": "I saw it in the comments.",
+          "jp": "コメント欄の中で見ました。",
+          "cat": "part1"
+        }
+      ]
+    },
+    {
+      "id": "q12",
+      "type": "order",
+      "cat": "builder",
+      "prompt": {
+        "en": "Sentence Builder: Make 「今日はまだお酒を飲んでいません。」",
+        "jp": "文を組み立てましょう：「今日はまだお酒を飲んでいません。」"
+      },
+      "words": [
+        "had",
+        "I",
+        "any alcohol",
+        "yet today",
+        "haven’t"
+      ],
+      "correctOrder": [
+        1,
+        4,
+        0,
+        2,
+        3
+      ],
+      "hint": {
+        "en": "Start with I haven’t...",
+        "jp": "I haven’t... から始めます。"
+      },
+      "explanation": {
+        "en": "The sentence is “I haven’t had any alcohol yet today.”",
+        "jp": "自然な文は “I haven’t had any alcohol yet today.” です。"
+      }
+    },
+    {
+      "id": "q13",
+      "type": "order",
+      "cat": "builder",
+      "prompt": {
+        "en": "Sentence Builder: Make 「サッカーを見るのが嫌いです。」",
+        "jp": "文を組み立てましょう：「サッカーを見るのが嫌いです。」"
+      },
+      "words": [
+        "soccer",
+        "hate",
+        "I",
+        "watching"
+      ],
+      "correctOrder": [
+        2,
+        1,
+        3,
+        0
+      ],
+      "hint": {
+        "en": "hate + watching.",
+        "jp": "hate + watching です。"
+      },
+      "explanation": {
+        "en": "The sentence is “I hate watching soccer.”",
+        "jp": "自然な文は “I hate watching soccer.” です。"
+      }
+    },
+    {
+      "id": "q14",
+      "type": "order",
+      "cat": "builder",
+      "prompt": {
+        "en": "Sentence Builder: Make 「インスタで見ました。」",
+        "jp": "文を組み立てましょう：「インスタで見ました。」"
+      },
+      "words": [
+        "on Instagram",
+        "it",
+        "I",
+        "saw"
+      ],
+      "correctOrder": [
+        2,
+        3,
+        1,
+        0
+      ],
+      "hint": {
+        "en": "SNS uses on.",
+        "jp": "SNSには on を使います。"
+      },
+      "explanation": {
+        "en": "The sentence is “I saw it on Instagram.”",
+        "jp": "自然な文は “I saw it on Instagram.” です。"
+      }
+    },
+    {
+      "id": "q15",
+      "type": "situation",
+      "cat": "sparkle",
+      "prompt": {
+        "en": "Which word sounds natural for cute shiny accessories?",
+        "jp": "かわいいアクセサリーがキラキラしている時、自然なのはどれですか？"
+      },
+      "choices": [
+        {
+          "id": "a",
+          "en": "sparkly",
+          "jp": "キラキラしている。アクセサリーなどに自然。"
+        },
+        {
+          "id": "b",
+          "en": "interested",
+          "jp": "興味がある、という意味です。"
+        },
+        {
+          "id": "c",
+          "en": "on behalf",
+          "jp": "代わりに、という意味です。"
+        },
+        {
+          "id": "d",
+          "en": "drunk",
+          "jp": "drink の過去分詞です。"
+        }
+      ],
+      "correct": "a",
+      "hint": {
+        "en": "Sparkly things are cute and shiny.",
+        "jp": "sparkly はかわいくキラキラした感じです。"
+      },
+      "explanation": {
+        "en": "Use sparkly for earrings, eyes, and cute things that shine.",
+        "jp": "イヤリング、目、かわいい物のキラキラには sparkly が自然です。"
+      },
+      "situationQuote": {
+        "en": "Someone has cute earrings that shine beautifully."
+      }
+    },
+    {
+      "id": "q16",
+      "type": "situation",
+      "cat": "sparkle",
+      "prompt": {
+        "en": "Which word fits best?",
+        "jp": "一番合う単語はどれですか？"
+      },
+      "choices": [
+        {
+          "id": "a",
+          "en": "glittery",
+          "jp": "ラメっぽくキラキラしている。"
+        },
+        {
+          "id": "b",
+          "en": "shiny",
+          "jp": "ピカピカですが、ラメ感は弱いです。"
+        },
+        {
+          "id": "c",
+          "en": "interested",
+          "jp": "興味がある、なので違います。"
+        },
+        {
+          "id": "d",
+          "en": "behalf",
+          "jp": "代わりに、なので違います。"
+        }
+      ],
+      "correct": "a",
+      "hint": {
+        "en": "Glitter = ラメ.",
+        "jp": "glitter = ラメです。"
+      },
+      "explanation": {
+        "en": "Use glittery for nails, makeup, dresses, or things with glitter.",
+        "jp": "ネイル、メイク、服などのラメっぽいキラキラには glittery を使います。"
+      },
+      "situationQuote": {
+        "en": "Her nails have glitter / ラメ."
+      }
+    },
+    {
+      "id": "q17",
+      "type": "situation",
+      "cat": "sparkle",
+      "prompt": {
+        "en": "Which word is best for ピカピカ?",
+        "jp": "車がピカピカしている時、一番合う単語はどれですか？"
+      },
+      "choices": [
+        {
+          "id": "a",
+          "en": "shiny",
+          "jp": "ピカピカ / ツヤツヤ。車・靴・髪に自然。"
+        },
+        {
+          "id": "b",
+          "en": "glittery",
+          "jp": "ラメっぽい感じです。"
+        },
+        {
+          "id": "c",
+          "en": "sparkle",
+          "jp": "動詞として「キラキラ光る」。ここでは shiny が自然。"
+        },
+        {
+          "id": "d",
+          "en": "drank",
+          "jp": "drink の過去形です。"
+        }
+      ],
+      "correct": "a",
+      "hint": {
+        "en": "Clean cars, shoes, metal, and hair can be shiny.",
+        "jp": "車、靴、金属、髪は shiny が自然です。"
+      },
+      "explanation": {
+        "en": "“The car is shiny” means the car looks clean and bright.",
+        "jp": "“The car is shiny.” は「車がピカピカ」という意味です。"
+      },
+      "situationQuote": {
+        "en": "A car is very clean and bright."
+      }
+    },
+    {
+      "id": "q18",
+      "type": "mcq",
+      "cat": "sparkle",
+      "prompt": {
+        "en": "True or False: “sparkling water” usually means ラメの水.",
+        "jp": "True or False：“sparkling water” は普通「ラメの水」という意味です。"
+      },
+      "choices": [
+        {
+          "id": "a",
+          "en": "True",
+          "jp": "正しい"
+        },
+        {
+          "id": "b",
+          "en": "False",
+          "jp": "違う"
+        }
+      ],
+      "correct": "b",
+      "hint": {
+        "en": "Sparkling water is carbonated water.",
+        "jp": "sparkling water は炭酸水です。"
+      },
+      "explanation": {
+        "en": "“Sparkling water” usually means carbonated water, not glittery water.",
+        "jp": "“sparkling water” は普通「炭酸水」の意味です。"
+      }
+    },
+    {
+      "id": "q19",
+      "type": "situation",
+      "cat": "interest",
+      "prompt": {
+        "en": "Which sentence is correct?",
+        "jp": "「英語に興味があります」と言いたい時、正しい文はどれですか？"
+      },
+      "choices": [
+        {
+          "id": "a",
+          "en": "I’m interested in English.",
+          "jp": "英語に興味があります。"
+        },
+        {
+          "id": "b",
+          "en": "I’m interesting in English.",
+          "jp": "意味が変わって不自然です。"
+        },
+        {
+          "id": "c",
+          "en": "English is interested me.",
+          "jp": "文法が不自然です。"
+        },
+        {
+          "id": "d",
+          "en": "I interest English.",
+          "jp": "この形は不自然です。"
+        }
+      ],
+      "correct": "a",
+      "hint": {
+        "en": "Your feeling = interested.",
+        "jp": "自分の気持ちは interested です。"
+      },
+      "explanation": {
+        "en": "Use interested for a person’s feeling: I’m interested in English.",
+        "jp": "人の気持ちには interested を使います。"
+      },
+      "situationQuote": {
+        "en": "You want to say you have interest in English."
+      }
+    },
+    {
+      "id": "q20",
+      "type": "mcq",
+      "cat": "interest",
+      "prompt": {
+        "en": "Which sentence means 「それは面白いです / 興味深いです」?",
+        "jp": "「それは面白いです / 興味深いです」はどれですか？"
+      },
+      "choices": [
+        {
+          "id": "a",
+          "en": "It’s interesting.",
+          "jp": "それは面白いです / 興味深いです。"
+        },
+        {
+          "id": "b",
+          "en": "It’s interested.",
+          "jp": "物が興味を持っているように聞こえて不自然です。"
+        },
+        {
+          "id": "c",
+          "en": "I’m interesting in it.",
+          "jp": "意味・形が違います。"
+        },
+        {
+          "id": "d",
+          "en": "It interests in me.",
+          "jp": "不自然です。"
+        }
+      ],
+      "correct": "a",
+      "hint": {
+        "en": "Thing/story = interesting.",
+        "jp": "物・話は interesting です。"
+      },
+      "explanation": {
+        "en": "Use interesting for the thing that creates interest.",
+        "jp": "興味を引く物・話には interesting を使います。"
+      }
+    },
+    {
+      "id": "q21",
+      "type": "mcq",
+      "cat": "interest",
+      "prompt": {
+        "en": "Mistake Detective: Which sentence is dangerous if you mean 「私は興味があります」?",
+        "jp": "ミス発見：「私は興味があります」と言いたい時、意味が変わる危険な文はどれですか？"
+      },
+      "choices": [
+        {
+          "id": "a",
+          "en": "I’m interesting.",
+          "jp": "私は面白い人です、という意味になります。"
+        },
+        {
+          "id": "b",
+          "en": "I’m interested.",
+          "jp": "私は興味があります。"
+        },
+        {
+          "id": "c",
+          "en": "I’m interested in English.",
+          "jp": "英語に興味があります。"
+        },
+        {
+          "id": "d",
+          "en": "That story is interesting.",
+          "jp": "その話は面白いです。"
+        }
+      ],
+      "correct": "a",
+      "hint": {
+        "en": "-ed is feeling. -ing causes the feeling.",
+        "jp": "-ed は気持ち、-ing はその気持ちを起こすものです。"
+      },
+      "explanation": {
+        "en": "“I’m interesting” means “I am an interesting person,” not “I am interested.”",
+        "jp": "“I’m interesting.” は「私は面白い人です」という意味です。"
+      }
+    },
+    {
+      "id": "q22",
+      "type": "situation",
+      "cat": "behalf",
+      "prompt": {
+        "en": "Which sentence is natural?",
+        "jp": "自然な文はどれですか？"
+      },
+      "choices": [
+        {
+          "id": "a",
+          "en": "Can you reply on my behalf?",
+          "jp": "私の代わりに返信してくれますか？"
+        },
+        {
+          "id": "b",
+          "en": "Can you reply behalf of me?",
+          "jp": "不自然です。"
+        },
+        {
+          "id": "c",
+          "en": "Can you reply in my behalf?",
+          "jp": "前置詞が違います。"
+        },
+        {
+          "id": "d",
+          "en": "Can you reply my behalf?",
+          "jp": "on が必要です。"
+        }
+      ],
+      "correct": "a",
+      "hint": {
+        "en": "Use on my behalf.",
+        "jp": "on my behalf を使います。"
+      },
+      "explanation": {
+        "en": "“On my behalf” means someone does something for you or representing you.",
+        "jp": "“on my behalf” は「私の代わりに / 私を代表して」という意味です。"
+      },
+      "situationQuote": {
+        "en": "You cannot reply, so you ask someone to reply for you."
+      }
+    },
+    {
+      "id": "q23",
+      "type": "mcq",
+      "cat": "behalf",
+      "prompt": {
+        "en": "Which phrase is more natural than “behalf of me”?",
+        "jp": "“behalf of me” より自然なのはどれですか？"
+      },
+      "choices": [
+        {
+          "id": "a",
+          "en": "on my behalf",
+          "jp": "私の代わりに。自然です。"
+        },
+        {
+          "id": "b",
+          "en": "at my behalf",
+          "jp": "不自然です。"
+        },
+        {
+          "id": "c",
+          "en": "in my behalf",
+          "jp": "不自然です。"
+        },
+        {
+          "id": "d",
+          "en": "by my behalf",
+          "jp": "不自然です。"
+        }
+      ],
+      "correct": "a",
+      "hint": {
+        "en": "The natural phrase is on my behalf.",
+        "jp": "自然な表現は on my behalf です。"
+      },
+      "explanation": {
+        "en": "Say “on my behalf,” not “behalf of me.”",
+        "jp": "“behalf of me” ではなく “on my behalf” が自然です。"
+      }
+    },
+    {
+      "id": "q24",
+      "type": "mcq",
+      "cat": "behalf",
+      "prompt": {
+        "en": "Which sentence sounds like a formal representative phrase?",
+        "jp": "代表して話すフォーマルな表現はどれですか？"
+      },
+      "choices": [
+        {
+          "id": "a",
+          "en": "I’m speaking on behalf of the team.",
+          "jp": "チームを代表して話しています。"
+        },
+        {
+          "id": "b",
+          "en": "I’m speaking on the team behalf me.",
+          "jp": "語順が不自然です。"
+        },
+        {
+          "id": "c",
+          "en": "I’m interesting on the team.",
+          "jp": "意味が違います。"
+        },
+        {
+          "id": "d",
+          "en": "I saw it on behalf.",
+          "jp": "意味が違います。"
+        }
+      ],
+      "correct": "a",
+      "hint": {
+        "en": "on behalf of + person/group.",
+        "jp": "on behalf of + 人・団体です。"
+      },
+      "explanation": {
+        "en": "“On behalf of the team” means representing the team.",
+        "jp": "“on behalf of the team” は「チームを代表して」という意味です。"
+      }
+    },
+    {
+      "id": "q25",
+      "type": "matching",
+      "cat": "part2",
+      "prompt": {
+        "en": "Part 2 Match: Match the nuance word with Japanese.",
+        "jp": "Part 2 マッチ：ニュアンス単語と日本語を合わせましょう。"
+      },
+      "hint": {
+        "en": "Think about the situation where each word is used.",
+        "jp": "それぞれの単語が使われる場面を考えましょう。"
+      },
+      "pairs": [
+        {
+          "en": "sparkly",
+          "jp": "キラキラしている。アクセサリーや目など。",
+          "cat": "part2"
+        },
+        {
+          "en": "glittery",
+          "jp": "ラメっぽくキラキラしている。",
+          "cat": "part2"
+        },
+        {
+          "en": "shiny",
+          "jp": "ピカピカ / ツヤツヤ。",
+          "cat": "part2"
+        },
+        {
+          "en": "interested",
+          "jp": "興味がある。人の気持ち。",
+          "cat": "part2"
+        },
+        {
+          "en": "interesting",
+          "jp": "面白い / 興味深い。物や話。",
+          "cat": "part2"
+        },
+        {
+          "en": "on my behalf",
+          "jp": "私の代わりに / 私を代表して。",
+          "cat": "part2"
+        }
+      ]
+    },
+    {
+      "id": "q26",
+      "type": "order",
+      "cat": "builder",
+      "prompt": {
+        "en": "Sentence Builder: Make 「英語に興味があります。」",
+        "jp": "文を組み立てましょう：「英語に興味があります。」"
+      },
+      "words": [
+        "interested",
+        "English",
+        "I’m",
+        "in"
+      ],
+      "correctOrder": [
+        2,
+        0,
+        3,
+        1
+      ],
+      "hint": {
+        "en": "Feeling = interested in...",
+        "jp": "気持ちは interested in... です。"
+      },
+      "explanation": {
+        "en": "The sentence is “I’m interested in English.”",
+        "jp": "自然な文は “I’m interested in English.” です。"
+      }
+    },
+    {
+      "id": "q27",
+      "type": "order",
+      "cat": "builder",
+      "prompt": {
+        "en": "Sentence Builder: Make 「私の代わりに返信してくれますか？」",
+        "jp": "文を組み立てましょう：「私の代わりに返信してくれますか？」"
+      },
+      "words": [
+        "reply",
+        "on my behalf",
+        "Can",
+        "you"
+      ],
+      "correctOrder": [
+        2,
+        3,
+        0,
+        1
+      ],
+      "hint": {
+        "en": "Use Can you...",
+        "jp": "Can you... から始めます。"
+      },
+      "explanation": {
+        "en": "The sentence is “Can you reply on my behalf?”",
+        "jp": "自然な文は “Can you reply on my behalf?” です。"
+      }
+    },
+    {
+      "id": "q28",
+      "type": "typing",
+      "cat": "alcohol",
+      "promptJP": "今日はまだお酒を飲んでいません。",
+      "accepted": [
+        "I haven't had any alcohol yet today",
+        "I have not had any alcohol yet today",
+        "I haven't had alcohol yet today"
+      ],
+      "hint": {
+        "en": "Use haven’t had any alcohol yet today.",
+        "jp": "haven’t had any alcohol yet today を使います。"
+      },
+      "explanation": {
+        "en": "This is the most natural daily sentence.",
+        "jp": "日常ではこの文がとても自然です。"
+      }
+    },
+    {
+      "id": "q29",
+      "type": "typing",
+      "cat": "hate",
+      "promptJP": "サッカーを見るのが嫌いです。",
+      "accepted": [
+        "I hate watching soccer",
+        "I hate watching football",
+        "I don't like watching soccer",
+        "I do not like watching soccer"
+      ],
+      "hint": {
+        "en": "Use hate + watching.",
+        "jp": "hate + watching を使います。"
+      },
+      "explanation": {
+        "en": "“I don’t like watching soccer” is a softer accepted version.",
+        "jp": "“I don’t like watching soccer.” はやわらかい言い方です。"
+      }
+    },
+    {
+      "id": "q30",
+      "type": "typing",
+      "cat": "prepositions",
+      "promptJP": "インスタで見ました。",
+      "accepted": [
+        "I saw it on Instagram",
+        "I saw that on Instagram"
+      ],
+      "hint": {
+        "en": "Use on Instagram.",
+        "jp": "on Instagram を使います。"
+      },
+      "explanation": {
+        "en": "For SNS platforms, use on.",
+        "jp": "SNSには on を使います。"
+      }
+    },
+    {
+      "id": "q31",
+      "type": "typing",
+      "cat": "sparkle",
+      "promptJP": "キラキラしたものが好きです。",
+      "accepted": [
+        "I like sparkly things",
+        "I like sparkling things"
+      ],
+      "hint": {
+        "en": "For cute shiny things, use sparkly.",
+        "jp": "かわいいキラキラには sparkly が自然です。"
+      },
+      "explanation": {
+        "en": "“I like sparkly things” is natural and easy.",
+        "jp": "“I like sparkly things.” は自然で使いやすいです。"
+      }
+    },
+    {
+      "id": "q32",
+      "type": "typing",
+      "cat": "interest",
+      "promptJP": "英語に興味があります。",
+      "accepted": [
+        "I'm interested in English",
+        "I am interested in English"
+      ],
+      "hint": {
+        "en": "Your feeling = interested in.",
+        "jp": "自分の気持ちは interested in です。"
+      },
+      "explanation": {
+        "en": "Use interested for your feeling.",
+        "jp": "自分の気持ちには interested を使います。"
+      }
+    },
+    {
+      "id": "q33",
+      "type": "typing",
+      "cat": "interest",
+      "promptJP": "それは面白いです。",
+      "accepted": [
+        "It's interesting",
+        "It is interesting",
+        "That's interesting",
+        "That is interesting"
+      ],
+      "hint": {
+        "en": "Thing/story = interesting.",
+        "jp": "物・話は interesting です。"
+      },
+      "explanation": {
+        "en": "Use interesting for the thing or story.",
+        "jp": "物や話には interesting を使います。"
+      }
+    },
+    {
+      "id": "q34",
+      "type": "typing",
+      "cat": "behalf",
+      "promptJP": "私の代わりに返信してくれますか？",
+      "accepted": [
+        "Can you reply on my behalf",
+        "Could you reply on my behalf",
+        "Please reply on my behalf"
+      ],
+      "hint": {
+        "en": "Use on my behalf.",
+        "jp": "on my behalf を使います。"
+      },
+      "explanation": {
+        "en": "“Can you reply on my behalf?” is natural.",
+        "jp": "“Can you reply on my behalf?” が自然です。"
+      }
+    }
+  ],
+  "reviewCards": [
+    {
+      "en": "I haven’t had any alcohol yet today.",
+      "jp": "今日はまだお酒を飲んでいません。",
+      "usageEn": "Use while today is still continuing.",
+      "usageJp": "今日がまだ続いている時に使います。"
+    },
+    {
+      "en": "I didn’t drink yesterday.",
+      "jp": "昨日は飲みませんでした。",
+      "usageEn": "Use past tense for finished past.",
+      "usageJp": "終わった過去には過去形を使います。"
+    },
+    {
+      "en": "I hate watching soccer.",
+      "jp": "サッカーを見るのが嫌いです。",
+      "usageEn": "Use hate + verb-ing.",
+      "usageJp": "hate + 動詞ing を使います。"
+    },
+    {
+      "en": "I’m not really into soccer.",
+      "jp": "サッカーにはあまり興味がありません。",
+      "usageEn": "A softer alternative to hate.",
+      "usageJp": "hate よりやわらかい言い方です。"
+    },
+    {
+      "en": "I saw it on Instagram.",
+      "jp": "インスタで見ました。",
+      "usageEn": "Use on for SNS/platforms.",
+      "usageJp": "SNS・サービス上には on を使います。"
+    },
+    {
+      "en": "I saw it in the comments.",
+      "jp": "コメント欄の中で見ました。",
+      "usageEn": "Use in for inside a section.",
+      "usageJp": "中・内部には in を使います。"
+    },
+    {
+      "en": "I like sparkly things.",
+      "jp": "キラキラしたものが好きです。",
+      "usageEn": "Use sparkly for cute shiny things.",
+      "usageJp": "かわいいキラキラには sparkly が自然です。"
+    },
+    {
+      "en": "Her nails are glittery.",
+      "jp": "彼女のネイルはキラキラしています。",
+      "usageEn": "Use glittery for glitter-like shine.",
+      "usageJp": "ラメっぽいキラキラには glittery を使います。"
+    },
+    {
+      "en": "I’m interested in English.",
+      "jp": "英語に興味があります。",
+      "usageEn": "Use interested for your feeling.",
+      "usageJp": "自分の気持ちには interested を使います。"
+    },
+    {
+      "en": "It’s interesting.",
+      "jp": "それは面白いです。",
+      "usageEn": "Use interesting for the thing/story.",
+      "usageJp": "物・話には interesting を使います。"
+    },
+    {
+      "en": "Can you reply on my behalf?",
+      "jp": "私の代わりに返信してくれますか？",
+      "usageEn": "Use on my behalf, not behalf of me.",
+      "usageJp": "behalf of me ではなく on my behalf が自然です。"
+    },
+    {
+      "en": "I’m speaking on behalf of the team.",
+      "jp": "チームを代表して話しています。",
+      "usageEn": "Use on behalf of + person/group.",
+      "usageJp": "代表する時は on behalf of + 人・団体を使います。"
+    }
+  ],
+  "teacherNote": {
+    "en": "This was a long lesson, so the quiz is split into two parts. First, focus on the safest sentence for each situation. Then review nuance and common mistakes.",
+    "jp": "今回は内容が多いので、クイズも2部構成にしています。まずは場面ごとの一番安全な文を覚えて、その後にニュアンスと間違いやすいポイントを復習しましょう。"
+  }
+};
+
+/* =========================================================================
+   =============================  GAME ENGINE  ============================
+   Do not edit below unless changing game logic. This code reads only from
+   `quizData` above, so it works unchanged for any future lesson.
+
+   ARCHITECTURE NOTE (v2): score, streak-per-question, and weak-point stats
+   are derived from `state.records` on demand instead of being incremented
+   live. That is what makes the Back button and the question navigator safe
+   — jumping around never double-counts or loses an answer, because nothing
+   is mutated by simply *looking* at a question again.
+   ========================================================================= */
+(function(){
+  "use strict";
+
+  const GRID_CELLS = ["top-left","top","top-right","left","middle","right","bottom-left","bottom","bottom-right"];
+
+  const state = {
+    current: 0,          // index into state.activeQuestions
+    playCount: 0,         // how many times startQuiz() has run (drives shuffle)
+    maxScore: 0,
+    streak: 0,
+    bestStreak: 0,
+    soundOn: true,
+    vibrationOn: true,
+    hintMode: "auto",
+    activeQuestions: [],  // quizData.questions, original order on play 1, shuffled after
+    records: [],          // one attempt-record per question, see createRecord()
+    quizMode: "full",     // full | part1 | part2 | mistakes
+    resultIndices: null,  // null for full active round; array for partial result or mistake scope
+    partialResult: false  // true when student clicks Finish Attempted Questions
+  };
+
+  let audioCtx = null;
+  let sparkleCounter = 0;
+  let hintTimeoutId = null;
+  let hintIntervalId = null;
+
+  /* ---------------------------------------------------------------------
+     AUDIO (Web Audio API only — no external audio files)
+     --------------------------------------------------------------------- */
+  function getAudioCtx(){
+    if(!audioCtx){
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      if(!Ctx) return null;
+      audioCtx = new Ctx();
+    }
+    if(audioCtx.state === "suspended"){ audioCtx.resume(); }
+    return audioCtx;
+  }
+
+  function playTone(opts){
+    if(!state.soundOn) return;
+    const ctx = getAudioCtx();
+    if(!ctx) return;
+    const { freq, freqEnd, duration = 0.15, type = "sine", startTime = 0, gainPeak = 0.16 } = opts;
+    const t0 = ctx.currentTime + startTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, t0);
+    if(freqEnd){
+      osc.frequency.exponentialRampToValueAtTime(Math.max(freqEnd, 24), t0 + duration);
+    }
+    gain.gain.setValueAtTime(0.0001, t0);
+    gain.gain.exponentialRampToValueAtTime(gainPeak, t0 + Math.min(0.018, duration * 0.32));
+    gain.gain.exponentialRampToValueAtTime(0.0001, t0 + duration);
+    osc.connect(gain).connect(ctx.destination);
+    osc.start(t0);
+    osc.stop(t0 + duration + 0.035);
+  }
+
+  function playNoiseBurst(opts){
+    if(!state.soundOn) return;
+    const ctx = getAudioCtx();
+    if(!ctx) return;
+    const { duration = 0.045, startTime = 0, gainPeak = 0.035 } = opts || {};
+    const t0 = ctx.currentTime + startTime;
+    const buffer = ctx.createBuffer(1, Math.max(1, Math.floor(ctx.sampleRate * duration)), ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for(let i=0;i<data.length;i++) data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / data.length, 2.2);
+    const src = ctx.createBufferSource();
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(gainPeak, t0);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t0 + duration);
+    src.buffer = buffer;
+    src.connect(gain).connect(ctx.destination);
+    src.start(t0);
+    src.stop(t0 + duration);
+  }
+
+  function playClick(){
+    playNoiseBurst({ duration: 0.028, gainPeak: 0.025 });
+    playTone({ freq: 1220, freqEnd: 760, duration: 0.055, type: "triangle", gainPeak: 0.085 });
+  }
+  function playHint(){
+    playTone({ freq: 720, duration: 0.12, type: "sine", gainPeak: 0.075 });
+    playTone({ freq: 1080, duration: 0.18, type: "triangle", startTime: 0.08, gainPeak: 0.065 });
+  }
+  function playCorrect(){
+    playTone({ freq: 659, duration: 0.13, type: "sine", gainPeak: 0.13 });
+    playTone({ freq: 880, duration: 0.16, type: "triangle", startTime: 0.075, gainPeak: 0.12 });
+    playTone({ freq: 1318, duration: 0.22, type: "sine", startTime: 0.155, gainPeak: 0.105 });
+    playTone({ freq: 1760, duration: 0.12, type: "sine", startTime: 0.28, gainPeak: 0.052 });
+  }
+  function playWrong(){
+    playTone({ freq: 270, freqEnd: 180, duration: 0.18, type: "triangle", gainPeak: 0.105 });
+    playTone({ freq: 210, freqEnd: 135, duration: 0.24, type: "sine", startTime: 0.13, gainPeak: 0.095 });
+    playNoiseBurst({ duration: 0.055, startTime: 0.03, gainPeak: 0.015 });
+  }
+  function playFinal(){
+    [523,659,784,1046,1318].forEach((f,i)=>playTone({ freq:f, duration:i===4 ? 0.36 : 0.17, type:i===4 ? "triangle" : "sine", startTime:i*0.085, gainPeak:i===4 ? 0.14 : 0.12 }));
+    playNoiseBurst({ duration: 0.12, startTime: 0.18, gainPeak: 0.022 });
+  }
+
+  /* ---------------------------------------------------------------------
+     VIBRATION (Vibration API — silently no-ops if unsupported or off)
+     --------------------------------------------------------------------- */
+  function vibrate(pattern){
+    if(!state.vibrationOn) return;
+    if(navigator.vibrate){
+      try{ navigator.vibrate(pattern); }catch(e){ /* unsupported device, ignore */ }
+    }
+  }
+
+  /* ---------------------------------------------------------------------
+     TEXT NORMALIZATION for typing questions
+     --------------------------------------------------------------------- */
+  function normalizeAnswer(str){
+    return str
+      .normalize("NFKC")
+      .toLowerCase()
+      .replace(/[\u2018\u2019\u00b4`]/g, "'")
+      .replace(/[^a-z0-9'\s]/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function levenshtein(a, b){
+    const m = a.length, n = b.length;
+    const dp = Array.from({ length: m + 1 }, () => new Array(n + 1).fill(0));
+    for(let i=0;i<=m;i++) dp[i][0]=i;
+    for(let j=0;j<=n;j++) dp[0][j]=j;
+    for(let i=1;i<=m;i++){
+      for(let j=1;j<=n;j++){
+        dp[i][j] = Math.min(
+          dp[i-1][j] + 1,
+          dp[i][j-1] + 1,
+          dp[i-1][j-1] + (a[i-1] === b[j-1] ? 0 : 1)
+        );
+      }
+    }
+    return dp[m][n];
+  }
+
+  function checkTypingAnswer(input, accepted){
+    const norm = normalizeAnswer(input);
+    const normNoApos = norm.replace(/'/g, "");
+    let best = "wrong";
+    for(const ans of accepted){
+      const a = normalizeAnswer(ans);
+      const aNoApos = a.replace(/'/g, "");
+      if(norm === a || (normNoApos === aNoApos && normNoApos.length>0)) return "correct";
+      const dist = levenshtein(normNoApos, aNoApos);
+      const threshold = Math.max(2, Math.round(aNoApos.length * 0.2));
+      if(dist <= threshold) best = "almost";
+    }
+    return best;
+  }
+
+  /* ---------------------------------------------------------------------
+     SMALL HELPERS
+     --------------------------------------------------------------------- */
+  function esc(s){
+    return String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
+  }
+  function shuffledIndices(n){
+    const arr = Array.from({ length: n }, (_,i)=>i);
+    for(let i=arr.length-1;i>0;i--){
+      const j = Math.floor(Math.random()*(i+1));
+      [arr[i],arr[j]] = [arr[j],arr[i]];
+    }
+    return arr;
+  }
+  function monthAbbrev(m){
+    return ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"][m];
+  }
+  function formatLessonTag(lessonId){
+    const d = new Date(lessonId + "T00:00:00");
+    if(isNaN(d.getTime())) return "REVIEW QUEST";
+    return monthAbbrev(d.getMonth()) + " " + d.getDate() + " \u00b7 REVIEW QUEST";
+  }
+  function formatPostmarkDate(lessonId){
+    const d = new Date(lessonId + "T00:00:00");
+    if(isNaN(d.getTime())) return "\u2022";
+    return (d.getMonth()+1) + "\u00b7" + d.getDate();
+  }
+
+  /* ---------------------------------------------------------------------
+     SCREEN NAVIGATION
+     --------------------------------------------------------------------- */
+  function showScreen(id){
+    document.querySelectorAll(".screen").forEach(s=>s.classList.remove("screen--active"));
+    document.getElementById(id).classList.add("screen--active");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  /* ---------------------------------------------------------------------
+     STATIC TEXT (populated from quizData so the engine stays lesson-agnostic)
+     --------------------------------------------------------------------- */
+  function populateStaticText(){
+    document.title = quizData.title;
+    document.getElementById("welcome-title").textContent = quizData.title;
+    document.getElementById("welcome-subtitle-en").textContent = quizData.subtitle;
+    document.getElementById("welcome-subtitle-jp").textContent = quizData.jpSubtitle;
+
+    const tag = formatLessonTag(quizData.lessonId);
+    document.querySelectorAll(".js-lesson-tag").forEach(el => el.textContent = tag);
+
+    const pmDate = formatPostmarkDate(quizData.lessonId);
+    document.querySelectorAll(".js-postmark-date").forEach(el => el.textContent = pmDate);
+  }
+
+  function renderFocusChips(){
+    const wrap = document.getElementById("focus-chips");
+    if(!wrap) return;
+    wrap.innerHTML = Object.keys(quizData.categoryLabels).map(key=>{
+      const l = quizData.categoryLabels[key];
+      return '<span class="focus-chip">' + esc(l.en) + '</span>';
+    }).join('');
+  }
+
+  /* ---------------------------------------------------------------------
+     RECORD FACTORY — one attempt-record per question (see architecture
+     note above). This is the "clean attempt-tracking system" that makes
+     Back / navigator jumps / retries all safe.
+     --------------------------------------------------------------------- */
+  function createRecord(q){
+    if(q.type === "order"){
+      return { type: "order", selected: [], currentCorrect: null, firstCorrect: null, retried: false };
+    }
+    if(q.type === "matching"){
+      return {
+        type: "matching",
+        pairMatched: new Array(q.pairs.length).fill(false),   // current progress, resets on "Reset"
+        pairFirstResult: new Array(q.pairs.length).fill(null), // permanent, for weak points
+        matchedCount: 0,
+        complete: false,
+        enOrder: null, jpOrder: null,
+        selectedEn: null, selectedJp: null, selectedEnEl: null, selectedJpEl: null,
+        locked: false
+      };
+    }
+    if(q.type === "typing"){
+      return { type: "typing", firstValue: null, firstResult: null, currentValue: "", currentResult: null, retried: false };
+    }
+    if(q.type === "grid"){
+      return { type: "grid", firstCell: null, firstCorrect: null, currentCell: null, currentCorrect: null, retried: false };
+    }
+    // mcq / situation
+    return { type: "mcq", firstChoice: null, firstCorrect: null, currentChoice: null, currentCorrect: null, retried: false };
+  }
+
+  /* ---------------------------------------------------------------------
+     SCORING — fully derived from state.records, never incremented live.
+     --------------------------------------------------------------------- */
+  function computeMaxScore(){
+    let max = 0;
+    state.activeQuestions.forEach(q=>{
+      max += (q.type === "matching") ? q.pairs.length : 1;
+    });
+    return max;
+  }
+
+  function firstScoreForQuestion(q, r){
+    if(!r) return 0;
+    if(q.type === "matching"){
+      return (r.pairFirstResult || []).reduce((total, value) => total + (value === "correct" ? 1 : 0), 0);
+    }
+    if(q.type === "typing") return r.firstResult === "correct" ? 1 : 0;
+    return r.firstCorrect === true ? 1 : 0;
+  }
+
+  function computeScore(){
+    let total = 0;
+    state.activeQuestions.forEach((q,i)=>{
+      total += firstScoreForQuestion(q, state.records[i]);
+    });
+    return total;
+  }
+
+  // Weak points use only each item's FIRST attempt, so a later retry can't
+  // erase an earlier mistake from the diagnostic — see spec requirement.
+  function computeCategoryStats(){
+    const stats = {};
+    const indices = getCurrentResultIndices();
+    function bump(cat, correct){
+      if(!stats[cat]) stats[cat] = { correct: 0, total: 0 };
+      stats[cat].total++;
+      if(correct) stats[cat].correct++;
+    }
+    indices.forEach(i=>{
+      const q = state.activeQuestions[i];
+      const r = state.records[i];
+      if(q.type === "matching"){
+        q.pairs.forEach((p,j)=>{ if(r.pairFirstResult[j] !== null) bump(p.cat, r.pairFirstResult[j] === "correct"); });
+      } else if(q.type === "typing"){
+        if(r.firstResult !== null) bump(q.cat, r.firstResult === "correct");
+      } else {
+        if(r.firstCorrect !== null) bump(q.cat, r.firstCorrect === true);
+      }
+    });
+    return stats;
+  }
+
+  // Per-question pill status for the navigator: 'unanswered' | 'correct' | 'wrong'
+  function firstAttemptStatus(q, r){
+    if(!r) return "unanswered";
+    if(q.type === "matching"){
+      const first = r.pairFirstResult || [];
+      if(first.some(v => v === "wrong")) return "wrong";
+      if(r.complete && first.length > 0 && first.every(v => v === "correct")) return "correct";
+      if(first.some(v => v !== null)) return "unanswered";
+      return "unanswered";
+    }
+    if(q.type === "typing"){
+      if(r.firstResult === null) return "unanswered";
+      return r.firstResult === "correct" ? "correct" : "wrong";
+    }
+    if(r.firstCorrect === null) return "unanswered";
+    return r.firstCorrect ? "correct" : "wrong";
+  }
+
+  // Per-question pill status for the navigator: 'unanswered' | 'correct' | 'wrong'.
+  // This uses the FIRST attempt, so a later retry cannot turn an official mistake green.
+  function questionStatus(i){
+    return firstAttemptStatus(state.activeQuestions[i], state.records[i]);
+  }
+
+
+  function questionPart(q){
+    const n = q.id ? parseInt(String(q.id).replace(/\D/g,""),10) : 0;
+    if(["alcohol","hate","prepositions","part1"].includes(q.cat)) return "part1";
+    if(["sparkle","interest","behalf","part2"].includes(q.cat)) return "part2";
+    if(q.cat === "builder") return n <= 14 ? "part1" : "part2";
+    return n && n <= 17 ? "part1" : "part2";
+  }
+
+  function modeLabel(){
+    if(state.quizMode === "part1") return "Part 1";
+    if(state.quizMode === "part2") return "Part 2";
+    if(state.quizMode === "mistakes") return "Mistakes";
+    return "Full";
+  }
+
+  function isQuestionAttempted(q, r){
+    if(!q || !r) return false;
+    if(q.type === "matching") return (r.pairFirstResult || []).some(v => v !== null) || r.complete || r.matchedCount > 0;
+    if(q.type === "typing") return r.firstResult !== null;
+    return r.firstCorrect !== null;
+  }
+
+  function getAttemptedQuestionIndices(){
+    const indices = [];
+    state.activeQuestions.forEach((q,i)=>{ if(isQuestionAttempted(q,state.records[i])) indices.push(i); });
+    return indices;
+  }
+
+  function getCurrentResultIndices(){
+    if(Array.isArray(state.resultIndices)) return state.resultIndices;
+    return state.activeQuestions.map((_,i)=>i);
+  }
+
+  function computeMaxScoreForIndices(indices){
+    let total = 0;
+    indices.forEach(i=>{
+      const q = state.activeQuestions[i];
+      if(q.type === "matching") total += q.pairs.length;
+      else total += 1;
+    });
+    return total;
+  }
+
+  function computeScoreForIndices(indices){
+    let total = 0;
+    indices.forEach(i=>{ total += firstScoreForQuestion(state.activeQuestions[i], state.records[i]); });
+    return total;
+  }
+
+  // Bumps the live streak counter — only ever called the first time a
+  // question (or matching pair) is resolved, never on a retry.
+  function bumpStreak(isCorrect){
+    if(isCorrect){
+      state.streak++;
+      state.bestStreak = Math.max(state.bestStreak, state.streak);
+      if(state.streak > 0 && state.streak % 3 === 0) showStreakPopup(state.streak);
+    } else {
+      state.streak = 0;
+    }
+  }
+
+  /* ---------------------------------------------------------------------
+     HEADER STATS + BACK BUTTON + PROGRESS BAR
+     --------------------------------------------------------------------- */
+  function updateHeaderStats(){
+    const total = state.activeQuestions.length;
+    document.getElementById("stat-position").textContent = modeLabel() + " · Q" + (state.current+1) + "/" + total;
+    document.getElementById("stat-score").textContent = "\u2b50 " + computeScore();
+    document.getElementById("stat-streak").textContent = "\ud83d\udd25 " + state.streak;
+
+    // progress = how many questions have been attempted at least once,
+    // NOT how far forward the student has navigated — so Back never makes
+    // the bar move backwards in a confusing way.
+    const completed = state.activeQuestions.filter((q,i)=>questionStatus(i) !== "unanswered").length;
+    document.getElementById("progress-fill").style.width = (completed/total*100) + "%";
+
+    const backBtn = document.getElementById("btn-back");
+    if(backBtn) backBtn.disabled = state.current <= 0;
+    renderPartialActions();
+  }
+
+  function renderPartialActions(){
+    const wrap = document.getElementById("partial-actions");
+    if(!wrap) return;
+    const attempted = getAttemptedQuestionIndices().length;
+    const total = state.activeQuestions.length;
+    if(attempted > 0 && attempted < total){
+      wrap.innerHTML = '<div class="partial-card">' +
+        '<button class="btn btn--secondary btn--block" data-action="finish-attempted" type="button">📌 Finish Attempted Questions<span class="btn-jp">ここまでの結果を見る</span></button>' +
+        '<p class="partial-note">Busy? You can check only the questions you have answered. Unanswered questions will be ignored in this partial result.</p>' +
+      '</div>';
+    } else {
+      wrap.innerHTML = "";
+    }
+  }
+
+  function bumpScoreChip(){
+    const el = document.getElementById("stat-score");
+    el.classList.remove("stat-chip--bump");
+    void el.offsetWidth; // restart animation
+    el.classList.add("stat-chip--bump");
+  }
+
+  function showStreakPopup(n){
+    const el = document.getElementById("streak-popup");
+    el.textContent = "\ud83d\udd25 " + n + " in a row! Nice combo!";
+    el.classList.add("show");
+    vibrate([25,30,25]);
+    clearTimeout(showStreakPopup._t);
+    showStreakPopup._t = setTimeout(()=> el.classList.remove("show"), 1700);
+  }
+
+  /* ---------------------------------------------------------------------
+     ====================  QUESTION NAVIGATOR (back / jump)  ==============
+     --------------------------------------------------------------------- */
+  function renderNavigator(){
+    const nav = document.getElementById("qnav");
+    if(!nav) return;
+    const total = state.activeQuestions.length;
+    let html = "";
+    for(let i=0;i<total;i++){
+      const status = questionStatus(i);
+      let cls = "qnav__pill";
+      if(i === state.current) cls += " qnav__pill--current";
+      else if(status === "correct") cls += " qnav__pill--correct";
+      else if(status === "wrong") cls += " qnav__pill--wrong";
+      html += '<button class="' + cls + '" data-action="qnav-jump" data-index="' + i + '" type="button" aria-label="Question ' + (i+1) + '">' + (i+1) + '</button>';
+    }
+    nav.innerHTML = html;
+    const currentPill = nav.querySelector(".qnav__pill--current");
+    if(currentPill) currentPill.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+  }
+
+  function goBack(){
+    if(state.current <= 0) return;
+    state.current--;
+    renderStage();
+  }
+
+  function goHome(){
+    clearHintTimers();
+    showScreen("screen-welcome");
+  }
+
+  function goToIndex(i){
+    if(i < 0 || i >= state.activeQuestions.length || i === state.current) return;
+    state.current = i;
+    renderStage();
+  }
+
+  function goNext(){
+    if(state.current >= state.activeQuestions.length - 1){
+      finishQuiz();
+    } else {
+      state.current++;
+      renderStage();
+    }
+  }
+
+  /* ---------------------------------------------------------------------
+     SPARKLES + CONFETTI (lightweight, no external libs)
+     --------------------------------------------------------------------- */
+  function spawnSparkles(targetEl){
+    if(!targetEl) return;
+    targetEl.style.position = "relative";
+    targetEl.style.overflow = "visible";
+    const glyphs = ["&#10024;","&#127775;","&#127919;","&#128079;","&#128293;","&#128142;","&#128640;","&#128171;","&#9989;","&#127881;","&#127942;","&#128588;"];
+    for(let i=0;i<9;i++){
+      const s = document.createElement("span");
+      s.className = "sparkle" + (i === 0 ? " sparkle--hero" : "");
+      s.innerHTML = glyphs[(sparkleCounter + i) % glyphs.length];
+      const dx = (Math.random()*150-75) + "px";
+      const dy = (-52 - Math.random()*72) + "px";
+      s.style.setProperty("--dx", dx);
+      s.style.setProperty("--dy", dy);
+      s.style.left = (12 + Math.random()*76) + "%";
+      s.style.top = (20 + Math.random()*42) + "%";
+      targetEl.appendChild(s);
+      setTimeout(()=> s.remove(), 2150);
+    }
+    sparkleCounter = (sparkleCounter + 1) % glyphs.length;
+  }
+
+  function spawnConfetti(){
+    const layer = document.getElementById("confetti-layer");
+    const colors = ["#4bb6a8","#e8a94c","#f0785c","#3a2e4d","#fff2df"];
+    const count = 46;
+    for(let i=0;i<count;i++){
+      const piece = document.createElement("div");
+      piece.className = "confetti-piece";
+      piece.style.left = Math.random()*100 + "%";
+      piece.style.background = colors[i % colors.length];
+      const duration = 2.4 + Math.random()*1.6;
+      piece.style.animationDuration = duration + "s";
+      piece.style.transform = "rotate(" + Math.floor(Math.random()*360) + "deg)";
+      layer.appendChild(piece);
+      setTimeout(()=> piece.remove(), duration*1000 + 200);
+    }
+  }
+
+  /* ---------------------------------------------------------------------
+     HINT PANEL
+     --------------------------------------------------------------------- */
+  function clearHintTimers(){
+    clearTimeout(hintTimeoutId);
+    clearInterval(hintIntervalId);
+    hintTimeoutId = null;
+    hintIntervalId = null;
+  }
+
+  function openHint(){
+    const panel = document.getElementById("hint-panel");
+    if(!panel) return;
+    playHint();
+    vibrate(15);
+    panel.classList.add("is-open");
+    const countdownEl = document.getElementById("hint-countdown");
+    clearHintTimers();
+    if(state.hintMode === "auto"){
+      let secondsLeft = 5;
+      countdownEl.textContent = "Hint closes in " + secondsLeft + "\u2026";
+      hintIntervalId = setInterval(()=>{
+        secondsLeft--;
+        if(secondsLeft > 0){
+          countdownEl.textContent = "Hint closes in " + secondsLeft + "\u2026";
+        }
+      }, 1000);
+      hintTimeoutId = setTimeout(closeHint, 5000);
+    } else {
+      countdownEl.textContent = "";
+    }
+  }
+
+  function closeHint(){
+    const panel = document.getElementById("hint-panel");
+    if(panel) panel.classList.remove("is-open");
+    clearHintTimers();
+  }
+
+  /* ---------------------------------------------------------------------
+     JP TOGGLE (generic, used for prompt + choice translations)
+     --------------------------------------------------------------------- */
+  function toggleJp(btn){
+    const targetId = btn.getAttribute("data-target");
+    const panel = document.getElementById(targetId);
+    if(!panel) return;
+    const opening = !panel.classList.contains("is-open");
+    panel.classList.toggle("is-open");
+    btn.classList.toggle("jp-pill--active", opening);
+  }
+
+  /* ---------------------------------------------------------------------
+     SHARED TEMPLATE PIECES
+     --------------------------------------------------------------------- */
+  function categoryTagHtml(q){
+    const label = quizData.categoryLabels[q.cat];
+    if(!label) return "";
+    return '<div class="q-cat-tag-row"><span class="q-cat-tag">' + esc(label.en) + '</span></div>';
+  }
+
+  function promptBlockHtml(q){
+    return (
+      '<div class="q-prompt">' +
+        '<div class="q-prompt__row">' +
+          '<p class="q-prompt__en">' + esc(q.prompt.en) + '</p>' +
+          '<button class="jp-pill" data-action="toggle-jp" data-target="prompt-jp" type="button">JP</button>' +
+        '</div>' +
+        '<p class="q-prompt__jp jp-panel" id="prompt-jp">' + esc(q.prompt.jp) + '</p>' +
+      '</div>'
+    );
+  }
+
+  function hintBlockHtml(q){
+    return (
+      '<div class="hint-row">' +
+        '<button class="btn btn--ghost btn--sm" data-action="show-hint" type="button">\ud83d\udca1 Hint</button>' +
+      '</div>' +
+      '<div class="hint-panel" id="hint-panel">' +
+        '<p class="hint-en">' + esc(q.hint.en) + '</p>' +
+        '<p class="hint-jp">' + esc(q.hint.jp) + '</p>' +
+        '<div class="hint-footer">' +
+          '<span class="hint-countdown" id="hint-countdown"></span>' +
+          '<button class="hint-close" data-action="close-hint" type="button" aria-label="Close hint">\u2715</button>' +
+        '</div>' +
+      '</div>'
+    );
+  }
+
+  function feedbackExplanationHtml(q, isCorrect, label, jp){
+    return (
+      '<div class="feedback-banner ' + (isCorrect ? "feedback-banner--good":"feedback-banner--bad") + '">' +
+        '<span>' + (isCorrect ? "\u2705 " : "\ud83d\udca1 ") + esc(label) +
+          (jp ? '<span class="feedback-jp">' + esc(jp) + '</span>' : '') +
+        '</span>' +
+      '</div>' +
+      '<div class="explanation-panel">' +
+        '<p class="explanation-en">' + esc(q.explanation.en) + '</p>' +
+        '<p class="explanation-jp">' + esc(q.explanation.jp) + '</p>' +
+      '</div>'
+    );
+  }
+
+  function nextButtonHtml(){
+    return '<button class="btn btn--primary btn--block" data-action="next-question" type="button">Next \u2192</button>';
+  }
+
+  // ==================  RETRY LOGIC: button markup  =======================
+  function retryButtonHtml(){
+    return (
+      '<button class="btn btn--secondary btn--block" data-action="retry-question" type="button">' +
+        '\ud83d\udd01 Try this question again' +
+        '<span class="btn-jp">\u3082\u3046\u4e00\u56de\u3053\u306e\u554f\u984c\u3092\u3084\u308b</span>' +
+      '</button>'
+    );
+  }
+
+  function buildAnswerAreaHtml(q, isCorrect, label, jp){
+    let html = feedbackExplanationHtml(q, isCorrect, label, jp);
+    if(!isCorrect) html += retryButtonHtml();
+    html += nextButtonHtml();
+    return html;
+  }
+
+  function standardLabel(isCorrect, retried){
+    if(isCorrect && retried) return { label: "Correct this time!", jp: "\u4eca\u5ea6\u306f\u6b63\u89e3\uff01" };
+    if(isCorrect) return { label: "Correct!", jp: "\u6b63\u89e3\uff01" };
+    return { label: "Not quite!", jp: "\u6b8b\u5ff5\u3001\u3082\u3046\u5c11\u3057\uff01" };
+  }
+
+  // Single source of truth for "what does the answer area look like right
+  // now" — used both right after answering AND when re-rendering a
+  // previously-answered question (Back / navigator jump).
+  function buildAnswerAreaForRecord(q, r){
+    if(q.type === "matching"){
+      if(!r.complete) return "";
+      return (
+        '<div class="feedback-banner feedback-banner--good"><span>\u2705 All matched! Great memory.' +
+        '<span class="feedback-jp">\u5168\u90e8\u30de\u30c3\u30c1\u3067\u304d\u307e\u3057\u305f\uff01</span></span></div>' +
+        nextButtonHtml()
+      );
+    }
+    if(q.type === "typing"){
+      if(r.currentResult === null) return "";
+      const isCorrect = r.currentResult === "correct";
+      let label, jp;
+      if(isCorrect){ label = r.retried ? "You got it!" : "Nice!"; jp = r.retried ? "\u3067\u304d\u307e\u3057\u305f\uff01" : "\u81ea\u7136\u3067\u3059\u3002"; }
+      else if(r.currentResult === "almost"){ label = "Good try."; jp = "Check the phrase once more."; }
+      else { label = "No worries."; jp = "\u3082\u3046\u4e00\u56de\u3084\u3063\u3066\u307f\u3088\u3046\u3002"; }
+      return buildAnswerAreaHtml(q, isCorrect, label, jp);
+    }
+    // mcq / situation / grid
+    if(r.currentCorrect === null) return "";
+    const { label, jp } = standardLabel(r.currentCorrect, r.retried);
+    return buildAnswerAreaHtml(q, r.currentCorrect, label, jp);
+  }
+
+  /* ---------------------------------------------------------------------
+     TYPE-SPECIFIC RENDERERS (all read the record `r` to decide whether to
+     show a fresh interactive question or a locked, already-answered one)
+     --------------------------------------------------------------------- */
+  function renderMcqCard(q, r){
+    const resolved = r.currentCorrect !== null;
+    let html = categoryTagHtml(q);
+    if(q.type === "situation" && q.situationQuote){
+      html += '<div class="quote-bubble"><span class="quote-mark">\u201c</span><p class="quote-en">' + esc(q.situationQuote.en) + '</p></div>';
+    }
+    html += promptBlockHtml(q);
+    html += '<div class="choices' + (resolved ? " is-locked" : "") + '" id="choices-wrap">';
+    q.choices.forEach(c=>{
+      let extra = "";
+      if(resolved){
+        if(c.id === r.currentChoice) extra = " choice--selected " + (r.currentCorrect ? "choice--correct" : "choice--wrong");
+        else if(c.id === q.correct && !r.currentCorrect) extra = " choice--reveal-correct";
+      }
+      html +=
+        '<div class="choice-wrap">' +
+          '<div class="choice' + extra + '" role="button" tabindex="0" data-action="select-choice" data-choice-id="' + c.id + '">' +
+            '<span class="choice-letter">' + c.id.toUpperCase() + '</span>' +
+            '<span class="choice-en">' + esc(c.en) + '</span>' +
+            '<button class="jp-pill jp-pill--sm" data-action="toggle-jp" data-target="choice-jp-' + c.id + '" type="button">JP</button>' +
+          '</div>' +
+          '<p class="choice-jp jp-panel" id="choice-jp-' + c.id + '">' + esc(c.jp) + '</p>' +
+        '</div>';
+    });
+    html += '</div>';
+    html += hintBlockHtml(q);
+    html += '<div class="answer-area" id="answer-area">' + buildAnswerAreaForRecord(q, r) + '</div>';
+    return html;
+  }
+
+  function renderGridCard(q, r){
+    const resolved = r.currentCorrect !== null;
+    let html = categoryTagHtml(q);
+    html += promptBlockHtml(q);
+    html += '<div class="position-grid' + (resolved ? " is-locked" : "") + '" id="position-grid">';
+    GRID_CELLS.forEach(cell=>{
+      let extra = "";
+      if(resolved){
+        if(cell === r.currentCell) extra = " " + (r.currentCorrect ? "grid-cell--correct" : "grid-cell--wrong");
+        else if(cell === q.correctCell && !r.currentCorrect) extra = " grid-cell--correct";
+      }
+      html += '<button class="grid-cell' + extra + '" data-action="grid-cell" data-cell="' + cell + '" aria-label="' + cell + '" type="button"></button>';
+    });
+    html += '</div>';
+    html += hintBlockHtml(q);
+    html += '<div class="answer-area" id="answer-area">' + buildAnswerAreaForRecord(q, r) + '</div>';
+    return html;
+  }
+
+  function renderMatchingCard(q, r){
+    // fresh shuffle order only generated once per attempt; re-renders
+    // (Back / navigator) reuse the same order so cards don't jump around
+    if(!r.enOrder){ r.enOrder = shuffledIndices(q.pairs.length); r.jpOrder = shuffledIndices(q.pairs.length); }
+    r.selectedEn = null; r.selectedJp = null; r.selectedEnEl = null; r.selectedJpEl = null; r.locked = false;
+
+    let html = categoryTagHtml(q);
+    html += promptBlockHtml(q);
+    html += '<div class="match-toolbar">' +
+              '<p class="match-progress" id="match-progress">' + r.matchedCount + '/' + q.pairs.length + ' matched</p>' +
+              '<button class="btn btn--ghost btn--sm" data-action="reset-matching" type="button">\ud83d\udd01 Reset</button>' +
+            '</div>';
+    html += '<div class="match-grid">';
+    html += '<div class="match-col">' + r.enOrder.map(i=>{
+      const matched = r.pairMatched[i];
+      return '<button class="match-card' + (matched ? " match-card--matched" : "") + '" data-action="match-card" data-side="en" data-pair="' + i + '" type="button"' + (matched ? " disabled" : "") + '>' + esc(q.pairs[i].en) + '</button>';
+    }).join('') + '</div>';
+    html += '<div class="match-col">' + r.jpOrder.map(i=>{
+      const matched = r.pairMatched[i];
+      return '<button class="match-card' + (matched ? " match-card--matched" : "") + '" data-action="match-card" data-side="jp" data-pair="' + i + '" type="button"' + (matched ? " disabled" : "") + '>' + esc(q.pairs[i].jp) + '</button>';
+    }).join('') + '</div>';
+    html += '</div>';
+    html += hintBlockHtml(q);
+    html += '<div class="answer-area" id="answer-area">' + buildAnswerAreaForRecord(q, r) + '</div>';
+    return html;
+  }
+
+
+
+  function renderOrderCard(q, r){
+    const resolved = r.currentCorrect !== null;
+    const selectedText = r.selected.map(i => q.words[i]);
+    let targetCls = "order-target";
+    if(selectedText.length === 0) targetCls += " order-target--empty";
+    if(resolved) targetCls += r.currentCorrect ? " order-target--correct" : " order-target--wrong";
+
+    let html = categoryTagHtml(q);
+    html += promptBlockHtml(q);
+    html += '<div class="order-builder' + (resolved ? " is-locked" : "") + '" id="order-builder">';
+    html += '<div class="' + targetCls + '" id="order-target">';
+    if(selectedText.length === 0){
+      html += 'Tap the words below to build the sentence.';
+    } else {
+      html += r.selected.map((wordIndex, pos) =>
+        '<button class="order-token" data-action="order-token" data-position="' + pos + '" type="button"' + (resolved ? " disabled" : "") + '>' + esc(q.words[wordIndex]) + '</button>'
+      ).join('');
+    }
+    html += '</div>';
+
+    html += '<div class="order-bank">';
+    q.words.forEach((word, i)=>{
+      const used = r.selected.includes(i);
+      html += '<button class="order-chip" data-action="order-chip" data-index="' + i + '" type="button"' + ((used || resolved) ? " disabled" : "") + '>' + esc(word) + '</button>';
+    });
+    html += '</div>';
+
+    if(!resolved){
+      html += '<div class="order-tools">';
+      if(r.selected.length > 0){
+        html += '<button class="btn btn--ghost btn--sm" data-action="clear-order" type="button">↺ Clear</button>';
+      }
+      html += '<button class="btn btn--primary btn--sm order-check" data-action="check-order" type="button"' + (r.selected.length < q.correctOrder.length ? " disabled" : "") + '>Check</button>';
+      html += '</div>';
+      if(r.selected.length > 0){
+        html += '<p class="order-helper">Tap a selected word above to send it back. / 上の単語をタップすると戻せます。</p>';
+      }
+    }
+    if(resolved && !r.currentCorrect){
+      html += '<div class="order-answer">Correct: ' + esc(q.correctOrder.map(i => q.words[i]).join(" ")) + '</div>';
+    }
+    html += '</div>';
+    html += hintBlockHtml(q);
+    html += '<div class="answer-area" id="answer-area">' + buildAnswerAreaForRecord(q, r) + '</div>';
+    return html;
+  }
+
+  function renderTypingCard(q, r){
+    const resolved = r.currentResult !== null;
+    let html = categoryTagHtml(q);
+    html +=
+      '<div class="typing-jp-prompt">' +
+        '<p class="typing-jp-label">Japanese \u2192 English</p>' +
+        '<p class="typing-jp-text">' + esc(q.promptJP) + '</p>' +
+      '</div>' +
+      '<div class="typing-input-row">' +
+        '<input type="text" id="typing-input" class="typing-input" placeholder="Type the natural English phrase\u2026" autocomplete="off" autocapitalize="off" spellcheck="false" value="' + (resolved ? esc(r.currentValue) : "") + '"' + (resolved ? " disabled" : "") + '>' +
+        '<button class="btn btn--primary" data-action="check-typing" type="button"' + (resolved ? " disabled" : "") + '>Check</button>' +
+      '</div>';
+    html += hintBlockHtml(q);
+    html += '<div class="answer-area" id="answer-area">' + buildAnswerAreaForRecord(q, r) + '</div>';
+    return html;
+  }
+
+  /* ---------------------------------------------------------------------
+     STAGE RENDER
+     --------------------------------------------------------------------- */
+  function renderStage(){
+    clearHintTimers();
+    const q = state.activeQuestions[state.current];
+    const r = state.records[state.current];
+    const stage = document.getElementById("stage");
+
+    let inner = "";
+    if(q.type === "mcq" || q.type === "situation") inner = renderMcqCard(q, r);
+    else if(q.type === "grid") inner = renderGridCard(q, r);
+    else if(q.type === "matching") inner = renderMatchingCard(q, r);
+    else if(q.type === "order") inner = renderOrderCard(q, r);
+    else if(q.type === "typing") inner = renderTypingCard(q, r);
+
+    stage.innerHTML = '<div class="q-card" id="q-card">' + inner + '</div>';
+    updateHeaderStats();
+    renderNavigator();
+  }
+
+  /* ---------------------------------------------------------------------
+     ANSWER HANDLERS
+     --------------------------------------------------------------------- */
+  function handleChoiceSelect(choiceId){
+    const q = state.activeQuestions[state.current];
+    const r = state.records[state.current];
+    if(r.currentCorrect !== null) return; // already resolved, ignore stray clicks
+    const isCorrect = choiceId === q.correct;
+    r.currentChoice = choiceId;
+    r.currentCorrect = isCorrect;
+    if(r.firstCorrect === null){ r.firstChoice = choiceId; r.firstCorrect = isCorrect; bumpStreak(isCorrect); }
+
+    const wrap = document.getElementById("choices-wrap");
+    wrap.classList.add("is-locked");
+    wrap.querySelectorAll(".choice").forEach(el=>{
+      const id = el.getAttribute("data-choice-id");
+      if(id === choiceId){
+        el.classList.add("choice--selected", isCorrect ? "choice--correct" : "choice--wrong");
+        if(isCorrect) spawnSparkles(el);
+      } else if(id === q.correct && !isCorrect){
+        el.classList.add("choice--reveal-correct");
+      }
+    });
+
+    if(isCorrect){ playCorrect(); vibrate([30,40,30]); }
+    else { playWrong(); vibrate([80,40,80]); }
+
+    document.getElementById("answer-area").innerHTML = buildAnswerAreaForRecord(q, r);
+    updateHeaderStats();
+    renderNavigator();
+    if(isCorrect && !r.retried) bumpScoreChip();
+  }
+
+  function handleGridCell(cell){
+    const q = state.activeQuestions[state.current];
+    const r = state.records[state.current];
+    if(r.currentCorrect !== null) return;
+    const isCorrect = cell === q.correctCell;
+    r.currentCell = cell;
+    r.currentCorrect = isCorrect;
+    if(r.firstCorrect === null){ r.firstCell = cell; r.firstCorrect = isCorrect; bumpStreak(isCorrect); }
+
+    const grid = document.getElementById("position-grid");
+    grid.classList.add("is-locked");
+    grid.querySelectorAll(".grid-cell").forEach(el=>{
+      const c = el.getAttribute("data-cell");
+      if(c === cell){
+        el.classList.add(isCorrect ? "grid-cell--correct" : "grid-cell--wrong");
+        if(isCorrect) spawnSparkles(el);
+      } else if(c === q.correctCell && !isCorrect){
+        el.classList.add("grid-cell--correct");
+      }
+    });
+
+    if(isCorrect){ playCorrect(); vibrate([30,40,30]); }
+    else { playWrong(); vibrate([80,40,80]); }
+
+    document.getElementById("answer-area").innerHTML = buildAnswerAreaForRecord(q, r);
+    updateHeaderStats();
+    renderNavigator();
+    if(isCorrect && !r.retried) bumpScoreChip();
+  }
+
+  function handleMatchCard(side, pairIndex, el){
+    const q = state.activeQuestions[state.current];
+    const r = state.records[state.current];
+    if(r.locked || r.complete) return;
+    if(r.pairMatched[pairIndex]) return;
+
+    playClick();
+    vibrate(15);
+
+    if(side === "en"){
+      if(r.selectedEnEl) r.selectedEnEl.classList.remove("match-card--selected");
+      r.selectedEn = pairIndex; r.selectedEnEl = el;
+      el.classList.add("match-card--selected");
+    } else {
+      if(r.selectedJpEl) r.selectedJpEl.classList.remove("match-card--selected");
+      r.selectedJp = pairIndex; r.selectedJpEl = el;
+      el.classList.add("match-card--selected");
+    }
+
+    if(r.selectedEn !== null && r.selectedJp !== null){
+      const isMatch = r.selectedEn === r.selectedJp;
+      const enEl = r.selectedEnEl, jpEl = r.selectedJpEl;
+
+      if(isMatch){
+        const idx = r.selectedEn;
+        enEl.classList.remove("match-card--selected"); jpEl.classList.remove("match-card--selected");
+        enEl.classList.add("match-card--matched"); jpEl.classList.add("match-card--matched");
+        enEl.disabled = true; jpEl.disabled = true;
+        spawnSparkles(enEl);
+        playCorrect(); vibrate([30,40,30]);
+        r.pairMatched[idx] = true;
+        r.matchedCount++;
+        const firstPairAttempt = r.pairFirstResult[idx] === null;
+        if(firstPairAttempt){ r.pairFirstResult[idx] = "correct"; bumpStreak(true); }
+        const progressEl = document.getElementById("match-progress");
+        if(progressEl) progressEl.textContent = r.matchedCount + "/" + q.pairs.length + " matched";
+        r.selectedEn = null; r.selectedJp = null; r.selectedEnEl = null; r.selectedJpEl = null;
+
+        if(r.matchedCount >= q.pairs.length){
+          r.complete = true;
+          document.getElementById("answer-area").innerHTML = buildAnswerAreaForRecord(q, r);
+        }
+        updateHeaderStats();
+        renderNavigator();
+        if(firstPairAttempt) bumpScoreChip();
+      } else {
+        const missIdx = r.selectedEn; // matches the pair the student's English card actually belongs to
+        enEl.classList.add("match-card--wrong"); jpEl.classList.add("match-card--wrong");
+        playWrong(); vibrate([80,40,80]);
+        if(r.pairFirstResult[missIdx] === null){ r.pairFirstResult[missIdx] = "wrong"; bumpStreak(false); }
+        r.locked = true;
+        updateHeaderStats();
+        renderNavigator();
+        setTimeout(()=>{
+          enEl.classList.remove("match-card--wrong","match-card--selected");
+          jpEl.classList.remove("match-card--wrong","match-card--selected");
+          r.selectedEn = null; r.selectedJp = null; r.selectedEnEl = null; r.selectedJpEl = null;
+          r.locked = false;
+        }, 500);
+      }
+    }
+  }
+
+  // ==================  RETRY LOGIC: reset the matching activity  =========
+  function handleResetMatching(){
+    const q = state.activeQuestions[state.current];
+    const r = state.records[state.current];
+    r.pairMatched = new Array(q.pairs.length).fill(false);
+    r.matchedCount = 0;
+    r.complete = false;
+    r.enOrder = shuffledIndices(q.pairs.length);
+    r.jpOrder = shuffledIndices(q.pairs.length);
+    r.selectedEn = null; r.selectedJp = null; r.locked = false;
+    // r.pairFirstResult is intentionally left untouched — weak points stay accurate
+    playClick(); vibrate(15);
+    renderStage();
+  }
+
+
+
+  function handleOrderChip(index){
+    const q = state.activeQuestions[state.current];
+    const r = state.records[state.current];
+    if(r.currentCorrect !== null) return;
+    if(r.selected.includes(index)) return;
+    r.selected.push(index);
+    playClick();
+    vibrate(15);
+    renderStage();
+  }
+
+  function handleOrderTokenBack(position){
+    const q = state.activeQuestions[state.current];
+    const r = state.records[state.current];
+    if(q.type !== "order" || r.currentCorrect !== null) return;
+    if(position < 0 || position >= r.selected.length) return;
+    r.selected.splice(position, 1);
+    playClick();
+    vibrate(15);
+    renderStage();
+  }
+
+  function handleCheckOrder(){
+    const q = state.activeQuestions[state.current];
+    const r = state.records[state.current];
+    if(q.type !== "order" || r.currentCorrect !== null) return;
+    if(r.selected.length < q.correctOrder.length) return;
+    const isCorrect = q.correctOrder.every((correctIndex, pos) => r.selected[pos] === correctIndex);
+    r.currentCorrect = isCorrect;
+    if(r.firstCorrect === null){ r.firstCorrect = isCorrect; bumpStreak(isCorrect); }
+    if(isCorrect){ playCorrect(); vibrate([30,40,30]); }
+    else { playWrong(); vibrate([80,40,80]); }
+    renderStage();
+    if(isCorrect && !r.retried) bumpScoreChip();
+  }
+
+  function handleClearOrder(){
+    const q = state.activeQuestions[state.current];
+    const r = state.records[state.current];
+    if(q.type !== "order" || r.currentCorrect !== null) return;
+    r.selected = [];
+    playClick();
+    vibrate(15);
+    renderStage();
+  }
+
+  function handleTypingCheck(){
+    const q = state.activeQuestions[state.current];
+    const r = state.records[state.current];
+    if(r.currentResult !== null) return;
+    const input = document.getElementById("typing-input");
+    const value = input.value.trim();
+    if(!value){
+      input.classList.remove("typing-input--shake");
+      void input.offsetWidth;
+      input.classList.add("typing-input--shake");
+      return;
+    }
+
+    const result = checkTypingAnswer(value, q.accepted);
+    r.currentValue = value;
+    r.currentResult = result;
+    if(r.firstResult === null){ r.firstValue = value; r.firstResult = result; bumpStreak(result === "correct"); }
+
+    input.disabled = true;
+    document.querySelector('[data-action="check-typing"]').disabled = true;
+
+    if(result === "correct"){ playCorrect(); vibrate([30,40,30]); spawnSparkles(input.parentElement); }
+    else if(result === "almost"){ playHint(); vibrate([80,40,80]); }
+    else { playWrong(); vibrate([80,40,80]); }
+
+    document.getElementById("answer-area").innerHTML = buildAnswerAreaForRecord(q, r);
+    updateHeaderStats();
+    renderNavigator();
+    if(result === "correct" && !r.retried) bumpScoreChip();
+  }
+
+  // ==================  RETRY LOGIC: mcq / grid / typing  =================
+  // Clears only the CURRENT attempt fields, so the permanent "first
+  // attempt" fields keep the original mistake visible in weak points.
+  function handleRetryQuestion(){
+    const q = state.activeQuestions[state.current];
+    const r = state.records[state.current];
+    r.retried = true;
+    if(q.type === "mcq" || q.type === "situation"){ r.currentChoice = null; r.currentCorrect = null; }
+    else if(q.type === "grid"){ r.currentCell = null; r.currentCorrect = null; }
+    else if(q.type === "order"){ r.selected = []; r.currentCorrect = null; }
+    else if(q.type === "typing"){ r.currentValue = ""; r.currentResult = null; } // input cleared on re-render
+    playClick(); vibrate(15);
+    renderStage();
+  }
+
+  /* ---------------------------------------------------------------------
+     FLOW CONTROL
+     --------------------------------------------------------------------- */
+  // ==================  SHUFFLE LOGIC  =====================================
+  // First playthrough keeps quizData's original order. Every subsequent
+  // "Try Again" reshuffles the question order (matching-card pairs are
+  // always freshly shuffled per attempt regardless, see renderMatchingCard).
+  function shuffleArray(arr){
+    const copy = arr.slice();
+    for(let i=copy.length-1;i>0;i--){
+      const j = Math.floor(Math.random()*(i+1));
+      [copy[i],copy[j]] = [copy[j],copy[i]];
+    }
+    return copy;
+  }
+
+  function startQuiz(mode){
+    mode = mode || "full";
+    let base = quizData.questions.slice();
+    if(mode === "part1") base = base.filter(q => questionPart(q) === "part1");
+    else if(mode === "part2") base = base.filter(q => questionPart(q) === "part2");
+    state.quizMode = mode;
+    state.resultIndices = null;
+    state.partialResult = false;
+    state.activeQuestions = (state.playCount === 0) ? base.slice() : shuffleArray(base);
+    state.playCount++;
+    state.records = state.activeQuestions.map(createRecord);
+    state.maxScore = computeMaxScore();
+    state.current = 0;
+    state.streak = 0;
+    state.bestStreak = 0;
+    showScreen("screen-quiz");
+    renderStage();
+  }
+
+  function getWrongQuestionIndices(){
+    const wrong = [];
+    const indices = getCurrentResultIndices();
+    indices.forEach(i=>{
+      const q = state.activeQuestions[i];
+      if(firstAttemptStatus(q, state.records[i]) !== "correct") wrong.push(i);
+    });
+    return wrong;
+  }
+
+  function summarizeQuestion(q, index){
+    if(q.prompt && q.prompt.en) return q.prompt.en;
+    if(q.promptJP) return "Translate: " + q.promptJP;
+    if(q.type === "matching") return "Match the English and Japanese phrases.";
+    return "Practice item " + (index + 1);
+  }
+
+  function renderWrongReview(){
+    const box = document.getElementById("wrong-review");
+    const list = document.getElementById("wrong-review-list");
+    if(!box || !list) return;
+    const wrong = getWrongQuestionIndices();
+    if(wrong.length === 0){
+      box.hidden = true;
+      list.innerHTML = "";
+      return;
+    }
+    box.hidden = false;
+    list.innerHTML = wrong.map(i=>{
+      const q = state.activeQuestions[i];
+      const labelObj = q.cat && quizData.categoryLabels[q.cat] ? quizData.categoryLabels[q.cat] : null;
+      const catText = labelObj ? (labelObj.en + " / " + labelObj.jp) : "Review item";
+      return '<div class="wrong-review__item">' +
+        '<span class="wrong-review__q">Q' + (i+1) + '</span>' +
+        '<p class="wrong-review__text">' + esc(summarizeQuestion(q, i)) + '</p>' +
+        '<p class="wrong-review__cat">' + esc(catText) + '</p>' +
+      '</div>';
+    }).join('');
+  }
+
+  function startMistakePractice(){
+    const wrong = getWrongQuestionIndices();
+    if(wrong.length === 0) return;
+    state.activeQuestions = wrong.map(i => state.activeQuestions[i]);
+    state.records = state.activeQuestions.map(createRecord);
+    state.maxScore = computeMaxScore();
+    state.current = 0;
+    state.streak = 0;
+    state.bestStreak = 0;
+    state.quizMode = "mistakes";
+    state.resultIndices = null;
+    state.partialResult = false;
+    showScreen("screen-quiz");
+    renderStage();
+  }
+
+
+  function finishQuiz(partial){
+    partial = !!partial;
+    const total = state.activeQuestions.length;
+    const allIndices = state.activeQuestions.map((_,i)=>i);
+    const attemptedIndices = getAttemptedQuestionIndices();
+    const resultIndices = partial ? attemptedIndices : allIndices;
+    if(partial && resultIndices.length === 0){
+      alert("Please answer at least one question first. / まず1問答えてから使えます。");
+      return;
+    }
+    state.resultIndices = resultIndices;
+    state.partialResult = partial;
+
+    document.getElementById("stat-position").textContent = partial ? ("Partial · " + resultIndices.length + "/" + total) : ("Q" + total + "/" + total);
+    document.getElementById("progress-fill").style.width = partial ? (resultIndices.length/total*100) + "%" : "100%";
+
+    const maxScore = computeMaxScoreForIndices(resultIndices);
+    const score = computeScoreForIndices(resultIndices);
+    const accuracy = maxScore > 0 ? Math.round((score / maxScore) * 100) : 0;
+
+    const eyebrow = document.getElementById("results-eyebrow");
+    const title = document.getElementById("results-title");
+    const note = document.getElementById("result-note");
+    if(partial){
+      eyebrow.textContent = "Partial Result";
+      title.innerHTML = "Good stopping point <span class=\"emoji-pop\">📌</span>";
+      note.textContent = "This score checks only the questions you answered. Unanswered questions were ignored.";
+    } else {
+      eyebrow.textContent = "Mission Complete";
+      title.innerHTML = "Nice work today! <span class=\"emoji-pop\">🎉</span>";
+      note.textContent = modeLabel() === "Full" ? "Full July 6 mission completed." : (modeLabel() + " completed.");
+    }
+
+    document.getElementById("result-score").textContent = score + " / " + maxScore;
+    document.getElementById("result-accuracy").textContent = accuracy + "%";
+    document.getElementById("result-streak").textContent = state.bestStreak;
+
+    const catStats = computeCategoryStats();
+    const weakBox = document.getElementById("weak-points");
+    const weakList = document.getElementById("weak-points-list");
+    weakList.innerHTML = "";
+    let anyWeak = false;
+    Object.keys(catStats).forEach(cat=>{
+      const s = catStats[cat];
+      if(s.total > 0 && (s.correct / s.total) < 0.7){
+        const labelObj = quizData.categoryLabels[cat];
+        if(!labelObj) return;
+        anyWeak = true;
+        const item = document.createElement("p");
+        item.className = "weak-points__item";
+        item.textContent = "• " + labelObj.en + " / " + labelObj.jp;
+        weakList.appendChild(item);
+      }
+    });
+    weakBox.hidden = !anyWeak;
+    renderWrongReview();
+
+    let msgEn, msgJp;
+    if(partial){
+      msgEn = "Good choice. You checked only what you finished, so you can come back later without feeling lost.";
+      msgJp = "いい判断です。できたところだけ確認したので、あとで続きに戻りやすくなります。";
+    } else if(accuracy >= 85){
+      msgEn = "Excellent work! You handled a long two-part lesson very well.";
+      msgJp = "すばらしいです。長い2部構成のレッスンをよく整理できています。";
+    } else if(accuracy >= 60){
+      msgEn = "Good review! A little more practice and these phrases will feel automatic.";
+      msgJp = "いい復習です。あと少し練習すると、自然に口から出るようになります。";
+    } else {
+      msgEn = "No problem. July 6 is a big lesson, so one more round will help a lot.";
+      msgJp = "大丈夫です。July 6は内容が多いので、もう一回やるとかなり定着します。";
+    }
+    document.getElementById("encourage-en").textContent = msgEn;
+    document.getElementById("encourage-jp").textContent = msgJp;
+
+    showScreen("screen-results");
+    playFinal();
+    vibrate([40,30,40,30,80]);
+    if(!partial) spawnConfetti();
+  }
+
+  function renderReview(){
+    const grid = document.getElementById("review-grid");
+    grid.innerHTML = quizData.reviewCards.map(card=>
+      '<div class="review-card">' +
+        '<p class="review-card__en">' + esc(card.en) + '</p>' +
+        '<p class="review-card__jp">' + esc(card.jp) + '</p>' +
+        '<p class="review-card__usage">' + esc(card.usageEn) + '</p>' +
+        '<p class="review-card__usage-jp">' + esc(card.usageJp) + '</p>' +
+      '</div>'
+    ).join('');
+    document.getElementById("teacher-note-en").textContent = quizData.teacherNote.en;
+    document.getElementById("teacher-note-jp").textContent = quizData.teacherNote.jp;
+    showScreen("screen-review");
+  }
+
+  /* ---------------------------------------------------------------------
+     TOGGLES
+     --------------------------------------------------------------------- */
+  function syncToggleUI(){
+    document.querySelectorAll('[data-action="toggle-sound"]').forEach(el=>{
+      el.setAttribute("data-on", state.soundOn ? "true":"false");
+      if(el.classList.contains("toggle-chip")) el.textContent = (state.soundOn ? "\ud83d\udd0a Sound: ON" : "\ud83d\udd07 Sound: OFF");
+    });
+    document.querySelectorAll('[data-action="toggle-vibration"]').forEach(el=>{
+      el.setAttribute("data-on", state.vibrationOn ? "true":"false");
+      if(el.classList.contains("toggle-chip")) el.textContent = (state.vibrationOn ? "\ud83d\udcf3 Vibration: ON" : "\ud83d\udcf3 Vibration: OFF");
+    });
+  }
+
+  function setHintMode(mode){
+    state.hintMode = mode;
+    document.querySelectorAll('[data-action="set-hint-mode"]').forEach(el=>{
+      el.classList.toggle("segmented__option--active", el.getAttribute("data-mode") === mode);
+    });
+  }
+
+  /* ---------------------------------------------------------------------
+     EVENT DELEGATION (single listener for the whole app)
+     --------------------------------------------------------------------- */
+  function handleAction(el){
+    const action = el.getAttribute("data-action");
+    switch(action){
+      case "toggle-sound":
+        state.soundOn = !state.soundOn;
+        syncToggleUI();
+        if(state.soundOn) playClick();
+        vibrate(15);
+        break;
+      case "toggle-vibration":
+        state.vibrationOn = !state.vibrationOn;
+        syncToggleUI();
+        playClick();
+        if(state.vibrationOn) vibrate(15);
+        break;
+      case "set-hint-mode":
+        setHintMode(el.getAttribute("data-mode"));
+        playClick(); vibrate(15);
+        break;
+      case "start-quiz":
+        playClick(); vibrate(20);
+        startQuiz("full");
+        break;
+      case "start-part":
+        playClick(); vibrate(20);
+        startQuiz(el.getAttribute("data-part") || "full");
+        break;
+      case "toggle-jp":
+        toggleJp(el);
+        playClick(); vibrate(10);
+        break;
+      case "show-hint":
+        openHint();
+        break;
+      case "close-hint":
+        closeHint();
+        playClick(); vibrate(10);
+        break;
+      case "select-choice":
+        playClick(); vibrate(20);
+        handleChoiceSelect(el.getAttribute("data-choice-id"));
+        break;
+      case "grid-cell":
+        playClick(); vibrate(20);
+        handleGridCell(el.getAttribute("data-cell"));
+        break;
+      case "match-card":
+        handleMatchCard(el.getAttribute("data-side"), parseInt(el.getAttribute("data-pair"),10), el);
+        break;
+      case "reset-matching":
+        handleResetMatching();
+        break;
+      case "order-chip":
+        handleOrderChip(parseInt(el.getAttribute("data-index"),10));
+        break;
+      case "order-token":
+        handleOrderTokenBack(parseInt(el.getAttribute("data-position"),10));
+        break;
+      case "check-order":
+        handleCheckOrder();
+        break;
+      case "clear-order":
+        handleClearOrder();
+        break;
+      case "check-typing":
+        playClick(); vibrate(15);
+        handleTypingCheck();
+        break;
+      case "retry-question":
+        handleRetryQuestion();
+        break;
+      case "next-question":
+        playClick(); vibrate(20);
+        goNext();
+        break;
+      case "finish-attempted":
+        playClick(); vibrate(20);
+        finishQuiz(true);
+        break;
+      // ================  NAVIGATION: Back button + navigator jump  ======
+      case "go-back":
+        playClick(); vibrate(15);
+        goBack();
+        break;
+      case "go-home":
+        playClick(); vibrate(15);
+        goHome();
+        break;
+      case "qnav-jump":
+        playClick(); vibrate(15);
+        goToIndex(parseInt(el.getAttribute("data-index"),10));
+        break;
+      case "retry-mistakes":
+        playClick(); vibrate(20);
+        startMistakePractice();
+        break;
+      case "restart-quiz":
+        playClick(); vibrate(20);
+        startQuiz(state.quizMode === "mistakes" ? "full" : state.quizMode);
+        break;
+      case "go-review":
+        playClick(); vibrate(15);
+        renderReview();
+        break;
+      case "go-results":
+        playClick(); vibrate(15);
+        showScreen("screen-results");
+        break;
+    }
+  }
+
+  document.addEventListener("click", function(e){
+    const el = e.target.closest("[data-action]");
+    if(!el) return;
+    handleAction(el);
+  });
+
+  document.addEventListener("keydown", function(e){
+    if(e.key !== "Enter" && e.key !== " ") return;
+    const el = e.target.closest('[role="button"][data-action]');
+    if(!el) return;
+    e.preventDefault();
+    handleAction(el);
+  });
+
+  document.addEventListener("keydown", function(e){
+    if(e.key === "Enter" && e.target && e.target.id === "typing-input"){
+      const checkBtn = document.querySelector('[data-action="check-typing"]');
+      if(checkBtn){
+        e.preventDefault();
+        handleAction(checkBtn);
+      }
+    }
+  });
+
+  /* ---------------------------------------------------------------------
+     INIT
+     --------------------------------------------------------------------- */
+  function init(){
+    populateStaticText();
+    renderFocusChips();
+    syncToggleUI();
+    setHintMode(state.hintMode);
+  }
+
+  document.addEventListener("DOMContentLoaded", init);
+})();
+</script>
+</body>
+</html>

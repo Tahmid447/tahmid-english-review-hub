@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tahmid's English Review Studio</title>
+<style>
+:root{
+  --bg-top:#fff7ec;
+  --bg-bottom:#ffd9c0;
+  --ink:#3a2e4d;
+  --ink-soft:#6e5f87;
+  --ink-faint:#a99cc4;
+  --surface:rgba(255,255,255,0.62);
+  --surface-strong:rgba(255,255,255,0.88);
+  --border:rgba(58,46,77,0.14);
+  --teal:#4bb6a8;
+  --teal-dark:#2f9284;
+  --teal-tint:rgba(75,182,168,0.16);
+  --gold:#e8a94c;
+  --gold-dark:#c1832a;
+  --gold-tint:rgba(232,169,76,0.18);
+  --coral:#f0785c;
+  --coral-dark:#d3563c;
+  --coral-tint:rgba(240,120,92,0.16);
+  --shadow-lg:0 24px 60px -24px rgba(58,46,77,0.38);
+  --shadow-sm:0 8px 20px -10px rgba(58,46,77,0.28);
+  --radius-lg:28px;
+  --radius-md:18px;
+  --radius-sm:12px;
+  --radius-pill:999px;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic","Noto Sans JP","Meiryo",sans-serif;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:var(--font);
+  min-height:100vh;
+  color:var(--ink);
+  background:linear-gradient(160deg,var(--bg-top) 0%,var(--bg-bottom) 100%);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+a{color:inherit;}
+h1,h2,h3,p{margin:0;}
+.bg-decor{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+.blob{position:absolute;border-radius:50%;filter:blur(60px);opacity:.55;}
+.blob--a{width:360px;height:360px;background:var(--teal);top:-120px;left:-110px;animation:blobFloat 16s ease-in-out infinite;}
+.blob--b{width:440px;height:440px;background:var(--gold);bottom:-170px;right:-140px;animation:blobFloat 18s ease-in-out infinite reverse;}
+.ambient-accent{position:absolute;border-radius:34px;border:1px solid rgba(255,255,255,.45);background:linear-gradient(135deg,rgba(255,255,255,.16),rgba(255,255,255,.04));box-shadow:inset 0 1px 0 rgba(255,255,255,.24),0 18px 60px -34px rgba(58,46,77,.45);opacity:.34;animation:ambientDrift 16s ease-in-out infinite;}
+.ambient-accent::before{content:"";position:absolute;width:8px;height:8px;border-radius:50%;background:var(--teal);opacity:.35;top:50%;left:50%;transform:translate(-50%,-50%);}
+.ambient-accent--1{width:92px;height:38px;top:14%;left:6%;transform:rotate(-14deg);}
+.ambient-accent--2{width:124px;height:48px;right:5%;top:32%;transform:rotate(18deg);animation-delay:2s;}
+.ambient-accent--3{width:78px;height:78px;left:7%;bottom:18%;border-radius:50%;animation-delay:4s;}
+.ambient-accent--4{width:106px;height:42px;right:10%;bottom:8%;transform:rotate(-8deg);animation-delay:6s;}
+.ambient-accent--5{width:70px;height:70px;right:18%;top:8%;border-radius:50%;animation-delay:1s;}
+.app{position:relative;z-index:1;max-width:980px;margin:0 auto;min-height:100vh;padding:28px 16px 36px;padding-top:max(28px,env(safe-area-inset-top));}
+.hero{position:relative;background:var(--surface);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.62);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);padding:28px 24px 24px;overflow:hidden;}
+.hero::before{content:"";position:absolute;inset:-1px;background:linear-gradient(120deg,rgba(255,255,255,.55),transparent 32%,rgba(255,255,255,.34));opacity:.55;pointer-events:none;}
+.hero-content{position:relative;z-index:1;}
+.postmark{position:absolute;top:-14px;right:-6px;pointer-events:none;}
+.postmark__ring{width:86px;height:86px;border-radius:50%;border:2px dashed var(--ink-faint);background:rgba(255,255,255,.66);display:flex;flex-direction:column;align-items:center;justify-content:center;transform:rotate(-9deg);gap:2px;animation:postmarkBreathe 5.5s ease-in-out infinite;}
+.postmark-date{font-size:1.03rem;font-weight:850;color:var(--ink);}
+.postmark-label{font-size:.46rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);text-align:center;line-height:1.25;padding:0 8px;}
+.eyebrow{font-size:.7rem;font-weight:850;letter-spacing:.16em;text-transform:uppercase;color:var(--teal-dark);margin-bottom:10px;}
+.title{font-size:clamp(2rem,8vw,4rem);line-height:1.04;letter-spacing:-.04em;font-weight:900;margin-bottom:12px;background:linear-gradient(135deg,var(--ink) 0%,var(--teal-dark) 55%,var(--gold-dark) 100%);background-size:200% 200%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:titleGradientShift 7s ease-in-out infinite;}
+.subtitle{font-size:1rem;line-height:1.6;color:var(--ink);max-width:650px;margin-bottom:8px;}
+.subtitle-jp{font-size:.9rem;line-height:1.65;color:var(--ink-soft);max-width:650px;margin-bottom:18px;}
+.signature-card{display:inline-flex;align-items:center;gap:10px;background:var(--surface-strong);border:1px solid var(--border);border-radius:var(--radius-pill);padding:10px 14px;box-shadow:var(--shadow-sm);font-size:.82rem;font-weight:750;color:var(--ink);}
+.signature-mark{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:var(--teal-tint);color:var(--teal-dark);font-weight:900;}
+.quick-row{display:grid;grid-template-columns:1fr;gap:12px;margin:18px 0 0;}
+.quick-card{background:rgba(255,255,255,.58);border:1px solid var(--border);border-radius:var(--radius-md);padding:14px 16px;}
+.quick-label{font-size:.68rem;font-weight:850;letter-spacing:.09em;text-transform:uppercase;color:var(--gold-dark);margin-bottom:5px;}
+.quick-text{font-size:.86rem;line-height:1.5;color:var(--ink-soft);}
+.quick-jp{font-size:.78rem;line-height:1.55;color:var(--ink-soft);margin-top:5px;}
+.signature-lines{display:flex;flex-direction:column;gap:1px;}
+.signature-sub{font-size:.74rem;color:var(--ink-soft);font-weight:700;}
+.lesson-desc-jp{font-size:.78rem;line-height:1.55;color:var(--ink-soft);margin:-6px 0 12px;}
+.section-head{margin:24px 2px 14px;display:flex;align-items:end;justify-content:space-between;gap:12px;}
+.section-title{font-size:1.2rem;font-weight:900;letter-spacing:-.01em;}
+.section-sub{font-size:.78rem;color:var(--ink-soft);font-weight:750;}
+.lesson-grid{display:grid;grid-template-columns:1fr;gap:14px;}
+.lesson-card{position:relative;display:block;text-decoration:none;background:var(--surface);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.62);border-radius:var(--radius-lg);padding:18px 18px;box-shadow:var(--shadow-sm);overflow:hidden;animation:cardIn .48s ease backwards;transition:transform .22s ease, box-shadow .22s ease, border-color .22s ease;}
+.lesson-card:nth-child(1){animation-delay:.05s;}
+.lesson-card:nth-child(2){animation-delay:.13s;}
+.lesson-card:nth-child(3){animation-delay:.21s;}
+.lesson-card:nth-child(4){animation-delay:.29s;}
+.lesson-card:nth-child(5){animation-delay:.37s;}
+.lesson-card:nth-child(6){animation-delay:.45s;}
+.lesson-card:nth-child(1)::after{animation-delay:.2s;}
+.lesson-card:nth-child(2)::after{animation-delay:.8s;}
+.lesson-card:nth-child(3)::after{animation-delay:1.4s;}
+.lesson-card:nth-child(4)::after{animation-delay:2s;}
+.lesson-card:nth-child(5)::after{animation-delay:2.6s;}
+.lesson-card:nth-child(6)::after{animation-delay:3.2s;}
+.lesson-card::after{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent,rgba(255,255,255,.50),transparent);width:38%;transform:translateX(-130%) skewX(-18deg);pointer-events:none;animation:cardShimmer 2.8s ease-in-out infinite;}
+.lesson-card:active{transform:scale(.985);}
+.lesson-top{display:flex;justify-content:space-between;gap:12px;margin-bottom:10px;}
+.lesson-date{display:inline-flex;align-items:center;gap:8px;font-size:.76rem;font-weight:850;color:var(--teal-dark);background:var(--teal-tint);padding:6px 11px;border-radius:var(--radius-pill);}
+.lesson-status{font-size:.68rem;font-weight:850;color:var(--gold-dark);background:var(--gold-tint);padding:6px 10px;border-radius:var(--radius-pill);white-space:nowrap;}
+.lesson-title{font-size:1.2rem;font-weight:900;line-height:1.2;margin-bottom:6px;letter-spacing:-.01em;}
+.lesson-desc{font-size:.9rem;line-height:1.55;color:var(--ink-soft);margin-bottom:12px;}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px;}
+.chip{font-size:.72rem;font-weight:800;color:var(--ink);background:var(--surface-strong);border:1px solid var(--border);border-radius:var(--radius-pill);padding:5px 9px;}
+.lesson-action{display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid rgba(58,46,77,.1);padding-top:12px;color:var(--teal-dark);font-size:.86rem;font-weight:900;}
+.arrow{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--teal-dark));color:#fff;box-shadow:0 14px 30px -14px rgba(47,146,132,.7);}
+.note-card{margin-top:16px;background:var(--surface);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.62);border-radius:var(--radius-lg);padding:18px;box-shadow:var(--shadow-sm);}
+.note-label{font-size:.68rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-dark);margin-bottom:8px;}
+.note-text{font-size:.9rem;line-height:1.6;color:var(--ink);margin-bottom:6px;}
+.note-jp{font-size:.82rem;line-height:1.6;color:var(--ink-soft);}
+.footer{margin:22px 0 0;text-align:center;color:var(--ink-soft);font-size:.76rem;line-height:1.6;}
+.footer strong{color:var(--teal-dark);}
+.heart{display:inline-block;animation:emojiPop 2.8s ease-in-out infinite;}
+@media (min-width:680px){
+  .app{padding:46px 22px 42px;}
+  .hero{padding:38px 36px 32px;}
+  .quick-row{grid-template-columns:repeat(3,1fr);}
+  .lesson-grid{grid-template-columns:repeat(2,1fr);}
+  .lesson-card{min-height:320px;display:flex;flex-direction:column;}
+  .lesson-action{margin-top:auto;}
+}
+@media (hover:hover) and (pointer:fine){
+  .lesson-card:hover{transform:translateY(-4px);box-shadow:0 28px 60px -34px rgba(58,46,77,.55);border-color:rgba(75,182,168,.34);}
+}
+@keyframes ambientDrift{0%,100%{translate:0 0;scale:1;}50%{translate:0 -14px;scale:1.035;}}
+@keyframes blobFloat{0%,100%{transform:translate3d(0,0,0) scale(1);}50%{transform:translate3d(14px,-18px,0) scale(1.03);}}
+@keyframes postmarkBreathe{0%,100%{transform:rotate(-9deg) scale(1);}50%{transform:rotate(-9deg) scale(1.035);}}
+@keyframes titleGradientShift{0%,100%{background-position:0% 50%;}50%{background-position:100% 50%;}}
+@keyframes cardIn{0%{opacity:0;transform:translateY(16px) scale(.98);}100%{opacity:1;transform:translateY(0) scale(1);}}
+@keyframes cardShimmer{0%{transform:translateX(-140%) skewX(-18deg);}34%{transform:translateX(330%) skewX(-18deg);}100%{transform:translateX(330%) skewX(-18deg);}}
+@keyframes emojiPop{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-2px) rotate(-6deg);}}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;}}
+</style>
+</head>
+<body>
+<div class="bg-decor" aria-hidden="true">
+  <div class="blob blob--a"></div>
+  <div class="blob blob--b"></div>
+  <span class="ambient-accent ambient-accent--1"></span>
+  <span class="ambient-accent ambient-accent--2"></span>
+  <span class="ambient-accent ambient-accent--3"></span>
+  <span class="ambient-accent ambient-accent--4"></span>
+  <span class="ambient-accent ambient-accent--5"></span>
+</div>
+<main class="app">
+  <section class="hero">
+    <div class="postmark" aria-hidden="true">
+      <div class="postmark__ring">
+        <span class="postmark-date">2026</span>
+        <span class="postmark-label">Practice Library</span>
+      </div>
+    </div>
+    <div class="hero-content">
+      <p class="eyebrow">Tahmid's English Review Studio</p>
+      <h1 class="title">Your English Practice Library</h1>
+      <p class="subtitle">Short, practical quizzes made from real lessons. Review useful English anytime, repeat difficult parts, and build confidence at your own pace.</p>
+      <p class="subtitle-jp">実際のレッスン内容から作った、短くて実践的な復習クイズです。苦手なところを何度でも練習しながら、自分のペースで英語を身につけられます。</p>
+      <div class="signature-card" aria-label="English practice created by Tahmid">
+        <span class="signature-mark">T</span>
+        <span class="signature-lines"><span>Created by <strong>Tahmid</strong></span><span class="signature-sub">レッスン内容をもとに、一つずつ丁寧に作成しています</span></span>
+      </div>
+      <div class="quick-row">
+        <div class="quick-card">
+          <p class="quick-label">Growing Library</p>
+          <p class="quick-text">New practice sets can be added regularly as you continue learning.</p>
+          <p class="quick-jp">学習に合わせて、新しい復習セットも少しずつ追加していきます。</p>
+        </div>
+        <div class="quick-card">
+          <p class="quick-label">First-answer score</p>
+          <p class="quick-text">Your score records the first answer, so it shows what you truly remembered.</p>
+          <p class="quick-jp">スコアは最初の答えで記録されるので、本当に覚えていたか確認できます。</p>
+        </div>
+        <div class="quick-card">
+          <p class="quick-label">Mistake Review</p>
+          <p class="quick-text">After finishing, practice only the questions you missed.</p>
+          <p class="quick-jp">最後に、間違えた問題だけをもう一度練習できます。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-head">
+    <div>
+      <h2 class="section-title">Practice Library / 復習ライブラリー</h2>
+      <p class="section-sub">Choose a topic and start practising / 復習したいトピックを選んでください</p>
+    </div>
+  </div>
+
+  <section class="lesson-grid" aria-label="English practice quizzes">
+    <a class="lesson-card" href="lessons/june-28/">
+      <div class="lesson-top">
+        <span class="lesson-date">JUN 28</span>
+        <span class="lesson-status">Practice Set</span>
+      </div>
+      <h3 class="lesson-title">Café Talk &amp; Polite Answers</h3>
+      <p class="lesson-desc">Practice polite orders, natural follow-up questions, and useful phrases for situations you cannot change.</p>
+      <p class="lesson-desc-jp">丁寧な注文、How about you? で会話を続ける方法、「仕方ない」の自然な言い方を練習します。</p>
+      <div class="chips">
+        <span class="chip">would like</span>
+        <span class="chip">How about you?</span>
+        <span class="chip">Did questions</span>
+        <span class="chip">It can’t be helped</span>
+      </div>
+      <div class="lesson-action"><span>Start Practice</span><span class="arrow">→</span></div>
+    </a>
+
+    <a class="lesson-card" href="lessons/june-29/">
+      <div class="lesson-top">
+        <span class="lesson-date">JUN 29</span>
+        <span class="lesson-status">Practice Set</span>
+      </div>
+      <h3 class="lesson-title">What Did You Hear? Reactions &amp; Position</h3>
+      <p class="lesson-desc">Learn the differences between I heard it, about it, and of it, plus natural reactions and position words.</p>
+      <p class="lesson-desc-jp">I heard の使い分け、自然なリアクション、top right などの位置表現を練習します。</p>
+      <div class="chips">
+        <span class="chip">I heard...</span>
+        <span class="chip">Exactly</span>
+        <span class="chip">For real</span>
+        <span class="chip">position words</span>
+      </div>
+      <div class="lesson-action"><span>Start Practice</span><span class="arrow">→</span></div>
+    </a>
+
+    <a class="lesson-card" href="lessons/june-30/">
+      <div class="lesson-top">
+        <span class="lesson-date">JUN 30</span>
+        <span class="lesson-status">Practice Set</span>
+      </div>
+      <h3 class="lesson-title">Feelings, Preferences &amp; Match Talk</h3>
+      <p class="lesson-desc">Practice annoyed vs annoying, prefer + because, predictions, comparisons, and useful match vocabulary.</p>
+      <p class="lesson-desc-jp">annoyed / annoying、prefer + because、勝敗予想、比較表現、試合で使う英語を練習します。</p>
+      <div class="chips">
+        <span class="chip">annoyed</span>
+        <span class="chip">annoying</span>
+        <span class="chip">prefer</span>
+        <span class="chip">easier than</span>
+      </div>
+      <div class="lesson-action"><span>Start Practice</span><span class="arrow">→</span></div>
+    </a>
+
+    <a class="lesson-card" href="lessons/july-04/">
+      <div class="lesson-top">
+        <span class="lesson-date">JUL 4</span>
+        <span class="lesson-status">Practice Set</span>
+      </div>
+      <h3 class="lesson-title">Everyday English: When Life Happens</h3>
+      <p class="lesson-desc">Practice useful English for unexpected situations, choices, accidents, feelings, gratitude, and possibility.</p>
+      <p class="lesson-desc-jp">actually、avoid、やむを得ない場面、事故、わざと、感謝、might / may など、日常で役立つ英語を練習します。</p>
+      <div class="chips">
+        <span class="chip">Actually</span>
+        <span class="chip">It can’t be helped</span>
+        <span class="chip">on purpose</span>
+        <span class="chip">I appreciate it</span>
+      </div>
+      <div class="lesson-action"><span>Start Practice</span><span class="arrow">→</span></div>
+    </a>
+
+    <a class="lesson-card" href="lessons/july-05/">
+      <div class="lesson-top">
+        <span class="lesson-date">JUL 5</span>
+        <span class="lesson-status">Practice Set</span>
+      </div>
+      <h3 class="lesson-title">Small Phrases, Natural English</h3>
+      <p class="lesson-desc">Make everyday English sound smoother with though, friendly replies, takeaway expressions, and go-to.</p>
+      <p class="lesson-desc-jp">文末の though、ありがとうへの自然な返事、持ち帰り表現、go-to の使い方を練習します。</p>
+      <div class="chips">
+        <span class="chip">though</span>
+        <span class="chip">No worries</span>
+        <span class="chip">to go</span>
+        <span class="chip">go-to</span>
+      </div>
+      <div class="lesson-action"><span>Start Practice</span><span class="arrow">→</span></div>
+    </a>
+
+    <a class="lesson-card" href="lessons/july-06/">
+      <div class="lesson-top">
+        <span class="lesson-date">JUL 6</span>
+        <span class="lesson-status">2-Part Practice</span>
+      </div>
+      <h3 class="lesson-title">Grammar Choices &amp; Real-Life Nuance</h3>
+      <p class="lesson-desc">Work through grammar choices first, then practice natural nuance, word choice, and common mistakes.</p>
+      <p class="lesson-desc-jp">「まだ〜していない」、hate + 動詞ing、on / in / at、interested / interesting、on my behalf を2部構成で練習します。</p>
+      <div class="chips">
+        <span class="chip">haven’t yet</span>
+        <span class="chip">hate watching</span>
+        <span class="chip">on Instagram</span>
+        <span class="chip">interested</span>
+        <span class="chip">on my behalf</span>
+      </div>
+      <div class="lesson-action"><span>Start Practice</span><span class="arrow">→</span></div>
+    </a>
+  </section>
+
+  <section class="note-card">
+    <p class="note-label">A note from Tahmid</p>
+    <p class="note-text">I made these practice sets to help you remember what you learned and use it naturally. Take your time, check your mistakes, and try the difficult parts again.</p>
+    <p class="note-jp">レッスンで学んだことを覚え、実際の会話で使えるようにするための練習です。焦らず、間違えたところを確認して、苦手な問題にもう一度挑戦してみてください。</p>
+  </section>
+
+  <footer class="footer">
+    <p>© 2026 <strong>Tahmid</strong>. English practice created from real lessons.</p>
+    <p>実際のレッスン内容をもとに、Tahmidが作成した英語復習ページです。</p>
+    <p>Learn it. Review it. Use it. <span class="heart">✨</span></p>
+  </footer>
+</main>
+</body>
+</html>
