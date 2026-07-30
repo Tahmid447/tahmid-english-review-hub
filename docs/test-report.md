@@ -95,12 +95,13 @@ Local Chromium-based browser checks covered:
 Safari checks covered the general hub, a scored lesson answer, and natural
 voice playback before packaging.
 
-## Hosted Netlify preview smoke test
+## Hosted Netlify production smoke test
 
 The separate Netlify preview at
 `https://tahmid-english-review-hub-preview.netlify.app/` was deployed from the
-private GitHub repository’s `upgrade/review-hub-v8` branch. The existing
-`jocular-chaja-86e78d` production site was not changed.
+private GitHub repository’s `upgrade/review-hub-v8` branch. After that review,
+the same static output was promoted to
+`https://jocular-chaja-86e78d.netlify.app/`.
 
 Hosted checks covered:
 
@@ -115,9 +116,12 @@ Hosted checks covered:
 - question-level, format, retry, lesson, speaking, phrase, and session analytics
 - direct learner refusal for the July 27 draft
 - teacher-only preview of all 24 July 27 draft activities
-- all 92 Phrase Library cards and 276 learning-note sections
-- live US Ava and UK Libby playback
+- all 199 Phrase Library cards, 15 Vocabulary cards, and their learning notes
+- live US Ava, UK Libby, and Japanese Nanami playback
 - hosted phrase practice synchronising back to teacher analytics
+- Japanese UI at the 390 px mobile breakpoint with no page-level horizontal
+  overflow
+- the July 27 illustration at 342 px inside the 390 px mobile viewport
 
 The first hosted deploy revealed that an internal Netlify rewrite did not
 expose the lesson slug to browser JavaScript. The player now also derives the

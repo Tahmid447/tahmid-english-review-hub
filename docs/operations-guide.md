@@ -101,10 +101,11 @@ For code, design, or new feature changes:
 3. Run `npm test`.
 4. Push to the private GitHub repository.
 5. Check the separate Netlify preview.
-6. Merge or change the production branch only after approval.
+6. Promote the reviewed package to production after approval.
 
-The current `jocular-chaja-86e78d` production site must remain unchanged until
-the upgrade is accepted.
+The reviewed v9 package was promoted to
+`https://jocular-chaja-86e78d.netlify.app/` on July 30, 2026. Use Netlify
+deploy history or `backup/v8-calm-baseline` if a rollback is needed.
 
 ## 7. Supabase migrations
 

@@ -2,10 +2,9 @@
 
 Private development repository for the upgraded English Review Hub.
 
-The supplied Takiwaki Review Hub v7 is preserved as the baseline. All upgrade
-work lives in this new repository and on a separate branch, so neither the old
-`Tahmid447/Takiwaki` repository nor the current Netlify production site is
-modified.
+The supplied Takiwaki Review Hub v7 is preserved as the baseline. Upgrade work
+lives in this repository and on dedicated branches. The unrelated legacy
+`Tahmid447/Takiwaki` repository remains untouched.
 
 ## Routes
 
@@ -15,12 +14,14 @@ modified.
 - `/takiwaki` — authenticated personal hub
 - `/teacher` — authenticated Teacher Studio
 
-Separate review deployment:
+Deployments:
 
+- Production: `https://jocular-chaja-86e78d.netlify.app/`
 - `https://tahmid-english-review-hub-preview.netlify.app/`
 - Deploys automatically from `upgrade/review-hub-v8` (the reviewed v9 commit is
   promoted to this preview branch after tests)
-- The existing `jocular-chaja-86e78d` production site remains unchanged
+- Production was promoted through a verified Netlify Drop package on July 30,
+  2026.
 
 The general and personal hubs share the same quiz, audio, settings, and
 Supabase modules. Personal history and private lesson data are protected by
@@ -73,7 +74,8 @@ no service-role key or password is stored in this repository.
   entrance design.
 - `legacy-site/` is an untouched extracted copy of the ZIP.
 - The unrelated legacy `Tahmid447/Takiwaki` repository is not used.
-- The current production Netlify site is not modified by this repository.
+- Netlify deploy history and `backup/v8-calm-baseline` provide two independent
+  rollback paths.
 
 See:
 
