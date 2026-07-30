@@ -5,10 +5,12 @@ const PROGRESS_KEY_PREFIX = "te-review-hub:lesson-progress:v2";
 let activeStorageScope = "anonymous";
 
 export const DEFAULT_SETTINGS = Object.freeze({
+  languageMode: "bilingual",
   showJapanese: true,
   sound: true,
   vibration: true,
   voice: "us",
+  playbackRate: 1,
   checkMode: "manual",
   shuffleChoices: false,
   hintMode: "auto",
@@ -71,12 +73,20 @@ export function getStorageScope() {
 
 export function getSettings() {
   const saved = readScopedJSON(SETTINGS_KEY_PREFIX, LEGACY_SETTINGS_KEY, {});
+  const languageMode = ["en", "bilingual", "ja"].includes(saved?.languageMode)
+    ? saved.languageMode
+    : (saved?.showJapanese === false ? "en" : "bilingual");
+  const playbackRate = [0.5, 1, 1.5].includes(Number(saved?.playbackRate))
+    ? Number(saved.playbackRate)
+    : 1;
   return {
     ...DEFAULT_SETTINGS,
     ...(saved && typeof saved === "object" ? saved : {}),
     voice: saved?.voice === "gb" ? "gb" : "us",
+    languageMode,
+    playbackRate,
     checkMode: saved?.checkMode === "instant" ? "instant" : "manual",
-    showJapanese: saved?.showJapanese !== false,
+    showJapanese: languageMode !== "en",
     sound: saved?.sound !== false,
     vibration: saved?.vibration !== false,
     shuffleChoices: Boolean(saved?.shuffleChoices),
@@ -86,9 +96,15 @@ export function getSettings() {
 
 export function updateSettings(patch = {}) {
   const next = { ...getSettings(), ...patch };
+  next.languageMode = ["en", "bilingual", "ja"].includes(next.languageMode)
+    ? next.languageMode
+    : (next.showJapanese === false ? "en" : "bilingual");
+  next.showJapanese = next.languageMode !== "en";
   next.voice = next.voice === "gb" ? "gb" : "us";
+  next.playbackRate = [0.5, 1, 1.5].includes(Number(next.playbackRate))
+    ? Number(next.playbackRate)
+    : 1;
   next.checkMode = next.checkMode === "instant" ? "instant" : "manual";
-  next.showJapanese = next.showJapanese !== false;
   next.sound = next.sound !== false;
   next.vibration = next.vibration !== false;
   next.shuffleChoices = Boolean(next.shuffleChoices);

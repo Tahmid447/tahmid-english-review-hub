@@ -7,7 +7,10 @@
   <meta property="og:title" content="Tahmid English Review Hub">
   <meta property="og:description" content="Understand it. Hear it. Say it. Use it.">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="/assets/og.png">
+  <meta property="og:image" content="https://tahmid-english-review-hub-preview.netlify.app/assets/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
   <title>Tahmid English Review Hub</title>
   <link rel="stylesheet" href="/src/styles.css">
 </head>
@@ -19,12 +22,23 @@
       <span><strong>Tahmid English Club</strong><small>English Review Hub</small></span>
     </a>
     <nav class="header-actions" aria-label="Site settings">
-      <button class="quiet-btn" id="languageToggle" type="button" aria-label="Change language">EN / JP</button>
-      <button class="quiet-btn" id="soundToggle" type="button" aria-pressed="true">Sound On</button>
-      <label class="voice-select">Voice
+      <label class="voice-select"><span data-ui-en="Language" data-ui-ja="表示">Language / 表示</span>
+        <select id="languageToggle" aria-label="Interface language">
+          <option value="en">English</option>
+          <option value="bilingual">English + 日本語</option>
+          <option value="ja">日本語UI</option>
+        </select>
+      </label>
+      <button class="quiet-btn" id="soundToggle" type="button" aria-pressed="true" data-ui-en="Sound On" data-ui-ja="音声オン">Sound On / 音声オン</button>
+      <label class="voice-select"><span data-ui-en="Voice" data-ui-ja="英語音声">Voice / 英語音声</span>
         <select id="voiceSelect" aria-label="English voice">
           <option value="us">US · Ava</option>
           <option value="gb">UK · Libby</option>
+        </select>
+      </label>
+      <label class="voice-select"><span data-ui-en="Speed" data-ui-ja="速さ">Speed / 速さ</span>
+        <select id="playbackRate" aria-label="Audio playback speed">
+          <option value="0.5">0.5×</option><option value="1">1×</option><option value="1.5">1.5×</option>
         </select>
       </label>
     </nav>
@@ -33,45 +47,46 @@
   <main id="main">
     <section class="hero shell">
       <div class="hero-copy">
-        <p class="eyebrow">Practical English, built from real lessons</p>
-        <h1>Understand it.<br><span>Hear it. Say it. Use it.</span></h1>
+        <p class="eyebrow" data-ui-en="Practical English, built from real lessons" data-ui-ja="実際のレッスンから生まれた、使える英語">Practical English, built from real lessons</p>
+        <h1 class="ui-en-heading">Understand it.<br><span>Hear it. Say it. Use it.</span></h1>
+        <h1 class="ui-ja-heading" lang="ja">意味をつかむ。<br><span>聞く・話す・使ってみる。</span></h1>
         <p class="hero-lead en">A growing practice library for useful English you can use in real conversations.</p>
         <p class="hero-lead jp" lang="ja">実際の会話で使える英語を、理解・リスニング・スピーキングまで一つの流れで練習できます。</p>
         <div class="hero-actions">
-          <a class="primary-btn" href="#library">Browse lessons</a>
-          <a class="secondary-btn" href="/phrases">Open Phrase Library</a>
+          <a class="primary-btn" href="#library" data-ui-en="Browse lessons" data-ui-ja="レッスンを選ぶ">Browse lessons</a>
+          <a class="secondary-btn" href="/phrases" data-ui-en="Phrase & Vocabulary Library" data-ui-ja="フレーズ・単語ライブラリ">Phrase & Vocabulary Library</a>
         </div>
       </div>
       <div class="hero-panel" aria-label="Practice flow">
-        <p class="panel-kicker">TODAY’S FLOW</p>
+        <p class="panel-kicker" data-ui-en="TODAY’S FLOW" data-ui-ja="今日の練習ステップ">TODAY’S FLOW</p>
         <ol class="practice-flow">
-          <li><span>01</span><strong>Understand</strong><small>Meaning and form</small></li>
-          <li><span>02</span><strong>Listen</strong><small>US or UK voice</small></li>
-          <li><span>03</span><strong>Speak</strong><small>Natural feedback</small></li>
-          <li><span>04</span><strong>Use it</strong><small>Real situations</small></li>
+          <li><span>01</span><strong data-ui-en="Understand" data-ui-ja="理解する">Understand</strong><small data-ui-en="Meaning and form" data-ui-ja="意味と形">Meaning and form</small></li>
+          <li><span>02</span><strong data-ui-en="Listen" data-ui-ja="聞く">Listen</strong><small data-ui-en="US or UK voice" data-ui-ja="米国・英国の自然音声">US or UK voice</small></li>
+          <li><span>03</span><strong data-ui-en="Speak" data-ui-ja="話す">Speak</strong><small data-ui-en="Natural feedback" data-ui-ja="自然なフィードバック">Natural feedback</small></li>
+          <li><span>04</span><strong data-ui-en="Use it" data-ui-ja="使ってみる">Use it</strong><small data-ui-en="Real situations" data-ui-ja="実際の場面">Real situations</small></li>
         </ol>
       </div>
     </section>
 
     <section class="metrics shell" aria-label="Library summary">
-      <article><strong id="publishedCount">6</strong><span>Published lessons</span></article>
-      <article><strong id="questionCount">221</strong><span>Practice questions</span></article>
-      <article><strong>9+</strong><span>Working practice formats</span></article>
-      <article><strong>2</strong><span>Natural voice choices</span></article>
+      <article><strong id="publishedCount">17</strong><span data-ui-en="Published lessons" data-ui-ja="公開レッスン">Published lessons</span></article>
+      <article><strong id="questionCount">485</strong><span data-ui-en="Practice questions" data-ui-ja="練習問題">Practice questions</span></article>
+      <article><strong>14</strong><span data-ui-en="Practice formats" data-ui-ja="問題形式">Practice formats</span></article>
+      <article><strong>3</strong><span data-ui-en="Natural voices" data-ui-ja="自然音声">Natural voices</span></article>
     </section>
 
     <section class="section shell" id="library">
       <div class="section-heading">
         <div>
-          <p class="eyebrow">Practice Library</p>
-          <h2>Choose what you want to review</h2>
+          <p class="eyebrow" data-ui-en="Practice Library" data-ui-ja="練習ライブラリ">Practice Library</p>
+          <h2 data-ui-en="Choose what you want to review" data-ui-ja="復習するレッスンを選びましょう">Choose what you want to review</h2>
           <p class="jp" lang="ja">復習したいレッスンを選んでください。</p>
         </div>
         <div class="filter-row" role="group" aria-label="Lesson filters">
-          <button class="filter-chip active" data-filter="all" type="button" aria-pressed="true">All</button>
-          <button class="filter-chip" data-filter="conversation" type="button" aria-pressed="false">Conversation practice</button>
-          <button class="filter-chip" data-filter="grammar" type="button" aria-pressed="false">Grammar focus</button>
-          <button class="filter-chip" data-filter="listening" type="button" aria-pressed="false">Listen &amp; Speak</button>
+          <button class="filter-chip active" data-filter="all" type="button" aria-pressed="true" data-ui-en="All" data-ui-ja="すべて">All</button>
+          <button class="filter-chip" data-filter="conversation" type="button" aria-pressed="false" data-ui-en="Conversation practice" data-ui-ja="会話練習">Conversation practice</button>
+          <button class="filter-chip" data-filter="grammar" type="button" aria-pressed="false" data-ui-en="Grammar focus" data-ui-ja="文法">Grammar focus</button>
+          <button class="filter-chip" data-filter="listening" type="button" aria-pressed="false" data-ui-en="Listen &amp; Speak" data-ui-ja="聞く・話す">Listen &amp; Speak</button>
         </div>
       </div>
       <div class="lesson-grid" id="lessonGrid" aria-live="polite"></div>
@@ -79,15 +94,15 @@
 
     <section class="section shell split-promo">
       <div>
-        <p class="eyebrow">Keep your progress</p>
-        <h2>Sign in only when you want your learning history on every device.</h2>
+        <p class="eyebrow" data-ui-en="Keep your progress" data-ui-ja="学習履歴を保存">Keep your progress</p>
+        <h2 data-ui-en="Sign in only when you want your learning history on every device." data-ui-ja="どの端末でも学習履歴を残したいときだけ、ログインしてください。">Sign in only when you want your learning history on every device.</h2>
         <p class="en">You can practise without an account. Signing in adds saved history, assignments and personalised recommendations.</p>
         <p class="jp" lang="ja">ログインなしでも練習できます。ログインすると履歴・割り当て・おすすめ復習が端末を越えて保存されます。</p>
       </div>
       <form class="auth-card" id="studentLoginForm">
-        <label>Email<input id="studentLogin" type="email" autocomplete="username" placeholder="you@example.com" required></label>
-        <label>Password<input id="studentPassword" type="password" autocomplete="current-password" required></label>
-        <button class="primary-btn" type="submit">Sign in</button>
+        <label><span data-ui-en="Email" data-ui-ja="メールアドレス">Email</span><input id="studentLogin" type="email" autocomplete="username" placeholder="you@example.com" required></label>
+        <label><span data-ui-en="Password" data-ui-ja="パスワード">Password</span><input id="studentPassword" type="password" autocomplete="current-password" required></label>
+        <button class="primary-btn" type="submit" data-ui-en="Sign in" data-ui-ja="ログイン">Sign in</button>
         <p class="form-status" id="studentLoginStatus" role="status"></p>
       </form>
     </section>
@@ -95,7 +110,7 @@
 
   <footer class="site-footer">
     <span>Created by Tahmid Ahmed</span>
-    <nav><a href="/phrases">Phrase Library</a><a href="/teacher">Teacher sign-in</a></nav>
+    <nav><a href="/phrases" data-ui-en="Phrase & Vocabulary Library" data-ui-ja="フレーズ・単語ライブラリ">Phrase & Vocabulary Library</a><a href="/teacher" data-ui-en="Teacher sign-in" data-ui-ja="先生用ログイン">Teacher sign-in</a></nav>
   </footer>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js"></script>

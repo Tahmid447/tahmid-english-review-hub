@@ -16,6 +16,8 @@ import {
   signInStudent,
   signOutStudent,
 } from "./supabase.js";
+import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js";
+import { installPlayfulInteractions } from "./effects.js";
 
 const page = document.body.dataset.page || "general";
 
@@ -133,10 +135,13 @@ function updateAndSyncSettings(patch) {
 }
 
 function settingsLanguage(settings) {
-  if (typeof settings.showJapanese === "boolean") {
-    return settings.showJapanese ? "bilingual" : "en";
-  }
-  return settings.languageMode || settings.language || "bilingual";
+  return languageModeFromSettings(settings);
+}
+function currentLanguage() {
+  return settingsLanguage(getSettings());
+}
+function t(english, japanese) {
+  return uiText(english, japanese, currentLanguage());
 }
 
 function settingsSound(settings) {
@@ -148,33 +153,35 @@ function settingsSound(settings) {
 function applySettings(settings = getSettings()) {
   const language = settingsLanguage(settings);
   const sound = settingsSound(settings);
-  document.body.classList.toggle("hide-jp", language === "en");
+  applyLanguageMode(language);
 
   const languageToggle = document.querySelector("#languageToggle");
   const soundToggle = document.querySelector("#soundToggle");
   const voiceSelect = document.querySelector("#voiceSelect");
-  if (languageToggle) {
-    languageToggle.textContent = language === "en" ? "English only" : "EN / JP";
-    languageToggle.setAttribute("aria-pressed", String(language !== "en"));
-  }
+  const playbackRate = document.querySelector("#playbackRate");
+  if (languageToggle) languageToggle.value = language;
   if (soundToggle) {
-    soundToggle.textContent = sound ? "Sound On" : "Sound Off";
+    soundToggle.textContent = sound
+      ? uiText("Sound On", "音声オン", language)
+      : uiText("Sound Off", "音声オフ", language);
     soundToggle.setAttribute("aria-pressed", String(sound));
   }
   if (voiceSelect) voiceSelect.value = settings.voice || "us";
+  if (playbackRate) playbackRate.value = String(settings.playbackRate || 1);
 }
 
 function bindSettings() {
   const languageToggle = document.querySelector("#languageToggle");
   const soundToggle = document.querySelector("#soundToggle");
   const voiceSelect = document.querySelector("#voiceSelect");
+  const playbackRate = document.querySelector("#playbackRate");
 
-  languageToggle?.addEventListener("click", () => {
-    const current = settingsLanguage(getSettings());
-    const next = current === "en" ? "bilingual" : "en";
+  languageToggle?.addEventListener("change", () => {
+    const next = ["en", "bilingual", "ja"].includes(languageToggle.value)
+      ? languageToggle.value
+      : "bilingual";
     updateAndSyncSettings({
       showJapanese: next !== "en",
-      language: next,
       languageMode: next,
     });
   });
@@ -185,15 +192,27 @@ function bindSettings() {
   voiceSelect?.addEventListener("change", () => {
     updateAndSyncSettings({ voice: voiceSelect.value === "gb" ? "gb" : "us" });
   });
-  onSettingsChange(applySettings);
+  playbackRate?.addEventListener("change", () => {
+    updateAndSyncSettings({ playbackRate: Number(playbackRate.value) });
+  });
+  onSettingsChange((settings) => {
+    applySettings(settings);
+    if (visibleLessons.length) renderLessonGrid();
+    if (page === "takiwaki" && authSession) {
+      updatePersonalMetrics();
+      renderHistory();
+    }
+  });
   applySettings();
 }
 
+installPlayfulInteractions();
+
 function formatDate(value, includeYear = true) {
-  if (!value) return "Date not recorded";
+  if (!value) return t("Date not recorded", "日付未登録");
   const parsed = new Date(`${String(value).slice(0, 10)}T12:00:00`);
   if (Number.isNaN(parsed.getTime())) return String(value);
-  return new Intl.DateTimeFormat("en-US", {
+  return new Intl.DateTimeFormat(currentLanguage() === "ja" ? "ja-JP" : "en-US", {
     month: "short",
     day: "numeric",
     ...(includeYear ? { year: "numeric" } : {}),
@@ -271,12 +290,12 @@ function createLessonCard(lesson, options = {}) {
   const count = Number(lesson.questions?.length || lesson.questionCount || 0);
   const groups = lessonGroups(lesson);
   const statusText = options.assigned
-    ? "Assigned"
+    ? t("Assigned", "割り当て済み")
     : progress.completed
-      ? "Completed"
+      ? t("Completed", "完了")
       : progress.percent
-        ? `${progress.percent}% complete`
-        : "Ready";
+        ? t(`${progress.percent}% complete`, `${progress.percent}% 完了`)
+        : t("Ready", "開始できます");
 
   const top = element("div", { className: "lesson-card-top" }, [
     element("span", { className: "lesson-date", text: formatDate(lesson.lessonDate, false) }),
@@ -292,8 +311,14 @@ function createLessonCard(lesson, options = {}) {
     ? element("p", { className: "jp", text: lesson.summaryJa })
     : null;
   const meta = element("div", { className: "lesson-meta" }, [
-    element("span", { text: `${count} activities` }),
-    ...groups.map((group) => element("span", { text: group[0].toUpperCase() + group.slice(1) })),
+    element("span", { text: t(`${count} activities`, `${count}問`) }),
+    ...groups.map((group) => element("span", {
+      text: ({
+        conversation: t("Conversation", "会話"),
+        grammar: t("Grammar", "文法"),
+        listening: t("Listening", "リスニング"),
+      })[group] || group,
+    })),
   ]);
   const progressBar = element("div", {
     className: "lesson-progress",
@@ -311,7 +336,9 @@ function createLessonCard(lesson, options = {}) {
     attrs: { href: lessonHref({ ...lesson, assigned: options.assigned }) },
   }, [
     element("span", {
-      text: progress.percent && !progress.completed ? "Continue lesson" : "Start practice",
+      text: progress.percent && !progress.completed
+        ? t("Continue lesson", "続きから")
+        : t("Start practice", "練習を始める"),
     }),
     element("span", { text: "→", attrs: { "aria-hidden": "true" } }),
   ]);
@@ -339,8 +366,8 @@ function renderLessonGrid() {
   grid.replaceChildren();
   if (!filtered.length) {
     const message = page === "takiwaki" && activeFilter !== "all"
-      ? "Nothing is waiting in this group. Keep up the steady work."
-      : "No lessons match this filter yet.";
+      ? t("Nothing is waiting in this group. Keep up the steady work.", "このグループに待っている復習はありません。この調子です。")
+      : t("No lessons match this filter yet.", "この条件に合うレッスンはまだありません。");
     grid.append(element("article", { className: "lesson-card" }, [
       element("h3", { text: message }),
       element("p", { className: "jp", text: "この条件に合うレッスンはまだありません。" }),
@@ -380,7 +407,7 @@ async function handleLogin(event) {
   const submit = form.querySelector('button[type="submit"]');
   if (!email || !password) return;
   if (submit) submit.disabled = true;
-  setLoginStatus("Signing in…");
+  setLoginStatus(t("Signing in…", "ログイン中…"));
   try {
     const result = await signInStudent(email, password);
     if (result?.error) throw result.error;
@@ -389,15 +416,15 @@ async function handleLogin(event) {
     const scopeReady = await activateStorageScope(authSession);
     if (!scopeReady) return;
     form.reset();
-    setLoginStatus("Signed in successfully.");
+    setLoginStatus(t("Signed in successfully.", "ログインしました。"));
     showToast(
       page === "takiwaki"
-        ? "Signed in securely."
-        : "Welcome back. Your saved learning is ready.",
+        ? t("Signed in securely.", "安全にログインしました。")
+        : t("Welcome back. Your saved learning is ready.", "おかえりなさい。保存済みの学習を再開できます。"),
     );
     await refreshAuthView();
   } catch (error) {
-    setLoginStatus(error?.message || "Sign-in failed.", true);
+    setLoginStatus(error?.message || t("Sign-in failed.", "ログインできませんでした。"), true);
   } finally {
     if (submit) submit.disabled = false;
   }
@@ -406,7 +433,7 @@ async function handleLogin(event) {
 async function handleLogout() {
   const result = await signOutStudent();
   if (result?.error) {
-    showToast(result.error.message || "Sign-out failed.");
+    showToast(result.error.message || t("Sign-out failed.", "ログアウトできませんでした。"));
     return;
   }
   authSession = null;
@@ -416,8 +443,8 @@ async function handleLogout() {
   remoteAssignments = [];
   remotePersonalLessons = [];
   personalLoadMessage = "";
-  setLoginStatus("Signed out.");
-  showToast("Signed out safely.");
+  setLoginStatus(t("Signed out.", "ログアウトしました。"));
+  showToast(t("Signed out safely.", "安全にログアウトしました。"));
   await refreshAuthView();
 }
 
@@ -453,14 +480,17 @@ function ensureGeneralLogoutButton() {
     if (!logout) {
       logout = element("button", {
         className: "secondary-btn",
-        text: "Sign out",
+        text: t("Sign out", "ログアウト"),
         attrs: { type: "button", "data-general-logout": "true" },
       });
       logout.addEventListener("click", handleLogout);
       form.append(logout);
     }
     logout.hidden = false;
-    setLoginStatus(`Signed in as ${authSession.user?.email || "student"}.`);
+    setLoginStatus(t(
+      `Signed in as ${authSession.user?.email || "student"}.`,
+      `${authSession.user?.email || "学習者"}でログイン中です。`,
+    ));
   } else {
     form.querySelectorAll("label, button[type='submit']").forEach((node) => {
       node.hidden = false;
@@ -514,7 +544,10 @@ async function fetchPersonalRecords() {
     if (lessonResult.error) throw lessonResult.error;
     remotePersonalLessons = Array.isArray(lessonResult.data) ? lessonResult.data : [];
   } catch {
-    personalLoadMessage = "Online history is temporarily unavailable. Your progress on this device is still shown.";
+    personalLoadMessage = t(
+      "Online history is temporarily unavailable. Your progress on this device is still shown.",
+      "オンライン履歴を一時的に取得できません。この端末の学習状況は表示されています。",
+    );
   }
 }
 
@@ -641,8 +674,8 @@ function updatePersonalMetrics() {
   const averageScore = document.querySelector("#averageScore");
   const sessionCount = document.querySelector("#sessionCount");
   const weakCount = document.querySelector("#weakCount");
-  if (lastStudy) lastStudy.textContent = dates[0] ? formatDate(dates[0]) : "Not yet";
-  if (averageScore) averageScore.textContent = total ? `${Math.round((correct / total) * 100)}%` : "Not yet";
+  if (lastStudy) lastStudy.textContent = dates[0] ? formatDate(dates[0]) : t("Not yet", "まだありません");
+  if (averageScore) averageScore.textContent = total ? `${Math.round((correct / total) * 100)}%` : t("Not yet", "まだありません");
   if (sessionCount) sessionCount.textContent = String(remoteAttempts.length + local.length);
   if (weakCount) weakCount.textContent = String(weakLessons);
 
@@ -668,18 +701,18 @@ function updateContinueCard(local, latestDate) {
     || remoteLatest?.lessonId;
   const lesson = visibleLessons.find((item) => item.id === lessonId) || visibleLessons[0];
   if (!lesson) {
-    cardTitle.textContent = "No lesson assigned yet";
-    cardMeta.textContent = "A new lesson will appear here when it is ready.";
+    cardTitle.textContent = t("No lesson assigned yet", "割り当てレッスンはまだありません");
+    cardMeta.textContent = t("A new lesson will appear here when it is ready.", "新しいレッスンの準備ができると、ここに表示されます。");
     cardLink.href = "#assigned";
-    cardLink.textContent = "Check lessons";
+    cardLink.textContent = t("Check lessons", "レッスンを見る");
     return;
   }
   cardTitle.textContent = lesson.title;
   cardMeta.textContent = latestDate
-    ? `Last studied ${formatDate(latestDate)}. Continue from your saved place.`
-    : "Start when you are ready. Your place will be saved.";
+    ? t(`Last studied ${formatDate(latestDate)}. Continue from your saved place.`, `最終学習：${formatDate(latestDate)}。保存した位置から続けられます。`)
+    : t("Start when you are ready. Your place will be saved.", "準備ができたら始めましょう。続きの位置は保存されます。");
   cardLink.href = lessonHref(lesson);
-  cardLink.textContent = latestDate ? "Continue lesson" : "Start lesson";
+  cardLink.textContent = latestDate ? t("Continue lesson", "続きから") : t("Start lesson", "レッスンを始める");
 }
 
 function renderHistory() {
@@ -690,10 +723,10 @@ function renderHistory() {
   list.replaceChildren();
   if (!remoteAttempts.length) {
     list.append(element("article", { className: "lesson-card" }, [
-      element("span", { className: "lesson-date", text: "Your first result" }),
-      element("h3", { text: "No online practice history yet" }),
+      element("span", { className: "lesson-date", text: t("Your first result", "最初の結果") }),
+      element("h3", { text: t("No online practice history yet", "オンライン練習履歴はまだありません") }),
       element("p", {
-        text: "Finish a lesson while signed in and the result will appear here.",
+        text: t("Finish a lesson while signed in and the result will appear here.", "ログイン中にレッスンを完了すると、結果がここに表示されます。"),
       }),
       element("p", {
         className: "jp",
@@ -713,18 +746,18 @@ function renderHistory() {
         }),
         element("span", {
           className: "lesson-status",
-          text: total ? `${correct} / ${total} first try` : "Completed",
+          text: total ? t(`${correct} / ${total} first try`, `初回答 ${correct} / ${total}`) : t("Completed", "完了"),
         }),
       ]),
       element("h3", { text: lesson?.title || "English Review" }),
       element("p", {
-        text: "This record keeps your official first answer separate from later practice.",
+        text: t("This record keeps your official first answer separate from later practice.", "初回答は、その後の練習とは別に記録されます。"),
       }),
       element("a", {
         className: "lesson-action",
         attrs: { href: lesson ? lessonHref(lesson) : "#assigned" },
       }, [
-        element("span", { text: "Review again" }),
+        element("span", { text: t("Review again", "もう一度復習") }),
         element("span", { text: "→", attrs: { "aria-hidden": "true" } }),
       ]),
     ]));
@@ -750,7 +783,9 @@ async function renderPrivateView() {
   if (dashboard) dashboard.hidden = true;
   if (lessonsSection) lessonsSection.hidden = true;
   if (historySection) historySection.hidden = true;
-  if (accountButton) accountButton.textContent = isSignedIn ? "Account" : "Sign in";
+  if (accountButton) accountButton.textContent = isSignedIn
+    ? t("Account", "アカウント")
+    : t("Sign in", "ログイン");
   if (logoutButton) logoutButton.hidden = !isSignedIn;
   if (loginForm) loginForm.hidden = isSignedIn;
   if (!isSignedIn) {
@@ -838,11 +873,7 @@ async function initialise() {
   publishedLessons = (await loadPublishedLessons({
     audience: page === "takiwaki" ? "takiwaki" : "general",
   }))
-    .filter((lesson) => lesson.status === "published")
-    .filter((lesson) => lesson.sourceType !== "notion");
-
-  // The public hub is deliberately limited to the six reviewed legacy lessons.
-  publishedLessons = publishedLessons.slice(0, 6);
+    .filter((lesson) => lesson.status === "published");
   visibleLessons = page === "general" ? publishedLessons : [];
 
   if (page === "general") {

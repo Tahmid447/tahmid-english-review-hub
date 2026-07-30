@@ -60,6 +60,15 @@ const elements = {
   questionSpeakJa: document.querySelector("#questionSpeakJa"),
   questionAnswerPayload: document.querySelector("#questionAnswerPayload"),
   questionAnswerHelp: document.querySelector("#questionAnswerHelp"),
+  easyChoiceFields: document.querySelector("#easyChoiceFields"),
+  easyAcceptedField: document.querySelector("#easyAcceptedField"),
+  easyChoiceAEn: document.querySelector("#easyChoiceAEn"),
+  easyChoiceAJa: document.querySelector("#easyChoiceAJa"),
+  easyChoiceBEn: document.querySelector("#easyChoiceBEn"),
+  easyChoiceBJa: document.querySelector("#easyChoiceBJa"),
+  easyCorrectChoice: document.querySelector("#easyCorrectChoice"),
+  easyAcceptedAnswers: document.querySelector("#easyAcceptedAnswers"),
+  questionTemplate: document.querySelector("#questionTemplateButton"),
   questionEditorStatus: document.querySelector("#questionEditorStatus"),
   cancelQuestion: document.querySelector("#cancelQuestionButton"),
   toast: document.querySelector("#toast"),
@@ -1537,7 +1546,14 @@ function updateQuestionAnswerHelp({ replaceDefault = false } = {}) {
         ? " Add the sentence to the Listening audio text field."
         : "";
   elements.questionAnswerHelp.textContent =
-    `${formatQuestionLabel(format)} details use the JSON structure shown above.${extra}`;
+    `${formatQuestionLabel(format)}：上の「かんたん回答設定」を使えます。詳細JSONは通常変更不要です。${extra}`;
+  const choiceFormat = ["mcq", "situation", "dialogue", "listenChoice"].includes(format);
+  const acceptedFormat = ["typing", "translation", "listenType", "mistake"].includes(format);
+  elements.easyChoiceFields.hidden = !choiceFormat;
+  elements.easyAcceptedField.hidden = !acceptedFormat;
+  elements.questionAudioText.closest("label").hidden = !["listenChoice", "listenType"].includes(format);
+  elements.questionSpeakText.closest("label").hidden = format !== "speaking";
+  elements.questionSpeakJa.closest("label").hidden = format !== "speaking";
 }
 
 function openQuestionEditor(question = null) {
@@ -1555,6 +1571,12 @@ function openQuestionEditor(question = null) {
     elements.questionFormat.value = "mcq";
     elements.questionPromptEn.value = "";
     elements.questionPromptJa.value = "";
+    elements.easyChoiceAEn.value = "";
+    elements.easyChoiceAJa.value = "";
+    elements.easyChoiceBEn.value = "";
+    elements.easyChoiceBJa.value = "";
+    elements.easyCorrectChoice.value = "a";
+    elements.easyAcceptedAnswers.value = "";
     elements.questionEditor.dataset.answerExample = "";
     updateQuestionAnswerHelp({ replaceDefault: true });
     elements.questionEditor.showModal();
@@ -1584,6 +1606,16 @@ function openQuestionEditor(question = null) {
   elements.questionAudioText.value = String(payload.audioText || "");
   elements.questionSpeakText.value = String(payload.speakText || "");
   elements.questionSpeakJa.value = String(payload.speakJa || "");
+  elements.easyChoiceAEn.value = String(payload.choices?.[0]?.en || "");
+  elements.easyChoiceAJa.value = String(payload.choices?.[0]?.jp || "");
+  elements.easyChoiceBEn.value = String(payload.choices?.[1]?.en || "");
+  elements.easyChoiceBJa.value = String(payload.choices?.[1]?.jp || "");
+  elements.easyCorrectChoice.value = ["a", "b"].includes(String(payload.correct))
+    ? String(payload.correct)
+    : "a";
+  elements.easyAcceptedAnswers.value = Array.isArray(payload.accepted)
+    ? payload.accepted.join("\n")
+    : "";
   elements.questionAnswerPayload.value = JSON.stringify(questionPayloadDetails(payload), null, 2);
   elements.questionEditor.dataset.answerExample = "";
   updateQuestionAnswerHelp();
@@ -1607,6 +1639,29 @@ function parseQuestionDetails() {
     );
   }
   return details;
+}
+
+function applyEasyAnswerFields(details, format) {
+  const next = { ...details };
+  if (["mcq", "situation", "dialogue", "listenChoice"].includes(format)) {
+    const first = elements.easyChoiceAEn.value.trim();
+    const second = elements.easyChoiceBEn.value.trim();
+    if (first || second) {
+      next.choices = [
+        { id: "a", en: first, jp: elements.easyChoiceAJa.value.trim() },
+        { id: "b", en: second, jp: elements.easyChoiceBJa.value.trim() },
+      ];
+      next.correct = elements.easyCorrectChoice.value === "b" ? "b" : "a";
+    }
+  }
+  if (["typing", "translation", "listenType", "mistake"].includes(format)) {
+    const accepted = elements.easyAcceptedAnswers.value
+      .split(/\n+/)
+      .map((answer) => answer.trim())
+      .filter(Boolean);
+    if (accepted.length) next.accepted = accepted;
+  }
+  return next;
 }
 
 function validateQuestionDetails(format, details, fields) {
@@ -1751,7 +1806,7 @@ async function saveQuestion(event) {
       throw new Error("That stable key is already used in this lesson.");
     }
     if (!fields.promptEn) throw new Error("Add the English prompt.");
-    const details = parseQuestionDetails();
+    const details = applyEasyAnswerFields(parseQuestionDetails(), format);
     validateQuestionDetails(format, details, fields);
     const payload = buildQuestionPayload(
       existing,
@@ -1836,7 +1891,7 @@ function openEditor(lesson = null) {
   elements.editorTitle.value = lesson?.title_en || "";
   elements.editorDate.value = lesson?.lesson_date || new Date().toISOString().slice(0, 10);
   elements.editorStatus.value = lesson?.status || "draft";
-  elements.editorAudience.value = lesson?.audience || "takiwaki";
+  elements.editorAudience.value = lesson?.audience || "both";
   elements.editorSummary.value = lesson?.summary_en || "";
   elements.editor.showModal();
 }
@@ -2099,9 +2154,9 @@ function addSyncButton() {
   if (!elements.newLesson || document.querySelector("#syncBundledContent")) return;
   const button = make("button", {
     className: "secondary-btn",
-    text: "Sync bundled content",
+    text: "Sync bundled content / 初期データ再同期",
     type: "button",
-    title: "Refresh the six verified public lessons and questions",
+    title: "保守用：コードに同梱された6件の初期レッスンを再同期します",
   });
   button.id = "syncBundledContent";
   button.addEventListener("click", () => syncBundledContent(button));
@@ -2159,6 +2214,24 @@ async function initialise() {
     previewLesson(state.questionLesson);
   });
   elements.questionFormat.addEventListener("change", () => updateQuestionAnswerHelp());
+  elements.questionTemplate.addEventListener("click", () => {
+    updateQuestionAnswerHelp({ replaceDefault: true });
+    const format = elements.questionFormat.value;
+    if (["mcq", "situation", "dialogue", "listenChoice"].includes(format)) {
+      elements.easyChoiceAEn.value ||= "Natural answer";
+      elements.easyChoiceAJa.value ||= "自然な答え";
+      elements.easyChoiceBEn.value ||= "Other answer";
+      elements.easyChoiceBJa.value ||= "別の答え";
+      elements.easyChoiceAEn.focus();
+    } else if (["typing", "translation", "listenType", "mistake"].includes(format)) {
+      elements.easyAcceptedAnswers.value ||= "Natural English answer";
+      elements.easyAcceptedAnswers.focus();
+    } else if (format === "speaking") {
+      elements.questionSpeakText.focus();
+    }
+    elements.questionEditorStatus.textContent =
+      "ひな形を入れました。サンプル英文を実際の問題内容に書き換えてください。";
+  });
   elements.questionEditorForm.addEventListener("submit", saveQuestion);
   elements.cancelQuestion.addEventListener("click", () => elements.questionEditor.close());
   elements.questionManager.addEventListener("close", () => {

@@ -90,13 +90,14 @@ The six public lessons therefore contain **221** top-level activities.
 ## 6. Notion-derived drafts
 
 Eleven lessons after July 6 were catalogued from the connected Notion database.
-Each starts with 24 activities, for **264 private draft activities**.
+Each starts with 24 activities, for **264 reviewed activities**. They were
+published to both audiences in the v9 launch migration after review.
 
 The complete reviewed source bundle contains:
 
 - 143 migrated originals
 - 78 additions
-- 264 private drafts
+- 264 Notion-derived activities, published to both audiences in v9
 - **485 total activities**
 - **14 implemented formats**
 
@@ -108,6 +109,8 @@ migration.
 
 - Private repository: `Tahmid447/tahmid-english-review-hub`
 - `main`: preserved v7 baseline commit
-- `upgrade/review-hub-v8`: upgraded system
+- `upgrade/review-hub-v8`: Netlify preview deployment branch
+- `upgrade/review-hub-v9-playful-jp`: v9 implementation branch
+- `backup/v8-calm-baseline`: one-step visual rollback
 
 The old `Tahmid447/Takiwaki` repository was not changed or archived.

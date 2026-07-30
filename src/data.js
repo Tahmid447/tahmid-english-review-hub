@@ -1,5 +1,5 @@
 import { normalizeAnswerText } from "./store.js";
-import { fetchDatabaseLesson } from "./supabase.js";
+import { fetchDatabaseLesson, fetchDatabaseLessons } from "./supabase.js";
 
 const DATA_PATHS = Object.freeze({
   lessons: "/src/data/legacy-lessons.json",
@@ -164,6 +164,16 @@ const audienceAllows = (lessonAudience, requestedAudience) => {
 };
 
 export async function loadPublishedLessons({ audience = "general" } = {}) {
+  try {
+    const remote = await fetchDatabaseLessons({ audience });
+    if (Array.isArray(remote.lessons) && remote.lessons.length) {
+      return remote.lessons
+        .map((lesson) => normalizeLesson(lesson, []))
+        .filter((lesson) => audienceAllows(lesson.audience, audience));
+    }
+  } catch {
+    // The bundled library is the offline-safe fallback.
+  }
   const lessons = await loadPublishedSource();
   return lessons.filter((lesson) => audienceAllows(lesson.audience, audience));
 }

@@ -17,6 +17,8 @@ import {
   loadUserSettings,
   saveUserSettings,
 } from "./supabase.js";
+import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js";
+import { celebrate, installPlayfulInteractions } from "./effects.js";
 
 const LEGACY_ACTIVITY_KEY = "teh_phrase_activity_v1";
 const ACTIVITY_KEY_PREFIX = "teh_phrase_activity_v2";
@@ -39,6 +41,7 @@ let activity = {};
 let activityStorageKey = null;
 let activeActivityUserId = null;
 let activeCategory = "all";
+let activeLibraryKind = "phrase";
 let searchText = "";
 let activeRecognitionId = null;
 
@@ -202,14 +205,6 @@ function isSafeLibraryPhrase(phrase) {
   if (/\s(?:\/|[-–—])\s/.test(english)) return false;
   if (/^(?:top|bottom)\s+(?:left|right)\.?$/i.test(english)) return false;
 
-  const words = english
-    .replace(/[.!?]+$/g, "")
-    .trim()
-    .split(/\s+/)
-    .filter(Boolean);
-  if (words.length === 1 && !/^[A-Z][A-Za-z’'-]*[.!?]$/.test(english)) {
-    return false;
-  }
   return true;
 }
 
@@ -402,19 +397,34 @@ function learningDetailsFor(phrase) {
 }
 
 function categoryLabel(category) {
-  if (category === "all") return "All phrases";
-  if (category === "favorites") return "★ Favorites";
-  return category
+  const language = settingsLanguage(getSettings());
+  if (category === "all") return uiText(
+    activeLibraryKind === "word" ? "All words" : "All phrases",
+    activeLibraryKind === "word" ? "すべての単語" : "すべてのフレーズ",
+    language,
+  );
+  if (category === "favorites") return uiText("★ Favorites", "★ お気に入り", language);
+  const english = category
     .split(" ")
     .map((part) => part[0].toUpperCase() + part.slice(1))
     .join(" ");
+  const japanese = {
+    feelings: "気持ち",
+    "food & daily life": "食事・日常",
+    "sports & hobbies": "スポーツ・趣味",
+    "work & learning": "仕事・学習",
+    "travel & places": "旅行・場所",
+    "time & change": "時間・変化",
+    "describing things": "表現・描写",
+    grammar: "文法",
+    conversation: "会話",
+    [DEFAULT_CATEGORY]: "日常表現",
+  }[category] || english;
+  return uiText(english, japanese, language);
 }
 
 function settingsLanguage(settings) {
-  if (typeof settings.showJapanese === "boolean") {
-    return settings.showJapanese ? "bilingual" : "en";
-  }
-  return settings.languageMode || settings.language || "bilingual";
+  return languageModeFromSettings(settings);
 }
 
 function settingsSound(settings) {
@@ -434,28 +444,27 @@ function updateAndSyncSettings(patch) {
 function applySettings(settings = getSettings()) {
   const language = settingsLanguage(settings);
   const sound = settingsSound(settings);
-  document.body.classList.toggle("hide-jp", language === "en");
+  applyLanguageMode(language);
   const languageToggle = document.querySelector("#languageToggle");
   const soundToggle = document.querySelector("#soundToggle");
   const voiceSelect = document.querySelector("#voiceSelect");
-  if (languageToggle) {
-    languageToggle.textContent = language === "en" ? "English only" : "EN / JP";
-    languageToggle.setAttribute("aria-pressed", String(language !== "en"));
-  }
+  const playbackRate = document.querySelector("#playbackRate");
+  if (languageToggle) languageToggle.value = language;
   if (soundToggle) {
-    soundToggle.textContent = sound ? "Sound On" : "Sound Off";
+    soundToggle.textContent = sound
+      ? uiText("Sound On", "音声オン", language)
+      : uiText("Sound Off", "音声オフ", language);
     soundToggle.setAttribute("aria-pressed", String(sound));
   }
   if (voiceSelect) voiceSelect.value = settings.voice || "us";
+  if (playbackRate) playbackRate.value = String(settings.playbackRate || 1);
 }
 
 function bindSettings() {
-  document.querySelector("#languageToggle")?.addEventListener("click", () => {
-    const current = settingsLanguage(getSettings());
-    const next = current === "en" ? "bilingual" : "en";
+  document.querySelector("#languageToggle")?.addEventListener("change", (event) => {
+    const next = event.currentTarget.value;
     updateAndSyncSettings({
       showJapanese: next !== "en",
-      language: next,
       languageMode: next,
     });
   });
@@ -466,9 +475,20 @@ function bindSettings() {
   document.querySelector("#voiceSelect")?.addEventListener("change", (event) => {
     updateAndSyncSettings({ voice: event.currentTarget.value === "gb" ? "gb" : "us" });
   });
-  onSettingsChange(applySettings);
+  document.querySelector("#playbackRate")?.addEventListener("change", (event) => {
+    updateAndSyncSettings({ playbackRate: Number(event.currentTarget.value) });
+  });
+  onSettingsChange((settings) => {
+    applySettings(settings);
+    if (catalog.length) {
+      renderFilters();
+      renderPhrases();
+    }
+  });
   applySettings();
 }
+
+installPlayfulInteractions();
 
 function normaliseSession(value) {
   if (!value) return null;
@@ -557,35 +577,48 @@ function toggleFavorite(id) {
 }
 
 function formatLastDate(value) {
-  if (!value) return "Not practised yet";
+  const language = settingsLanguage(getSettings());
+  if (!value) return uiText("Not practised yet", "未練習", language);
   const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return "Practised before";
-  return `Last: ${new Intl.DateTimeFormat("en-US", {
+  if (Number.isNaN(date.getTime())) return uiText("Practised before", "練習済み", language);
+  const formatted = new Intl.DateTimeFormat(language === "ja" ? "ja-JP" : "en-US", {
     month: "short",
     day: "numeric",
     year: "numeric",
-  }).format(date)}`;
+  }).format(date);
+  return uiText(`Last: ${formatted}`, `最終：${formatted}`, language);
 }
 
 function feedbackText(status) {
   if (!status) return "";
   if (typeof status === "string") return status;
-  return status.messageEn || status.message || status.state || "";
+  return uiText(
+    status.messageEn || status.message || status.state || "",
+    status.messageJa || "",
+    settingsLanguage(getSettings()),
+  );
 }
 
-async function listenToPhrase(phrase, voiceCode, button, statusNode) {
+async function listenToPhrase(phrase, voiceCode, button, statusNode, language = "en") {
+  const interfaceLanguage = settingsLanguage(getSettings());
   if (!settingsSound(getSettings())) {
-    showToast("Turn Sound On to hear this phrase.");
+    showToast(uiText("Turn Sound On to hear this phrase.", "音声を聞くには「音声オン」にしてください。", interfaceLanguage));
     return;
   }
-  const accent = voiceCode === "gb" ? "UK" : "US";
+  const accent = language === "ja" ? "Japanese" : voiceCode === "gb" ? "UK" : "US";
+  const spokenText = language === "ja" ? phrase.jp : phrase.en;
   stopSpeechPractice?.();
   activeRecognitionId = null;
   button.disabled = true;
-  statusNode.textContent = `Preparing the ${accent} voice…`;
+  statusNode.textContent = uiText(
+    `Preparing the ${accent} voice…`,
+    `${language === "ja" ? "日本語" : accent}の自然音声を準備中です…`,
+    interfaceLanguage,
+  );
   try {
-    const result = await speakText(phrase.en, {
+    const result = await speakText(spokenText, {
       voice: voiceCode,
+      language,
       onStatus: (status) => {
         const message = feedbackText(status);
         if (message) statusNode.textContent = message;
@@ -593,13 +626,17 @@ async function listenToPhrase(phrase, voiceCode, button, statusNode) {
     });
     if (result?.played) {
       recordPractice(phrase.id);
-      statusNode.textContent = `${accent} audio played. Compare both accents or say it yourself.`;
+      statusNode.textContent = uiText(
+        `${accent} audio played. Compare both accents or say it yourself.`,
+        `${language === "ja" ? "日本語" : accent}の音声を再生しました。英語音声を聞き比べたり、自分で言ったりしてみましょう。`,
+        interfaceLanguage,
+      );
       updateCardStats(phrase.id);
     } else if (!result?.cancelled) {
-      statusNode.textContent = "Audio is temporarily unavailable. Please try again.";
+      statusNode.textContent = uiText("Audio is temporarily unavailable. Please try again.", "音声を一時的に利用できません。もう一度お試しください。", interfaceLanguage);
     }
   } catch (error) {
-    statusNode.textContent = error?.message || "Audio is temporarily unavailable. Please try again.";
+    statusNode.textContent = error?.message || uiText("Audio is temporarily unavailable. Please try again.", "音声を一時的に利用できません。もう一度お試しください。", interfaceLanguage);
   } finally {
     button.disabled = false;
   }
@@ -610,7 +647,7 @@ async function practiseSpeaking(phrase, button, statusNode) {
     stopSpeechPractice?.();
     activeRecognitionId = null;
     button.classList.remove("listening");
-    button.textContent = "Speak";
+    button.textContent = uiText("Speak", "話す", settingsLanguage(getSettings()));
     statusNode.textContent = "Speaking practice stopped.";
     return;
   }
@@ -638,6 +675,9 @@ async function practiseSpeaking(phrase, button, statusNode) {
       statusNode.textContent = `${message} Heard: “${result.transcript}”`;
       recordPractice(phrase.id);
       updateCardStats(phrase.id);
+      if (["excellent", "good", "natural", "close"].includes(result.band)) {
+        celebrate(button.closest(".phrase-card") || button, { speaking: true });
+      }
     }
   } catch (error) {
     statusNode.textContent = error?.message
@@ -645,7 +685,7 @@ async function practiseSpeaking(phrase, button, statusNode) {
   } finally {
     if (activeRecognitionId === phrase.id) activeRecognitionId = null;
     button.classList.remove("listening");
-    button.textContent = "Speak";
+    button.textContent = uiText("Speak", "話す", settingsLanguage(getSettings()));
   }
 }
 
@@ -653,15 +693,19 @@ function updateCardStats(id) {
   const node = document.querySelector(`[data-phrase-stats="${CSS.escape(id)}"]`);
   if (!node) return;
   const record = activity[id] || {};
-  node.textContent = `${Number(record.count || 0)} practices · ${formatLastDate(record.lastDate)}`;
+  node.textContent = uiText(
+    `${Number(record.count || 0)} practices · ${formatLastDate(record.lastDate)}`,
+    `練習 ${Number(record.count || 0)}回 · ${formatLastDate(record.lastDate)}`,
+    settingsLanguage(getSettings()),
+  );
 }
 
 function createLearningItem(labelEn, labelJp, detail) {
   return element("section", { className: "phrase-learning-item" }, [
-    element("h3", { className: "phrase-learning-label" }, [
-      element("span", { text: labelEn }),
-      element("span", { className: "jp", text: labelJp }),
-    ]),
+    element("h3", {
+      className: "phrase-learning-label",
+      text: uiText(labelEn, labelJp, settingsLanguage(getSettings())),
+    }),
     element("p", { className: "phrase-learning-text", text: detail.en }),
     element("p", { className: "phrase-learning-text phrase-learning-jp jp", text: detail.jp }),
   ]);
@@ -676,10 +720,13 @@ function createPhraseCard(phrase) {
     : "";
   const category = categoryFor(phrase);
   const learning = phrase.learning || learningDetailsFor(phrase);
+  const language = settingsLanguage(getSettings());
 
   const favorite = element("button", {
     className: `favorite${record.favorite ? " active" : ""}`,
-    text: record.favorite ? "★ Saved" : "☆ Save",
+    text: record.favorite
+      ? uiText("★ Saved", "★ 保存済み", language)
+      : uiText("☆ Save", "☆ 保存", language),
     attrs: {
       type: "button",
       "aria-pressed": String(Boolean(record.favorite)),
@@ -711,13 +758,23 @@ function createPhraseCard(phrase) {
       "aria-label": `Play ${phrase.en} with a UK accent`,
     },
   });
+  const listenJa = element("button", {
+    className: "phrase-audio-btn jp",
+    text: "JP · Nanami",
+    attrs: {
+      type: "button",
+      "data-voice": "ja",
+      "aria-label": `日本語の意味を自然な日本語音声で再生：${phrase.jp}`,
+    },
+  });
   const speak = element("button", {
     className: "mic-btn",
-    text: "Speak",
+    text: uiText("Speak", "話す", language),
     attrs: { type: "button", "aria-label": `Practise saying ${phrase.en}` },
   });
   listenUs.addEventListener("click", () => void listenToPhrase(phrase, "us", listenUs, status));
   listenGb.addEventListener("click", () => void listenToPhrase(phrase, "gb", listenGb, status));
+  listenJa.addEventListener("click", () => void listenToPhrase(phrase, "ja", listenJa, status, "ja"));
   speak.addEventListener("click", () => void practiseSpeaking(phrase, speak, status));
 
   const lessonLink = element("a", {
@@ -728,12 +785,16 @@ function createPhraseCard(phrase) {
     text: [phrase.lessonTitle || "English Review", sourceDate].filter(Boolean).join(" · "),
   });
   const source = element("p", { className: "phrase-note" }, [
-    element("span", { text: "From: " }),
+    element("span", { text: uiText("From: ", "出典：", language) }),
     lessonLink,
   ]);
   const stats = element("p", {
     className: "phrase-note",
-    text: `${Number(record.count || 0)} practices · ${formatLastDate(record.lastDate)}`,
+    text: uiText(
+      `${Number(record.count || 0)} practices · ${formatLastDate(record.lastDate)}`,
+      `練習 ${Number(record.count || 0)}回 · ${formatLastDate(record.lastDate)}`,
+      language,
+    ),
     attrs: { "data-phrase-stats": id },
   });
 
@@ -766,7 +827,7 @@ function createPhraseCard(phrase) {
           role: "group",
           "aria-label": `Choose a playback accent for ${phrase.en}`,
         },
-      }, [listenUs, listenGb]),
+      }, [listenUs, listenGb, listenJa]),
       speak,
     ]),
     status,
@@ -776,6 +837,7 @@ function createPhraseCard(phrase) {
 function filteredCatalog() {
   const query = searchText.trim().toLocaleLowerCase();
   return catalog.filter((phrase) => {
+    if ((phrase.libraryKind || "phrase") !== activeLibraryKind) return false;
     const record = activity[phrase.id] || {};
     const matchesCategory = activeCategory === "all"
       || (activeCategory === "favorites" && record.favorite)
@@ -804,20 +866,25 @@ function renderPhrases() {
   const phrases = filteredCatalog();
   const results = document.querySelector("#phraseResults");
   if (results) {
-    results.textContent = `${phrases.length} ${phrases.length === 1 ? "phrase" : "phrases"} shown.`;
+    const noun = activeLibraryKind === "word" ? "word" : "phrase";
+    results.textContent = uiText(
+      `${phrases.length} ${phrases.length === 1 ? noun : `${noun}s`} shown.`,
+      `${phrases.length}${activeLibraryKind === "word" ? "語" : "フレーズ"}を表示しています。`,
+      settingsLanguage(getSettings()),
+    );
   }
   grid.replaceChildren();
   if (!phrases.length) {
     grid.append(element("article", { className: "phrase-card" }, [
       element("h2", {
         text: activeCategory === "favorites"
-          ? "No saved phrases yet"
-          : "No phrase matches your search",
+          ? uiText("No saved phrases yet", "保存したフレーズはまだありません", settingsLanguage(getSettings()))
+          : uiText("No phrase matches your search", "検索に合うフレーズがありません", settingsLanguage(getSettings())),
       }),
       element("p", {
         text: activeCategory === "favorites"
-          ? "Use the ☆ Save button to build your personal list."
-          : "Try a shorter English or Japanese search.",
+          ? uiText("Use the ☆ Save button to build your personal list.", "☆ 保存ボタンで自分のリストを作れます。", settingsLanguage(getSettings()))
+          : uiText("Try a shorter English or Japanese search.", "英語または日本語の検索語を短くしてみてください。", settingsLanguage(getSettings())),
       }),
       element("p", {
         className: "jp",
@@ -829,6 +896,22 @@ function renderPhrases() {
     return;
   }
   phrases.forEach((phrase) => grid.append(createPhraseCard(phrase)));
+}
+
+function bindLibraryTabs() {
+  document.querySelectorAll("[data-library-kind]").forEach((button) => {
+    button.addEventListener("click", () => {
+      activeLibraryKind = button.dataset.libraryKind === "word" ? "word" : "phrase";
+      activeCategory = "all";
+      document.querySelectorAll("[data-library-kind]").forEach((tab) => {
+        const active = tab === button;
+        tab.classList.toggle("active", active);
+        tab.setAttribute("aria-selected", String(active));
+      });
+      renderFilters();
+      renderPhrases();
+    });
+  });
 }
 
 function renderFilters() {
@@ -878,6 +961,7 @@ async function initialise() {
   }
   bindSettings();
   bindSearch();
+  bindLibraryTabs();
   const phrases = await buildPhraseCatalog();
   catalog = (Array.isArray(phrases) ? phrases : [])
     .filter((phrase) => phrase && phrase.en)
@@ -887,6 +971,10 @@ async function initialise() {
     .map((phrase) => ({
       ...phrase,
       id: phraseId(phrase),
+      libraryKind: String(phrase.en).trim().split(/\s+/).length <= 3
+        && !/[.?!]/.test(String(phrase.en))
+        ? "word"
+        : "phrase",
       learning: learningDetailsFor(phrase),
     }))
     .sort((a, b) => {

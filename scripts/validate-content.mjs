@@ -363,8 +363,8 @@ assert(
   "Phrase cards provide separate US and UK playback controls.",
 );
 assert(
-  /speakText\(phrase\.en,\s*\{[\s\S]{0,120}voice:\s*voiceCode/.test(phraseScript),
-  "Phrase playback passes the selected card accent to the audio engine.",
+  /speakText\(spokenText,\s*\{[\s\S]{0,160}voice:\s*voiceCode,[\s\S]{0,80}language/.test(phraseScript),
+  "Phrase playback passes the selected card language and accent to the audio engine.",
 );
 assert(
   /toggleFavorite\(id\)/.test(phraseScript)

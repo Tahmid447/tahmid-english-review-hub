@@ -53,6 +53,15 @@ Teacher Studio supports:
 - activity/history review
 - question creation, editing, ordering, and deactivation
 
+Use **New Draft Lesson** for normal day-to-day authoring. **Sync Bundled
+Content** is a maintenance tool for rebuilding the supplied lesson bundle; it
+is not needed for a normal new lesson. **Archive** hides an old lesson without
+deleting its content or learning history.
+
+Selecting `General`, `Takiwaki`, or `Both` and changing the status to
+`published` updates the learner sites from Supabase immediately. A Netlify
+deployment is needed only for code, design, or feature changes.
+
 Archive or deactivate content instead of hard-deleting it.
 
 Before publishing:
@@ -99,8 +108,11 @@ the upgrade is accepted.
 
 ## 7. Supabase migrations
 
-Apply the three migration files in order. Migration 003 is generated from the
+Apply the four migration files in order. Migration 003 is generated from the
 private reviewed source and stores all 485 question payloads behind RLS.
+Migration 004 publishes all 17 reviewed lessons to both audiences, adds the
+teacher account’s private learner-preview profile, and attaches the three
+late-July illustrations.
 
 The July 30 preview setup was applied through the trusted Supabase SQL Editor.
 The local CLI could link to the project, but the shared project’s existing

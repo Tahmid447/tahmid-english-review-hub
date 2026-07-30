@@ -9,8 +9,8 @@
 </head>
 <body data-page="teacher">
   <header class="site-header">
-    <a class="brand" href="/teacher"><span class="brand-mark">TE</span><span><strong>Teacher Studio</strong><small>Secure lesson management</small></span></a>
-    <nav class="header-actions"><span class="role-badge">Teacher only</span><button class="quiet-btn" id="teacherLogout" type="button" hidden>Sign out</button></nav>
+    <a class="brand" href="/teacher"><span class="brand-mark">TE</span><span><strong>Teacher Studio</strong><small>レッスン管理</small></span></a>
+    <nav class="header-actions"><span class="role-badge">Teacher only / 先生専用</span><button class="quiet-btn" id="teacherLogout" type="button" hidden>Sign out / ログアウト</button></nav>
   </header>
   <main class="teacher-shell shell">
     <section class="teacher-login" id="teacherLoginPanel">
@@ -25,9 +25,19 @@
 
     <section id="teacherApp" hidden>
       <div class="teacher-top">
-        <div><p class="eyebrow">Review Hub control room</p><h1>Good to see you, <span id="teacherName">Teacher</span>.</h1><p>Drafts stay private until you review and publish them.</p></div>
-        <button class="primary-btn" id="newLessonButton" type="button">New draft lesson</button>
+        <div><p class="eyebrow">Review Hub control room</p><h1>Good to see you, <span id="teacherName">Teacher</span>.</h1><p>Drafts stay private until you review and publish them. / 確認して公開するまでは、生徒には表示されません。</p></div>
+        <button class="primary-btn" id="newLessonButton" type="button">New draft lesson / 新しい下書き</button>
       </div>
+      <details class="teacher-workflow" open>
+        <summary>How publishing works / 公開の流れ</summary>
+        <div class="teacher-workflow-grid">
+          <article><strong>1. New Draft Lesson</strong><p>日常的に新しいレッスンを作るボタンです。タイトル・日付・問題を準備します。</p></article>
+          <article><strong>2. Audience</strong><p><b>General</b>＝一般、<b>Takiwaki only</b>＝専用、<b>Both</b>＝両方。公開先をここで選びます。</p></article>
+          <article><strong>3. Published</strong><p>Publishedで保存した瞬間、対象サイトへ反映されます。GitHubやNetlifyの操作は不要です。</p></article>
+          <article><strong>Archive</strong><p>削除ではなく非表示です。問題・学習記録は残り、後で元に戻せます。</p></article>
+          <article><strong>Sync Bundled Content</strong><p>コードに同梱された安全な初期データを再同期する保守用です。普段の追加には使いません。</p></article>
+        </div>
+      </details>
       <section class="dashboard-shell">
         <article class="dashboard-card"><span>Students</span><strong id="teacherStudentCount">0</strong></article>
         <article class="dashboard-card"><span>Published lessons</span><strong id="teacherPublishedCount">6</strong></article>
@@ -51,8 +61,8 @@
         <input id="editorLessonId" type="hidden">
         <label>Lesson title<input id="editorTitle" required></label>
         <label>Lesson date<input id="editorDate" type="date" required></label>
-        <label>Status<select id="editorStatus"><option value="draft">Draft</option><option value="review">Review</option><option value="published">Published</option><option value="archived">Archived</option></select></label>
-        <label>Audience<select id="editorAudience"><option value="takiwaki">Takiwaki only</option><option value="general">General</option><option value="both">Both</option></select></label>
+        <label>Status / 公開状態<select id="editorStatus"><option value="draft">Draft / 下書き</option><option value="review">Review / 確認中</option><option value="published">Published / 公開</option><option value="archived">Archived / 非表示</option></select></label>
+        <label>Audience / 公開先<select id="editorAudience"><option value="takiwaki">Takiwaki only / 専用</option><option value="general">General / 一般</option><option value="both">Both / 両方</option></select></label>
         <label class="wide">Summary<textarea id="editorSummary" rows="4"></textarea></label>
         <div class="dialog-actions"><button class="secondary-btn" id="previewDraftButton" type="button">Preview</button><button class="primary-btn" type="submit">Save draft</button></div>
         <p class="form-status" id="editorStatusMessage"></p>
@@ -107,9 +117,24 @@
         <label class="wide">Listening audio text<input id="questionAudioText" placeholder="The sentence the learner hears"></label>
         <label>Speaking target — English<input id="questionSpeakText" placeholder="The sentence the learner says"></label>
         <label>Speaking target — Japanese<input id="questionSpeakJa"></label>
-        <label class="wide">Answer &amp; format details (JSON)
-          <textarea id="questionAnswerPayload" rows="12" spellcheck="false" required></textarea>
-        </label>
+        <section class="wide easy-question-builder" id="easyQuestionBuilder">
+          <div><strong>Easy Answer Builder / かんたん回答設定</strong><p>選択問題・入力問題は、まずここだけ入力すれば作れます。</p></div>
+          <div class="easy-choice-fields" id="easyChoiceFields">
+            <label>Choice A — English<input id="easyChoiceAEn"></label>
+            <label>Choice A — 日本語<input id="easyChoiceAJa"></label>
+            <label>Choice B — English<input id="easyChoiceBEn"></label>
+            <label>Choice B — 日本語<input id="easyChoiceBJa"></label>
+            <label>Correct answer / 正解<select id="easyCorrectChoice"><option value="a">A</option><option value="b">B</option></select></label>
+          </div>
+          <label id="easyAcceptedField">Accepted answers / 正解として認める英文（1行に1つ）<textarea id="easyAcceptedAnswers" rows="3"></textarea></label>
+          <button class="secondary-btn" id="questionTemplateButton" type="button">Use starter / ひな形を使う</button>
+        </section>
+        <details class="wide advanced-question-details">
+          <summary>Advanced format settings / 詳細設定（通常は変更不要）</summary>
+          <label>Answer &amp; format details (JSON)
+            <textarea id="questionAnswerPayload" rows="12" spellcheck="false" required></textarea>
+          </label>
+        </details>
         <small class="wide" id="questionAnswerHelp"></small>
         <div class="dialog-actions">
           <button class="secondary-btn" id="cancelQuestionButton" type="button">Cancel</button>

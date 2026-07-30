@@ -1,4 +1,4 @@
-import { getLessonById } from "./data.js";
+import { buildPhraseCatalog, getLessonById } from "./data.js";
 import {
   escapeHTML,
   getLessonProgress,
@@ -25,6 +25,8 @@ import {
   saveSpeakingActivity,
   saveUserSettings,
 } from "./supabase.js";
+import { applyLanguageMode, languageModeFromSettings, learningText, uiText } from "./i18n.js";
+import { celebrate, installPlayfulInteractions } from "./effects.js";
 
 const $ = (selector) => document.querySelector(selector);
 
@@ -34,10 +36,12 @@ const elements = {
   soundToggle: $("#soundToggle"),
   vibrationToggle: $("#vibrationToggle"),
   voiceSelect: $("#voiceSelect"),
+  playbackRate: $("#playbackRate"),
   lessonDate: $("#lessonDate"),
   lessonTitle: $("#lessonTitle"),
   lessonSummary: $("#lessonSummary"),
   lessonSummaryJa: $("#lessonSummaryJa"),
+  lessonGuideContent: $("#lessonGuideContent"),
   practiceMode: $("#practiceMode"),
   shuffleQuestions: $("#shuffleQuestions"),
   checkModeButtons: [...document.querySelectorAll("[data-check]")],
@@ -116,6 +120,8 @@ const textFor = (bilingual, language = "en") => {
   if (bilingual && typeof bilingual === "object") return String(bilingual[language] || "");
   return language === "en" ? String(bilingual || "") : "";
 };
+const currentLanguage = () => languageModeFromSettings(state.settings);
+const t = (english, japanese) => uiText(english, japanese, currentLanguage());
 
 const showToast = (message) => {
   clearTimeout(state.toastTimer);
@@ -130,6 +136,10 @@ const vibrationSupported = () => (
 
 const provideAnswerFeedback = (correct) => {
   playAnswerFeedback(Boolean(correct));
+  if (correct) {
+    const question = state.visibleQuestions[state.currentIndex];
+    celebrate(elements.feedbackCard, { speaking: question?.format === "speaking" });
+  }
   if (!state.settings.vibration || !vibrationSupported()) return;
   try {
     navigator.vibrate(correct ? [30, 40, 30] : [80, 40, 80]);
@@ -162,7 +172,9 @@ const syncHintTimer = ({ restart = false } = {}) => {
   const updateCountdown = () => {
     const seconds = Math.max(0, Math.ceil((hintDeadline - Date.now()) / 1000));
     if (elements.hintCountdown) {
-      elements.hintCountdown.textContent = seconds ? `Closes in ${seconds}s` : "Closing…";
+      elements.hintCountdown.textContent = seconds
+        ? t(`Closes in ${seconds}s`, `${seconds}秒後に閉じます`)
+        : t("Closing…", "閉じています…");
     }
   };
   updateCountdown();
@@ -338,20 +350,26 @@ const loadScopedSettings = async () => {
 };
 
 const renderSettings = () => {
-  elements.languageToggle.textContent = state.settings.showJapanese ? "EN + JP" : "EN only";
-  elements.languageToggle.setAttribute("aria-pressed", String(state.settings.showJapanese));
-  elements.soundToggle.textContent = state.settings.sound ? "Sound On" : "Sound Off";
+  const language = languageModeFromSettings(state.settings);
+  applyLanguageMode(language);
+  elements.languageToggle.value = language;
+  elements.soundToggle.textContent = state.settings.sound
+    ? uiText("Sound On", "音声オン", language)
+    : uiText("Sound Off", "音声オフ", language);
   elements.soundToggle.setAttribute("aria-pressed", String(state.settings.sound));
   const canVibrate = vibrationSupported();
   elements.vibrationToggle.textContent = canVibrate
-    ? (state.settings.vibration ? "Vibration On" : "Vibration Off")
-    : "Vibration unavailable";
+    ? (state.settings.vibration
+      ? uiText("Vibration On", "振動オン", language)
+      : uiText("Vibration Off", "振動オフ", language))
+    : uiText("Visual feedback", "画面エフェクト", language);
   elements.vibrationToggle.disabled = !canVibrate;
   elements.vibrationToggle.setAttribute(
     "aria-pressed",
     String(canVibrate && state.settings.vibration),
   );
   elements.voiceSelect.value = state.settings.voice;
+  elements.playbackRate.value = String(state.settings.playbackRate || 1);
   elements.shuffleChoices.checked = state.settings.shuffleChoices;
   elements.checkModeButtons.forEach((button) => {
     button.classList.toggle("active", button.dataset.check === state.settings.checkMode);
@@ -364,22 +382,26 @@ const renderSettings = () => {
   elements.checkAnswered.disabled = state.settings.checkMode === "instant";
 };
 
-const questionTypeLabel = (format) => ({
-  mcq: "Choose",
-  situation: "Real-life choice",
-  dialogue: "Conversation",
-  truefalse: "True or False",
-  typing: "Type it",
-  translation: "Translation",
-  listenType: "Dictation",
-  listenChoice: "Listening",
-  speaking: "Speaking",
-  mistake: "Mistake detective",
-  order: "Sentence builder",
-  matching: "Matching",
-  sorting: "Sorting",
-  grid: "Position",
-}[format] || "Question");
+const questionTypeLabel = (format) => {
+  const labels = {
+    mcq: ["Choose", "選択問題"],
+    situation: ["Real-life choice", "場面別問題"],
+    dialogue: ["Conversation", "会話"],
+    truefalse: ["True or False", "正誤問題"],
+    typing: ["Type it", "入力問題"],
+    translation: ["Translation", "英作文"],
+    listenType: ["Dictation", "ディクテーション"],
+    listenChoice: ["Listening", "リスニング"],
+    speaking: ["Speaking", "スピーキング"],
+    mistake: ["Mistake detective", "間違い探し"],
+    order: ["Sentence builder", "語順問題"],
+    matching: ["Matching", "組み合わせ"],
+    sorting: ["Sorting", "分類"],
+    grid: ["Position", "位置"],
+  };
+  const [english, japanese] = labels[format] || ["Question", "問題"];
+  return t(english, japanese);
+};
 
 const orderFor = (key, values, alwaysShuffle = false) => {
   const ids = values.map(String);
@@ -424,11 +446,11 @@ const updatePracticeModeLabels = () => {
   const wrong = selectQuestionSet("wrong").length;
   const unanswered = selectQuestionSet("unanswered").length;
   const labels = {
-    all: `All questions (${state.masterQuestions.length})`,
-    original: `Original Review (${originals})`,
-    extra: `Listen & Speak (${extras})`,
-    wrong: `Mistakes only (${wrong})`,
-    unanswered: `Unanswered only (${unanswered})`,
+    all: t(`All questions (${state.masterQuestions.length})`, `全問題 (${state.masterQuestions.length})`),
+    original: t(`Original Review (${originals})`, `元の復習 (${originals})`),
+    extra: t(`Listen & Speak (${extras})`, `聞く・話す (${extras})`),
+    wrong: t(`Mistakes only (${wrong})`, `間違いだけ (${wrong})`),
+    unanswered: t(`Unanswered only (${unanswered})`, `未回答だけ (${unanswered})`),
   };
   [...elements.practiceMode.options].forEach((option) => {
     option.textContent = labels[option.value] || option.textContent;
@@ -580,35 +602,109 @@ const checkQuestion = (question, { quiet = false } = {}) => {
 const feedbackMessage = (question, result) => {
   if (question.format === "matching") {
     return result.correct
-      ? `All ${result.max} pairs are correct.`
-      : `${result.score} of ${result.max} pairs are correct. Check the remaining pairs.`;
+      ? t(`All ${result.max} pairs are correct.`, `${result.max}組すべて正解です。`)
+      : t(`${result.score} of ${result.max} pairs are correct. Check the remaining pairs.`, `${result.max}組中${result.score}組が正解です。残りを確認しましょう。`);
   }
   if (question.format === "sorting") {
     return result.correct
-      ? `All ${result.max} items are in the correct group.`
-      : `${result.score} of ${result.max} items are in the correct group.`;
+      ? t(`All ${result.max} items are in the correct group.`, `${result.max}項目すべて正しいグループです。`)
+      : t(`${result.score} of ${result.max} items are in the correct group.`, `${result.max}項目中${result.score}項目が正しいグループです。`);
   }
   if (question.format === "speaking") {
     const answer = state.answers[question.id];
-    return answer?.messageEn || (result.correct
-      ? "Speaking practice complete."
-      : "Listen once more and try the sentence again.");
+    if (answer?.messageEn || answer?.messageJa) {
+      return t(answer?.messageEn || "", answer?.messageJa || "");
+    }
+    return result.correct
+      ? t("Speaking practice complete.", "スピーキング練習を完了しました。")
+      : t("Listen once more and try the sentence again.", "もう一度聞いて、文を言ってみましょう。");
   }
-  return result.correct ? "Correct — well done." : "Not quite. Review the answer and try again.";
+  return result.correct
+    ? t("Correct — well done.", "正解です。よくできました。")
+    : t("Not quite. Review the answer and try again.", "もう少しです。答えを確認して、もう一度挑戦しましょう。");
 };
 
-const renderTextAudioButton = (text, label = "Listen") => {
+const renderTextAudioButton = (text, label = "Listen", language = "en") => {
   const cleanText = String(text ?? "").trim();
   if (!cleanText) return "";
   return `
     <button
       class="text-audio-btn"
       data-audio-text="${escapeHTML(cleanText)}"
+      data-audio-language="${escapeHTML(language)}"
       type="button"
       aria-label="${escapeHTML(`${label}: ${cleanText}`)}"
       title="${escapeHTML(label)}"
     ><span aria-hidden="true">▶</span> ${escapeHTML(label)}</button>
   `;
+};
+
+const renderLessonGuide = async () => {
+  if (!state.lesson || !elements.lessonGuideContent) return;
+  const language = languageModeFromSettings(state.settings);
+  const themes = [...new Set((state.lesson.themes || [])
+    .map((theme) => typeof theme === "string" ? theme : theme?.en)
+    .filter(Boolean))];
+  let phrases = Array.isArray(state.lesson.phrases) ? state.lesson.phrases : [];
+  if (!phrases.length) {
+    try {
+      phrases = (await buildPhraseCatalog()).filter((phrase) => phrase.lessonId === state.lesson.id);
+    } catch {
+      phrases = [];
+    }
+  }
+  const cleanPhrases = phrases.slice(0, 12).map((phrase) => ({
+    en: String(phrase.en || phrase.english || ""),
+    jp: String(phrase.jp || phrase.ja || phrase.japanese || ""),
+    note: String(phrase.note || ""),
+  })).filter((phrase) => phrase.en);
+  const corrections = state.masterQuestions
+    .filter((question) => question.format === "mistake" && question.wrongSentence && question.accepted?.[0])
+    .slice(0, 6);
+  const examples = [...new Set(state.masterQuestions
+    .flatMap((question) => [question.speakText, question.audioText])
+    .filter(Boolean))].slice(0, 6);
+  const bilingual = (en, jp) => {
+    const text = learningText(en, jp, language);
+    return `<strong>${escapeHTML(text.primary)}</strong>${text.secondary ? `<small lang="ja">${escapeHTML(text.secondary)}</small>` : ""}`;
+  };
+  elements.lessonGuideContent.innerHTML = `
+    <div class="guide-snapshot">
+      <p class="eyebrow">${escapeHTML(uiText("Today’s Lesson Snapshot", "今日のまとめ", language))}</p>
+      <h2>${escapeHTML(state.lesson.title)}</h2>
+      <p>${escapeHTML(state.lesson.summary || "Review the key English from this lesson.")}</p>
+      ${state.settings.showJapanese && state.lesson.summaryJa ? `<p lang="ja">${escapeHTML(state.lesson.summaryJa)}</p>` : ""}
+    </div>
+    <div class="guide-grid">
+      <section class="guide-card guide-card-themes">
+        <h3>${escapeHTML(uiText("Key points", "重要ポイント", language))}</h3>
+        <ul>${themes.slice(0, 8).map((theme) => `<li>${escapeHTML(theme)}</li>`).join("") || `<li>${escapeHTML(uiText("Useful conversation English", "会話で使える英語", language))}</li>`}</ul>
+      </section>
+      <section class="guide-card guide-card-phrases">
+        <h3>${escapeHTML(uiText("English you can use", "すぐ使える英語", language))}</h3>
+        <div class="guide-phrase-list">${cleanPhrases.slice(0, 8).map((phrase) => `
+          <div>
+            <span>${bilingual(phrase.en, phrase.jp)}</span>
+            ${renderTextAudioButton(phrase.en, uiText("Listen", "英語を聞く", language))}
+            ${state.settings.showJapanese && phrase.jp ? renderTextAudioButton(phrase.jp, uiText("Listen in Japanese", "日本語を聞く", language), "ja") : ""}
+          </div>
+        `).join("") || examples.map((example) => `<div><span><strong>${escapeHTML(example)}</strong></span>${renderTextAudioButton(example, uiText("Listen", "英語を聞く", language))}</div>`).join("")}</div>
+      </section>
+      ${corrections.length ? `<section class="guide-card guide-card-corrections">
+        <h3>${escapeHTML(uiText("Natural corrections", "自然な言い直し", language))}</h3>
+        ${corrections.map((question) => `<p><del>${escapeHTML(question.wrongSentence)}</del><span aria-hidden="true"> → </span><strong>${escapeHTML(question.accepted[0])}</strong></p>`).join("")}
+      </section>` : ""}
+      <section class="guide-card guide-card-takeaway">
+        <h3>${escapeHTML(uiText("Final takeaway", "最後に覚えること", language))}</h3>
+        <p>${escapeHTML(uiText(
+          "Read one phrase aloud, listen once, then use it in your own sentence.",
+          "フレーズを声に出し、一度聞いてから、自分の文で使ってみましょう。",
+          language,
+        ))}</p>
+      </section>
+    </div>
+  `;
+  attachAudioHandlers(elements.lessonGuideContent);
 };
 
 const renderFeedback = (question) => {
@@ -623,8 +719,8 @@ const renderFeedback = (question) => {
   const explanationJa = textFor(question.explanation, "jp");
   const correctAnswer = correctAnswerLabel(question);
   const retryNote = result.isRetry
-    ? `<p><strong>Retry:</strong> Your first score is safely locked. This result is practice only.</p>`
-    : `<p><strong>First answer recorded.</strong> Future tries will not change this official score.</p>`;
+    ? `<p><strong>${escapeHTML(t("Retry:", "再挑戦："))}</strong> ${escapeHTML(t("Your first score is safely locked. This result is practice only.", "初回スコアは保存済みです。今回は練習として記録されます。"))}</p>`
+    : `<p><strong>${escapeHTML(t("First answer recorded.", "初回答を記録しました。"))}</strong> ${escapeHTML(t("Future tries will not change this official score.", "この後の再挑戦で初回スコアは変わりません。"))}</p>`;
   const scoreText = result.max > 1 ? ` (${result.score} / ${result.max})` : "";
   elements.feedbackCard.className = `feedback-card ${result.correct ? "correct" : "wrong"}`;
   elements.feedbackCard.innerHTML = `
@@ -632,17 +728,22 @@ const renderFeedback = (question) => {
     ${retryNote}
     ${!result.correct && correctAnswer ? `
       <div class="feedback-audio-row">
-        <p><strong>Answer:</strong> ${escapeHTML(correctAnswer)}</p>
-        ${renderTextAudioButton(correctAnswer, "Listen to the answer")}
+        <p><strong>${escapeHTML(t("Answer:", "答え："))}</strong> ${escapeHTML(correctAnswer)}</p>
+        ${renderTextAudioButton(correctAnswer, t("Listen to the answer", "答えを聞く"))}
       </div>
     ` : ""}
     ${explanationEn ? `
       <div class="feedback-audio-row">
         <p>${escapeHTML(explanationEn)}</p>
-        ${renderTextAudioButton(explanationEn, "Listen to the explanation")}
+        ${renderTextAudioButton(explanationEn, t("Listen to the explanation", "英語の解説を聞く"))}
       </div>
     ` : ""}
-    ${state.settings.showJapanese && explanationJa ? `<p class="jp">${escapeHTML(explanationJa)}</p>` : ""}
+    ${state.settings.showJapanese && explanationJa ? `
+      <div class="feedback-audio-row jp">
+        <p>${escapeHTML(explanationJa)}</p>
+        ${renderTextAudioButton(explanationJa, t("Listen in Japanese", "日本語の解説を聞く"), "ja")}
+      </div>
+    ` : ""}
   `;
   elements.feedbackCard.hidden = false;
   attachAudioHandlers(elements.feedbackCard);
@@ -650,7 +751,7 @@ const renderFeedback = (question) => {
 
 const renderAudioPractice = (text, kind = "listen") => `
   <div class="audio-practice">
-    <button class="audio-btn" data-audio-text="${escapeHTML(text)}" type="button">${kind === "speak" ? "Hear the model" : "Play audio"}</button>
+    <button class="audio-btn" data-audio-text="${escapeHTML(text)}" data-audio-language="en" type="button">${kind === "speak" ? escapeHTML(t("Hear the model", "お手本を聞く")) : escapeHTML(t("Play audio", "音声を聞く"))}</button>
     <span class="audio-status" role="status">${state.settings.voice === "gb" ? "UK · Libby" : "US · Ava"}</span>
   </div>
 `;
@@ -664,7 +765,7 @@ const renderChoiceQuestion = (question, selectedAnswer = state.answers[question.
             <span class="letter">${String.fromCharCode(65 + index)}</span>
             <span>${escapeHTML(choice.en)}${state.settings.showJapanese && choice.jp ? `<small>${escapeHTML(choice.jp)}</small>` : ""}</span>
           </button>
-          ${renderTextAudioButton(choice.en, `Listen to choice ${String.fromCharCode(65 + index)}`)}
+          ${renderTextAudioButton(choice.en, t(`Listen to choice ${String.fromCharCode(65 + index)}`, `選択肢${String.fromCharCode(65 + index)}を聞く`))}
         </div>
       `).join("")}
     </div>
@@ -678,7 +779,7 @@ const renderTextQuestion = (question) => {
       <div class="context-box">
         <div class="context-audio-row">
           <span><strong>Original:</strong> ${escapeHTML(question.wrongSentence)}</span>
-          ${renderTextAudioButton(question.wrongSentence, "Listen to the original")}
+          ${renderTextAudioButton(question.wrongSentence, t("Listen to the original", "元の文を聞く"))}
         </div>
       </div>
     `
@@ -686,8 +787,8 @@ const renderTextQuestion = (question) => {
   return `
     ${wrongSentence}
     <label>
-      <span class="question-jp">Type your answer</span>
-      <input class="answer-input" id="typedAnswer" type="text" autocomplete="off" spellcheck="false" value="${escapeHTML(answer)}" placeholder="Type your English answer">
+      <span class="question-jp">${escapeHTML(t("Type your answer", "英語で答えを入力"))}</span>
+      <input class="answer-input" id="typedAnswer" type="text" autocomplete="off" spellcheck="false" value="${escapeHTML(answer)}" placeholder="${escapeHTML(t("Type your English answer", "英語の答えを入力"))}">
     </label>
   `;
 };
@@ -699,7 +800,7 @@ const renderOrderQuestion = (question) => {
     ? answer.map((tokenIndex) => question.words[tokenIndex] || "").join(" ").trim()
     : "";
   return `
-    <p class="question-jp">Build your sentence here:</p>
+    <p class="question-jp">${escapeHTML(t("Build your sentence here:", "ここで英文を組み立てましょう："))}</p>
     <div class="built-sentence" aria-label="Your sentence">
       ${answer.map((tokenIndex, position) => `
         <button class="word-chip" data-remove-word="${position}" type="button">${escapeHTML(question.words[tokenIndex] || "")}</button>
@@ -707,10 +808,10 @@ const renderOrderQuestion = (question) => {
     </div>
     ${completedSentence ? `
       <div class="completed-order-audio">
-        ${renderTextAudioButton(completedSentence, "Listen to your sentence")}
+        ${renderTextAudioButton(completedSentence, t("Listen to your sentence", "作った文を聞く"))}
       </div>
     ` : ""}
-    <p class="question-jp">Word bank:</p>
+    <p class="question-jp">${escapeHTML(t("Word bank:", "単語リスト："))}</p>
     <div class="word-bank">
       ${question.words.map((word, tokenIndex) => used.has(tokenIndex) ? "" : `
         <button class="word-chip" data-add-word="${tokenIndex}" type="button">${escapeHTML(word)}</button>
@@ -728,10 +829,10 @@ const renderMatchingQuestion = (question) => {
         <div class="matching-row">
           <div class="matching-term">
             <strong>${escapeHTML(pair.en)}</strong>
-            ${renderTextAudioButton(pair.en, "Listen")}
+            ${renderTextAudioButton(pair.en, t("Listen", "聞く"))}
           </div>
           <select data-match-pair="${escapeHTML(pair.id)}" aria-label="Match for ${escapeHTML(pair.en)}">
-            <option value="">Choose the Japanese meaning</option>
+            <option value="">${escapeHTML(t("Choose the Japanese meaning", "日本語の意味を選ぶ"))}</option>
             ${meanings.map((meaning) => `<option value="${escapeHTML(meaning)}" ${answer[pair.id] === meaning ? "selected" : ""}>${escapeHTML(meaning)}</option>`).join("")}
           </select>
         </div>
@@ -744,18 +845,18 @@ const renderSortingQuestion = (question) => {
   const answer = safeProgress(state.answers[question.id], {});
   return `
     <div class="sorting-category-audio" aria-label="Listen to sorting group names">
-      <span>Group names:</span>
-      ${question.categories.map((category) => renderTextAudioButton(category, "Listen")).join("")}
+      <span>${escapeHTML(t("Group names:", "グループ名："))}</span>
+      ${question.categories.map((category) => renderTextAudioButton(category, t("Listen", "聞く"))).join("")}
     </div>
     <div class="sorting-board">
       ${question.sortingItems.map((item) => `
         <div class="sort-column">
           <div class="sort-item-heading">
             <h3>${escapeHTML(item.text)}</h3>
-            ${renderTextAudioButton(item.text, "Listen")}
+            ${renderTextAudioButton(item.text, t("Listen", "聞く"))}
           </div>
           <select data-sort-item="${escapeHTML(item.id)}" aria-label="Category for ${escapeHTML(item.text)}">
-            <option value="">Choose a group</option>
+            <option value="">${escapeHTML(t("Choose a group", "グループを選ぶ"))}</option>
             ${question.categories.map((category) => `<option value="${escapeHTML(category)}" ${answer[item.id] === category ? "selected" : ""}>${escapeHTML(category)}</option>`).join("")}
           </select>
         </div>
@@ -788,9 +889,9 @@ const renderSpeakingQuestion = (question) => {
     <div class="speaking-practice">
       <p class="speech-target">${escapeHTML(question.speakText)}</p>
       ${state.settings.showJapanese && question.speakJa ? `<p class="question-jp">${escapeHTML(question.speakJa)}</p>` : ""}
-      <button class="mic-btn" id="speakButton" type="button" ${supported ? "" : "disabled"}>${supported ? "Start speaking" : "Microphone unavailable"}</button>
-      <button class="word-chip" id="selfPracticeButton" type="button">I practised it</button>
-      <span class="speech-status" id="speechStatus" role="status">${supported ? "Listen first, then press the microphone." : "You can still listen and mark the sentence as practised."}</span>
+      <button class="mic-btn" id="speakButton" type="button" ${supported ? "" : "disabled"}>${supported ? escapeHTML(t("Start speaking", "話してみる")) : escapeHTML(t("Microphone unavailable", "マイクを利用できません"))}</button>
+      <button class="word-chip" id="selfPracticeButton" type="button">${escapeHTML(t("I practised it", "声に出して練習しました"))}</button>
+      <span class="speech-status" id="speechStatus" role="status">${supported ? escapeHTML(t("Listen first, then press the microphone.", "まずお手本を聞いてから、マイクを押してください。")) : escapeHTML(t("You can still listen and mark the sentence as practised.", "音声を聞き、練習済みとして記録できます。"))}</span>
       ${answer.transcript ? `<p class="speech-target">“${escapeHTML(answer.transcript)}”</p>` : ""}
     </div>
   `;
@@ -830,6 +931,7 @@ const attachAudioHandlers = (root = elements.questionCard) => {
       button.setAttribute("aria-busy", "true");
       const result = await speakText(button.dataset.audioText, {
         voice: state.settings.voice,
+        language: button.dataset.audioLanguage || "en",
         onStatus: ({ phase, messageEn, messageJa }) => {
           if (status) {
             status.textContent = state.settings.showJapanese && messageJa ? messageJa : messageEn;
@@ -837,8 +939,8 @@ const attachAudioHandlers = (root = elements.questionCard) => {
           button.classList.toggle("loading", phase === "loading");
         },
       });
-      if (result?.reason === "sound-off") showToast("Sound is off. Turn it on to listen.");
-      if (result?.reason === "unavailable") showToast("Audio is unavailable in this browser.");
+      if (result?.reason === "sound-off") showToast(t("Sound is off. Turn it on to listen.", "音声がオフです。ヘッダーでオンにしてください。"));
+      if (result?.reason === "unavailable") showToast(t("Audio is unavailable in this browser.", "このブラウザでは音声を利用できません。"));
       button.disabled = false;
       button.classList.remove("loading");
       button.removeAttribute("aria-busy");
@@ -970,9 +1072,9 @@ const renderQuestion = () => {
     clearHintTimer();
     hintQuestionId = "";
     elements.hintBox.open = false;
-    elements.questionType.textContent = "No questions";
+    elements.questionType.textContent = t("No questions", "問題がありません");
     elements.questionCounter.textContent = "0 / 0";
-    elements.questionCard.innerHTML = "<h2>No questions in this practice set.</h2>";
+    elements.questionCard.innerHTML = `<h2>${escapeHTML(t("No questions in this practice set.", "この練習セットには問題がありません。"))}</h2>`;
     elements.hintBox.hidden = true;
     elements.feedbackCard.hidden = true;
     return;
@@ -992,17 +1094,24 @@ const renderQuestion = () => {
       <div class="context-audio-row">
         <span>${escapeHTML(text)}${state.settings.showJapanese && japanese ? `<br><small>${escapeHTML(japanese)}</small>` : ""}</span>
         ${renderTextAudioButton(text, audioLabel)}
+        ${state.settings.showJapanese && japanese ? renderTextAudioButton(japanese, t("Listen in Japanese", "日本語を聞く"), "ja") : ""}
       </div>
     </div>
   ` : "";
   elements.questionCard.innerHTML = `
-    ${renderContextBox(situationEn, "", "Listen to the situation")}
-    ${renderContextBox(contextEn, contextJa, "Listen to the context")}
+    ${question.image ? `<figure class="question-illustration"><img src="${escapeHTML(question.image)}" alt="${escapeHTML(question.imageAlt || promptEn)}" loading="eager"></figure>` : ""}
+    ${renderContextBox(situationEn, "", t("Listen to the situation", "場面を聞く"))}
+    ${renderContextBox(contextEn, contextJa, t("Listen to the context", "文脈を聞く"))}
     <div class="prompt-heading-row">
       <h2>${escapeHTML(promptEn)}</h2>
-      ${renderTextAudioButton(promptEn, "Listen to the question")}
+      ${renderTextAudioButton(promptEn, t("Listen to the question", "質問文を聞く"))}
     </div>
-    ${state.settings.showJapanese && promptJa ? `<p class="question-jp">${escapeHTML(promptJa)}</p>` : ""}
+    ${state.settings.showJapanese && promptJa ? `
+      <div class="prompt-ja-audio">
+        <p class="question-jp">${escapeHTML(promptJa)}</p>
+        ${renderTextAudioButton(promptJa, t("Listen in Japanese", "日本語を聞く"), "ja")}
+      </div>
+    ` : ""}
     ${audio}
     ${renderQuestionBody(question)}
   `;
@@ -1052,7 +1161,10 @@ const renderNavigation = () => {
 
 const renderScore = () => {
   const totals = officialTotals();
-  elements.scorePill.textContent = `First score ${totals.score} / ${totals.max}`;
+  elements.scorePill.textContent = t(
+    `First score ${totals.score} / ${totals.max}`,
+    `初回スコア ${totals.score} / ${totals.max}`,
+  );
 };
 
 const renderAll = () => {
@@ -1145,8 +1257,13 @@ const maybeCompleteRun = () => {
   ));
   const score = results.reduce((sum, result) => sum + Number(result?.score || 0), 0);
   const max = state.visibleQuestions.reduce((sum, question) => sum + Number(question.maxPoints || 1), 0);
-  elements.resultHeading.textContent = score === max ? "Excellent work." : "Good practice — keep going.";
-  elements.resultSummary.textContent = `This practice: ${score} / ${max}. Your first official answers stay safely recorded.`;
+  elements.resultHeading.textContent = score === max
+    ? t("Excellent work.", "全問正解です。すばらしいです。")
+    : t("Good practice — keep going.", "よい練習でした。この調子で続けましょう。");
+  elements.resultSummary.textContent = t(
+    `This practice: ${score} / ${max}. Your first official answers stay safely recorded.`,
+    `今回の練習：${score} / ${max}。初回答はそのまま安全に記録されています。`,
+  );
   elements.resultPanel.hidden = false;
   saveCompletedRun().catch(() => {});
 };
@@ -1160,6 +1277,7 @@ const initialiseLesson = async () => {
     if (!lesson) throw new Error("This lesson could not be found.");
     state.lesson = lesson;
     state.masterQuestions = lesson.questions;
+    await renderLessonGuide();
     restoreProgress();
     const allIds = state.masterQuestions.map((question) => question.id);
     const allIdSet = new Set(allIds);
@@ -1225,9 +1343,11 @@ onStudentAuthChange((session) => {
   window.location.reload();
 });
 
-elements.languageToggle.addEventListener("click", () => {
-  persistSettings({ showJapanese: !state.settings.showJapanese });
+elements.languageToggle.addEventListener("change", () => {
+  const languageMode = elements.languageToggle.value;
+  persistSettings({ languageMode, showJapanese: languageMode !== "en" });
   elements.lessonSummaryJa.hidden = !state.settings.showJapanese;
+  renderLessonGuide();
   renderQuestion();
 });
 elements.soundToggle.addEventListener("click", () => {
@@ -1243,6 +1363,10 @@ elements.voiceSelect.addEventListener("change", () => {
   stopAudio();
   persistSettings({ voice: elements.voiceSelect.value });
   renderQuestion();
+});
+elements.playbackRate.addEventListener("change", () => {
+  stopAudio();
+  persistSettings({ playbackRate: Number(elements.playbackRate.value) });
 });
 elements.checkModeButtons.forEach((button) => {
   button.addEventListener("click", () => persistSettings({ checkMode: button.dataset.check }));
@@ -1324,4 +1448,5 @@ window.addEventListener("keydown", (event) => {
   if (event.key === "ArrowRight") elements.nextQuestion.click();
 });
 
+installPlayfulInteractions();
 initialiseLesson();

@@ -8,10 +8,11 @@ Test date: **July 30, 2026**
   recorded SHA-256 hashes.
 - All six original lessons and all **143 original activities** are present with
   stable IDs.
-- All **78 added activities** and **264 private draft activities** are present.
+- All **78 added activities** and **264 Notion-derived activities** are present.
 - The complete reviewed source contains **485 activities in 14 formats**.
 - The production build excludes `notion-drafts.json` and `curriculum.js`.
-- The public route catalogue contains only the six reviewed legacy lessons.
+- The public route catalogue contains all 17 reviewed lessons after the v9
+  publication decision.
 - The Netlify lesson redirect preserves the requested lesson slug.
 - The shipped anonymous private-hub HTML does not contain the learner’s display
   name; it is inserted only after an authorised profile check.
@@ -35,16 +36,16 @@ Verified live counts:
 | Check | Result |
 |---|---:|
 | All Review Hub lessons | 17 |
-| Published lessons | 6 |
-| Private drafts | 11 |
+| Published to both audiences | 17 |
+| Remaining private drafts | 0 |
 | All active activities | 485 |
-| Public activities | 221 |
-| Private draft activities | 264 |
+| Public activities | 485 |
+| Published July 7–27 activities | 264 |
 
 Anonymous REST checks:
 
-- `review_public_lessons`: **200**, 6 rows
-- `review_public_questions`: **200**, 221 rows
+- `review_public_lessons`: **200**, 17 rows
+- `review_public_questions`: **200**, 485 rows
 - ten personal/base resources reject anonymous reads
 - private authoring data is absent from the public static build
 
@@ -70,9 +71,10 @@ attempt. The teacher could read it for feedback and analytics.
 
 Local Chromium-based browser checks covered:
 
-- general entrance and six lesson cards
+- general entrance and 17 lesson cards
 - private anonymous gate and authorised private dashboard
-- teacher-only gate, teacher sign-in, 11 drafts, six published lessons, and
+- teacher-only gate, teacher sign-in, 17 published lessons, audience controls,
+  and
   student count excluding teachers
 - Manual and Instant Check
 - first-answer score lock and retry-only results
@@ -80,10 +82,11 @@ Local Chromium-based browser checks covered:
 - partial matching/sorting scoring
 - mistakes-only, unanswered-only, and all-question practice
 - all 14 activity formats
-- English/Japanese display
+- English-only, bilingual, and full Japanese interface modes
 - hint auto-close and keep-open modes
 - answer feedback sounds and vibration feature detection
-- Phrase Library filters, search, favorites, speaking, per-card US/UK audio,
+- Phrase and Vocabulary Library tabs, filters, search, favorites, speaking,
+  per-card US/UK audio and Japanese meaning audio,
   learning notes, practice count, and last-practised date
 - account-scoped local progress, phrase activity, and settings
 - 390 px responsive layout with no horizontal overflow and 44 px controls
@@ -101,13 +104,13 @@ private GitHub repository’s `upgrade/review-hub-v8` branch. The existing
 
 Hosted checks covered:
 
-- six public lessons and 221 public activities
+- 17 public lessons and 485 public activities
 - the short `/lesson/june-28` route and the query-string lesson route
 - Manual Check and first-answer lock
 - the anonymous private-account gate
 - authorised private sign-in, personal history, and history after reload
 - refusal of a second learner account without private-hub scope
-- teacher sign-in, 11 private drafts, six published lessons, and two
+- teacher sign-in, 17 published lessons, audience editing, and two
   non-teacher test learners
 - question-level, format, retry, lesson, speaking, phrase, and session analytics
 - direct learner refusal for the July 27 draft
@@ -128,13 +131,16 @@ The live `natural-speech` Edge Function returned valid `audio/mpeg` for both:
 - American English / Ava: HTTP 200
 - British English / Libby: HTTP 200
 
-The UI also has a browser speech fallback with a clear retry message when the
-natural voice is unavailable.
+No browser/computer speech fallback is used. If natural speech is unavailable,
+the UI gives a clear retry message instead of switching to a mechanical voice.
+
+The live function also returned valid `audio/mpeg` for Japanese / Nanami.
 
 ## Items that require the real learner or a physical device
 
-- A permanent private learner account has not been created because the
-  learner’s email was not supplied.
+- The teacher account can now enter the private hub as a preview learner while
+  retaining teacher authorisation. A separate permanent learner account can
+  still be created later when the learner’s email is supplied.
 - The real learner’s sign-in, password handoff, and history-after-relogin need
   confirmation after that account is created.
 - Browser microphone permission was denied in the automated environment, so

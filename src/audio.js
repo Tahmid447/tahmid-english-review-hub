@@ -5,7 +5,6 @@ const AUDIO_CACHE_LIMIT = 24;
 const remoteAudioCache = new Map();
 let activeAudio = null;
 let activeRequest = null;
-let activeUtterance = null;
 let requestGeneration = 0;
 let activeRecognition = null;
 let activeRecognitionFinish = null;
@@ -37,10 +36,6 @@ const cancelPlayingAudio = () => {
     activeAudio.load();
     activeAudio = null;
   }
-  if (activeUtterance && "speechSynthesis" in window) {
-    window.speechSynthesis.cancel();
-    activeUtterance = null;
-  }
 };
 
 export function stopAudio() {
@@ -52,15 +47,23 @@ export function stopAudio() {
   if (typeof window !== "undefined") cancelPlayingAudio();
 }
 
-const playBlobSource = (source, onStatus, token) => new Promise((resolve, reject) => {
+const playBlobSource = (source, onStatus, token, rate = 1) => new Promise((resolve, reject) => {
   if (token !== requestGeneration) {
     resolve({ played: false, cancelled: true });
     return;
   }
   cancelPlayingAudio();
   const audio = new Audio(source);
+  audio.playbackRate = [0.5, 1, 1.5].includes(Number(rate)) ? Number(rate) : 1;
+  audio.preservesPitch = true;
   activeAudio = audio;
-  audio.onplaying = () => report(onStatus, "playing", "Playing natural voice…", "ナチュラル音声を再生中です。", { source: "edge" });
+  audio.onplaying = () => report(
+    onStatus,
+    "playing",
+    `Playing natural voice at ${audio.playbackRate}×…`,
+    `自然な音声を${audio.playbackRate}倍速で再生中です。`,
+    { source: "edge", rate: audio.playbackRate },
+  );
   audio.onended = () => {
     if (activeAudio === audio) activeAudio = null;
     report(onStatus, "ready", "Ready to play again.", "もう一度再生できます。", { source: "edge" });
@@ -73,59 +76,14 @@ const playBlobSource = (source, onStatus, token) => new Promise((resolve, reject
   audio.play().catch(reject);
 });
 
-const chooseBrowserVoice = (voiceCode) => {
-  const voices = window.speechSynthesis?.getVoices?.() || [];
-  const locale = voiceCode === "gb" ? /^en-GB/i : /^en-US/i;
-  const preferredNames = voiceCode === "gb"
-    ? /libby|serena|kate|female/i
-    : /ava|samantha|susan|female/i;
-  return voices.find((voice) => locale.test(voice.lang) && preferredNames.test(voice.name))
-    || voices.find((voice) => locale.test(voice.lang))
-    || voices.find((voice) => /^en-/i.test(voice.lang))
-    || voices[0]
-    || null;
-};
+const looksJapanese = (text) => /[\u3040-\u30ff\u3400-\u9fff]/u.test(text);
 
-const browserSpeechFallback = (text, voiceCode, onStatus, token) => new Promise((resolve, reject) => {
-  if (token !== requestGeneration) {
-    resolve({ played: false, cancelled: true });
-    return;
-  }
-  if (typeof window === "undefined" || !("speechSynthesis" in window)) {
-    reject(new Error("Speech playback is not supported in this browser."));
-    return;
-  }
-  cancelPlayingAudio();
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = voiceCode === "gb" ? "en-GB" : "en-US";
-  utterance.rate = 0.84;
-  utterance.pitch = 1;
-  const voice = chooseBrowserVoice(voiceCode);
-  if (voice) utterance.voice = voice;
-  activeUtterance = utterance;
-  utterance.onstart = () => report(
-    onStatus,
-    "playing",
-    "Playing the browser voice.",
-    "ブラウザ音声を再生中です。",
-    { source: "browser" },
-  );
-  utterance.onend = () => {
-    if (activeUtterance === utterance) activeUtterance = null;
-    report(onStatus, "ready", "Ready to play again.", "もう一度再生できます。", { source: "browser" });
-    resolve({ played: true, source: "browser" });
-  };
-  utterance.onerror = (event) => {
-    if (activeUtterance === utterance) activeUtterance = null;
-    reject(new Error(event.error || "Browser speech playback failed."));
-  };
-  window.speechSynthesis.speak(utterance);
-});
-
-export async function speakText(text, { voice, onStatus } = {}) {
+export async function speakText(text, { voice, language, onStatus } = {}) {
   const cleanText = String(text ?? "").trim();
   const settings = getSettings();
-  const voiceCode = voice === "gb" || (!voice && settings.voice === "gb") ? "gb" : "us";
+  const voiceCode = language === "ja" || (!language && looksJapanese(cleanText))
+    ? "ja"
+    : (voice === "gb" || (!voice && settings.voice === "gb") ? "gb" : "us");
   if (!cleanText) {
     report(onStatus, "error", "There is no sentence to play.", "再生する英文がありません。");
     return { played: false, reason: "empty" };
@@ -137,11 +95,18 @@ export async function speakText(text, { voice, onStatus } = {}) {
 
   stopAudio();
   const token = requestGeneration;
-  const cacheKey = `${voiceCode}:${normalizeAnswerText(cleanText)}`;
+  const cacheKey = `${voiceCode}:${cleanText.normalize("NFKC").toLocaleLowerCase()}`;
   try {
     let source = remoteAudioCache.get(cacheKey);
     if (!source && NATURAL_SPEECH_URL && SUPABASE_ANON_KEY && typeof fetch === "function") {
-      report(onStatus, "loading", "Preparing Ava / Libby natural voice…", "Ava / Libby のナチュラル音声を準備中です。", { source: "edge" });
+      const voiceName = voiceCode === "ja" ? "Nanami" : voiceCode === "gb" ? "Libby" : "Ava";
+      report(
+        onStatus,
+        "loading",
+        `Preparing ${voiceName} natural voice…`,
+        `${voiceName}の自然な音声を準備中です。`,
+        { source: "edge", voice: voiceCode },
+      );
       const controller = new AbortController();
       activeRequest = controller;
       const timeout = setTimeout(() => controller.abort(), 12000);
@@ -167,7 +132,7 @@ export async function speakText(text, { voice, onStatus } = {}) {
       }
     }
     if (source && token === requestGeneration) {
-      return await playBlobSource(source, onStatus, token);
+      return await playBlobSource(source, onStatus, token, settings.playbackRate);
     }
   } catch (error) {
     if (error?.name === "AbortError" && token !== requestGeneration) {
@@ -175,25 +140,13 @@ export async function speakText(text, { voice, onStatus } = {}) {
     }
     report(
       onStatus,
-      "fallback",
-      "Natural voice is unavailable. Trying the browser voice…",
-      "ナチュラル音声を使えないため、ブラウザ音声を試します。",
-      { error: error?.message || String(error) },
-    );
-  }
-
-  try {
-    return await browserSpeechFallback(cleanText, voiceCode, onStatus, token);
-  } catch (error) {
-    report(
-      onStatus,
       "error",
-      "Audio could not be played. Please try again.",
-      "音声を再生できませんでした。もう一度お試しください。",
+      "Natural voice is temporarily unavailable. No computer voice will be used. Please try again.",
+      "自然な音声を一時的に利用できません。機械音声には切り替えません。もう一度お試しください。",
       { error: error?.message || String(error) },
     );
-    return { played: false, reason: "unavailable", error };
   }
+  return { played: false, reason: "natural-voice-unavailable" };
 }
 
 export function playAnswerFeedback(correct) {

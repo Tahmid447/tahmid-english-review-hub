@@ -6277,7 +6277,9 @@
             "jp": "彼のせいで不安になっています。"
           }
         ],
-        "correct": "a"
+        "correct": "a",
+        "image": "/assets/questions/july-25-feelings.png",
+        "imageAlt": "A learner looks irritated by repeated phone notifications."
       },
       {
         "id": "july-25-draft-choice-4",
@@ -7004,7 +7006,9 @@
             "jp": "もう朝食を食べました。"
           }
         ],
-        "correct": "a"
+        "correct": "a",
+        "image": "/assets/questions/july-26-wish.png",
+        "imageAlt": "A person in a rainy room imagines being in sunny Malaysia."
       },
       {
         "id": "july-26-draft-choice-3",
@@ -7727,7 +7731,9 @@
             "jp": "コーヒーは慣れると好きになる味です。"
           }
         ],
-        "correct": "a"
+        "correct": "a",
+        "image": "/assets/questions/july-27-spill.png",
+        "imageAlt": "A person accidentally spills coffee on a shirt and table."
       },
       {
         "id": "july-27-draft-choice-2",

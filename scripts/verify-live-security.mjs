@@ -40,16 +40,16 @@ const protectedResults = await Promise.all(
 );
 
 const failures = [];
-if (publicLessons.status !== 200 || publicLessons.rows?.length !== 6) {
+if (publicLessons.status !== 200 || publicLessons.rows?.length !== 17) {
   failures.push(
-    `Expected 6 public lessons; received status ${publicLessons.status} and ${
+    `Expected 17 public lessons; received status ${publicLessons.status} and ${
       Array.isArray(publicLessons.rows) ? publicLessons.rows.length : "no"
     } rows.`,
   );
 }
-if (publicQuestions.status !== 200 || publicQuestions.rows?.length !== 221) {
+if (publicQuestions.status !== 200 || publicQuestions.rows?.length !== 485) {
   failures.push(
-    `Expected 221 public questions; received status ${publicQuestions.status} and ${
+    `Expected 485 public questions; received status ${publicQuestions.status} and ${
       Array.isArray(publicQuestions.rows) ? publicQuestions.rows.length : "no"
     } rows.`,
   );
@@ -68,8 +68,8 @@ if (failures.length) {
   process.exitCode = 1;
 } else {
   console.log("Live Supabase security verification passed.");
-  console.log("  ✓ 6 published public lessons");
-  console.log("  ✓ 221 published public activities");
+  console.log("  ✓ 17 published public lessons");
+  console.log("  ✓ 485 published public activities");
   console.log(
     `  ✓ ${protectedResults.length} personal/base resources reject anonymous reads`,
   );

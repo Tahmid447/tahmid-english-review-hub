@@ -14,9 +14,10 @@
       <span class="brand-mark">TE</span><span><strong>Review Hub</strong><small>Back to lessons</small></span>
     </a>
     <nav class="header-actions">
-      <button class="quiet-btn" id="languageToggle" type="button">EN / JP</button>
-      <button class="quiet-btn" id="soundToggle" type="button">Sound On</button>
-      <label class="voice-select">Voice<select id="voiceSelect"><option value="us">US · Ava</option><option value="gb">UK · Libby</option></select></label>
+      <label class="voice-select"><span data-ui-en="Language" data-ui-ja="表示">Language / 表示</span><select id="languageToggle"><option value="en">English</option><option value="bilingual">English + 日本語</option><option value="ja">日本語UI</option></select></label>
+      <button class="quiet-btn" id="soundToggle" type="button" data-ui-en="Sound On" data-ui-ja="音声オン">Sound On / 音声オン</button>
+      <label class="voice-select"><span data-ui-en="Voice" data-ui-ja="英語音声">Voice / 英語音声</span><select id="voiceSelect"><option value="us">US · Ava</option><option value="gb">UK · Libby</option></select></label>
+      <label class="voice-select"><span data-ui-en="Speed" data-ui-ja="速さ">Speed / 速さ</span><select id="playbackRate"><option value="0.5">0.5×</option><option value="1">1×</option><option value="1.5">1.5×</option></select></label>
     </nav>
   </header>
 
@@ -29,24 +30,29 @@
         <p class="jp" id="lessonSummaryJa"></p>
       </div>
       <div class="lesson-mode">
-        <label>Practice set<select id="practiceMode"><option value="all">All questions</option><option value="original">Original Review</option><option value="extra">Listen & Speak</option><option value="wrong">Mistakes only</option><option value="unanswered">Unanswered only</option></select></label>
-        <button class="secondary-btn" id="shuffleQuestions" type="button">Shuffle questions</button>
+        <label><span data-ui-en="Practice set" data-ui-ja="練習セット">Practice set / 練習セット</span><select id="practiceMode"><option value="all">All questions / 全問題</option><option value="original">Original Review / 元の復習</option><option value="extra">Listen & Speak / 聞く・話す</option><option value="wrong">Mistakes only / 間違いだけ</option><option value="unanswered">Unanswered only / 未回答だけ</option></select></label>
+        <button class="secondary-btn" id="shuffleQuestions" type="button" data-ui-en="Shuffle questions" data-ui-ja="問題順をシャッフル">Shuffle questions / 問題順をシャッフル</button>
       </div>
     </section>
 
+    <details class="lesson-guide" id="lessonGuide">
+      <summary><span data-ui-en="Lesson Guide" data-ui-ja="今日のレッスン内容">Lesson Guide / 今日のレッスン内容</span><small data-ui-en="Review before or after the quiz" data-ui-ja="問題の前後に確認できます">Review before or after the quiz</small></summary>
+      <div id="lessonGuideContent"></div>
+    </details>
+
     <section class="quiz-toolbar" aria-label="Quiz settings">
       <div class="segmented" role="group" aria-label="Checking mode">
-        <button class="active" data-check="manual" type="button">Manual Check</button>
-        <button data-check="instant" type="button">Instant Check</button>
+        <button class="active" data-check="manual" type="button" data-ui-en="Manual Check" data-ui-ja="自分で確認">Manual Check / 自分で確認</button>
+        <button data-check="instant" type="button" data-ui-en="Instant Check" data-ui-ja="すぐ採点">Instant Check / すぐ採点</button>
       </div>
-      <label class="toggle-label"><input id="shuffleChoices" type="checkbox"> Shuffle choices</label>
+      <label class="toggle-label"><input id="shuffleChoices" type="checkbox"> <span data-ui-en="Shuffle choices" data-ui-ja="選択肢をシャッフル">Shuffle choices / 選択肢をシャッフル</span></label>
       <div class="segmented hint-mode-toggle" role="group" aria-label="Hint behaviour">
-        <button class="active" data-hint-mode="auto" type="button">Hint · Auto-close</button>
-        <button data-hint-mode="manual" type="button">Hint · Keep open</button>
+        <button class="active" data-hint-mode="auto" type="button" data-ui-en="Hint · Auto-close" data-ui-ja="ヒント・自動で閉じる">Hint · Auto-close / ヒント・自動で閉じる</button>
+        <button data-hint-mode="manual" type="button" data-ui-en="Hint · Keep open" data-ui-ja="ヒント・開いたまま">Hint · Keep open / ヒント・開いたまま</button>
       </div>
-      <button class="quiet-btn" id="vibrationToggle" type="button">Vibration On</button>
-      <button class="quiet-btn" id="checkAnswered" type="button">Check answered</button>
-      <span class="score-pill" id="scorePill">First score 0 / 0</span>
+      <button class="quiet-btn" id="vibrationToggle" type="button" data-ui-en="Vibration On" data-ui-ja="振動オン">Vibration On / 振動オン</button>
+      <button class="quiet-btn" id="checkAnswered" type="button" data-ui-en="Check answered" data-ui-ja="回答済みを採点">Check answered / 回答済みを採点</button>
+      <span class="score-pill" id="scorePill">First score / 初回スコア 0 / 0</span>
     </section>
 
     <nav class="question-nav" id="questionNav" aria-label="Question numbers"></nav>
@@ -55,25 +61,25 @@
       <div class="question-topline"><span id="questionType">Question</span><span id="questionCounter">1 / 1</span></div>
       <article id="questionCard" class="question-card" aria-live="polite"></article>
       <details class="hint-box" id="hintBox">
-        <summary><span>Hint / ヒント</span><span class="hint-countdown" id="hintCountdown"></span></summary>
+        <summary><span data-ui-en="Hint" data-ui-ja="ヒント">Hint / ヒント</span><span class="hint-countdown" id="hintCountdown"></span></summary>
         <div id="hintContent"></div>
       </details>
       <div class="feedback-card" id="feedbackCard" hidden></div>
       <div class="question-actions">
-        <button class="secondary-btn" id="previousQuestion" type="button">Previous</button>
-        <button class="primary-btn" id="checkQuestion" type="button">Check this question</button>
-        <button class="secondary-btn" id="nextQuestion" type="button">Next</button>
+        <button class="secondary-btn" id="previousQuestion" type="button" data-ui-en="Previous" data-ui-ja="前へ">Previous / 前へ</button>
+        <button class="primary-btn" id="checkQuestion" type="button" data-ui-en="Check this question" data-ui-ja="この問題を採点">Check this question / この問題を採点</button>
+        <button class="secondary-btn" id="nextQuestion" type="button" data-ui-en="Next" data-ui-ja="次へ">Next / 次へ</button>
       </div>
     </section>
 
     <section class="result-panel" id="resultPanel" hidden>
-      <p class="eyebrow">Practice complete</p>
+      <p class="eyebrow" data-ui-en="Practice complete" data-ui-ja="練習完了">Practice complete</p>
       <h2 id="resultHeading">Nice work.</h2>
       <p id="resultSummary"></p>
       <div class="result-actions">
-        <button class="primary-btn" data-retry="wrong" type="button">Practice mistakes</button>
-        <button class="secondary-btn" data-retry="unanswered" type="button">Practice unanswered</button>
-        <button class="secondary-btn" data-retry="all" type="button">Practise all again</button>
+        <button class="primary-btn" data-retry="wrong" type="button" data-ui-en="Practice mistakes" data-ui-ja="間違いを練習">Practice mistakes</button>
+        <button class="secondary-btn" data-retry="unanswered" type="button" data-ui-en="Practice unanswered" data-ui-ja="未回答を練習">Practice unanswered</button>
+        <button class="secondary-btn" data-retry="all" type="button" data-ui-en="Practise all again" data-ui-ja="すべてもう一度">Practise all again</button>
       </div>
     </section>
   </main>

@@ -111,6 +111,70 @@ const databaseQuestion = (row = {}) => {
   };
 };
 
+export async function fetchDatabaseLessons({ audience = "general" } = {}) {
+  const client = getStudentClient();
+  if (!client) return { lessons: null, reason: "client-unavailable" };
+  const authenticated = Boolean((await getStudentSession())?.user);
+  const lessonTable = audience === "general" || !authenticated
+    ? "review_public_lessons"
+    : "review_lessons";
+  const questionTable = audience === "general" || !authenticated
+    ? "review_public_questions"
+    : "review_questions";
+  let lessonQuery = client
+    .from(lessonTable)
+    .select("id,slug,lesson_date,title_en,title_ja,summary_en,summary_ja,status,audience,content_version,content")
+    .eq("status", "published")
+    .order("lesson_date", { ascending: true });
+  if (lessonTable === "review_lessons") {
+    if (audience === "takiwaki") lessonQuery = lessonQuery.in("audience", ["takiwaki", "both"]);
+    if (audience === "general") lessonQuery = lessonQuery.in("audience", ["general", "both"]);
+  }
+  const { data: lessonRows, error: lessonError } = await lessonQuery;
+  if (lessonError) return { lessons: null, reason: "lesson-query-failed", error: lessonError };
+  if (!lessonRows?.length) return { lessons: [], reason: null };
+
+  let questionQuery = client
+    .from(questionTable)
+    .select("id,lesson_id,stable_key,position,section,format,payload,is_original,points")
+    .in("lesson_id", lessonRows.map((lesson) => lesson.id))
+    .order("position", { ascending: true });
+  if (questionTable === "review_questions") questionQuery = questionQuery.eq("active", true);
+  const { data: questionRows, error: questionError } = await questionQuery;
+  if (questionError) return { lessons: null, reason: "question-query-failed", error: questionError };
+  const questionsByLesson = new Map();
+  (questionRows || []).forEach((question) => {
+    const current = questionsByLesson.get(question.lesson_id) || [];
+    current.push(databaseQuestion(question));
+    questionsByLesson.set(question.lesson_id, current);
+  });
+
+  return {
+    lessons: lessonRows.map((lesson) => {
+      const content = lesson.content && typeof lesson.content === "object" && !Array.isArray(lesson.content)
+        ? lesson.content
+        : {};
+      return {
+        id: lesson.slug,
+        databaseLessonId: lesson.id,
+        lessonDate: lesson.lesson_date,
+        title: lesson.title_en,
+        titleJa: lesson.title_ja || "",
+        summary: lesson.summary_en || "",
+        summaryJa: lesson.summary_ja || "",
+        status: lesson.status,
+        audience: lesson.audience,
+        contentVersion: lesson.content_version,
+        themes: Array.isArray(content.themes) ? content.themes : [],
+        phrases: Array.isArray(content.phrases) ? content.phrases : [],
+        notes: content.notes && typeof content.notes === "object" ? content.notes : {},
+        questions: questionsByLesson.get(lesson.id) || [],
+      };
+    }),
+    reason: null,
+  };
+}
+
 export async function fetchDatabaseLesson(lessonSlug, { preview = false } = {}) {
   const slug = String(lessonSlug || "").trim();
   if (!slug) return { lesson: null, reason: "missing-lesson" };

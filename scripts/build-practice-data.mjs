@@ -387,6 +387,30 @@ function makeDraftQuestions(lesson) {
   if (result.length !== 24) {
     throw new Error(`${lesson.id} generated ${result.length} questions instead of 24`);
   }
+  const illustration = {
+    "july-25": {
+      questionId: "july-25-draft-choice-3",
+      image: "/assets/questions/july-25-feelings.png",
+      imageAlt: "A learner looks irritated by repeated phone notifications.",
+    },
+    "july-26": {
+      questionId: "july-26-draft-choice-2",
+      image: "/assets/questions/july-26-wish.png",
+      imageAlt: "A person in a rainy room imagines being in sunny Malaysia.",
+    },
+    "july-27": {
+      questionId: "july-27-draft-choice-1",
+      image: "/assets/questions/july-27-spill.png",
+      imageAlt: "A person accidentally spills coffee on a shirt and table.",
+    },
+  }[lesson.id];
+  if (illustration) {
+    const question = result.find((item) => item.id === illustration.questionId);
+    if (question) {
+      question.image = illustration.image;
+      question.imageAlt = illustration.imageAlt;
+    }
+  }
   return result;
 }
 
