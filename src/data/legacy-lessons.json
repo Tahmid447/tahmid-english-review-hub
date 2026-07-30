@@ -1,0 +1,5714 @@
+[
+  {
+    "id": "july-04",
+    "lessonDate": "2026-07-04",
+    "title": "Everyday English: When Life Happens",
+    "takiTitle": "Daily Life Survival English",
+    "summary": "Today's mission: use real-life phrases for unavoidable situations, danger, feelings, gratitude, and tiny grammar choices.",
+    "summaryJa": "actually、avoid、事故、感謝、might / may など日常で役立つ英語を復習します。",
+    "status": "published",
+    "audience": "both",
+    "sourceType": "legacy_zip",
+    "sourcePath": "legacy-site/lessons/july-04/index.html",
+    "contentVersion": 1,
+    "categoryLabels": {
+      "core": {
+        "en": "Actually / avoid",
+        "jp": "実は・避ける"
+      },
+      "unavoidable": {
+        "en": "Unavoidable situations",
+        "jp": "やむを得ない状況"
+      },
+      "danger": {
+        "en": "Accident & danger English",
+        "jp": "事故・危険の英語"
+      },
+      "feelings": {
+        "en": "Real feelings",
+        "jp": "本音・気持ちの英語"
+      },
+      "intention": {
+        "en": "On purpose / intention",
+        "jp": "わざと・意図"
+      },
+      "gratitude": {
+        "en": "Gratitude & replies",
+        "jp": "感謝と返事"
+      },
+      "grammar": {
+        "en": "Tiny grammar choices",
+        "jp": "小さな文法の違い"
+      },
+      "builder": {
+        "en": "Sentence Builder",
+        "jp": "文を組み立てる練習"
+      },
+      "mixed": {
+        "en": "Mixed survival review",
+        "jp": "総復習"
+      }
+    },
+    "originalQuestionCount": 27,
+    "questions": [
+      {
+        "id": "july-04-original-q1",
+        "type": "situation",
+        "cat": "core",
+        "situationQuote": {
+          "en": "You want to tell the real reason softly before giving new information."
+        },
+        "prompt": {
+          "en": "Which word naturally means 「実は」 at the beginning of a sentence?",
+          "jp": "文の最初で「実は」と自然に言いたい時、どれを使いますか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "Actually",
+            "jp": "実は / 実際は"
+          },
+          {
+            "id": "b",
+            "en": "Always",
+            "jp": "いつも / 常に"
+          },
+          {
+            "id": "c",
+            "en": "Avoid",
+            "jp": "避ける"
+          },
+          {
+            "id": "d",
+            "en": "Gratitude",
+            "jp": "感謝"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "It often starts a sentence when you share the real information.",
+          "jp": "本当の情報を言う時、文の最初によく使います。"
+        },
+        "explanation": {
+          "en": "“Actually” is natural for adding true or slightly surprising information: “Actually, I’m a little tired today.”",
+          "jp": "“Actually” は「実は」と本当のことを言う時に自然です。例：Actually, I’m a little tired today."
+        },
+        "legacyId": "q1",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-04-original-q2",
+        "type": "mcq",
+        "cat": "core",
+        "prompt": {
+          "en": "Which sentence is grammatically natural?",
+          "jp": "文法的に自然なのはどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "I avoid driving when I’m tired.",
+            "jp": "疲れている時は運転を避けます。"
+          },
+          {
+            "id": "b",
+            "en": "I avoid to drive when I’m tired.",
+            "jp": "avoid to do は不自然です。"
+          },
+          {
+            "id": "c",
+            "en": "I avoid drive when I’m tired.",
+            "jp": "動詞の形が不自然です。"
+          },
+          {
+            "id": "d",
+            "en": "I avoiding driving when I’m tired.",
+            "jp": "be 動詞がないので不自然です。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "After avoid, use a noun or -ing.",
+          "jp": "avoid の後は名詞か ing 形です。"
+        },
+        "explanation": {
+          "en": "Use “avoid + -ing”: I avoid driving, avoid eating, avoid using difficult words.",
+          "jp": "avoid の後は “driving / eating / using” のように ing 形が自然です。"
+        },
+        "legacyId": "q2",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-04-original-q3",
+        "type": "mcq",
+        "cat": "core",
+        "prompt": {
+          "en": "True or False: “avoid to do” is the normal pattern in English.",
+          "jp": "True or False：“avoid to do” は普通の英語の形です。"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "True",
+            "jp": "正しい"
+          },
+          {
+            "id": "b",
+            "en": "False",
+            "jp": "違う"
+          }
+        ],
+        "correct": "b",
+        "hint": {
+          "en": "Think: avoid doing.",
+          "jp": "avoid doing を思い出しましょう。"
+        },
+        "explanation": {
+          "en": "False. The natural pattern is “avoid doing,” not “avoid to do.”",
+          "jp": "False です。自然なのは “avoid doing” で、“avoid to do” ではありません。"
+        },
+        "legacyId": "q3",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-04-original-q4",
+        "type": "situation",
+        "cat": "unavoidable",
+        "situationQuote": {
+          "en": "The train was cancelled, and there is nothing you can change now."
+        },
+        "prompt": {
+          "en": "Which phrase fits best?",
+          "jp": "この場面に一番合う表現はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "It can’t be helped.",
+            "jp": "仕方ない / やむを得ない。"
+          },
+          {
+            "id": "b",
+            "en": "I’m the sleepiest.",
+            "jp": "私が一番眠い。"
+          },
+          {
+            "id": "c",
+            "en": "Did you do that on purpose?",
+            "jp": "それわざとやったの？"
+          },
+          {
+            "id": "d",
+            "en": "Actually, I like coffee.",
+            "jp": "実はコーヒーが好きです。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "Use this when you accept a situation you cannot change.",
+          "jp": "変えられない状況を受け入れる時の表現です。"
+        },
+        "explanation": {
+          "en": "“It can’t be helped” means 仕方ない or やむを得ない.",
+          "jp": "“It can’t be helped.” は「仕方ない / やむを得ない」という意味です。"
+        },
+        "legacyId": "q4",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-04-original-q5",
+        "type": "mcq",
+        "cat": "unavoidable",
+        "prompt": {
+          "en": "Which phrase means 「選択肢がない / そうするしかない」?",
+          "jp": "「選択肢がない / そうするしかない」はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "I have no choice.",
+            "jp": "選択肢がない。"
+          },
+          {
+            "id": "b",
+            "en": "I have no purpose.",
+            "jp": "目的がない、という意味になります。"
+          },
+          {
+            "id": "c",
+            "en": "I have no sleepy.",
+            "jp": "不自然です。"
+          },
+          {
+            "id": "d",
+            "en": "I have no mention.",
+            "jp": "不自然です。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "Choice = 選択肢.",
+          "jp": "choice は「選択肢」です。"
+        },
+        "explanation": {
+          "en": "“I have no choice” is natural when you must do something even if you do not really want to.",
+          "jp": "“I have no choice.” は、したくなくても他に選択肢がない時に自然です。"
+        },
+        "legacyId": "q5",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-04-original-q6",
+        "type": "situation",
+        "cat": "unavoidable",
+        "situationQuote": {
+          "en": "You missed an event because an unexpected problem happened."
+        },
+        "prompt": {
+          "en": "What is the most natural casual explanation?",
+          "jp": "急な事情で行けなかった時、カジュアルで自然な説明はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "Something came up, so I couldn’t make it.",
+            "jp": "急な事情があって行けませんでした。"
+          },
+          {
+            "id": "b",
+            "en": "Something went down, so I couldn’t make it.",
+            "jp": "この意味では不自然です。"
+          },
+          {
+            "id": "c",
+            "en": "Something became, so I couldn’t go.",
+            "jp": "文として不自然です。"
+          },
+          {
+            "id": "d",
+            "en": "I was always, so I couldn’t make it.",
+            "jp": "意味が通りません。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "“Came up” means something unexpected happened.",
+          "jp": "came up は「急なことが起きた」という意味で使えます。"
+        },
+        "explanation": {
+          "en": "“Something came up” is a very natural way to avoid giving too many personal details.",
+          "jp": "“Something came up.” は、詳しく言いすぎず「急な事情があった」と言える自然な表現です。"
+        },
+        "legacyId": "q6",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-04-original-q7",
+        "type": "mcq",
+        "cat": "unavoidable",
+        "prompt": {
+          "en": "Which version sounds more formal and polite?",
+          "jp": "よりフォーマルで丁寧に聞こえるのはどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "Due to unavoidable circumstances, I couldn’t attend.",
+            "jp": "やむを得ない事情により、参加できませんでした。"
+          },
+          {
+            "id": "b",
+            "en": "I don’t want to get old.",
+            "jp": "歳とりたくない。"
+          },
+          {
+            "id": "c",
+            "en": "Don’t mention it.",
+            "jp": "いえいえ。"
+          },
+          {
+            "id": "d",
+            "en": "I’m just sitting here.",
+            "jp": "ただ座ってるだけ。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "Formal emails often use “Due to... circumstances.”",
+          "jp": "丁寧なメールでは “Due to... circumstances” がよく合います。"
+        },
+        "explanation": {
+          "en": "This phrase is more formal than “Something came up.”",
+          "jp": "これは “Something came up.” よりフォーマルで丁寧な表現です。"
+        },
+        "legacyId": "q7",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-04-original-q8",
+        "type": "mcq",
+        "cat": "danger",
+        "prompt": {
+          "en": "Mistake Detective: Which phrase is unnatural for 「事故を起こす / 事故に遭う」?",
+          "jp": "ミス発見：「事故を起こす / 事故に遭う」で不自然なのはどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "make an accident",
+            "jp": "不自然です。"
+          },
+          {
+            "id": "b",
+            "en": "have an accident",
+            "jp": "自然です。"
+          },
+          {
+            "id": "c",
+            "en": "get into an accident",
+            "jp": "自然です。"
+          },
+          {
+            "id": "d",
+            "en": "crash",
+            "jp": "自然です。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "In English, you do not usually “make” an accident.",
+          "jp": "英語では普通 “make an accident” とは言いません。"
+        },
+        "explanation": {
+          "en": "Say “have an accident,” “get into an accident,” or “crash.”",
+          "jp": "“have an accident,” “get into an accident,” “crash” が自然です。"
+        },
+        "legacyId": "q8",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-04-original-q9",
+        "type": "situation",
+        "cat": "danger",
+        "situationQuote": {
+          "en": "You are driving on a scary highway. The cars are very fast."
+        },
+        "prompt": {
+          "en": "Choose the natural sentence.",
+          "jp": "自然な文を選んでください。"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "If I crashed on this highway, I’d be dead for sure.",
+            "jp": "この高速で事故ったら、確実に死んでるわ。"
+          },
+          {
+            "id": "b",
+            "en": "If I made an accident, I’m sleepy for sure.",
+            "jp": "意味も文法も不自然です。"
+          },
+          {
+            "id": "c",
+            "en": "If I avoid on this highway, I’d gratitude.",
+            "jp": "文として不自然です。"
+          },
+          {
+            "id": "d",
+            "en": "If I purpose on this highway, I’d old.",
+            "jp": "文として不自然です。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "Crash = 事故る / 衝突する.",
+          "jp": "crash は「事故る / 衝突する」です。"
+        },
+        "explanation": {
+          "en": "This is a casual but powerful way to describe a dangerous road.",
+          "jp": "危険な道路について言う時、カジュアルでリアルな表現です。"
+        },
+        "legacyId": "q9",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-04-original-q10",
+        "type": "mcq",
+        "cat": "feelings",
+        "prompt": {
+          "en": "Which sentence means 「歳とりたくない」?",
+          "jp": "「歳とりたくない」はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "I don’t want to get old.",
+            "jp": "歳とりたくない。"
+          },
+          {
+            "id": "b",
+            "en": "I don’t want to be always.",
+            "jp": "不自然です。"
+          },
+          {
+            "id": "c",
+            "en": "I don’t want to appreciate.",
+            "jp": "感謝したくない、という変な意味です。"
+          },
+          {
+            "id": "d",
+            "en": "I don’t want to mention.",
+            "jp": "この場面では不自然です。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "get old = 年を取る.",
+          "jp": "get old は「年を取る」です。"
+        },
+        "explanation": {
+          "en": "“I don’t want to get old” is simple and very natural.",
+          "jp": "“I don’t want to get old.” はシンプルで自然です。"
+        },
+        "legacyId": "q10",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-04-original-q11",
+        "type": "situation",
+        "cat": "feelings",
+        "situationQuote": {
+          "en": "Someone thinks you are doing something special, but you are doing nothing special."
+        },
+        "prompt": {
+          "en": "Which sentence fits 「ただ座ってるだけだけどね」?",
+          "jp": "「ただ座ってるだけだけどね」に合う文はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "I’m just sitting here, though.",
+            "jp": "ただ座ってるだけだけどね。"
+          },
+          {
+            "id": "b",
+            "en": "I’m just avoiding here, though.",
+            "jp": "ここでは不自然です。"
+          },
+          {
+            "id": "c",
+            "en": "I’m just gratitude here, though.",
+            "jp": "文として不自然です。"
+          },
+          {
+            "id": "d",
+            "en": "I’m just purpose here, though.",
+            "jp": "文として不自然です。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "Use the present continuous: I’m sitting.",
+          "jp": "今していることなので I’m sitting を使います。"
+        },
+        "explanation": {
+          "en": "Adding “though” at the end gives a natural 「だけどね」 feeling.",
+          "jp": "最後に though をつけると「だけどね」という自然な感じになります。"
+        },
+        "legacyId": "q11",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-04-original-q12",
+        "type": "mcq",
+        "cat": "intention",
+        "prompt": {
+          "en": "Which phrase means 「わざと」 in everyday conversation?",
+          "jp": "日常会話で「わざと」はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "on purpose",
+            "jp": "わざと"
+          },
+          {
+            "id": "b",
+            "en": "on sleepy",
+            "jp": "不自然です。"
+          },
+          {
+            "id": "c",
+            "en": "on gratitude",
+            "jp": "不自然です。"
+          },
+          {
+            "id": "d",
+            "en": "on always",
+            "jp": "不自然です。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "Purpose = 目的. On purpose = intentionally.",
+          "jp": "purpose は目的。on purpose は「わざと」です。"
+        },
+        "explanation": {
+          "en": "“on purpose” is the most useful everyday phrase for わざと.",
+          "jp": "“on purpose” は「わざと」の日常会話で一番使いやすい表現です。"
+        },
+        "legacyId": "q12",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-04-original-q13",
+        "type": "mcq",
+        "cat": "intention",
+        "prompt": {
+          "en": "Fix-It Challenge: Choose the natural question for 「それわざとやったの？」",
+          "jp": "修正チャレンジ：「それわざとやったの？」の自然な英語はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "Did you do that on purpose?",
+            "jp": "それわざとやったの？"
+          },
+          {
+            "id": "b",
+            "en": "Did you do that on gratitude?",
+            "jp": "不自然です。"
+          },
+          {
+            "id": "c",
+            "en": "Were you do that on purpose?",
+            "jp": "文法が不自然です。"
+          },
+          {
+            "id": "d",
+            "en": "Did you that purpose?",
+            "jp": "文法が不自然です。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "Past question: Did you + base verb.",
+          "jp": "過去の質問は Did you + 動詞の原形です。"
+        },
+        "explanation": {
+          "en": "“Did you do that on purpose?” is the natural daily phrase.",
+          "jp": "“Did you do that on purpose?” が自然な日常表現です。"
+        },
+        "legacyId": "q13",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-04-original-q14",
+        "type": "mcq",
+        "cat": "gratitude",
+        "prompt": {
+          "en": "Which word is a noun meaning 「感謝 / 感謝の気持ち」?",
+          "jp": "名詞で「感謝 / 感謝の気持ち」はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "gratitude",
+            "jp": "感謝 / 感謝の気持ち"
+          },
+          {
+            "id": "b",
+            "en": "grateful",
+            "jp": "形容詞：感謝している"
+          },
+          {
+            "id": "c",
+            "en": "appreciate",
+            "jp": "動詞：感謝する"
+          },
+          {
+            "id": "d",
+            "en": "purpose",
+            "jp": "目的"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "A noun names a person, place, thing, or idea.",
+          "jp": "名詞は、人・場所・もの・考えなどの名前を表します。"
+        },
+        "explanation": {
+          "en": "“gratitude” is the noun. “grateful” is an adjective, and “appreciate” is a verb.",
+          "jp": "“gratitude” は名詞、“grateful” は形容詞、“appreciate” は動詞です。"
+        },
+        "legacyId": "q14",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-04-original-q15",
+        "type": "situation",
+        "cat": "gratitude",
+        "situationQuote": {
+          "en": "Someone helped you a lot, and you want to sound natural and sincere."
+        },
+        "prompt": {
+          "en": "Which phrase is the best daily expression?",
+          "jp": "日常で一番使いやすく自然な感謝表現はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "I really appreciate it.",
+            "jp": "本当にありがとう / 本当に感謝しています。"
+          },
+          {
+            "id": "b",
+            "en": "I really gratitude it.",
+            "jp": "gratitude は名詞なので不自然です。"
+          },
+          {
+            "id": "c",
+            "en": "I really grateful it.",
+            "jp": "grateful は形容詞なので不自然です。"
+          },
+          {
+            "id": "d",
+            "en": "I really purpose it.",
+            "jp": "不自然です。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "appreciate is a verb.",
+          "jp": "appreciate は動詞です。"
+        },
+        "explanation": {
+          "en": "“I really appreciate it” is one of the most useful daily gratitude phrases.",
+          "jp": "“I really appreciate it.” は日常でとても使いやすい感謝表現です。"
+        },
+        "legacyId": "q15",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-04-original-q16",
+        "type": "situation",
+        "cat": "gratitude",
+        "situationQuote": {
+          "en": "A: Thank you for helping me."
+        },
+        "prompt": {
+          "en": "Which reply means 「いえいえ / 気にしないで」?",
+          "jp": "「いえいえ / 気にしないで」という返事はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "Don’t mention it.",
+            "jp": "いえいえ / 気にしないで。"
+          },
+          {
+            "id": "b",
+            "en": "Don’t purpose it.",
+            "jp": "不自然です。"
+          },
+          {
+            "id": "c",
+            "en": "Don’t avoid it.",
+            "jp": "避けないで、という意味です。"
+          },
+          {
+            "id": "d",
+            "en": "Don’t sleepy it.",
+            "jp": "不自然です。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "It is a polite reply to “Thank you.”",
+          "jp": "Thank you への丁寧で自然な返事です。"
+        },
+        "explanation": {
+          "en": "“Don’t mention it” means the person does not need to thank you too much.",
+          "jp": "“Don’t mention it.” は「お礼なんていいよ / 気にしないで」という感じです。"
+        },
+        "legacyId": "q16",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-04-original-q17",
+        "type": "mcq",
+        "cat": "grammar",
+        "prompt": {
+          "en": "Which is the most natural superlative of “sleepy”?",
+          "jp": "sleepy の一番自然な最上級はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "sleepiest",
+            "jp": "一番眠い"
+          },
+          {
+            "id": "b",
+            "en": "most sleepy",
+            "jp": "意味はわかるけど、普通は sleepiest が自然。"
+          },
+          {
+            "id": "c",
+            "en": "sleepyest",
+            "jp": "スペルが違います。"
+          },
+          {
+            "id": "d",
+            "en": "sleepily",
+            "jp": "副詞です。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "sleepy → sleepier → sleepiest.",
+          "jp": "sleepy → sleepier → sleepiest です。"
+        },
+        "explanation": {
+          "en": "The natural form is sleepiest: “This is the sleepiest I’ve ever been.”",
+          "jp": "自然なのは sleepiest です。例：This is the sleepiest I’ve ever been."
+        },
+        "legacyId": "q17",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-04-original-q18",
+        "type": "mcq",
+        "cat": "grammar",
+        "prompt": {
+          "en": "Which sentence sounds most natural in daily conversation?",
+          "jp": "日常会話で一番自然なのはどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "I might be late.",
+            "jp": "遅れるかもしれない。"
+          },
+          {
+            "id": "b",
+            "en": "I may late.",
+            "jp": "be が必要です。"
+          },
+          {
+            "id": "c",
+            "en": "I might to be late.",
+            "jp": "to は不要です。"
+          },
+          {
+            "id": "d",
+            "en": "I might being late.",
+            "jp": "形が不自然です。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "might + base verb / be.",
+          "jp": "might の後は動詞の原形です。"
+        },
+        "explanation": {
+          "en": "“I might be late” is natural and common. “May” can also mean 〜かもしれない, but it sounds a little more formal.",
+          "jp": "“I might be late.” は自然でよく使います。may も使えますが、少し丁寧・硬めです。"
+        },
+        "legacyId": "q18",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-04-original-q19",
+        "type": "mcq",
+        "cat": "grammar",
+        "prompt": {
+          "en": "Which sentence puts “always” in the right place?",
+          "jp": "always の位置が正しい文はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "I am always tired.",
+            "jp": "私はいつも疲れています。"
+          },
+          {
+            "id": "b",
+            "en": "I always am tired.",
+            "jp": "会話では少し不自然です。"
+          },
+          {
+            "id": "c",
+            "en": "I tired always am.",
+            "jp": "語順が不自然です。"
+          },
+          {
+            "id": "d",
+            "en": "Always I am tired.",
+            "jp": "文脈によって可能ですが、普通の語順ではありません。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "With a form of be, always usually comes after the verb.",
+          "jp": "be動詞の後に always を置くのが基本です。"
+        },
+        "explanation": {
+          "en": "With the verb be: I am always tired. With action verbs: I always eat breakfast.",
+          "jp": "be動詞なら I am always tired. 一般動詞なら I always eat breakfast. です。"
+        },
+        "legacyId": "q19",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-04-original-q20",
+        "type": "order",
+        "cat": "builder",
+        "prompt": {
+          "en": "Sentence Builder: Make 「実は、今日は少し疲れています。」",
+          "jp": "文を組み立てましょう：「実は、今日は少し疲れています。」"
+        },
+        "words": [
+          "tired",
+          "Actually,",
+          "a little",
+          "today",
+          "I’m"
+        ],
+        "correctOrder": [
+          1,
+          4,
+          2,
+          0,
+          3
+        ],
+        "hint": {
+          "en": "Start with Actually, then I’m...",
+          "jp": "Actually, で始めて、I’m... と続けます。"
+        },
+        "explanation": {
+          "en": "The natural sentence is “Actually, I’m a little tired today.”",
+          "jp": "自然な文は “Actually, I’m a little tired today.” です。"
+        },
+        "legacyId": "q20",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-04-original-q21",
+        "type": "order",
+        "cat": "builder",
+        "prompt": {
+          "en": "Sentence Builder: Make 「疲れている時は運転を避けます。」",
+          "jp": "文を組み立てましょう：「疲れている時は運転を避けます。」"
+        },
+        "words": [
+          "when",
+          "driving",
+          "tired",
+          "I",
+          "avoid",
+          "I’m"
+        ],
+        "correctOrder": [
+          3,
+          4,
+          1,
+          0,
+          5,
+          2
+        ],
+        "hint": {
+          "en": "Use avoid + driving.",
+          "jp": "avoid + driving を使います。"
+        },
+        "explanation": {
+          "en": "The natural sentence is “I avoid driving when I’m tired.”",
+          "jp": "自然な文は “I avoid driving when I’m tired.” です。"
+        },
+        "legacyId": "q21",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-04-original-q22",
+        "type": "order",
+        "cat": "builder",
+        "prompt": {
+          "en": "Sentence Builder: Make 「急な事情があって行けませんでした。」",
+          "jp": "文を組み立てましょう：「急な事情があって行けませんでした。」"
+        },
+        "words": [
+          "make",
+          "up,",
+          "it",
+          "couldn’t",
+          "Something",
+          "came",
+          "so I"
+        ],
+        "correctOrder": [
+          4,
+          5,
+          1,
+          6,
+          3,
+          0,
+          2
+        ],
+        "hint": {
+          "en": "Start with “Something came up...”",
+          "jp": "“Something came up...” から始めます。"
+        },
+        "explanation": {
+          "en": "The natural sentence is “Something came up, so I couldn’t make it.”",
+          "jp": "自然な文は “Something came up, so I couldn’t make it.” です。"
+        },
+        "legacyId": "q22",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-04-original-q23",
+        "type": "matching",
+        "cat": "mixed",
+        "prompt": {
+          "en": "Speed Match: Match today’s phrases with the Japanese meaning.",
+          "jp": "スピードマッチ：今日の表現と日本語の意味を合わせましょう。"
+        },
+        "hint": {
+          "en": "Match the meaning, not only the word order.",
+          "jp": "語順ではなく、意味で合わせましょう。"
+        },
+        "pairs": [
+          {
+            "en": "Actually",
+            "jp": "実は",
+            "cat": "core"
+          },
+          {
+            "en": "avoid",
+            "jp": "避ける",
+            "cat": "core"
+          },
+          {
+            "en": "It can’t be helped.",
+            "jp": "仕方ない。",
+            "cat": "unavoidable"
+          },
+          {
+            "en": "Something came up.",
+            "jp": "急な事情が起きた。",
+            "cat": "unavoidable"
+          },
+          {
+            "en": "crash",
+            "jp": "事故る / 衝突する",
+            "cat": "danger"
+          },
+          {
+            "en": "I don’t want to get old.",
+            "jp": "歳とりたくない。",
+            "cat": "feelings"
+          },
+          {
+            "en": "on purpose",
+            "jp": "わざと",
+            "cat": "intention"
+          },
+          {
+            "en": "I really appreciate it.",
+            "jp": "本当に感謝しています。",
+            "cat": "gratitude"
+          },
+          {
+            "en": "sleepiest",
+            "jp": "一番眠い",
+            "cat": "grammar"
+          },
+          {
+            "en": "Don’t mention it.",
+            "jp": "いえいえ / 気にしないで",
+            "cat": "gratitude"
+          }
+        ],
+        "legacyId": "q23",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-04-original-q24",
+        "type": "typing",
+        "cat": "unavoidable",
+        "promptJP": "「仕方ない。」",
+        "accepted": [
+          "It can't be helped",
+          "It cannot be helped"
+        ],
+        "hint": {
+          "en": "Use can’t be helped.",
+          "jp": "can’t be helped を使います。"
+        },
+        "explanation": {
+          "en": "“It can’t be helped” is a natural phrase for 仕方ない.",
+          "jp": "“It can’t be helped.” は「仕方ない」に自然です。"
+        },
+        "legacyId": "q24",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-04-original-q25",
+        "type": "typing",
+        "cat": "danger",
+        "promptJP": "「もしこの高速で事故ったら、確実に死んでるわ。」",
+        "accepted": [
+          "If I crashed on this highway I'd be dead for sure",
+          "If I crashed on this highway, I'd be dead for sure",
+          "If I crashed on this highway I would be dead for sure",
+          "If I crashed on this highway, I would be dead for sure"
+        ],
+        "hint": {
+          "en": "Use crashed and dead for sure.",
+          "jp": "crashed と dead for sure を使います。"
+        },
+        "explanation": {
+          "en": "This is a vivid, natural way to talk about a dangerous highway.",
+          "jp": "危ない高速について言う時、リアルで自然な表現です。"
+        },
+        "legacyId": "q25",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-04-original-q26",
+        "type": "typing",
+        "cat": "intention",
+        "promptJP": "「それわざとやったの？」",
+        "accepted": [
+          "Did you do that on purpose"
+        ],
+        "hint": {
+          "en": "Did you + do + that + on purpose.",
+          "jp": "Did you + do + that + on purpose です。"
+        },
+        "explanation": {
+          "en": "“Did you do that on purpose?” is the natural question.",
+          "jp": "“Did you do that on purpose?” が自然な質問です。"
+        },
+        "legacyId": "q26",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-04-original-q27",
+        "type": "typing",
+        "cat": "gratitude",
+        "promptJP": "「本当に感謝しています。」",
+        "accepted": [
+          "I really appreciate it",
+          "I'm really grateful",
+          "I am really grateful"
+        ],
+        "hint": {
+          "en": "The daily phrase is I really appreciate it.",
+          "jp": "日常で一番使いやすいのは I really appreciate it. です。"
+        },
+        "explanation": {
+          "en": "“I really appreciate it” is direct, natural, and useful.",
+          "jp": "“I really appreciate it.” は自然でとても使いやすい感謝表現です。"
+        },
+        "legacyId": "q27",
+        "section": "Original Review",
+        "isOriginal": true
+      }
+    ]
+  },
+  {
+    "id": "july-05",
+    "lessonDate": "2026-07-05",
+    "title": "Natural Reactions & Everyday Choices",
+    "takiTitle": "Reactions, Reasons & Choices",
+    "summary": "Today's mission: make small daily phrases sound natural: though, thank-you replies, to go, and go-to.",
+    "summaryJa": "自然なリアクション、理由、選択、日常会話の組み立てを復習します。",
+    "status": "published",
+    "audience": "both",
+    "sourceType": "legacy_zip",
+    "sourcePath": "legacy-site/lessons/july-05/index.html",
+    "contentVersion": 1,
+    "categoryLabels": {
+      "though": {
+        "en": "Sentence-final though",
+        "jp": "文末の though"
+      },
+      "replies": {
+        "en": "Thank-you replies",
+        "jp": "ありがとうへの返事"
+      },
+      "takeout": {
+        "en": "Takeout / takeaway / to go",
+        "jp": "持ち帰り表現"
+      },
+      "goto": {
+        "en": "go-to vs got to",
+        "jp": "go-to と got to"
+      },
+      "builder": {
+        "en": "Sentence Builder",
+        "jp": "文を組み立てる練習"
+      },
+      "mixed": {
+        "en": "Natural phrase review",
+        "jp": "自然な表現の総復習"
+      }
+    },
+    "originalQuestionCount": 24,
+    "questions": [
+      {
+        "id": "july-05-original-q1",
+        "type": "situation",
+        "cat": "though",
+        "situationQuote": {
+          "en": "A: This coffee is a little expensive."
+        },
+        "prompt": {
+          "en": "You want to say 「まあ、美味しいけどね」. Which sentence is natural?",
+          "jp": "「まあ、美味しいけどね」と言いたい時、自然なのはどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "It tastes good, though.",
+            "jp": "まあ、美味しいけどね。"
+          },
+          {
+            "id": "b",
+            "en": "It tastes good, thought.",
+            "jp": "thought は「思った」の意味で違います。"
+          },
+          {
+            "id": "c",
+            "en": "It though tastes good.",
+            "jp": "語順が不自然です。"
+          },
+          {
+            "id": "d",
+            "en": "It tastes though good.",
+            "jp": "語順が不自然です。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "Put though at the end for 「〜だけどね」.",
+          "jp": "「〜だけどね」は文の最後に though を置きます。"
+        },
+        "explanation": {
+          "en": "Sentence-final “though” softens the sentence and adds a natural “but still...” feeling.",
+          "jp": "文末の “though” は文をやわらかくして、「まあ〜だけどね」という自然な感じを出します。"
+        },
+        "legacyId": "q1",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-05-original-q2",
+        "type": "mcq",
+        "cat": "though",
+        "prompt": {
+          "en": "Which Japanese feeling is closest to “It’s expensive, though”?",
+          "jp": "“It’s expensive, though.” に一番近い日本語の感じはどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "高いけどね。",
+            "jp": "自然です。"
+          },
+          {
+            "id": "b",
+            "en": "高くないです。",
+            "jp": "意味が違います。"
+          },
+          {
+            "id": "c",
+            "en": "高いと思いました。",
+            "jp": "thought の意味に近くなります。"
+          },
+          {
+            "id": "d",
+            "en": "高くしてください。",
+            "jp": "意味が違います。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "though at the end often feels like 「だけどね」.",
+          "jp": "文末の though は「だけどね」に近いです。"
+        },
+        "explanation": {
+          "en": "“It’s expensive, though” means the speaker admits it is expensive, but says it softly.",
+          "jp": "“It’s expensive, though.” は「高いけどね」と、少しやわらかく言っています。"
+        },
+        "legacyId": "q2",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-05-original-q3",
+        "type": "mcq",
+        "cat": "though",
+        "prompt": {
+          "en": "True or False: In casual conversation, “sentence + though” can mean 「〜だけどね」.",
+          "jp": "True or False：会話で “文 + though” は「〜だけどね」の感じになります。"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "True",
+            "jp": "正しい"
+          },
+          {
+            "id": "b",
+            "en": "False",
+            "jp": "違う"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "Example: I’m tired, though.",
+          "jp": "例：I’m tired, though. = 疲れてるけどね。"
+        },
+        "explanation": {
+          "en": "True. This is a very useful casual pattern for soft reactions.",
+          "jp": "True です。やわらかく反応する時にとても便利な形です。"
+        },
+        "legacyId": "q3",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-05-original-q4",
+        "type": "situation",
+        "cat": "though",
+        "situationQuote": {
+          "en": "Someone says, “You look busy.” But you are doing nothing special."
+        },
+        "prompt": {
+          "en": "Choose the best reply.",
+          "jp": "一番自然な返事を選んでください。"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "I’m just sitting here, though.",
+            "jp": "ただ座ってるだけだけどね。"
+          },
+          {
+            "id": "b",
+            "en": "I just sitting here, though.",
+            "jp": "be 動詞がないので不自然です。"
+          },
+          {
+            "id": "c",
+            "en": "I’m just sit here, though.",
+            "jp": "動詞の形が不自然です。"
+          },
+          {
+            "id": "d",
+            "en": "I’m just sitting here, thought.",
+            "jp": "thought ではありません。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "Use present continuous: I’m sitting.",
+          "jp": "今していることなので I’m sitting を使います。"
+        },
+        "explanation": {
+          "en": "“I’m just sitting here, though” is natural when you softly correct someone’s impression.",
+          "jp": "“I’m just sitting here, though.” は、相手の印象をやわらかく訂正する時に自然です。"
+        },
+        "legacyId": "q4",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-05-original-q5",
+        "type": "situation",
+        "cat": "replies",
+        "situationQuote": {
+          "en": "A: Thanks for waiting."
+        },
+        "prompt": {
+          "en": "Which reply is casual and natural?",
+          "jp": "カジュアルで自然な返事はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "No problem.",
+            "jp": "全然大丈夫。"
+          },
+          {
+            "id": "b",
+            "en": "Problem yes.",
+            "jp": "不自然です。"
+          },
+          {
+            "id": "c",
+            "en": "Don’t worry?",
+            "jp": "疑問文になっていて不自然です。"
+          },
+          {
+            "id": "d",
+            "en": "For here, please.",
+            "jp": "店内でお願いします、なので場面が違います。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "This means it was not a problem for you.",
+          "jp": "「迷惑じゃなかったよ」という感じです。"
+        },
+        "explanation": {
+          "en": "“No problem” is common when someone thanks you for a small favor.",
+          "jp": "“No problem.” は軽い手伝いに対する「全然大丈夫」として自然です。"
+        },
+        "legacyId": "q5",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-05-original-q6",
+        "type": "situation",
+        "cat": "replies",
+        "situationQuote": {
+          "en": "A: Thank you, and sorry for the trouble."
+        },
+        "prompt": {
+          "en": "Which reply sounds kind and reassuring?",
+          "jp": "優しく安心させる返事はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "No worries. It’s totally fine.",
+            "jp": "気にしないで。全然大丈夫だよ。"
+          },
+          {
+            "id": "b",
+            "en": "It’s expensive, though.",
+            "jp": "高いけどね、なので場面が違います。"
+          },
+          {
+            "id": "c",
+            "en": "This is my go-to coffee.",
+            "jp": "定番コーヒーの話なので違います。"
+          },
+          {
+            "id": "d",
+            "en": "Takeaway available?",
+            "jp": "持ち帰りできますか、なので違います。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "Use this when the other person feels sorry.",
+          "jp": "相手が申し訳なさそうな時に使いやすいです。"
+        },
+        "explanation": {
+          "en": "“No worries” sounds warm and gentle, especially when someone apologizes while thanking you.",
+          "jp": "“No worries.” は、相手が謝りながら感謝している時に優しく聞こえます。"
+        },
+        "legacyId": "q6",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-05-original-q7",
+        "type": "mcq",
+        "cat": "replies",
+        "prompt": {
+          "en": "Which reply sounds polite and a little elegant, often used in service or business?",
+          "jp": "接客・ビジネスでも使える丁寧で上品な返事はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "My pleasure.",
+            "jp": "喜んで / お役に立てて嬉しいです。"
+          },
+          {
+            "id": "b",
+            "en": "My problem.",
+            "jp": "不自然です。"
+          },
+          {
+            "id": "c",
+            "en": "My takeaway.",
+            "jp": "意味が違います。"
+          },
+          {
+            "id": "d",
+            "en": "My though.",
+            "jp": "意味が違います。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "Pleasure = 喜び.",
+          "jp": "pleasure は「喜び」です。"
+        },
+        "explanation": {
+          "en": "“My pleasure” is polite and refined. It means you were happy to help.",
+          "jp": "“My pleasure.” は丁寧で上品な返事です。「喜んで / お役に立てて嬉しいです」という感じです。"
+        },
+        "legacyId": "q7",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-05-original-q8",
+        "type": "mcq",
+        "cat": "replies",
+        "prompt": {
+          "en": "Mistake Detective: Which reply means 「またいつでも言って」?",
+          "jp": "ミス発見：「またいつでも言って」に近い返事はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "Anytime.",
+            "jp": "いつでも言って。"
+          },
+          {
+            "id": "b",
+            "en": "Always.",
+            "jp": "いつも、という意味で返事としては違います。"
+          },
+          {
+            "id": "c",
+            "en": "To go.",
+            "jp": "持ち帰りで、なので違います。"
+          },
+          {
+            "id": "d",
+            "en": "Though.",
+            "jp": "だけどね、なので違います。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "It means you are happy to help again.",
+          "jp": "また助けてもいいよ、という感じです。"
+        },
+        "explanation": {
+          "en": "“Anytime” is natural when you want to say the person can ask you again.",
+          "jp": "“Anytime.” は「またいつでも言って」という自然な返事です。"
+        },
+        "legacyId": "q8",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-05-original-q9",
+        "type": "matching",
+        "cat": "mixed",
+        "prompt": {
+          "en": "Speed Match: Match each reply with the Japanese feeling.",
+          "jp": "スピードマッチ：英語の返事と日本語の感じを合わせましょう。"
+        },
+        "hint": {
+          "en": "Think about the feeling, not only the dictionary meaning.",
+          "jp": "単語の意味だけではなく、雰囲気で考えましょう。"
+        },
+        "pairs": [
+          {
+            "en": "You’re welcome.",
+            "jp": "どういたしまして。",
+            "cat": "replies"
+          },
+          {
+            "en": "No problem.",
+            "jp": "全然大丈夫。",
+            "cat": "replies"
+          },
+          {
+            "en": "No worries.",
+            "jp": "気にしないで。",
+            "cat": "replies"
+          },
+          {
+            "en": "Of course.",
+            "jp": "もちろん。",
+            "cat": "replies"
+          },
+          {
+            "en": "Anytime.",
+            "jp": "いつでも言って。",
+            "cat": "replies"
+          },
+          {
+            "en": "My pleasure.",
+            "jp": "喜んで。",
+            "cat": "replies"
+          },
+          {
+            "en": "Don’t mention it.",
+            "jp": "お礼なんていいよ。",
+            "cat": "replies"
+          }
+        ],
+        "legacyId": "q9",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-05-original-q10",
+        "type": "situation",
+        "cat": "takeout",
+        "situationQuote": {
+          "en": "You are ordering coffee at a café. You want to take it home."
+        },
+        "prompt": {
+          "en": "What is the shortest natural answer?",
+          "jp": "一番短く自然な答えはどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "To go, please.",
+            "jp": "持ち帰りでお願いします。"
+          },
+          {
+            "id": "b",
+            "en": "Go to, please.",
+            "jp": "go to では意味が違います。"
+          },
+          {
+            "id": "c",
+            "en": "For here, please.",
+            "jp": "店内でお願いします、なので逆です。"
+          },
+          {
+            "id": "d",
+            "en": "Though, please.",
+            "jp": "不自然です。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "In the U.S., “to go” is very natural at cafés.",
+          "jp": "アメリカではカフェで “to go” がとても自然です。"
+        },
+        "explanation": {
+          "en": "“To go, please” is a simple natural way to say 持ち帰りでお願いします.",
+          "jp": "“To go, please.” は「持ち帰りでお願いします」の短く自然な言い方です。"
+        },
+        "legacyId": "q10",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-05-original-q11",
+        "type": "mcq",
+        "cat": "takeout",
+        "prompt": {
+          "en": "Which question means 「店内ですか？お持ち帰りですか？」",
+          "jp": "「店内ですか？お持ち帰りですか？」はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "For here or to go?",
+            "jp": "店内ですか？お持ち帰りですか？"
+          },
+          {
+            "id": "b",
+            "en": "For go or to here?",
+            "jp": "語順が不自然です。"
+          },
+          {
+            "id": "c",
+            "en": "Here to for go?",
+            "jp": "文として不自然です。"
+          },
+          {
+            "id": "d",
+            "en": "Takeout or coffee?",
+            "jp": "意味が違います。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "For here = 店内で. To go = 持ち帰りで.",
+          "jp": "For here = 店内で。To go = 持ち帰りで。"
+        },
+        "explanation": {
+          "en": "Cashiers often ask “For here or to go?”",
+          "jp": "店員さんはよく “For here or to go?” と聞きます。"
+        },
+        "legacyId": "q11",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-05-original-q12",
+        "type": "mcq",
+        "cat": "takeout",
+        "prompt": {
+          "en": "True or False: “takeaway” is especially common in British/Australian English.",
+          "jp": "True or False：“takeaway” は特にイギリス・オーストラリア英語でよく使われます。"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "True",
+            "jp": "正しい"
+          },
+          {
+            "id": "b",
+            "en": "False",
+            "jp": "違う"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "takeout = often American. takeaway = often British/Australian.",
+          "jp": "takeout は米英語寄り、takeaway は英英語・豪英語寄りです。"
+        },
+        "explanation": {
+          "en": "True. “takeaway” is common in British and Australian English.",
+          "jp": "True です。“takeaway” はイギリス英語・オーストラリア英語でよく使われます。"
+        },
+        "legacyId": "q12",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-05-original-q13",
+        "type": "situation",
+        "cat": "takeout",
+        "situationQuote": {
+          "en": "A cashier asks: “For here or to go?” You want to eat inside."
+        },
+        "prompt": {
+          "en": "Which answer is correct?",
+          "jp": "店内で食べたい時、正しい答えはどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "For here, please.",
+            "jp": "店内でお願いします。"
+          },
+          {
+            "id": "b",
+            "en": "To go, please.",
+            "jp": "持ち帰りでお願いします、なので逆です。"
+          },
+          {
+            "id": "c",
+            "en": "Takeaway, please.",
+            "jp": "持ち帰りで、なので逆です。"
+          },
+          {
+            "id": "d",
+            "en": "Go-to, please.",
+            "jp": "定番、なので違います。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "Here = inside the shop.",
+          "jp": "here は店内を指します。"
+        },
+        "explanation": {
+          "en": "“For here, please” means you want to eat or drink inside.",
+          "jp": "“For here, please.” は「店内でお願いします」という意味です。"
+        },
+        "legacyId": "q13",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-05-original-q14",
+        "type": "mcq",
+        "cat": "goto",
+        "prompt": {
+          "en": "Which phrase means 「定番の / いつもの / 迷ったらこれ」?",
+          "jp": "「定番の / いつもの / 迷ったらこれ」はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "go-to",
+            "jp": "定番の / いつもの"
+          },
+          {
+            "id": "b",
+            "en": "got to",
+            "jp": "〜しなければならない / 到着した、など別の意味です。"
+          },
+          {
+            "id": "c",
+            "en": "to go",
+            "jp": "持ち帰りで、という意味です。"
+          },
+          {
+            "id": "d",
+            "en": "though",
+            "jp": "だけどね、という意味です。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "The hyphen matters: go-to.",
+          "jp": "ハイフンが大事です：go-to。"
+        },
+        "explanation": {
+          "en": "“go-to” means your usual reliable choice, like “my go-to coffee.”",
+          "jp": "“go-to” は「いつもの頼れる選択肢・定番」という意味です。"
+        },
+        "legacyId": "q14",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-05-original-q15",
+        "type": "mcq",
+        "cat": "goto",
+        "prompt": {
+          "en": "Mistake Detective: Which sentence is unnatural for 「これは私の定番コーヒーです」?",
+          "jp": "ミス発見：「これは私の定番コーヒーです」で不自然なのはどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "This is my got to coffee.",
+            "jp": "got to では不自然です。"
+          },
+          {
+            "id": "b",
+            "en": "This is my go-to coffee.",
+            "jp": "自然です。"
+          },
+          {
+            "id": "c",
+            "en": "This coffee is my go-to.",
+            "jp": "自然です。"
+          },
+          {
+            "id": "d",
+            "en": "This is my usual coffee.",
+            "jp": "自然です。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "go-to and got to are different.",
+          "jp": "go-to と got to は違います。"
+        },
+        "explanation": {
+          "en": "Say “go-to coffee,” not “got to coffee.” “got to” has a different meaning.",
+          "jp": "“got to coffee” ではなく “go-to coffee” です。“got to” は別の意味です。"
+        },
+        "legacyId": "q15",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-05-original-q16",
+        "type": "mcq",
+        "cat": "goto",
+        "prompt": {
+          "en": "Which sentence uses “got to” correctly?",
+          "jp": "“got to” を正しく使っている文はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "I’ve got to go.",
+            "jp": "行かなきゃ。"
+          },
+          {
+            "id": "b",
+            "en": "This is my got to coffee.",
+            "jp": "定番コーヒーには使いません。"
+          },
+          {
+            "id": "c",
+            "en": "My got to restaurant is here.",
+            "jp": "定番レストランには go-to を使います。"
+          },
+          {
+            "id": "d",
+            "en": "That’s my got to phrase.",
+            "jp": "定番フレーズには go-to を使います。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "“I’ve got to” is a common conversational form of “I have to.”",
+          "jp": "“I’ve got to” は会話で「〜しなければならない」を表します。"
+        },
+        "explanation": {
+          "en": "“I’ve got to go” means “I have to go.” This is different from “go-to.”",
+          "jp": "“I’ve got to go.” は「行かなきゃ」という意味です。“go-to” とは別です。"
+        },
+        "legacyId": "q16",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-05-original-q17",
+        "type": "order",
+        "cat": "builder",
+        "prompt": {
+          "en": "Sentence Builder: Make 「まあ、美味しいけどね。」",
+          "jp": "文を組み立てましょう：「まあ、美味しいけどね。」"
+        },
+        "words": [
+          "though",
+          "good,",
+          "It",
+          "tastes"
+        ],
+        "correctOrder": [
+          2,
+          3,
+          1,
+          0
+        ],
+        "hint": {
+          "en": "Put though at the end.",
+          "jp": "though は最後に置きます。"
+        },
+        "explanation": {
+          "en": "The natural sentence is “It tastes good, though.”",
+          "jp": "自然な文は “It tastes good, though.” です。"
+        },
+        "legacyId": "q17",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-05-original-q18",
+        "type": "order",
+        "cat": "builder",
+        "prompt": {
+          "en": "Sentence Builder: Make 「これ持ち帰りでお願いします。」",
+          "jp": "文を組み立てましょう：「これ持ち帰りでお願いします。」"
+        },
+        "words": [
+          "get",
+          "Can",
+          "to go",
+          "this",
+          "I"
+        ],
+        "correctOrder": [
+          1,
+          4,
+          0,
+          3,
+          2
+        ],
+        "hint": {
+          "en": "Start with “Can I...”",
+          "jp": "“Can I...” から始めます。"
+        },
+        "explanation": {
+          "en": "The natural sentence is “Can I get this to go?”",
+          "jp": "自然な文は “Can I get this to go?” です。"
+        },
+        "legacyId": "q18",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-05-original-q19",
+        "type": "order",
+        "cat": "builder",
+        "prompt": {
+          "en": "Sentence Builder: Make 「これは私の定番コーヒーです。」",
+          "jp": "文を組み立てましょう：「これは私の定番コーヒーです。」"
+        },
+        "words": [
+          "go-to",
+          "This",
+          "coffee",
+          "is",
+          "my"
+        ],
+        "correctOrder": [
+          1,
+          3,
+          4,
+          0,
+          2
+        ],
+        "hint": {
+          "en": "Use go-to, not got to.",
+          "jp": "got to ではなく go-to を使います。"
+        },
+        "explanation": {
+          "en": "The natural sentence is “This is my go-to coffee.”",
+          "jp": "自然な文は “This is my go-to coffee.” です。"
+        },
+        "legacyId": "q19",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-05-original-q20",
+        "type": "typing",
+        "cat": "though",
+        "promptJP": "「ただ座ってるだけだけどね。」",
+        "accepted": [
+          "I'm just sitting here though",
+          "I am just sitting here though",
+          "I'm just sitting here, though",
+          "I am just sitting here, though"
+        ],
+        "hint": {
+          "en": "Use “I’m just sitting here” + though.",
+          "jp": "“I’m just sitting here” + though を使います。"
+        },
+        "explanation": {
+          "en": "“I’m just sitting here, though” is a natural soft reply.",
+          "jp": "“I’m just sitting here, though.” は自然でやわらかい返事です。"
+        },
+        "legacyId": "q20",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-05-original-q21",
+        "type": "typing",
+        "cat": "replies",
+        "promptJP": "「全然大丈夫。」",
+        "accepted": [
+          "No problem",
+          "No worries"
+        ],
+        "hint": {
+          "en": "A short reply to thank you.",
+          "jp": "Thank you への短い返事です。"
+        },
+        "explanation": {
+          "en": "“No problem” is very common. “No worries” also works kindly.",
+          "jp": "“No problem.” はとてもよく使います。“No worries.” も優しく自然です。"
+        },
+        "legacyId": "q21",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-05-original-q22",
+        "type": "typing",
+        "cat": "takeout",
+        "promptJP": "「持ち帰りでお願いします。」",
+        "accepted": [
+          "To go please",
+          "To go, please",
+          "Can I get this to go",
+          "Can I get it to go",
+          "Can I have this to go"
+        ],
+        "hint": {
+          "en": "At a café, the shortest answer is “To go, please.”",
+          "jp": "カフェでは “To go, please.” が短く自然です。"
+        },
+        "explanation": {
+          "en": "“To go, please” and “Can I get this to go?” are both natural.",
+          "jp": "“To go, please.” と “Can I get this to go?” はどちらも自然です。"
+        },
+        "legacyId": "q22",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-05-original-q23",
+        "type": "typing",
+        "cat": "takeout",
+        "promptJP": "「店内ですか？お持ち帰りですか？」",
+        "accepted": [
+          "For here or to go",
+          "Is it for here or to go",
+          "For here or to go please"
+        ],
+        "hint": {
+          "en": "Cashiers often say this.",
+          "jp": "店員さんがよく言う表現です。"
+        },
+        "explanation": {
+          "en": "“For here or to go?” is the standard café/restaurant question.",
+          "jp": "“For here or to go?” はカフェやレストランでよく聞く質問です。"
+        },
+        "legacyId": "q23",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-05-original-q24",
+        "type": "typing",
+        "cat": "goto",
+        "promptJP": "「これは私の定番コーヒーです。」",
+        "accepted": [
+          "This is my go-to coffee",
+          "This is my go to coffee",
+          "This coffee is my go-to",
+          "This coffee is my go to"
+        ],
+        "hint": {
+          "en": "Use go-to for 定番.",
+          "jp": "定番には go-to を使います。"
+        },
+        "explanation": {
+          "en": "“This is my go-to coffee” means this is the coffee you usually choose.",
+          "jp": "“This is my go-to coffee.” は「いつも選ぶ定番コーヒー」という意味です。"
+        },
+        "legacyId": "q24",
+        "section": "Original Review",
+        "isOriginal": true
+      }
+    ]
+  },
+  {
+    "id": "july-06",
+    "lessonDate": "2026-07-06",
+    "title": "Connected Speech & Useful Conversation",
+    "takiTitle": "July 6 Complete Review",
+    "summary": "Today's mission: master a long lesson in two parts — grammar choices first, then natural nuance.",
+    "summaryJa": "7月6日の語彙・文法・会話をPart 1・Part 2で総復習します。",
+    "status": "published",
+    "audience": "both",
+    "sourceType": "legacy_zip",
+    "sourcePath": "legacy-site/lessons/july-06/index.html",
+    "contentVersion": 1,
+    "categoryLabels": {
+      "part1": {
+        "en": "Part 1: Grammar choices",
+        "jp": "Part 1：文法の選び方"
+      },
+      "alcohol": {
+        "en": "Alcohol yet / past",
+        "jp": "まだ飲んでない / 過去形"
+      },
+      "hate": {
+        "en": "hate + -ing",
+        "jp": "hate + 動詞ing"
+      },
+      "prepositions": {
+        "en": "on / in / at",
+        "jp": "on / in / at"
+      },
+      "part2": {
+        "en": "Part 2: Natural nuance",
+        "jp": "Part 2：自然なニュアンス"
+      },
+      "sparkle": {
+        "en": "sparkly words",
+        "jp": "キラキラの言い方"
+      },
+      "interest": {
+        "en": "interested / interesting",
+        "jp": "interested / interesting"
+      },
+      "behalf": {
+        "en": "on my behalf",
+        "jp": "私の代わりに"
+      },
+      "builder": {
+        "en": "Sentence Builder",
+        "jp": "文を組み立てる練習"
+      },
+      "mixed": {
+        "en": "Two-part review",
+        "jp": "2部構成の総復習"
+      }
+    },
+    "originalQuestionCount": 34,
+    "questions": [
+      {
+        "id": "july-06-original-q1",
+        "type": "situation",
+        "cat": "alcohol",
+        "prompt": {
+          "en": "Choose the most natural way to say 「今日はまだお酒を飲んでいません」.",
+          "jp": "「今日はまだお酒を飲んでいません」と言う時、一番自然なのはどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "I haven’t had any alcohol yet today.",
+            "jp": "今日はまだお酒を飲んでいません。"
+          },
+          {
+            "id": "b",
+            "en": "I didn’t drink alcohol yet today.",
+            "jp": "didn’t + yet が少し不自然です。"
+          },
+          {
+            "id": "c",
+            "en": "I haven’t drink alcohol yet today.",
+            "jp": "haven’t の後は過去分詞が必要です。"
+          },
+          {
+            "id": "d",
+            "en": "I didn’t drank alcohol today.",
+            "jp": "didn’t の後は原形 drink です。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "For まだ〜していない, present perfect + yet is natural.",
+          "jp": "「まだ〜していない」は現在完了 + yet が自然です。"
+        },
+        "explanation": {
+          "en": "“I haven’t had any alcohol yet today” means today is still continuing and up to now you have not drunk.",
+          "jp": "今日がまだ続いていて、今の時点でまだ飲んでいないという意味です。"
+        },
+        "situationQuote": {
+          "en": "It is still early in the day. Someone asks: “Did you drink today?”"
+        },
+        "legacyId": "q1",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-06-original-q2",
+        "type": "mcq",
+        "cat": "alcohol",
+        "prompt": {
+          "en": "Which sentence sounds like a finished-day result?",
+          "jp": "一日を振り返って「今日は飲まなかった」と言う感じの文はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "I didn’t drink today.",
+            "jp": "今日は飲まなかった。"
+          },
+          {
+            "id": "b",
+            "en": "I haven’t had any alcohol yet today.",
+            "jp": "まだ今日が続いている感じです。"
+          },
+          {
+            "id": "c",
+            "en": "I don’t drinking today.",
+            "jp": "文法が不自然です。"
+          },
+          {
+            "id": "d",
+            "en": "I didn’t drunk today.",
+            "jp": "didn’t の後は drink です。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "Finished past uses didn’t + verb.",
+          "jp": "終わった過去は didn’t + 動詞の原形です。"
+        },
+        "explanation": {
+          "en": "“I didn’t drink today” is natural when you summarize the day as a result.",
+          "jp": "“I didn’t drink today.” は結果として「今日は飲まなかった」と言う時に自然です。"
+        },
+        "legacyId": "q2",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-06-original-q3",
+        "type": "mcq",
+        "cat": "alcohol",
+        "prompt": {
+          "en": "True or False: “I didn’t drink alcohol yet” is the best standard sentence for 「まだ飲んでいない」.",
+          "jp": "True or False：“I didn’t drink alcohol yet” は「まだ飲んでいない」の一番標準的な文です。"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "True",
+            "jp": "正しい"
+          },
+          {
+            "id": "b",
+            "en": "False",
+            "jp": "違う"
+          }
+        ],
+        "correct": "b",
+        "hint": {
+          "en": "Use haven’t ... yet.",
+          "jp": "haven’t ... yet を使います。"
+        },
+        "explanation": {
+          "en": "The standard natural sentence is “I haven’t had any alcohol yet.”",
+          "jp": "標準的には “I haven’t had any alcohol yet.” が自然です。"
+        },
+        "legacyId": "q3",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-06-original-q4",
+        "type": "mcq",
+        "cat": "alcohol",
+        "prompt": {
+          "en": "Choose the correct verb change for drink.",
+          "jp": "drink の変化で正しいものを選んでください。"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "drink - drank - drunk",
+            "jp": "原形 - 過去形 - 過去分詞"
+          },
+          {
+            "id": "b",
+            "en": "drink - drunk - drank",
+            "jp": "順番が違います。"
+          },
+          {
+            "id": "c",
+            "en": "drink - drinked - drinked",
+            "jp": "不規則動詞です。"
+          },
+          {
+            "id": "d",
+            "en": "drink - drinking - drank",
+            "jp": "過去分詞ではありません。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "Past is drank. Past participle is drunk.",
+          "jp": "過去形は drank、過去分詞は drunk です。"
+        },
+        "explanation": {
+          "en": "The verb forms are drink, drank, drunk.",
+          "jp": "drink の変化は drink - drank - drunk です。"
+        },
+        "legacyId": "q4",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-06-original-q5",
+        "type": "situation",
+        "cat": "hate",
+        "prompt": {
+          "en": "Which sentence is natural?",
+          "jp": "自然な文はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "I hate watching soccer.",
+            "jp": "サッカーを見るのが嫌いです。"
+          },
+          {
+            "id": "b",
+            "en": "I hate watch soccer.",
+            "jp": "hate の後にそのまま原形は置けません。"
+          },
+          {
+            "id": "c",
+            "en": "I hate watched soccer.",
+            "jp": "この形は不自然です。"
+          },
+          {
+            "id": "d",
+            "en": "I hate to soccer watching.",
+            "jp": "語順が不自然です。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "hate + verb-ing.",
+          "jp": "hate + 動詞ing です。"
+        },
+        "explanation": {
+          "en": "Use hate + watching when you mean 「見るのが嫌い」.",
+          "jp": "「見るのが嫌い」は hate + watching が自然です。"
+        },
+        "situationQuote": {
+          "en": "You don’t like watching soccer on TV."
+        },
+        "legacyId": "q5",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-06-original-q6",
+        "type": "mcq",
+        "cat": "hate",
+        "prompt": {
+          "en": "Which sentence is a softer way to say you dislike soccer?",
+          "jp": "サッカーがあまり好きではないことをやわらかく言う文はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "I’m not really into soccer.",
+            "jp": "サッカーにはあまり興味がありません。"
+          },
+          {
+            "id": "b",
+            "en": "I hate soccer forever.",
+            "jp": "かなり強すぎます。"
+          },
+          {
+            "id": "c",
+            "en": "I angry soccer.",
+            "jp": "文法が不自然です。"
+          },
+          {
+            "id": "d",
+            "en": "Soccer is my behalf.",
+            "jp": "意味が違います。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "not really into = あまり興味がない.",
+          "jp": "not really into = あまり興味がない。"
+        },
+        "explanation": {
+          "en": "“I’m not really into soccer” is softer than “I hate soccer.”",
+          "jp": "“I’m not really into soccer.” は “I hate soccer.” よりやわらかいです。"
+        },
+        "legacyId": "q6",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-06-original-q7",
+        "type": "mcq",
+        "cat": "hate",
+        "prompt": {
+          "en": "Mistake Detective: Which sentence is wrong?",
+          "jp": "ミス発見：間違っている文はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "I hate watch football.",
+            "jp": "hate の後は watching などが必要です。"
+          },
+          {
+            "id": "b",
+            "en": "I hate watching football.",
+            "jp": "自然です。"
+          },
+          {
+            "id": "c",
+            "en": "I hate waiting in line.",
+            "jp": "自然です。"
+          },
+          {
+            "id": "d",
+            "en": "I hate waking up early.",
+            "jp": "自然です。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "Look after hate.",
+          "jp": "hate の後ろを見ましょう。"
+        },
+        "explanation": {
+          "en": "“I hate watch football” is wrong because hate needs a gerund like watching or an infinitive like to watch.",
+          "jp": "hate の後は watching や to watch が必要です。"
+        },
+        "legacyId": "q7",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-06-original-q8",
+        "type": "situation",
+        "cat": "prepositions",
+        "prompt": {
+          "en": "Which sentence is natural?",
+          "jp": "自然な文はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "I found this café on Instagram.",
+            "jp": "このカフェをインスタで見つけました。"
+          },
+          {
+            "id": "b",
+            "en": "I found this café in Instagram.",
+            "jp": "普通は不自然です。"
+          },
+          {
+            "id": "c",
+            "en": "I found this café at Instagram.",
+            "jp": "会社・場所の at なので違います。"
+          },
+          {
+            "id": "d",
+            "en": "I found this café of Instagram.",
+            "jp": "前置詞が違います。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "SNS and websites usually use on.",
+          "jp": "SNSやウェブサイトは基本 on を使います。"
+        },
+        "explanation": {
+          "en": "We say on Instagram, on YouTube, on TikTok, on the internet, and on a website.",
+          "jp": "Instagram、YouTube、TikTok、internet、website には基本的に on を使います。"
+        },
+        "situationQuote": {
+          "en": "You found a nice café while using Instagram."
+        },
+        "legacyId": "q8",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-06-original-q9",
+        "type": "mcq",
+        "cat": "prepositions",
+        "prompt": {
+          "en": "Which sentence means 「コメント欄の中で見ました」?",
+          "jp": "「コメント欄の中で見ました」はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "I saw it in the comments.",
+            "jp": "コメント欄の中で見ました。"
+          },
+          {
+            "id": "b",
+            "en": "I saw it on the comments.",
+            "jp": "コメント欄の中なら in が自然です。"
+          },
+          {
+            "id": "c",
+            "en": "I saw it at the comments.",
+            "jp": "at は不自然です。"
+          },
+          {
+            "id": "d",
+            "en": "I saw it by comments.",
+            "jp": "意味が違います。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "Inside a section = in.",
+          "jp": "中にある感じは in です。"
+        },
+        "explanation": {
+          "en": "Use in when you mean inside a section, like “in the comments.”",
+          "jp": "コメント欄の中は “in the comments” が自然です。"
+        },
+        "legacyId": "q9",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-06-original-q10",
+        "type": "mcq",
+        "cat": "prepositions",
+        "prompt": {
+          "en": "Which sentence means she works for Instagram as a company?",
+          "jp": "彼女がInstagramという会社で働いている、という意味の文はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "She works at Instagram.",
+            "jp": "彼女はInstagram社で働いています。"
+          },
+          {
+            "id": "b",
+            "en": "She works on Instagram.",
+            "jp": "インスタ上で活動している感じになることがあります。"
+          },
+          {
+            "id": "c",
+            "en": "She works in Instagram.",
+            "jp": "普通は不自然です。"
+          },
+          {
+            "id": "d",
+            "en": "She works by Instagram.",
+            "jp": "不自然です。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "For a company/workplace, use at.",
+          "jp": "会社・職場には at を使います。"
+        },
+        "explanation": {
+          "en": "Use at for a company or workplace: She works at Instagram.",
+          "jp": "会社・職場として言う時は at を使います。"
+        },
+        "legacyId": "q10",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-06-original-q11",
+        "type": "matching",
+        "cat": "part1",
+        "prompt": {
+          "en": "Part 1 Match: Connect the sentence with the meaning.",
+          "jp": "Part 1 マッチ：英語と日本語を合わせましょう。"
+        },
+        "hint": {
+          "en": "Focus on situation and grammar shape.",
+          "jp": "場面と文法の形に注目しましょう。"
+        },
+        "pairs": [
+          {
+            "en": "I haven’t had any alcohol yet.",
+            "jp": "まだお酒を飲んでいません。",
+            "cat": "part1"
+          },
+          {
+            "en": "I didn’t drink yesterday.",
+            "jp": "昨日は飲みませんでした。",
+            "cat": "part1"
+          },
+          {
+            "en": "I hate watching soccer.",
+            "jp": "サッカーを見るのが嫌いです。",
+            "cat": "part1"
+          },
+          {
+            "en": "I’m not really into soccer.",
+            "jp": "サッカーにはあまり興味がありません。",
+            "cat": "part1"
+          },
+          {
+            "en": "I saw it on Instagram.",
+            "jp": "インスタで見ました。",
+            "cat": "part1"
+          },
+          {
+            "en": "I saw it in the comments.",
+            "jp": "コメント欄の中で見ました。",
+            "cat": "part1"
+          }
+        ],
+        "legacyId": "q11",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-06-original-q12",
+        "type": "order",
+        "cat": "builder",
+        "prompt": {
+          "en": "Sentence Builder: Make 「今日はまだお酒を飲んでいません。」",
+          "jp": "文を組み立てましょう：「今日はまだお酒を飲んでいません。」"
+        },
+        "words": [
+          "had",
+          "I",
+          "any alcohol",
+          "yet today",
+          "haven’t"
+        ],
+        "correctOrder": [
+          1,
+          4,
+          0,
+          2,
+          3
+        ],
+        "hint": {
+          "en": "Start with I haven’t...",
+          "jp": "I haven’t... から始めます。"
+        },
+        "explanation": {
+          "en": "The sentence is “I haven’t had any alcohol yet today.”",
+          "jp": "自然な文は “I haven’t had any alcohol yet today.” です。"
+        },
+        "legacyId": "q12",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-06-original-q13",
+        "type": "order",
+        "cat": "builder",
+        "prompt": {
+          "en": "Sentence Builder: Make 「サッカーを見るのが嫌いです。」",
+          "jp": "文を組み立てましょう：「サッカーを見るのが嫌いです。」"
+        },
+        "words": [
+          "soccer",
+          "hate",
+          "I",
+          "watching"
+        ],
+        "correctOrder": [
+          2,
+          1,
+          3,
+          0
+        ],
+        "hint": {
+          "en": "hate + watching.",
+          "jp": "hate + watching です。"
+        },
+        "explanation": {
+          "en": "The sentence is “I hate watching soccer.”",
+          "jp": "自然な文は “I hate watching soccer.” です。"
+        },
+        "legacyId": "q13",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-06-original-q14",
+        "type": "order",
+        "cat": "builder",
+        "prompt": {
+          "en": "Sentence Builder: Make 「インスタで見ました。」",
+          "jp": "文を組み立てましょう：「インスタで見ました。」"
+        },
+        "words": [
+          "on Instagram",
+          "it",
+          "I",
+          "saw"
+        ],
+        "correctOrder": [
+          2,
+          3,
+          1,
+          0
+        ],
+        "hint": {
+          "en": "SNS uses on.",
+          "jp": "SNSには on を使います。"
+        },
+        "explanation": {
+          "en": "The sentence is “I saw it on Instagram.”",
+          "jp": "自然な文は “I saw it on Instagram.” です。"
+        },
+        "legacyId": "q14",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-06-original-q15",
+        "type": "situation",
+        "cat": "sparkle",
+        "prompt": {
+          "en": "Which word sounds natural for cute shiny accessories?",
+          "jp": "かわいいアクセサリーがキラキラしている時、自然なのはどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "sparkly",
+            "jp": "キラキラしている。アクセサリーなどに自然。"
+          },
+          {
+            "id": "b",
+            "en": "interested",
+            "jp": "興味がある、という意味です。"
+          },
+          {
+            "id": "c",
+            "en": "on behalf",
+            "jp": "代わりに、という意味です。"
+          },
+          {
+            "id": "d",
+            "en": "drunk",
+            "jp": "drink の過去分詞です。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "Sparkly things are cute and shiny.",
+          "jp": "sparkly はかわいくキラキラした感じです。"
+        },
+        "explanation": {
+          "en": "Use sparkly for earrings, eyes, and cute things that shine.",
+          "jp": "イヤリング、目、かわいい物のキラキラには sparkly が自然です。"
+        },
+        "situationQuote": {
+          "en": "Someone has cute earrings that shine beautifully."
+        },
+        "legacyId": "q15",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-06-original-q16",
+        "type": "situation",
+        "cat": "sparkle",
+        "prompt": {
+          "en": "Which word fits best?",
+          "jp": "一番合う単語はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "glittery",
+            "jp": "ラメっぽくキラキラしている。"
+          },
+          {
+            "id": "b",
+            "en": "shiny",
+            "jp": "ピカピカですが、ラメ感は弱いです。"
+          },
+          {
+            "id": "c",
+            "en": "interested",
+            "jp": "興味がある、なので違います。"
+          },
+          {
+            "id": "d",
+            "en": "behalf",
+            "jp": "代わりに、なので違います。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "Glitter = ラメ.",
+          "jp": "glitter = ラメです。"
+        },
+        "explanation": {
+          "en": "Use glittery for nails, makeup, dresses, or things with glitter.",
+          "jp": "ネイル、メイク、服などのラメっぽいキラキラには glittery を使います。"
+        },
+        "situationQuote": {
+          "en": "Her nails have glitter / ラメ."
+        },
+        "legacyId": "q16",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-06-original-q17",
+        "type": "situation",
+        "cat": "sparkle",
+        "prompt": {
+          "en": "Which word is best for ピカピカ?",
+          "jp": "車がピカピカしている時、一番合う単語はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "shiny",
+            "jp": "ピカピカ / ツヤツヤ。車・靴・髪に自然。"
+          },
+          {
+            "id": "b",
+            "en": "glittery",
+            "jp": "ラメっぽい感じです。"
+          },
+          {
+            "id": "c",
+            "en": "sparkle",
+            "jp": "動詞として「キラキラ光る」。ここでは shiny が自然。"
+          },
+          {
+            "id": "d",
+            "en": "drank",
+            "jp": "drink の過去形です。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "Clean cars, shoes, metal, and hair can be shiny.",
+          "jp": "車、靴、金属、髪は shiny が自然です。"
+        },
+        "explanation": {
+          "en": "“The car is shiny” means the car looks clean and bright.",
+          "jp": "“The car is shiny.” は「車がピカピカ」という意味です。"
+        },
+        "situationQuote": {
+          "en": "A car is very clean and bright."
+        },
+        "legacyId": "q17",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-06-original-q18",
+        "type": "mcq",
+        "cat": "sparkle",
+        "prompt": {
+          "en": "True or False: “sparkling water” usually means ラメの水.",
+          "jp": "True or False：“sparkling water” は普通「ラメの水」という意味です。"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "True",
+            "jp": "正しい"
+          },
+          {
+            "id": "b",
+            "en": "False",
+            "jp": "違う"
+          }
+        ],
+        "correct": "b",
+        "hint": {
+          "en": "Sparkling water is carbonated water.",
+          "jp": "sparkling water は炭酸水です。"
+        },
+        "explanation": {
+          "en": "“Sparkling water” usually means carbonated water, not glittery water.",
+          "jp": "“sparkling water” は普通「炭酸水」の意味です。"
+        },
+        "legacyId": "q18",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-06-original-q19",
+        "type": "situation",
+        "cat": "interest",
+        "prompt": {
+          "en": "Which sentence is correct?",
+          "jp": "「英語に興味があります」と言いたい時、正しい文はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "I’m interested in English.",
+            "jp": "英語に興味があります。"
+          },
+          {
+            "id": "b",
+            "en": "I’m interesting in English.",
+            "jp": "意味が変わって不自然です。"
+          },
+          {
+            "id": "c",
+            "en": "English is interested me.",
+            "jp": "文法が不自然です。"
+          },
+          {
+            "id": "d",
+            "en": "I interest English.",
+            "jp": "この形は不自然です。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "Your feeling = interested.",
+          "jp": "自分の気持ちは interested です。"
+        },
+        "explanation": {
+          "en": "Use interested for a person’s feeling: I’m interested in English.",
+          "jp": "人の気持ちには interested を使います。"
+        },
+        "situationQuote": {
+          "en": "You want to say you have interest in English."
+        },
+        "legacyId": "q19",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-06-original-q20",
+        "type": "mcq",
+        "cat": "interest",
+        "prompt": {
+          "en": "Which sentence means 「それは面白いです / 興味深いです」?",
+          "jp": "「それは面白いです / 興味深いです」はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "It’s interesting.",
+            "jp": "それは面白いです / 興味深いです。"
+          },
+          {
+            "id": "b",
+            "en": "It’s interested.",
+            "jp": "物が興味を持っているように聞こえて不自然です。"
+          },
+          {
+            "id": "c",
+            "en": "I’m interesting in it.",
+            "jp": "意味・形が違います。"
+          },
+          {
+            "id": "d",
+            "en": "It interests in me.",
+            "jp": "不自然です。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "Thing/story = interesting.",
+          "jp": "物・話は interesting です。"
+        },
+        "explanation": {
+          "en": "Use interesting for the thing that creates interest.",
+          "jp": "興味を引く物・話には interesting を使います。"
+        },
+        "legacyId": "q20",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-06-original-q21",
+        "type": "mcq",
+        "cat": "interest",
+        "prompt": {
+          "en": "Mistake Detective: Which sentence is dangerous if you mean 「私は興味があります」?",
+          "jp": "ミス発見：「私は興味があります」と言いたい時、意味が変わる危険な文はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "I’m interesting.",
+            "jp": "私は面白い人です、という意味になります。"
+          },
+          {
+            "id": "b",
+            "en": "I’m interested.",
+            "jp": "私は興味があります。"
+          },
+          {
+            "id": "c",
+            "en": "I’m interested in English.",
+            "jp": "英語に興味があります。"
+          },
+          {
+            "id": "d",
+            "en": "That story is interesting.",
+            "jp": "その話は面白いです。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "-ed is feeling. -ing causes the feeling.",
+          "jp": "-ed は気持ち、-ing はその気持ちを起こすものです。"
+        },
+        "explanation": {
+          "en": "“I’m interesting” means “I am an interesting person,” not “I am interested.”",
+          "jp": "“I’m interesting.” は「私は面白い人です」という意味です。"
+        },
+        "legacyId": "q21",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-06-original-q22",
+        "type": "situation",
+        "cat": "behalf",
+        "prompt": {
+          "en": "Which sentence is natural?",
+          "jp": "自然な文はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "Can you reply on my behalf?",
+            "jp": "私の代わりに返信してくれますか？"
+          },
+          {
+            "id": "b",
+            "en": "Can you reply behalf of me?",
+            "jp": "不自然です。"
+          },
+          {
+            "id": "c",
+            "en": "Can you reply in my behalf?",
+            "jp": "前置詞が違います。"
+          },
+          {
+            "id": "d",
+            "en": "Can you reply my behalf?",
+            "jp": "on が必要です。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "Use on my behalf.",
+          "jp": "on my behalf を使います。"
+        },
+        "explanation": {
+          "en": "“On my behalf” means someone does something for you or represents you.",
+          "jp": "“on my behalf” は「私の代わりに / 私を代表して」という意味です。"
+        },
+        "situationQuote": {
+          "en": "You cannot reply, so you ask someone to reply for you."
+        },
+        "legacyId": "q22",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-06-original-q23",
+        "type": "mcq",
+        "cat": "behalf",
+        "prompt": {
+          "en": "Which phrase is more natural than “behalf of me”?",
+          "jp": "“behalf of me” より自然なのはどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "on my behalf",
+            "jp": "私の代わりに。自然です。"
+          },
+          {
+            "id": "b",
+            "en": "at my behalf",
+            "jp": "不自然です。"
+          },
+          {
+            "id": "c",
+            "en": "in my behalf",
+            "jp": "不自然です。"
+          },
+          {
+            "id": "d",
+            "en": "by my behalf",
+            "jp": "不自然です。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "The natural phrase is on my behalf.",
+          "jp": "自然な表現は on my behalf です。"
+        },
+        "explanation": {
+          "en": "Say “on my behalf,” not “behalf of me.”",
+          "jp": "“behalf of me” ではなく “on my behalf” が自然です。"
+        },
+        "legacyId": "q23",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-06-original-q24",
+        "type": "mcq",
+        "cat": "behalf",
+        "prompt": {
+          "en": "Which sentence sounds like a formal representative phrase?",
+          "jp": "代表して話すフォーマルな表現はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "I’m speaking on behalf of the team.",
+            "jp": "チームを代表して話しています。"
+          },
+          {
+            "id": "b",
+            "en": "I’m speaking on the team behalf me.",
+            "jp": "語順が不自然です。"
+          },
+          {
+            "id": "c",
+            "en": "I’m interesting on the team.",
+            "jp": "意味が違います。"
+          },
+          {
+            "id": "d",
+            "en": "I saw it on behalf.",
+            "jp": "意味が違います。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "on behalf of + person/group.",
+          "jp": "on behalf of + 人・団体です。"
+        },
+        "explanation": {
+          "en": "“On behalf of the team” means representing the team.",
+          "jp": "“on behalf of the team” は「チームを代表して」という意味です。"
+        },
+        "legacyId": "q24",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-06-original-q25",
+        "type": "matching",
+        "cat": "part2",
+        "prompt": {
+          "en": "Part 2 Match: Match each nuance word with its Japanese meaning.",
+          "jp": "Part 2 マッチ：各ニュアンス単語と日本語の意味を合わせましょう。"
+        },
+        "hint": {
+          "en": "Think about the situation where each word is used.",
+          "jp": "それぞれの単語が使われる場面を考えましょう。"
+        },
+        "pairs": [
+          {
+            "en": "sparkly",
+            "jp": "キラキラしている。アクセサリーや目など。",
+            "cat": "part2"
+          },
+          {
+            "en": "glittery",
+            "jp": "ラメっぽくキラキラしている。",
+            "cat": "part2"
+          },
+          {
+            "en": "shiny",
+            "jp": "ピカピカ / ツヤツヤ。",
+            "cat": "part2"
+          },
+          {
+            "en": "interested",
+            "jp": "興味がある。人の気持ち。",
+            "cat": "part2"
+          },
+          {
+            "en": "interesting",
+            "jp": "面白い / 興味深い。物や話。",
+            "cat": "part2"
+          },
+          {
+            "en": "on my behalf",
+            "jp": "私の代わりに / 私を代表して。",
+            "cat": "part2"
+          }
+        ],
+        "legacyId": "q25",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-06-original-q26",
+        "type": "order",
+        "cat": "builder",
+        "prompt": {
+          "en": "Sentence Builder: Make 「英語に興味があります。」",
+          "jp": "文を組み立てましょう：「英語に興味があります。」"
+        },
+        "words": [
+          "interested",
+          "English",
+          "I’m",
+          "in"
+        ],
+        "correctOrder": [
+          2,
+          0,
+          3,
+          1
+        ],
+        "hint": {
+          "en": "Feeling = interested in...",
+          "jp": "気持ちは interested in... です。"
+        },
+        "explanation": {
+          "en": "The sentence is “I’m interested in English.”",
+          "jp": "自然な文は “I’m interested in English.” です。"
+        },
+        "legacyId": "q26",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-06-original-q27",
+        "type": "order",
+        "cat": "builder",
+        "prompt": {
+          "en": "Sentence Builder: Make 「私の代わりに返信してくれますか？」",
+          "jp": "文を組み立てましょう：「私の代わりに返信してくれますか？」"
+        },
+        "words": [
+          "reply",
+          "on my behalf",
+          "Can",
+          "you"
+        ],
+        "correctOrder": [
+          2,
+          3,
+          0,
+          1
+        ],
+        "hint": {
+          "en": "Use Can you...",
+          "jp": "Can you... から始めます。"
+        },
+        "explanation": {
+          "en": "The sentence is “Can you reply on my behalf?”",
+          "jp": "自然な文は “Can you reply on my behalf?” です。"
+        },
+        "legacyId": "q27",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-06-original-q28",
+        "type": "typing",
+        "cat": "alcohol",
+        "promptJP": "今日はまだお酒を飲んでいません。",
+        "accepted": [
+          "I haven't had any alcohol yet today",
+          "I have not had any alcohol yet today",
+          "I haven't had alcohol yet today"
+        ],
+        "hint": {
+          "en": "Use haven’t had any alcohol yet today.",
+          "jp": "haven’t had any alcohol yet today を使います。"
+        },
+        "explanation": {
+          "en": "This is the most natural daily sentence.",
+          "jp": "日常ではこの文がとても自然です。"
+        },
+        "legacyId": "q28",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-06-original-q29",
+        "type": "typing",
+        "cat": "hate",
+        "promptJP": "サッカーを見るのが嫌いです。",
+        "accepted": [
+          "I hate watching soccer",
+          "I hate watching football",
+          "I don't like watching soccer",
+          "I do not like watching soccer"
+        ],
+        "hint": {
+          "en": "Use hate + watching.",
+          "jp": "hate + watching を使います。"
+        },
+        "explanation": {
+          "en": "“I don’t like watching soccer” is a softer accepted version.",
+          "jp": "“I don’t like watching soccer.” はやわらかい言い方です。"
+        },
+        "legacyId": "q29",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-06-original-q30",
+        "type": "typing",
+        "cat": "prepositions",
+        "promptJP": "インスタで見ました。",
+        "accepted": [
+          "I saw it on Instagram",
+          "I saw that on Instagram"
+        ],
+        "hint": {
+          "en": "Use on Instagram.",
+          "jp": "on Instagram を使います。"
+        },
+        "explanation": {
+          "en": "For SNS platforms, use on.",
+          "jp": "SNSには on を使います。"
+        },
+        "legacyId": "q30",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-06-original-q31",
+        "type": "typing",
+        "cat": "sparkle",
+        "promptJP": "キラキラしたものが好きです。",
+        "accepted": [
+          "I like sparkly things",
+          "I like sparkling things"
+        ],
+        "hint": {
+          "en": "For cute shiny things, use sparkly.",
+          "jp": "かわいいキラキラには sparkly が自然です。"
+        },
+        "explanation": {
+          "en": "“I like sparkly things” is natural and easy.",
+          "jp": "“I like sparkly things.” は自然で使いやすいです。"
+        },
+        "legacyId": "q31",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-06-original-q32",
+        "type": "typing",
+        "cat": "interest",
+        "promptJP": "英語に興味があります。",
+        "accepted": [
+          "I'm interested in English",
+          "I am interested in English"
+        ],
+        "hint": {
+          "en": "Your feeling = interested in.",
+          "jp": "自分の気持ちは interested in です。"
+        },
+        "explanation": {
+          "en": "Use interested for your feeling.",
+          "jp": "自分の気持ちには interested を使います。"
+        },
+        "legacyId": "q32",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-06-original-q33",
+        "type": "typing",
+        "cat": "interest",
+        "promptJP": "それは面白いです。",
+        "accepted": [
+          "It's interesting",
+          "It is interesting",
+          "That's interesting",
+          "That is interesting"
+        ],
+        "hint": {
+          "en": "Thing/story = interesting.",
+          "jp": "物・話は interesting です。"
+        },
+        "explanation": {
+          "en": "Use interesting for the thing or story.",
+          "jp": "物や話には interesting を使います。"
+        },
+        "legacyId": "q33",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "july-06-original-q34",
+        "type": "typing",
+        "cat": "behalf",
+        "promptJP": "私の代わりに返信してくれますか？",
+        "accepted": [
+          "Can you reply on my behalf",
+          "Could you reply on my behalf",
+          "Please reply on my behalf"
+        ],
+        "hint": {
+          "en": "Use on my behalf.",
+          "jp": "on my behalf を使います。"
+        },
+        "explanation": {
+          "en": "“Can you reply on my behalf?” is natural.",
+          "jp": "“Can you reply on my behalf?” が自然です。"
+        },
+        "legacyId": "q34",
+        "section": "Original Review",
+        "isOriginal": true
+      }
+    ]
+  },
+  {
+    "id": "june-28",
+    "lessonDate": "2026-06-28",
+    "title": "Café Talk & Polite Answers",
+    "takiTitle": "Polite Conversation Review",
+    "summary": "Today's mission: order politely, ask better questions, and choose the right real-life phrase under pressure.",
+    "summaryJa": "丁寧な注文、How about you?、Did の質問、「仕方ない」の自然な英語を復習します。",
+    "status": "published",
+    "audience": "both",
+    "sourceType": "legacy_zip",
+    "sourcePath": "legacy-site/lessons/june-28/index.html",
+    "contentVersion": 1,
+    "categoryLabels": {
+      "wouldLike": {
+        "en": "Polite requests: would like",
+        "jp": "would like の丁寧な言い方"
+      },
+      "turnTaking": {
+        "en": "Conversation flow",
+        "jp": "会話を自然につなげる表現"
+      },
+      "pastQuestions": {
+        "en": "Past questions with Did",
+        "jp": "Did を使う過去の質問"
+      },
+      "winning": {
+        "en": "Who / Which will win?",
+        "jp": "勝敗を聞く表現"
+      },
+      "cantBeHelped": {
+        "en": "仕方ない expressions",
+        "jp": "仕方ない・どうしようもない"
+      },
+      "reasonWith": {
+        "en": "reason with someone",
+        "jp": "人を説得する"
+      },
+      "mixed": {
+        "en": "Creative mixed challenge",
+        "jp": "クリエイティブ総復習"
+      }
+    },
+    "originalQuestionCount": 21,
+    "questions": [
+      {
+        "id": "june-28-original-q1",
+        "type": "mcq",
+        "cat": "wouldLike",
+        "prompt": {
+          "en": "Warm-up: Which sentence is the most polite way to ask 「何を飲みたいですか？」?",
+          "jp": "ウォームアップ：「何を飲みたいですか？」を一番丁寧で自然に聞く英語はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "What would you like to drink?",
+            "jp": "何を飲みたいですか？"
+          },
+          {
+            "id": "b",
+            "en": "What do you drink?",
+            "jp": "普段何を飲みますか？"
+          },
+          {
+            "id": "c",
+            "en": "What are you drink?",
+            "jp": "文法的に不自然です。"
+          },
+          {
+            "id": "d",
+            "en": "What you like drink?",
+            "jp": "語順が不自然です。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "Use “would like” when you want to sound polite.",
+          "jp": "丁寧に聞きたいときは would like を使います。"
+        },
+        "explanation": {
+          "en": "“What would you like to drink?” is polite and natural in a café, restaurant, or lesson conversation.",
+          "jp": "“What would you like to drink?” はカフェ・レストラン・レッスン会話で自然で丁寧な聞き方です。"
+        },
+        "legacyId": "q1",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-28-original-q2",
+        "type": "situation",
+        "cat": "wouldLike",
+        "situationQuote": {
+          "en": "Café staff: “What would you like to eat?”"
+        },
+        "prompt": {
+          "en": "Café Mission: Choose the best reply.",
+          "jp": "カフェミッション：一番自然な返事を選びましょう。"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "I’d like pasta, please.",
+            "jp": "パスタがいいです。"
+          },
+          {
+            "id": "b",
+            "en": "I like eat pasta.",
+            "jp": "文法的に不自然です。"
+          },
+          {
+            "id": "c",
+            "en": "I would pasta, please.",
+            "jp": "like が必要です。"
+          },
+          {
+            "id": "d",
+            "en": "Pasta is drink.",
+            "jp": "意味が変です。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "The answer can use the same polite pattern: “I’d like...”.",
+          "jp": "答えも同じ丁寧な形 “I’d like...” を使えます。"
+        },
+        "explanation": {
+          "en": "“I’d like pasta, please” sounds polite and natural when ordering food.",
+          "jp": "注文するときは “I’d like pasta, please.” が丁寧で自然です。"
+        },
+        "legacyId": "q2",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-28-original-q3",
+        "type": "mcq",
+        "cat": "wouldLike",
+        "prompt": {
+          "en": "TRUE or FALSE: “I like coffee” and “I’d like coffee” mean exactly the same thing.",
+          "jp": "○×問題：“I like coffee” と “I’d like coffee” はまったく同じ意味です。"
+        },
+        "choices": [
+          {
+            "id": "t",
+            "en": "True",
+            "jp": "正しい"
+          },
+          {
+            "id": "f",
+            "en": "False",
+            "jp": "違います"
+          }
+        ],
+        "correct": "f",
+        "hint": {
+          "en": "One is about general preference. One is about what you want now.",
+          "jp": "一つは普段の好み。もう一つは今ほしいものです。"
+        },
+        "explanation": {
+          "en": "“I like coffee” means coffee is your preference. “I’d like coffee” means you want coffee now.",
+          "jp": "“I like coffee.” は「コーヒーが好き」。 “I’d like coffee.” は「今コーヒーがほしい・コーヒーがいい」です。"
+        },
+        "legacyId": "q3",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-28-original-q4",
+        "type": "situation",
+        "cat": "turnTaking",
+        "situationQuote": {
+          "en": "A: “I’d like tea.”  B: “...”"
+        },
+        "prompt": {
+          "en": "Mini Dialogue: B wants to ask A the same question back. What should B say?",
+          "jp": "ミニ会話：Bが相手にも同じ質問を返したいです。何と言えばいいですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "How about you?",
+            "jp": "あなたはどうですか？"
+          },
+          {
+            "id": "b",
+            "en": "Who will win?",
+            "jp": "誰が勝つ？"
+          },
+          {
+            "id": "c",
+            "en": "It can’t be helped.",
+            "jp": "仕方ない。"
+          },
+          {
+            "id": "d",
+            "en": "Did he help you?",
+            "jp": "彼は手伝いましたか？"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "This phrase is perfect after you answer someone’s question.",
+          "jp": "自分が答えたあとに、相手へ聞き返すときの表現です。"
+        },
+        "explanation": {
+          "en": "“How about you?” keeps the conversation moving naturally after you answer.",
+          "jp": "“How about you?” は、自分が答えたあとに「あなたは？」と自然に会話を続ける表現です。"
+        },
+        "legacyId": "q4",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-28-original-q5",
+        "type": "mcq",
+        "cat": "wouldLike",
+        "prompt": {
+          "en": "Mistake Detective: What is wrong with “I would coffee”?",
+          "jp": "間違い探し：“I would coffee” は何が足りませんか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "It needs “like”: I would like coffee.",
+            "jp": "like が必要です：I would like coffee."
+          },
+          {
+            "id": "b",
+            "en": "It needs “win”: I would win coffee.",
+            "jp": "win は必要ありません。"
+          },
+          {
+            "id": "c",
+            "en": "It needs “did”: I did would coffee.",
+            "jp": "did は必要ありません。"
+          },
+          {
+            "id": "d",
+            "en": "Nothing is wrong.",
+            "jp": "間違いはありません。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "The full phrase is “would like.”",
+          "jp": "セットで “would like” です。"
+        },
+        "explanation": {
+          "en": "Use “would like” together. “I would coffee” is incomplete.",
+          "jp": "“would like” はセットです。“I would coffee.” だけだと不完全です。"
+        },
+        "legacyId": "q5",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-28-original-q6",
+        "type": "mcq",
+        "cat": "pastQuestions",
+        "prompt": {
+          "en": "Speed Check: Which past question is correct?",
+          "jp": "スピードチェック：正しい過去の質問はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "Did he help you yesterday?",
+            "jp": "彼は昨日あなたを手伝いましたか？"
+          },
+          {
+            "id": "b",
+            "en": "Did he helped you yesterday?",
+            "jp": "Did の後は helped ではなく help です。"
+          },
+          {
+            "id": "c",
+            "en": "Helped he you yesterday?",
+            "jp": "語順が不自然です。"
+          },
+          {
+            "id": "d",
+            "en": "Did he helps you yesterday?",
+            "jp": "helps ではなく help です。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "After “Did,” use the base verb.",
+          "jp": "Did の後は動詞の原形です。"
+        },
+        "explanation": {
+          "en": "Past questions use “Did + subject + base verb?” so the correct sentence is “Did he help you yesterday?”",
+          "jp": "過去の質問は “Did + 主語 + 動詞の原形？” なので “Did he help you yesterday?” が正解です。"
+        },
+        "legacyId": "q6",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-28-original-q7",
+        "type": "mcq",
+        "cat": "pastQuestions",
+        "prompt": {
+          "en": "TRUE or FALSE: After “Did,” we usually use the past verb like “helped.”",
+          "jp": "○×問題：Did の後は、ふつう helped のような過去形を使います。"
+        },
+        "choices": [
+          {
+            "id": "t",
+            "en": "True",
+            "jp": "正しい"
+          },
+          {
+            "id": "f",
+            "en": "False",
+            "jp": "違います"
+          }
+        ],
+        "correct": "f",
+        "hint": {
+          "en": "Did already shows the past.",
+          "jp": "Did がもう過去を表しています。"
+        },
+        "explanation": {
+          "en": "Because “Did” already marks the sentence as past, the main verb returns to the base form: help, eat, call.",
+          "jp": "Did が過去を表すので、メインの動詞は原形になります：help / eat / call。"
+        },
+        "legacyId": "q7",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-28-original-q8",
+        "type": "situation",
+        "cat": "pastQuestions",
+        "situationQuote": {
+          "en": "Bad sentence: “Did he helped you yesterday?”"
+        },
+        "prompt": {
+          "en": "Fix-It Challenge: Choose the corrected sentence.",
+          "jp": "修正チャレンジ：正しく直した文を選びましょう。"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "Did he help you yesterday?",
+            "jp": "彼は昨日あなたを手伝いましたか？"
+          },
+          {
+            "id": "b",
+            "en": "Did he helping you yesterday?",
+            "jp": "不自然です。"
+          },
+          {
+            "id": "c",
+            "en": "Did helped he you yesterday?",
+            "jp": "語順が不自然です。"
+          },
+          {
+            "id": "d",
+            "en": "He did helped yesterday?",
+            "jp": "不自然です。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "Remove the -ed after Did.",
+          "jp": "Did の後の -ed を外します。"
+        },
+        "explanation": {
+          "en": "The corrected sentence is “Did he help you yesterday?” because the verb after Did is the base form.",
+          "jp": "正しくは “Did he help you yesterday?” です。Did の後は動詞の原形です。"
+        },
+        "legacyId": "q8",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-28-original-q9",
+        "type": "situation",
+        "cat": "winning",
+        "situationQuote": {
+          "en": "You are watching Japan vs Brazil with a friend."
+        },
+        "prompt": {
+          "en": "Stadium Question: What is the most natural way to ask 「どっちが勝つと思う？」?",
+          "jp": "スタジアム問題：「どっちが勝つと思う？」を自然に聞く英語はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "Who will win, Japan or Brazil?",
+            "jp": "日本とブラジル、どちらが勝つと思う？"
+          },
+          {
+            "id": "b",
+            "en": "Who will winning Japan or Brazil?",
+            "jp": "文法的に不自然です。"
+          },
+          {
+            "id": "c",
+            "en": "Who win will Japan or Brazil?",
+            "jp": "語順が不自然です。"
+          },
+          {
+            "id": "d",
+            "en": "Japan or Brazil who?",
+            "jp": "不自然です。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "Use “will + base verb.”",
+          "jp": "will + 動詞の原形を使います。"
+        },
+        "explanation": {
+          "en": "“Who will win, Japan or Brazil?” is natural when asking about teams, countries, or players.",
+          "jp": "チーム・国・選手の勝敗を聞くときは “Who will win, Japan or Brazil?” が自然です。"
+        },
+        "legacyId": "q9",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-28-original-q10",
+        "type": "mcq",
+        "cat": "winning",
+        "prompt": {
+          "en": "TRUE or FALSE: “Who will win, Japan or Brazil?” can sound natural even though Japan and Brazil are countries.",
+          "jp": "○×問題：“Who will win, Japan or Brazil?” は、Japan と Brazil が国でも自然に聞こえることがあります。"
+        },
+        "choices": [
+          {
+            "id": "t",
+            "en": "True",
+            "jp": "正しい"
+          },
+          {
+            "id": "f",
+            "en": "False",
+            "jp": "違います"
+          }
+        ],
+        "correct": "t",
+        "hint": {
+          "en": "In sports, countries often mean the teams.",
+          "jp": "スポーツでは国名がチームを表すことが多いです。"
+        },
+        "explanation": {
+          "en": "In sports conversations, “Japan” and “Brazil” often mean the teams, so “Who will win?” sounds natural.",
+          "jp": "スポーツの会話では Japan / Brazil がチームを表すので、“Who will win?” は自然です。"
+        },
+        "legacyId": "q10",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-28-original-q11",
+        "type": "mcq",
+        "cat": "winning",
+        "prompt": {
+          "en": "Nuance Check: Which one clearly means 「どちらのチームが勝ちますか？」?",
+          "jp": "ニュアンスチェック：「どちらのチームが勝ちますか？」をはっきり言うならどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "Which team will win?",
+            "jp": "どちらのチームが勝ちますか？"
+          },
+          {
+            "id": "b",
+            "en": "Which team will help?",
+            "jp": "どちらのチームが手伝いますか？"
+          },
+          {
+            "id": "c",
+            "en": "How about you?",
+            "jp": "あなたはどう？"
+          },
+          {
+            "id": "d",
+            "en": "It can’t be helped.",
+            "jp": "仕方ない。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "If you want to be very clear, use “team.”",
+          "jp": "はっきりチームと言いたいなら team を使います。"
+        },
+        "explanation": {
+          "en": "“Which team will win?” is clear and slightly more specific than “Who will win?”",
+          "jp": "“Which team will win?” は “Who will win?” より少しはっきり「チーム」を意識した言い方です。"
+        },
+        "legacyId": "q11",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-28-original-q12",
+        "type": "situation",
+        "cat": "cantBeHelped",
+        "situationQuote": {
+          "en": "The train already left. You cannot change it now."
+        },
+        "prompt": {
+          "en": "Real-Life Reaction: What can you say?",
+          "jp": "リアルな反応：この場面で何と言えますか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "There’s nothing we can do.",
+            "jp": "もうどうしようもない。"
+          },
+          {
+            "id": "b",
+            "en": "What would you like to drink?",
+            "jp": "何を飲みたいですか？"
+          },
+          {
+            "id": "c",
+            "en": "How about you?",
+            "jp": "あなたは？"
+          },
+          {
+            "id": "d",
+            "en": "Who will win?",
+            "jp": "誰が勝つ？"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "There are no useful actions left.",
+          "jp": "もうできることがない状況です。"
+        },
+        "explanation": {
+          "en": "“There’s nothing we can do” is natural when the situation cannot be changed now.",
+          "jp": "もう変えられない状況では “There’s nothing we can do.” が自然です。"
+        },
+        "legacyId": "q12",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-28-original-q13",
+        "type": "situation",
+        "cat": "cantBeHelped",
+        "situationQuote": {
+          "en": "It’s raining, so the outdoor event was cancelled."
+        },
+        "prompt": {
+          "en": "Soft Acceptance: Which phrase sounds closest to 「仕方ないね」?",
+          "jp": "受け入れる一言：「仕方ないね」に一番近い英語はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "It can’t be helped.",
+            "jp": "仕方ないね。"
+          },
+          {
+            "id": "b",
+            "en": "I’d like coffee.",
+            "jp": "コーヒーがいいです。"
+          },
+          {
+            "id": "c",
+            "en": "Did he help you yesterday?",
+            "jp": "彼は昨日手伝いましたか？"
+          },
+          {
+            "id": "d",
+            "en": "Which team will win?",
+            "jp": "どちらのチームが勝ちますか？"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "This phrase accepts the situation.",
+          "jp": "状況を受け入れる感じの表現です。"
+        },
+        "explanation": {
+          "en": "“It can’t be helped” is close to 「仕方ない」 and is used when you accept a situation you cannot change.",
+          "jp": "“It can’t be helped.” は「仕方ない」に近く、変えられない状況を受け入れるときに使います。"
+        },
+        "legacyId": "q13",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-28-original-q14",
+        "type": "mcq",
+        "cat": "cantBeHelped",
+        "prompt": {
+          "en": "TRUE or FALSE: “There is nothing that can be done” is usually more casual than “There’s nothing we can do.”",
+          "jp": "○×問題：“There is nothing that can be done” は “There’s nothing we can do” よりカジュアルです。"
+        },
+        "choices": [
+          {
+            "id": "t",
+            "en": "True",
+            "jp": "正しい"
+          },
+          {
+            "id": "f",
+            "en": "False",
+            "jp": "違います"
+          }
+        ],
+        "correct": "f",
+        "hint": {
+          "en": "Longer often sounds more formal here.",
+          "jp": "この場合、長い表現は少し硬く聞こえやすいです。"
+        },
+        "explanation": {
+          "en": "“There is nothing that can be done” is correct, but it sounds more formal. In daily speech, “There’s nothing we can do” is usually more natural.",
+          "jp": "“There is nothing that can be done.” は正しいですが少し硬いです。日常会話では “There’s nothing we can do.” の方が自然です。"
+        },
+        "legacyId": "q14",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-28-original-q15",
+        "type": "situation",
+        "cat": "reasonWith",
+        "situationQuote": {
+          "en": "He was angry, so I tried to talk calmly and make him understand."
+        },
+        "prompt": {
+          "en": "Phrase Hunter: Which sentence fits this situation?",
+          "jp": "フレーズ探し：この状況に合う英文はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "I tried to reason with him.",
+            "jp": "彼を説得しようとした / 理性的に話そうとした。"
+          },
+          {
+            "id": "b",
+            "en": "I tried to win with him.",
+            "jp": "彼と勝とうとした。意味が違います。"
+          },
+          {
+            "id": "c",
+            "en": "I tried to drink with him.",
+            "jp": "彼と飲もうとした。意味が違います。"
+          },
+          {
+            "id": "d",
+            "en": "I tried to helped him.",
+            "jp": "文法的に不自然です。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "This phrase means to talk calmly and persuade someone.",
+          "jp": "落ち着いて話して説得するイメージです。"
+        },
+        "explanation": {
+          "en": "“Reason with someone” means to talk calmly and try to persuade them, especially when they are upset or emotional.",
+          "jp": "“reason with someone” は、相手が怒っている・感情的なときに、落ち着いて話して説得しようとする意味です。"
+        },
+        "legacyId": "q15",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-28-original-q16",
+        "type": "matching",
+        "cat": "mixed",
+        "prompt": {
+          "en": "Speed Match: Connect each phrase to the Japanese meaning.",
+          "jp": "スピードマッチ：英語フレーズと日本語の意味をつなげましょう。"
+        },
+        "hint": {
+          "en": "Match meaning, not word order.",
+          "jp": "単語の順番ではなく、意味でマッチしましょう。"
+        },
+        "pairs": [
+          {
+            "en": "What would you like to drink?",
+            "jp": "何を飲みたいですか？",
+            "cat": "wouldLike"
+          },
+          {
+            "en": "I’d like coffee.",
+            "jp": "コーヒーがいいです。",
+            "cat": "wouldLike"
+          },
+          {
+            "en": "How about you?",
+            "jp": "あなたはどうですか？",
+            "cat": "turnTaking"
+          },
+          {
+            "en": "Did he help you yesterday?",
+            "jp": "彼は昨日あなたを手伝いましたか？",
+            "cat": "pastQuestions"
+          },
+          {
+            "en": "Who will win?",
+            "jp": "誰が勝つ？ / どちらが勝つ？",
+            "cat": "winning"
+          },
+          {
+            "en": "There’s nothing we can do.",
+            "jp": "もうどうしようもない。",
+            "cat": "cantBeHelped"
+          },
+          {
+            "en": "It can’t be helped.",
+            "jp": "仕方ない。",
+            "cat": "cantBeHelped"
+          },
+          {
+            "en": "reason with someone",
+            "jp": "人を説得する / 理性的に話す",
+            "cat": "reasonWith"
+          }
+        ],
+        "legacyId": "q16",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-28-original-q17a",
+        "type": "typing",
+        "cat": "wouldLike",
+        "promptJP": "何を飲みたいですか？",
+        "accepted": [
+          "What would you like to drink"
+        ],
+        "hint": {
+          "en": "Start with “What would you like...”.",
+          "jp": "“What would you like...” から始めます。"
+        },
+        "explanation": {
+          "en": "The natural polite question is “What would you like to drink?”",
+          "jp": "丁寧で自然な質問は “What would you like to drink?” です。"
+        },
+        "legacyId": "q17a",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-28-original-q17b",
+        "type": "typing",
+        "cat": "wouldLike",
+        "promptJP": "コーヒーがいいです。",
+        "accepted": [
+          "I'd like coffee",
+          "I would like coffee"
+        ],
+        "hint": {
+          "en": "Use “I’d like...” or “I would like...”.",
+          "jp": "“I’d like...” または “I would like...” を使います。"
+        },
+        "explanation": {
+          "en": "“I’d like coffee” is short, polite, and natural.",
+          "jp": "“I’d like coffee.” は短くて丁寧で自然です。"
+        },
+        "legacyId": "q17b",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-28-original-q17c",
+        "type": "typing",
+        "cat": "turnTaking",
+        "promptJP": "あなたはどうですか？",
+        "accepted": [
+          "How about you"
+        ],
+        "hint": {
+          "en": "Three words. This phrase returns the same question.",
+          "jp": "3語です。同じ質問を相手に返す表現です。"
+        },
+        "explanation": {
+          "en": "“How about you?” is a natural way to ask the same question back.",
+          "jp": "“How about you?” は「あなたは？」と自然に聞き返す表現です。"
+        },
+        "legacyId": "q17c",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-28-original-q17d",
+        "type": "typing",
+        "cat": "pastQuestions",
+        "promptJP": "彼は昨日あなたを手伝いましたか？",
+        "accepted": [
+          "Did he help you yesterday"
+        ],
+        "hint": {
+          "en": "Use Did + he + base verb.",
+          "jp": "Did + he + 動詞の原形を使います。"
+        },
+        "explanation": {
+          "en": "“Did he help you yesterday?” uses the base verb “help” after Did.",
+          "jp": "“Did he help you yesterday?” では Did の後なので help を使います。"
+        },
+        "legacyId": "q17d",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-28-original-q17e",
+        "type": "typing",
+        "cat": "cantBeHelped",
+        "promptJP": "仕方ない。",
+        "accepted": [
+          "It can't be helped",
+          "It cannot be helped"
+        ],
+        "hint": {
+          "en": "Start with “It can’t...”.",
+          "jp": "“It can’t...” から始めます。"
+        },
+        "explanation": {
+          "en": "“It can’t be helped” is close to 「仕方ない」 when accepting a situation.",
+          "jp": "“It can’t be helped.” は、状況を受け入れる「仕方ない」に近い表現です。"
+        },
+        "legacyId": "q17e",
+        "section": "Original Review",
+        "isOriginal": true
+      }
+    ]
+  },
+  {
+    "id": "june-29",
+    "lessonDate": "2026-06-29",
+    "title": "What Did You Hear? Reactions & Position",
+    "takiTitle": "Heard, Reactions & Position",
+    "summary": "Today's mission: master “I heard…”, natural reactions, and position words.",
+    "summaryJa": "I heard の使い分け、自然なリアクション、位置表現を復習します。",
+    "status": "published",
+    "audience": "both",
+    "sourceType": "legacy_zip",
+    "sourcePath": "legacy-site/lessons/june-29/index.html",
+    "contentVersion": 1,
+    "categoryLabels": {
+      "heard": {
+        "en": "“I heard…” expressions",
+        "jp": "「聞いた」の使い分け"
+      },
+      "reactions": {
+        "en": "Natural reaction phrases",
+        "jp": "自然なリアクション表現"
+      },
+      "position": {
+        "en": "Position words",
+        "jp": "位置を表す言葉"
+      }
+    },
+    "originalQuestionCount": 15,
+    "questions": [
+      {
+        "id": "june-29-original-q1",
+        "type": "mcq",
+        "cat": "heard",
+        "prompt": {
+          "en": "Which sentence means 「それ聞こえた」?",
+          "jp": "「それ聞こえた」はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "I heard it.",
+            "jp": "それ聞こえた。"
+          },
+          {
+            "id": "b",
+            "en": "I heard that.",
+            "jp": "それ聞いたよ。"
+          },
+          {
+            "id": "c",
+            "en": "I heard about it.",
+            "jp": "それについて聞いた。"
+          },
+          {
+            "id": "d",
+            "en": "I've heard of it.",
+            "jp": "名前は聞いたことある。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "Think about sound or voice reaching your ears.",
+          "jp": "音や声が耳に入ったイメージです。"
+        },
+        "explanation": {
+          "en": "“I heard it” is used when you heard a sound, voice, or something someone said.",
+          "jp": "“I heard it.” は、音・声・何かが耳に入ったときに使います。「それ聞こえた」という感じです。"
+        },
+        "legacyId": "q1",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-29-original-q2",
+        "type": "mcq",
+        "cat": "heard",
+        "prompt": {
+          "en": "Which sentence means 「それ聞いたよ」 as information?",
+          "jp": "情報として「それ聞いたよ」はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "I heard it.",
+            "jp": "それ聞こえた。"
+          },
+          {
+            "id": "b",
+            "en": "I heard that.",
+            "jp": "それ聞いたよ。"
+          },
+          {
+            "id": "c",
+            "en": "I heard about it.",
+            "jp": "それについて聞いた。"
+          },
+          {
+            "id": "d",
+            "en": "I've heard of it.",
+            "jp": "名前は聞いたことある。"
+          }
+        ],
+        "correct": "b",
+        "hint": {
+          "en": "This is about information or content, not just sound.",
+          "jp": "音ではなく、内容・情報を聞いた感じです。"
+        },
+        "explanation": {
+          "en": "“I heard that” is used when you heard some information or content.",
+          "jp": "“I heard that.” は、内容や情報を聞いたときに使います。「その話聞いたよ」という感じです。"
+        },
+        "legacyId": "q2",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-29-original-q3",
+        "type": "mcq",
+        "cat": "heard",
+        "prompt": {
+          "en": "Which sentence means 「それについて聞いた」?",
+          "jp": "「それについて聞いた」はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "I heard it.",
+            "jp": "それ聞こえた。"
+          },
+          {
+            "id": "b",
+            "en": "I heard that.",
+            "jp": "それ聞いたよ。"
+          },
+          {
+            "id": "c",
+            "en": "I heard about it.",
+            "jp": "それについて聞いた。"
+          },
+          {
+            "id": "d",
+            "en": "I've heard of it.",
+            "jp": "名前は聞いたことある。"
+          }
+        ],
+        "correct": "c",
+        "hint": {
+          "en": "Use this when talking about a topic, event, story, or news.",
+          "jp": "話題・出来事・ニュースについて聞いたときに使います。"
+        },
+        "explanation": {
+          "en": "“I heard about it” means you heard some information about a topic, event, or situation.",
+          "jp": "“I heard about it.” は、ある話題や出来事について聞いたときに使います。「そのことについて聞いた」という感じです。"
+        },
+        "legacyId": "q3",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-29-original-q4",
+        "type": "mcq",
+        "cat": "heard",
+        "prompt": {
+          "en": "Which sentence means 「名前は聞いたことある」?",
+          "jp": "「名前は聞いたことある」はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "I heard it.",
+            "jp": "それ聞こえた。"
+          },
+          {
+            "id": "b",
+            "en": "I heard that.",
+            "jp": "それ聞いたよ。"
+          },
+          {
+            "id": "c",
+            "en": "I heard about it.",
+            "jp": "それについて聞いた。"
+          },
+          {
+            "id": "d",
+            "en": "I've heard of it.",
+            "jp": "名前は聞いたことある。"
+          }
+        ],
+        "correct": "d",
+        "hint": {
+          "en": "You know the name, but maybe you do not know the details.",
+          "jp": "名前や存在は知っているけど、詳しくは知らない感じです。"
+        },
+        "explanation": {
+          "en": "“I've heard of it” means you know the name or existence of something, but you may not know the details.",
+          "jp": "“I've heard of it.” は、名前や存在を聞いたことがあるときに使います。詳しい内容までは知らなくても大丈夫です。"
+        },
+        "legacyId": "q4",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-29-original-q5",
+        "type": "situation",
+        "cat": "heard",
+        "situationQuote": {
+          "en": "“There is a new restaurant near the station. Have you heard about it?”"
+        },
+        "prompt": {
+          "en": "What is the best answer?",
+          "jp": "友達が「駅の近くに新しいレストランがあるんだけど、そのこと聞いた？」と言っています。自然な返事はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "I think I heard about it.",
+            "jp": "それについて聞いた気がする。"
+          },
+          {
+            "id": "b",
+            "en": "I think I heard it.",
+            "jp": "それが聞こえた気がする。"
+          },
+          {
+            "id": "c",
+            "en": "I think I heard of that.",
+            "jp": "名前は聞いたことある気がする。"
+          },
+          {
+            "id": "d",
+            "en": "I am hearing it.",
+            "jp": "不自然な英語です。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "The friend is asking about a topic or news.",
+          "jp": "話題・ニュースについて聞かれています。"
+        },
+        "explanation": {
+          "en": "“I think I heard about it” is natural because the topic is a new restaurant or news.",
+          "jp": "新しいレストランという話題について聞いているので、“I think I heard about it.” が自然です。"
+        },
+        "legacyId": "q5",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-29-original-q6",
+        "type": "mcq",
+        "cat": "reactions",
+        "prompt": {
+          "en": "Which phrase means 「それなぁ！」?",
+          "jp": "「それなぁ！」に近い英語はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "Exactly.",
+            "jp": "それなぁ。"
+          },
+          {
+            "id": "b",
+            "en": "It's okay.",
+            "jp": "大丈夫だよ。"
+          },
+          {
+            "id": "c",
+            "en": "That's tough.",
+            "jp": "それは大変だね。"
+          },
+          {
+            "id": "d",
+            "en": "That sounds good.",
+            "jp": "それいいね。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "Use this when you strongly agree.",
+          "jp": "強く同意するときに使います。"
+        },
+        "explanation": {
+          "en": "“Exactly” is used when you strongly agree with what someone said.",
+          "jp": "“Exactly.” は、相手の言ったことに強く同意するときに使います。「それなぁ」「まさにそう」という感じです。"
+        },
+        "legacyId": "q6",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-29-original-q7",
+        "type": "situation",
+        "cat": "reactions",
+        "situationQuote": {
+          "en": "“Learning English every day is important.”"
+        },
+        "prompt": {
+          "en": "Choose the best natural reaction.",
+          "jp": "友達が「毎日英語を勉強するのは大事だよね」と言いました。自然な反応はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "That's so true.",
+            "jp": "それほんとだよね。"
+          },
+          {
+            "id": "b",
+            "en": "It can't be helped.",
+            "jp": "仕方ない。"
+          },
+          {
+            "id": "c",
+            "en": "I heard it.",
+            "jp": "それ聞こえた。"
+          },
+          {
+            "id": "d",
+            "en": "Top right.",
+            "jp": "右上。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "Choose a phrase for agreeing with an opinion.",
+          "jp": "意見に共感・同意するときの表現です。"
+        },
+        "explanation": {
+          "en": "“That's so true” is a natural reaction when you agree with someone's opinion.",
+          "jp": "“That's so true.” は、相手の意見に共感するときに使えます。「それほんとだよね」という感じです。"
+        },
+        "legacyId": "q7",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-29-original-q8",
+        "type": "mcq",
+        "cat": "reactions",
+        "prompt": {
+          "en": "Which phrase means 「マジで / ほんとそれ」 casually?",
+          "jp": "カジュアルに「マジで / ほんとそれ」はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "For real.",
+            "jp": "マジで / ほんとそれ。"
+          },
+          {
+            "id": "b",
+            "en": "It's okay.",
+            "jp": "大丈夫だよ。"
+          },
+          {
+            "id": "c",
+            "en": "That sounds good.",
+            "jp": "それいいね。"
+          },
+          {
+            "id": "d",
+            "en": "I heard that.",
+            "jp": "それ聞いたよ。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "This is casual and conversational.",
+          "jp": "カジュアルな会話で使います。"
+        },
+        "explanation": {
+          "en": "“For real” is a casual phrase used to show agreement, surprise, or strong feeling.",
+          "jp": "“For real.” はカジュアルな表現で、「マジで」「ほんとそれ」のように使えます。"
+        },
+        "legacyId": "q8",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-29-original-q9",
+        "type": "mcq",
+        "cat": "position",
+        "prompt": {
+          "en": "What does “top right” mean?",
+          "jp": "“top right” はどこの位置ですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "右上",
+            "jp": "top right"
+          },
+          {
+            "id": "b",
+            "en": "左上",
+            "jp": "top left"
+          },
+          {
+            "id": "c",
+            "en": "右下",
+            "jp": "bottom right"
+          },
+          {
+            "id": "d",
+            "en": "左下",
+            "jp": "bottom left"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "Top means 上. Right means 右.",
+          "jp": "top = 上、right = 右です。"
+        },
+        "explanation": {
+          "en": "“Top right” means the upper-right position.",
+          "jp": "“top right” は「右上」という意味です。top が上、right が右です。"
+        },
+        "legacyId": "q9",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-29-original-q10",
+        "type": "grid",
+        "cat": "position",
+        "prompt": {
+          "en": "Click the bottom left box.",
+          "jp": "左下のマスをクリックしてください。"
+        },
+        "correctCell": "bottom-left",
+        "hint": {
+          "en": "Bottom means 下. Left means 左.",
+          "jp": "bottom = 下、left = 左です。"
+        },
+        "explanation": {
+          "en": "“Bottom left” is the box in the lower-left corner — bottom (下) + left (左).",
+          "jp": "“bottom left” は左下のマスです。bottom = 下、left = 左です。"
+        },
+        "legacyId": "q10",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-29-original-q11",
+        "type": "matching",
+        "cat": "mixed",
+        "prompt": {
+          "en": "Match the English phrase with the Japanese meaning.",
+          "jp": "英語のフレーズと日本語の意味をマッチさせましょう。"
+        },
+        "hint": {
+          "en": "Think back to the phrases you just reviewed above.",
+          "jp": "これまで復習した表現を思い出してみましょう。"
+        },
+        "pairs": [
+          {
+            "en": "I heard it.",
+            "jp": "それ聞こえた。",
+            "cat": "heard"
+          },
+          {
+            "en": "I heard that.",
+            "jp": "それ聞いたよ。",
+            "cat": "heard"
+          },
+          {
+            "en": "I heard about it.",
+            "jp": "それについて聞いた。",
+            "cat": "heard"
+          },
+          {
+            "en": "I've heard of it.",
+            "jp": "名前は聞いたことある。",
+            "cat": "heard"
+          },
+          {
+            "en": "Exactly.",
+            "jp": "それなぁ。",
+            "cat": "reactions"
+          },
+          {
+            "en": "For real.",
+            "jp": "マジで / ほんとそれ。",
+            "cat": "reactions"
+          },
+          {
+            "en": "top right.",
+            "jp": "右上。",
+            "cat": "position"
+          },
+          {
+            "en": "bottom left.",
+            "jp": "左下。",
+            "cat": "position"
+          }
+        ],
+        "legacyId": "q11",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-29-original-q12a",
+        "type": "typing",
+        "cat": "heard",
+        "promptJP": "「それについて聞いた気がする。」",
+        "accepted": [
+          "I think I heard about it"
+        ],
+        "hint": {
+          "en": "This is about a topic or piece of news, not just a sound.",
+          "jp": "話題やニュースについてです。音だけではありません。"
+        },
+        "explanation": {
+          "en": "“I think I heard about it” fits because it's about a topic or story, not a sound.",
+          "jp": "話題や出来事について聞いた場合は “I heard about it” を使います。"
+        },
+        "legacyId": "q12a",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-29-original-q12b",
+        "type": "typing",
+        "cat": "heard",
+        "promptJP": "「名前は聞いたことある。」",
+        "accepted": [
+          "I've heard of it",
+          "I have heard of it"
+        ],
+        "hint": {
+          "en": "You recognize the name, but maybe not the details.",
+          "jp": "名前は知っているけど、詳しくは知らないイメージです。"
+        },
+        "explanation": {
+          "en": "“I've heard of it” is for names or things you recognize but don't know in detail.",
+          "jp": "名前や存在を知っているときは “I've heard of it” が自然です。"
+        },
+        "legacyId": "q12b",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-29-original-q12c",
+        "type": "typing",
+        "cat": "reactions",
+        "promptJP": "「それほんとだよね。」",
+        "accepted": [
+          "That's so true"
+        ],
+        "hint": {
+          "en": "This shows warm agreement with someone's opinion.",
+          "jp": "相手の意見に温かく同意する表現です。"
+        },
+        "explanation": {
+          "en": "“That's so true” is a warm, natural way to agree with someone's feeling or opinion.",
+          "jp": "相手の意見に共感するときは “That's so true” が自然です。"
+        },
+        "legacyId": "q12c",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-29-original-q12d",
+        "type": "typing",
+        "cat": "position",
+        "promptJP": "「右上」",
+        "accepted": [
+          "top right"
+        ],
+        "hint": {
+          "en": "Top means 上, right means 右.",
+          "jp": "top = 上、right = 右です。"
+        },
+        "explanation": {
+          "en": "“Top right” describes the upper-right position — top is 上, right is 右.",
+          "jp": "“top right” は「右上」、top = 上、right = 右です。"
+        },
+        "legacyId": "q12d",
+        "section": "Original Review",
+        "isOriginal": true
+      }
+    ]
+  },
+  {
+    "id": "june-30",
+    "lessonDate": "2026-06-30",
+    "title": "Feelings, Preferences & Match Talk",
+    "takiTitle": "Feelings, Prefer & Sports English",
+    "summary": "Today's mission: master annoyed vs annoying, sports who, prefer + because, and easier than.",
+    "summaryJa": "annoyed / annoying、prefer、比較、試合で使う英語を復習します。",
+    "status": "published",
+    "audience": "both",
+    "sourceType": "legacy_zip",
+    "sourcePath": "legacy-site/lessons/june-30/index.html",
+    "contentVersion": 1,
+    "categoryLabels": {
+      "feelings": {
+        "en": "Feeling words: annoyed / annoying",
+        "jp": "イライラ表現の使い分け"
+      },
+      "nuance": {
+        "en": "Emotion nuance: frustrated / irritated / stressed out",
+        "jp": "感情のニュアンス"
+      },
+      "sports": {
+        "en": "Sports English: Who will win?",
+        "jp": "スポーツで使う who"
+      },
+      "prefer": {
+        "en": "Prefer + because answers",
+        "jp": "prefer と because の答え方"
+      },
+      "compare": {
+        "en": "Easier than comparisons",
+        "jp": "easier than の比較"
+      },
+      "flow": {
+        "en": "First half / Second half",
+        "jp": "前半・後半"
+      },
+      "builder": {
+        "en": "Sentence Builder",
+        "jp": "文を組み立てる練習"
+      }
+    },
+    "originalQuestionCount": 22,
+    "questions": [
+      {
+        "id": "june-30-original-q1",
+        "type": "situation",
+        "cat": "feelings",
+        "situationQuote": {
+          "en": "A loud noise has been going on for 20 minutes."
+        },
+        "prompt": {
+          "en": "You want to say 「それがイライラする」. Which sentence is natural?",
+          "jp": "大きな音が20分続いています。「それがイライラする」と言いたい時、自然なのはどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "It’s annoying.",
+            "jp": "それがイライラする。"
+          },
+          {
+            "id": "b",
+            "en": "I’m annoying.",
+            "jp": "私は人をイライラさせる人、という意味になりやすい。"
+          },
+          {
+            "id": "c",
+            "en": "I’m annoyed by coffee.",
+            "jp": "コーヒーにイライラしている、という変な意味。"
+          },
+          {
+            "id": "d",
+            "en": "It’s annoyed.",
+            "jp": "物がイライラしている、という不自然な形。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "The noise is the cause. Use the -ing adjective.",
+          "jp": "音が原因です。原因になるものには -ing 形を使います。"
+        },
+        "explanation": {
+          "en": "Use “It’s annoying” when something, someone, or a situation causes the irritated feeling.",
+          "jp": "物・人・状況がイライラの原因なら “It’s annoying.” が自然です。"
+        },
+        "legacyId": "q1",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-30-original-q2",
+        "type": "mcq",
+        "cat": "feelings",
+        "prompt": {
+          "en": "Which sentence means 「私はイライラしています」?",
+          "jp": "「私はイライラしています」はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "I’m annoyed.",
+            "jp": "私はイライラしています。"
+          },
+          {
+            "id": "b",
+            "en": "I’m annoying.",
+            "jp": "私は人をイライラさせます。"
+          },
+          {
+            "id": "c",
+            "en": "It’s annoying.",
+            "jp": "それがイライラします。"
+          },
+          {
+            "id": "d",
+            "en": "I annoy.",
+            "jp": "文としてかなり不自然。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "This is your feeling, so use -ed.",
+          "jp": "自分の気持ちなので -ed を使います。"
+        },
+        "explanation": {
+          "en": "“I’m annoyed” describes your feeling. Be careful: “I’m annoying” sounds like you annoy other people.",
+          "jp": "“I’m annoyed.” は自分の気持ちです。“I’m annoying.” は「私は人をイライラさせる人」という意味になりやすいので注意です。"
+        },
+        "legacyId": "q2",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-30-original-q3",
+        "type": "situation",
+        "cat": "nuance",
+        "situationQuote": {
+          "en": "You try to fix a problem, but nothing works."
+        },
+        "prompt": {
+          "en": "Which feeling word fits best?",
+          "jp": "問題を直そうとしているけど、うまくいきません。どの表現が一番合いますか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "I’m frustrated.",
+            "jp": "うまくいかず、もどかしくてイライラしている。"
+          },
+          {
+            "id": "b",
+            "en": "I’m delicious.",
+            "jp": "私はおいしい、なので違います。"
+          },
+          {
+            "id": "c",
+            "en": "It’s winning.",
+            "jp": "勝っている、なので違います。"
+          },
+          {
+            "id": "d",
+            "en": "I’m first half.",
+            "jp": "前半です、なので違います。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "This is the feeling when you cannot do something smoothly.",
+          "jp": "うまくできなくて、もどかしい時の表現です。"
+        },
+        "explanation": {
+          "en": "“I’m frustrated” is perfect when something is not working and you feel stuck or blocked.",
+          "jp": "何かがうまくいかず、もどかしくてイライラする時は “I’m frustrated.” がぴったりです。"
+        },
+        "legacyId": "q3",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-30-original-q4",
+        "type": "mcq",
+        "cat": "nuance",
+        "prompt": {
+          "en": "Which one is stronger than “annoyed” and often means quite irritated?",
+          "jp": "“annoyed” より少し強めで「かなりイライラ」に近いのはどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "I’m irritated.",
+            "jp": "かなりイライラしている。"
+          },
+          {
+            "id": "b",
+            "en": "I’m easy.",
+            "jp": "簡単です、なので違います。"
+          },
+          {
+            "id": "c",
+            "en": "I’m prefer.",
+            "jp": "文法的に不自然。"
+          },
+          {
+            "id": "d",
+            "en": "I’m second half.",
+            "jp": "後半です、なので違います。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "This word sounds a little stronger and more uncomfortable.",
+          "jp": "少し強めで、不快感が強いイメージです。"
+        },
+        "explanation": {
+          "en": "“I’m irritated” is a little stronger than “I’m annoyed.” It can sound more serious or uncomfortable.",
+          "jp": "“I’m irritated.” は “I’m annoyed.” より少し強めで、不快感が強い感じです。"
+        },
+        "legacyId": "q4",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-30-original-q5",
+        "type": "situation",
+        "cat": "nuance",
+        "situationQuote": {
+          "en": "You have too much work, many messages, and no rest."
+        },
+        "prompt": {
+          "en": "What is the most natural feeling phrase?",
+          "jp": "仕事やメッセージが多すぎて休めません。自然な表現はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "I’m stressed out.",
+            "jp": "ストレスで疲れている。"
+          },
+          {
+            "id": "b",
+            "en": "It’s preferred.",
+            "jp": "好まれている、なので違います。"
+          },
+          {
+            "id": "c",
+            "en": "Who will coffee?",
+            "jp": "文として不自然。"
+          },
+          {
+            "id": "d",
+            "en": "I’m annoying.",
+            "jp": "私は人をイライラさせる、になりやすい。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "This is not only anger. It includes tiredness and pressure.",
+          "jp": "怒りだけではなく、疲れやプレッシャーも入ります。"
+        },
+        "explanation": {
+          "en": "“I’m stressed out” is natural when you feel tired, pressured, and mentally overwhelmed.",
+          "jp": "疲れ・プレッシャー・ストレスで気持ちに余裕がない時は “I’m stressed out.” が自然です。"
+        },
+        "legacyId": "q5",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-30-original-q6",
+        "type": "mcq",
+        "cat": "feelings",
+        "prompt": {
+          "en": "Mistake Detective: Which sentence is dangerous because it changes the meaning?",
+          "jp": "ミス発見：意味が変わって危ない文はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "I’m annoying.",
+            "jp": "私は人をイライラさせる人、という意味になりやすい。"
+          },
+          {
+            "id": "b",
+            "en": "I’m annoyed.",
+            "jp": "私はイライラしている。"
+          },
+          {
+            "id": "c",
+            "en": "It’s annoying.",
+            "jp": "それがイライラする。"
+          },
+          {
+            "id": "d",
+            "en": "This noise is annoying.",
+            "jp": "この音はイライラする。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "One sentence makes YOU the cause of annoyance.",
+          "jp": "1つだけ、自分がイライラの原因になる文があります。"
+        },
+        "explanation": {
+          "en": "“I’m annoying” often means you are the annoying person. For your own feeling, say “I’m annoyed.”",
+          "jp": "“I’m annoying.” は「私は人をイライラさせる人」という意味になりやすいです。自分の気持ちは “I’m annoyed.” です。"
+        },
+        "legacyId": "q6",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-30-original-q7",
+        "type": "situation",
+        "cat": "sports",
+        "situationQuote": {
+          "en": "Japan vs Brazil is tonight."
+        },
+        "prompt": {
+          "en": "What is the most natural sports question?",
+          "jp": "今夜は日本対ブラジルです。自然なスポーツ英語はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "Who will win, Japan or Brazil?",
+            "jp": "日本とブラジル、どちらが勝つ？"
+          },
+          {
+            "id": "b",
+            "en": "What will win, Japan or Brazil?",
+            "jp": "チームには不自然。"
+          },
+          {
+            "id": "c",
+            "en": "Who will coffee or tea?",
+            "jp": "文として不自然。"
+          },
+          {
+            "id": "d",
+            "en": "Which annoyed will win?",
+            "jp": "文として不自然。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "In sports, “who” can sound natural for teams and countries.",
+          "jp": "スポーツでは、チームや国にも who が自然に使えます。"
+        },
+        "explanation": {
+          "en": "In sports conversation, “Who will win?” is natural even when the choices are teams or countries.",
+          "jp": "スポーツの会話では、チームや国に対しても “Who will win?” が自然です。"
+        },
+        "legacyId": "q7",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-30-original-q8",
+        "type": "mcq",
+        "cat": "sports",
+        "prompt": {
+          "en": "Which sentence means 「どっちが勝つと思う？」?",
+          "jp": "「どっちが勝つと思う？」に一番近いのはどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "Who do you think will win?",
+            "jp": "どっちが勝つと思う？"
+          },
+          {
+            "id": "b",
+            "en": "Who do you think coffee?",
+            "jp": "文として不自然。"
+          },
+          {
+            "id": "c",
+            "en": "Which do you annoying?",
+            "jp": "文として不自然。"
+          },
+          {
+            "id": "d",
+            "en": "Do you prefer win?",
+            "jp": "文として不自然。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "Use “do you think” inside the question.",
+          "jp": "質問の中に “do you think” を入れます。"
+        },
+        "explanation": {
+          "en": "“Who do you think will win?” is a very natural way to ask for someone’s prediction.",
+          "jp": "“Who do you think will win?” は、相手の予想を聞く自然な言い方です。"
+        },
+        "legacyId": "q8",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-30-original-q9",
+        "type": "mcq",
+        "cat": "prefer",
+        "prompt": {
+          "en": "Which question means 「コーヒーと紅茶、どちらが好きですか？」?",
+          "jp": "「コーヒーと紅茶、どちらが好きですか？」はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "Do you prefer coffee or tea?",
+            "jp": "コーヒーと紅茶、どちらが好きですか？"
+          },
+          {
+            "id": "b",
+            "en": "Are you prefer coffee or tea?",
+            "jp": "be 動詞はいりません。"
+          },
+          {
+            "id": "c",
+            "en": "Do you preferred coffee or tea?",
+            "jp": "Do の後は原形です。"
+          },
+          {
+            "id": "d",
+            "en": "Who prefer coffee or tea?",
+            "jp": "この場面では不自然。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "Pattern: Do you prefer A or B?",
+          "jp": "形は “Do you prefer A or B?” です。"
+        },
+        "explanation": {
+          "en": "Use “Do you prefer A or B?” to ask which one someone likes more.",
+          "jp": "AとBのどちらが好きか聞く時は “Do you prefer A or B?” が自然です。"
+        },
+        "legacyId": "q9",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-30-original-q10",
+        "type": "situation",
+        "cat": "prefer",
+        "situationQuote": {
+          "en": "A: Do you prefer coffee or tea?"
+        },
+        "prompt": {
+          "en": "Choose the best complete answer.",
+          "jp": "一番自然で完成した答えを選んでください。"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "I prefer coffee because it smells good.",
+            "jp": "香りがいいのでコーヒーが好きです。"
+          },
+          {
+            "id": "b",
+            "en": "I prefer because coffee smells.",
+            "jp": "語順と意味が不自然。"
+          },
+          {
+            "id": "c",
+            "en": "I am prefer coffee.",
+            "jp": "be 動詞はいりません。"
+          },
+          {
+            "id": "d",
+            "en": "Coffee prefer me.",
+            "jp": "コーヒーが私を好む、という変な意味。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "Answer with “I prefer A because...”",
+          "jp": "“I prefer A because...” の形で答えます。"
+        },
+        "explanation": {
+          "en": "“I prefer coffee because it smells good” gives a clear preference and reason.",
+          "jp": "“I prefer coffee because it smells good.” は、好みと理由がはっきりしていて自然です。"
+        },
+        "legacyId": "q10",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-30-original-q11",
+        "type": "mcq",
+        "cat": "compare",
+        "prompt": {
+          "en": "Which sentence means 「冬より夏の方がゴルフしやすい」?",
+          "jp": "「冬より夏の方がゴルフしやすい」はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "It’s easier to play golf in summer than in winter.",
+            "jp": "冬より夏の方がゴルフしやすい。"
+          },
+          {
+            "id": "b",
+            "en": "It’s easy than play golf winter.",
+            "jp": "語順が不自然。"
+          },
+          {
+            "id": "c",
+            "en": "Summer is annoying to golf.",
+            "jp": "意味が違います。"
+          },
+          {
+            "id": "d",
+            "en": "I prefer winter because golf annoyed.",
+            "jp": "意味と文法が不自然。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "Use “easier to...” and “than in winter.”",
+          "jp": "“easier to...” と “than in winter” を使います。"
+        },
+        "explanation": {
+          "en": "“It’s easier to play golf in summer than in winter” naturally compares summer and winter.",
+          "jp": "“It’s easier to play golf in summer than in winter.” は、夏と冬を自然に比べています。"
+        },
+        "legacyId": "q11",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-30-original-q12",
+        "type": "mcq",
+        "cat": "flow",
+        "prompt": {
+          "en": "Which pair means 「前半 / 後半」?",
+          "jp": "「前半 / 後半」はどれですか？"
+        },
+        "choices": [
+          {
+            "id": "a",
+            "en": "first half / second half",
+            "jp": "前半 / 後半"
+          },
+          {
+            "id": "b",
+            "en": "first annoyed / second annoying",
+            "jp": "意味が違います。"
+          },
+          {
+            "id": "c",
+            "en": "first win / second prefer",
+            "jp": "意味が違います。"
+          },
+          {
+            "id": "d",
+            "en": "half first / half second",
+            "jp": "語順が不自然。"
+          }
+        ],
+        "correct": "a",
+        "hint": {
+          "en": "Use this for games, movies, lessons, and events.",
+          "jp": "試合・映画・レッスン・イベントなどに使えます。"
+        },
+        "explanation": {
+          "en": "“First half” means 前半, and “second half” means 後半.",
+          "jp": "“first half” は前半、“second half” は後半です。"
+        },
+        "legacyId": "q12",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-30-original-q13",
+        "type": "order",
+        "cat": "builder",
+        "prompt": {
+          "en": "Sentence Builder: Make 「香りがいいのでコーヒーが好きです。」",
+          "jp": "文を組み立てましょう：「香りがいいのでコーヒーが好きです。」"
+        },
+        "words": [
+          "smells",
+          "coffee",
+          "I",
+          "good",
+          "it",
+          "because",
+          "prefer"
+        ],
+        "correctOrder": [
+          2,
+          6,
+          1,
+          5,
+          4,
+          0,
+          3
+        ],
+        "hint": {
+          "en": "Start with “I prefer...” and give the reason with “because.”",
+          "jp": "“I prefer...” で始めて、because で理由を言います。"
+        },
+        "explanation": {
+          "en": "The natural sentence is “I prefer coffee because it smells good.”",
+          "jp": "自然な文は “I prefer coffee because it smells good.” です。"
+        },
+        "legacyId": "q13",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-30-original-q14",
+        "type": "order",
+        "cat": "builder",
+        "prompt": {
+          "en": "Sentence Builder: Make 「どっちが勝つと思う？」",
+          "jp": "文を組み立てましょう：「どっちが勝つと思う？」"
+        },
+        "words": [
+          "you",
+          "win",
+          "Who",
+          "will",
+          "think",
+          "do"
+        ],
+        "correctOrder": [
+          2,
+          5,
+          0,
+          4,
+          3,
+          1
+        ],
+        "hint": {
+          "en": "Start with “Who do you think...”",
+          "jp": "“Who do you think...” から始めます。"
+        },
+        "explanation": {
+          "en": "The natural question is “Who do you think will win?”",
+          "jp": "自然な質問は “Who do you think will win?” です。"
+        },
+        "legacyId": "q14",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-30-original-q15",
+        "type": "order",
+        "cat": "compare",
+        "prompt": {
+          "en": "Sentence Builder: Make 「冬より夏の方がゴルフしやすいです。」",
+          "jp": "文を組み立てましょう：「冬より夏の方がゴルフしやすいです。」"
+        },
+        "words": [
+          "to play golf",
+          "than in winter",
+          "It’s",
+          "in summer",
+          "easier"
+        ],
+        "correctOrder": [
+          2,
+          4,
+          0,
+          3,
+          1
+        ],
+        "hint": {
+          "en": "The pattern is: It’s easier to... in A than in B.",
+          "jp": "形は “It’s easier to... in A than in B.” です。"
+        },
+        "explanation": {
+          "en": "The natural sentence is “It’s easier to play golf in summer than in winter.”",
+          "jp": "自然な文は “It’s easier to play golf in summer than in winter.” です。"
+        },
+        "legacyId": "q15",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-30-original-q16",
+        "type": "matching",
+        "cat": "mixed",
+        "prompt": {
+          "en": "Speed Match: Match the English phrase with the Japanese meaning.",
+          "jp": "スピードマッチ：英語と日本語の意味を合わせましょう。"
+        },
+        "hint": {
+          "en": "Focus on the core meaning, not only the Japanese word order.",
+          "jp": "日本語の語順ではなく、中心の意味で考えましょう。"
+        },
+        "pairs": [
+          {
+            "en": "I’m annoyed.",
+            "jp": "私はイライラしている。",
+            "cat": "feelings"
+          },
+          {
+            "en": "It’s annoying.",
+            "jp": "それがイライラする。",
+            "cat": "feelings"
+          },
+          {
+            "en": "I’m frustrated.",
+            "jp": "うまくいかずイライラしている。",
+            "cat": "nuance"
+          },
+          {
+            "en": "I’m irritated.",
+            "jp": "かなりイライラしている。",
+            "cat": "nuance"
+          },
+          {
+            "en": "I’m stressed out.",
+            "jp": "ストレスで疲れている。",
+            "cat": "nuance"
+          },
+          {
+            "en": "Who will win?",
+            "jp": "どっちが勝つ？",
+            "cat": "sports"
+          },
+          {
+            "en": "Do you prefer A or B?",
+            "jp": "AとBどちらが好き？",
+            "cat": "prefer"
+          },
+          {
+            "en": "first half / second half",
+            "jp": "前半 / 後半",
+            "cat": "flow"
+          }
+        ],
+        "legacyId": "q16",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-30-original-q17",
+        "type": "typing",
+        "cat": "feelings",
+        "promptJP": "「私はイライラしています。」",
+        "accepted": [
+          "I'm annoyed",
+          "I am annoyed"
+        ],
+        "hint": {
+          "en": "Your feeling = -ed.",
+          "jp": "自分の気持ちは -ed です。"
+        },
+        "explanation": {
+          "en": "“I’m annoyed” describes your feeling.",
+          "jp": "“I’m annoyed.” は自分の気持ちを表します。"
+        },
+        "legacyId": "q17",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-30-original-q18",
+        "type": "typing",
+        "cat": "feelings",
+        "promptJP": "「それはイライラします。」",
+        "accepted": [
+          "It's annoying",
+          "It is annoying"
+        ],
+        "hint": {
+          "en": "The thing is the cause = -ing.",
+          "jp": "原因になるものは -ing です。"
+        },
+        "explanation": {
+          "en": "“It’s annoying” describes the thing or situation that causes the feeling.",
+          "jp": "“It’s annoying.” は、イライラさせる物・状況を表します。"
+        },
+        "legacyId": "q18",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-30-original-q19",
+        "type": "typing",
+        "cat": "sports",
+        "promptJP": "「日本とブラジル、どちらが勝つと思う？」",
+        "accepted": [
+          "Who do you think will win Japan or Brazil",
+          "Who do you think will win, Japan or Brazil",
+          "Who will win Japan or Brazil",
+          "Who will win, Japan or Brazil"
+        ],
+        "hint": {
+          "en": "Use “Who will win...?” or “Who do you think will win...?”",
+          "jp": "“Who will win...?” または “Who do you think will win...?” を使います。"
+        },
+        "explanation": {
+          "en": "In sports, “who” can naturally refer to teams or countries.",
+          "jp": "スポーツでは、チームや国にも “who” が自然に使えます。"
+        },
+        "legacyId": "q19",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-30-original-q20",
+        "type": "typing",
+        "cat": "prefer",
+        "promptJP": "「コーヒーと紅茶、どちらが好きですか？」",
+        "accepted": [
+          "Do you prefer coffee or tea"
+        ],
+        "hint": {
+          "en": "Pattern: Do you prefer A or B?",
+          "jp": "形は “Do you prefer A or B?” です。"
+        },
+        "explanation": {
+          "en": "“Do you prefer coffee or tea?” is natural and clear.",
+          "jp": "“Do you prefer coffee or tea?” は自然で分かりやすい質問です。"
+        },
+        "legacyId": "q20",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-30-original-q21",
+        "type": "typing",
+        "cat": "prefer",
+        "promptJP": "「香りがいいのでコーヒーが好きです。」",
+        "accepted": [
+          "I prefer coffee because it smells good"
+        ],
+        "hint": {
+          "en": "Use “I prefer coffee because...”",
+          "jp": "“I prefer coffee because...” を使います。"
+        },
+        "explanation": {
+          "en": "“I prefer coffee because it smells good” gives both preference and reason.",
+          "jp": "“I prefer coffee because it smells good.” は、好みと理由を両方言えます。"
+        },
+        "legacyId": "q21",
+        "section": "Original Review",
+        "isOriginal": true
+      },
+      {
+        "id": "june-30-original-q22",
+        "type": "typing",
+        "cat": "compare",
+        "promptJP": "「冬より夏の方がゴルフしやすいです。」",
+        "accepted": [
+          "It's easier to play golf in summer than in winter",
+          "It is easier to play golf in summer than in winter"
+        ],
+        "hint": {
+          "en": "Use “easier to play golf in summer than in winter.”",
+          "jp": "“easier to play golf in summer than in winter” を使います。"
+        },
+        "explanation": {
+          "en": "“It’s easier to play golf in summer than in winter” is the clean comparison sentence.",
+          "jp": "“It’s easier to play golf in summer than in winter.” がきれいな比較の文です。"
+        },
+        "legacyId": "q22",
+        "section": "Original Review",
+        "isOriginal": true
+      }
+    ]
+  }
+]

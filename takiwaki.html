@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="description" content="A private English review space with assigned lessons and saved progress.">
+  <title>Your English Review Hub</title>
+  <link rel="stylesheet" href="/src/styles.css">
+</head>
+<body data-page="takiwaki">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="brand" href="/takiwaki">
+      <span class="brand-mark">TE</span>
+      <span><strong>Your Review Hub</strong><small>Tahmid English Club</small></span>
+    </a>
+    <nav class="header-actions">
+      <button class="quiet-btn" id="languageToggle" type="button">EN / JP</button>
+      <button class="quiet-btn" id="soundToggle" type="button" aria-pressed="true">Sound On</button>
+      <label class="voice-select">Voice
+        <select id="voiceSelect"><option value="us">US · Ava</option><option value="gb">UK · Libby</option></select>
+      </label>
+      <button class="quiet-btn" id="accountButton" type="button">Sign in</button>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="private-hero shell" id="signInGate">
+      <div>
+        <p class="eyebrow">Private English review</p>
+        <h1>Your learning stays<br><span>private.</span></h1>
+        <p class="en">Sign in to open your assigned lessons, saved progress and practice history.</p>
+        <p class="jp" lang="ja">割り当てレッスン・学習状況・練習履歴は、ログイン後だけ表示されます。</p>
+      </div>
+      <div class="continue-card">
+        <p class="panel-kicker">YOUR ACCOUNT</p>
+        <h2>Ready when you are</h2>
+        <p>Your personal learning records are not shown on this screen.</p>
+        <button class="primary-btn" id="openLoginButton" type="button">Sign in securely</button>
+      </div>
+    </section>
+
+    <section class="private-hero shell access-message" id="privateAccessDenied" hidden>
+      <div>
+        <p class="eyebrow">Private learning space</p>
+        <h1>Access is not available<br><span>for this account.</span></h1>
+        <p class="en">This account does not have access to this private learning space.</p>
+        <p class="jp" lang="ja">このアカウントでは、この個別学習スペースを利用できません。</p>
+      </div>
+      <div class="continue-card">
+        <p class="panel-kicker">ACCOUNT</p>
+        <h2>Use the assigned account</h2>
+        <p>Open Account above to sign out, then sign in with the email assigned to this space.</p>
+      </div>
+    </section>
+
+    <section class="private-hero shell" id="privateHero" hidden>
+      <div>
+        <p class="eyebrow">A private practice space</p>
+        <h1>Welcome back,<br><span id="privateLearnerName">Learner.</span></h1>
+        <p class="en">Continue steadily. Your first answer shows what you remembered; every retry helps you learn it.</p>
+        <p class="jp" lang="ja">最初の答えは「覚えていたこと」、再挑戦は「身につけたこと」。自分のペースで続けましょう。</p>
+      </div>
+      <div class="continue-card" id="continueCard">
+        <p class="panel-kicker">CONTINUE</p>
+        <h2 id="continueTitle">Choose a lesson to begin</h2>
+        <p id="continueMeta">Your progress will appear here on this device.</p>
+        <a class="primary-btn" id="continueLink" href="#assigned">View lessons</a>
+      </div>
+    </section>
+
+    <section class="dashboard-shell shell" id="privateDashboard" hidden>
+      <article class="dashboard-card"><span>Last study</span><strong id="lastStudy">—</strong></article>
+      <article class="dashboard-card"><span>First-try average</span><strong id="averageScore">—</strong></article>
+      <article class="dashboard-card"><span>Practice sessions</span><strong id="sessionCount">0</strong></article>
+      <article class="dashboard-card"><span>Needs review</span><strong id="weakCount">0</strong></article>
+    </section>
+
+    <section class="section shell" id="assigned" hidden>
+      <div class="section-heading">
+        <div><p class="eyebrow">Your lessons</p><h2>Assigned and published practice</h2><p class="jp" lang="ja">公開済み・割り当て済みの復習です。</p></div>
+        <div class="filter-row" role="group" aria-label="Personal lesson filters">
+          <button class="filter-chip active" data-filter="all" type="button" aria-pressed="true">All</button>
+          <button class="filter-chip" data-filter="continue" type="button" aria-pressed="false">Continue</button>
+          <button class="filter-chip" data-filter="weak" type="button" aria-pressed="false">Needs review</button>
+        </div>
+      </div>
+      <div class="lesson-grid" id="lessonGrid" aria-live="polite"></div>
+    </section>
+
+    <section class="section shell" id="history" hidden>
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Your history</p>
+          <h2>Recent official attempts</h2>
+          <p class="jp" lang="ja">最初の回答を記録した、最近の公式結果です。</p>
+        </div>
+        <p class="form-status" id="personalDataStatus" role="status"></p>
+      </div>
+      <div class="lesson-grid" id="historyList"></div>
+    </section>
+
+    <dialog class="auth-dialog" id="accountDialog">
+      <form method="dialog"><button class="dialog-close" aria-label="Close">×</button></form>
+      <p class="eyebrow">Private account</p>
+      <h2>Sign in to see personal records</h2>
+      <p class="jp" lang="ja">個人の履歴はログイン後だけ表示されます。</p>
+      <form id="studentLoginForm" class="stack-form">
+        <label>Email<input id="studentLogin" type="email" autocomplete="username" placeholder="you@example.com" required></label>
+        <label>Password<input id="studentPassword" type="password" autocomplete="current-password" required></label>
+        <button class="primary-btn" type="submit">Sign in</button>
+        <p class="form-status" id="studentLoginStatus" role="status"></p>
+      </form>
+      <button class="secondary-btn full-width" id="logoutButton" type="button" hidden>Sign out</button>
+    </dialog>
+  </main>
+
+  <footer class="site-footer"><span>Created by Tahmid Ahmed</span><nav><a href="/">General Hub</a><a href="/phrases">Phrase Library</a></nav></footer>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js"></script>
+  <script type="module" src="/src/hub.js"></script>
+</body>
+</html>

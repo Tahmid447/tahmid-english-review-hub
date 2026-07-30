@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="description" content="Interactive English listening, speaking and review practice.">
+  <title>English Lesson Practice</title>
+  <link rel="stylesheet" href="/src/styles.css">
+</head>
+<body data-page="lesson">
+  <a class="skip-link" href="#quizMain">Skip to question</a>
+  <header class="site-header quiz-header">
+    <a class="brand" id="hubBackLink" href="/">
+      <span class="brand-mark">TE</span><span><strong>Review Hub</strong><small>Back to lessons</small></span>
+    </a>
+    <nav class="header-actions">
+      <button class="quiet-btn" id="languageToggle" type="button">EN / JP</button>
+      <button class="quiet-btn" id="soundToggle" type="button">Sound On</button>
+      <label class="voice-select">Voice<select id="voiceSelect"><option value="us">US · Ava</option><option value="gb">UK · Libby</option></select></label>
+    </nav>
+  </header>
+
+  <main class="quiz-shell shell" id="quizMain">
+    <section class="lesson-banner">
+      <div>
+        <p class="eyebrow" id="lessonDate">Lesson</p>
+        <h1 id="lessonTitle">Loading lesson…</h1>
+        <p id="lessonSummary"></p>
+        <p class="jp" id="lessonSummaryJa"></p>
+      </div>
+      <div class="lesson-mode">
+        <label>Practice set<select id="practiceMode"><option value="all">All questions</option><option value="original">Original Review</option><option value="extra">Listen & Speak</option><option value="wrong">Mistakes only</option><option value="unanswered">Unanswered only</option></select></label>
+        <button class="secondary-btn" id="shuffleQuestions" type="button">Shuffle questions</button>
+      </div>
+    </section>
+
+    <section class="quiz-toolbar" aria-label="Quiz settings">
+      <div class="segmented" role="group" aria-label="Checking mode">
+        <button class="active" data-check="manual" type="button">Manual Check</button>
+        <button data-check="instant" type="button">Instant Check</button>
+      </div>
+      <label class="toggle-label"><input id="shuffleChoices" type="checkbox"> Shuffle choices</label>
+      <div class="segmented hint-mode-toggle" role="group" aria-label="Hint behaviour">
+        <button class="active" data-hint-mode="auto" type="button">Hint · Auto-close</button>
+        <button data-hint-mode="manual" type="button">Hint · Keep open</button>
+      </div>
+      <button class="quiet-btn" id="vibrationToggle" type="button">Vibration On</button>
+      <button class="quiet-btn" id="checkAnswered" type="button">Check answered</button>
+      <span class="score-pill" id="scorePill">First score 0 / 0</span>
+    </section>
+
+    <nav class="question-nav" id="questionNav" aria-label="Question numbers"></nav>
+
+    <section class="question-stage">
+      <div class="question-topline"><span id="questionType">Question</span><span id="questionCounter">1 / 1</span></div>
+      <article id="questionCard" class="question-card" aria-live="polite"></article>
+      <details class="hint-box" id="hintBox">
+        <summary><span>Hint / ヒント</span><span class="hint-countdown" id="hintCountdown"></span></summary>
+        <div id="hintContent"></div>
+      </details>
+      <div class="feedback-card" id="feedbackCard" hidden></div>
+      <div class="question-actions">
+        <button class="secondary-btn" id="previousQuestion" type="button">Previous</button>
+        <button class="primary-btn" id="checkQuestion" type="button">Check this question</button>
+        <button class="secondary-btn" id="nextQuestion" type="button">Next</button>
+      </div>
+    </section>
+
+    <section class="result-panel" id="resultPanel" hidden>
+      <p class="eyebrow">Practice complete</p>
+      <h2 id="resultHeading">Nice work.</h2>
+      <p id="resultSummary"></p>
+      <div class="result-actions">
+        <button class="primary-btn" data-retry="wrong" type="button">Practice mistakes</button>
+        <button class="secondary-btn" data-retry="unanswered" type="button">Practice unanswered</button>
+        <button class="secondary-btn" data-retry="all" type="button">Practise all again</button>
+      </div>
+    </section>
+  </main>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js"></script>
+  <script type="module" src="/src/lesson.js"></script>
+</body>
+</html>

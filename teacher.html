@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Teacher Studio · Tahmid English Club</title>
+  <link rel="stylesheet" href="/src/styles.css">
+</head>
+<body data-page="teacher">
+  <header class="site-header">
+    <a class="brand" href="/teacher"><span class="brand-mark">TE</span><span><strong>Teacher Studio</strong><small>Secure lesson management</small></span></a>
+    <nav class="header-actions"><span class="role-badge">Teacher only</span><button class="quiet-btn" id="teacherLogout" type="button" hidden>Sign out</button></nav>
+  </header>
+  <main class="teacher-shell shell">
+    <section class="teacher-login" id="teacherLoginPanel">
+      <div><p class="eyebrow">Protected access</p><h1>Teacher Studio</h1><p>Sign in with a teacher-authorised Supabase account. The page address alone does not grant access.</p></div>
+      <form id="teacherLoginForm" class="auth-card">
+        <label>Email<input id="teacherEmail" type="email" autocomplete="username" required></label>
+        <label>Password<input id="teacherPassword" type="password" autocomplete="current-password" required></label>
+        <button class="primary-btn" type="submit">Sign in securely</button>
+        <p class="form-status" id="teacherLoginStatus" role="status"></p>
+      </form>
+    </section>
+
+    <section id="teacherApp" hidden>
+      <div class="teacher-top">
+        <div><p class="eyebrow">Review Hub control room</p><h1>Good to see you, <span id="teacherName">Teacher</span>.</h1><p>Drafts stay private until you review and publish them.</p></div>
+        <button class="primary-btn" id="newLessonButton" type="button">New draft lesson</button>
+      </div>
+      <section class="dashboard-shell">
+        <article class="dashboard-card"><span>Students</span><strong id="teacherStudentCount">0</strong></article>
+        <article class="dashboard-card"><span>Published lessons</span><strong id="teacherPublishedCount">6</strong></article>
+        <article class="dashboard-card"><span>Draft lessons</span><strong id="teacherDraftCount">11</strong></article>
+        <article class="dashboard-card"><span>Recent sessions</span><strong id="teacherSessionCount">0</strong></article>
+      </section>
+      <div class="teacher-tabs" role="tablist">
+        <button class="active" data-teacher-tab="drafts" type="button">Notion drafts</button>
+        <button data-teacher-tab="lessons" type="button">Published lessons</button>
+        <button data-teacher-tab="students" type="button">Students</button>
+        <button data-teacher-tab="activity" type="button">Insights &amp; activity</button>
+      </div>
+      <section class="teacher-panel" id="teacherPanel"></section>
+    </section>
+
+    <dialog class="editor-dialog" id="lessonEditor">
+      <form method="dialog"><button class="dialog-close" aria-label="Close">×</button></form>
+      <p class="eyebrow">Draft editor</p>
+      <h2 id="editorHeading">New lesson</h2>
+      <form id="lessonEditorForm" class="editor-form">
+        <input id="editorLessonId" type="hidden">
+        <label>Lesson title<input id="editorTitle" required></label>
+        <label>Lesson date<input id="editorDate" type="date" required></label>
+        <label>Status<select id="editorStatus"><option value="draft">Draft</option><option value="review">Review</option><option value="published">Published</option><option value="archived">Archived</option></select></label>
+        <label>Audience<select id="editorAudience"><option value="takiwaki">Takiwaki only</option><option value="general">General</option><option value="both">Both</option></select></label>
+        <label class="wide">Summary<textarea id="editorSummary" rows="4"></textarea></label>
+        <div class="dialog-actions"><button class="secondary-btn" id="previewDraftButton" type="button">Preview</button><button class="primary-btn" type="submit">Save draft</button></div>
+        <p class="form-status" id="editorStatusMessage"></p>
+      </form>
+    </dialog>
+
+    <dialog class="editor-dialog" id="questionManager" style="width:min(1100px,calc(100% - 28px))">
+      <form method="dialog"><button class="dialog-close" aria-label="Close question manager">×</button></form>
+      <p class="eyebrow">Question manager</p>
+      <h2 id="questionManagerHeading">Lesson questions</h2>
+      <p id="questionManagerMeta"></p>
+      <div class="dialog-actions">
+        <button class="secondary-btn" id="previewQuestionsButton" type="button">Preview active questions</button>
+        <button class="primary-btn" id="newQuestionButton" type="button">Add question</button>
+      </div>
+      <p class="form-status" id="questionManagerStatus" role="status"></p>
+      <section class="teacher-panel" id="questionManagerPanel"></section>
+    </dialog>
+
+    <dialog class="editor-dialog" id="questionEditor">
+      <form method="dialog"><button class="dialog-close" aria-label="Close question editor">×</button></form>
+      <p class="eyebrow">Question editor</p>
+      <h2 id="questionEditorHeading">Add question</h2>
+      <form id="questionEditorForm" class="editor-form">
+        <input id="questionRecordId" type="hidden">
+        <label>Stable key<input id="questionStableKey" autocomplete="off" required></label>
+        <label>Section<input id="questionSection" autocomplete="off" placeholder="Use It"></label>
+        <label>Format
+          <select id="questionFormat">
+            <option value="mcq">Multiple choice</option>
+            <option value="situation">Situation choice</option>
+            <option value="truefalse">True / false</option>
+            <option value="typing">Typing</option>
+            <option value="translation">Translation</option>
+            <option value="order">Word order</option>
+            <option value="matching">Matching</option>
+            <option value="sorting">Sorting</option>
+            <option value="grid">Position grid</option>
+            <option value="listenChoice">Listening choice</option>
+            <option value="listenType">Listening dictation</option>
+            <option value="speaking">Speaking</option>
+            <option value="dialogue">Dialogue</option>
+            <option value="mistake">Correct the mistake</option>
+          </select>
+        </label>
+        <label>Prompt — English<input id="questionPromptEn" required></label>
+        <label class="wide">Prompt — Japanese<input id="questionPromptJa"></label>
+        <label>Hint — English<textarea id="questionHintEn" rows="3"></textarea></label>
+        <label>Hint — Japanese<textarea id="questionHintJa" rows="3"></textarea></label>
+        <label>Explanation — English<textarea id="questionExplanationEn" rows="3"></textarea></label>
+        <label>Explanation — Japanese<textarea id="questionExplanationJa" rows="3"></textarea></label>
+        <label class="wide">Listening audio text<input id="questionAudioText" placeholder="The sentence the learner hears"></label>
+        <label>Speaking target — English<input id="questionSpeakText" placeholder="The sentence the learner says"></label>
+        <label>Speaking target — Japanese<input id="questionSpeakJa"></label>
+        <label class="wide">Answer &amp; format details (JSON)
+          <textarea id="questionAnswerPayload" rows="12" spellcheck="false" required></textarea>
+        </label>
+        <small class="wide" id="questionAnswerHelp"></small>
+        <div class="dialog-actions">
+          <button class="secondary-btn" id="cancelQuestionButton" type="button">Cancel</button>
+          <button class="primary-btn" type="submit">Save question</button>
+        </div>
+        <p class="form-status" id="questionEditorStatus" role="status"></p>
+      </form>
+    </dialog>
+  </main>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js"></script>
+  <script type="module" src="/src/teacher.js"></script>
+</body>
+</html>

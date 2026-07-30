@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="description" content="Useful English phrase library with US and UK audio and speaking practice.">
+  <title>English Phrase Library</title>
+  <link rel="stylesheet" href="/src/styles.css">
+</head>
+<body data-page="phrases">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="brand" href="/"><span class="brand-mark">TE</span><span><strong>Phrase Library</strong><small>Tahmid English Club</small></span></a>
+    <nav class="header-actions" aria-label="Site settings">
+      <button class="quiet-btn" id="languageToggle" type="button">EN / JP</button>
+      <button class="quiet-btn" id="soundToggle" type="button">Sound On</button>
+      <label class="voice-select">Speaking accent<select id="voiceSelect" aria-label="Accent for speaking practice"><option value="us">US English</option><option value="gb">UK English</option></select></label>
+    </nav>
+  </header>
+  <main class="section shell" id="main">
+    <div class="section-heading phrase-heading">
+      <div><p class="eyebrow">Use it every day</p><h1>English Phrase Library</h1><p class="jp" lang="ja">レッスンから生まれた、日常で使える英語表現です。</p></div>
+      <label class="search-box">Search<input id="phraseSearch" type="search" placeholder="Search English or Japanese"></label>
+    </div>
+    <div class="filter-row phrase-filters" id="phraseFilters" role="group" aria-label="Phrase category filters"></div>
+    <p class="sr-only" id="phraseResults" role="status" aria-live="polite"></p>
+    <div class="phrase-grid" id="phraseGrid" aria-describedby="phraseResults"></div>
+  </main>
+  <footer class="site-footer"><span>Created by Tahmid Ahmed</span><nav><a href="/">English Review Hub</a></nav></footer>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js"></script>
+  <script type="module" src="/src/phrases.js"></script>
+</body>
+</html>

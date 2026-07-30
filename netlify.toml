@@ -1,0 +1,31 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "microphone=(self)"
+
+[[redirects]]
+  from = "/takiwaki"
+  to = "/takiwaki.html"
+  status = 200
+
+[[redirects]]
+  from = "/teacher"
+  to = "/teacher.html"
+  status = 200
+
+[[redirects]]
+  from = "/lesson/:id"
+  to = "/lesson.html?id=:id"
+  status = 200
+
+[[redirects]]
+  from = "/phrases"
+  to = "/phrases.html"
+  status = 200
