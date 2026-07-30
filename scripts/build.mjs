@@ -11,7 +11,6 @@ const files = [
   "lesson.html",
   "phrases.html",
   "404.html",
-  "netlify.toml",
 ];
 const publicSourceFiles = [
   "audio.js",
@@ -66,6 +65,17 @@ fs.writeFileSync(
     "/teacher /teacher.html 200",
     "/lesson/* /lesson.html?id=:splat 200",
     "/phrases /phrases.html 200",
+  ].join("\n") + "\n",
+);
+
+fs.writeFileSync(
+  path.join(dist, "_headers"),
+  [
+    "/*",
+    "  X-Frame-Options: DENY",
+    "  X-Content-Type-Options: nosniff",
+    "  Referrer-Policy: strict-origin-when-cross-origin",
+    "  Permissions-Policy: microphone=(self)",
   ].join("\n") + "\n",
 );
 
