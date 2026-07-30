@@ -10,10 +10,16 @@ modified.
 ## Routes
 
 - `/` — general learner Review Hub
-- `/lesson.html?id=june-28` — shared lesson player
-- `/phrases.html` — public Phrase Library
-- `/takiwaki.html` — authenticated personal hub
-- `/teacher.html` — authenticated Teacher Studio
+- `/lesson/june-28` — shared lesson player
+- `/phrases` — public Phrase Library
+- `/takiwaki` — authenticated personal hub
+- `/teacher` — authenticated Teacher Studio
+
+Separate review deployment:
+
+- `https://tahmid-english-review-hub-preview.netlify.app/`
+- Deploys automatically from `upgrade/review-hub-v8`
+- The existing `jocular-chaja-86e78d` production site remains unchanged
 
 The general and personal hubs share the same quiz, audio, settings, and
 Supabase modules. Personal history and private lesson data are protected by

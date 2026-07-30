@@ -92,6 +92,35 @@ Local Chromium-based browser checks covered:
 Safari checks covered the general hub, a scored lesson answer, and natural
 voice playback before packaging.
 
+## Hosted Netlify preview smoke test
+
+The separate Netlify preview at
+`https://tahmid-english-review-hub-preview.netlify.app/` was deployed from the
+private GitHub repository’s `upgrade/review-hub-v8` branch. The existing
+`jocular-chaja-86e78d` production site was not changed.
+
+Hosted checks covered:
+
+- six public lessons and 221 public activities
+- the short `/lesson/june-28` route and the query-string lesson route
+- Manual Check and first-answer lock
+- the anonymous private-account gate
+- authorised private sign-in, personal history, and history after reload
+- refusal of a second learner account without private-hub scope
+- teacher sign-in, 11 private drafts, six published lessons, and two
+  non-teacher test learners
+- question-level, format, retry, lesson, speaking, phrase, and session analytics
+- direct learner refusal for the July 27 draft
+- teacher-only preview of all 24 July 27 draft activities
+- all 92 Phrase Library cards and 276 learning-note sections
+- live US Ava and UK Libby playback
+- hosted phrase practice synchronising back to teacher analytics
+
+The first hosted deploy revealed that an internal Netlify rewrite did not
+expose the lesson slug to browser JavaScript. The player now also derives the
+lesson ID from `/lesson/:slug`; an automated regression assertion and a second
+hosted smoke test both pass.
+
 ## Natural voice
 
 The live `natural-speech` Edge Function returned valid `audio/mpeg` for both:
@@ -114,5 +143,8 @@ natural voice is unavailable.
 - Responsive browser checks passed, but a final touch check on the learner’s
   physical phone/tablet remains recommended.
 
-Temporary test identities and their test records are removed after the hosted
-preview smoke test.
+The three temporary test identities and their cascade-linked test records were
+removed after the hosted preview smoke test. A scoped SQL verification returned
+zero remaining `codex.reviewhub.*` users, zero test profiles, and zero orphaned
+attempts. The existing `tahmidhc245@gmail.com` teacher identity remains present
+and authorised.
