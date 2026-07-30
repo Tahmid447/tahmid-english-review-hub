@@ -208,6 +208,11 @@ assert.match(lessonPage, /id="vibrationToggle"/);
 assert.match(lessonScript, /onStudentAuthChange/);
 assert.match(lessonScript, /authScopeLocked = true/);
 assert.match(lessonScript, /window\.location\.reload\(\)/);
+assert.match(
+  lessonScript,
+  /lessonPathMatch[\s\S]{0,180}decodeURIComponent\(lessonPathMatch\?\.\[1\]/,
+  "Netlify /lesson/:slug rewrites retain a usable lesson ID in the browser.",
+);
 for (const [name, source] of [
   ["lesson", lessonScript],
   ["hub", hubScript],

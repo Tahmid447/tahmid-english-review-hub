@@ -64,7 +64,8 @@ const elements = {
 };
 
 const params = new URLSearchParams(window.location.search);
-const lessonId = params.get("id") || "";
+const lessonPathMatch = window.location.pathname.match(/^\/lesson\/([^/]+)\/?$/);
+const lessonId = params.get("id") || decodeURIComponent(lessonPathMatch?.[1] || "");
 const isTeacherPreview = params.get("preview") === "1";
 const returnTo = isTeacherPreview
   ? "/teacher.html"
