@@ -1195,10 +1195,12 @@ async function initialise() {
   if (authSession) await ensureStudentProfile(authSession);
   await activateStorageScope(authSession);
   populateNativeLanguages();
-  await configureGoogleButton();
   bindSettings();
   bindFilters();
   bindAuth();
+  // Authentication and lesson controls should never wait on the provider
+  // settings endpoint. The availability check updates the button separately.
+  void configureGoogleButton();
 
   await reloadLessons();
   await refreshAuthView();

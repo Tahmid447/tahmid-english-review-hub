@@ -2812,7 +2812,9 @@ async function initialise() {
 
   addSyncButton();
   if (elements.googleSignIn) {
-    elements.googleSignIn.disabled = !await googleStudentAuthAvailable();
+    void googleStudentAuthAvailable().then((available) => {
+      elements.googleSignIn.disabled = !available;
+    });
     elements.googleSignIn.addEventListener("click", async () => {
       elements.loginStatus.textContent = "Opening Google sign-in…";
       const { data, error } = await signInTeacherWithGoogle();

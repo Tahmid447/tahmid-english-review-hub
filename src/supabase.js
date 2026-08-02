@@ -94,14 +94,20 @@ export async function signUpStudent(profile = {}) {
 }
 
 export async function googleStudentAuthAvailable() {
+  const controller = new AbortController();
+  const timeout = globalThis.setTimeout(() => controller.abort(), 5000);
   try {
     const response = await fetch(`${SUPABASE_URL}/auth/v1/settings`, {
       headers: { apikey: SUPABASE_ANON_KEY },
+      cache: "no-store",
+      signal: controller.signal,
     });
     const settings = response.ok ? await response.json() : null;
     return settings?.external?.google === true;
   } catch {
     return false;
+  } finally {
+    globalThis.clearTimeout(timeout);
   }
 }
 
