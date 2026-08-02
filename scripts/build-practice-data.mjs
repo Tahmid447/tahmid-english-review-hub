@@ -5,6 +5,15 @@ import { legacyAdditions, notionDraftCurriculum } from "../src/data/curriculum.j
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const dataRoot = path.join(root, "src", "data");
+const visualManifest = JSON.parse(
+  fs.readFileSync(path.join(root, "scripts", "visual-question-manifest.json"), "utf8"),
+);
+const visualQuestionsByLesson = new Map();
+for (const visual of visualManifest.questions || []) {
+  const lessonQuestions = visualQuestionsByLesson.get(visual.lessonId) || [];
+  lessonQuestions.push(visual);
+  visualQuestionsByLesson.set(visual.lessonId, lessonQuestions);
+}
 
 const choice = (phrases, correctIndex, field = "en") =>
   [0, 1, 2, 3].map((offset) => {
@@ -356,6 +365,17 @@ function makeDraftQuestions(lesson) {
     });
   });
 
+  [9, 10].forEach((index, offset) => {
+    const target = get(index);
+    result.push({
+      ...base(`${lesson.id}-draft-speaking-${offset + 4}`, "speaking", "Speak", target),
+      prompt: "Say the sentence naturally, then try it once without looking.",
+      promptJa: "自然に言ってから、英文を見ずにもう一度話してみましょう。",
+      speakText: target.en,
+      speakJa: target.jp,
+    });
+  });
+
   result.push({
     ...base(`${lesson.id}-draft-dialogue`, "dialogue", "Use It", get(9)),
     prompt: "Choose the most natural next line.",
@@ -384,32 +404,34 @@ function makeDraftQuestions(lesson) {
     correct: "a",
   });
 
-  if (result.length !== 24) {
-    throw new Error(`${lesson.id} generated ${result.length} questions instead of 24`);
+  const visualQuestions = visualQuestionsByLesson.get(lesson.id) || [];
+  if (visualQuestions.length !== 5) {
+    throw new Error(`${lesson.id} needs exactly five visual-question briefs; found ${visualQuestions.length}`);
   }
-  const illustration = {
-    "july-25": {
-      questionId: "july-25-draft-choice-3",
-      image: "/assets/questions/july-25-feelings.png",
-      imageAlt: "A learner looks irritated by repeated phone notifications.",
-    },
-    "july-26": {
-      questionId: "july-26-draft-choice-2",
-      image: "/assets/questions/july-26-wish.png",
-      imageAlt: "A person in a rainy room imagines being in sunny Malaysia.",
-    },
-    "july-27": {
-      questionId: "july-27-draft-choice-1",
-      image: "/assets/questions/july-27-spill.png",
-      imageAlt: "A person accidentally spills coffee on a shirt and table.",
-    },
-  }[lesson.id];
-  if (illustration) {
-    const question = result.find((item) => item.id === illustration.questionId);
-    if (question) {
-      question.image = illustration.image;
-      question.imageAlt = illustration.imageAlt;
-    }
+
+  visualQuestions
+    .sort((left, right) => left.slot - right.slot)
+    .forEach((visual) => {
+      const target = get(visual.phraseIndex);
+      result.push({
+        ...base(`${lesson.id}-draft-visual-${visual.slot}`, "situation", "See It", target),
+        prompt: "Which sentence best matches the illustration?",
+        promptJa: "イラストの場面に最も合う英文を選んでください。",
+        choices: choice(phrases, visual.phraseIndex),
+        correct: "a",
+        image: visual.asset,
+        imageAlt: visual.imageAlt,
+        visualAssetId: `${lesson.id}-${String(visual.slot).padStart(2, "0")}`,
+      });
+    });
+
+  const listeningCount = result.filter(({ format }) => ["listenChoice", "listenType"].includes(format)).length;
+  const speakingCount = result.filter(({ format }) => format === "speaking").length;
+  const visualCount = result.filter(({ image }) => Boolean(image)).length;
+  if (listeningCount < 5 || speakingCount < 5 || visualCount < 5) {
+    throw new Error(
+      `${lesson.id} skill minimums not met (visual ${visualCount}, listening ${listeningCount}, speaking ${speakingCount})`,
+    );
   }
   return result;
 }

@@ -8,8 +8,8 @@ Test date: **July 30, 2026**
   recorded SHA-256 hashes.
 - All six original lessons and all **143 original activities** are present with
   stable IDs.
-- All **78 added activities** and **264 Notion-derived activities** are present.
-- The complete reviewed source contains **485 activities in 14 formats**.
+- All **78 added activities** and **341 Notion-derived activities** are present.
+- The complete reviewed source contains **562 activities in 14 formats**.
 - The production build excludes `notion-drafts.json` and `curriculum.js`.
 - The public route catalogue contains all 17 reviewed lessons after the v9
   publication decision.
@@ -25,7 +25,7 @@ npm test
 npm run verify:live
 ```
 
-## Live Supabase verification
+## July 30 live Supabase verification (before the 31-activity expansion)
 
 The three Review Hub migrations were applied to the existing
 `Tahmid English Academy` project through the trusted Supabase SQL Editor. They
@@ -95,7 +95,7 @@ Local Chromium-based browser checks covered:
 Safari checks covered the general hub, a scored lesson answer, and natural
 voice playback before packaging.
 
-## Hosted Netlify production smoke test
+## Hosted Netlify production smoke test (pre-expansion snapshot)
 
 The separate Netlify preview at
 `https://tahmid-english-review-hub-preview.netlify.app/` was deployed from the
@@ -170,8 +170,8 @@ and authorised.
   anonymous reads, including memberships, access codes, and redemptions.
 - Sign-in and create-account panels switch correctly and expose eight
   privacy-conscious profile fields/controls.
-- The complete source still passes all 1,322 content/security assertions and
-  all 485-activity validation.
+- The complete source now passes all 1,369 content/security assertions and
+  all 562-activity validation.
 - The Lesson Guide shows non-empty, bilingual key points and playable phrases.
 - Natural voice playback completed without browser console errors; requests now
   retry once and reject invalid/empty audio without falling back to a computer
@@ -181,3 +181,15 @@ and authorised.
 - Supabase migration 005 completed successfully. Production, preview, and local
   authentication return URLs are approved. Email signup remains confirmed-email
   only; Google OAuth is intentionally pending its Google Client ID and Secret.
+
+## August 2 lesson skill expansion (local source)
+
+- All 11 Notion-derived lessons generate 31 activities each.
+- Every lesson has five distinct illustration-led activities, six listening
+  activities, and five speaking activities.
+- The reviewed source and protected question migration contain 562 activities.
+- The visual production manifest contains 55 unique WebP paths, alt text, and
+  lesson-specific scene briefs.
+- `npm test` passes with 1,369 assertions.
+- `npm run verify:visuals` must pass after the 55 final illustrations are added
+  and before this expanded question migration is promoted to production.

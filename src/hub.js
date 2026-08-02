@@ -589,7 +589,11 @@ async function handleAccessCode(event) {
   const code = input?.value.trim() || "";
   if (!code) return;
   const submit = form.querySelector('button[type="submit"]');
-  if (submit) submit.disabled = true;
+  const originalLabel = submit?.textContent || "Unlock";
+  if (submit) {
+    submit.disabled = true;
+    submit.textContent = t("Checking…", "確認中…");
+  }
   setLoginStatus(t("Checking the code…", "コードを確認中…"));
   try {
     const result = await redeemStudentAccessCode(code);
@@ -610,10 +614,23 @@ async function handleAccessCode(event) {
             "This code is invalid, expired, or has already reached its use limit.",
             "コードが正しくないか、期限切れ、または利用上限に達しています。",
           )
-        : rawMessage || t("The code could not be used.", "コードを利用できませんでした。");
+        : /full code in the format/i.test(rawMessage)
+          ? t(
+              "Enter the complete code beginning with TEC-. The four characters in the teacher’s history are only a masked reference.",
+              "TEC-から始まる完全なコードを入力してください。先生画面の履歴にある4文字は、安全のため末尾だけを表示したものです。",
+            )
+          : /took too long/i.test(rawMessage)
+            ? t(
+                "The check took too long. Nothing was changed. Please check your connection and try again.",
+                "確認に時間がかかりすぎました。変更は行われていません。通信を確認してもう一度お試しください。",
+              )
+            : rawMessage || t("The code could not be used.", "コードを利用できませんでした。");
     setLoginStatus(safeMessage, true);
   } finally {
-    if (submit) submit.disabled = false;
+    if (submit) {
+      submit.disabled = false;
+      submit.textContent = originalLabel;
+    }
   }
 }
 
@@ -726,6 +743,7 @@ function ensureGeneralLogoutButton() {
 async function refreshMembershipPanel() {
   const panel = document.querySelector("#membershipPanel");
   const status = document.querySelector("#membershipStatus");
+  const codeForm = document.querySelector("#accessCodeForm");
   if (!panel || !authSession) {
     currentMembership = null;
     if (panel) panel.hidden = true;
@@ -744,6 +762,10 @@ async function refreshMembershipPanel() {
         `Signed in as ${authSession.user?.email || "learner"}. Approval is pending, or enter an access code below.`,
         `${authSession.user?.email || "学習者"}でログイン中です。承認を待つか、アクセスコードを入力してください。`,
       );
+  }
+  if (codeForm) {
+    codeForm.hidden = result.active;
+    codeForm.setAttribute("aria-hidden", String(result.active));
   }
 }
 

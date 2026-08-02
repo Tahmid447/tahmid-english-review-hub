@@ -75,6 +75,9 @@ const elements = {
   questionTemplate: document.querySelector("#questionTemplateButton"),
   questionEditorStatus: document.querySelector("#questionEditorStatus"),
   cancelQuestion: document.querySelector("#cancelQuestionButton"),
+  learnerDialog: document.querySelector("#learnerDialog"),
+  learnerDialogHeading: document.querySelector("#learnerDialogHeading"),
+  learnerDialogContent: document.querySelector("#learnerDialogContent"),
   toast: document.querySelector("#toast"),
 };
 
@@ -88,6 +91,8 @@ const state = {
   accessCodes: [],
   attempts: [],
   assignments: [],
+  accessOverrides: [],
+  teacherControlsReady: true,
   answers: [],
   analyticsQuestions: [],
   speaking: [],
@@ -98,6 +103,8 @@ const state = {
   questions: [],
   questionLoading: false,
   questionSaving: false,
+  lessonListView: "published",
+  lastGeneratedCode: null,
 };
 
 function make(tag, options = {}) {
@@ -318,6 +325,17 @@ async function fetchAll(table, columns, options = {}) {
   return rows;
 }
 
+async function fetchOptional(table, columns, options = {}) {
+  try {
+    return { rows: await fetchAll(table, columns, options), available: true };
+  } catch (error) {
+    if (/relation .* does not exist|schema cache/i.test(error?.message || "")) {
+      return { rows: [], available: false };
+    }
+    throw error;
+  }
+}
+
 async function verifyTeacher(session) {
   const { data, error } = await client
     .from("review_teachers")
@@ -377,6 +395,7 @@ async function refreshDashboard() {
       phrases,
       memberships,
       accessCodes,
+      accessOverrides,
     ] = await Promise.all([
       fetchAll("review_lessons", "*, review_questions(count)", {
         order: { column: "lesson_date", ascending: false },
@@ -423,6 +442,11 @@ async function refreshDashboard() {
         "id,label,code_last4,duration_days,access_scope,max_uses,use_count,enabled,valid_until,created_at",
         { order: { column: "created_at", ascending: false } },
       ),
+      fetchOptional(
+        "review_lesson_access_overrides",
+        "lesson_id,student_id,access_mode,note,updated_at",
+        { order: { column: "updated_at", ascending: false } },
+      ),
     ]);
 
     state.lessons = lessons;
@@ -440,6 +464,8 @@ async function refreshDashboard() {
     state.phrases = phrases;
     state.memberships = memberships;
     state.accessCodes = accessCodes;
+    state.accessOverrides = accessOverrides.rows;
+    state.teacherControlsReady = accessOverrides.available;
     updateMetrics();
     renderActiveTab();
   } catch (error) {
@@ -536,6 +562,19 @@ function lessonRows(lessons) {
     );
     if (lesson.status !== "archived") {
       actions.append(makeAction("Archive", () => archiveLesson(lesson)));
+    } else {
+      actions.append(makeAction("Restore", () => restoreLesson(lesson), "Return this lesson to Published"));
+      const remove = makeAction(
+        "Delete permanently",
+        () => permanentlyDeleteLesson(lesson),
+        "Only possible when no learner history exists",
+      );
+      remove.className = "danger-action";
+      remove.disabled = !state.teacherControlsReady;
+      if (!state.teacherControlsReady) {
+        remove.title = "Apply the Teacher Controls database update first";
+      }
+      actions.append(remove);
     }
 
     row.append(
@@ -553,23 +592,55 @@ function lessonRows(lessons) {
 }
 
 function renderLessons(mode) {
-  const filtered =
-    mode === "drafts"
-      ? state.lessons.filter((lesson) => ["draft", "review"].includes(lesson.status))
-      : state.lessons.filter((lesson) => ["published", "archived"].includes(lesson.status));
+  const filtered = mode === "drafts"
+    ? state.lessons.filter((lesson) => ["draft", "review"].includes(lesson.status))
+    : state.lessons.filter((lesson) => {
+        if (state.lessonListView === "all") return ["published", "archived"].includes(lesson.status);
+        return lesson.status === state.lessonListView;
+      });
+
+  const wrap = make("div", { className: "teacher-list-view" });
+  if (mode === "lessons") {
+    const controls = make("div", { className: "lesson-list-filters" });
+    const publishedCount = state.lessons.filter((lesson) => lesson.status === "published").length;
+    const archivedCount = state.lessons.filter((lesson) => lesson.status === "archived").length;
+    [
+      ["published", `Published (${publishedCount})`],
+      ["archived", `Archived (${archivedCount})`],
+      ["all", "All"],
+    ].forEach(([value, label]) => {
+      const button = makeAction(label, () => {
+        state.lessonListView = value;
+        renderLessons("lessons");
+      });
+      button.className = "filter-chip";
+      button.setAttribute("aria-pressed", String(state.lessonListView === value));
+      controls.append(button);
+    });
+    const explanation = make("p", {
+      text: state.lessonListView === "archived"
+        ? "Archived lessons are hidden from learners but retain questions and study records. Restore or permanently delete an unused lesson here."
+        : "Published lessons are currently visible to their selected audience.",
+    });
+    controls.append(explanation);
+    wrap.append(controls);
+  }
 
   if (!filtered.length) {
-    elements.panel.replaceChildren(
-      make("p", {
-        text:
-          mode === "drafts"
-            ? "There are no private drafts waiting for review."
-            : "There are no published or archived lessons yet.",
-      }),
-    );
+    wrap.append(make("p", {
+      text: mode === "drafts"
+        ? "There are no private drafts waiting for review."
+        : state.lessonListView === "archived"
+          ? "There are no archived lessons."
+          : "There are no published lessons yet.",
+    }));
+    elements.panel.replaceChildren(wrap);
     return;
   }
-  elements.panel.replaceChildren(lessonRows(filtered));
+  const tableWrap = make("div", { className: "table-scroll" });
+  tableWrap.append(lessonRows(filtered));
+  wrap.append(tableWrap);
+  elements.panel.replaceChildren(wrap);
 }
 
 function lessonTitle(lessonId) {
@@ -613,6 +684,7 @@ async function activateMembership(profile, days, scope, button) {
     if (error) throw error;
     showToast(`${profileName(profile.user_id)} now has ${duration} days of ${scope} access.`, "success");
     await refreshDashboard();
+    if (elements.learnerDialog?.open) openLearnerDialog(profile);
   } catch (error) {
     showToast(readableError(error, "Membership could not be activated."), "error");
     button.disabled = false;
@@ -632,6 +704,46 @@ async function pauseMembership(profile, button) {
   }
   showToast("Membership paused.", "success");
   await refreshDashboard();
+  if (elements.learnerDialog?.open) openLearnerDialog(profile);
+}
+
+async function copyText(value) {
+  try {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(value);
+    } else {
+      const field = make("textarea");
+      field.value = value;
+      field.style.position = "fixed";
+      field.style.opacity = "0";
+      document.body.append(field);
+      field.select();
+      document.execCommand("copy");
+      field.remove();
+    }
+    showToast("Full access code copied.", "success");
+  } catch {
+    showToast("Copy failed. Select the full code and copy it manually.", "error");
+  }
+}
+
+function generatedCodeResult() {
+  if (!state.lastGeneratedCode?.code) return null;
+  const output = make("section", { className: "generated-code" });
+  const copy = makeAction("Copy full code", () => copyText(state.lastGeneratedCode.code));
+  copy.className = "primary-btn";
+  const code = make("code", { text: state.lastGeneratedCode.code });
+  code.setAttribute("aria-label", "Full newly generated access code");
+  const text = make("div");
+  text.append(
+    make("strong", { text: "New full code — copy and send this now" }),
+    code,
+    make("p", {
+      text: `${state.lastGeneratedCode.label} · ${state.lastGeneratedCode.durationDays} days · ${audienceLabel(state.lastGeneratedCode.accessScope)}. For security, the history below shows only the last four characters.`,
+    }),
+  );
+  output.append(text, copy);
+  return output;
 }
 
 function renderAccessCodeManager() {
@@ -679,15 +791,13 @@ function renderAccessCodeManager() {
       });
       if (error) throw error;
       const rawCode = data?.accessCode;
-      const output = make("div", { className: "generated-code" });
-      output.append(
-        make("strong", { text: rawCode || "Code generated" }),
-        make("p", { text: "Copy this now. Only the last four characters remain visible after refreshing." }),
-      );
-      if (rawCode) {
-        output.append(makeAction("Copy", () => navigator.clipboard?.writeText(rawCode)));
-      }
-      form.after(output);
+      if (!rawCode) throw new Error("The service did not return the new full code.");
+      state.lastGeneratedCode = {
+        code: rawCode,
+        label: label.value.trim(),
+        durationDays,
+        accessScope: scope.value,
+      };
       showToast("Access code generated.", "success");
       await refreshDashboard();
     } catch (error) {
@@ -698,11 +808,17 @@ function renderAccessCodeManager() {
   form.addEventListener("submit", (event) => event.preventDefault());
   form.append(label, days, scope, uses, create);
   section.append(heading, form);
+  const generated = generatedCodeResult();
+  if (generated) section.append(generated);
   if (state.accessCodes.length) {
+    section.append(make("p", {
+      className: "code-history-note",
+      text: "Code history — masked for security. “••••1234” is only the last four characters and cannot be used to unlock an account.",
+    }));
     const codeList = make("div", { className: "code-list" });
     state.accessCodes.slice(0, 8).forEach((code) => {
       codeList.append(make("span", {
-        text: `${code.label} · ••••${code.code_last4} · ${code.duration_days} days · ${code.use_count}/${code.max_uses} used${code.enabled ? "" : " · disabled"}`,
+        text: `${code.label} · last 4: ••••${code.code_last4} · ${code.duration_days} days · ${code.use_count}/${code.max_uses} used${code.enabled ? "" : " · disabled"}`,
       }));
     });
     section.append(codeList);
@@ -710,87 +826,358 @@ function renderAccessCodeManager() {
   return section;
 }
 
-function renderStudents() {
+function assignmentFor(studentId, lessonId) {
+  return state.assignments.find(
+    (assignment) => assignment.student_id === studentId && assignment.lesson_id === lessonId,
+  ) || null;
+}
+
+function accessOverrideFor(studentId, lessonId) {
+  return state.accessOverrides.find(
+    (override) => override.student_id === studentId && override.lesson_id === lessonId,
+  ) || null;
+}
+
+async function setLessonAssignment(profile, lesson, assigned, control) {
+  control.disabled = true;
+  const existing = assignmentFor(profile.user_id, lesson.id);
+  let result;
+  if (assigned) {
+    result = await client.from("review_assignments").upsert({
+      lesson_id: lesson.id,
+      student_id: profile.user_id,
+      assigned_by: state.session.user.id,
+      status: "assigned",
+    }, { onConflict: "lesson_id,student_id" }).select("id,lesson_id,student_id,assigned_by,due_at,status,note,created_at").single();
+  } else if (existing) {
+    result = await client.from("review_assignments")
+      .update({ status: "dismissed" })
+      .eq("id", existing.id)
+      .select("id,lesson_id,student_id,assigned_by,due_at,status,note,created_at")
+      .single();
+  } else {
+    result = { data: null, error: null };
+  }
+  control.disabled = false;
+  if (result.error) {
+    control.checked = !assigned;
+    showToast(readableError(result.error, "The lesson recommendation could not be changed."), "error");
+    return;
+  }
+  if (result.data) {
+    state.assignments = state.assignments.filter((item) => item.id !== result.data.id);
+    state.assignments.push(result.data);
+  }
+  showToast(assigned ? "Lesson added to this learner’s plan." : "Lesson removed from this learner’s plan.", "success");
+  renderStudents();
+  openLearnerDialog(profile);
+}
+
+async function setLessonLock(profile, lesson, accessMode, control) {
+  if (!state.teacherControlsReady) {
+    showToast("Apply the Teacher Controls database update before using lesson locks.", "error");
+    control.value = accessOverrideFor(profile.user_id, lesson.id)?.access_mode || "inherit";
+    return;
+  }
+  control.disabled = true;
+  let result;
+  if (accessMode === "inherit") {
+    result = await client.from("review_lesson_access_overrides")
+      .delete()
+      .eq("lesson_id", lesson.id)
+      .eq("student_id", profile.user_id);
+  } else {
+    result = await client.from("review_lesson_access_overrides").upsert({
+      lesson_id: lesson.id,
+      student_id: profile.user_id,
+      access_mode: accessMode,
+      updated_by: state.session.user.id,
+    }, { onConflict: "lesson_id,student_id" });
+  }
+  control.disabled = false;
+  if (result.error) {
+    control.value = accessOverrideFor(profile.user_id, lesson.id)?.access_mode || "inherit";
+    showToast(readableError(result.error, "The learner-specific lesson access could not be changed."), "error");
+    return;
+  }
+  state.accessOverrides = state.accessOverrides.filter(
+    (item) => !(item.lesson_id === lesson.id && item.student_id === profile.user_id),
+  );
+  if (accessMode !== "inherit") {
+    state.accessOverrides.push({
+      lesson_id: lesson.id,
+      student_id: profile.user_id,
+      access_mode: accessMode,
+      updated_at: new Date().toISOString(),
+    });
+  }
+  showToast(accessMode === "block" ? "This lesson is now locked for the learner." : "Normal membership access restored.", "success");
+  renderStudents();
+  openLearnerDialog(profile);
+}
+
+async function sendPasswordReset(profile, button) {
+  const email = String(profile.contact_email || "").trim();
+  if (!email) {
+    showToast("No account email is recorded for this learner.", "error");
+    return;
+  }
+  if (!window.confirm(`Send a secure password-reset email to ${email}?`)) return;
+  button.disabled = true;
+  const redirectTo = new URL("/", window.location.origin).href;
+  const { error } = await client.auth.resetPasswordForEmail(email, { redirectTo });
+  button.disabled = false;
+  if (error) {
+    showToast(readableError(error, "The password-reset email could not be sent."), "error");
+    return;
+  }
+  showToast("Password-reset email sent. Passwords are never visible to the teacher.", "success");
+}
+
+function learnerActivity(profile) {
+  const events = [];
+  state.attempts.filter((item) => item.user_id === profile.user_id).forEach((item) => {
+    events.push({
+      at: item.completed_at,
+      title: `Completed ${lessonTitle(item.lesson_id)}`,
+      detail: item.max_score > 0
+        ? `First score ${item.first_score}/${item.max_score} · ${item.wrong_count} wrong`
+        : "Practice recorded",
+    });
+  });
+  state.speaking.filter((item) => item.user_id === profile.user_id).forEach((item) => {
+    events.push({
+      at: item.practiced_at,
+      title: `Speaking · ${lessonTitle(item.lesson_id)}`,
+      detail: item.transcript ? `Heard: “${item.transcript}”` : "Speaking practice recorded",
+    });
+  });
+  state.assignments.filter((item) => item.student_id === profile.user_id).forEach((item) => {
+    events.push({
+      at: item.created_at,
+      title: `${item.status === "dismissed" ? "Removed" : "Assigned"} · ${lessonTitle(item.lesson_id)}`,
+      detail: item.status === "completed" ? "Assignment completed" : `Assignment status: ${item.status}`,
+    });
+  });
+  return events
+    .filter((item) => item.at)
+    .sort((left, right) => new Date(right.at).getTime() - new Date(left.at).getTime())
+    .slice(0, 15);
+}
+
+function learnerLessonControls(profile) {
+  const section = make("section", { className: "learner-control-section" });
+  section.append(
+    make("h3", { text: "Lesson plan & visibility / レッスン割り当て・表示管理" }),
+    make("p", {
+      text: "Recommendation adds a lesson to the learner’s personal plan. Visibility follows the membership by default; choose Locked only when this learner must not open that lesson.",
+    }),
+  );
+  if (!state.teacherControlsReady) {
+    section.append(make("p", {
+      className: "control-warning",
+      text: "Lesson locking will become available after the Teacher Controls migration is applied. Assignments already work.",
+    }));
+  }
   const published = state.lessons.filter((lesson) => lesson.status === "published");
+  if (!published.length) {
+    section.append(make("p", { text: "Publish a lesson before assigning it." }));
+    return section;
+  }
+  const { table, tbody } = makeTable(["Lesson", "Recommend", "Learner visibility", "Practice"]);
+  for (const lesson of published) {
+    const assignment = assignmentFor(profile.user_id, lesson.id);
+    const checkbox = make("input");
+    checkbox.type = "checkbox";
+    checkbox.checked = Boolean(assignment && assignment.status !== "dismissed");
+    checkbox.setAttribute("aria-label", `Recommend ${lesson.title_en}`);
+    checkbox.addEventListener("change", () => setLessonAssignment(profile, lesson, checkbox.checked, checkbox));
+
+    const visibility = make("select");
+    [["inherit", "Membership rules (available)"], ["block", "Locked for this learner"]].forEach(([value, label]) => {
+      const option = make("option", { text: label });
+      option.value = value;
+      visibility.append(option);
+    });
+    visibility.value = accessOverrideFor(profile.user_id, lesson.id)?.access_mode || "inherit";
+    visibility.disabled = !state.teacherControlsReady;
+    visibility.setAttribute("aria-label", `Visibility of ${lesson.title_en}`);
+    visibility.addEventListener("change", () => setLessonLock(profile, lesson, visibility.value, visibility));
+
+    const attempts = state.attempts.filter(
+      (attempt) => attempt.user_id === profile.user_id && attempt.lesson_id === lesson.id,
+    );
+    const best = attempts.reduce((maximum, attempt) => {
+      const value = Number(attempt.max_score || 0) > 0
+        ? Number(attempt.first_score || 0) / Number(attempt.max_score)
+        : 0;
+      return Math.max(maximum, value);
+    }, 0);
+    const row = make("tr");
+    const lessonCell = make("td");
+    lessonCell.append(make("strong", { text: lesson.title_en }), make("br"), make("small", { text: formatDate(lesson.lesson_date) }));
+    const recommendCell = make("td");
+    recommendCell.append(checkbox);
+    row.append(
+      lessonCell,
+      recommendCell,
+      make("td"),
+      make("td", { text: attempts.length ? `${attempts.length} session(s) · best ${Math.round(best * 100)}%` : "Not practised" }),
+    );
+    row.children[2].append(visibility);
+    tbody.append(row);
+  }
+  const tableWrap = make("div", { className: "table-scroll" });
+  tableWrap.append(table);
+  section.append(tableWrap);
+  return section;
+}
+
+function openLearnerDialog(profile) {
+  if (!elements.learnerDialog || !elements.learnerDialogContent) return;
+  const current = state.profiles.find((item) => item.user_id === profile.user_id) || profile;
+  const membership = membershipFor(current.user_id);
+  const attempts = state.attempts.filter((item) => item.user_id === current.user_id);
+  const speaking = state.speaking.filter((item) => item.user_id === current.user_id);
+  const phraseCount = state.phrases
+    .filter((item) => item.user_id === current.user_id)
+    .reduce((sum, item) => sum + Number(item.practice_count || 0), 0);
+  const assigned = state.assignments.filter(
+    (item) => item.student_id === current.user_id && item.status !== "dismissed",
+  ).length;
+  elements.learnerDialogHeading.textContent = profileName(current.user_id);
+
+  const profileCard = make("section", { className: "learner-profile-card" });
+  profileCard.append(
+    make("div", { text: current.contact_email || "No email recorded" }),
+    make("p", { text: [current.english_level || "Level not set", current.age_group || "Age not shared", current.native_language || "Language not set"].join(" · ") }),
+    make("p", { text: current.learning_goal ? `Goal: ${current.learning_goal}` : "No learning goal recorded yet." }),
+  );
+
+  const metrics = make("section", { className: "learner-metrics" });
+  [
+    ["Practice sessions", attempts.length],
+    ["Speaking records", speaking.length],
+    ["Phrase repetitions", phraseCount],
+    ["Assigned lessons", assigned],
+  ].forEach(([label, value]) => {
+    const card = make("article");
+    card.append(make("span", { text: label }), make("strong", { text: value }));
+    metrics.append(card);
+  });
+
+  const access = make("section", { className: "learner-control-section" });
+  access.append(
+    make("h3", { text: "Membership & account safety / 会員期間・安全管理" }),
+    make("p", { text: `Status: ${activeMembershipStatus(membership)} · Scope: ${membership?.access_scope || "general"} · Expires: ${membership?.expires_at ? formatDate(membership.expires_at, true) : "—"}` }),
+  );
+  const duration = make("input");
+  duration.type = "number";
+  duration.min = "1";
+  duration.max = "730";
+  duration.value = "30";
+  duration.setAttribute("aria-label", "Membership duration in days");
+  const scope = make("select");
+  [["general", "General"], ["takiwaki", "Takiwaki"], ["both", "Both"]].forEach(([value, label]) => {
+    const option = make("option", { text: label });
+    option.value = value;
+    if (membership?.access_scope === value) option.selected = true;
+    scope.append(option);
+  });
+  const approve = makeAction("Approve / extend", () => activateMembership(current, duration.value, scope.value, approve));
+  const pause = makeAction("Pause access", () => pauseMembership(current, pause));
+  const reset = makeAction("Send password-reset email", () => sendPasswordReset(current, reset));
+  const controls = make("div", { className: "learner-access-actions" });
+  controls.append(duration, scope, approve, pause, reset);
+  access.append(
+    controls,
+    make("small", { text: "For security, teachers can never see or retrieve learner passwords. A reset email lets the learner choose a new password privately." }),
+  );
+
+  const timeline = make("section", { className: "learner-control-section" });
+  timeline.append(make("h3", { text: "Recent learning activity / 最近の学習状況" }));
+  const events = learnerActivity(current);
+  if (!events.length) {
+    timeline.append(make("p", { text: "No learning activity has been recorded yet." }));
+  } else {
+    const list = make("ol", { className: "learner-timeline" });
+    events.forEach((event) => {
+      const item = make("li");
+      item.append(make("strong", { text: event.title }), make("span", { text: event.detail }), make("time", { text: formatDate(event.at, true) }));
+      list.append(item);
+    });
+    timeline.append(list);
+  }
+
+  elements.learnerDialogContent.replaceChildren(
+    profileCard,
+    metrics,
+    access,
+    learnerLessonControls(current),
+    timeline,
+  );
+  if (!elements.learnerDialog.open) elements.learnerDialog.showModal();
+}
+
+function renderStudents() {
+  const wrap = make("div", { className: "learner-admin" });
+  wrap.append(renderAccessCodeManager());
+  const heading = make("div", { className: "teacher-panel-heading" });
+  heading.append(
+    make("div", { text: "Learners / 学習者" }),
+    make("p", { text: "Open a learner to manage membership, recommendations, lesson locks, password reset, and detailed activity." }),
+  );
+  wrap.append(heading);
+
+  if (!state.profiles.length) {
+    wrap.append(make("p", { text: "No student profiles have been created yet." }));
+    elements.panel.replaceChildren(wrap);
+    return;
+  }
+
   const { table, tbody } = makeTable([
     "Learner",
     "Profile",
     "Membership",
-    "Expires",
-    "Sessions",
-    "Manage access",
-    "Assign lesson",
+    "Latest practice",
+    "Assigned",
+    "Controls",
   ]);
-
   for (const profile of state.profiles) {
     const attempts = state.attempts.filter((attempt) => attempt.user_id === profile.user_id);
-    const assignments = state.assignments.filter(
-      (assignment) => assignment.student_id === profile.user_id,
-    );
     const membership = membershipFor(profile.user_id);
-    const assignCell = make("td");
-    if (published.length) {
-      const select = make("select");
-      select.setAttribute("aria-label", `Assign a lesson to ${profileName(profile.user_id)}`);
-      for (const lesson of published) {
-        const option = make("option", { text: `${formatDate(lesson.lesson_date)} · ${lesson.title_en}` });
-        option.value = lesson.id;
-        select.append(option);
-      }
-      const button = makeAction("Assign", () =>
-        assignLesson(profile.user_id, select.value, button),
-      );
-      const group = make("div", { className: "table-actions" });
-      group.append(select, button);
-      assignCell.append(group);
-    } else {
-      assignCell.textContent = "Publish a lesson first";
-    }
-
-    const manageCell = make("td");
-    const duration = make("input");
-    duration.type = "number";
-    duration.min = "1";
-    duration.max = "730";
-    duration.value = "30";
-    duration.placeholder = "Days";
-    duration.title = "Access period in days (1–730). Examples: 30 = one month, 180 = six months.";
-    duration.setAttribute("aria-label", `Access duration in days for ${profileName(profile.user_id)}`);
-    const scope = make("select");
-    [["general", "General"], ["takiwaki", "Takiwaki"], ["both", "Both"]].forEach(([value, textValue]) => {
-      const option = make("option", { text: textValue });
-      option.value = value;
-      if (membership?.access_scope === value) option.selected = true;
-      scope.append(option);
-    });
-    const activate = makeAction("Approve", () => activateMembership(profile, duration.value, scope.value, activate));
-    const pause = makeAction("Pause", () => pauseMembership(profile, pause));
-    const manage = make("div", { className: "table-actions membership-actions" });
-    manage.append(duration, scope, activate, pause);
-    manageCell.append(manage);
-
+    const assignments = state.assignments.filter(
+      (assignment) => assignment.student_id === profile.user_id && assignment.status !== "dismissed",
+    );
+    const latest = attempts
+      .map((attempt) => attempt.completed_at)
+      .filter(Boolean)
+      .sort((left, right) => new Date(right).getTime() - new Date(left).getTime())[0];
+    const open = makeAction("Open profile & controls", () => openLearnerDialog(profile));
+    open.className = "secondary-btn";
+    const actionCell = make("td");
+    actionCell.append(open);
+    const learnerCell = make("td");
+    learnerCell.append(
+      make("strong", { text: profileName(profile.user_id) }),
+      make("br"),
+      make("small", { text: profile.contact_email || "No email recorded" }),
+    );
     const row = make("tr");
     row.append(
-      make("td", { text: `${profileName(profile.user_id)}\n${profile.contact_email || "No email recorded"}` }),
+      learnerCell,
       make("td", { text: [profile.english_level || "Level not set", profile.age_group || "Age not shared", profile.native_language || "Language not set"].join(" · ") }),
-      make("td", { text: `${activeMembershipStatus(membership)} · ${membership?.access_scope || "general"}` }),
-      make("td", { text: membership?.expires_at ? formatDate(membership.expires_at, true) : "—" }),
-      make("td", { text: attempts.length }),
-      manageCell,
-      assignCell,
+      make("td", { text: `${activeMembershipStatus(membership)} · ${membership?.access_scope || "general"}\n${membership?.expires_at ? `until ${formatDate(membership.expires_at)}` : ""}` }),
+      make("td", { text: latest ? formatDate(latest, true) : "Not practised" }),
+      make("td", { text: assignments.length }),
+      actionCell,
     );
     tbody.append(row);
   }
-
-  if (!state.profiles.length) {
-    elements.panel.replaceChildren(
-      make("p", { text: "No student profiles have been created yet." }),
-    );
-  } else {
-    const tableWrap = make("div", { className: "table-scroll" });
-    tableWrap.append(table);
-    elements.panel.replaceChildren(renderAccessCodeManager(), tableWrap);
-  }
+  const tableWrap = make("div", { className: "table-scroll" });
+  tableWrap.append(table);
+  wrap.append(tableWrap);
+  elements.panel.replaceChildren(wrap);
 }
 
 function formatPercent(correct, total) {
@@ -2106,6 +2493,59 @@ async function archiveLesson(lesson) {
   }
   showToast("Lesson archived. Nothing was deleted.");
   await refreshDashboard();
+}
+
+async function restoreLesson(lesson) {
+  const confirmed = window.confirm(
+    `Restore “${lesson.title_en}” to Published? It will become visible to its selected audience again.`,
+  );
+  if (!confirmed) return;
+  try {
+    const active = await countActiveQuestionsForLesson(lesson.id);
+    if (!active) {
+      showToast("This lesson has no active questions. Restore questions first, then publish it.", "error");
+      return;
+    }
+    const { error } = await client
+      .from("review_lessons")
+      .update({ status: "published" })
+      .eq("id", lesson.id);
+    if (error) throw error;
+    showToast("Lesson restored and published.", "success");
+    await refreshDashboard();
+  } catch (error) {
+    showToast(readableError(error, "The lesson could not be restored."), "error");
+  }
+}
+
+async function permanentlyDeleteLesson(lesson) {
+  const expected = `DELETE ${lesson.slug}`;
+  const typed = window.prompt(
+    `Permanent deletion cannot be undone. It is only allowed for archived lessons with no learner history.\n\nType exactly: ${expected}`,
+  );
+  if (typed === null) return;
+  if (typed !== expected) {
+    showToast("The confirmation did not match. Nothing was deleted.", "error");
+    return;
+  }
+  try {
+    const { data, error } = await client.rpc("review_permanently_delete_lesson", {
+      lesson_to_delete: lesson.id,
+      confirmation_text: typed,
+    });
+    if (error) throw error;
+    if (data !== true) throw new Error("The deletion was not confirmed by the server.");
+    showToast("The unused lesson was permanently deleted.", "success");
+    await refreshDashboard();
+  } catch (error) {
+    showToast(
+      readableError(
+        error,
+        error?.message || "The lesson could not be deleted. Keep it archived if learner history exists.",
+      ),
+      "error",
+    );
+  }
 }
 
 async function saveLesson(event) {

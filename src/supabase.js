@@ -198,6 +198,8 @@ const invokeMembershipAccess = async (client, body) => {
   const { data: sessionData } = await client.auth.getSession();
   const accessToken = sessionData?.session?.access_token;
   if (!accessToken) return { data: null, error: new Error("Please sign in first.") };
+  const controller = new AbortController();
+  const timeout = window.setTimeout(() => controller.abort(), 12000);
   try {
     const response = await fetch(`${SUPABASE_URL}/functions/v1/membership-access`, {
       method: "POST",
@@ -208,23 +210,36 @@ const invokeMembershipAccess = async (client, body) => {
       },
       body: JSON.stringify(body),
       cache: "no-store",
+      signal: controller.signal,
     });
     const payload = await response.json().catch(() => ({}));
     if (!response.ok || payload?.error) {
       return { data: null, error: new Error(payload?.error || "The membership request could not be completed.") };
     }
     return { data: payload, error: null };
-  } catch {
-    return { data: null, error: new Error("The membership service could not be reached. Please try again.") };
+  } catch (error) {
+    const message = error?.name === "AbortError"
+      ? "The code check took too long. Nothing was changed; please try once more."
+      : "The membership service could not be reached. Please check your connection and try again.";
+    return { data: null, error: new Error(message) };
+  } finally {
+    window.clearTimeout(timeout);
   }
 };
 
 export async function redeemStudentAccessCode(code) {
   const client = getStudentClient();
   if (!client) return { data: null, error: new Error("Code redemption is not available right now.") };
+  const normalised = String(code || "").trim().toUpperCase();
+  if (!/^TEC-[A-F0-9]{12}$/.test(normalised)) {
+    return {
+      data: null,
+      error: new Error("Enter the full code in the format TEC-XXXXXXXXXXXX. The four characters shown in Teacher Studio history are not the full code."),
+    };
+  }
   return invokeMembershipAccess(client, {
     action: "redeem",
-    code: String(code || "").trim(),
+    code: normalised,
   });
 }
 

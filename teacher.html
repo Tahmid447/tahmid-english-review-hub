@@ -149,6 +149,13 @@
         <p class="form-status" id="questionEditorStatus" role="status"></p>
       </form>
     </dialog>
+
+    <dialog class="editor-dialog learner-dialog" id="learnerDialog">
+      <form method="dialog"><button class="dialog-close" aria-label="Close learner profile">×</button></form>
+      <p class="eyebrow">Learner profile &amp; controls / 学習者管理</p>
+      <h2 id="learnerDialogHeading">Learner</h2>
+      <div id="learnerDialogContent"></div>
+    </dialog>
   </main>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js"></script>

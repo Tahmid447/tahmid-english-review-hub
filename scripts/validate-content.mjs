@@ -16,6 +16,7 @@ const sha256 = (relative) =>
 const legacy = readJson("src/data/legacy-lessons.json");
 const additions = readJson("src/data/legacy-additions.json");
 const drafts = readJson("src/data/notion-drafts.json");
+const visualManifest = readJson("scripts/visual-question-manifest.json");
 const migration = readText("supabase/migrations/202607300001_review_hub.sql");
 const catalogMigration = readText(
   "supabase/migrations/202607300002_review_hub_catalog.sql",
@@ -185,6 +186,22 @@ const notionIds = drafts.map((lesson) => lesson.sourceNotionPageId);
 assert(notionIds.every(Boolean), "Every Notion draft keeps its source page ID.");
 assert(unique(notionIds), "Notion source page IDs are unique.");
 assert(unique(drafts.map((lesson) => lesson.id)), "Notion draft slugs are unique.");
+assert(
+  Array.isArray(visualManifest.questions) && visualManifest.questions.length === 55,
+  "The visual-question manifest contains five briefs for each of 11 lessons.",
+);
+assert(
+  unique(visualManifest.questions.map((question) => question.asset)),
+  "Every visual-question asset filename is unique.",
+);
+assert(
+  visualManifest.questions.every((question) =>
+    /^\/assets\/questions\/visual\/[a-z0-9-]+\.webp$/.test(question.asset)
+    && Boolean(question.imageAlt)
+    && Boolean(question.scenePrompt)
+  ),
+  "Every visual brief has a web-safe asset path, meaningful alt text, and a concrete scene prompt.",
+);
 
 let draftQuestionTotal = 0;
 const draftQuestionIds = [];
@@ -197,10 +214,22 @@ for (const lesson of drafts) {
     ["general", "takiwaki", "both"].includes(lesson.audience),
     `${lesson.id}: audience value is valid.`,
   );
-  assert(lesson.questions.length === 24, `${lesson.id}: exactly 24 draft activities exist.`);
+  assert(lesson.questions.length >= 31, `${lesson.id}: at least 31 varied activities exist.`);
   assert(
     new Set(lesson.questions.map((question) => question.format)).size >= 9,
     `${lesson.id}: at least nine activity formats are included.`,
+  );
+  const visualQuestions = lesson.questions.filter((question) => Boolean(question.image));
+  const listeningQuestions = lesson.questions.filter((question) =>
+    ["listenChoice", "listenType"].includes(question.format)
+  );
+  const speakingQuestions = lesson.questions.filter((question) => question.format === "speaking");
+  assert(visualQuestions.length >= 5, `${lesson.id}: at least five illustration-led activities exist.`);
+  assert(listeningQuestions.length >= 5, `${lesson.id}: at least five listening activities exist.`);
+  assert(speakingQuestions.length >= 5, `${lesson.id}: at least five speaking activities exist.`);
+  assert(
+    unique(visualQuestions.map((question) => question.image)),
+    `${lesson.id}: each illustration-led activity uses a distinct visual asset.`,
   );
   const mistake = lesson.questions.find((question) => question.format === "mistake");
   assert(
@@ -216,7 +245,7 @@ for (const lesson of drafts) {
     `${lesson.id}: dialogue choices are present and distinct.`,
   );
 }
-assert(draftQuestionTotal === 264, "Exactly 264 draft activities are present (24 × 11).");
+assert(draftQuestionTotal >= 341, "At least 341 Notion-derived activities are present (31 × 11 minimum)." );
 assert(unique(draftQuestionIds), "All Notion draft question IDs are unique.");
 
 const allQuestions = [
@@ -226,7 +255,7 @@ const allQuestions = [
 ];
 const allQuestionIds = allQuestions.map((question) => question.id);
 const allFormats = new Set(allQuestions.map((question) => question.format || question.type));
-assert(allQuestions.length === 485, "The complete bundle contains 485 activities.");
+assert(allQuestions.length >= 562, "The complete bundle contains at least 562 activities.");
 assert(unique(allQuestionIds), "Question IDs are unique across the complete bundle.");
 assert(allFormats.size >= 9, `The complete bundle has ${allFormats.size} activity formats.`);
 
@@ -338,8 +367,8 @@ assert(
   "The catalogue migration keeps all 11 Notion lessons as drafts.",
 );
 assert(
-  (questionMigration.match(/::jsonb/g) || []).length === 485,
-  "The protected question migration contains all 485 activity payloads.",
+  (questionMigration.match(/::jsonb/g) || []).length === allQuestions.length,
+  "The protected question migration contains every generated activity payload.",
 );
 assert(
   /on\s+conflict\s*\(\s*lesson_id\s*,\s*stable_key\s*\)\s+do\s+update/i.test(

@@ -5,9 +5,9 @@ pages were not edited. The database contained 11 unique lesson dates after
 July 6; no same-date duplicate was found. July 25 already combines the morning
 and afternoon material in one lesson.
 
-Every lesson below starts as `draft`. Each draft contains 24 activities,
-including three Listening Choice, three Dictation, three Speaking activities,
-and mixed comprehension/use-it activities.
+Every lesson below starts as `draft`. Each draft now contains 31 activities:
+five illustration-led questions, three Listening Choice, three Dictation, five
+Speaking activities, and 15 mixed comprehension/use-it activities.
 
 | Date | Draft title | Main themes | Initial audience | Notion page ID |
 |---|---|---|---|---|

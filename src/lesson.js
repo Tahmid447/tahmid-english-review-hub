@@ -1063,6 +1063,7 @@ const attachAudioHandlers = (root = elements.questionCard) => {
       const play = (text, language) => speakText(text, {
         voice: state.settings.voice,
         language,
+        rate: state.settings.playbackRate,
         onStatus: ({ phase, messageEn, messageJa }) => {
           if (status) {
             status.textContent = state.settings.showJapanese && messageJa ? messageJa : messageEn;

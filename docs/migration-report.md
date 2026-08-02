@@ -90,15 +90,18 @@ The six public lessons therefore contain **221** top-level activities.
 ## 6. Notion-derived drafts
 
 Eleven lessons after July 6 were catalogued from the connected Notion database.
-Each starts with 24 activities, for **264 reviewed activities**. They were
-published to both audiences in the v9 launch migration after review.
+Each now contains 31 activities: five illustration-led questions, six listening
+activities, five speaking activities, and 15 varied reading, writing, sentence-
+building, matching, dialogue, and correction activities. That produces **341
+reviewed activities**. They were published to both audiences in the v9 launch
+migration after review.
 
 The complete reviewed source bundle contains:
 
 - 143 migrated originals
 - 78 additions
-- 264 Notion-derived activities, published to both audiences in v9
-- **485 total activities**
+- 341 Notion-derived activities, published to both audiences
+- **562 total activities**
 - **14 implemented formats**
 
 Draft JSON and curriculum source files are not copied to the public Netlify

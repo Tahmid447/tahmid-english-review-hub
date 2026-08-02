@@ -1,0 +1,456 @@
+{
+  "version": 1,
+  "globalArtDirection": "Warm, polished editorial anime-style illustration for an adult English-learning app. Believable Japanese everyday-life setting, expressive but natural body language, soft daylight, clean shapes, teal/coral/navy palette, landscape 16:10 composition, one clear focal action, no words, no captions, no logos, no watermarks.",
+  "questions": [
+    {
+      "lessonId": "july-07",
+      "slot": 1,
+      "phraseIndex": 0,
+      "asset": "/assets/questions/visual/july-07-01-brought-notebook.webp",
+      "imageAlt": "A learner arrives in a classroom holding the notebook they brought.",
+      "scenePrompt": "A learner has just entered an English classroom and is holding up the familiar notebook they brought from home; a teacher welcomes them beside an open desk. Make the act of bringing the notebook unmistakable."
+    },
+    {
+      "lessonId": "july-07",
+      "slot": 2,
+      "phraseIndex": 1,
+      "asset": "/assets/questions/visual/july-07-02-bought-notebook.webp",
+      "imageAlt": "A shopper buys a new notebook at a stationery shop.",
+      "scenePrompt": "Inside a modern stationery shop, a shopper pays at the register for a visibly new notebook while the clerk hands over a receipt and shopping bag."
+    },
+    {
+      "lessonId": "july-07",
+      "slot": 3,
+      "phraseIndex": 3,
+      "asset": "/assets/questions/visual/july-07-03-phone-died.webp",
+      "imageAlt": "A commuter looks worried at a phone with an empty battery.",
+      "scenePrompt": "At a train station, a commuter looks worried at a smartphone whose screen has gone black with a clear empty-battery symbol; a charging cable is out of reach in the bag."
+    },
+    {
+      "lessonId": "july-07",
+      "slot": 4,
+      "phraseIndex": 5,
+      "asset": "/assets/questions/visual/july-07-04-flat-tire.webp",
+      "imageAlt": "A driver discovers a flat tire beside a parked car.",
+      "scenePrompt": "On a safe roadside shoulder, a driver crouches beside a car and points in surprise at one visibly deflated tire; warning triangle placed behind the car."
+    },
+    {
+      "lessonId": "july-07",
+      "slot": 5,
+      "phraseIndex": 7,
+      "asset": "/assets/questions/visual/july-07-05-on-my-behalf.webp",
+      "imageAlt": "A woman signs a document as an authorized representative for a colleague.",
+      "scenePrompt": "At an office desk, a woman signs an official document as an authorized representative while her colleague joins by video call and gives an approving nod; convey that she is signing for the colleague, not for herself."
+    },
+
+    {
+      "lessonId": "july-11",
+      "slot": 1,
+      "phraseIndex": 0,
+      "asset": "/assets/questions/visual/july-11-01-wifi-connected.webp",
+      "imageAlt": "A phone is successfully connected to home Wi-Fi.",
+      "scenePrompt": "A person smiles at a smartphone showing a strong connected Wi-Fi symbol while standing beside a home router with steady indicator lights."
+    },
+    {
+      "lessonId": "july-11",
+      "slot": 2,
+      "phraseIndex": 2,
+      "asset": "/assets/questions/visual/july-11-02-live-broadcast.webp",
+      "imageAlt": "A television presenter appears in a live broadcast studio.",
+      "scenePrompt": "A professional television presenter speaks to camera in an active broadcast studio; a glowing red tally light and behind-the-scenes crew clearly communicate that the program is happening live, without any written text."
+    },
+    {
+      "lessonId": "july-11",
+      "slot": 3,
+      "phraseIndex": 4,
+      "asset": "/assets/questions/visual/july-11-03-hometown.webp",
+      "imageAlt": "A traveler returns to their hometown and greets family.",
+      "scenePrompt": "A traveler with a small suitcase arrives in a familiar quiet hometown street and warmly greets family outside the old family home."
+    },
+    {
+      "lessonId": "july-11",
+      "slot": 4,
+      "phraseIndex": 6,
+      "asset": "/assets/questions/visual/july-11-04-noticed-sound.webp",
+      "imageAlt": "A person suddenly notices a strange sound from another room.",
+      "scenePrompt": "In a calm home, a person suddenly pauses and turns toward another room after noticing a strange mechanical sound; subtle sound-wave marks point toward the source."
+    },
+    {
+      "lessonId": "july-11",
+      "slot": 5,
+      "phraseIndex": 7,
+      "asset": "/assets/questions/visual/july-11-05-wrong-key.webp",
+      "imageAlt": "A person realizes they brought the wrong key at a locked door.",
+      "scenePrompt": "At an apartment door, a person tries a key that clearly does not fit, then looks at a different key tag in sudden realization; expressive aha moment."
+    },
+
+    {
+      "lessonId": "july-12",
+      "slot": 1,
+      "phraseIndex": 2,
+      "asset": "/assets/questions/visual/july-12-01-lunch-noon.webp",
+      "imageAlt": "A person eats lunch at noon.",
+      "scenePrompt": "A person eats a complete lunch at a café table while a nearby analog wall clock clearly shows twelve noon; bright midday light."
+    },
+    {
+      "lessonId": "july-12",
+      "slot": 2,
+      "phraseIndex": 5,
+      "asset": "/assets/questions/visual/july-12-02-not-eaten-today.webp",
+      "imageAlt": "A hungry person has an empty lunchbox late in the day.",
+      "scenePrompt": "Late in the afternoon, a hungry person opens a completely empty lunchbox and realizes they have eaten nothing all day; a sequence of untouched meal moments is suggested in faint background vignettes."
+    },
+    {
+      "lessonId": "july-12",
+      "slot": 3,
+      "phraseIndex": 6,
+      "asset": "/assets/questions/visual/july-12-03-breakfast-already.webp",
+      "imageAlt": "A satisfied woman has already finished breakfast.",
+      "scenePrompt": "In a sunny kitchen, a satisfied woman sits beside an empty breakfast plate, finished toast crumbs and an empty cup, clearly showing that breakfast is already over."
+    },
+    {
+      "lessonId": "july-12",
+      "slot": 4,
+      "phraseIndex": 9,
+      "asset": "/assets/questions/visual/july-12-04-bag-for-years.webp",
+      "imageAlt": "The same well-loved bag is used over many years.",
+      "scenePrompt": "A tasteful split-time composition shows the same person using the same distinctive, slightly worn bag across several years, from younger adult to present day; the bag remains clearly identical."
+    },
+    {
+      "lessonId": "july-12",
+      "slot": 5,
+      "phraseIndex": 11,
+      "asset": "/assets/questions/visual/july-12-05-dinner-last-night.webp",
+      "imageAlt": "Friends ate dinner together last night.",
+      "scenePrompt": "A warm evening dinner scene from the previous night: friends finish a shared meal under moonlight through the window, with yesterday indicated visually by a turned calendar page but no readable text."
+    },
+
+    {
+      "lessonId": "july-13",
+      "slot": 1,
+      "phraseIndex": 0,
+      "asset": "/assets/questions/visual/july-13-01-expected-call.webp",
+      "imageAlt": "A person watches the clock while expecting a possible phone call.",
+      "scenePrompt": "Around the usual evening time, a person watches both a clock and a silent phone on the table, anticipating that someone might call; uncertain but expectant expression."
+    },
+    {
+      "lessonId": "july-13",
+      "slot": 2,
+      "phraseIndex": 2,
+      "asset": "/assets/questions/visual/july-13-02-weak-signal.webp",
+      "imageAlt": "A phone has a weak mobile signal.",
+      "scenePrompt": "On a city street, a person raises a smartphone searching for reception; the screen shows only one tiny signal bar and the call is struggling."
+    },
+    {
+      "lessonId": "july-13",
+      "slot": 3,
+      "phraseIndex": 4,
+      "asset": "/assets/questions/visual/july-13-03-rush-back.webp",
+      "imageAlt": "A person rushes back toward an office after forgetting something.",
+      "scenePrompt": "A person suddenly turns around and runs back toward an office entrance after realizing something was forgotten, checking the time with urgency."
+    },
+    {
+      "lessonId": "july-13",
+      "slot": 4,
+      "phraseIndex": 7,
+      "asset": "/assets/questions/visual/july-13-04-week-flew-by.webp",
+      "imageAlt": "Calendar pages seem to fly past during a quick week.",
+      "scenePrompt": "A surprised person looks at a desk calendar as seven daily pages sweep past quickly like a gentle breeze, expressing that the week went by fast; no readable words."
+    },
+    {
+      "lessonId": "july-13",
+      "slot": 5,
+      "phraseIndex": 8,
+      "asset": "/assets/questions/visual/july-13-05-packed-street.webp",
+      "imageAlt": "A city street is packed with pedestrians.",
+      "scenePrompt": "A wide urban crosswalk and shopping street are densely packed with pedestrians in daytime, while one foreground person carefully navigates the crowd."
+    },
+
+    {
+      "lessonId": "july-18",
+      "slot": 1,
+      "phraseIndex": 1,
+      "asset": "/assets/questions/visual/july-18-01-has-cat.webp",
+      "imageAlt": "A woman happily holds her pet cat at home.",
+      "scenePrompt": "At home, a woman happily holds her own relaxed pet cat; cat bed, food bowl and toys make ownership unmistakable."
+    },
+    {
+      "lessonId": "july-18",
+      "slot": 2,
+      "phraseIndex": 5,
+      "asset": "/assets/questions/visual/july-18-02-pot-on-stove.webp",
+      "imageAlt": "A cooking pot sits safely on the stove.",
+      "scenePrompt": "A normal kitchen scene with a cooking pot sitting safely on a lit stove, gentle steam rising, no fire outside the burner and a cook nearby."
+    },
+    {
+      "lessonId": "july-18",
+      "slot": 3,
+      "phraseIndex": 6,
+      "asset": "/assets/questions/visual/july-18-03-pot-caught-fire.webp",
+      "imageAlt": "A cooking pot has caught fire on the stove.",
+      "scenePrompt": "In a kitchen emergency, visible flames rise from inside a pot on the stove while the cook reaches safely for a fire blanket; clear contrast with ordinary cooking."
+    },
+    {
+      "lessonId": "july-18",
+      "slot": 4,
+      "phraseIndex": 7,
+      "asset": "/assets/questions/visual/july-18-04-house-on-fire.webp",
+      "imageAlt": "Firefighters respond to a house on fire.",
+      "scenePrompt": "Firefighters respond from a safe distance to a house with visible smoke and flames, using a hose while residents stand safely away."
+    },
+    {
+      "lessonId": "july-18",
+      "slot": 5,
+      "phraseIndex": 8,
+      "asset": "/assets/questions/visual/july-18-05-on-fire-idiom.webp",
+      "imageAlt": "An athlete performs brilliantly and celebrates a winning streak.",
+      "scenePrompt": "A tennis player performs brilliantly, winning several points in a row and celebrating confidently while the crowd cheers; use a subtle energetic glow, not literal flames, to show the idiom 'on fire'."
+    },
+
+    {
+      "lessonId": "july-19",
+      "slot": 1,
+      "phraseIndex": 0,
+      "asset": "/assets/questions/visual/july-19-01-both-drinks.webp",
+      "imageAlt": "A person happily chooses both tea and coffee.",
+      "scenePrompt": "At breakfast, a person happily enjoys both a cup of tea and a cup of coffee together, clearly choosing both rather than only one."
+    },
+    {
+      "lessonId": "july-19",
+      "slot": 2,
+      "phraseIndex": 1,
+      "asset": "/assets/questions/visual/july-19-02-either-day.webp",
+      "imageAlt": "A person is equally available on either of two calendar days.",
+      "scenePrompt": "A person compares two adjacent calendar-day cards and gives a relaxed thumbs-up to both, showing that either day works equally well; use symbols only, no words."
+    },
+    {
+      "lessonId": "july-19",
+      "slot": 3,
+      "phraseIndex": 2,
+      "asset": "/assets/questions/visual/july-19-03-neither-option.webp",
+      "imageAlt": "A person rejects both of two options.",
+      "scenePrompt": "A person considers two clearly different options on a table and rejects both with crossed hands and an unhappy expression; both options are visibly marked as unsuitable without text."
+    },
+    {
+      "lessonId": "july-19",
+      "slot": 4,
+      "phraseIndex": 4,
+      "asset": "/assets/questions/visual/july-19-04-rather-home.webp",
+      "imageAlt": "A person prefers relaxing at home instead of going out.",
+      "scenePrompt": "A cozy person chooses to stay home with tea and a book while, through the window, friends head out into a busy rainy evening; preference for home is clear."
+    },
+    {
+      "lessonId": "july-19",
+      "slot": 5,
+      "phraseIndex": 8,
+      "asset": "/assets/questions/visual/july-19-05-ran-into-friend.webp",
+      "imageAlt": "Two old friends unexpectedly meet on a city sidewalk.",
+      "scenePrompt": "Two adults unexpectedly recognize each other on a city sidewalk, stop in surprise, then smile warmly; the accidental meeting is unmistakable."
+    },
+
+    {
+      "lessonId": "july-22",
+      "slot": 1,
+      "phraseIndex": 0,
+      "asset": "/assets/questions/visual/july-22-01-availability.webp",
+      "imageAlt": "A person checks whether a morning appointment time is available.",
+      "scenePrompt": "A professional checks a calendar appointment card for a morning meeting and then gives a tentative confirming gesture; show an August calendar page, day four and a clock at ten using visual numerals only."
+    },
+    {
+      "lessonId": "july-22",
+      "slot": 2,
+      "phraseIndex": 1,
+      "asset": "/assets/questions/visual/july-22-02-group-ready.webp",
+      "imageAlt": "A group is ready to leave together.",
+      "scenePrompt": "A friendly mixed group stands by the door with bags and shoes on, everyone giving a ready thumbs-up before leaving together."
+    },
+    {
+      "lessonId": "july-22",
+      "slot": 3,
+      "phraseIndex": 2,
+      "asset": "/assets/questions/visual/july-22-03-like-both.webp",
+      "imageAlt": "A diner happily likes both dishes.",
+      "scenePrompt": "A diner enthusiastically tastes and approves two different dishes side by side, clearly liking both equally."
+    },
+    {
+      "lessonId": "july-22",
+      "slot": 4,
+      "phraseIndex": 4,
+      "asset": "/assets/questions/visual/july-22-04-neither-okay.webp",
+      "imageAlt": "Neither of two damaged items is acceptable.",
+      "scenePrompt": "A customer inspects two damaged products on a counter and rejects both as unacceptable; each item has a visible defect and a simple cross symbol, no text."
+    },
+    {
+      "lessonId": "july-22",
+      "slot": 5,
+      "phraseIndex": 6,
+      "asset": "/assets/questions/visual/july-22-05-likes-yakiniku.webp",
+      "imageAlt": "A diner enthusiastically enjoys yakiniku.",
+      "scenePrompt": "At a Japanese yakiniku restaurant, a diner smiles enthusiastically and gives a strong yes gesture while enjoying grilled meat at the table."
+    },
+
+    {
+      "lessonId": "july-23",
+      "slot": 1,
+      "phraseIndex": 1,
+      "asset": "/assets/questions/visual/july-23-01-under-weather.webp",
+      "imageAlt": "A person feels mildly ill at home.",
+      "scenePrompt": "A person rests at home under a blanket with tissues, warm tea and a thermometer, looking mildly unwell rather than seriously ill."
+    },
+    {
+      "lessonId": "july-23",
+      "slot": 2,
+      "phraseIndex": 2,
+      "asset": "/assets/questions/visual/july-23-02-too-hot-outside.webp",
+      "imageAlt": "It is too hot for a person to go outside.",
+      "scenePrompt": "A person opens the front door, recoils from intense summer heat and blazing sunlight, and decides not to step outside; heat waves visible."
+    },
+    {
+      "lessonId": "july-23",
+      "slot": 3,
+      "phraseIndex": 4,
+      "asset": "/assets/questions/visual/july-23-03-car-appeared.webp",
+      "imageAlt": "A car suddenly appears from a side street.",
+      "scenePrompt": "At a quiet intersection, a car suddenly emerges from a narrow side street and startles a pedestrian, with safe distance and dynamic surprise."
+    },
+    {
+      "lessonId": "july-23",
+      "slot": 4,
+      "phraseIndex": 9,
+      "asset": "/assets/questions/visual/july-23-04-oyakodon-order.webp",
+      "imageAlt": "A customer receives a chicken-and-egg rice bowl.",
+      "scenePrompt": "In a Japanese restaurant, a server places a steaming chicken-and-egg rice bowl in front of a customer who has just ordered it; ingredients clearly visible."
+    },
+    {
+      "lessonId": "july-23",
+      "slot": 5,
+      "phraseIndex": 11,
+      "asset": "/assets/questions/visual/july-23-05-anywhere-door.webp",
+      "imageAlt": "A magical freestanding door opens onto a distant tropical place.",
+      "scenePrompt": "A whimsical freestanding pink door opens directly from an ordinary room onto a distant sunny tropical beach, visually showing that the door can take someone anywhere; original design, no copyrighted characters."
+    },
+
+    {
+      "lessonId": "july-25",
+      "slot": 1,
+      "phraseIndex": 0,
+      "asset": "/assets/questions/visual/july-25-01-getting-hungry.webp",
+      "imageAlt": "A person gradually starts to feel hungry before lunch.",
+      "scenePrompt": "Before lunchtime, a person begins to feel hungry, glances at the clock and lightly holds their stomach while noticing food aromas from a nearby kitchen."
+    },
+    {
+      "lessonId": "july-25",
+      "slot": 2,
+      "phraseIndex": 1,
+      "asset": "/assets/questions/visual/july-25-02-starving.webp",
+      "imageAlt": "An extremely hungry person waits at an empty table.",
+      "scenePrompt": "An extremely hungry person waits dramatically but realistically at an empty restaurant table, stomach rumbling, while food is still being prepared in the distance."
+    },
+    {
+      "lessonId": "july-25",
+      "slot": 3,
+      "phraseIndex": 2,
+      "asset": "/assets/questions/visual/july-25-03-annoyed-noise.webp",
+      "imageAlt": "A person is annoyed by loud construction noise.",
+      "scenePrompt": "At home, a person covers one ear and looks visibly annoyed by repeated loud construction noise coming through the window; sound-wave marks show the cause."
+    },
+    {
+      "lessonId": "july-25",
+      "slot": 4,
+      "phraseIndex": 4,
+      "asset": "/assets/questions/visual/july-25-04-on-my-nerves.webp",
+      "imageAlt": "Repeated phone notifications are getting on a person's nerves.",
+      "scenePrompt": "A person becomes increasingly irritated as the same contact sends many repeated phone notifications; the phone vibrates again and again while patience visibly runs out."
+    },
+    {
+      "lessonId": "july-25",
+      "slot": 5,
+      "phraseIndex": 8,
+      "asset": "/assets/questions/visual/july-25-05-gut-feeling.webp",
+      "imageAlt": "A person trusts a bad gut feeling before entering a dark alley.",
+      "scenePrompt": "A person pauses before entering a dim unfamiliar alley, hand lightly on stomach, sensing that something is wrong and choosing to turn back; intuitive caution, no visible danger."
+    },
+
+    {
+      "lessonId": "july-26",
+      "slot": 1,
+      "phraseIndex": 0,
+      "asset": "/assets/questions/visual/july-26-01-hope-malaysia.webp",
+      "imageAlt": "A hopeful traveler plans to visit Malaysia next year.",
+      "scenePrompt": "A hopeful traveler looks at a future calendar, passport and Malaysia travel photos while planning a possible trip next year; optimistic but not certain."
+    },
+    {
+      "lessonId": "july-26",
+      "slot": 2,
+      "phraseIndex": 1,
+      "asset": "/assets/questions/visual/july-26-02-wish-in-malaysia.webp",
+      "imageAlt": "A person in a rainy room wishes they were in sunny Malaysia.",
+      "scenePrompt": "A person sits by a rainy window at home and imagines being in sunny Malaysia, with a soft thought-bubble transition to tropical Kuala Lumpur scenery; clearly a present unreal wish."
+    },
+    {
+      "lessonId": "july-26",
+      "slot": 3,
+      "phraseIndex": 2,
+      "asset": "/assets/questions/visual/july-26-03-studied-harder.webp",
+      "imageAlt": "A learner regrets not studying harder before a test.",
+      "scenePrompt": "After receiving a disappointing test result, a learner looks regretfully at an unopened study book and imagines an earlier scene of studying diligently; past regret is clear without written grades."
+    },
+    {
+      "lessonId": "july-26",
+      "slot": 4,
+      "phraseIndex": 4,
+      "asset": "/assets/questions/visual/july-26-04-already-breakfast.webp",
+      "imageAlt": "A person has already finished breakfast.",
+      "scenePrompt": "In a morning kitchen, a person is already finished with breakfast: empty plate, cup and fruit peel neatly arranged, satisfied expression and morning sunlight."
+    },
+    {
+      "lessonId": "july-26",
+      "slot": 5,
+      "phraseIndex": 8,
+      "asset": "/assets/questions/visual/july-26-05-dinner-before-call.webp",
+      "imageAlt": "Dinner was finished before a phone call arrived.",
+      "scenePrompt": "A clear two-step composition: first an empty dinner plate after the meal is finished, then a phone begins ringing moments later; show chronological order with visual flow, no text."
+    },
+
+    {
+      "lessonId": "july-27",
+      "slot": 1,
+      "phraseIndex": 0,
+      "asset": "/assets/questions/visual/july-27-01-spilled-coffee.webp",
+      "imageAlt": "A person accidentally spills coffee on a white shirt.",
+      "scenePrompt": "At a café table, a person accidentally tips a coffee cup and coffee visibly spills onto their white shirt; surprised reaction, clearly unintentional."
+    },
+    {
+      "lessonId": "july-27",
+      "slot": 2,
+      "phraseIndex": 1,
+      "asset": "/assets/questions/visual/july-27-02-poured-sauce.webp",
+      "imageAlt": "A cook deliberately pours sauce over pasta.",
+      "scenePrompt": "A cook deliberately and carefully pours sauce from a small jug over a plated pasta dish; controlled intentional action."
+    },
+    {
+      "lessonId": "july-27",
+      "slot": 3,
+      "phraseIndex": 2,
+      "asset": "/assets/questions/visual/july-27-03-splashed-water.webp",
+      "imageAlt": "A child splashes water onto another person.",
+      "scenePrompt": "During safe summer play near a shallow fountain, one person playfully sends a visible splash of water onto another person's clothes; dynamic burst of droplets."
+    },
+    {
+      "lessonId": "july-27",
+      "slot": 4,
+      "phraseIndex": 3,
+      "asset": "/assets/questions/visual/july-27-04-acquired-taste.webp",
+      "imageAlt": "A person gradually learns to enjoy black coffee.",
+      "scenePrompt": "A gentle two-moment sequence shows the same adult first grimacing at black coffee, then later smiling while enjoying it, illustrating a taste learned over time."
+    },
+    {
+      "lessonId": "july-27",
+      "slot": 5,
+      "phraseIndex": 4,
+      "asset": "/assets/questions/visual/july-27-05-sophisticated-dessert.webp",
+      "imageAlt": "An elegant dessert has a sophisticated flavor.",
+      "scenePrompt": "An adult diner appreciates an elegant, refined plated dessert with dark chocolate, subtle garnish and balanced presentation in a sophisticated restaurant setting."
+    }
+  ]
+}

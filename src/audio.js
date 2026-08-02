@@ -47,7 +47,52 @@ export function stopAudio() {
   if (typeof window !== "undefined") cancelPlayingAudio();
 }
 
-const playBlobSource = (source, onStatus, token, rate = 1) => new Promise((resolve, reject) => {
+export const normalizePlaybackRate = (rate) => (
+  [0.5, 1, 1.5].includes(Number(rate)) ? Number(rate) : 1
+);
+
+const JAPANESE_CHARACTER = /[\u3040-\u30ff\u3400-\u9fff]/u;
+const ENGLISH_CHARACTER = /[A-Za-z]/u;
+
+/**
+ * Break mixed Japanese/English copy into voice-safe runs.
+ *
+ * A Japanese explanation often includes a reusable English phrase, for example:
+ *   注文するときは “I’d like pasta, please.” が丁寧で自然です。
+ * Sending the whole sentence to the Japanese voice makes the model phrase hard to
+ * understand, so the phrase is handed to the selected English voice instead.
+ */
+export function splitSpeechSegments(text, defaultLanguage = "en") {
+  const value = String(text ?? "").trim();
+  if (!value) return [];
+
+  const rawTokens = value.match(/[\u3040-\u30ff\u3400-\u9fff]+|[A-Za-z]+(?:[’'][A-Za-z]+)*|[^A-Za-z\u3040-\u30ff\u3400-\u9fff]+/gu) || [value];
+  const tagged = rawTokens.map((token) => ({
+    text: token,
+    language: JAPANESE_CHARACTER.test(token)
+      ? "ja"
+      : ENGLISH_CHARACTER.test(token) ? "en" : "",
+  }));
+
+  tagged.forEach((token, index) => {
+    if (token.language) return;
+    const previous = [...tagged.slice(0, index)].reverse().find((candidate) => candidate.language)?.language;
+    const next = tagged.slice(index + 1).find((candidate) => candidate.language)?.language;
+    token.language = previous || next || (defaultLanguage === "ja" ? "ja" : "en");
+  });
+
+  const segments = [];
+  tagged.forEach((token) => {
+    const last = segments.at(-1);
+    if (last?.language === token.language) last.text += token.text;
+    else segments.push({ text: token.text, language: token.language });
+  });
+  return segments
+    .map((segment) => ({ ...segment, text: segment.text.trim() }))
+    .filter((segment) => segment.text && (JAPANESE_CHARACTER.test(segment.text) || ENGLISH_CHARACTER.test(segment.text)));
+}
+
+const playBlobSource = (source, onStatus, token, rate = 1, { finalSegment = true } = {}) => new Promise((resolve, reject) => {
   if (token !== requestGeneration) {
     resolve({ played: false, cancelled: true });
     return;
@@ -55,15 +100,21 @@ const playBlobSource = (source, onStatus, token, rate = 1) => new Promise((resol
   cancelPlayingAudio();
   const audio = new Audio(source);
   audio.preload = "auto";
-  audio.playbackRate = [0.5, 1, 1.5].includes(Number(rate)) ? Number(rate) : 1;
-  audio.preservesPitch = true;
+  const playbackRate = normalizePlaybackRate(rate);
+  const applyPlaybackRate = () => {
+    audio.defaultPlaybackRate = playbackRate;
+    audio.playbackRate = playbackRate;
+    audio.preservesPitch = true;
+    audio.webkitPreservesPitch = true;
+  };
+  applyPlaybackRate();
   activeAudio = audio;
   audio.onplaying = () => report(
     onStatus,
     "playing",
-    `Playing natural voice at ${audio.playbackRate}×…`,
-    `自然な音声を${audio.playbackRate}倍速で再生中です。`,
-    { source: "edge", rate: audio.playbackRate },
+    `Playing natural voice at ${playbackRate}×…`,
+    `自然な音声を${playbackRate}倍速で再生中です。`,
+    { source: "edge", rate: playbackRate },
   );
   let settled = false;
   const fail = (error) => {
@@ -77,8 +128,10 @@ const playBlobSource = (source, onStatus, token, rate = 1) => new Promise((resol
     if (settled) return;
     settled = true;
     if (activeAudio === audio) activeAudio = null;
-    report(onStatus, "ready", "Ready to play again.", "もう一度再生できます。", { source: "edge" });
-    resolve({ played: true, source: "edge" });
+    if (finalSegment) {
+      report(onStatus, "ready", "Ready to play again.", "もう一度再生できます。", { source: "edge", rate: playbackRate });
+    }
+    resolve({ played: true, source: "edge", rate: playbackRate });
   };
   const readyTimeout = setTimeout(() => {
     if (audio.readyState < 2) fail(new Error("The natural audio took too long to load."));
@@ -90,21 +143,27 @@ const playBlobSource = (source, onStatus, token, rate = 1) => new Promise((resol
       resolve({ played: false, cancelled: true });
       return;
     }
+    // Some mobile browsers restore the default rate after metadata loads.
+    // Reapplying it immediately before play keeps 0.5× and 1.5× reliable.
+    applyPlaybackRate();
     audio.play().catch(fail);
   };
+  audio.addEventListener("loadedmetadata", applyPlaybackRate, { once: true });
   if (audio.readyState >= 2) begin();
   else audio.addEventListener("canplay", begin, { once: true });
   audio.load();
 });
 
-const looksJapanese = (text) => /[\u3040-\u30ff\u3400-\u9fff]/u.test(text);
+const looksJapanese = (text) => JAPANESE_CHARACTER.test(text);
 
-export async function speakText(text, { voice, language, onStatus } = {}) {
+export async function speakText(text, { voice, language, rate, onStatus } = {}) {
   const cleanText = String(text ?? "").trim();
   const settings = getSettings();
-  const voiceCode = language === "ja" || (!language && looksJapanese(cleanText))
+  const defaultVoiceCode = language === "ja" || (!language && looksJapanese(cleanText))
     ? "ja"
     : (voice === "gb" || (!voice && settings.voice === "gb") ? "gb" : "us");
+  const englishVoiceCode = voice === "gb" || (!voice && settings.voice === "gb") ? "gb" : "us";
+  const playbackRate = normalizePlaybackRate(rate ?? settings.playbackRate);
   if (!cleanText) {
     report(onStatus, "error", "There is no sentence to play.", "再生する英文がありません。");
     return { played: false, reason: "empty" };
@@ -116,58 +175,82 @@ export async function speakText(text, { voice, language, onStatus } = {}) {
 
   stopAudio();
   const token = requestGeneration;
-  const cacheKey = `${voiceCode}:${cleanText.normalize("NFKC").toLocaleLowerCase()}`;
+  const segments = splitSpeechSegments(cleanText, defaultVoiceCode === "ja" ? "ja" : "en")
+    .map((segment) => ({
+      ...segment,
+      voiceCode: segment.language === "ja" ? "ja" : englishVoiceCode,
+    }));
+  let playedSegments = 0;
   try {
-    let source = remoteAudioCache.get(cacheKey);
-    if (!source && NATURAL_SPEECH_URL && SUPABASE_ANON_KEY && typeof fetch === "function") {
-      const voiceName = voiceCode === "ja" ? "Nanami" : voiceCode === "gb" ? "Libby" : "Ava";
-      report(
-        onStatus,
-        "loading",
-        `Preparing ${voiceName} natural voice…`,
-        `${voiceName}の自然な音声を準備中です。`,
-        { source: "edge", voice: voiceCode },
-      );
-      let lastError;
-      for (let attempt = 0; attempt < 2 && !source; attempt += 1) {
-        const controller = new AbortController();
-        activeRequest = controller;
-        const timeout = setTimeout(() => controller.abort(), attempt === 0 ? 12000 : 16000);
-        try {
-          const response = await fetch(NATURAL_SPEECH_URL, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              apikey: SUPABASE_ANON_KEY,
-              Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-            },
-            body: JSON.stringify({ text: cleanText, accent: voiceCode }),
-            signal: controller.signal,
-            cache: "no-store",
-          });
-          if (!response.ok) throw new Error(`Natural speech request failed (${response.status}).`);
-          const blob = await response.blob();
-          if (!blob.type.startsWith("audio/") || blob.size < 128) {
-            throw new Error("Natural speech returned an invalid audio file.");
+    for (let segmentIndex = 0; segmentIndex < segments.length; segmentIndex += 1) {
+      const segment = segments[segmentIndex];
+      const { voiceCode } = segment;
+      const cacheKey = `${voiceCode}:${segment.text.normalize("NFKC").toLocaleLowerCase()}`;
+      let source = remoteAudioCache.get(cacheKey);
+      if (!source && NATURAL_SPEECH_URL && SUPABASE_ANON_KEY && typeof fetch === "function") {
+        const voiceName = voiceCode === "ja" ? "Nanami" : voiceCode === "gb" ? "Libby" : "Ava";
+        report(
+          onStatus,
+          "loading",
+          `Preparing ${voiceName} natural voice…`,
+          `${voiceName}の自然な音声を準備中です。`,
+          { source: "edge", voice: voiceCode, rate: playbackRate },
+        );
+        let lastError;
+        for (let attempt = 0; attempt < 2 && !source; attempt += 1) {
+          const controller = new AbortController();
+          activeRequest = controller;
+          const timeout = setTimeout(() => controller.abort(), attempt === 0 ? 12000 : 16000);
+          try {
+            const response = await fetch(NATURAL_SPEECH_URL, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                apikey: SUPABASE_ANON_KEY,
+                Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+              },
+              body: JSON.stringify({ text: segment.text, accent: voiceCode }),
+              signal: controller.signal,
+              cache: "no-store",
+            });
+            if (!response.ok) throw new Error(`Natural speech request failed (${response.status}).`);
+            const blob = await response.blob();
+            if (!blob.type.startsWith("audio/") || blob.size < 128) {
+              throw new Error("Natural speech returned an invalid audio file.");
+            }
+            source = URL.createObjectURL(blob);
+            cacheAudio(cacheKey, source);
+          } catch (error) {
+            lastError = error;
+            if (error?.name === "AbortError" && token !== requestGeneration) throw error;
+            if (attempt === 0) {
+              report(onStatus, "loading", "Trying the natural voice again…", "自然な音声をもう一度準備しています。", { source: "edge" });
+            }
+          } finally {
+            clearTimeout(timeout);
+            if (activeRequest === controller) activeRequest = null;
           }
-          source = URL.createObjectURL(blob);
-          cacheAudio(cacheKey, source);
-        } catch (error) {
-          lastError = error;
-          if (error?.name === "AbortError" && token !== requestGeneration) throw error;
-          if (attempt === 0) {
-            report(onStatus, "loading", "Trying the natural voice again…", "自然な音声をもう一度準備しています。", { source: "edge" });
-          }
-        } finally {
-          clearTimeout(timeout);
-          if (activeRequest === controller) activeRequest = null;
         }
+        if (!source && lastError) throw lastError;
       }
-      if (!source && lastError) throw lastError;
+      if (source && token === requestGeneration) {
+        const result = await playBlobSource(source, onStatus, token, playbackRate, {
+          finalSegment: segmentIndex === segments.length - 1,
+        });
+        if (result.cancelled) return result;
+        if (result.played) playedSegments += 1;
+      }
     }
-    if (source && token === requestGeneration) {
-      return await playBlobSource(source, onStatus, token, settings.playbackRate);
-    }
+    if (playedSegments) return {
+      played: true,
+      source: "edge",
+      rate: playbackRate,
+      segments: segments.map(({ text: segmentText, language: segmentLanguage, voiceCode }) => ({
+        text: segmentText,
+        language: segmentLanguage,
+        voice: voiceCode,
+      })),
+    };
   } catch (error) {
     if (error?.name === "AbortError" && token !== requestGeneration) {
       return { played: false, cancelled: true };
@@ -180,7 +263,7 @@ export async function speakText(text, { voice, language, onStatus } = {}) {
       { error: error?.message || String(error) },
     );
   }
-  return { played: false, reason: "natural-voice-unavailable" };
+  return { played: false, reason: "natural-voice-unavailable", rate: playbackRate };
 }
 
 export function playAnswerFeedback(correct) {

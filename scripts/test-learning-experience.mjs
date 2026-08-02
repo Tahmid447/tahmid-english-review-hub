@@ -77,6 +77,10 @@ assert.equal(
   4,
   "Signing out restores only the anonymous resume scope.",
 );
+store.updateSettings({ sound: true, playbackRate: 0.5 });
+assert.equal(store.getSettings().playbackRate, 0.5, "The slow 0.5× voice speed is stored exactly.");
+store.updateSettings({ playbackRate: 1.5 });
+assert.equal(store.getSettings().playbackRate, 1.5, "The fast 1.5× voice speed is stored exactly.");
 
 let currentAuthUserId = "student-a";
 const remoteSettings = new Map([
@@ -168,7 +172,87 @@ else globalThis.window = originalWindow;
 if (originalCustomEvent === undefined) delete globalThis.CustomEvent;
 else globalThis.CustomEvent = originalCustomEvent;
 
-const { speakingFeedbackForSimilarity, speakingFeedbackForTranscript } = await import("../src/audio.js");
+const {
+  normalizePlaybackRate,
+  speakText,
+  speakingFeedbackForSimilarity,
+  speakingFeedbackForTranscript,
+  splitSpeechSegments,
+} = await import("../src/audio.js");
+assert.equal(normalizePlaybackRate(0.5), 0.5);
+assert.equal(normalizePlaybackRate("1.5"), 1.5);
+assert.equal(normalizePlaybackRate(0.75), 1);
+assert.deepEqual(
+  splitSpeechSegments("注文するときは “I’d like pasta, please.” が丁寧で自然です。", "ja")
+    .map(({ language, text }) => [language, text]),
+  [
+    ["ja", "注文するときは “"],
+    ["en", "I’d like pasta, please.”"],
+    ["ja", "が丁寧で自然です。"],
+  ],
+  "Quoted English in a Japanese explanation is delegated to the English voice.",
+);
+assert.deepEqual(
+  splitSpeechSegments("“What would you like to drink?” は自然で丁寧な聞き方です。", "ja")
+    .map(({ language }) => language),
+  ["en", "ja"],
+  "A Japanese explanation may begin with a natural English model phrase.",
+);
+
+const originalAudio = globalThis.Audio;
+const originalFetch = globalThis.fetch;
+const audioInstances = [];
+const speechRequests = [];
+globalThis.Audio = class FakeAudio {
+  constructor(source) {
+    this.source = source;
+    this.readyState = 4;
+    this.playbackRate = 1;
+    this.defaultPlaybackRate = 1;
+    audioInstances.push(this);
+  }
+
+  addEventListener() {}
+  pause() {}
+  removeAttribute() {}
+  load() {}
+
+  play() {
+    queueMicrotask(() => {
+      this.onplaying?.();
+      this.onended?.();
+    });
+    return Promise.resolve();
+  }
+};
+globalThis.fetch = async (_url, options = {}) => {
+  speechRequests.push(JSON.parse(options.body || "{}"));
+  return {
+    ok: true,
+    blob: async () => new Blob([new Uint8Array(256)], { type: "audio/mpeg" }),
+  };
+};
+const slowVoice = await speakText("Playback rate check.", { language: "en", rate: 0.5 });
+assert.equal(slowVoice.played, true);
+assert.equal(slowVoice.rate, 0.5);
+assert.equal(audioInstances.at(-1).playbackRate, 0.5, "The audio element receives the selected slow rate.");
+const mixedVoice = await speakText(
+  "注文するときは “I’d like pasta, please.” が丁寧で自然です。",
+  { language: "ja", voice: "us", rate: 1.5 },
+);
+assert.equal(mixedVoice.played, true);
+assert.equal(mixedVoice.rate, 1.5);
+assert(audioInstances.slice(-3).every(({ playbackRate }) => playbackRate === 1.5));
+assert.deepEqual(
+  speechRequests.slice(-3).map(({ accent }) => accent),
+  ["ja", "us", "ja"],
+  "Mixed explanations request Nanami, Ava, then Nanami in their natural language order.",
+);
+if (originalAudio === undefined) delete globalThis.Audio;
+else globalThis.Audio = originalAudio;
+if (originalFetch === undefined) delete globalThis.fetch;
+else globalThis.fetch = originalFetch;
+
 const bands = [
   [0.95, "excellent"],
   [0.75, "good"],
@@ -234,6 +318,7 @@ assert.match(lessonScript, /navigator\.vibrate\(correct \? \[30, 40, 30\] : \[80
 assert.match(lessonScript, /Date\.now\(\) \+ 5000/);
 assert.match(lessonScript, /data-audio-secondary-text/);
 assert.match(lessonScript, /result = await play\([\s\S]{0,160}audioSecondaryText/);
+assert.match(lessonScript, /rate: state\.settings\.playbackRate/);
 assert.match(lessonScript, /<details class="guide-card/);
 assert.match(lessonPage, /data-hint-mode="auto"/);
 assert.match(lessonPage, /data-hint-mode="manual"/);

@@ -31,8 +31,8 @@ Supabase Auth and Row Level Security.
 
 - 143 migrated original questions across six verified lessons
 - 78 added listening, dictation, speaking, and mixed-format activities
-- 264 activities across 11 Notion-derived, now-published lessons
-- 485 activities in the reviewed source bundle
+- 341 activities across 11 Notion-derived, now-published lessons
+- 562 activities in the reviewed source bundle
 - 14 implemented activity formats
 
 All 17 reviewed lessons are listed in the general catalogue. Two lessons are
@@ -46,6 +46,7 @@ audience, or archive a lesson without a code deployment.
 ```bash
 npm run build
 npm test
+npm run verify:visuals
 npm run verify:live
 npm run preview
 ```

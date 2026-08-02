@@ -137,7 +137,7 @@ on `backup/v8-calm-baseline`; the last verified v9 release is commit `b7e4ac9`.
 ## 7. Supabase migrations
 
 Apply the five migration files in order. Migration 003 is generated from the
-private reviewed source and stores all 485 question payloads behind RLS.
+private reviewed source and stores all 562 question payloads behind RLS.
 Migration 004 publishes all 17 reviewed lessons to both audiences, adds the
 teacher account’s private learner-preview profile, and attaches the three
 late-July illustrations.

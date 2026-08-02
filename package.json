@@ -12,6 +12,7 @@
     "config:public": "node scripts/import-public-config.mjs",
     "dev": "node scripts/serve.mjs",
     "generate:migration": "node scripts/generate-question-migration.mjs",
+    "verify:visuals": "node scripts/verify-visual-assets.mjs",
     "build": "npm run config:public && npm run extract:legacy && npm run generate:practice && npm run generate:migration && node scripts/build.mjs",
     "preview": "node scripts/serve.mjs dist",
     "test": "node scripts/validate-content.mjs && node scripts/test-learning-experience.mjs",
