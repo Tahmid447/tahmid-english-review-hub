@@ -200,6 +200,23 @@ assert.equal(Object.keys(DEEP_LESSON_GUIDES).length, 17, "All 17 lessons have de
 assert(Object.values(DEEP_LESSON_GUIDES).every((guide) => guide.points.length >= 3));
 assert(Object.values(DEEP_LESSON_GUIDES).every((guide) => guide.corrections.length >= 2));
 
+const { normalizeJapaneseMeaning } = await import("../src/data.js");
+assert.equal(
+  normalizeJapaneseMeaning("語順を並べましょう：彼女が言ったことが聞こえませんでした。"),
+  "彼女が言ったことが聞こえませんでした。",
+  "Phrase cards remove exercise instructions and retain the real Japanese meaning.",
+);
+assert.equal(
+  normalizeJapaneseMeaning("聞こえた英文をそのまま入力してください。"),
+  "",
+  "Instruction-only Japanese is never displayed as a phrase translation.",
+);
+assert.equal(
+  normalizeJapaneseMeaning("「今マレーシアにいたらいいのに。」に合う英文を選んでください。"),
+  "今マレーシアにいたらいいのに。",
+  "Quoted Japanese targets remain available as the actual meaning.",
+);
+
 const lessonScript = fs.readFileSync(path.join(root, "src", "lesson.js"), "utf8");
 const lessonPage = fs.readFileSync(path.join(root, "lesson.html"), "utf8");
 const hubScript = fs.readFileSync(path.join(root, "src", "hub.js"), "utf8");
@@ -215,6 +232,9 @@ assert.match(lessonScript, /sorting-category-audio/);
 assert.match(lessonScript, /playAnswerFeedback\(Boolean\(correct\)\)/);
 assert.match(lessonScript, /navigator\.vibrate\(correct \? \[30, 40, 30\] : \[80, 40, 80\]\)/);
 assert.match(lessonScript, /Date\.now\(\) \+ 5000/);
+assert.match(lessonScript, /data-audio-secondary-text/);
+assert.match(lessonScript, /result = await play\([\s\S]{0,160}audioSecondaryText/);
+assert.match(lessonScript, /<details class="guide-card/);
 assert.match(lessonPage, /data-hint-mode="auto"/);
 assert.match(lessonPage, /data-hint-mode="manual"/);
 assert.match(lessonPage, /id="vibrationToggle"/);

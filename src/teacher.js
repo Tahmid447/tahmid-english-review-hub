@@ -1,4 +1,5 @@
 import {
+  createTeacherAccessCode,
   getTeacherClient,
   getTeacherSession,
   onTeacherAuthChange,
@@ -34,6 +35,9 @@ const elements = {
   editorAudience: document.querySelector("#editorAudience"),
   editorSummary: document.querySelector("#editorSummary"),
   editorMessage: document.querySelector("#editorStatusMessage"),
+  editorQuestionSummary: document.querySelector("#editorQuestionSummary"),
+  manageLessonQuestions: document.querySelector("#manageLessonQuestionsButton"),
+  saveLesson: document.querySelector("#saveLessonButton"),
   preview: document.querySelector("#previewDraftButton"),
   questionManager: document.querySelector("#questionManager"),
   questionManagerHeading: document.querySelector("#questionManagerHeading"),
@@ -127,6 +131,9 @@ function readableError(error, fallback) {
   }
   if (/must contain at least one active question/i.test(message)) {
     return "Add and activate at least one question before publishing this lesson.";
+  }
+  if (/digest\(|gen_random_bytes|pgcrypto/i.test(message)) {
+    return "The secure access-code service needs its database update. No code was created.";
   }
   if (/duplicate key|review_questions_lesson_id_stable_key/i.test(message)) {
     return "That stable key is already used by another question in this lesson.";
@@ -664,15 +671,14 @@ function renderAccessCodeManager() {
     days.value = String(durationDays);
     create.disabled = true;
     try {
-      const { data, error } = await client.rpc("review_create_access_code", {
-        code_label: label.value.trim(),
-        code_duration_days: durationDays,
-        code_scope: scope.value,
-        code_max_uses: Number(uses.value),
-        code_valid_until: null,
+      const { data, error } = await createTeacherAccessCode({
+        label: label.value.trim(),
+        durationDays,
+        accessScope: scope.value,
+        maxUses: Number(uses.value),
       });
       if (error) throw error;
-      const rawCode = Array.isArray(data) ? data[0]?.access_code : data?.access_code;
+      const rawCode = data?.accessCode;
       const output = make("div", { className: "generated-code" });
       output.append(
         make("strong", { text: rawCode || "Code generated" }),
@@ -2048,6 +2054,22 @@ async function countActiveQuestionsForLesson(lessonId) {
   return Number(count || 0);
 }
 
+function updateLessonEditorControls(lesson = null) {
+  const saved = Boolean(lesson?.id || elements.editorId.value);
+  const status = elements.editorStatus.value;
+  const count = lesson ? questionCount(lesson) : 0;
+  elements.manageLessonQuestions.disabled = !saved;
+  elements.preview.disabled = !saved;
+  elements.editorQuestionSummary.textContent = saved
+    ? `${count} questions are attached. Open the question manager to add, edit, reorder or activate them. / ${count}問あります。追加・編集・並べ替え・有効化ができます。`
+    : "Save the lesson details first. The question builder will open automatically next. / 先に基本情報を保存すると、続けて問題作成画面が開きます。";
+  elements.saveLesson.textContent = !saved
+    ? "Save draft & add questions / 保存して問題作成へ"
+    : status === "published"
+      ? "Publish changes / 変更を公開"
+      : "Save changes / 変更を保存";
+}
+
 function openEditor(lesson = null) {
   elements.editorForm.reset();
   elements.editorMessage.textContent = "";
@@ -2058,6 +2080,7 @@ function openEditor(lesson = null) {
   elements.editorStatus.value = lesson?.status || "draft";
   elements.editorAudience.value = lesson?.audience || "both";
   elements.editorSummary.value = lesson?.summary_en || "";
+  updateLessonEditorControls(lesson);
   elements.editor.showModal();
 }
 
@@ -2088,6 +2111,7 @@ async function archiveLesson(lesson) {
 async function saveLesson(event) {
   event.preventDefault();
   const id = elements.editorId.value;
+  const wasNew = !id;
   const status = elements.editorStatus.value;
   if (status === "published") {
     if (!id) {
@@ -2136,7 +2160,10 @@ async function saveLesson(event) {
     payload.slug = `custom-${lessonDate}-${Date.now().toString(36)}`;
     payload.source_type = "manual";
     payload.created_by = state.session.user.id;
-    result = await client.from("review_lessons").insert(payload);
+    result = await client.from("review_lessons")
+      .insert(payload)
+      .select("id,slug,lesson_date,title_en,title_ja,summary_en,summary_ja,status,audience,source_type,source_notion_url,content_version,content,is_preview")
+      .single();
   }
 
   if (result.error) {
@@ -2147,8 +2174,14 @@ async function saveLesson(event) {
     return;
   }
   elements.editor.close();
-  showToast(status === "published" ? "Lesson published." : "Lesson saved privately.");
+  showToast(wasNew
+    ? "Draft saved. Add the first practice question now."
+    : status === "published" ? "Lesson published." : "Lesson saved privately.");
   await refreshDashboard();
+  if (wasNew && result.data?.id) {
+    const created = state.lessons.find((lesson) => lesson.id === result.data.id) || result.data;
+    openQuestionManager(created);
+  }
 }
 
 async function assignLesson(studentId, lessonId, button) {
@@ -2363,6 +2396,19 @@ async function initialise() {
 
   elements.newLesson.addEventListener("click", () => openEditor());
   elements.editorForm.addEventListener("submit", saveLesson);
+  elements.editorStatus.addEventListener("change", () => {
+    const lesson = state.lessons.find((item) => item.id === elements.editorId.value) || null;
+    updateLessonEditorControls(lesson);
+  });
+  elements.manageLessonQuestions.addEventListener("click", () => {
+    const lesson = state.lessons.find((item) => item.id === elements.editorId.value);
+    if (!lesson) {
+      elements.editorMessage.textContent = "Save the lesson first; the question builder will open automatically.";
+      return;
+    }
+    elements.editor.close();
+    openQuestionManager(lesson);
+  });
   elements.preview.addEventListener("click", () => {
     const lesson = state.lessons.find((item) => item.id === elements.editorId.value);
     if (lesson) previewLesson(lesson);

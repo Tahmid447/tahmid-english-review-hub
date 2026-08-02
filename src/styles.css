@@ -386,9 +386,12 @@ input:focus, select:focus, textarea:focus { border-color: var(--teal); box-shado
 .teacher-login p { color: var(--ink-soft); line-height: 1.7; }
 .role-badge { color: #745417; background: var(--gold-soft); }
 .teacher-top { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; margin-bottom: 22px; }
-.teacher-tabs { display: flex; gap: 7px; overflow-x: auto; margin: 22px 0 12px; }
-.teacher-tabs button { border: 1px solid var(--line); border-radius: 12px; padding: 10px 13px; background: var(--paper); cursor: pointer; white-space: nowrap; font-weight: 850; }
+.teacher-tabs { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 9px; margin: 22px 0 12px; }
+.teacher-tabs button { min-height: 74px; display: grid; align-content: center; gap: 4px; border: 1px solid var(--line); border-radius: 16px; padding: 11px 14px; text-align: left; background: var(--paper); cursor: pointer; font-weight: 850; }
+.teacher-tabs button strong { font-size: .8rem; }
+.teacher-tabs button small { color: var(--ink-soft); font-size: .62rem; font-weight: 700; }
 .teacher-tabs button.active { color: white; background: var(--navy); border-color: var(--navy); }
+.teacher-tabs button.active small { color: rgba(255,255,255,.78); }
 .teacher-panel { min-height: 360px; padding: 20px; border: 1px solid white; border-radius: 25px; background: rgba(255,253,248,.85); box-shadow: var(--shadow-small); overflow-x: auto; }
 .teacher-workflow { margin: 10px 0 20px; border: 1px solid #d8d2c7; border-radius: 20px; background: rgba(255,255,255,.8); }
 .teacher-workflow > summary { padding: 16px 19px; cursor: pointer; color: var(--navy); font-weight: 900; }
@@ -400,6 +403,16 @@ input:focus, select:focus, textarea:focus { border-color: var(--teal); box-shado
 .teacher-workflow article:nth-child(5) { background: var(--coral-soft); }
 .teacher-workflow strong { color: var(--navy); font-size: .78rem; }
 .teacher-workflow p { margin: 7px 0 0; color: var(--ink-soft); font-size: .7rem; line-height: 1.55; }
+.lesson-editor-steps { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 10px; margin: 0; padding: 0; list-style: none; }
+.lesson-editor-steps li { display: flex; align-items: center; gap: 10px; padding: 12px; border: 1px solid var(--line); border-radius: 15px; background: linear-gradient(145deg,#fff,var(--sky-soft)); }
+.lesson-editor-steps li:nth-child(2) { background: linear-gradient(145deg,#fff,var(--lavender-soft)); }
+.lesson-editor-steps li:nth-child(3) { background: linear-gradient(145deg,#fff,var(--green-soft)); }
+.lesson-editor-steps li > b { flex: 0 0 30px; width: 30px; height: 30px; display: grid; place-items: center; border-radius: 50%; color: white; background: var(--navy); }
+.lesson-editor-steps span { display: grid; gap: 2px; }
+.lesson-editor-steps small { color: var(--ink-soft); font-size: .62rem; }
+.editor-question-callout { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 16px; border: 1px solid rgba(47,143,135,.25); border-radius: 16px; background: var(--teal-soft); }
+.editor-question-callout p { margin: 4px 0 0; color: var(--ink-soft); font-size: .7rem; }
+.editor-question-callout button { flex: 0 0 auto; }
 .easy-question-builder { display: grid; gap: 12px; padding: 16px; border: 1px solid #cddfec; border-radius: 17px; background: var(--sky-soft); }
 .easy-question-builder > div:first-child p { margin: 5px 0 0; color: var(--ink-soft); font-size: .76rem; }
 .easy-choice-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -455,6 +468,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--teal); box-shado
   .lesson-mode { min-width: 0; }
   .teacher-analytics-metrics, .teacher-analytics-mini-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
   .teacher-workflow-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .teacher-tabs { grid-template-columns: repeat(2,minmax(0,1fr)); }
 }
 @media (max-width: 620px) {
   .shell { width: min(100% - 20px,1180px); }
@@ -494,6 +508,8 @@ input:focus, select:focus, textarea:focus { border-color: var(--teal); box-shado
   .editor-form .wide, .editor-form .dialog-actions, .editor-form .form-status { grid-column: auto; }
   .teacher-analytics-metrics, .teacher-analytics-mini-grid { grid-template-columns: 1fr; }
   .teacher-workflow-grid, .easy-choice-fields { grid-template-columns: 1fr; }
+  .teacher-tabs, .lesson-editor-steps { grid-template-columns: 1fr; }
+  .editor-question-callout { align-items: stretch; flex-direction: column; }
 }
 
 /* v11 · warm studio edition */
@@ -707,9 +723,14 @@ body {
 .membership-box { display: grid; gap: 10px; padding: 16px; border: 1px solid rgba(47,143,135,.28); border-radius: 15px; background: var(--teal-soft); }
 .membership-box > strong { color: var(--navy); font-size: 1.05rem; }
 .membership-box p { margin: 0; color: var(--ink-soft); font-size: .76rem; line-height: 1.55; }
-.membership-box form { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: end; }
+.membership-box form { display: grid; grid-template-columns: minmax(0,1fr); gap: 8px; align-items: stretch; }
 .membership-box form label { display: grid; gap: 5px; color: var(--ink-soft); font-size: .7rem; font-weight: 850; }
 .membership-box input { min-width: 0; }
+.membership-box form .secondary-btn { width: 100%; min-height: 46px; }
+.profile-completion { margin-top: 5px; padding: 12px; border: 1px solid rgba(47,143,135,.28); border-radius: 16px; background: rgba(255,255,255,.64); }
+.profile-completion summary { cursor: pointer; color: var(--navy); font-weight: 850; }
+.profile-completion > p { margin: 8px 0 11px; color: var(--ink-soft); font-size: .72rem; line-height: 1.55; }
+.profile-completion .signup-form { margin-top: 10px; }
 .membership-admin { display: grid; gap: 13px; margin-bottom: 18px; padding: 18px; border: 1px solid rgba(47,143,135,.28); border-radius: 20px; background: linear-gradient(145deg,var(--teal-soft),#fffaf0); }
 .teacher-panel-heading > div { color: var(--navy); font-size: 1.2rem; font-weight: 900; }
 .teacher-panel-heading p { margin: 4px 0 0; color: var(--ink-soft); font-size: .76rem; }
@@ -900,16 +921,24 @@ body:not([data-language="ja"]) .ui-ja-heading { display: none !important; }
 .guide-snapshot h2 { font-family: var(--serif); font-size: clamp(1.8rem,4vw,3rem); font-weight: 500; }
 .guide-snapshot p { margin-bottom: 7px; color: #dbe9ed; line-height: 1.65; }
 .guide-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; margin-top: 12px; }
-.guide-card { padding: 18px; border: 1px solid var(--line); border-radius: 18px; background: white; }
+.guide-card { align-self: start; overflow: hidden; padding: 0; border: 1px solid var(--line); border-radius: 18px; background: white; }
 .guide-card:nth-child(1) { background: var(--lemon-soft); }
 .guide-card:nth-child(2) { background: var(--sky-soft); }
 .guide-card:nth-child(3) { background: var(--coral-soft); }
 .guide-card:nth-child(4) { background: var(--lavender-soft); }
-.guide-card h3 { color: var(--navy); font-family: var(--serif); font-size: 1.35rem; }
+.guide-card > summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 66px; padding: 16px 18px; cursor: pointer; list-style: none; }
+.guide-card > summary::-webkit-details-marker { display: none; }
+.guide-card > summary:hover { background: rgba(255,255,255,.36); }
+.guide-card h3 { margin: 0; color: var(--navy); font-family: var(--serif); font-size: 1.35rem; }
+.guide-card-toggle { flex: 0 0 auto; width: 30px; height: 30px; display: grid; place-items: center; border-radius: 50%; color: white; background: var(--navy); transition: transform .22s ease; }
+.guide-card[open] .guide-card-toggle { transform: rotate(45deg); }
+.guide-card-body { padding: 0 18px 18px; }
 .guide-card ul { margin: 0; padding-left: 19px; line-height: 1.75; }
 .guide-phrase-list { display: grid; gap: 9px; }
-.guide-phrase-list > div { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-bottom: 8px; border-bottom: 1px solid rgba(21,59,85,.1); }
+.guide-phrase-list > div { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); align-items: stretch; gap: 9px; padding-bottom: 12px; border-bottom: 1px solid rgba(21,59,85,.1); }
+.guide-phrase-list > div > span { grid-column: 1 / -1; min-width: 0; }
 .guide-phrase-list small { display: block; margin-top: 3px; color: var(--ink-soft); font-weight: 650; }
+.guide-phrase-list .text-audio-btn { width: 100%; min-width: 0; max-width: none; }
 .guide-card-corrections p { display: grid; gap: 3px; margin-bottom: 10px; }
 .guide-card-corrections del { color: #965244; }
 .question-illustration { margin: 0 0 20px; }

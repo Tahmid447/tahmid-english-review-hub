@@ -1,6 +1,8 @@
 -- Review Hub membership, learner profiles, preview access and manual approvals.
 -- Passwords remain entirely inside Supabase Auth and are never copied here.
 
+create extension if not exists pgcrypto with schema extensions;
+
 alter table public.review_profiles
   add column if not exists first_name text,
   add column if not exists last_name text,
@@ -303,13 +305,13 @@ begin
   if code_scope not in ('general', 'takiwaki', 'both') then
     raise exception 'Invalid access scope.';
   end if;
-  raw_code := 'TEC-' || upper(substr(encode(gen_random_bytes(8), 'hex'), 1, 12));
+  raw_code := 'TEC-' || upper(substr(encode(extensions.gen_random_bytes(8), 'hex'), 1, 12));
   insert into public.review_access_codes (
     label, code_hash, code_last4, duration_days, access_scope,
     max_uses, valid_until, created_by
   ) values (
     btrim(code_label),
-    encode(digest(raw_code, 'sha256'), 'hex'),
+    encode(extensions.digest(raw_code, 'sha256'), 'hex'),
     right(raw_code, 4),
     code_duration_days,
     code_scope,
@@ -340,7 +342,7 @@ begin
   end if;
   select * into matched
   from public.review_access_codes c
-  where c.code_hash = encode(digest(upper(btrim(raw_code)), 'sha256'), 'hex')
+  where c.code_hash = encode(extensions.digest(upper(btrim(raw_code)), 'sha256'), 'hex')
   for update;
   if matched.id is null
      or not matched.enabled

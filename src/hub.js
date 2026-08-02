@@ -10,6 +10,7 @@ import { loadPublishedLessons } from "./data.js";
 import {
   getStudentClient,
   getStudentMembership,
+  getStudentProfile,
   getStudentSession,
   googleStudentAuthAvailable,
   ensureStudentProfile,
@@ -36,8 +37,6 @@ const LANGUAGE_CODES = Object.freeze([
 ]);
 
 function populateNativeLanguages() {
-  const select = document.querySelector("#signupNativeLanguage");
-  if (!select || select.options.length > 1) return;
   const names = typeof Intl.DisplayNames === "function"
     ? new Intl.DisplayNames([document.documentElement.lang || "en", "en"], { type: "language" })
     : null;
@@ -45,10 +44,13 @@ function populateNativeLanguages() {
     code,
     name: names?.of(code) || code.toUpperCase(),
   })).sort((left, right) => left.name.localeCompare(right.name));
-  choices.forEach(({ code, name }) => select.append(element("option", {
-    text: `${name} (${code})`,
-    attrs: { value: name },
-  })));
+  document.querySelectorAll(".native-language-select").forEach((select) => {
+    if (select.options.length > 1) return;
+    choices.forEach(({ code, name }) => select.append(element("option", {
+      text: `${name} (${code})`,
+      attrs: { value: name },
+    })));
+  });
 }
 
 async function configureGoogleButton() {
@@ -75,6 +77,7 @@ let settingsScopeGeneration = 0;
 let pendingSettingsLoad = null;
 let pendingSettingsUserId;
 let currentMembership = null;
+let currentProfile = null;
 
 function element(tag, options = {}, children = []) {
   const node = document.createElement(tag);
@@ -596,7 +599,50 @@ async function handleAccessCode(event) {
     await refreshAuthView();
     await reloadLessons();
   } catch (error) {
-    setLoginStatus(error?.message || t("The code could not be used.", "コードを利用できませんでした。"), true);
+    const rawMessage = String(error?.message || "");
+    const safeMessage = /digest\(|gen_random_bytes|pgcrypto|function .* does not exist/i.test(rawMessage)
+      ? t(
+          "The secure code service is being updated. Please contact the teacher.",
+          "アクセスコード機能を更新中です。担当講師へご連絡ください。",
+        )
+      : /invalid, expired, or already used/i.test(rawMessage)
+        ? t(
+            "This code is invalid, expired, or has already reached its use limit.",
+            "コードが正しくないか、期限切れ、または利用上限に達しています。",
+          )
+        : rawMessage || t("The code could not be used.", "コードを利用できませんでした。");
+    setLoginStatus(safeMessage, true);
+  } finally {
+    if (submit) submit.disabled = false;
+  }
+}
+
+async function handleProfileCompletion(event) {
+  event.preventDefault();
+  if (!authSession) return;
+  const form = event.currentTarget;
+  const values = {
+    firstName: form.querySelector("#profileFirstName")?.value.trim() || "",
+    lastName: form.querySelector("#profileLastName")?.value.trim() || "",
+    ageGroup: form.querySelector("#profileAgeGroup")?.value || "",
+    nativeLanguage: form.querySelector("#profileNativeLanguage")?.value || "",
+    englishLevel: form.querySelector("#profileEnglishLevel")?.value || "",
+    learningGoal: form.querySelector("#profileLearningGoal")?.value.trim() || "",
+  };
+  if (!form.reportValidity() || Object.entries(values).some(([key, value]) => key !== "learningGoal" && !value)) {
+    setLoginStatus(t("Please complete every required profile field.", "必須プロフィール項目をすべて入力してください。"), true);
+    return;
+  }
+  const submit = form.querySelector('button[type="submit"]');
+  if (submit) submit.disabled = true;
+  try {
+    const result = await ensureStudentProfile(authSession, values);
+    if (result?.error) throw result.error;
+    currentProfile = result.profile;
+    showToast(t("Your learning profile is ready.", "学習プロフィールを保存しました。"));
+    await refreshProfileCompletion();
+  } catch (error) {
+    setLoginStatus(error?.message || t("The profile could not be saved.", "プロフィールを保存できませんでした。"), true);
   } finally {
     if (submit) submit.disabled = false;
   }
@@ -610,6 +656,7 @@ async function handleLogout() {
   }
   authSession = null;
   currentMembership = null;
+  currentProfile = null;
   const scopeReady = await activateStorageScope(null);
   if (!scopeReady) return;
   remoteAttempts = [];
@@ -626,6 +673,7 @@ function bindAuth() {
   document.querySelector("#studentSignupForm")?.addEventListener("submit", handleSignup);
   document.querySelector("#googleSignIn")?.addEventListener("click", handleGoogleSignIn);
   document.querySelector("#accessCodeForm")?.addEventListener("submit", handleAccessCode);
+  document.querySelector("#profileCompletionForm")?.addEventListener("submit", handleProfileCompletion);
   document.querySelector("#logoutButton")?.addEventListener("click", handleLogout);
   document.querySelector("#studentLogout")?.addEventListener("click", handleLogout);
 
@@ -697,6 +745,35 @@ async function refreshMembershipPanel() {
         `${authSession.user?.email || "学習者"}でログイン中です。承認を待つか、アクセスコードを入力してください。`,
       );
   }
+}
+
+async function refreshProfileCompletion() {
+  const panel = document.querySelector("#profileCompletionPanel");
+  const form = document.querySelector("#profileCompletionForm");
+  if (!panel || !form || !authSession) {
+    if (panel) panel.hidden = true;
+    currentProfile = null;
+    return;
+  }
+  const result = await getStudentProfile();
+  currentProfile = result.profile;
+  const required = ["first_name", "last_name", "age_group", "native_language", "english_level"];
+  const incomplete = required.some((key) => !String(currentProfile?.[key] || "").trim());
+  panel.hidden = !incomplete;
+  if (!incomplete) return;
+  const metadata = authSession.user?.user_metadata || {};
+  const fields = {
+    profileFirstName: currentProfile?.first_name || metadata.given_name || metadata.first_name || "",
+    profileLastName: currentProfile?.last_name || metadata.family_name || metadata.last_name || "",
+    profileAgeGroup: currentProfile?.age_group || "",
+    profileNativeLanguage: currentProfile?.native_language || "",
+    profileEnglishLevel: currentProfile?.english_level || "",
+    profileLearningGoal: currentProfile?.learning_goal || "",
+  };
+  Object.entries(fields).forEach(([id, value]) => {
+    const control = form.querySelector(`#${id}`);
+    if (control && !control.value) control.value = value;
+  });
 }
 
 async function fetchPersonalRecords() {
@@ -1063,8 +1140,10 @@ async function refreshAuthView() {
   if (page === "general") {
     ensureGeneralLogoutButton();
     await refreshMembershipPanel();
+    await refreshProfileCompletion();
   } else if (page === "takiwaki") {
     await refreshMembershipPanel();
+    await refreshProfileCompletion();
     await renderPrivateView();
   }
 }

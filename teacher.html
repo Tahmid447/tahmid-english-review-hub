@@ -45,10 +45,10 @@
         <article class="dashboard-card"><span>Recent sessions</span><strong id="teacherSessionCount">0</strong></article>
       </section>
       <div class="teacher-tabs" role="tablist">
-        <button class="active" data-teacher-tab="drafts" type="button">Notion drafts</button>
-        <button data-teacher-tab="lessons" type="button">Published lessons</button>
-        <button data-teacher-tab="students" type="button">Learners &amp; memberships / 会員管理</button>
-        <button data-teacher-tab="activity" type="button">Insights &amp; activity</button>
+        <button class="active" data-teacher-tab="drafts" type="button"><strong>Lesson builder</strong><small>下書き・問題作成</small></button>
+        <button data-teacher-tab="lessons" type="button"><strong>Published lessons</strong><small>公開・編集・非表示</small></button>
+        <button data-teacher-tab="students" type="button"><strong>Learners &amp; access</strong><small>会員・期間・コード管理</small></button>
+        <button data-teacher-tab="activity" type="button"><strong>Insights &amp; activity</strong><small>学習状況を確認</small></button>
       </div>
       <section class="teacher-panel" id="teacherPanel"></section>
     </section>
@@ -59,12 +59,18 @@
       <h2 id="editorHeading">New lesson</h2>
       <form id="lessonEditorForm" class="editor-form">
         <input id="editorLessonId" type="hidden">
+        <ol class="wide lesson-editor-steps" aria-label="Lesson publishing steps">
+          <li><b>1</b><span><strong>Lesson details</strong><small>タイトル・日付・公開先</small></span></li>
+          <li><b>2</b><span><strong>Practice questions</strong><small>最低1問を作成・有効化</small></span></li>
+          <li><b>3</b><span><strong>Preview &amp; publish</strong><small>確認後に公開</small></span></li>
+        </ol>
         <label>Lesson title<input id="editorTitle" required></label>
         <label>Lesson date<input id="editorDate" type="date" required></label>
         <label>Status / 公開状態<select id="editorStatus"><option value="draft">Draft / 下書き</option><option value="review">Review / 確認中</option><option value="published">Published / 公開</option><option value="archived">Archived / 非表示</option></select></label>
         <label>Audience / 公開先<select id="editorAudience"><option value="takiwaki">Takiwaki only / 専用</option><option value="general">General / 一般</option><option value="both">Both / 両方</option></select></label>
         <label class="wide">Summary<textarea id="editorSummary" rows="4"></textarea></label>
-        <div class="dialog-actions"><button class="secondary-btn" id="previewDraftButton" type="button">Preview</button><button class="primary-btn" type="submit">Save draft</button></div>
+        <div class="wide editor-question-callout"><div><strong>Practice questions / 練習問題</strong><p id="editorQuestionSummary">下書きを保存すると、続けて問題を作成できます。</p></div><button class="secondary-btn" id="manageLessonQuestionsButton" type="button">Manage questions / 問題を作る・編集</button></div>
+        <div class="dialog-actions"><button class="secondary-btn" id="previewDraftButton" type="button">Preview / プレビュー</button><button class="primary-btn" id="saveLessonButton" type="submit">Save draft &amp; add questions / 保存して問題作成へ</button></div>
         <p class="form-status" id="editorStatusMessage"></p>
       </form>
     </dialog>

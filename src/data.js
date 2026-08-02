@@ -229,6 +229,40 @@ const phraseFromCorrectChoice = (question) => {
   return correct?.en ? { en: correct.en, jp: correct.jp } : null;
 };
 
+const JAPANESE_INSTRUCTION_ONLY = /^(?:聞こえた英文をそのまま入力してください|音声を聞いて[^。]*|英語で入力してください|正しい英文を入力してください)[。.]?$/;
+const JAPANESE_MEANING_PREFIX = /^(?:語順を並べましょう|文を組み立てましょう|英語にしましょう|英文を作りましょう)\s*[：:]\s*(.+)$/;
+
+export const normalizeJapaneseMeaning = (value = "") => {
+  const text = String(value || "").replace(/\s+/g, " ").trim();
+  if (!text || JAPANESE_INSTRUCTION_ONLY.test(text)) return "";
+  const prefixed = text.match(JAPANESE_MEANING_PREFIX);
+  if (prefixed?.[1]) return prefixed[1].trim();
+  const quotedTarget = text.match(/^「(.+?)」(?:に合う英文|を英語|という意味)/);
+  if (quotedTarget?.[1]) return quotedTarget[1].trim();
+  return text;
+};
+
+const lessonTranslationMap = (lesson) => {
+  const translations = new Map();
+  const add = (english, japanese) => {
+    const en = String(english || "").trim();
+    const jp = normalizeJapaneseMeaning(japanese);
+    if (!en || !jp) return;
+    const key = normalizeAnswerText(en);
+    if (key && !translations.has(key)) translations.set(key, jp);
+  };
+
+  (lesson.phrases || []).forEach((phrase) => add(phrase?.en || phrase?.english, phrase?.jp || phrase?.ja));
+  (lesson.questions || []).forEach((question) => {
+    question.choices?.forEach((choice) => add(choice.en, choice.jp));
+    question.pairs?.forEach((pair) => add(pair.en, pair.jp));
+    add(question.speakText, question.speakJa);
+    if (question.correctWords?.length) add(question.correctWords.join(" "), question.prompt?.jp);
+    if (question.explanation?.en) add(question.explanation.en, question.explanation.jp);
+  });
+  return translations;
+};
+
 const asksForAnError = (question) => {
   const promptText = `${question.prompt?.en || ""} ${question.prompt?.jp || ""}`;
   return /\b(?:not natural|incorrect|wrong|mistake|error)\b|不自然|間違|誤り/i.test(promptText);
@@ -277,10 +311,12 @@ export async function buildPhraseCatalog({ audience = "all", includeDrafts = fal
   const seen = new Set();
 
   lessons.forEach((lesson) => {
+    const translations = lessonTranslationMap(lesson);
     lesson.questions.forEach((question) => {
       collectQuestionPhrases(question).forEach((phrase, phraseIndex) => {
         const en = String(phrase.en || "").trim();
-        const jp = String(phrase.jp || "").trim();
+        const jp = translations.get(normalizeAnswerText(en))
+          || normalizeJapaneseMeaning(phrase.jp);
         if (!isUsefulPhrase({ en, jp }) || en.length > 180) return;
         const uniqueKey = normalizeAnswerText(en);
         if (seen.has(uniqueKey)) return;

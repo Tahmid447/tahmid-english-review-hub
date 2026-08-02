@@ -125,23 +125,28 @@ export async function ensureStudentProfile(session, values = {}) {
   const client = getStudentClient();
   const user = session?.user;
   if (!client || !user) return { profile: null, error: null };
+  const { data: existingProfile } = await client
+    .from("review_profiles")
+    .select("*")
+    .eq("user_id", user.id)
+    .maybeSingle();
   const metadata = user.user_metadata || {};
   const fullName = String(metadata.full_name || metadata.name || "").trim();
   const nameParts = fullName.split(/\s+/).filter(Boolean);
-  const firstName = String(values.firstName || metadata.first_name || nameParts[0] || "").trim();
-  const lastName = String(values.lastName || metadata.last_name || nameParts.slice(1).join(" ") || "").trim();
+  const firstName = String(values.firstName || existingProfile?.first_name || metadata.first_name || nameParts[0] || "").trim();
+  const lastName = String(values.lastName || existingProfile?.last_name || metadata.last_name || nameParts.slice(1).join(" ") || "").trim();
   const payload = {
     user_id: user.id,
     display_name: [firstName, lastName].filter(Boolean).join(" ") || fullName || null,
-    avatar_url: metadata.avatar_url || metadata.picture || null,
+    avatar_url: existingProfile?.avatar_url || metadata.avatar_url || metadata.picture || null,
     contact_email: user.email || null,
     first_name: firstName || null,
     last_name: lastName || null,
-    age_group: values.ageGroup || metadata.age_group || null,
-    native_language: values.nativeLanguage || metadata.native_language || null,
-    english_level: values.englishLevel || metadata.english_level || null,
-    learning_goal: values.learningGoal || metadata.learning_goal || null,
-    locale: "ja",
+    age_group: values.ageGroup || existingProfile?.age_group || metadata.age_group || null,
+    native_language: values.nativeLanguage || existingProfile?.native_language || metadata.native_language || null,
+    english_level: values.englishLevel || existingProfile?.english_level || metadata.english_level || null,
+    learning_goal: values.learningGoal || existingProfile?.learning_goal || metadata.learning_goal || null,
+    locale: existingProfile?.locale || "ja",
   };
   const { data, error } = await client
     .from("review_profiles")
@@ -149,6 +154,18 @@ export async function ensureStudentProfile(session, values = {}) {
     .select("*")
     .maybeSingle();
   return { profile: data || null, error };
+}
+
+export async function getStudentProfile() {
+  const client = getStudentClient();
+  const session = await getStudentSession();
+  if (!client || !session?.user) return { profile: null, signedIn: false, error: null };
+  const { data, error } = await client
+    .from("review_profiles")
+    .select("*")
+    .eq("user_id", session.user.id)
+    .maybeSingle();
+  return { profile: data || null, signedIn: true, error };
 }
 
 export async function getStudentMembership() {
@@ -176,10 +193,52 @@ export async function hasStudentAccess(scope = "general") {
   return !error && data === true;
 }
 
+const invokeMembershipAccess = async (client, body) => {
+  if (!client) return { data: null, error: new Error("The membership service is unavailable.") };
+  const { data: sessionData } = await client.auth.getSession();
+  const accessToken = sessionData?.session?.access_token;
+  if (!accessToken) return { data: null, error: new Error("Please sign in first.") };
+  try {
+    const response = await fetch(`${SUPABASE_URL}/functions/v1/membership-access`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        apikey: SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify(body),
+      cache: "no-store",
+    });
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok || payload?.error) {
+      return { data: null, error: new Error(payload?.error || "The membership request could not be completed.") };
+    }
+    return { data: payload, error: null };
+  } catch {
+    return { data: null, error: new Error("The membership service could not be reached. Please try again.") };
+  }
+};
+
 export async function redeemStudentAccessCode(code) {
   const client = getStudentClient();
   if (!client) return { data: null, error: new Error("Code redemption is not available right now.") };
-  return client.rpc("review_redeem_access_code", { raw_code: String(code || "").trim() });
+  return invokeMembershipAccess(client, {
+    action: "redeem",
+    code: String(code || "").trim(),
+  });
+}
+
+export async function createTeacherAccessCode({ label, durationDays, accessScope, maxUses, validUntil = null }) {
+  const client = getTeacherClient();
+  if (!client) return { data: null, error: new Error("Code generation is not available right now.") };
+  return invokeMembershipAccess(client, {
+    action: "create",
+    label,
+    durationDays,
+    accessScope,
+    maxUses,
+    validUntil,
+  });
 }
 
 export async function signInTeacher(email, password) {
