@@ -20,7 +20,7 @@ async function readRows(resource, column) {
   return { resource, status: response.status, rows };
 }
 
-const publicLessons = await readRows("review_public_lessons", "id");
+const publicLessons = await readRows("review_public_lessons", "id,is_preview");
 const publicQuestions = await readRows("review_public_questions", "id");
 const protectedResources = [
   ["review_profiles", "user_id"],
@@ -33,6 +33,9 @@ const protectedResources = [
   ["review_speaking_activity", "id"],
   ["review_phrase_activity", "id"],
   ["review_user_settings", "user_id"],
+  ["review_memberships", "id"],
+  ["review_access_codes", "id"],
+  ["review_access_code_redemptions", "id"],
 ];
 
 const protectedResults = await Promise.all(
@@ -47,9 +50,15 @@ if (publicLessons.status !== 200 || publicLessons.rows?.length !== 17) {
     } rows.`,
   );
 }
-if (publicQuestions.status !== 200 || publicQuestions.rows?.length !== 485) {
+const previewLessonCount = Array.isArray(publicLessons.rows)
+  ? publicLessons.rows.filter((lesson) => lesson.is_preview === true).length
+  : 0;
+if (previewLessonCount !== 2) {
+  failures.push(`Expected exactly 2 public preview lessons; received ${previewLessonCount}.`);
+}
+if (publicQuestions.status !== 200 || publicQuestions.rows?.length !== 62) {
   failures.push(
-    `Expected 485 public questions; received status ${publicQuestions.status} and ${
+    `Expected 62 anonymous preview questions; received status ${publicQuestions.status} and ${
       Array.isArray(publicQuestions.rows) ? publicQuestions.rows.length : "no"
     } rows.`,
   );
@@ -69,7 +78,8 @@ if (failures.length) {
 } else {
   console.log("Live Supabase security verification passed.");
   console.log("  ✓ 17 published public lessons");
-  console.log("  ✓ 485 published public activities");
+  console.log("  ✓ exactly 2 free preview lessons");
+  console.log("  ✓ 62 anonymous preview activities; 423 remain protected");
   console.log(
     `  ✓ ${protectedResults.length} personal/base resources reject anonymous reads`,
   );

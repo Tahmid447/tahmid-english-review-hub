@@ -166,6 +166,8 @@ and authorised.
   no longer returned through the anonymous question view or static fallback.
 - Anonymous REST verification returned 17 catalogue rows, exactly two
   `is_preview` lessons, and 62 public question rows.
+- The repeatable live check confirms that 13 personal/base resources reject
+  anonymous reads, including memberships, access codes, and redemptions.
 - Sign-in and create-account panels switch correctly and expose eight
   privacy-conscious profile fields/controls.
 - The complete source still passes all 1,322 content/security assertions and
