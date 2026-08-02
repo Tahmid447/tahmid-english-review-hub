@@ -22,6 +22,7 @@ async function readRows(resource, column) {
 
 const publicLessons = await readRows("review_public_lessons", "id,is_preview");
 const publicQuestions = await readRows("review_public_questions", "id");
+const publicPlans = await readRows("review_plan_catalog", "plan_key,active");
 const protectedResources = [
   ["review_profiles", "user_id"],
   ["review_teachers", "user_id"],
@@ -36,6 +37,11 @@ const protectedResources = [
   ["review_memberships", "id"],
   ["review_access_codes", "id"],
   ["review_access_code_redemptions", "id"],
+  ["review_lesson_access_overrides", "id"],
+  ["review_learner_plan_overrides", "id"],
+  ["review_premium_tasks", "id"],
+  ["review_task_submissions", "id"],
+  ["review_submission_feedback", "id"],
 ];
 
 const protectedResults = await Promise.all(
@@ -63,6 +69,13 @@ if (publicQuestions.status !== 200 || publicQuestions.rows?.length !== 62) {
     } rows.`,
   );
 }
+if (publicPlans.status !== 200 || publicPlans.rows?.length !== 2) {
+  failures.push(
+    `Expected 2 public plan descriptions; received status ${publicPlans.status} and ${
+      Array.isArray(publicPlans.rows) ? publicPlans.rows.length : "no"
+    } rows.`,
+  );
+}
 for (const result of protectedResults) {
   if (result.status < 400) {
     failures.push(
@@ -79,7 +92,8 @@ if (failures.length) {
   console.log("Live Supabase security verification passed.");
   console.log("  ✓ 17 published public lessons");
   console.log("  ✓ exactly 2 free preview lessons");
-  console.log("  ✓ 62 anonymous preview activities; 423 remain protected");
+  console.log("  ✓ 62 anonymous preview activities; expanded member activities remain protected");
+  console.log("  ✓ 2 public Standard/Premium plan descriptions");
   console.log(
     `  ✓ ${protectedResults.length} personal/base resources reject anonymous reads`,
   );
