@@ -1,6 +1,24 @@
 # Operations Guide / 運用ガイド
 
-## 1. Create a Review Hub learner account
+## 1. Create and approve a Review Hub learner account
+
+Normally, the learner chooses **Create account** on the public site and uses
+Google or email/password. Email registration asks for name, optional age group,
+native language, English level, and an optional learning goal. It never exposes
+the password to the teacher.
+
+The new learner appears under **Learners & memberships** in Teacher Studio.
+After bank-transfer confirmation:
+
+1. Choose 30, 180, or 365 days.
+2. Choose General, Takiwaki, or Both.
+3. Press **Approve**.
+
+For another duration, generate an access code with the desired number of days,
+scope, and maximum uses. The complete code is shown only once; later the
+dashboard shows only its final four characters.
+
+Manual Supabase creation remains available for an administrator:
 
 1. Open Supabase Dashboard → Authentication → Users.
 2. Choose **Add user** or **Send invitation**.
@@ -103,17 +121,34 @@ For code, design, or new feature changes:
 5. Check the separate Netlify preview.
 6. Promote the reviewed package to production after approval.
 
-The reviewed v9 package was promoted to
-`https://jocular-chaja-86e78d.netlify.app/` on July 30, 2026. Use Netlify
-deploy history or `backup/v8-calm-baseline` if a rollback is needed.
+### Beginner-friendly rollback
+
+No coding is required to restore the previous visual version:
+
+1. Open Netlify and choose the production project.
+2. Open **Deploys**.
+3. Choose the last successful deploy before the v10 membership release.
+4. Select **Publish deploy**.
+
+This restores the old website files. It does not delete lessons, learners, or
+study history in Supabase. For a developer rollback, the calm baseline remains
+on `backup/v8-calm-baseline`; the last verified v9 release is commit `b7e4ac9`.
 
 ## 7. Supabase migrations
 
-Apply the four migration files in order. Migration 003 is generated from the
+Apply the five migration files in order. Migration 003 is generated from the
 private reviewed source and stores all 485 question payloads behind RLS.
 Migration 004 publishes all 17 reviewed lessons to both audiences, adds the
 teacher account’s private learner-preview profile, and attaches the three
 late-July illustrations.
+
+Migration 005 adds privacy-conscious learner profiles, memberships, manual
+approval, expiry dates, access codes, two public previews, and protected full
+lesson questions. It was applied through the trusted SQL Editor on August 2,
+2026. Authentication Site URL and approved redirect URLs were updated for the
+production site, preview site, and local review address. Email signup is
+enabled with confirmation. Google remains disabled until a Google OAuth Client
+ID and Client Secret are supplied in Supabase.
 
 The July 30 preview setup was applied through the trusted Supabase SQL Editor.
 The local CLI could link to the project, but the shared project’s existing

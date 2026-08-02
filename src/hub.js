@@ -9,11 +9,16 @@ import {
 import { loadPublishedLessons } from "./data.js";
 import {
   getStudentClient,
+  getStudentMembership,
   getStudentSession,
+  ensureStudentProfile,
   loadUserSettings,
   onStudentAuthChange,
+  redeemStudentAccessCode,
   saveUserSettings,
   signInStudent,
+  signInStudentWithGoogle,
+  signUpStudent,
   signOutStudent,
 } from "./supabase.js";
 import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js";
@@ -33,6 +38,7 @@ let activeStorageUserId = null;
 let settingsScopeGeneration = 0;
 let pendingSettingsLoad = null;
 let pendingSettingsUserId;
+let currentMembership = null;
 
 function element(tag, options = {}, children = []) {
   const node = document.createElement(tag);
@@ -289,7 +295,12 @@ function createLessonCard(lesson, options = {}) {
   const progress = progressSummary(lesson);
   const count = Number(lesson.questions?.length || lesson.questionCount || 0);
   const groups = lessonGroups(lesson);
-  const statusText = options.assigned
+  const locked = lesson.locked === true;
+  const statusText = locked
+    ? t("Membership", "会員限定")
+    : lesson.isPreview
+      ? t("Free preview", "無料サンプル")
+      : options.assigned
     ? t("Assigned", "割り当て済み")
     : progress.completed
       ? t("Completed", "完了")
@@ -332,11 +343,14 @@ function createLessonCard(lesson, options = {}) {
   }, element("span"));
   progressBar.firstElementChild.style.width = `${progress.percent}%`;
   const action = element("a", {
-    className: "lesson-action",
-    attrs: { href: lessonHref({ ...lesson, assigned: options.assigned }) },
+    className: `lesson-action${locked ? " locked" : ""}`,
+    attrs: { href: locked ? "#account" : lessonHref({ ...lesson, assigned: options.assigned }) },
   }, [
+    locked ? element("span", { text: "🔒", attrs: { "aria-hidden": "true" } }) : null,
     element("span", {
-      text: progress.percent && !progress.completed
+      text: locked
+        ? t("Unlock full lesson", "全レッスンを開放")
+        : progress.percent && !progress.completed
         ? t("Continue lesson", "続きから")
         : t("Start practice", "練習を始める"),
     }),
@@ -344,7 +358,7 @@ function createLessonCard(lesson, options = {}) {
   ]);
 
   return element("article", {
-    className: "lesson-card",
+    className: `lesson-card${locked ? " lesson-card-locked" : ""}`,
     attrs: { "data-groups": groups.join(" "), "data-lesson-id": lesson.id },
   }, [top, title, titleJa, summary, summaryJa, meta, progressBar, action]);
 }
@@ -413,6 +427,7 @@ async function handleLogin(event) {
     if (result?.error) throw result.error;
     authSession = normaliseSession(result) || normaliseSession(await getStudentSession());
     if (!authSession) throw new Error("The account could not be opened.");
+    await ensureStudentProfile(authSession);
     const scopeReady = await activateStorageScope(authSession);
     if (!scopeReady) return;
     form.reset();
@@ -430,6 +445,87 @@ async function handleLogin(event) {
   }
 }
 
+function signupValues(form) {
+  return {
+    firstName: form.querySelector("#signupFirstName")?.value.trim() || "",
+    lastName: form.querySelector("#signupLastName")?.value.trim() || "",
+    email: form.querySelector("#signupEmail")?.value.trim() || "",
+    password: form.querySelector("#signupPassword")?.value || "",
+    ageGroup: form.querySelector("#signupAgeGroup")?.value || "",
+    nativeLanguage: form.querySelector("#signupNativeLanguage")?.value.trim() || "",
+    englishLevel: form.querySelector("#signupEnglishLevel")?.value || "",
+    learningGoal: form.querySelector("#signupLearningGoal")?.value.trim() || "",
+  };
+}
+
+async function handleSignup(event) {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const submit = form.querySelector('button[type="submit"]');
+  const values = signupValues(form);
+  if (!values.firstName || !values.lastName || !values.email || values.password.length < 8) return;
+  if (submit) submit.disabled = true;
+  setLoginStatus(t("Creating your account…", "アカウントを作成中…"));
+  try {
+    const result = await signUpStudent(values);
+    if (result?.error) throw result.error;
+    authSession = normaliseSession(result) || normaliseSession(await getStudentSession());
+    if (authSession) {
+      await ensureStudentProfile(authSession, values);
+      await activateStorageScope(authSession);
+      setLoginStatus(t(
+        "Account created. Membership is waiting for teacher approval.",
+        "アカウントを作成しました。先生の承認をお待ちください。",
+      ));
+      await refreshAuthView();
+    } else {
+      setLoginStatus(t(
+        "Check your email to confirm the account, then sign in.",
+        "確認メールを開いて登録を完了し、その後ログインしてください。",
+      ));
+    }
+    form.reset();
+  } catch (error) {
+    setLoginStatus(error?.message || t("Account creation failed.", "アカウントを作成できませんでした。"), true);
+  } finally {
+    if (submit) submit.disabled = false;
+  }
+}
+
+async function handleGoogleSignIn() {
+  setLoginStatus(t("Opening Google sign-in…", "Googleログインを開いています…"));
+  const result = await signInStudentWithGoogle();
+  if (result?.error) {
+    setLoginStatus(t(
+      "Google sign-in is not configured yet. Please use email for now.",
+      "Googleログインは現在設定中です。今はメールアドレスをご利用ください。",
+    ), true);
+  }
+}
+
+async function handleAccessCode(event) {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const input = form.querySelector("#accessCodeInput");
+  const code = input?.value.trim() || "";
+  if (!code) return;
+  const submit = form.querySelector('button[type="submit"]');
+  if (submit) submit.disabled = true;
+  setLoginStatus(t("Checking the code…", "コードを確認中…"));
+  try {
+    const result = await redeemStudentAccessCode(code);
+    if (result?.error) throw result.error;
+    if (input) input.value = "";
+    showToast(t("Membership unlocked.", "メンバーシップを開放しました。"));
+    await refreshAuthView();
+    await reloadLessons();
+  } catch (error) {
+    setLoginStatus(error?.message || t("The code could not be used.", "コードを利用できませんでした。"), true);
+  } finally {
+    if (submit) submit.disabled = false;
+  }
+}
+
 async function handleLogout() {
   const result = await signOutStudent();
   if (result?.error) {
@@ -437,6 +533,7 @@ async function handleLogout() {
     return;
   }
   authSession = null;
+  currentMembership = null;
   const scopeReady = await activateStorageScope(null);
   if (!scopeReady) return;
   remoteAttempts = [];
@@ -450,7 +547,23 @@ async function handleLogout() {
 
 function bindAuth() {
   document.querySelector("#studentLoginForm")?.addEventListener("submit", handleLogin);
+  document.querySelector("#studentSignupForm")?.addEventListener("submit", handleSignup);
+  document.querySelector("#googleSignIn")?.addEventListener("click", handleGoogleSignIn);
+  document.querySelector("#accessCodeForm")?.addEventListener("submit", handleAccessCode);
   document.querySelector("#logoutButton")?.addEventListener("click", handleLogout);
+  document.querySelector("#studentLogout")?.addEventListener("click", handleLogout);
+
+  document.querySelectorAll("[data-auth-view]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const view = button.dataset.authView;
+      document.querySelectorAll("[data-auth-view]").forEach((candidate) => {
+        candidate.classList.toggle("active", candidate === button);
+      });
+      document.querySelectorAll("[data-auth-panel]").forEach((panel) => {
+        panel.hidden = panel.dataset.authPanel !== view;
+      });
+    });
+  });
 
   const dialog = document.querySelector("#accountDialog");
   const accountButton = document.querySelector("#accountButton");
@@ -463,39 +576,50 @@ function bindAuth() {
 
   onStudentAuthChange(async (...args) => {
     authSession = normaliseSession(args[1]) || normaliseSession(args[0]);
+    if (authSession) await ensureStudentProfile(authSession);
     const scopeReady = await activateStorageScope(authSession);
     if (!scopeReady) return;
+    await reloadLessons();
     await refreshAuthView();
   });
 }
 
 function ensureGeneralLogoutButton() {
-  const form = document.querySelector("#studentLoginForm");
-  if (!form) return;
-  let logout = form.querySelector("[data-general-logout]");
-  if (authSession) {
-    form.querySelectorAll("label, button[type='submit']").forEach((node) => {
-      node.hidden = true;
-    });
-    if (!logout) {
-      logout = element("button", {
-        className: "secondary-btn",
-        text: t("Sign out", "ログアウト"),
-        attrs: { type: "button", "data-general-logout": "true" },
-      });
-      logout.addEventListener("click", handleLogout);
-      form.append(logout);
-    }
-    logout.hidden = false;
-    setLoginStatus(t(
-      `Signed in as ${authSession.user?.email || "student"}.`,
-      `${authSession.user?.email || "学習者"}でログイン中です。`,
-    ));
-  } else {
-    form.querySelectorAll("label, button[type='submit']").forEach((node) => {
-      node.hidden = false;
-    });
-    if (logout) logout.hidden = true;
+  const membershipPanel = document.querySelector("#membershipPanel");
+  const loginForm = document.querySelector("#studentLoginForm");
+  const signupForm = document.querySelector("#studentSignupForm");
+  const google = document.querySelector("#googleSignIn");
+  const divider = document.querySelector(".auth-divider");
+  const tabs = document.querySelector(".auth-tabs");
+  if (membershipPanel) membershipPanel.hidden = !authSession;
+  if (loginForm) loginForm.hidden = Boolean(authSession);
+  if (signupForm) signupForm.hidden = true;
+  if (google) google.hidden = Boolean(authSession);
+  if (divider) divider.hidden = Boolean(authSession);
+  if (tabs) tabs.hidden = Boolean(authSession);
+}
+
+async function refreshMembershipPanel() {
+  const panel = document.querySelector("#membershipPanel");
+  const status = document.querySelector("#membershipStatus");
+  if (!panel || !authSession) {
+    currentMembership = null;
+    if (panel) panel.hidden = true;
+    return;
+  }
+  const result = await getStudentMembership();
+  currentMembership = result.membership;
+  panel.hidden = false;
+  const expires = currentMembership?.expires_at
+    ? formatDate(currentMembership.expires_at, true)
+    : "—";
+  if (status) {
+    status.textContent = result.active
+      ? t(`Active until ${expires}.`, `${expires}まで利用できます。`)
+      : t(
+        `Signed in as ${authSession.user?.email || "learner"}. Approval is pending, or enter an access code below.`,
+        `${authSession.user?.email || "学習者"}でログイン中です。承認を待つか、アクセスコードを入力してください。`,
+      );
   }
 }
 
@@ -804,7 +928,11 @@ async function renderPrivateView() {
       .select("access_scope, display_name")
       .eq("user_id", userId)
       .maybeSingle();
-    hasPrivateAccess = !error && data?.access_scope === "takiwaki";
+    const membership = await getStudentMembership();
+    hasPrivateAccess = !error
+      && data?.access_scope === "takiwaki"
+      && membership.active
+      && ["takiwaki", "both"].includes(membership.membership?.access_scope);
     privateDisplayName = hasPrivateAccess ? String(data?.display_name || "").trim() : "";
   }
   if (authSession?.user?.id !== userId) return;
@@ -858,36 +986,42 @@ async function renderPrivateView() {
 async function refreshAuthView() {
   if (page === "general") {
     ensureGeneralLogoutButton();
+    await refreshMembershipPanel();
   } else if (page === "takiwaki") {
+    await refreshMembershipPanel();
     await renderPrivateView();
+  }
+}
+
+async function reloadLessons() {
+  publishedLessons = (await loadPublishedLessons({
+    audience: page === "takiwaki" ? "takiwaki" : "general",
+  })).filter((lesson) => lesson.status === "published");
+  visibleLessons = page === "general" ? publishedLessons : [];
+  if (page === "general") {
+    const publishedCount = document.querySelector("#publishedCount");
+    const questionCount = document.querySelector("#questionCount");
+    const totalQuestions = publishedLessons.reduce(
+      (sum, lesson) => sum + Number(lesson.questions?.length || lesson.questionCount || 0),
+      0,
+    );
+    if (publishedCount) publishedCount.textContent = String(publishedLessons.length);
+    if (questionCount) questionCount.textContent = currentMembership?.status === "active"
+      ? String(totalQuestions)
+      : "485";
+    renderLessonGrid();
   }
 }
 
 async function initialise() {
   authSession = normaliseSession(await getStudentSession());
+  if (authSession) await ensureStudentProfile(authSession);
   await activateStorageScope(authSession);
   bindSettings();
   bindFilters();
   bindAuth();
 
-  publishedLessons = (await loadPublishedLessons({
-    audience: page === "takiwaki" ? "takiwaki" : "general",
-  }))
-    .filter((lesson) => lesson.status === "published");
-  visibleLessons = page === "general" ? publishedLessons : [];
-
-  if (page === "general") {
-    const publishedCount = document.querySelector("#publishedCount");
-    const questionCount = document.querySelector("#questionCount");
-    const totalQuestions = publishedLessons.reduce(
-      (sum, lesson) => sum + Number(lesson.questions?.length || 0),
-      0,
-    );
-    if (publishedCount) publishedCount.textContent = String(publishedLessons.length);
-    if (questionCount) questionCount.textContent = String(totalQuestions);
-    renderLessonGrid();
-  }
-
+  await reloadLessons();
   await refreshAuthView();
 }
 

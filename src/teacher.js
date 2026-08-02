@@ -80,6 +80,8 @@ const state = {
   tab: "drafts",
   lessons: [],
   profiles: [],
+  memberships: [],
+  accessCodes: [],
   attempts: [],
   assignments: [],
   answers: [],
@@ -366,11 +368,13 @@ async function refreshDashboard() {
       analyticsQuestions,
       speaking,
       phrases,
+      memberships,
+      accessCodes,
     ] = await Promise.all([
       fetchAll("review_lessons", "*, review_questions(count)", {
         order: { column: "lesson_date", ascending: false },
       }),
-      fetchAll("review_profiles", "user_id, display_name, locale, access_scope, created_at"),
+      fetchAll("review_profiles", "user_id, display_name, first_name, last_name, contact_email, age_group, native_language, english_level, learning_goal, locale, access_scope, created_at"),
       fetchAll("review_teachers", "user_id, active"),
       fetchAll(
         "review_attempts",
@@ -402,6 +406,16 @@ async function refreshDashboard() {
         "id, user_id, phrase_id, practice_count, last_practiced_at, is_favorite",
         { order: { column: "last_practiced_at", ascending: false } },
       ),
+      fetchAll(
+        "review_memberships",
+        "user_id,status,access_scope,plan_label,starts_at,expires_at,approval_source,approved_at,notes,created_at,updated_at",
+        { order: { column: "created_at", ascending: false } },
+      ),
+      fetchAll(
+        "review_access_codes",
+        "id,label,code_last4,duration_days,access_scope,max_uses,use_count,enabled,valid_until,created_at",
+        { order: { column: "created_at", ascending: false } },
+      ),
     ]);
 
     state.lessons = lessons;
@@ -417,6 +431,8 @@ async function refreshDashboard() {
     state.analyticsQuestions = analyticsQuestions;
     state.speaking = speaking;
     state.phrases = phrases;
+    state.memberships = memberships;
+    state.accessCodes = accessCodes;
     updateMetrics();
     renderActiveTab();
   } catch (error) {
@@ -560,15 +576,144 @@ function profileName(userId) {
   );
 }
 
+function membershipFor(userId) {
+  return state.memberships.find((membership) => membership.user_id === userId) || null;
+}
+
+function activeMembershipStatus(membership) {
+  if (!membership) return "Pending";
+  if (membership.status === "active" && new Date(membership.expires_at || 0).getTime() <= Date.now()) {
+    return "Expired";
+  }
+  return {
+    pending: "Pending approval",
+    active: "Active",
+    expired: "Expired",
+    suspended: "Paused",
+    cancelled: "Cancelled",
+  }[membership.status] || membership.status;
+}
+
+async function activateMembership(profile, days, scope, button) {
+  const duration = Math.max(1, Math.min(730, Number(days || 30)));
+  button.disabled = true;
+  try {
+    const { error } = await client.rpc("review_approve_membership", {
+      learner_id: profile.user_id,
+      duration_days: duration,
+      membership_scope: scope,
+    });
+    if (error) throw error;
+    showToast(`${profileName(profile.user_id)} now has ${duration} days of ${scope} access.`, "success");
+    await refreshDashboard();
+  } catch (error) {
+    showToast(readableError(error, "Membership could not be activated."), "error");
+    button.disabled = false;
+  }
+}
+
+async function pauseMembership(profile, button) {
+  if (!window.confirm(`Pause access for ${profileName(profile.user_id)}?`)) return;
+  button.disabled = true;
+  const { error } = await client.from("review_memberships")
+    .update({ status: "suspended" })
+    .eq("user_id", profile.user_id);
+  if (error) {
+    showToast(readableError(error, "Membership could not be paused."), "error");
+    button.disabled = false;
+    return;
+  }
+  showToast("Membership paused.", "success");
+  await refreshDashboard();
+}
+
+function renderAccessCodeManager() {
+  const section = make("section", { className: "membership-admin" });
+  const heading = make("div", { className: "teacher-panel-heading" });
+  heading.append(
+    make("div", { text: "Access codes / アクセスコード" }),
+    make("p", { text: "Generate a code after bank-transfer confirmation, or use manual approval below. Set any period from 1 to 730 days (30 = 1 month, 180 = 6 months)." }),
+  );
+  const form = make("form", { className: "code-create-form" });
+  const label = make("input");
+  label.required = true;
+  label.placeholder = "Plan label (e.g. July 6-month plan)";
+  const days = make("input");
+  days.type = "number";
+  days.min = "1";
+  days.max = "730";
+  days.value = "30";
+  days.placeholder = "Days";
+  days.title = "Access period in days (1–730). Examples: 30 = one month, 180 = six months.";
+  days.setAttribute("aria-label", "Access duration in days");
+  const scope = make("select");
+  [["general", "General"], ["takiwaki", "Takiwaki"], ["both", "Both"]].forEach(([value, textValue]) => {
+    const option = make("option", { text: textValue });
+    option.value = value;
+    scope.append(option);
+  });
+  const uses = make("input");
+  uses.type = "number";
+  uses.min = "1";
+  uses.max = "1000";
+  uses.value = "1";
+  uses.setAttribute("aria-label", "Maximum uses");
+  const create = makeAction("Generate secure code", async () => {
+    if (!label.value.trim()) return;
+    const durationDays = Math.max(1, Math.min(730, Number(days.value || 30)));
+    days.value = String(durationDays);
+    create.disabled = true;
+    try {
+      const { data, error } = await client.rpc("review_create_access_code", {
+        code_label: label.value.trim(),
+        code_duration_days: durationDays,
+        code_scope: scope.value,
+        code_max_uses: Number(uses.value),
+        code_valid_until: null,
+      });
+      if (error) throw error;
+      const rawCode = Array.isArray(data) ? data[0]?.access_code : data?.access_code;
+      const output = make("div", { className: "generated-code" });
+      output.append(
+        make("strong", { text: rawCode || "Code generated" }),
+        make("p", { text: "Copy this now. Only the last four characters remain visible after refreshing." }),
+      );
+      if (rawCode) {
+        output.append(makeAction("Copy", () => navigator.clipboard?.writeText(rawCode)));
+      }
+      form.after(output);
+      showToast("Access code generated.", "success");
+      await refreshDashboard();
+    } catch (error) {
+      showToast(readableError(error, "The access code could not be generated."), "error");
+      create.disabled = false;
+    }
+  });
+  form.addEventListener("submit", (event) => event.preventDefault());
+  form.append(label, days, scope, uses, create);
+  section.append(heading, form);
+  if (state.accessCodes.length) {
+    const codeList = make("div", { className: "code-list" });
+    state.accessCodes.slice(0, 8).forEach((code) => {
+      codeList.append(make("span", {
+        text: `${code.label} · ••••${code.code_last4} · ${code.duration_days} days · ${code.use_count}/${code.max_uses} used${code.enabled ? "" : " · disabled"}`,
+      }));
+    });
+    section.append(codeList);
+  }
+  return section;
+}
+
 function renderStudents() {
   const published = state.lessons.filter((lesson) => lesson.status === "published");
   const { table, tbody } = makeTable([
-    "Student",
-    "Access",
+    "Learner",
+    "Profile",
+    "Membership",
+    "Expires",
     "Sessions",
-    "Latest practice",
-    "Assigned",
-    "New assignment",
+    "Manage access",
+    "Assign lesson",
   ]);
 
   for (const profile of state.profiles) {
@@ -576,6 +721,7 @@ function renderStudents() {
     const assignments = state.assignments.filter(
       (assignment) => assignment.student_id === profile.user_id,
     );
+    const membership = membershipFor(profile.user_id);
     const assignCell = make("td");
     if (published.length) {
       const select = make("select");
@@ -595,19 +741,36 @@ function renderStudents() {
       assignCell.textContent = "Publish a lesson first";
     }
 
+    const manageCell = make("td");
+    const duration = make("input");
+    duration.type = "number";
+    duration.min = "1";
+    duration.max = "730";
+    duration.value = "30";
+    duration.placeholder = "Days";
+    duration.title = "Access period in days (1–730). Examples: 30 = one month, 180 = six months.";
+    duration.setAttribute("aria-label", `Access duration in days for ${profileName(profile.user_id)}`);
+    const scope = make("select");
+    [["general", "General"], ["takiwaki", "Takiwaki"], ["both", "Both"]].forEach(([value, textValue]) => {
+      const option = make("option", { text: textValue });
+      option.value = value;
+      if (membership?.access_scope === value) option.selected = true;
+      scope.append(option);
+    });
+    const activate = makeAction("Approve", () => activateMembership(profile, duration.value, scope.value, activate));
+    const pause = makeAction("Pause", () => pauseMembership(profile, pause));
+    const manage = make("div", { className: "table-actions membership-actions" });
+    manage.append(duration, scope, activate, pause);
+    manageCell.append(manage);
+
     const row = make("tr");
     row.append(
-      make("td", { text: profileName(profile.user_id) }),
-      make("td", { text: profile.access_scope === "takiwaki" ? "Takiwaki" : "General" }),
+      make("td", { text: `${profileName(profile.user_id)}\n${profile.contact_email || "No email recorded"}` }),
+      make("td", { text: [profile.english_level || "Level not set", profile.age_group || "Age not shared", profile.native_language || "Language not set"].join(" · ") }),
+      make("td", { text: `${activeMembershipStatus(membership)} · ${membership?.access_scope || "general"}` }),
+      make("td", { text: membership?.expires_at ? formatDate(membership.expires_at, true) : "—" }),
       make("td", { text: attempts.length }),
-      make("td", {
-        text: attempts[0]?.completed_at ? formatDate(attempts[0].completed_at, true) : "—",
-      }),
-      make("td", {
-        text: assignments.length
-          ? `${assignments.filter((item) => item.status === "assigned").length} active`
-          : "None",
-      }),
+      manageCell,
       assignCell,
     );
     tbody.append(row);
@@ -618,7 +781,9 @@ function renderStudents() {
       make("p", { text: "No student profiles have been created yet." }),
     );
   } else {
-    elements.panel.replaceChildren(table);
+    const tableWrap = make("div", { className: "table-scroll" });
+    tableWrap.append(table);
+    elements.panel.replaceChildren(renderAccessCodeManager(), tableWrap);
   }
 }
 

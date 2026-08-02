@@ -158,3 +158,24 @@ removed after the hosted preview smoke test. A scoped SQL verification returned
 zero remaining `codex.reviewhub.*` users, zero test profiles, and zero orphaned
 attempts. The existing `tahmidhc245@gmail.com` teacher identity remains present
 and authorised.
+
+## August 2 v10 membership addendum
+
+- All 17 lesson titles remain visible before sign-in.
+- Two preview lessons expose 62 activities; the other 423 activity payloads are
+  no longer returned through the anonymous question view or static fallback.
+- Anonymous REST verification returned 17 catalogue rows, exactly two
+  `is_preview` lessons, and 62 public question rows.
+- Sign-in and create-account panels switch correctly and expose eight
+  privacy-conscious profile fields/controls.
+- The complete source still passes all 1,322 content/security assertions and
+  all 485-activity validation.
+- The Lesson Guide shows non-empty, bilingual key points and playable phrases.
+- Natural voice playback completed without browser console errors; requests now
+  retry once and reject invalid/empty audio without falling back to a computer
+  voice.
+- The full-image layout uses `object-fit: contain` and responsive height limits,
+  preventing the late-July illustrations from being cropped.
+- Supabase migration 005 completed successfully. Production, preview, and local
+  authentication return URLs are approved. Email signup remains confirmed-email
+  only; Google OAuth is intentionally pending its Google Client ID and Secret.

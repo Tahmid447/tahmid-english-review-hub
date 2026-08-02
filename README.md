@@ -10,7 +10,7 @@ lives in this repository and on dedicated branches. The unrelated legacy
 
 - `/` — general learner Review Hub
 - `/lesson/june-28` — shared lesson player
-- `/phrases` — public Phrase Library
+- `/phrases` — Phrase & Vocabulary Library (previews before membership)
 - `/takiwaki` — authenticated personal hub
 - `/teacher` — authenticated Teacher Studio
 
@@ -35,9 +35,11 @@ Supabase Auth and Row Level Security.
 - 485 activities in the reviewed source bundle
 - 14 implemented activity formats
 
-All 17 reviewed lessons are now published to both the general catalogue and
-the authenticated Takiwaki hub. Teacher Studio can change the audience or
-archive a lesson without a code deployment.
+All 17 reviewed lessons are listed in the general catalogue. Two lessons are
+free previews; complete questions and the full phrase/vocabulary catalogue are
+served only to an active membership. Teacher Studio can approve 30-, 180-, or
+365-day access, pause access, generate limited-use codes, change the lesson
+audience, or archive a lesson without a code deployment.
 
 ## Local commands
 
@@ -60,10 +62,12 @@ Apply the migrations in filename order:
 2. `202607300002_review_hub_catalog.sql`
 3. `202607300003_review_hub_questions.sql`
 4. `202607300004_v9_publish_and_preview.sql`
+5. `202608020005_memberships_and_signup.sql`
 
 All new objects use the `review_` prefix. The migrations do not alter or drop
-the existing Do/Does tables. The browser receives only the public anon key;
-no service-role key or password is stored in this repository.
+the existing Do/Does tables. The browser receives only the public anon key; no
+service-role key or password is stored in this repository. Learner passwords
+remain inside Supabase Auth and are never readable in Teacher Studio.
 
 ## Safety
 

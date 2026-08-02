@@ -639,12 +639,108 @@ const renderTextAudioButton = (text, label = "Listen", language = "en") => {
   `;
 };
 
+const LESSON_KEY_POINTS = Object.freeze({
+  "june-28": [
+    ["Polite orders with I’d like and Could I have", "I’d like / Could I have を使った丁寧な注文"],
+    ["Past questions: did + base verb", "過去の質問は did ＋ 動詞の原形"],
+    ["Natural follow-up questions and reactions", "会話を続ける質問と自然なリアクション"],
+  ],
+  "june-29": [
+    ["hear, hear about and hear of", "hear / hear about / hear of の違い"],
+    ["Natural reactions such as Exactly and For real?", "Exactly / For real? などの自然な反応"],
+    ["Clear position words: top-right and bottom-left", "右上・左下などの位置表現"],
+  ],
+  "june-30": [
+    ["annoyed describes a feeling; annoying describes the cause", "annoyed は気持ち、annoying は原因"],
+    ["Comparisons with easier than", "easier than を使った比較"],
+    ["Preferences with prefer + reason", "prefer と理由を組み合わせる"],
+  ],
+  "july-04": [
+    ["Actually adds the real or corrected information", "Actually で本当の情報を付け加える"],
+    ["avoid + verb-ing", "avoid の後は動詞-ing"],
+    ["Useful phrases for unexpected situations and gratitude", "急な事情・感謝に使える表現"],
+  ],
+  "july-05": [
+    ["though as a natural sentence-ending contrast", "文末の though で自然な対比"],
+    ["to go for takeaway orders", "持ち帰り注文の to go"],
+    ["go-to for a favourite regular choice", "いつものお気に入りを表す go-to"],
+  ],
+  "july-06": [
+    ["Choose tense and modal forms from context", "文脈から時制・助動詞を選ぶ"],
+    ["Separate grammatical correctness from natural nuance", "文法的な正しさと自然なニュアンスを分ける"],
+    ["Build longer answers in two clear steps", "長い答えを2段階で組み立てる"],
+  ],
+  "july-07": [
+    ["bring vs buy", "bring（持ってくる）と buy（買う）の違い"],
+    ["tell someone to + verb", "tell 人 to ＋ 動詞"],
+    ["on my behalf for acting for another person", "代理を表す on my behalf"],
+  ],
+  "july-11": [
+    ["be connected and live broadcast", "be connected と live broadcast"],
+    ["notice vs realize", "notice（気づく）と realize（理解して気づく）"],
+    ["Talk naturally about hometowns and live events", "出身地・生放送について自然に話す"],
+  ],
+  "july-12": [
+    ["have–had–had and the past participle", "have–had–had と過去分詞"],
+    ["any in questions and negative sentences", "疑問文・否定文の any"],
+    ["yet for things not completed up to now", "今の時点で未完了を表す yet"],
+  ],
+  "july-13": [
+    ["might vs will for different levels of certainty", "可能性の強さで might / will を選ぶ"],
+    ["around this time for approximate timing", "おおよその時間を表す around this time"],
+    ["go by and signal in everyday city talk", "街の会話で使う go by / signal"],
+  ],
+  "july-18": [
+    ["be supposed to for rules and expectations", "ルール・期待を表す be supposed to"],
+    ["Choose do/does and have/has by the subject", "主語に合わせて do/does・have/has を選ぶ"],
+    ["on fire vs start a fire", "on fire と start a fire の違い"],
+  ],
+  "july-19": [
+    ["both, either and neither for two choices", "2つの選択を表す both / either / neither"],
+    ["would rather + base verb", "would rather ＋ 動詞の原形"],
+    ["Natural reactions with hilarious and run into", "hilarious / run into の自然な使い方"],
+  ],
+  "july-22": [
+    ["would be: a modal followed by the base form be", "would の後は原形 be"],
+    ["both, either and neither", "both / either / neither の使い分け"],
+    ["Yes and No answer the fact, even after a negative question", "否定疑問でも事実が肯定なら Yes、否定なら No"],
+    ["Use That’s right or Actually to avoid ambiguity after right?", "right? には That’s right / Actually で明確に答える"],
+  ],
+  "july-23": [
+    ["Present perfect: have + past participle", "現在完了は have ＋ 過去分詞"],
+    ["under the weather means feeling unwell", "under the weather は体調が悪い"],
+    ["too + adjective + to for something difficult or impossible", "too ＋ 形容詞 ＋ to の形"],
+    ["Natural food, movement and Doraemon vocabulary", "食べ物・動き・ドラえもんの自然な英語"],
+  ],
+  "july-25": [
+    ["get + adjective shows a change", "get ＋ 形容詞は状態の変化"],
+    ["annoyed, frustrated and angry have different strengths", "annoyed / frustrated / angry の強さと原因"],
+    ["nerves is a noun; nervous is an adjective", "nerves は名詞、nervous は形容詞"],
+    ["gut feeling is a natural everyday word for intuition", "gut feeling は日常的な「直感」"],
+  ],
+  "july-26": [
+    ["hope is for a possible future; wish contrasts with reality", "hope は可能な未来、wish は現実と違う願い"],
+    ["wish + past for the present; wish + past perfect for past regret", "現在の願いは wish＋過去形、過去の後悔は wish＋過去完了"],
+    ["Present perfect looks back from now", "現在完了は「今」から過去を見る"],
+    ["Past perfect looks back from a past point", "過去完了は「過去の時点」からさらに前を見る"],
+  ],
+  "july-27": [
+    ["spill is accidental; pour is intentional; splash has force", "spill はうっかり、pour は意図的、splash は勢いよく"],
+    ["an acquired taste is something you learn to enjoy", "an acquired taste は慣れると好きになる味"],
+    ["Past, present perfect and past perfect use different time viewpoints", "過去形・現在完了・過去完了は基準時点が違う"],
+    ["haven’t … yet, didn’t and have never are not interchangeable", "haven’t … yet / didn’t / have never の違い"],
+  ],
+});
+
 const renderLessonGuide = async () => {
   if (!state.lesson || !elements.lessonGuideContent) return;
   const language = languageModeFromSettings(state.settings);
   const themes = [...new Set((state.lesson.themes || [])
     .map((theme) => typeof theme === "string" ? theme : theme?.en)
     .filter(Boolean))];
+  const keyPoints = LESSON_KEY_POINTS[state.lesson.id]
+    || themes.map((theme) => [theme, ""])
+    || [];
   let phrases = Array.isArray(state.lesson.phrases) ? state.lesson.phrases : [];
   if (!phrases.length) {
     try {
@@ -678,7 +774,7 @@ const renderLessonGuide = async () => {
     <div class="guide-grid">
       <section class="guide-card guide-card-themes">
         <h3>${escapeHTML(uiText("Key points", "重要ポイント", language))}</h3>
-        <ul>${themes.slice(0, 8).map((theme) => `<li>${escapeHTML(theme)}</li>`).join("") || `<li>${escapeHTML(uiText("Useful conversation English", "会話で使える英語", language))}</li>`}</ul>
+        <ul>${keyPoints.slice(0, 8).map(([en, jp]) => `<li>${bilingual(en, jp)}</li>`).join("") || `<li>${escapeHTML(uiText("Useful conversation English", "会話で使える英語", language))}</li>`}</ul>
       </section>
       <section class="guide-card guide-card-phrases">
         <h3>${escapeHTML(uiText("English you can use", "すぐ使える英語", language))}</h3>
@@ -940,7 +1036,9 @@ const attachAudioHandlers = (root = elements.questionCard) => {
         },
       });
       if (result?.reason === "sound-off") showToast(t("Sound is off. Turn it on to listen.", "音声がオフです。ヘッダーでオンにしてください。"));
-      if (result?.reason === "unavailable") showToast(t("Audio is unavailable in this browser.", "このブラウザでは音声を利用できません。"));
+      if (["unavailable", "natural-voice-unavailable"].includes(result?.reason)) {
+        showToast(t("Natural audio is temporarily unavailable. Please tap once more.", "自然な音声を一時的に利用できません。もう一度押してください。"));
+      }
       button.disabled = false;
       button.classList.remove("loading");
       button.removeAttribute("aria-busy");
@@ -1278,6 +1376,31 @@ const initialiseLesson = async () => {
     state.lesson = lesson;
     state.masterQuestions = lesson.questions;
     await renderLessonGuide();
+    elements.lessonDate.textContent = formatDate(lesson.lessonDate);
+    elements.lessonTitle.textContent = lesson.title;
+    elements.lessonSummary.textContent = lesson.summary;
+    elements.lessonSummaryJa.textContent = lesson.summaryJa;
+    elements.lessonSummaryJa.hidden = !state.settings.showJapanese;
+    if (lesson.locked) {
+      elements.questionCard.innerHTML = `
+        <div class="membership-lock-card">
+          <span aria-hidden="true">🔒</span>
+          <h2>Unlock this complete lesson</h2>
+          <p>Sign in and use an access code, or wait for the teacher to approve your membership period.</p>
+          <p class="jp" lang="ja">ログイン後、アクセスコードを入力するか、先生による利用期間の承認をお待ちください。</p>
+          <a class="primary-btn" href="/#account">Open account / アカウントを開く</a>
+        </div>
+      `;
+      elements.questionNav.innerHTML = "";
+      elements.checkQuestion.disabled = true;
+      elements.checkAnswered.disabled = true;
+      elements.previousQuestion.disabled = true;
+      elements.nextQuestion.disabled = true;
+      elements.practiceMode.disabled = true;
+      elements.shuffleQuestions.disabled = true;
+      return;
+    }
+    if (!state.masterQuestions.length) throw new Error("This lesson does not have readable practice questions yet.");
     restoreProgress();
     const allIds = state.masterQuestions.map((question) => question.id);
     const allIdSet = new Set(allIds);
@@ -1295,11 +1418,6 @@ const initialiseLesson = async () => {
       ...state.questionOrder.filter((id) => allIds.includes(id)),
       ...allIds.filter((id) => !state.questionOrder.includes(id)),
     ];
-    elements.lessonDate.textContent = formatDate(lesson.lessonDate);
-    elements.lessonTitle.textContent = lesson.title;
-    elements.lessonSummary.textContent = lesson.summary;
-    elements.lessonSummaryJa.textContent = lesson.summaryJa;
-    elements.lessonSummaryJa.hidden = !state.settings.showJapanese;
     elements.practiceMode.value = state.practiceMode;
     const selected = selectQuestionSet(state.practiceMode);
     if (!selected.length) state.practiceMode = "all";

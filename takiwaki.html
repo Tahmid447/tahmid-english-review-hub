@@ -12,8 +12,8 @@
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header">
     <a class="brand" href="/takiwaki">
-      <span class="brand-mark">TE</span>
-      <span><strong>Your Review Hub</strong><small>Tahmid English Club</small></span>
+      <span class="brand-mark" aria-hidden="true"><b>T</b><i>✦</i><b>E</b></span>
+      <span><strong>Your Review Hub</strong><small>Tahmid English Club · 専用学習ページ</small></span>
     </a>
     <nav class="header-actions">
       <label class="voice-select"><span data-ui-en="Language" data-ui-ja="表示">Language / 表示</span>
@@ -112,12 +112,26 @@
       <p class="eyebrow" data-ui-en="Private account" data-ui-ja="専用アカウント">Private account</p>
       <h2 data-ui-en="Sign in to see personal records" data-ui-ja="ログインして個人記録を表示">Sign in to see personal records</h2>
       <p class="jp" lang="ja">個人の履歴はログイン後だけ表示されます。</p>
-      <form id="studentLoginForm" class="stack-form">
+      <div class="auth-tabs" role="tablist"><button class="active" data-auth-view="signin" type="button" data-ui-en="Sign in" data-ui-ja="ログイン">Sign in</button><button data-auth-view="signup" type="button" data-ui-en="Create account" data-ui-ja="新規登録">Create account</button></div>
+      <button class="google-btn" id="googleSignIn" type="button"><span aria-hidden="true">G</span><span data-ui-en="Continue with Google" data-ui-ja="Googleで続ける">Continue with Google</span></button>
+      <div class="auth-divider"><span data-ui-en="or use email" data-ui-ja="またはメールアドレス">or use email</span></div>
+      <form id="studentLoginForm" class="stack-form" data-auth-panel="signin">
         <label><span data-ui-en="Email" data-ui-ja="メールアドレス">Email</span><input id="studentLogin" type="email" autocomplete="username" placeholder="you@example.com" required></label>
         <label><span data-ui-en="Password" data-ui-ja="パスワード">Password</span><input id="studentPassword" type="password" autocomplete="current-password" required></label>
         <button class="primary-btn" type="submit" data-ui-en="Sign in" data-ui-ja="ログイン">Sign in</button>
-        <p class="form-status" id="studentLoginStatus" role="status"></p>
       </form>
+      <form id="studentSignupForm" class="stack-form signup-form" data-auth-panel="signup" hidden>
+        <div class="form-two"><label><span data-ui-en="First name" data-ui-ja="名前">First name</span><input id="signupFirstName" autocomplete="given-name" required></label><label><span data-ui-en="Last name" data-ui-ja="苗字">Last name</span><input id="signupLastName" autocomplete="family-name" required></label></div>
+        <label><span data-ui-en="Email" data-ui-ja="メールアドレス">Email</span><input id="signupEmail" type="email" autocomplete="email" required></label>
+        <label><span data-ui-en="Password (8+ characters)" data-ui-ja="パスワード（8文字以上）">Password (8+ characters)</span><input id="signupPassword" type="password" minlength="8" autocomplete="new-password" required></label>
+        <div class="form-two"><label><span data-ui-en="Age group (optional)" data-ui-ja="年齢層（任意）">Age group</span><select id="signupAgeGroup"><option value="">Prefer not to say / 回答しない</option><option>Under 18</option><option>18–24</option><option>25–34</option><option>35–49</option><option>50–64</option><option>65+</option></select></label><label><span data-ui-en="English level" data-ui-ja="英語レベル">English level</span><select id="signupEnglishLevel"><option value="beginner">Beginner / 初級</option><option value="elementary">Elementary / 初中級</option><option value="intermediate">Intermediate / 中級</option><option value="advanced">Advanced / 上級</option></select></label></div>
+        <label><span data-ui-en="Native language" data-ui-ja="母語">Native language</span><input id="signupNativeLanguage" value="Japanese"></label>
+        <label><span data-ui-en="Learning goal (optional)" data-ui-ja="学習目標（任意）">Learning goal</span><textarea id="signupLearningGoal" rows="2" maxlength="300"></textarea></label>
+        <p class="privacy-note" data-ui-en="Passwords are never visible to the teacher." data-ui-ja="パスワードが先生に表示されることはありません。">Passwords are never visible to the teacher.</p>
+        <button class="primary-btn" type="submit" data-ui-en="Create account" data-ui-ja="アカウントを作成">Create account</button>
+      </form>
+      <section class="membership-box" id="membershipPanel" hidden><strong id="membershipHeading">Membership</strong><p id="membershipStatus"></p><form id="accessCodeForm"><label><span data-ui-en="Access code" data-ui-ja="アクセスコード">Access code</span><input id="accessCodeInput" placeholder="TEC-XXXXXXXXXXXX"></label><button class="secondary-btn" type="submit" data-ui-en="Unlock" data-ui-ja="コードを使う">Unlock</button></form></section>
+      <p class="form-status" id="studentLoginStatus" role="status"></p>
       <button class="secondary-btn full-width" id="logoutButton" type="button" hidden data-ui-en="Sign out" data-ui-ja="ログアウト">Sign out</button>
     </dialog>
   </main>

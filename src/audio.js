@@ -54,6 +54,7 @@ const playBlobSource = (source, onStatus, token, rate = 1) => new Promise((resol
   }
   cancelPlayingAudio();
   const audio = new Audio(source);
+  audio.preload = "auto";
   audio.playbackRate = [0.5, 1, 1.5].includes(Number(rate)) ? Number(rate) : 1;
   audio.preservesPitch = true;
   activeAudio = audio;
@@ -64,16 +65,36 @@ const playBlobSource = (source, onStatus, token, rate = 1) => new Promise((resol
     `自然な音声を${audio.playbackRate}倍速で再生中です。`,
     { source: "edge", rate: audio.playbackRate },
   );
+  let settled = false;
+  const fail = (error) => {
+    if (settled) return;
+    settled = true;
+    if (activeAudio === audio) activeAudio = null;
+    reject(error instanceof Error ? error : new Error("The natural audio could not be played."));
+  };
+  audio.onerror = () => fail(new Error("The natural audio could not be decoded."));
   audio.onended = () => {
+    if (settled) return;
+    settled = true;
     if (activeAudio === audio) activeAudio = null;
     report(onStatus, "ready", "Ready to play again.", "もう一度再生できます。", { source: "edge" });
     resolve({ played: true, source: "edge" });
   };
-  audio.onerror = () => {
-    if (activeAudio === audio) activeAudio = null;
-    reject(new Error("The natural audio could not be played."));
+  const readyTimeout = setTimeout(() => {
+    if (audio.readyState < 2) fail(new Error("The natural audio took too long to load."));
+  }, 8000);
+  const begin = () => {
+    clearTimeout(readyTimeout);
+    if (token !== requestGeneration) {
+      settled = true;
+      resolve({ played: false, cancelled: true });
+      return;
+    }
+    audio.play().catch(fail);
   };
-  audio.play().catch(reject);
+  if (audio.readyState >= 2) begin();
+  else audio.addEventListener("canplay", begin, { once: true });
+  audio.load();
 });
 
 const looksJapanese = (text) => /[\u3040-\u30ff\u3400-\u9fff]/u.test(text);
@@ -107,29 +128,42 @@ export async function speakText(text, { voice, language, onStatus } = {}) {
         `${voiceName}の自然な音声を準備中です。`,
         { source: "edge", voice: voiceCode },
       );
-      const controller = new AbortController();
-      activeRequest = controller;
-      const timeout = setTimeout(() => controller.abort(), 12000);
-      try {
-        const response = await fetch(NATURAL_SPEECH_URL, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            apikey: SUPABASE_ANON_KEY,
-            Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-          },
-          body: JSON.stringify({ text: cleanText, accent: voiceCode }),
-          signal: controller.signal,
-        });
-        if (!response.ok) throw new Error(`Natural speech request failed (${response.status}).`);
-        const blob = await response.blob();
-        if (!blob.type.startsWith("audio/")) throw new Error("Natural speech returned an invalid audio file.");
-        source = URL.createObjectURL(blob);
-        cacheAudio(cacheKey, source);
-      } finally {
-        clearTimeout(timeout);
-        if (activeRequest === controller) activeRequest = null;
+      let lastError;
+      for (let attempt = 0; attempt < 2 && !source; attempt += 1) {
+        const controller = new AbortController();
+        activeRequest = controller;
+        const timeout = setTimeout(() => controller.abort(), attempt === 0 ? 12000 : 16000);
+        try {
+          const response = await fetch(NATURAL_SPEECH_URL, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              apikey: SUPABASE_ANON_KEY,
+              Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+            },
+            body: JSON.stringify({ text: cleanText, accent: voiceCode }),
+            signal: controller.signal,
+            cache: "no-store",
+          });
+          if (!response.ok) throw new Error(`Natural speech request failed (${response.status}).`);
+          const blob = await response.blob();
+          if (!blob.type.startsWith("audio/") || blob.size < 128) {
+            throw new Error("Natural speech returned an invalid audio file.");
+          }
+          source = URL.createObjectURL(blob);
+          cacheAudio(cacheKey, source);
+        } catch (error) {
+          lastError = error;
+          if (error?.name === "AbortError" && token !== requestGeneration) throw error;
+          if (attempt === 0) {
+            report(onStatus, "loading", "Trying the natural voice again…", "自然な音声をもう一度準備しています。", { source: "edge" });
+          }
+        } finally {
+          clearTimeout(timeout);
+          if (activeRequest === controller) activeRequest = null;
+        }
       }
+      if (!source && lastError) throw lastError;
     }
     if (source && token === requestGeneration) {
       return await playBlobSource(source, onStatus, token, settings.playbackRate);

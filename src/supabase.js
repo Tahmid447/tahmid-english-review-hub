@@ -69,6 +69,103 @@ export async function signInStudent(email, password) {
   return client.auth.signInWithPassword({ email: String(email || "").trim(), password: String(password || "") });
 }
 
+export async function signUpStudent(profile = {}) {
+  const client = getStudentClient();
+  if (!client) return { data: null, error: new Error("Account creation is not available right now.") };
+  const firstName = String(profile.firstName || "").trim();
+  const lastName = String(profile.lastName || "").trim();
+  return client.auth.signUp({
+    email: String(profile.email || "").trim(),
+    password: String(profile.password || ""),
+    options: {
+      emailRedirectTo: `${window.location.origin}${window.location.pathname}?account=confirmed`,
+      data: {
+        app: "review_hub",
+        display_name: [firstName, lastName].filter(Boolean).join(" "),
+        first_name: firstName,
+        last_name: lastName,
+        age_group: String(profile.ageGroup || "").trim(),
+        native_language: String(profile.nativeLanguage || "").trim(),
+        english_level: String(profile.englishLevel || "").trim(),
+        learning_goal: String(profile.learningGoal || "").trim(),
+      },
+    },
+  });
+}
+
+export async function signInStudentWithGoogle() {
+  const client = getStudentClient();
+  if (!client) return { data: null, error: new Error("Google sign-in is not available right now.") };
+  return client.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      redirectTo: `${window.location.origin}${window.location.pathname}?account=google`,
+      queryParams: { access_type: "offline", prompt: "select_account" },
+    },
+  });
+}
+
+export async function ensureStudentProfile(session, values = {}) {
+  const client = getStudentClient();
+  const user = session?.user;
+  if (!client || !user) return { profile: null, error: null };
+  const metadata = user.user_metadata || {};
+  const fullName = String(metadata.full_name || metadata.name || "").trim();
+  const nameParts = fullName.split(/\s+/).filter(Boolean);
+  const firstName = String(values.firstName || metadata.first_name || nameParts[0] || "").trim();
+  const lastName = String(values.lastName || metadata.last_name || nameParts.slice(1).join(" ") || "").trim();
+  const payload = {
+    user_id: user.id,
+    display_name: [firstName, lastName].filter(Boolean).join(" ") || fullName || null,
+    avatar_url: metadata.avatar_url || metadata.picture || null,
+    contact_email: user.email || null,
+    first_name: firstName || null,
+    last_name: lastName || null,
+    age_group: values.ageGroup || metadata.age_group || null,
+    native_language: values.nativeLanguage || metadata.native_language || null,
+    english_level: values.englishLevel || metadata.english_level || null,
+    learning_goal: values.learningGoal || metadata.learning_goal || null,
+    locale: "ja",
+  };
+  const { data, error } = await client
+    .from("review_profiles")
+    .upsert(payload, { onConflict: "user_id" })
+    .select("*")
+    .maybeSingle();
+  return { profile: data || null, error };
+}
+
+export async function getStudentMembership() {
+  const client = getStudentClient();
+  const session = await getStudentSession();
+  if (!client || !session?.user) return { membership: null, active: false, signedIn: false };
+  const { data, error } = await client
+    .from("review_memberships")
+    .select("user_id,status,access_scope,plan_label,starts_at,expires_at,approval_source")
+    .eq("user_id", session.user.id)
+    .maybeSingle();
+  if (error) return { membership: null, active: false, signedIn: true, error };
+  const active = data?.status === "active"
+    && new Date(data?.starts_at || 0).getTime() <= Date.now()
+    && new Date(data?.expires_at || 0).getTime() > Date.now();
+  return { membership: data || null, active, signedIn: true, error: null };
+}
+
+export async function hasStudentAccess(scope = "general") {
+  const client = getStudentClient();
+  if (!client) return false;
+  const { data, error } = await client.rpc("review_has_active_membership", {
+    requested_scope: scope,
+  });
+  return !error && data === true;
+}
+
+export async function redeemStudentAccessCode(code) {
+  const client = getStudentClient();
+  if (!client) return { data: null, error: new Error("Code redemption is not available right now.") };
+  return client.rpc("review_redeem_access_code", { raw_code: String(code || "").trim() });
+}
+
 export async function signInTeacher(email, password) {
   const client = getTeacherClient();
   if (!client) return { data: null, error: new Error("Teacher sign-in is not available right now.") };
@@ -115,15 +212,15 @@ export async function fetchDatabaseLessons({ audience = "general" } = {}) {
   const client = getStudentClient();
   if (!client) return { lessons: null, reason: "client-unavailable" };
   const authenticated = Boolean((await getStudentSession())?.user);
-  const lessonTable = audience === "general" || !authenticated
-    ? "review_public_lessons"
-    : "review_lessons";
-  const questionTable = audience === "general" || !authenticated
-    ? "review_public_questions"
-    : "review_questions";
+  const hasAccess = authenticated && await hasStudentAccess(audience === "takiwaki" ? "takiwaki" : "general");
+  const usePrivateCatalog = authenticated && hasAccess;
+  const lessonTable = usePrivateCatalog ? "review_lessons" : "review_public_lessons";
+  const questionTable = usePrivateCatalog ? "review_questions" : "review_public_questions";
   let lessonQuery = client
     .from(lessonTable)
-    .select("id,slug,lesson_date,title_en,title_ja,summary_en,summary_ja,status,audience,content_version,content")
+    .select(lessonTable === "review_lessons"
+      ? "id,slug,lesson_date,title_en,title_ja,summary_en,summary_ja,status,audience,content_version,content,is_preview"
+      : "id,slug,lesson_date,title_en,title_ja,summary_en,summary_ja,status,audience,content_version,content,is_preview,question_count")
     .eq("status", "published")
     .order("lesson_date", { ascending: true });
   if (lessonTable === "review_lessons") {
@@ -169,6 +266,9 @@ export async function fetchDatabaseLessons({ audience = "general" } = {}) {
         phrases: Array.isArray(content.phrases) ? content.phrases : [],
         notes: content.notes && typeof content.notes === "object" ? content.notes : {},
         questions: questionsByLesson.get(lesson.id) || [],
+        isPreview: lesson.is_preview === true,
+        locked: !usePrivateCatalog && lesson.is_preview !== true,
+        questionCount: Number(lesson.question_count || questionsByLesson.get(lesson.id)?.length || 0),
       };
     }),
     reason: null,
@@ -190,11 +290,12 @@ export async function fetchDatabaseLesson(lessonSlug, { preview = false } = {}) 
     authenticated = Boolean((await getStudentSession())?.user);
   }
 
-  const lessonTable = authenticated ? "review_lessons" : "review_public_lessons";
-  const questionTable = authenticated ? "review_questions" : "review_public_questions";
-  const lessonColumns = authenticated
-    ? "id,slug,lesson_date,title_en,title_ja,summary_en,summary_ja,status,audience,source_type,content_version,content"
-    : "id,slug,lesson_date,title_en,title_ja,summary_en,summary_ja,status,audience,content_version,content";
+  const hasAccess = preview || (authenticated && await hasStudentAccess("general"));
+  const lessonTable = hasAccess ? "review_lessons" : "review_public_lessons";
+  const questionTable = hasAccess ? "review_questions" : "review_public_questions";
+  const lessonColumns = hasAccess
+    ? "id,slug,lesson_date,title_en,title_ja,summary_en,summary_ja,status,audience,source_type,content_version,content,is_preview"
+    : "id,slug,lesson_date,title_en,title_ja,summary_en,summary_ja,status,audience,content_version,content,is_preview";
   const { data: lesson, error: lessonError } = await client
     .from(lessonTable)
     .select(lessonColumns)
@@ -238,6 +339,8 @@ export async function fetchDatabaseLesson(lessonSlug, { preview = false } = {}) 
         ? content.categoryLabels
         : {},
       questions: Array.isArray(questions) ? questions.map(databaseQuestion) : [],
+      isPreview: lesson.is_preview === true,
+      locked: !hasAccess && lesson.is_preview !== true,
     },
     reason: null,
   };

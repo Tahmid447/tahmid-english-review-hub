@@ -19,8 +19,8 @@
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header">
     <a class="brand" href="/" aria-label="Tahmid English Club home">
-      <span class="brand-mark">TE</span>
-      <span><strong>Tahmid English Club</strong><small>English Review Hub</small></span>
+      <span class="brand-mark" aria-hidden="true"><b>T</b><i>✦</i><b>E</b></span>
+      <span><strong>Tahmid English Club</strong><small>English Review Hub · 英語復習ハブ</small></span>
     </a>
     <nav class="header-actions" aria-label="Site settings">
       <label class="voice-select"><span data-ui-en="Language" data-ui-ja="表示">Language / 表示</span>
@@ -54,8 +54,8 @@
         <p class="hero-lead en">A growing practice library for useful English you can use in real conversations.</p>
         <p class="hero-lead jp" lang="ja">実際の会話で使える英語を、理解・リスニング・スピーキングまで一つの流れで練習できます。</p>
         <div class="hero-actions">
-          <a class="primary-btn" href="#library" data-ui-en="Browse lessons" data-ui-ja="レッスンを選ぶ">Browse lessons</a>
-          <a class="secondary-btn" href="/phrases" data-ui-en="Phrase & Vocabulary Library" data-ui-ja="フレーズ・単語ライブラリ">Phrase & Vocabulary Library</a>
+          <a class="primary-btn feature-link" href="#library"><span class="feature-icon" aria-hidden="true">▶</span><span><b data-ui-en="Browse lessons" data-ui-ja="レッスンを選ぶ">Browse lessons</b><small data-ui-en="Choose today’s practice" data-ui-ja="今日の練習を選ぶ">Choose today’s practice</small></span></a>
+          <a class="secondary-btn feature-link" href="/phrases"><span class="feature-icon" aria-hidden="true">Aa</span><span><b data-ui-en="Phrases & Vocabulary" data-ui-ja="フレーズ・単語">Phrases & Vocabulary</b><small data-ui-en="Listen, save and review" data-ui-ja="聞いて、覚えて、復習">Listen, save and review</small></span></a>
         </div>
       </div>
       <div class="hero-panel" aria-label="Practice flow">
@@ -93,19 +93,36 @@
       <div class="lesson-grid" id="lessonGrid" aria-live="polite"></div>
     </section>
 
-    <section class="section shell split-promo">
+    <section class="section shell split-promo" id="account">
       <div>
-        <p class="eyebrow" data-ui-en="Keep your progress" data-ui-ja="学習履歴を保存">Keep your progress</p>
-        <h2 data-ui-en="Sign in only when you want your learning history on every device." data-ui-ja="どの端末でも学習履歴を残したいときだけ、ログインしてください。">Sign in only when you want your learning history on every device.</h2>
-        <p class="en">You can practise without an account. Signing in adds saved history, assignments and personalised recommendations.</p>
-        <p class="jp" lang="ja">ログインなしでも練習できます。ログインすると履歴・割り当て・おすすめ復習が端末を越えて保存されます。</p>
+        <p class="eyebrow" data-ui-en="Your learning account" data-ui-ja="学習アカウント">Your learning account</p>
+        <h2 data-ui-en="Try the previews, then unlock the complete library." data-ui-ja="無料サンプルを試して、全レッスンを開放。">Try the previews, then unlock the complete library.</h2>
+        <p class="en">Create an account, complete your bank transfer, and the teacher will activate your chosen period. An access code can also unlock membership instantly.</p>
+        <p class="jp" lang="ja">アカウント作成後、銀行振込を確認して先生が利用期間を有効化します。アクセスコードがある場合は、すぐに開放できます。</p>
+        <ul class="membership-benefits"><li>2 free preview lessons / 無料サンプル2回分</li><li>Saved learning history / 学習履歴を保存</li><li>Teacher-approved 1・6か月・任意期間 / 期間を先生が設定</li></ul>
       </div>
-      <form class="auth-card" id="studentLoginForm">
-        <label><span data-ui-en="Email" data-ui-ja="メールアドレス">Email</span><input id="studentLogin" type="email" autocomplete="username" placeholder="you@example.com" required></label>
-        <label><span data-ui-en="Password" data-ui-ja="パスワード">Password</span><input id="studentPassword" type="password" autocomplete="current-password" required></label>
-        <button class="primary-btn" type="submit" data-ui-en="Sign in" data-ui-ja="ログイン">Sign in</button>
-        <p class="form-status" id="studentLoginStatus" role="status"></p>
-      </form>
+      <div class="auth-card account-card">
+        <div class="auth-tabs" role="tablist"><button class="active" data-auth-view="signin" type="button" data-ui-en="Sign in" data-ui-ja="ログイン">Sign in</button><button data-auth-view="signup" type="button" data-ui-en="Create account" data-ui-ja="新規登録">Create account</button></div>
+        <button class="google-btn" id="googleSignIn" type="button"><span aria-hidden="true">G</span><span data-ui-en="Continue with Google" data-ui-ja="Googleで続ける">Continue with Google</span></button>
+        <div class="auth-divider"><span data-ui-en="or use email" data-ui-ja="またはメールアドレス">or use email</span></div>
+        <form id="studentLoginForm" class="stack-form" data-auth-panel="signin">
+          <label><span data-ui-en="Email" data-ui-ja="メールアドレス">Email</span><input id="studentLogin" type="email" autocomplete="username" placeholder="you@example.com" required></label>
+          <label><span data-ui-en="Password" data-ui-ja="パスワード">Password</span><input id="studentPassword" type="password" autocomplete="current-password" required></label>
+          <button class="primary-btn" type="submit" data-ui-en="Sign in" data-ui-ja="ログイン">Sign in</button>
+        </form>
+        <form id="studentSignupForm" class="stack-form signup-form" data-auth-panel="signup" hidden>
+          <div class="form-two"><label><span data-ui-en="First name" data-ui-ja="名前">First name</span><input id="signupFirstName" autocomplete="given-name" required></label><label><span data-ui-en="Last name" data-ui-ja="苗字">Last name</span><input id="signupLastName" autocomplete="family-name" required></label></div>
+          <label><span data-ui-en="Email" data-ui-ja="メールアドレス">Email</span><input id="signupEmail" type="email" autocomplete="email" required></label>
+          <label><span data-ui-en="Password (8+ characters)" data-ui-ja="パスワード（8文字以上）">Password (8+ characters)</span><input id="signupPassword" type="password" minlength="8" autocomplete="new-password" required></label>
+          <div class="form-two"><label><span data-ui-en="Age group (optional)" data-ui-ja="年齢層（任意）">Age group</span><select id="signupAgeGroup"><option value="">Prefer not to say / 回答しない</option><option>Under 18</option><option>18–24</option><option>25–34</option><option>35–49</option><option>50–64</option><option>65+</option></select></label><label><span data-ui-en="English level" data-ui-ja="英語レベル">English level</span><select id="signupEnglishLevel"><option value="beginner">Beginner / 初級</option><option value="elementary">Elementary / 初中級</option><option value="intermediate">Intermediate / 中級</option><option value="advanced">Advanced / 上級</option></select></label></div>
+          <label><span data-ui-en="Native language" data-ui-ja="母語">Native language</span><input id="signupNativeLanguage" value="Japanese" autocomplete="language"></label>
+          <label><span data-ui-en="Learning goal (optional)" data-ui-ja="学習目標（任意）">Learning goal</span><textarea id="signupLearningGoal" rows="2" maxlength="300" placeholder="I want to speak confidently at work."></textarea></label>
+          <p class="privacy-note" data-ui-en="Your profile is visible only to you and the authorised teacher. Passwords are never visible to the teacher." data-ui-ja="プロフィールは本人と担当講師だけが確認できます。パスワードが先生に表示されることはありません。">Your profile is visible only to you and the authorised teacher. Passwords are never visible to the teacher.</p>
+          <button class="primary-btn" type="submit" data-ui-en="Create account" data-ui-ja="アカウントを作成">Create account</button>
+        </form>
+        <section class="membership-box" id="membershipPanel" hidden><strong id="membershipHeading">Membership</strong><p id="membershipStatus"></p><form id="accessCodeForm"><label><span data-ui-en="Access code" data-ui-ja="アクセスコード">Access code</span><input id="accessCodeInput" autocomplete="one-time-code" placeholder="TEC-XXXXXXXXXXXX"></label><button class="secondary-btn" type="submit" data-ui-en="Unlock" data-ui-ja="コードを使う">Unlock</button></form><button class="quiet-btn" id="studentLogout" type="button" data-ui-en="Sign out" data-ui-ja="ログアウト">Sign out</button></section>
+        <p class="form-status" id="studentLoginStatus" role="status" aria-live="polite"></p>
+      </div>
     </section>
   </main>
 

@@ -6,6 +6,7 @@ const DATA_PATHS = Object.freeze({
   additions: "/src/data/legacy-additions.json",
   drafts: "/src/data/notion-drafts.json",
 });
+const OFFLINE_PREVIEW_LESSONS = new Set(["june-28", "june-29"]);
 
 let publishedPromise;
 let draftPromise;
@@ -124,7 +125,7 @@ const normalizeLesson = (lesson, additions = []) => {
     audience: String(lesson.audience || "both"),
     originalQuestionCount,
     extraQuestionCount: Math.max(0, questions.length - originalQuestionCount),
-    questionCount: questions.length,
+    questionCount: Math.max(questions.length, Number(lesson.questionCount || 0)),
     maxPoints: questions.reduce((sum, question) => sum + question.maxPoints, 0),
     questions,
   };
@@ -175,7 +176,14 @@ export async function loadPublishedLessons({ audience = "general" } = {}) {
     // The bundled library is the offline-safe fallback.
   }
   const lessons = await loadPublishedSource();
-  return lessons.filter((lesson) => audienceAllows(lesson.audience, audience));
+  return lessons
+    .filter((lesson) => audienceAllows(lesson.audience, audience))
+    .map((lesson) => ({
+      ...lesson,
+      isPreview: OFFLINE_PREVIEW_LESSONS.has(lesson.id),
+      locked: !OFFLINE_PREVIEW_LESSONS.has(lesson.id),
+      questions: OFFLINE_PREVIEW_LESSONS.has(lesson.id) ? lesson.questions : [],
+    }));
 }
 
 export async function loadAllPublishedLessons() {
@@ -185,11 +193,11 @@ export async function loadAllPublishedLessons() {
 export async function getLessonById(id, { preview = false } = {}) {
   const lessons = await loadPublishedSource();
   const localLesson = lessons.find((lesson) => lesson.id === id) || null;
-  if (!preview && localLesson) return localLesson;
-
   const remote = await fetchDatabaseLesson(id, { preview });
   if (remote.lesson) return normalizeLesson(remote.lesson, []);
-  if (localLesson) return localLesson;
+  if (!preview && localLesson && OFFLINE_PREVIEW_LESSONS.has(localLesson.id)) {
+    return { ...localLesson, isPreview: true, locked: false };
+  }
   if (preview && remote.reason === "teacher-sign-in-required") {
     throw new Error("Sign in to Teacher Studio before opening a private preview.");
   }

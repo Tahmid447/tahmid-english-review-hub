@@ -26,10 +26,8 @@ const publicSourceFiles = [
   "supabase.js",
   "teacher.js",
 ];
-const publicDataFiles = [
-  "legacy-lessons.json",
-  "legacy-additions.json",
-];
+const publicDataFiles = [];
+const offlinePreviewIds = new Set(["june-28", "june-29"]);
 
 fs.rmSync(dist, { recursive: true, force: true });
 fs.mkdirSync(dist, { recursive: true });
@@ -52,6 +50,18 @@ for (const file of publicDataFiles) {
     path.join(dist, "src", "data", file),
   );
 }
+
+// The source repository keeps the complete offline migration catalogue, but a
+// production browser should never receive subscriber-only question payloads.
+// Only the two advertised preview lessons are bundled as an outage fallback.
+const sourceLessons = JSON.parse(fs.readFileSync(path.join(root, "src", "data", "legacy-lessons.json"), "utf8"));
+const sourceAdditions = JSON.parse(fs.readFileSync(path.join(root, "src", "data", "legacy-additions.json"), "utf8"));
+const previewLessons = sourceLessons.filter((lesson) => offlinePreviewIds.has(lesson.id));
+const previewAdditions = Object.fromEntries(
+  Object.entries(sourceAdditions).filter(([lessonId]) => offlinePreviewIds.has(lessonId)),
+);
+fs.writeFileSync(path.join(dist, "src", "data", "legacy-lessons.json"), `${JSON.stringify(previewLessons, null, 2)}\n`);
+fs.writeFileSync(path.join(dist, "src", "data", "legacy-additions.json"), `${JSON.stringify(previewAdditions, null, 2)}\n`);
 
 const assets = path.join(root, "assets");
 if (fs.existsSync(assets)) {
