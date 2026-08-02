@@ -10,12 +10,12 @@ the password to the teacher.
 The new learner appears under **Learners & memberships** in Teacher Studio.
 After bank-transfer confirmation:
 
-1. Choose 30, 180, or 365 days.
+1. Enter any access period from 1 to 730 days (for example, 30 days for one month or 180 days for six months).
 2. Choose General, Takiwaki, or Both.
 3. Press **Approve**.
 
-For another duration, generate an access code with the desired number of days,
-scope, and maximum uses. The complete code is shown only once; later the
+Access codes use the same 1-to-730-day range and also let you choose the scope
+and maximum number of uses. The complete code is shown only once; later the
 dashboard shows only its final four characters.
 
 Manual Supabase creation remains available for an administrator:
