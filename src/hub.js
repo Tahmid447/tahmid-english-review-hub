@@ -1191,13 +1191,16 @@ async function reloadLessons() {
 }
 
 async function initialise() {
-  authSession = normaliseSession(await getStudentSession());
-  if (authSession) await ensureStudentProfile(authSession);
-  await activateStorageScope(authSession);
+  // Bind visible controls before any session or network lookup so an expired
+  // browser session can never leave the page looking ready but unresponsive.
   populateNativeLanguages();
   bindSettings();
   bindFilters();
   bindAuth();
+
+  authSession = normaliseSession(await getStudentSession());
+  if (authSession) await ensureStudentProfile(authSession);
+  await activateStorageScope(authSession);
   // Authentication and lesson controls should never wait on the provider
   // settings endpoint. The availability check updates the button separately.
   void configureGoogleButton();

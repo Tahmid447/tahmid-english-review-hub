@@ -33,10 +33,27 @@ export function getTeacherClient() {
   return teacherClient;
 }
 
+const getBoundedSession = async (client) => {
+  let timeout;
+  try {
+    return await Promise.race([
+      client.auth.getSession(),
+      new Promise((resolve) => {
+        timeout = globalThis.setTimeout(
+          () => resolve({ data: { session: null }, error: null, timedOut: true }),
+          5000,
+        );
+      }),
+    ]);
+  } finally {
+    globalThis.clearTimeout(timeout);
+  }
+};
+
 export async function getStudentSession() {
   const client = getStudentClient();
   if (!client) return null;
-  const { data, error } = await client.auth.getSession();
+  const { data, error } = await getBoundedSession(client);
   if (error) return null;
   return data.session || null;
 }
@@ -44,7 +61,7 @@ export async function getStudentSession() {
 export async function getTeacherSession() {
   const client = getTeacherClient();
   if (!client) return null;
-  const { data, error } = await client.auth.getSession();
+  const { data, error } = await getBoundedSession(client);
   if (error) return null;
   return data.session || null;
 }
