@@ -20,6 +20,7 @@ const publicSourceFiles = [
   "hub.js",
   "i18n.js",
   "lesson.js",
+  "lesson-guides.js",
   "phrases.js",
   "store.js",
   "styles.css",

@@ -23,8 +23,11 @@ Deno.serve(async (request) => {
     const body = await request.json();
     const text = String(body?.text || "").trim();
     const accent = body?.accent === "ja" ? "ja" : body?.accent === "gb" ? "gb" : "us";
-    const safeCharacters = /^[\p{L}\p{N}\p{M}\p{Zs}.,?!'’"“”()、。！？・：；ー〜～…%-]+$/u;
-    if (!text || text.length > 220 || !safeCharacters.test(text)) {
+    // Natural lesson copy legitimately contains punctuation such as colons,
+    // slashes and dashes. Reject control/surrogate characters instead of
+    // maintaining a brittle punctuation allow-list.
+    const safeCharacters = /^[^\p{Cc}\p{Cs}]+$/u;
+    if (!text || text.length > 500 || !safeCharacters.test(text)) {
       return new Response("Invalid speech text", { status: 400, headers: corsHeaders });
     }
 

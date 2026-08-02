@@ -26,6 +26,7 @@ import {
   saveUserSettings,
 } from "./supabase.js";
 import { applyLanguageMode, languageModeFromSettings, learningText, uiText } from "./i18n.js";
+import { DEEP_LESSON_GUIDES } from "./lesson-guides.js";
 import { celebrate, installPlayfulInteractions } from "./effects.js";
 
 const $ = (selector) => document.querySelector(selector);
@@ -47,6 +48,7 @@ const elements = {
   checkModeButtons: [...document.querySelectorAll("[data-check]")],
   hintModeButtons: [...document.querySelectorAll("[data-hint-mode]")],
   shuffleChoices: $("#shuffleChoices"),
+  showChoiceTranslations: $("#showChoiceTranslations"),
   checkAnswered: $("#checkAnswered"),
   scorePill: $("#scorePill"),
   questionNav: $("#questionNav"),
@@ -371,6 +373,9 @@ const renderSettings = () => {
   elements.voiceSelect.value = state.settings.voice;
   elements.playbackRate.value = String(state.settings.playbackRate || 1);
   elements.shuffleChoices.checked = state.settings.shuffleChoices;
+  if (elements.showChoiceTranslations) {
+    elements.showChoiceTranslations.checked = state.settings.showChoiceTranslations;
+  }
   elements.checkModeButtons.forEach((button) => {
     button.classList.toggle("active", button.dataset.check === state.settings.checkMode);
   });
@@ -627,6 +632,9 @@ const feedbackMessage = (question, result) => {
 const renderTextAudioButton = (text, label = "Listen", language = "en") => {
   const cleanText = String(text ?? "").trim();
   if (!cleanText) return "";
+  const labelParts = String(label).split(" / ");
+  const mainLabel = labelParts.shift() || "Listen";
+  const subLabel = labelParts.join(" / ");
   return `
     <button
       class="text-audio-btn"
@@ -635,7 +643,7 @@ const renderTextAudioButton = (text, label = "Listen", language = "en") => {
       type="button"
       aria-label="${escapeHTML(`${label}: ${cleanText}`)}"
       title="${escapeHTML(label)}"
-    ><span aria-hidden="true">▶</span> ${escapeHTML(label)}</button>
+    ><span class="audio-play-icon" aria-hidden="true">▶</span><span class="audio-button-copy"><b>${escapeHTML(mainLabel)}</b>${subLabel ? `<small lang="ja">${escapeHTML(subLabel)}</small>` : ""}</span></button>
   `;
 };
 
@@ -735,6 +743,7 @@ const LESSON_KEY_POINTS = Object.freeze({
 const renderLessonGuide = async () => {
   if (!state.lesson || !elements.lessonGuideContent) return;
   const language = languageModeFromSettings(state.settings);
+  const deepGuide = DEEP_LESSON_GUIDES[state.lesson.id] || null;
   const themes = [...new Set((state.lesson.themes || [])
     .map((theme) => typeof theme === "string" ? theme : theme?.en)
     .filter(Boolean))];
@@ -754,9 +763,13 @@ const renderLessonGuide = async () => {
     jp: String(phrase.jp || phrase.ja || phrase.japanese || ""),
     note: String(phrase.note || ""),
   })).filter((phrase) => phrase.en);
-  const corrections = state.masterQuestions
+  const questionCorrections = state.masterQuestions
     .filter((question) => question.format === "mistake" && question.wrongSentence && question.accepted?.[0])
     .slice(0, 6);
+  const corrections = [
+    ...(deepGuide?.corrections || []).map(([wrongSentence, naturalSentence]) => ({ wrongSentence, accepted: [naturalSentence] })),
+    ...questionCorrections,
+  ].filter((item, index, all) => all.findIndex((candidate) => candidate.wrongSentence === item.wrongSentence) === index).slice(0, 8);
   const examples = [...new Set(state.masterQuestions
     .flatMap((question) => [question.speakText, question.audioText])
     .filter(Boolean))].slice(0, 6);
@@ -774,7 +787,15 @@ const renderLessonGuide = async () => {
     <div class="guide-grid">
       <section class="guide-card guide-card-themes">
         <h3>${escapeHTML(uiText("Key points", "重要ポイント", language))}</h3>
-        <ul>${keyPoints.slice(0, 8).map(([en, jp]) => `<li>${bilingual(en, jp)}</li>`).join("") || `<li>${escapeHTML(uiText("Useful conversation English", "会話で使える英語", language))}</li>`}</ul>
+        ${deepGuide?.points?.length ? `<div class="guide-concepts">${deepGuide.points.map(([titleEn, titleJa, detailEn, detailJa, exampleEn, exampleJa], index) => `
+          <article class="guide-concept guide-tone-${(index % 4) + 1}">
+            <p class="guide-concept-number">${String(index + 1).padStart(2, "0")}</p>
+            <h4>${escapeHTML(titleEn)}${state.settings.showJapanese ? `<small lang="ja">${escapeHTML(titleJa)}</small>` : ""}</h4>
+            <p>${escapeHTML(detailEn)}</p>
+            ${state.settings.showJapanese ? `<p class="jp" lang="ja">${escapeHTML(detailJa)}</p>` : ""}
+            <div class="guide-example"><strong>${escapeHTML(exampleEn)}</strong>${state.settings.showJapanese ? `<small lang="ja">${escapeHTML(exampleJa)}</small>` : ""}${renderTextAudioButton(exampleEn, uiText("Hear the example", "例文を聞く", language))}</div>
+          </article>
+        `).join("")}</div>` : `<ul>${keyPoints.slice(0, 8).map(([en, jp]) => `<li>${bilingual(en, jp)}</li>`).join("") || `<li>${escapeHTML(uiText("Useful conversation English", "会話で使える英語", language))}</li>`}</ul>`}
       </section>
       <section class="guide-card guide-card-phrases">
         <h3>${escapeHTML(uiText("English you can use", "すぐ使える英語", language))}</h3>
@@ -793,8 +814,8 @@ const renderLessonGuide = async () => {
       <section class="guide-card guide-card-takeaway">
         <h3>${escapeHTML(uiText("Final takeaway", "最後に覚えること", language))}</h3>
         <p>${escapeHTML(uiText(
-          "Read one phrase aloud, listen once, then use it in your own sentence.",
-          "フレーズを声に出し、一度聞いてから、自分の文で使ってみましょう。",
+          deepGuide?.takeaway?.[0] || "Read one phrase aloud, listen once, then use it in your own sentence.",
+          deepGuide?.takeaway?.[1] || "フレーズを声に出し、一度聞いてから、自分の文で使ってみましょう。",
           language,
         ))}</p>
       </section>
@@ -859,7 +880,7 @@ const renderChoiceQuestion = (question, selectedAnswer = state.answers[question.
         <div class="choice-audio-row">
           <button class="choice-option ${String(selectedAnswer) === String(choice.id) ? "selected" : ""}" data-choice="${escapeHTML(choice.id)}" type="button">
             <span class="letter">${String.fromCharCode(65 + index)}</span>
-            <span>${escapeHTML(choice.en)}${state.settings.showJapanese && choice.jp ? `<small>${escapeHTML(choice.jp)}</small>` : ""}</span>
+            <span>${escapeHTML(choice.en)}${state.settings.showJapanese && state.settings.showChoiceTranslations && choice.jp ? `<small>${escapeHTML(choice.jp)}</small>` : ""}</span>
           </button>
           ${renderTextAudioButton(choice.en, t(`Listen to choice ${String.fromCharCode(65 + index)}`, `選択肢${String.fromCharCode(65 + index)}を聞く`))}
         </div>
@@ -1131,7 +1152,12 @@ const attachQuestionHandlers = (question) => {
       const result = await startSpeechPractice(question.speakText, {
         voice: state.settings.voice,
         onStatus: ({ phase, messageEn, messageJa }) => {
-          if (status) status.textContent = state.settings.showJapanese && messageJa ? messageJa : messageEn;
+          if (status) {
+            const language = languageModeFromSettings(state.settings);
+            status.textContent = language === "bilingual" && messageEn && messageJa
+              ? `${messageEn}\n${messageJa}`
+              : language === "ja" && messageJa ? messageJa : messageEn;
+          }
           speakingButton.classList.toggle("listening", phase === "listening");
         },
       });
@@ -1501,6 +1527,10 @@ elements.hintBox.addEventListener("toggle", () => {
 });
 elements.shuffleChoices.addEventListener("change", () => {
   persistSettings({ shuffleChoices: elements.shuffleChoices.checked });
+  renderQuestion();
+});
+elements.showChoiceTranslations?.addEventListener("change", () => {
+  persistSettings({ showChoiceTranslations: elements.showChoiceTranslations.checked });
   renderQuestion();
 });
 elements.practiceMode.addEventListener("change", () => setPracticeMode(elements.practiceMode.value));

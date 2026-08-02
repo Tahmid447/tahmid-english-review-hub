@@ -7,12 +7,13 @@
   <meta name="description" content="A private English review space with assigned lessons and saved progress.">
   <title>Your English Review Hub</title>
   <link rel="stylesheet" href="/src/styles.css">
+  <link rel="icon" href="/assets/tahmid-english-club-logo.png">
 </head>
 <body data-page="takiwaki">
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header">
     <a class="brand" href="/takiwaki">
-      <span class="brand-mark" aria-hidden="true"><b>T</b><i>✦</i><b>E</b></span>
+      <img class="brand-logo" src="/assets/tahmid-english-club-logo.png" alt="Tahmid English Club logo">
       <span><strong>Your Review Hub</strong><small>Tahmid English Club · 専用学習ページ</small></span>
     </a>
     <nav class="header-actions">
@@ -121,11 +122,12 @@
         <button class="primary-btn" type="submit" data-ui-en="Sign in" data-ui-ja="ログイン">Sign in</button>
       </form>
       <form id="studentSignupForm" class="stack-form signup-form" data-auth-panel="signup" hidden>
-        <div class="form-two"><label><span data-ui-en="First name" data-ui-ja="名前">First name</span><input id="signupFirstName" autocomplete="given-name" required></label><label><span data-ui-en="Last name" data-ui-ja="苗字">Last name</span><input id="signupLastName" autocomplete="family-name" required></label></div>
-        <label><span data-ui-en="Email" data-ui-ja="メールアドレス">Email</span><input id="signupEmail" type="email" autocomplete="email" required></label>
-        <label><span data-ui-en="Password (8+ characters)" data-ui-ja="パスワード（8文字以上）">Password (8+ characters)</span><input id="signupPassword" type="password" minlength="8" autocomplete="new-password" required></label>
-        <div class="form-two"><label><span data-ui-en="Age group (optional)" data-ui-ja="年齢層（任意）">Age group</span><select id="signupAgeGroup"><option value="">Prefer not to say / 回答しない</option><option>Under 18</option><option>18–24</option><option>25–34</option><option>35–49</option><option>50–64</option><option>65+</option></select></label><label><span data-ui-en="English level" data-ui-ja="英語レベル">English level</span><select id="signupEnglishLevel"><option value="beginner">Beginner / 初級</option><option value="elementary">Elementary / 初中級</option><option value="intermediate">Intermediate / 中級</option><option value="advanced">Advanced / 上級</option></select></label></div>
-        <label><span data-ui-en="Native language" data-ui-ja="母語">Native language</span><input id="signupNativeLanguage" value="Japanese"></label>
+        <p class="required-note"><b>*</b> Required / 必須</p>
+        <div class="form-two"><label><span data-ui-en="First name *" data-ui-ja="名前 *">First name *</span><input id="signupFirstName" autocomplete="given-name" required></label><label><span data-ui-en="Last name *" data-ui-ja="苗字 *">Last name *</span><input id="signupLastName" autocomplete="family-name" required></label></div>
+        <label><span data-ui-en="Email *" data-ui-ja="メールアドレス *">Email *</span><input id="signupEmail" type="email" autocomplete="email" required></label>
+        <label><span data-ui-en="Password *" data-ui-ja="パスワード *">Password *</span><small class="field-help" data-ui-en="8+ characters with at least one letter and one number" data-ui-ja="英字と数字を含む8文字以上">8+ characters with at least one letter and one number</small><input id="signupPassword" type="password" minlength="8" pattern="(?=.*[A-Za-z])(?=.*[0-9]).{8,}" autocomplete="new-password" required></label>
+        <div class="form-two"><label><span data-ui-en="Age group *" data-ui-ja="年齢層 *">Age group *</span><select id="signupAgeGroup" required><option value="" selected disabled>Select / 選択</option><option>Under 18</option><option>18–24</option><option>25–34</option><option>35–49</option><option>50–64</option><option>65+</option></select></label><label><span data-ui-en="English level *" data-ui-ja="英語レベル *">English level *</span><select id="signupEnglishLevel" required><option value="" selected disabled>Select / 選択</option><option value="beginner">Beginner / 初級</option><option value="elementary">Elementary / 初中級</option><option value="intermediate">Intermediate / 中級</option><option value="advanced">Advanced / 上級</option></select></label></div>
+        <label><span data-ui-en="Native language *" data-ui-ja="母語 *">Native language *</span><select id="signupNativeLanguage" required><option value="" selected disabled>Select a language / 言語を選択</option></select></label>
         <label><span data-ui-en="Learning goal (optional)" data-ui-ja="学習目標（任意）">Learning goal</span><textarea id="signupLearningGoal" rows="2" maxlength="300"></textarea></label>
         <p class="privacy-note" data-ui-en="Passwords are never visible to the teacher." data-ui-ja="パスワードが先生に表示されることはありません。">Passwords are never visible to the teacher.</p>
         <button class="primary-btn" type="submit" data-ui-en="Create account" data-ui-ja="アカウントを作成">Create account</button>

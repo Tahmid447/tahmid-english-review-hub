@@ -7,6 +7,7 @@ let activeStorageScope = "anonymous";
 export const DEFAULT_SETTINGS = Object.freeze({
   languageMode: "bilingual",
   showJapanese: true,
+  showChoiceTranslations: false,
   sound: true,
   vibration: true,
   voice: "us",
@@ -87,6 +88,7 @@ export function getSettings() {
     playbackRate,
     checkMode: saved?.checkMode === "instant" ? "instant" : "manual",
     showJapanese: languageMode !== "en",
+    showChoiceTranslations: saved?.showChoiceTranslations === true,
     sound: saved?.sound !== false,
     vibration: saved?.vibration !== false,
     shuffleChoices: Boolean(saved?.shuffleChoices),
@@ -108,6 +110,7 @@ export function updateSettings(patch = {}) {
   next.sound = next.sound !== false;
   next.vibration = next.vibration !== false;
   next.shuffleChoices = Boolean(next.shuffleChoices);
+  next.showChoiceTranslations = Boolean(next.showChoiceTranslations);
   next.hintMode = next.hintMode === "manual" ? "manual" : "auto";
   writeJSON(scopedKey(SETTINGS_KEY_PREFIX), next);
   notify("te-review:settings", next);

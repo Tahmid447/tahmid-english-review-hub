@@ -93,12 +93,28 @@ export async function signUpStudent(profile = {}) {
   });
 }
 
+export async function googleStudentAuthAvailable() {
+  try {
+    const response = await fetch(`${SUPABASE_URL}/auth/v1/settings`, {
+      headers: { apikey: SUPABASE_ANON_KEY },
+    });
+    const settings = response.ok ? await response.json() : null;
+    return settings?.external?.google === true;
+  } catch {
+    return false;
+  }
+}
+
 export async function signInStudentWithGoogle() {
   const client = getStudentClient();
   if (!client) return { data: null, error: new Error("Google sign-in is not available right now.") };
+  if (!await googleStudentAuthAvailable()) {
+    return { data: null, error: new Error("Google sign-in is not configured yet.") };
+  }
   return client.auth.signInWithOAuth({
     provider: "google",
     options: {
+      skipBrowserRedirect: true,
       redirectTo: `${window.location.origin}${window.location.pathname}?account=google`,
       queryParams: { access_type: "offline", prompt: "select_account" },
     },
@@ -174,7 +190,19 @@ export async function signInTeacher(email, password) {
 
 export async function signOutStudent() {
   const client = getStudentClient();
-  return client ? client.auth.signOut() : { error: null };
+  if (!client) return { error: null };
+  const result = await client.auth.signOut({ scope: "local" });
+  // A stale or expired server session must not leave the browser looking
+  // signed in. Supabase keeps this session in the named student storage key.
+  try {
+    window.localStorage.removeItem("te-review-hub-student-auth");
+  } catch {
+    // Storage can be unavailable in strict privacy mode.
+  }
+  if (result?.error && /session.*missing|auth session/i.test(String(result.error.message || ""))) {
+    return { error: null };
+  }
+  return result;
 }
 
 export async function signOutTeacher() {

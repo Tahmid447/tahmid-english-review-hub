@@ -246,10 +246,10 @@ const editDistance = (left, right) => {
   return row[right.length];
 };
 
-const speechSimilarity = (target, heard) => {
+const speechComparison = (target, heard) => {
   const expected = normalizeAnswerText(target);
   const actual = normalizeAnswerText(heard);
-  if (!expected || !actual) return 0;
+  if (!expected || !actual) return { similarity: 0, missing: [], unexpected: [], exactWords: false };
   const charMatch = 1 - (editDistance(expected, actual) / Math.max(expected.length, actual.length));
   const expectedWords = expected.split(" ");
   const remainingWords = actual.split(" ");
@@ -262,8 +262,22 @@ const speechSimilarity = (target, heard) => {
     }
   });
   const wordMatch = matchedWords / Math.max(expectedWords.length, actual.split(" ").length);
-  return Math.max(0, Math.min(1, charMatch * 0.68 + wordMatch * 0.32));
+  const actualWords = actual.split(" ");
+  const missing = expectedWords.filter((word) => !actualWords.includes(word));
+  const unexpected = actualWords.filter((word) => !expectedWords.includes(word));
+  const exactWords = missing.length === 0
+    && unexpected.length === 0
+    && expectedWords.length === actualWords.length;
+  const rawSimilarity = Math.max(0, Math.min(1, charMatch * 0.58 + wordMatch * 0.42));
+  return {
+    similarity: exactWords ? rawSimilarity : Math.min(rawSimilarity, 0.76),
+    missing,
+    unexpected,
+    exactWords,
+  };
 };
+
+const speechSimilarity = (target, heard) => speechComparison(target, heard).similarity;
 
 const SPEAKING_FEEDBACK = Object.freeze({
   excellent: Object.freeze([
@@ -310,11 +324,22 @@ const SPEAKING_FEEDBACK = Object.freeze({
   ]),
 });
 
-export function speakingFeedbackForSimilarity(similarity, random = Math.random) {
+export function speakingFeedbackForSimilarity(similarity, random = Math.random, comparison = null) {
   const score = Number.isFinite(Number(similarity))
     ? Math.max(0, Math.min(1, Number(similarity)))
     : 0;
-  const band = score >= 0.88 ? "excellent" : score >= 0.68 ? "good" : "keep-going";
+  if (comparison && !comparison.exactWords && (comparison.missing.length || comparison.unexpected.length)) {
+    const expectedWord = comparison.missing[0] || "the target word";
+    const heardWord = comparison.unexpected[0] || "a different word";
+    return {
+      band: "word-mismatch",
+      matched: false,
+      similarity: score,
+      messageEn: `Close, but one word changed. Say “${expectedWord}”, not “${heardWord}”.`,
+      messageJa: `惜しいです。ただし単語が違います。「${heardWord}」ではなく「${expectedWord}」と言いましょう。`,
+    };
+  }
+  const band = score >= 0.9 ? "excellent" : score >= 0.68 ? "good" : "keep-going";
   const choices = SPEAKING_FEEDBACK[band];
   const randomValue = Number(random?.());
   const safeRandom = Number.isFinite(randomValue)
@@ -326,6 +351,14 @@ export function speakingFeedbackForSimilarity(similarity, random = Math.random) 
     matched: band !== "keep-going",
     similarity: score,
     ...message,
+  };
+}
+
+export function speakingFeedbackForTranscript(target, heard, random = Math.random) {
+  const comparison = speechComparison(target, heard);
+  return {
+    transcript: String(heard || ""),
+    ...speakingFeedbackForSimilarity(comparison.similarity, random, comparison),
   };
 }
 
@@ -404,10 +437,10 @@ export function startSpeechPractice(target, { voice, onStatus } = {}) {
     recognition.onresult = (event) => {
       const alternatives = Array.from(event.results?.[0] || [], (item) => ({
         transcript: item.transcript,
-        similarity: speechSimilarity(expected, item.transcript),
+        ...speechComparison(expected, item.transcript),
       })).sort((left, right) => right.similarity - left.similarity);
-      const best = alternatives[0] || { transcript: "", similarity: 0 };
-      const feedback = speakingFeedbackForSimilarity(best.similarity);
+      const best = alternatives[0] || { transcript: "", similarity: 0, missing: [], unexpected: [], exactWords: false };
+      const feedback = speakingFeedbackForSimilarity(best.similarity, Math.random, best);
       const result = { transcript: best.transcript, ...feedback };
       report(onStatus, "result", result.messageEn, result.messageJa, result);
       finish(result);

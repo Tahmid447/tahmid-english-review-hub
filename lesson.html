@@ -6,12 +6,13 @@
   <meta name="description" content="Interactive English listening, speaking and review practice.">
   <title>English Lesson Practice</title>
   <link rel="stylesheet" href="/src/styles.css">
+  <link rel="icon" href="/assets/tahmid-english-club-logo.png">
 </head>
 <body data-page="lesson">
   <a class="skip-link" href="#quizMain">Skip to question</a>
   <header class="site-header quiz-header">
     <a class="brand" id="hubBackLink" href="/">
-      <span class="brand-mark" aria-hidden="true"><b>T</b><i>✦</i><b>E</b></span><span><strong>Review Hub</strong><small>Back to lessons · レッスン一覧へ</small></span>
+      <img class="brand-logo" src="/assets/tahmid-english-club-logo.png" alt="Tahmid English Club logo"><span><strong>Review Hub</strong><small>Back to lessons · レッスン一覧へ</small></span>
     </a>
     <nav class="header-actions">
       <label class="voice-select"><span data-ui-en="Language" data-ui-ja="表示">Language / 表示</span><select id="languageToggle"><option value="en">English</option><option value="bilingual">English + 日本語</option><option value="ja">日本語UI</option></select></label>
@@ -46,6 +47,7 @@
         <button data-check="instant" type="button" data-ui-en="Instant Check" data-ui-ja="すぐ採点">Instant Check / すぐ採点</button>
       </div>
       <label class="toggle-label"><input id="shuffleChoices" type="checkbox"> <span data-ui-en="Shuffle choices" data-ui-ja="選択肢をシャッフル">Shuffle choices / 選択肢をシャッフル</span></label>
+      <label class="toggle-label choice-help-toggle"><input id="showChoiceTranslations" type="checkbox"> <span data-ui-en="Choice translations" data-ui-ja="選択肢の日本語">Choice translations / 選択肢の日本語</span><small data-ui-en="Off during challenge" data-ui-ja="問題中は非表示">Off during challenge</small></label>
       <div class="segmented hint-mode-toggle" role="group" aria-label="Hint behaviour">
         <button class="active" data-hint-mode="auto" type="button" data-ui-en="Hint · Auto-close" data-ui-ja="ヒント・自動で閉じる">Hint · Auto-close / ヒント・自動で閉じる</button>
         <button data-hint-mode="manual" type="button" data-ui-en="Hint · Keep open" data-ui-ja="ヒント・開いたまま">Hint · Keep open / ヒント・開いたまま</button>

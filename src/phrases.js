@@ -592,11 +592,11 @@ function formatLastDate(value) {
 function feedbackText(status) {
   if (!status) return "";
   if (typeof status === "string") return status;
-  return uiText(
-    status.messageEn || status.message || status.state || "",
-    status.messageJa || "",
-    settingsLanguage(getSettings()),
-  );
+  const english = status.messageEn || status.message || status.state || "";
+  const japanese = status.messageJa || "";
+  const language = settingsLanguage(getSettings());
+  if (language === "bilingual" && english && japanese) return `${english}\n${japanese}`;
+  return uiText(english, japanese, language);
 }
 
 async function listenToPhrase(phrase, voiceCode, button, statusNode, language = "en") {
@@ -666,13 +666,21 @@ async function practiseSpeaking(phrase, button, statusNode) {
       },
     });
     if (result?.transcript) {
-      const message = result.messageEn
+      const messageEn = result.messageEn
         || (result.band === "natural"
           ? "Natural and clear."
           : result.band === "close"
             ? "Very close. Try it once more for a smoother rhythm."
             : "Good attempt. Listen again, then repeat the full sentence.");
-      statusNode.textContent = `${message} Heard: “${result.transcript}”`;
+      const messageJa = result.messageJa || "もう一度お手本を聞いて、英文全体を練習しましょう。";
+      const interfaceLanguage = settingsLanguage(getSettings());
+      statusNode.textContent = interfaceLanguage === "bilingual"
+        ? `${messageEn} Heard: “${result.transcript}”\n${messageJa} 認識した音声：「${result.transcript}」`
+        : uiText(
+          `${messageEn} Heard: “${result.transcript}”`,
+          `${messageJa} 認識した音声：「${result.transcript}」`,
+          interfaceLanguage,
+        );
       recordPractice(phrase.id);
       updateCardStats(phrase.id);
       if (["excellent", "good", "natural", "close"].includes(result.band)) {
@@ -736,7 +744,7 @@ function createPhraseCard(phrase) {
   favorite.addEventListener("click", () => toggleFavorite(id));
 
   const status = element("p", {
-    className: "phrase-note",
+    className: "phrase-note phrase-speaking-status",
     text: "",
     attrs: { role: "status", "aria-live": "polite" },
   });

@@ -11,6 +11,7 @@ import {
   getStudentClient,
   getStudentMembership,
   getStudentSession,
+  googleStudentAuthAvailable,
   ensureStudentProfile,
   loadUserSettings,
   onStudentAuthChange,
@@ -29,6 +30,41 @@ const page = document.body.dataset.page || "general";
 let publishedLessons = [];
 let visibleLessons = [];
 let activeFilter = "all";
+
+const LANGUAGE_CODES = Object.freeze([
+  "af","sq","am","ar","hy","as","ay","az","bm","eu","be","bn","bho","bs","bg","ca","ceb","zh","co","hr","cs","da","dv","doi","nl","en","eo","et","ee","fil","fi","fr","fy","gl","ka","de","el","gn","gu","ht","ha","haw","he","hi","hmn","hu","is","ig","ilo","id","ga","it","ja","jv","kn","kk","km","rw","gom","ko","kri","ku","ckb","ky","lo","la","lv","ln","lt","lg","lb","mk","mai","mg","ms","ml","mt","mi","mr","mni","lus","mn","my","ne","no","ny","or","om","ps","fa","pl","pt","pa","qu","ro","ru","sm","sa","gd","nso","sr","st","sn","sd","si","sk","sl","so","es","su","sw","sv","tg","ta","tt","te","th","ti","ts","tr","tk","ak","uk","ur","ug","uz","vi","cy","xh","yi","yo","zu"
+]);
+
+function populateNativeLanguages() {
+  const select = document.querySelector("#signupNativeLanguage");
+  if (!select || select.options.length > 1) return;
+  const names = typeof Intl.DisplayNames === "function"
+    ? new Intl.DisplayNames([document.documentElement.lang || "en", "en"], { type: "language" })
+    : null;
+  const choices = LANGUAGE_CODES.map((code) => ({
+    code,
+    name: names?.of(code) || code.toUpperCase(),
+  })).sort((left, right) => left.name.localeCompare(right.name));
+  choices.forEach(({ code, name }) => select.append(element("option", {
+    text: `${name} (${code})`,
+    attrs: { value: name },
+  })));
+}
+
+async function configureGoogleButton() {
+  const button = document.querySelector("#googleSignIn");
+  if (!button) return;
+  const available = await googleStudentAuthAvailable();
+  if (available) return;
+  button.disabled = true;
+  button.title = "Google signup requires the site owner’s Google OAuth credentials.";
+  const label = button.querySelector("span:last-child");
+  if (label) {
+    label.dataset.uiEn = "Google signup · setup pending";
+    label.dataset.uiJa = "Google登録・設定準備中";
+    label.textContent = uiText(label.dataset.uiEn, label.dataset.uiJa, languageModeFromSettings(getSettings()));
+  }
+}
 let authSession = null;
 let remoteAttempts = [];
 let remoteAssignments = [];
@@ -357,10 +393,33 @@ function createLessonCard(lesson, options = {}) {
     element("span", { text: "→", attrs: { "aria-hidden": "true" } }),
   ]);
 
-  return element("article", {
+  const card = element("article", {
     className: `lesson-card${locked ? " lesson-card-locked" : ""}`,
-    attrs: { "data-groups": groups.join(" "), "data-lesson-id": lesson.id },
+    attrs: {
+      "data-groups": groups.join(" "),
+      "data-lesson-id": lesson.id,
+      role: "link",
+      tabindex: "0",
+      "aria-label": locked
+        ? t(`${lesson.title}. Membership required.`, `${lesson.titleJa || lesson.title}。会員限定です。`)
+        : t(`Open ${lesson.title}`, `${lesson.titleJa || lesson.title}を開く`),
+    },
   }, [top, title, titleJa, summary, summaryJa, meta, progressBar, action]);
+  const destination = locked ? "#account" : lessonHref({ ...lesson, assigned: options.assigned });
+  const openCard = () => {
+    if (locked) document.querySelector("#account")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    else window.location.assign(destination);
+  };
+  card.addEventListener("click", (event) => {
+    if (event.target.closest("a,button,input,select,textarea")) return;
+    openCard();
+  });
+  card.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    openCard();
+  });
+  return card;
 }
 
 function renderLessonGrid() {
@@ -463,7 +522,17 @@ async function handleSignup(event) {
   const form = event.currentTarget;
   const submit = form.querySelector('button[type="submit"]');
   const values = signupValues(form);
-  if (!values.firstName || !values.lastName || !values.email || values.password.length < 8) return;
+  const passwordIsValid = values.password.length >= 8
+    && /[A-Za-z]/.test(values.password)
+    && /[0-9]/.test(values.password);
+  if (!form.reportValidity() || !values.firstName || !values.lastName || !values.email
+    || !values.ageGroup || !values.nativeLanguage || !values.englishLevel || !passwordIsValid) {
+    setLoginStatus(t(
+      "Please complete every required field. Use at least 8 password characters with a letter and a number.",
+      "必須項目をすべて入力してください。パスワードは英字と数字を含む8文字以上にしてください。",
+    ), true);
+    return;
+  }
   if (submit) submit.disabled = true;
   setLoginStatus(t("Creating your account…", "アカウントを作成中…"));
   try {
@@ -500,7 +569,14 @@ async function handleGoogleSignIn() {
       "Google sign-in is not configured yet. Please use email for now.",
       "Googleログインは現在設定中です。今はメールアドレスをご利用ください。",
     ), true);
+    return;
   }
+  const destination = result?.data?.url;
+  if (destination) window.location.assign(destination);
+  else setLoginStatus(t(
+    "Google sign-in is not available yet. Please use email for now.",
+    "Googleログインは現在準備中です。今はメールアドレスをご利用ください。",
+  ), true);
 }
 
 async function handleAccessCode(event) {
@@ -1017,6 +1093,8 @@ async function initialise() {
   authSession = normaliseSession(await getStudentSession());
   if (authSession) await ensureStudentProfile(authSession);
   await activateStorageScope(authSession);
+  populateNativeLanguages();
+  await configureGoogleButton();
   bindSettings();
   bindFilters();
   bindAuth();

@@ -168,7 +168,7 @@ else globalThis.window = originalWindow;
 if (originalCustomEvent === undefined) delete globalThis.CustomEvent;
 else globalThis.CustomEvent = originalCustomEvent;
 
-const { speakingFeedbackForSimilarity } = await import("../src/audio.js");
+const { speakingFeedbackForSimilarity, speakingFeedbackForTranscript } = await import("../src/audio.js");
 const bands = [
   [0.95, "excellent"],
   [0.75, "good"],
@@ -186,6 +186,19 @@ for (const [similarity, expectedBand] of bands) {
   );
   assert(messages.every(({ messageJa }) => Boolean(messageJa)));
 }
+const changedWordFeedback = speakingFeedbackForTranscript(
+  "reason with someone",
+  "reasonable with someone",
+  () => 0,
+);
+assert.equal(changedWordFeedback.band, "word-mismatch");
+assert.equal(changedWordFeedback.matched, false);
+assert.match(changedWordFeedback.messageEn, /reason.*reasonable/i);
+
+const { DEEP_LESSON_GUIDES } = await import("../src/lesson-guides.js");
+assert.equal(Object.keys(DEEP_LESSON_GUIDES).length, 17, "All 17 lessons have detailed lesson guides.");
+assert(Object.values(DEEP_LESSON_GUIDES).every((guide) => guide.points.length >= 3));
+assert(Object.values(DEEP_LESSON_GUIDES).every((guide) => guide.corrections.length >= 2));
 
 const lessonScript = fs.readFileSync(path.join(root, "src", "lesson.js"), "utf8");
 const lessonPage = fs.readFileSync(path.join(root, "lesson.html"), "utf8");
