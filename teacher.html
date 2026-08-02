@@ -16,6 +16,8 @@
     <section class="teacher-login" id="teacherLoginPanel">
       <div><p class="eyebrow">Protected access</p><h1>Teacher Studio</h1><p>Sign in with a teacher-authorised Supabase account. The page address alone does not grant access.</p></div>
       <form id="teacherLoginForm" class="auth-card">
+        <button class="google-btn" id="teacherGoogleSignIn" type="button"><span aria-hidden="true">G</span><span>Continue with Google / Googleで続ける</span></button>
+        <div class="auth-divider"><span>or use email / またはメールアドレス</span></div>
         <label>Email<input id="teacherEmail" type="email" autocomplete="username" required></label>
         <label>Password<input id="teacherPassword" type="password" autocomplete="current-password" required></label>
         <button class="primary-btn" type="submit">Sign in securely</button>

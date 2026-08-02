@@ -262,6 +262,22 @@ export async function signInTeacher(email, password) {
   return client.auth.signInWithPassword({ email: String(email || "").trim(), password: String(password || "") });
 }
 
+export async function signInTeacherWithGoogle() {
+  const client = getTeacherClient();
+  if (!client) return { data: null, error: new Error("Teacher Google sign-in is not available right now.") };
+  if (!await googleStudentAuthAvailable()) {
+    return { data: null, error: new Error("Google sign-in is not configured yet.") };
+  }
+  return client.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      skipBrowserRedirect: true,
+      redirectTo: `${window.location.origin}/teacher.html?account=google`,
+      queryParams: { access_type: "offline", prompt: "select_account" },
+    },
+  });
+}
+
 export async function signOutStudent() {
   const client = getStudentClient();
   if (!client) return { error: null };

@@ -2,8 +2,10 @@ import {
   createTeacherAccessCode,
   getTeacherClient,
   getTeacherSession,
+  googleStudentAuthAvailable,
   onTeacherAuthChange,
   signInTeacher,
+  signInTeacherWithGoogle,
   signOutTeacher,
 } from "./supabase.js";
 
@@ -14,6 +16,7 @@ const elements = {
   loginForm: document.querySelector("#teacherLoginForm"),
   email: document.querySelector("#teacherEmail"),
   password: document.querySelector("#teacherPassword"),
+  googleSignIn: document.querySelector("#teacherGoogleSignIn"),
   loginStatus: document.querySelector("#teacherLoginStatus"),
   app: document.querySelector("#teacherApp"),
   logout: document.querySelector("#teacherLogout"),
@@ -2808,6 +2811,19 @@ async function initialise() {
   }
 
   addSyncButton();
+  if (elements.googleSignIn) {
+    elements.googleSignIn.disabled = !await googleStudentAuthAvailable();
+    elements.googleSignIn.addEventListener("click", async () => {
+      elements.loginStatus.textContent = "Opening Google sign-in…";
+      const { data, error } = await signInTeacherWithGoogle();
+      if (error) {
+        elements.loginStatus.textContent = readableError(error, "Google sign-in is not available right now.");
+        return;
+      }
+      if (data?.url) window.location.assign(data.url);
+      else elements.loginStatus.textContent = "Google sign-in is not available right now.";
+    });
+  }
   elements.loginForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     elements.loginStatus.textContent = "Signing in…";

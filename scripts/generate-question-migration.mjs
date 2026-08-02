@@ -15,6 +15,12 @@ const output = path.join(
   "migrations",
   "202607300003_review_hub_questions.sql",
 );
+const expandedOutput = path.join(
+  root,
+  "supabase",
+  "migrations",
+  "202608020009_expanded_lesson_questions.sql",
+);
 
 const sqlString = (value) =>
   `'${String(value ?? "").replaceAll("'", "''")}'`;
@@ -31,6 +37,7 @@ const pointsFor = (question) => {
 const bundles = [
   ...legacyLessons.map((lesson) => ({
     slug: lesson.id,
+    sourceType: "legacy",
     questions: [
       ...lesson.questions,
       ...(legacyAdditions[lesson.id] || []),
@@ -38,30 +45,32 @@ const bundles = [
   })),
   ...notionDrafts.map((lesson) => ({
     slug: lesson.id,
+    sourceType: "notion",
     questions: lesson.questions,
   })),
 ];
 
 const rows = [];
+const expandedRows = [];
 for (const bundle of bundles) {
   bundle.questions.forEach((question, position) => {
     const format = question.format || question.type;
-    rows.push(
-      [
-        sqlString(bundle.slug),
-        sqlString(question.id),
-        String(position),
-        question.section ? sqlString(question.section) : "null",
-        sqlString(format),
-        jsonValue(question),
-        question.isOriginal === false ? "false" : "true",
-        String(pointsFor(question)),
-      ].join(", "),
-    );
+    const row = [
+      sqlString(bundle.slug),
+      sqlString(question.id),
+      String(position),
+      question.section ? sqlString(question.section) : "null",
+      sqlString(format),
+      jsonValue(question),
+      question.isOriginal === false ? "false" : "true",
+      String(pointsFor(question)),
+    ].join(", ");
+    rows.push(row);
+    if (bundle.sourceType === "notion") expandedRows.push(row);
   });
 }
 
-const sql = `-- Review Hub question catalogue
+const makeQuestionUpsert = (selectedRows, header) => `${header}
 --
 -- Generated from the private repository's reviewed source bundle.
 -- Draft payloads live behind Supabase RLS and are intentionally excluded from
@@ -83,7 +92,7 @@ select
   true
 from (
   values
-    ${rows.map((row) => `(${row})`).join(",\n    ")}
+    ${selectedRows.map((row) => `(${row})`).join(",\n    ")}
 ) as source (
   lesson_slug, stable_key, position, section, format, payload,
   is_original, points
@@ -99,5 +108,22 @@ on conflict (lesson_id, stable_key) do update set
   active = true;
 `;
 
+const sql = makeQuestionUpsert(rows, "-- Review Hub question catalogue");
+const expandedSql = `${makeQuestionUpsert(
+  expandedRows,
+  "-- Expanded 31-activity lesson payload, including five visual questions per lesson",
+)}
+update public.review_lessons
+set content_version = greatest(content_version, 2),
+    content = jsonb_set(content, '{draft_questions}', '31'::jsonb, true),
+    updated_at = now()
+where slug in (
+  'july-07', 'july-11', 'july-12', 'july-13', 'july-18', 'july-19',
+  'july-22', 'july-23', 'july-25', 'july-26', 'july-27'
+);
+`;
+
 fs.writeFileSync(output, sql);
+fs.writeFileSync(expandedOutput, expandedSql);
 console.log(`Generated ${rows.length} RLS-protected question rows.`);
+console.log(`Generated ${expandedRows.length} expanded lesson rows for migration 009.`);
