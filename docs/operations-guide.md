@@ -149,9 +149,12 @@ lesson questions. It was applied through the trusted SQL Editor on August 2,
 2026. Authentication Site URL and approved redirect URLs were updated for the
 production site, preview site, and local review address. Email signup is
 enabled with confirmation. Google OAuth is now enabled in Supabase; local
-Google sign-in, callback cleanup and sign-out were verified on August 3. Every
-new hosted Netlify URL must still be added to the Supabase redirect allow-list
-before its Google callback is tested.
+Google sign-in, callback cleanup and sign-out were verified on August 3. The
+current v9 preview origin,
+`https://tahmid-english-review-hub-v9-preview.netlify.app`, is present in the
+Supabase redirect allow-list and the `membership-access` Edge CORS allow-list.
+Every future hosted Netlify URL must be added to both lists before its callback
+and access-code flow are tested.
 
 Migrations 007, 008, 009, 010 and 011 are present in the live schema. Migrations
 010 and 011 were applied through the authenticated SQL Editor on August 3,

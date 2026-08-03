@@ -54,6 +54,13 @@ npm run verify:live
 - Supabase migrations 010 and 011: PASS in the authenticated dashboard on
   August 3. The private Premium recording bucket and all three authenticated
   storage policies are visible after application.
+- New v9 Netlify preview: PASS at
+  `https://tahmid-english-review-hub-v9-preview.netlify.app`, deployed from
+  commit `447c7d7`. Hosted checks passed for 17/562 summary, 55/55 WebP
+  responses, automatic reshuffle, 0.5x/1.5x selection, natural and mixed
+  English/Japanese audio, Google callback, sign-out and the protected Teacher
+  Studio entry page. Real-device mobile, microphone upload and valid-teacher
+  end-to-end controls remain pending.
 
 The July 30 sections below are retained as dated historical evidence. Their
 485-question counts describe the pre-expansion deployment and are not the

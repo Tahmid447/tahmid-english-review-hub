@@ -7,7 +7,8 @@ Updated: 2026-08-03 (Asia/Tokyo)
 - Repository folder: `/Users/tahmidahmed/Documents/Codex/2026-07-30/referenced-chatgpt-conversation-this-is-untrusted/work/tahmid-english-review-hub`
 - Working branch: `upgrade/review-hub-v9-playful-jp`
 - Production: https://jocular-chaja-86e78d.netlify.app
-- Preview: https://tahmid-english-review-hub-preview.netlify.app
+- Current v9 preview: https://tahmid-english-review-hub-v9-preview.netlify.app
+- Legacy preview: https://tahmid-english-review-hub-preview.netlify.app
 - Supabase project ref: `ycmybggetemkhorkhfnf`
 
 Do not place OAuth client secrets, passwords, service-role keys, or access tokens in this file, Git, screenshots, or chat.
@@ -37,18 +38,21 @@ Do not place OAuth client secrets, passwords, service-role keys, or access token
   MIME types, and the three authenticated storage policies.
 - `membership-access` Edge Function version 2 is live and returns bounded,
   reason-specific access-code errors.
+- The v9 preview is deployed from commit `447c7d7` on
+  `upgrade/review-hub-v9-playful-jp`. Its origin is present in the Edge CORS
+  allow-list and the Supabase Auth redirect allow-list. Hosted Google callback,
+  sign-out, 55/55 WebP delivery, shuffle, audio speed selection and
+  English/Japanese audio complete without browser console errors.
 
 ## Must be completed before deployment
 
-1. Create the new Netlify preview. Add its exact origin to the
-   `membership-access` CORS allow-list and its callback to the Supabase Auth
-   redirect allow-list.
-2. With a valid teacher-authorised account, test access-code
+1. With a valid teacher-authorised account, test access-code
    create/edit/reissue/delete and one real redemption; learner controls;
    archive/restore; and Premium task submission/teacher return.
-3. Complete hosted desktop and 390 px/mobile QA, including Google callback,
-   sign-out, audio speed, mixed-language audio and microphone recording.
-4. Only after the preview passes, publish production. Per-question teacher
+2. Complete real-device mobile QA and microphone recording. The in-app browser
+   viewport control did not enter 390 px mode, so mobile is deliberately not
+   reported as passed.
+3. Only after the preview passes, publish production. Per-question teacher
    configuration for free/blurred/hidden/premium questions is not yet
    implemented; current controls are lesson-, learner-, assignment- and
    Premium-task-level.

@@ -4,6 +4,7 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 const allowedOrigins = new Set([
   "https://jocular-chaja-86e78d.netlify.app",
   "https://tahmid-english-review-hub-preview.netlify.app",
+  "https://tahmid-english-review-hub-v9-preview.netlify.app",
   "http://127.0.0.1:4173",
   "http://localhost:4173",
 ]);
