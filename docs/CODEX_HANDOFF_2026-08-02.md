@@ -1,6 +1,6 @@
 # Codex Handoff — Tahmid English Review Hub
 
-Updated: 2026-08-02 (Asia/Tokyo)
+Updated: 2026-08-03 (Asia/Tokyo)
 
 ## Open this project
 
@@ -18,19 +18,40 @@ Do not place OAuth client secrets, passwords, service-role keys, or access token
 - Japanese explanation playback can switch naturally between Japanese and quoted English voices.
 - Teacher Studio now has learner detail views, assignment and learner-lock controls, archive restore, guarded permanent deletion, complete newly generated access-code display/copy, and safer access-code validation/timeout UX.
 - Standard/Premium database foundation was added for speaking/essay submissions, teacher feedback, tier controls, and feature overrides.
-- All 11 lessons were expanded to 31 activities each: 5 visual, 6 listening, 5 speaking, and 15 varied reading/writing/dialogue activities.
+- The complete library contains 17 lessons and 562 activities. The 11
+  Notion-derived lessons have 31 activities each: 5 visual, 6 listening, 5
+  speaking, and 15 varied reading/writing/dialogue activities.
 - Google OAuth client was created in Google Cloud, registered in Supabase, limited to `openid`, email, and profile, and pushed to production status.
 - Supabase Site URL and redirect allow-list already include production, preview, and local test URLs.
+- All 55 WebP illustration assets are present and visually inspected;
+  `npm run verify:visuals` passes. One July 25 image mismatch was replaced and
+  rechecked.
+- `npm test`, `npm run build`, `npm run verify:live`, question-quality audit,
+  and the 17-lesson live audio audit pass. The detailed per-question ledger is
+  in `docs/question-quality-audit.md`.
+- New practice runs always shuffle question and choice order. Resumed runs keep
+  their saved order.
+- Supabase migrations 007, 008 and 009 are reflected in the live schema.
+- `membership-access` Edge Function version 2 is live and returns bounded,
+  reason-specific access-code errors.
 
 ## Must be completed before deployment
 
-1. Generate all 55 WebP illustration assets listed in `scripts/visual-question-manifest.json` and store them under `assets/questions/visual/`.
-2. Run `npm run verify:visuals`; it must pass before publishing the expanded lesson payload.
-3. Apply Supabase migrations in order:
-   - `202608020007_teacher_controls.sql`
-   - `202608020008_premium_plans_and_submissions.sql`
-4. Run the full test/build suite and test Google login, access-code redemption, sign-out, audio speed, mixed-language audio, Teacher Studio learner controls, archive/restore, and premium submission permissions.
-5. Deploy preview first, complete browser/mobile QA, and only then deploy production.
+1. Sign in to the Supabase dashboard and apply, in order:
+   - `202608030010_teacher_access_priority.sql`
+   - `202608030011_private_premium_recordings.sql`
+2. Create the new Netlify preview. Add its exact origin to the
+   `membership-access` CORS allow-list and its callback to the Supabase Auth
+   redirect allow-list.
+3. With a valid teacher-authorised account, test access-code
+   create/edit/reissue/delete and one real redemption; learner controls;
+   archive/restore; and Premium task submission/teacher return.
+4. Complete hosted desktop and 390 px/mobile QA, including Google callback,
+   sign-out, audio speed, mixed-language audio and microphone recording.
+5. Only after the preview passes, publish production. Per-question teacher
+   configuration for free/blurred/hidden/premium questions is not yet
+   implemented; current controls are lesson-, learner-, assignment- and
+   Premium-task-level.
 
 ## Verification commands
 
@@ -38,6 +59,8 @@ Do not place OAuth client secrets, passwords, service-role keys, or access token
 npm test
 npm run build
 npm run verify:visuals
+npm run verify:live
+npm run audit:audio-live
 node scripts/test-teacher-controls.mjs
 node scripts/validate-premium-schema.mjs
 ```

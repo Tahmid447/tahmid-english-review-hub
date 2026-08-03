@@ -209,10 +209,12 @@ else globalThis.CustomEvent = originalCustomEvent;
 
 const lessonScript = fs.readFileSync(path.join(root, "src", "lesson.js"), "utf8");
 const lessonPage = fs.readFileSync(path.join(root, "lesson.html"), "utf8");
+const localServer = fs.readFileSync(path.join(root, "scripts", "serve.mjs"), "utf8");
 assert.match(lessonScript, /orderFor\(`\$\{question\.id\}:choices`, ids, true\)/);
 assert.match(lessonScript, /state\.questionOrder = shuffleArray\(state\.questionOrder\)/);
 assert.doesNotMatch(lessonPage, /id="shuffleChoices"/);
 assert.match(lessonPage, /Questions &amp; choices shuffle automatically/);
+assert.match(localServer, /"\.webp": "image\/webp"/);
 
 const {
   normalizePlaybackRate,

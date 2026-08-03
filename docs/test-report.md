@@ -33,6 +33,9 @@ npm run verify:live
   files remain excluded from `dist/`.
 - `npm run verify:visuals`: PASS — all 55 WebP visual-question assets exist and
   match the manifest dimensions/type checks.
+- Local built-site HTTP visual check: PASS — 55/55 assets return HTTP 200,
+  `image/webp`, and non-empty image bytes. The local preview server's missing
+  WebP MIME mapping was found during this check and fixed.
 - `npm run verify:live`: PASS — 17 public catalogue lessons, exactly two free
   previews, 62 anonymous preview activities, two plan descriptions, and 18
   private/base resources denying anonymous reads.
@@ -44,7 +47,9 @@ npm run verify:live
   1.5x playback and mixed Japanese/English sequencing complete without a stuck
   control.
 - `membership-access` Edge Function: deployed as version 2; CORS preflight and
-  unauthenticated rejection were verified. A valid teacher session is still
+  unauthenticated rejection were verified. An authenticated learner submitted
+  a well-formed unknown code and received the distinct bilingual "not found"
+  result instead of an endless loading state. A valid teacher session is still
   required for the full create/edit/reissue/delete/redeem browser workflow.
 
 The July 30 sections below are retained as dated historical evidence. Their
@@ -206,7 +211,8 @@ and authorised.
   preventing the late-July illustrations from being cropped.
 - Supabase migration 005 completed successfully. Production, preview, and local
   authentication return URLs are approved. Email signup remains confirmed-email
-  only; Google OAuth is intentionally pending its Google Client ID and Secret.
+  only. Google OAuth was still pending at the time of this dated August 2
+  snapshot; it was enabled and locally tested on August 3.
 
 ## August 2 lesson skill expansion (local source)
 
@@ -217,5 +223,4 @@ and authorised.
 - The visual production manifest contains 55 unique WebP paths, alt text, and
   lesson-specific scene briefs.
 - `npm test` passes with 1,369 assertions.
-- `npm run verify:visuals` must pass after the 55 final illustrations are added
-  and before this expanded question migration is promoted to production.
+- `npm run verify:visuals` now passes with all 55 final illustrations present.

@@ -136,8 +136,9 @@ on `backup/v8-calm-baseline`; the last verified v9 release is commit `b7e4ac9`.
 
 ## 7. Supabase migrations
 
-Apply the five migration files in order. Migration 003 is generated from the
-private reviewed source and stores all 562 question payloads behind RLS.
+Apply the numbered migration files in filename order. Migration 003 is generated
+from the private reviewed source and stores the protected question payloads
+behind RLS; migration 009 expands the current source to 562 activities.
 Migration 004 publishes all 17 reviewed lessons to both audiences, adds the
 teacher account’s private learner-preview profile, and attaches the three
 late-July illustrations.
@@ -147,8 +148,16 @@ approval, expiry dates, access codes, two public previews, and protected full
 lesson questions. It was applied through the trusted SQL Editor on August 2,
 2026. Authentication Site URL and approved redirect URLs were updated for the
 production site, preview site, and local review address. Email signup is
-enabled with confirmation. Google remains disabled until a Google OAuth Client
-ID and Client Secret are supplied in Supabase.
+enabled with confirmation. Google OAuth is now enabled in Supabase; local
+Google sign-in, callback cleanup and sign-out were verified on August 3. Every
+new hosted Netlify URL must still be added to the Supabase redirect allow-list
+before its Google callback is tested.
+
+Migrations 007, 008 and 009 are present in the live schema. Migration 010
+(teacher allow/block priority) and migration 011 (private Premium recording
+bucket and policies) remain pending until the authenticated SQL Editor session
+is available. Do not report those two features as live before applying and
+verifying both files.
 
 The July 30 preview setup was applied through the trusted Supabase SQL Editor.
 The local CLI could link to the project, but the shared project’s existing
