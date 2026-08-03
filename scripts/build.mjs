@@ -22,6 +22,7 @@ const publicSourceFiles = [
   "lesson.js",
   "lesson-guides.js",
   "phrases.js",
+  "premium-tasks.js",
   "store.js",
   "styles.css",
   "supabase.js",

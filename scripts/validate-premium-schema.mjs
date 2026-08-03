@@ -8,6 +8,12 @@ const migrationPath = resolve(
   "../supabase/migrations/202608020008_premium_plans_and_submissions.sql",
 );
 const sql = await readFile(migrationPath, "utf8");
+const recordingSql = await readFile(
+  resolve(here, "../supabase/migrations/202608030011_private_premium_recordings.sql"),
+  "utf8",
+);
+const learnerUi = await readFile(resolve(here, "../src/premium-tasks.js"), "utf8");
+const teacherUi = await readFile(resolve(here, "../src/teacher.js"), "utf8");
 
 const requiredFragments = [
   "review_plan_catalog",
@@ -43,6 +49,14 @@ if (unsafe.length) {
   throw new Error(`Premium schema failed a safety check: ${unsafe.join(", ")}`);
 }
 
-console.log(
-  "Premium schema static checks passed: required objects, RLS markers, private feedback gate and no password columns.",
-);
+for (const fragment of ["review-premium-recordings", "public = false", "review_recordings_insert_self", "review_recordings_delete_safe"]) {
+  if (!recordingSql.includes(fragment)) throw new Error(`Private recording schema is missing: ${fragment}`);
+}
+for (const fragment of ["Save draft / 下書き保存", "Re-record / 録り直す", "Submit recording / 録音を提出", "Teacher feedback"]) {
+  if (!learnerUi.includes(fragment)) throw new Error(`Premium learner UI is missing: ${fragment}`);
+}
+for (const fragment of ["Create a Premium review task", "Publish feedback", "AI-assisted draft"]) {
+  if (!teacherUi.includes(fragment)) throw new Error(`Premium teacher UI is missing: ${fragment}`);
+}
+
+console.log("Premium schema/UI static checks passed: tier controls, submissions, private recordings, teacher feedback, RLS markers and no password columns.");

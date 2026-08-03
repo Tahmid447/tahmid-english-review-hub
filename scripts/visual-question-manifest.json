@@ -227,6 +227,7 @@
       "lessonId": "july-19",
       "slot": 3,
       "phraseIndex": 2,
+      "distractorIndexes": [4, 6, 10],
       "asset": "/assets/questions/visual/july-19-03-neither-option.webp",
       "imageAlt": "A person rejects both of two options.",
       "scenePrompt": "A person considers two clearly different options on a table and rejects both with crossed hands and an unhappy expression; both options are visibly marked as unsuitable without text."
@@ -284,6 +285,7 @@
       "lessonId": "july-22",
       "slot": 5,
       "phraseIndex": 6,
+      "distractorIndexes": [0, 4, 10],
       "asset": "/assets/questions/visual/july-22-05-likes-yakiniku.webp",
       "imageAlt": "A diner enthusiastically enjoys yakiniku.",
       "scenePrompt": "At a Japanese yakiniku restaurant, a diner smiles enthusiastically and gives a strong yes gesture while enjoying grilled meat at the table."
@@ -334,6 +336,7 @@
       "lessonId": "july-25",
       "slot": 1,
       "phraseIndex": 0,
+      "distractorIndexes": [3, 6, 10],
       "asset": "/assets/questions/visual/july-25-01-getting-hungry.webp",
       "imageAlt": "A person gradually starts to feel hungry before lunch.",
       "scenePrompt": "Before lunchtime, a person begins to feel hungry, glances at the clock and lightly holds their stomach while noticing food aromas from a nearby kitchen."
@@ -358,6 +361,7 @@
       "lessonId": "july-25",
       "slot": 4,
       "phraseIndex": 4,
+      "distractorIndexes": [1, 7, 10],
       "asset": "/assets/questions/visual/july-25-04-on-my-nerves.webp",
       "imageAlt": "Repeated phone notifications are getting on a person's nerves.",
       "scenePrompt": "A person becomes increasingly irritated as the same contact sends many repeated phone notifications; the phone vibrates again and again while patience visibly runs out."
@@ -375,6 +379,7 @@
       "lessonId": "july-26",
       "slot": 1,
       "phraseIndex": 0,
+      "distractorIndexes": [4, 7, 10],
       "asset": "/assets/questions/visual/july-26-01-hope-malaysia.webp",
       "imageAlt": "A hopeful traveler plans to visit Malaysia next year.",
       "scenePrompt": "A hopeful traveler looks at a future calendar, passport and Malaysia travel photos while planning a possible trip next year; optimistic but not certain."
@@ -407,6 +412,7 @@
       "lessonId": "july-26",
       "slot": 5,
       "phraseIndex": 8,
+      "distractorIndexes": [0, 5, 10],
       "asset": "/assets/questions/visual/july-26-05-dinner-before-call.webp",
       "imageAlt": "Dinner was finished before a phone call arrived.",
       "scenePrompt": "A clear two-step composition: first an empty dinner plate after the meal is finished, then a phone begins ringing moments later; show chronological order with visual flow, no text."

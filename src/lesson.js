@@ -28,6 +28,7 @@ import {
 import { applyLanguageMode, languageModeFromSettings, learningText, uiText } from "./i18n.js";
 import { DEEP_LESSON_GUIDES } from "./lesson-guides.js";
 import { celebrate, installPlayfulInteractions } from "./effects.js";
+import { renderPremiumLessonTasks } from "./premium-tasks.js";
 
 const $ = (selector) => document.querySelector(selector);
 
@@ -47,7 +48,6 @@ const elements = {
   shuffleQuestions: $("#shuffleQuestions"),
   checkModeButtons: [...document.querySelectorAll("[data-check]")],
   hintModeButtons: [...document.querySelectorAll("[data-hint-mode]")],
-  shuffleChoices: $("#shuffleChoices"),
   showChoiceTranslations: $("#showChoiceTranslations"),
   checkAnswered: $("#checkAnswered"),
   scorePill: $("#scorePill"),
@@ -65,6 +65,7 @@ const elements = {
   resultPanel: $("#resultPanel"),
   resultHeading: $("#resultHeading"),
   resultSummary: $("#resultSummary"),
+  premiumTasksPanel: $("#premiumTasksPanel"),
   retryButtons: [...document.querySelectorAll("[data-retry]")],
   toast: $("#toast"),
 };
@@ -220,6 +221,8 @@ const beginNewRun = () => {
   state.runResults = {};
   state.runFirstResults = {};
   state.runAnswerCounts = {};
+  state.questionOrder = shuffleArray(state.questionOrder);
+  state.choiceOrders = {};
   state.hasPersistedRunState = true;
 };
 
@@ -372,7 +375,6 @@ const renderSettings = () => {
   );
   elements.voiceSelect.value = state.settings.voice;
   elements.playbackRate.value = String(state.settings.playbackRate || 1);
-  elements.shuffleChoices.checked = state.settings.shuffleChoices;
   if (elements.showChoiceTranslations) {
     elements.showChoiceTranslations.checked = state.settings.showChoiceTranslations;
   }
@@ -423,9 +425,7 @@ const orderFor = (key, values, alwaysShuffle = false) => {
 
 const choiceOrder = (question) => {
   const ids = question.choices.map((choice) => choice.id);
-  const order = state.settings.shuffleChoices
-    ? orderFor(`${question.id}:choices`, ids)
-    : ids;
+  const order = orderFor(`${question.id}:choices`, ids, true);
   return order.map((id) => question.choices.find((choice) => choice.id === id)).filter(Boolean);
 };
 
@@ -463,22 +463,23 @@ const updatePracticeModeLabels = () => {
 };
 
 const setPracticeMode = (mode, { clearCurrentAnswers = false, force = false } = {}) => {
-  const nextQuestions = selectQuestionSet(mode);
-  if (!nextQuestions.length && !force) {
+  const availableQuestions = selectQuestionSet(mode);
+  if (!availableQuestions.length && !force) {
     showToast(mode === "wrong" ? "No mistakes to practise yet." : "There are no questions in this set yet.");
     elements.practiceMode.value = state.practiceMode;
     return;
   }
   if (clearCurrentAnswers) {
-    nextQuestions.forEach((question) => {
+    availableQuestions.forEach((question) => {
       delete state.answers[question.id];
       delete state.feedback[question.id];
     });
   }
+  beginNewRun();
+  const nextQuestions = selectQuestionSet(mode);
   state.practiceMode = mode;
   state.visibleQuestions = nextQuestions;
   state.currentIndex = 0;
-  beginNewRun();
   state.requireRunChecks = clearCurrentAnswers || mode === "wrong";
   elements.practiceMode.value = mode;
   elements.resultPanel.hidden = true;
@@ -1454,6 +1455,7 @@ const initialiseLesson = async () => {
       elements.nextQuestion.disabled = true;
       elements.practiceMode.disabled = true;
       elements.shuffleQuestions.disabled = true;
+      elements.premiumTasksPanel.hidden = true;
       return;
     }
     if (!state.masterQuestions.length) throw new Error("This lesson does not have readable practice questions yet.");
@@ -1470,10 +1472,14 @@ const initialiseLesson = async () => {
     state.runAnswerCounts = Object.fromEntries(
       Object.entries(state.runAnswerCounts).filter(([id]) => allIdSet.has(id)),
     );
-    state.questionOrder = [
+    const resumableOrder = [
       ...state.questionOrder.filter((id) => allIds.includes(id)),
       ...allIds.filter((id) => !state.questionOrder.includes(id)),
     ];
+    state.questionOrder = state.hasPersistedRunState
+      ? resumableOrder
+      : shuffleArray(allIds);
+    if (!state.hasPersistedRunState) state.choiceOrders = {};
     elements.practiceMode.value = state.practiceMode;
     const selected = selectQuestionSet(state.practiceMode);
     if (!selected.length) state.practiceMode = "all";
@@ -1484,6 +1490,12 @@ const initialiseLesson = async () => {
     state.currentIndex = savedIndex >= 0 ? savedIndex : 0;
     saveLocalState();
     renderAll();
+    await renderPremiumLessonTasks({
+      lesson: state.lesson,
+      container: elements.premiumTasksPanel,
+      showJapanese: state.settings.showJapanese,
+      showMessage: showToast,
+    });
     maybeCompleteRun();
   } catch (error) {
     elements.lessonTitle.textContent = "Lesson unavailable";
@@ -1555,10 +1567,6 @@ elements.hintBox.addEventListener("toggle", () => {
   if (elements.hintBox.open) syncHintTimer({ restart: true });
   else clearHintTimer();
 });
-elements.shuffleChoices.addEventListener("change", () => {
-  persistSettings({ shuffleChoices: elements.shuffleChoices.checked });
-  renderQuestion();
-});
 elements.showChoiceTranslations?.addEventListener("change", () => {
   persistSettings({ showChoiceTranslations: elements.showChoiceTranslations.checked });
   renderQuestion();
@@ -1566,6 +1574,7 @@ elements.showChoiceTranslations?.addEventListener("change", () => {
 elements.practiceMode.addEventListener("change", () => setPracticeMode(elements.practiceMode.value));
 elements.shuffleQuestions.addEventListener("click", () => {
   state.questionOrder = shuffleArray(state.questionOrder);
+  state.choiceOrders = {};
   state.visibleQuestions = selectQuestionSet(state.practiceMode);
   state.currentIndex = 0;
   saveLocalState();

@@ -33,8 +33,19 @@ const normalizeChoices = (choices = []) => choices.map((choice, index) => {
   return { id: String(index), en: String(choice ?? ""), jp: "" };
 });
 
+const stableChoiceOrder = (choices, questionId) => {
+  if (choices.length < 2) return choices;
+  const score = (value) => [...String(value)]
+    .reduce((total, character) => ((total * 33) ^ character.charCodeAt(0)) >>> 0, 5381);
+  return [...choices].sort((left, right) => {
+    const difference = score(`${questionId}:${left.id}`) - score(`${questionId}:${right.id}`);
+    return difference || String(left.id).localeCompare(String(right.id));
+  });
+};
+
 export function normalizeQuestion(question, lessonId = "", index = 0) {
   const source = question && typeof question === "object" ? question : {};
+  const questionId = String(source.id ?? `${lessonId}-q${index + 1}`);
   const format = source.format || source.type || "mcq";
   const prompt = source.prompt && typeof source.prompt === "object"
     ? asBilingual(source.prompt)
@@ -48,7 +59,10 @@ export function normalizeQuestion(question, lessonId = "", index = 0) {
   const explanation = source.explanation && typeof source.explanation === "object"
     ? asBilingual(source.explanation)
     : asBilingual(source.explanation || "", source.explanationJa || "");
-  const choices = normalizeChoices(source.choices);
+  // Preserve stable answer IDs while varying their visual order. Generated and
+  // legacy content often stores the correct answer as id "a"; showing it first
+  // every time teaches a position pattern instead of English.
+  const choices = stableChoiceOrder(normalizeChoices(source.choices), questionId);
   const correctWords = Array.isArray(source.correctWords)
     ? [...source.correctWords]
     : Array.isArray(source.correctOrder)
@@ -82,7 +96,7 @@ export function normalizeQuestion(question, lessonId = "", index = 0) {
 
   return {
     ...source,
-    id: String(source.id ?? `${lessonId}-q${index + 1}`),
+    id: questionId,
     lessonId,
     format,
     type: format,

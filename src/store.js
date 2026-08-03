@@ -13,7 +13,7 @@ export const DEFAULT_SETTINGS = Object.freeze({
   voice: "us",
   playbackRate: 1,
   checkMode: "manual",
-  shuffleChoices: false,
+  shuffleChoices: true,
   hintMode: "auto",
 });
 
@@ -91,7 +91,10 @@ export function getSettings() {
     showChoiceTranslations: saved?.showChoiceTranslations === true,
     sound: saved?.sound !== false,
     vibration: saved?.vibration !== false,
-    shuffleChoices: Boolean(saved?.shuffleChoices),
+    // Choices are always shuffled for a new practice run. Keep this field for
+    // backward-compatible remote settings without allowing an old unchecked
+    // preference to disable the learning safeguard.
+    shuffleChoices: true,
     hintMode: saved?.hintMode === "manual" ? "manual" : "auto",
   };
 }
@@ -109,7 +112,7 @@ export function updateSettings(patch = {}) {
   next.checkMode = next.checkMode === "instant" ? "instant" : "manual";
   next.sound = next.sound !== false;
   next.vibration = next.vibration !== false;
-  next.shuffleChoices = Boolean(next.shuffleChoices);
+  next.shuffleChoices = true;
   next.showChoiceTranslations = Boolean(next.showChoiceTranslations);
   next.hintMode = next.hintMode === "manual" ? "manual" : "auto";
   writeJSON(scopedKey(SETTINGS_KEY_PREFIX), next);

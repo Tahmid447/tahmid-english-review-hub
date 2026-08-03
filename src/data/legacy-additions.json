@@ -7,10 +7,10 @@
       "section": "Listen & Speak",
       "topic": "polite orders",
       "isOriginal": false,
-      "hint": "I’d like は丁寧な注文。",
+      "hint": "Focus on the polite orders meaning. Look for the sentence that expresses “コーヒーをお願いします。”.",
       "hintJa": "I’d like は丁寧な注文。",
-      "explanation": "I’d like は丁寧な注文。",
-      "explanationJa": "I’d like は丁寧な注文。",
+      "explanation": "The sentence in the audio is “I’d like a coffee, please.”. Listen for the complete phrase, not just one familiar word.",
+      "explanationJa": "音声の英文は「I’d like a coffee, please.」です。知っている単語一つだけでなく、文全体を聞き取りましょう。",
       "prompt": "Listen and choose the sentence you hear.",
       "promptJa": "音声を聞いて、聞こえた英文を選んでください。",
       "audioText": "I’d like a coffee, please.",
@@ -27,13 +27,13 @@
         },
         {
           "id": "c",
-          "en": "What did you order?",
-          "jp": "何を注文しましたか？"
+          "en": "It can’t be helped.",
+          "jp": "仕方ありません。"
         },
         {
           "id": "d",
-          "en": "It can’t be helped.",
-          "jp": "仕方ありません。"
+          "en": "That sounds good.",
+          "jp": "それはよさそうですね。"
         }
       ],
       "correct": "a"
@@ -45,10 +45,10 @@
       "section": "Listen & Speak",
       "topic": "follow-up questions",
       "isOriginal": false,
-      "hint": "相手にも同じ質問を返す。",
+      "hint": "Focus on the follow-up questions meaning. Look for the sentence that expresses “あなたはどうですか？”.",
       "hintJa": "相手にも同じ質問を返す。",
-      "explanation": "相手にも同じ質問を返す。",
-      "explanationJa": "相手にも同じ質問を返す。",
+      "explanation": "The sentence in the audio is “How about you?”. Listen for the complete phrase, not just one familiar word.",
+      "explanationJa": "音声の英文は「How about you?」です。知っている単語一つだけでなく、文全体を聞き取りましょう。",
       "prompt": "Listen and choose the sentence you hear.",
       "promptJa": "音声を聞いて、聞こえた英文を選んでください。",
       "audioText": "How about you?",
@@ -65,13 +65,13 @@
         },
         {
           "id": "c",
-          "en": "It can’t be helped.",
-          "jp": "仕方ありません。"
+          "en": "Could I have the menu?",
+          "jp": "メニューをいただけますか？"
         },
         {
           "id": "d",
-          "en": "Could I have the menu?",
-          "jp": "メニューをいただけますか？"
+          "en": "Would you like anything else?",
+          "jp": "ほかに何かいかがですか？"
         }
       ],
       "correct": "a"
@@ -83,10 +83,10 @@
       "section": "Listen & Speak",
       "topic": "past questions",
       "isOriginal": false,
-      "hint": "did の後は動詞の原形。",
+      "hint": "Focus on the past questions meaning. Look for the sentence that expresses “何を注文しましたか？”.",
       "hintJa": "did の後は動詞の原形。",
-      "explanation": "did の後は動詞の原形。",
-      "explanationJa": "did の後は動詞の原形。",
+      "explanation": "The complete sentence is “What did you order?”. Compare articles, auxiliaries and verb endings when you check your answer.",
+      "explanationJa": "全文は「What did you order?」です。答え合わせでは冠詞・助動詞・動詞の語尾まで確認しましょう。",
       "prompt": "Type the complete sentence you hear.",
       "promptJa": "聞こえた英文をそのまま入力してください。",
       "audioText": "What did you order?",
@@ -101,10 +101,10 @@
       "section": "Listen & Speak",
       "topic": "useful responses",
       "isOriginal": false,
-      "hint": "変えられない状況への自然な反応。",
+      "hint": "Focus on the useful responses meaning. Look for the sentence that expresses “仕方ありません。”.",
       "hintJa": "変えられない状況への自然な反応。",
-      "explanation": "変えられない状況への自然な反応。",
-      "explanationJa": "変えられない状況への自然な反応。",
+      "explanation": "The complete sentence is “It can’t be helped.”. Compare articles, auxiliaries and verb endings when you check your answer.",
+      "explanationJa": "全文は「It can’t be helped.」です。答え合わせでは冠詞・助動詞・動詞の語尾まで確認しましょう。",
       "prompt": "Type the complete sentence you hear.",
       "promptJa": "聞こえた英文をそのまま入力してください。",
       "audioText": "It can’t be helped.",
@@ -119,10 +119,10 @@
       "section": "Listen & Speak",
       "topic": "restaurants",
       "isOriginal": false,
-      "hint": "Could I have... は丁寧な依頼。",
+      "hint": "Focus on the restaurants meaning. Look for the sentence that expresses “メニューをいただけますか？”.",
       "hintJa": "Could I have... は丁寧な依頼。",
-      "explanation": "Could I have... は丁寧な依頼。",
-      "explanationJa": "Could I have... は丁寧な依頼。",
+      "explanation": "Model: “Could I have the menu?” (メニューをいただけますか？). Practise the whole thought as one natural phrase.",
+      "explanationJa": "お手本は「Could I have the menu?」（メニューをいただけますか？）です。意味のまとまりとして自然に言う練習をしましょう。",
       "prompt": "Listen, then say the sentence naturally.",
       "promptJa": "音声を聞いてから、自然に言ってみましょう。",
       "speakText": "Could I have the menu?",
@@ -135,10 +135,10 @@
       "section": "Listen & Speak",
       "topic": "choices",
       "isOriginal": false,
-      "hint": "instead は「代わりに」。",
+      "hint": "Focus on the choices meaning. Look for the sentence that expresses “代わりに紅茶を注文しました。”.",
       "hintJa": "instead は「代わりに」。",
-      "explanation": "instead は「代わりに」。",
-      "explanationJa": "instead は「代わりに」。",
+      "explanation": "Model: “I ordered tea instead.” (代わりに紅茶を注文しました。). Practise the whole thought as one natural phrase.",
+      "explanationJa": "お手本は「I ordered tea instead.」（代わりに紅茶を注文しました。）です。意味のまとまりとして自然に言う練習をしましょう。",
       "prompt": "Listen, then say the sentence naturally.",
       "promptJa": "音声を聞いてから、自然に言ってみましょう。",
       "speakText": "I ordered tea instead.",
@@ -151,10 +151,10 @@
       "section": "Use It",
       "topic": "reactions",
       "isOriginal": false,
-      "hint": "提案への自然な反応。",
+      "hint": "Focus on the reactions meaning. Look for the sentence that expresses “それはよさそうですね。”.",
       "hintJa": "提案への自然な反応。",
-      "explanation": "提案への自然な反応。",
-      "explanationJa": "提案への自然な反応。",
+      "explanation": "True. “That sounds good.” means “それはよさそうですね。”.",
+      "explanationJa": "正解はTrueです。「That sounds good.」は「それはよさそうですね。」という意味です。",
       "prompt": "“That sounds good.” means “それはよさそうですね。”.",
       "promptJa": "「That sounds good.」は「それはよさそうですね。」という意味です。",
       "correct": true
@@ -166,10 +166,10 @@
       "section": "Use It",
       "topic": "restaurants",
       "isOriginal": false,
-      "hint": "店員がよく使う丁寧な質問。",
+      "hint": "Focus on the restaurants meaning. Look for the sentence that expresses “ほかに何かいかがですか？”.",
       "hintJa": "店員がよく使う丁寧な質問。",
-      "explanation": "店員がよく使う丁寧な質問。",
-      "explanationJa": "店員がよく使う丁寧な質問。",
+      "explanation": "Correct order: “Would you like anything else?”. Keep the subject, verb and remaining information in that order.",
+      "explanationJa": "正しい語順は「Would you like anything else?」です。主語・動詞・残りの情報の順を確認しましょう。",
       "prompt": "Put the words in order: ほかに何かいかがですか？",
       "promptJa": "語順を並べましょう：ほかに何かいかがですか？",
       "words": [
@@ -194,10 +194,10 @@
       "section": "Use It",
       "topic": "polite orders",
       "isOriginal": false,
-      "hint": "I’d like は丁寧な注文。",
+      "hint": "Focus on the polite orders meaning. Look for the sentence that expresses “コーヒーをお願いします。”.",
       "hintJa": "I’d like は丁寧な注文。",
-      "explanation": "I’d like は丁寧な注文。",
-      "explanationJa": "I’d like は丁寧な注文。",
+      "explanation": "Each English phrase has one Japanese partner with the same meaning. Recheck the complete phrase when two items share a similar word.",
+      "explanationJa": "各英文には、同じ意味の日本語が一つずつあります。似た単語がある時も、表現全体の意味で確認しましょう。",
       "prompt": "Match each English phrase with its natural Japanese meaning.",
       "promptJa": "英文と自然な日本語を組み合わせてください。",
       "pairs": [
@@ -240,10 +240,10 @@
       "section": "Use It",
       "topic": "follow-up questions",
       "isOriginal": false,
-      "hint": "相手にも同じ質問を返す。",
+      "hint": "Focus on the follow-up questions meaning. Look for the sentence that expresses “あなたはどうですか？”.",
       "hintJa": "相手にも同じ質問を返す。",
-      "explanation": "相手にも同じ質問を返す。",
-      "explanationJa": "相手にも同じ質問を返す。",
+      "explanation": "The categories describe language purpose: polite orders, follow-up questions. Sort by what each complete phrase does in conversation.",
+      "explanationJa": "分類は「polite orders・follow-up questions」です。単語一つではなく、会話でその表現が果たす役割で分けましょう。",
       "prompt": "Sort each phrase by its language purpose.",
       "promptJa": "各表現を目的別に分類してください。",
       "categories": [
@@ -268,10 +268,10 @@
       "section": "Use It",
       "topic": "follow-up questions",
       "isOriginal": false,
-      "hint": "相手にも同じ質問を返す。",
+      "hint": "Focus on the follow-up questions meaning. Look for the sentence that expresses “あなたはどうですか？”.",
       "hintJa": "相手にも同じ質問を返す。",
-      "explanation": "相手にも同じ質問を返す。",
-      "explanationJa": "相手にも同じ質問を返す。",
+      "explanation": "“How about you?” responds directly and naturally to the previous line.",
+      "explanationJa": "「How about you?」は、直前の発言に直接答える自然な一文です。",
       "prompt": "Choose the most natural next line in the conversation.",
       "promptJa": "会話の次に続く最も自然な一文を選んでください。",
       "context": "A: I’d like a coffee, please. What can A ask the other person next?",
@@ -289,13 +289,13 @@
         },
         {
           "id": "c",
-          "en": "It can’t be helped.",
-          "jp": "仕方ありません。"
+          "en": "Could I have the menu?",
+          "jp": "メニューをいただけますか？"
         },
         {
           "id": "d",
-          "en": "Could I have the menu?",
-          "jp": "メニューをいただけますか？"
+          "en": "Would you like anything else?",
+          "jp": "ほかに何かいかがですか？"
         }
       ],
       "correct": "a"
@@ -307,10 +307,10 @@
       "section": "Use It",
       "topic": "past questions",
       "isOriginal": false,
-      "hint": "did の後は動詞の原形。",
+      "hint": "Focus on the past questions meaning. Look for the sentence that expresses “何を注文しましたか？”.",
       "hintJa": "did の後は動詞の原形。",
-      "explanation": "did の後は動詞の原形。",
-      "explanationJa": "did の後は動詞の原形。",
+      "explanation": "A natural translation is “What did you order?”. It expresses “何を注文しましたか？” with the lesson’s past questions pattern.",
+      "explanationJa": "自然な英訳は「What did you order?」です。「何を注文しましたか？」を今回のpast questions表現で伝えています。",
       "prompt": "Translate into English: 何を注文しましたか？",
       "promptJa": "英語にしてください：何を注文しましたか？",
       "accepted": [
@@ -324,10 +324,10 @@
       "section": "Use It",
       "topic": "useful responses",
       "isOriginal": false,
-      "hint": "変えられない状況への自然な反応。",
+      "hint": "Focus on the useful responses meaning. Look for the sentence that expresses “仕方ありません。”.",
       "hintJa": "変えられない状況への自然な反応。",
-      "explanation": "変えられない状況への自然な反応。",
-      "explanationJa": "変えられない状況への自然な反応。",
+      "explanation": "“It can’t be helped.” directly expresses “仕方ありません。”. The other choices describe different situations.",
+      "explanationJa": "「It can’t be helped.」が「仕方ありません。」を直接表します。他の選択肢は別の場面を表しています。",
       "prompt": "Which sentence best expresses this meaning: 仕方ありません。",
       "promptJa": "「仕方ありません。」に最も合う英文はどれですか？",
       "choices": [
@@ -343,13 +343,13 @@
         },
         {
           "id": "c",
-          "en": "I ordered tea instead.",
-          "jp": "代わりに紅茶を注文しました。"
+          "en": "That sounds good.",
+          "jp": "それはよさそうですね。"
         },
         {
           "id": "d",
-          "en": "That sounds good.",
-          "jp": "それはよさそうですね。"
+          "en": "How about you?",
+          "jp": "あなたはどうですか？"
         }
       ],
       "correct": "a"
@@ -363,10 +363,10 @@
       "section": "Listen & Speak",
       "topic": "hear",
       "isOriginal": false,
-      "hint": "出来事・話題には hear about。",
+      "hint": "Focus on the hear meaning. Look for the sentence that expresses “昨日そのことについて聞きました。”.",
       "hintJa": "出来事・話題には hear about。",
-      "explanation": "出来事・話題には hear about。",
-      "explanationJa": "出来事・話題には hear about。",
+      "explanation": "The sentence in the audio is “I heard about it yesterday.”. Listen for the complete phrase, not just one familiar word.",
+      "explanationJa": "音声の英文は「I heard about it yesterday.」です。知っている単語一つだけでなく、文全体を聞き取りましょう。",
       "prompt": "Listen and choose the sentence you hear.",
       "promptJa": "音声を聞いて、聞こえた英文を選んでください。",
       "audioText": "I heard about it yesterday.",
@@ -383,13 +383,13 @@
         },
         {
           "id": "c",
-          "en": "I heard it clearly.",
-          "jp": "それがはっきり聞こえました。"
+          "en": "Exactly. That’s what I mean.",
+          "jp": "その通り。それが私の言いたいことです。"
         },
         {
           "id": "d",
-          "en": "Exactly. That’s what I mean.",
-          "jp": "その通り。それが私の言いたいことです。"
+          "en": "The button is in the bottom-left corner.",
+          "jp": "ボタンは左下にあります。"
         }
       ],
       "correct": "a"
@@ -401,10 +401,10 @@
       "section": "Listen & Speak",
       "topic": "hear",
       "isOriginal": false,
-      "hint": "存在を知っている時は hear of。",
+      "hint": "Focus on the hear meaning. Look for the sentence that expresses “そのレストランの名前は聞いたことがあります。”.",
       "hintJa": "存在を知っている時は hear of。",
-      "explanation": "存在を知っている時は hear of。",
-      "explanationJa": "存在を知っている時は hear of。",
+      "explanation": "The sentence in the audio is “I’ve heard of that restaurant.”. Listen for the complete phrase, not just one familiar word.",
+      "explanationJa": "音声の英文は「I’ve heard of that restaurant.」です。知っている単語一つだけでなく、文全体を聞き取りましょう。",
       "prompt": "Listen and choose the sentence you hear.",
       "promptJa": "音声を聞いて、聞こえた英文を選んでください。",
       "audioText": "I’ve heard of that restaurant.",
@@ -421,13 +421,13 @@
         },
         {
           "id": "c",
-          "en": "Exactly. That’s what I mean.",
-          "jp": "その通り。それが私の言いたいことです。"
+          "en": "For real?",
+          "jp": "本当に？"
         },
         {
           "id": "d",
-          "en": "For real?",
-          "jp": "本当に？"
+          "en": "I didn’t hear what she said.",
+          "jp": "彼女が言ったことが聞こえませんでした。"
         }
       ],
       "correct": "a"
@@ -439,10 +439,10 @@
       "section": "Listen & Speak",
       "topic": "hear",
       "isOriginal": false,
-      "hint": "音そのものを目的語にする。",
+      "hint": "Focus on the hear meaning. Look for the sentence that expresses “それがはっきり聞こえました。”.",
       "hintJa": "音そのものを目的語にする。",
-      "explanation": "音そのものを目的語にする。",
-      "explanationJa": "音そのものを目的語にする。",
+      "explanation": "The complete sentence is “I heard it clearly.”. Compare articles, auxiliaries and verb endings when you check your answer.",
+      "explanationJa": "全文は「I heard it clearly.」です。答え合わせでは冠詞・助動詞・動詞の語尾まで確認しましょう。",
       "prompt": "Type the complete sentence you hear.",
       "promptJa": "聞こえた英文をそのまま入力してください。",
       "audioText": "I heard it clearly.",
@@ -457,10 +457,10 @@
       "section": "Listen & Speak",
       "topic": "reactions",
       "isOriginal": false,
-      "hint": "同意を強く示す。",
+      "hint": "Focus on the reactions meaning. Look for the sentence that expresses “その通り。それが私の言いたいことです。”.",
       "hintJa": "同意を強く示す。",
-      "explanation": "同意を強く示す。",
-      "explanationJa": "同意を強く示す。",
+      "explanation": "The complete sentence is “Exactly. That’s what I mean.”. Compare articles, auxiliaries and verb endings when you check your answer.",
+      "explanationJa": "全文は「Exactly. That’s what I mean.」です。答え合わせでは冠詞・助動詞・動詞の語尾まで確認しましょう。",
       "prompt": "Type the complete sentence you hear.",
       "promptJa": "聞こえた英文をそのまま入力してください。",
       "audioText": "Exactly. That’s what I mean.",
@@ -475,10 +475,10 @@
       "section": "Listen & Speak",
       "topic": "reactions",
       "isOriginal": false,
-      "hint": "かなりカジュアルな驚き。",
+      "hint": "Focus on the reactions meaning. Look for the sentence that expresses “本当に？”.",
       "hintJa": "かなりカジュアルな驚き。",
-      "explanation": "かなりカジュアルな驚き。",
-      "explanationJa": "かなりカジュアルな驚き。",
+      "explanation": "Model: “For real?” (本当に？). Practise the whole thought as one natural phrase.",
+      "explanationJa": "お手本は「For real?」（本当に？）です。意味のまとまりとして自然に言う練習をしましょう。",
       "prompt": "Listen, then say the sentence naturally.",
       "promptJa": "音声を聞いてから、自然に言ってみましょう。",
       "speakText": "For real?",
@@ -491,10 +491,10 @@
       "section": "Listen & Speak",
       "topic": "position",
       "isOriginal": false,
-      "hint": "top-right = 右上。",
+      "hint": "Focus on the position meaning. Look for the sentence that expresses “右上のマスを押してください。”.",
       "hintJa": "top-right = 右上。",
-      "explanation": "top-right = 右上。",
-      "explanationJa": "top-right = 右上。",
+      "explanation": "Model: “Click the top-right box.” (右上のマスを押してください。). Practise the whole thought as one natural phrase.",
+      "explanationJa": "お手本は「Click the top-right box.」（右上のマスを押してください。）です。意味のまとまりとして自然に言う練習をしましょう。",
       "prompt": "Listen, then say the sentence naturally.",
       "promptJa": "音声を聞いてから、自然に言ってみましょう。",
       "speakText": "Click the top-right box.",
@@ -507,10 +507,10 @@
       "section": "Use It",
       "topic": "position",
       "isOriginal": false,
-      "hint": "corner を加えると位置が明確。",
+      "hint": "Focus on the position meaning. Look for the sentence that expresses “ボタンは左下にあります。”.",
       "hintJa": "corner を加えると位置が明確。",
-      "explanation": "corner を加えると位置が明確。",
-      "explanationJa": "corner を加えると位置が明確。",
+      "explanation": "True. “The button is in the bottom-left corner.” means “ボタンは左下にあります。”.",
+      "explanationJa": "正解はTrueです。「The button is in the bottom-left corner.」は「ボタンは左下にあります。」という意味です。",
       "prompt": "“The button is in the bottom-left corner.” means “ボタンは左下にあります。”.",
       "promptJa": "「The button is in the bottom-left corner.」は「ボタンは左下にあります。」という意味です。",
       "correct": true
@@ -522,10 +522,10 @@
       "section": "Use It",
       "topic": "hear",
       "isOriginal": false,
-      "hint": "didn’t の後は hear。",
+      "hint": "Focus on the hear meaning. Look for the sentence that expresses “彼女が言ったことが聞こえませんでした。”.",
       "hintJa": "didn’t の後は hear。",
-      "explanation": "didn’t の後は hear。",
-      "explanationJa": "didn’t の後は hear。",
+      "explanation": "Correct order: “I didn’t hear what she said.”. Keep the subject, verb and remaining information in that order.",
+      "explanationJa": "正しい語順は「I didn’t hear what she said.」です。主語・動詞・残りの情報の順を確認しましょう。",
       "prompt": "Put the words in order: 彼女が言ったことが聞こえませんでした。",
       "promptJa": "語順を並べましょう：彼女が言ったことが聞こえませんでした。",
       "words": [
@@ -552,10 +552,10 @@
       "section": "Use It",
       "topic": "hear",
       "isOriginal": false,
-      "hint": "出来事・話題には hear about。",
+      "hint": "Focus on the hear meaning. Look for the sentence that expresses “昨日そのことについて聞きました。”.",
       "hintJa": "出来事・話題には hear about。",
-      "explanation": "出来事・話題には hear about。",
-      "explanationJa": "出来事・話題には hear about。",
+      "explanation": "Each English phrase has one Japanese partner with the same meaning. Recheck the complete phrase when two items share a similar word.",
+      "explanationJa": "各英文には、同じ意味の日本語が一つずつあります。似た単語がある時も、表現全体の意味で確認しましょう。",
       "prompt": "Match each English phrase with its natural Japanese meaning.",
       "promptJa": "英文と自然な日本語を組み合わせてください。",
       "pairs": [
@@ -598,10 +598,10 @@
       "section": "Use It",
       "topic": "hear",
       "isOriginal": false,
-      "hint": "存在を知っている時は hear of。",
+      "hint": "Focus on the hear meaning. Look for the sentence that expresses “そのレストランの名前は聞いたことがあります。”.",
       "hintJa": "存在を知っている時は hear of。",
-      "explanation": "存在を知っている時は hear of。",
-      "explanationJa": "存在を知っている時は hear of。",
+      "explanation": "The categories describe language purpose: hear, reactions. Sort by what each complete phrase does in conversation.",
+      "explanationJa": "分類は「hear・reactions」です。単語一つではなく、会話でその表現が果たす役割で分けましょう。",
       "prompt": "Sort each phrase by its language purpose.",
       "promptJa": "各表現を目的別に分類してください。",
       "categories": [
@@ -642,10 +642,10 @@
       "section": "Use It",
       "topic": "hear",
       "isOriginal": false,
-      "hint": "存在を知っている時は hear of。",
+      "hint": "Focus on the hear meaning. Look for the sentence that expresses “そのレストランの名前は聞いたことがあります。”.",
       "hintJa": "存在を知っている時は hear of。",
-      "explanation": "存在を知っている時は hear of。",
-      "explanationJa": "存在を知っている時は hear of。",
+      "explanation": "“I’ve heard of that restaurant.” responds directly and naturally to the previous line.",
+      "explanationJa": "「I’ve heard of that restaurant.」は、直前の発言に直接答える自然な一文です。",
       "prompt": "Choose the most natural next line in the conversation.",
       "promptJa": "会話の次に続く最も自然な一文を選んでください。",
       "context": "A: Have you heard of the new restaurant?\nB: ...",
@@ -663,13 +663,13 @@
         },
         {
           "id": "c",
-          "en": "Exactly. That’s what I mean.",
-          "jp": "その通り。それが私の言いたいことです。"
+          "en": "For real?",
+          "jp": "本当に？"
         },
         {
           "id": "d",
-          "en": "For real?",
-          "jp": "本当に？"
+          "en": "I didn’t hear what she said.",
+          "jp": "彼女が言ったことが聞こえませんでした。"
         }
       ],
       "correct": "a"
@@ -681,10 +681,10 @@
       "section": "Use It",
       "topic": "hear",
       "isOriginal": false,
-      "hint": "音そのものを目的語にする。",
+      "hint": "Focus on the hear meaning. Look for the sentence that expresses “それがはっきり聞こえました。”.",
       "hintJa": "音そのものを目的語にする。",
-      "explanation": "音そのものを目的語にする。",
-      "explanationJa": "音そのものを目的語にする。",
+      "explanation": "A natural translation is “I heard it clearly.”. It expresses “それがはっきり聞こえました。” with the lesson’s hear pattern.",
+      "explanationJa": "自然な英訳は「I heard it clearly.」です。「それがはっきり聞こえました。」を今回のhear表現で伝えています。",
       "prompt": "Translate into English: それがはっきり聞こえました。",
       "promptJa": "英語にしてください：それがはっきり聞こえました。",
       "accepted": [
@@ -698,10 +698,10 @@
       "section": "Use It",
       "topic": "reactions",
       "isOriginal": false,
-      "hint": "同意を強く示す。",
+      "hint": "Focus on the reactions meaning. Look for the sentence that expresses “その通り。それが私の言いたいことです。”.",
       "hintJa": "同意を強く示す。",
-      "explanation": "同意を強く示す。",
-      "explanationJa": "同意を強く示す。",
+      "explanation": "“Exactly. That’s what I mean.” directly expresses “その通り。それが私の言いたいことです。”. The other choices describe different situations.",
+      "explanationJa": "「Exactly. That’s what I mean.」が「その通り。それが私の言いたいことです。」を直接表します。他の選択肢は別の場面を表しています。",
       "prompt": "Which sentence best expresses this meaning: その通り。それが私の言いたいことです。",
       "promptJa": "「その通り。それが私の言いたいことです。」に最も合う英文はどれですか？",
       "choices": [
@@ -717,13 +717,13 @@
         },
         {
           "id": "c",
-          "en": "Click the top-right box.",
-          "jp": "右上のマスを押してください。"
+          "en": "The button is in the bottom-left corner.",
+          "jp": "ボタンは左下にあります。"
         },
         {
           "id": "d",
-          "en": "The button is in the bottom-left corner.",
-          "jp": "ボタンは左下にあります。"
+          "en": "I’ve heard of that restaurant.",
+          "jp": "そのレストランの名前は聞いたことがあります。"
         }
       ],
       "correct": "a"
@@ -737,10 +737,10 @@
       "section": "Listen & Speak",
       "topic": "feelings",
       "isOriginal": false,
-      "hint": "-ed は人の気持ち。",
+      "hint": "Focus on the feelings meaning. Look for the sentence that expresses “その音にイライラしています。”.",
       "hintJa": "-ed は人の気持ち。",
-      "explanation": "-ed は人の気持ち。",
-      "explanationJa": "-ed は人の気持ち。",
+      "explanation": "The sentence in the audio is “I’m annoyed by the noise.”. Listen for the complete phrase, not just one familiar word.",
+      "explanationJa": "音声の英文は「I’m annoyed by the noise.」です。知っている単語一つだけでなく、文全体を聞き取りましょう。",
       "prompt": "Listen and choose the sentence you hear.",
       "promptJa": "音声を聞いて、聞こえた英文を選んでください。",
       "audioText": "I’m annoyed by the noise.",
@@ -757,13 +757,13 @@
         },
         {
           "id": "c",
-          "en": "I prefer tea because it’s lighter.",
-          "jp": "軽い味なので紅茶の方が好きです。"
+          "en": "Who do you think will win?",
+          "jp": "誰が勝つと思いますか？"
         },
         {
           "id": "d",
-          "en": "Who do you think will win?",
-          "jp": "誰が勝つと思いますか？"
+          "en": "The second half was exciting.",
+          "jp": "後半はわくわくしました。"
         }
       ],
       "correct": "a"
@@ -775,10 +775,10 @@
       "section": "Listen & Speak",
       "topic": "feelings",
       "isOriginal": false,
-      "hint": "-ing は原因の性質。",
+      "hint": "Focus on the feelings meaning. Look for the sentence that expresses “その音はイライラさせます。”.",
       "hintJa": "-ing は原因の性質。",
-      "explanation": "-ing は原因の性質。",
-      "explanationJa": "-ing は原因の性質。",
+      "explanation": "The sentence in the audio is “The noise is annoying.”. Listen for the complete phrase, not just one familiar word.",
+      "explanationJa": "音声の英文は「The noise is annoying.」です。知っている単語一つだけでなく、文全体を聞き取りましょう。",
       "prompt": "Listen and choose the sentence you hear.",
       "promptJa": "音声を聞いて、聞こえた英文を選んでください。",
       "audioText": "The noise is annoying.",
@@ -795,13 +795,13 @@
         },
         {
           "id": "c",
-          "en": "Who do you think will win?",
-          "jp": "誰が勝つと思いますか？"
+          "en": "This exercise is easier than the last one.",
+          "jp": "この練習は前のものより簡単です。"
         },
         {
           "id": "d",
-          "en": "This exercise is easier than the last one.",
-          "jp": "この練習は前のものより簡単です。"
+          "en": "I was frustrated because nothing worked.",
+          "jp": "何もうまくいかず、もどかしかったです。"
         }
       ],
       "correct": "a"
@@ -813,10 +813,10 @@
       "section": "Listen & Speak",
       "topic": "preferences",
       "isOriginal": false,
-      "hint": "prefer + 理由。",
+      "hint": "Focus on the preferences meaning. Look for the sentence that expresses “軽い味なので紅茶の方が好きです。”.",
       "hintJa": "prefer + 理由。",
-      "explanation": "prefer + 理由。",
-      "explanationJa": "prefer + 理由。",
+      "explanation": "The complete sentence is “I prefer tea because it’s lighter.”. Compare articles, auxiliaries and verb endings when you check your answer.",
+      "explanationJa": "全文は「I prefer tea because it’s lighter.」です。答え合わせでは冠詞・助動詞・動詞の語尾まで確認しましょう。",
       "prompt": "Type the complete sentence you hear.",
       "promptJa": "聞こえた英文をそのまま入力してください。",
       "audioText": "I prefer tea because it’s lighter.",
@@ -831,10 +831,10 @@
       "section": "Listen & Speak",
       "topic": "predictions",
       "isOriginal": false,
-      "hint": "will で予想。",
+      "hint": "Focus on the predictions meaning. Look for the sentence that expresses “誰が勝つと思いますか？”.",
       "hintJa": "will で予想。",
-      "explanation": "will で予想。",
-      "explanationJa": "will で予想。",
+      "explanation": "The complete sentence is “Who do you think will win?”. Compare articles, auxiliaries and verb endings when you check your answer.",
+      "explanationJa": "全文は「Who do you think will win?」です。答え合わせでは冠詞・助動詞・動詞の語尾まで確認しましょう。",
       "prompt": "Type the complete sentence you hear.",
       "promptJa": "聞こえた英文をそのまま入力してください。",
       "audioText": "Who do you think will win?",
@@ -849,10 +849,10 @@
       "section": "Listen & Speak",
       "topic": "comparisons",
       "isOriginal": false,
-      "hint": "比較級 + than。",
+      "hint": "Focus on the comparisons meaning. Look for the sentence that expresses “この練習は前のものより簡単です。”.",
       "hintJa": "比較級 + than。",
-      "explanation": "比較級 + than。",
-      "explanationJa": "比較級 + than。",
+      "explanation": "Model: “This exercise is easier than the last one.” (この練習は前のものより簡単です。). Practise the whole thought as one natural phrase.",
+      "explanationJa": "お手本は「This exercise is easier than the last one.」（この練習は前のものより簡単です。）です。意味のまとまりとして自然に言う練習をしましょう。",
       "prompt": "Listen, then say the sentence naturally.",
       "promptJa": "音声を聞いてから、自然に言ってみましょう。",
       "speakText": "This exercise is easier than the last one.",
@@ -865,10 +865,10 @@
       "section": "Listen & Speak",
       "topic": "sports",
       "isOriginal": false,
-      "hint": "first half = 前半。",
+      "hint": "Focus on the sports meaning. Look for the sentence that expresses “前半に得点しました。”.",
       "hintJa": "first half = 前半。",
-      "explanation": "first half = 前半。",
-      "explanationJa": "first half = 前半。",
+      "explanation": "Model: “They scored in the first half.” (前半に得点しました。). Practise the whole thought as one natural phrase.",
+      "explanationJa": "お手本は「They scored in the first half.」（前半に得点しました。）です。意味のまとまりとして自然に言う練習をしましょう。",
       "prompt": "Listen, then say the sentence naturally.",
       "promptJa": "音声を聞いてから、自然に言ってみましょう。",
       "speakText": "They scored in the first half.",
@@ -881,10 +881,10 @@
       "section": "Use It",
       "topic": "sports",
       "isOriginal": false,
-      "hint": "second half = 後半。",
+      "hint": "Focus on the sports meaning. Look for the sentence that expresses “後半はわくわくしました。”.",
       "hintJa": "second half = 後半。",
-      "explanation": "second half = 後半。",
-      "explanationJa": "second half = 後半。",
+      "explanation": "True. “The second half was exciting.” means “後半はわくわくしました。”.",
+      "explanationJa": "正解はTrueです。「The second half was exciting.」は「後半はわくわくしました。」という意味です。",
       "prompt": "“The second half was exciting.” means “後半はわくわくしました。”.",
       "promptJa": "「The second half was exciting.」は「後半はわくわくしました。」という意味です。",
       "correct": true
@@ -896,10 +896,10 @@
       "section": "Use It",
       "topic": "feelings",
       "isOriginal": false,
-      "hint": "frustrated は思い通りにならない気持ち。",
+      "hint": "Focus on the feelings meaning. Look for the sentence that expresses “何もうまくいかず、もどかしかったです。”.",
       "hintJa": "frustrated は思い通りにならない気持ち。",
-      "explanation": "frustrated は思い通りにならない気持ち。",
-      "explanationJa": "frustrated は思い通りにならない気持ち。",
+      "explanation": "Correct order: “I was frustrated because nothing worked.”. Keep the subject, verb and remaining information in that order.",
+      "explanationJa": "正しい語順は「I was frustrated because nothing worked.」です。主語・動詞・残りの情報の順を確認しましょう。",
       "prompt": "Put the words in order: 何もうまくいかず、もどかしかったです。",
       "promptJa": "語順を並べましょう：何もうまくいかず、もどかしかったです。",
       "words": [
@@ -926,10 +926,10 @@
       "section": "Use It",
       "topic": "feelings",
       "isOriginal": false,
-      "hint": "-ed は人の気持ち。",
+      "hint": "Focus on the feelings meaning. Look for the sentence that expresses “その音にイライラしています。”.",
       "hintJa": "-ed は人の気持ち。",
-      "explanation": "-ed は人の気持ち。",
-      "explanationJa": "-ed は人の気持ち。",
+      "explanation": "Each English phrase has one Japanese partner with the same meaning. Recheck the complete phrase when two items share a similar word.",
+      "explanationJa": "各英文には、同じ意味の日本語が一つずつあります。似た単語がある時も、表現全体の意味で確認しましょう。",
       "prompt": "Match each English phrase with its natural Japanese meaning.",
       "promptJa": "英文と自然な日本語を組み合わせてください。",
       "pairs": [
@@ -972,10 +972,10 @@
       "section": "Use It",
       "topic": "feelings",
       "isOriginal": false,
-      "hint": "-ing は原因の性質。",
+      "hint": "Focus on the feelings meaning. Look for the sentence that expresses “その音はイライラさせます。”.",
       "hintJa": "-ing は原因の性質。",
-      "explanation": "-ing は原因の性質。",
-      "explanationJa": "-ing は原因の性質。",
+      "explanation": "The categories describe language purpose: feelings, preferences. Sort by what each complete phrase does in conversation.",
+      "explanationJa": "分類は「feelings・preferences」です。単語一つではなく、会話でその表現が果たす役割で分けましょう。",
       "prompt": "Sort each phrase by its language purpose.",
       "promptJa": "各表現を目的別に分類してください。",
       "categories": [
@@ -1008,10 +1008,10 @@
       "section": "Use It",
       "topic": "feelings",
       "isOriginal": false,
-      "hint": "-ing は原因の性質。",
+      "hint": "Focus on the feelings meaning. Look for the sentence that expresses “その音はイライラさせます。”.",
       "hintJa": "-ing は原因の性質。",
-      "explanation": "-ing は原因の性質。",
-      "explanationJa": "-ing は原因の性質。",
+      "explanation": "“The noise is annoying.” responds directly and naturally to the previous line.",
+      "explanationJa": "「The noise is annoying.」は、直前の発言に直接答える自然な一文です。",
       "prompt": "Choose the most natural next line in the conversation.",
       "promptJa": "会話の次に続く最も自然な一文を選んでください。",
       "context": "A: How do you feel about that loud sound?\nB: ...",
@@ -1029,13 +1029,13 @@
         },
         {
           "id": "c",
-          "en": "Who do you think will win?",
-          "jp": "誰が勝つと思いますか？"
+          "en": "This exercise is easier than the last one.",
+          "jp": "この練習は前のものより簡単です。"
         },
         {
           "id": "d",
-          "en": "This exercise is easier than the last one.",
-          "jp": "この練習は前のものより簡単です。"
+          "en": "I was frustrated because nothing worked.",
+          "jp": "何もうまくいかず、もどかしかったです。"
         }
       ],
       "correct": "a"
@@ -1047,10 +1047,10 @@
       "section": "Use It",
       "topic": "preferences",
       "isOriginal": false,
-      "hint": "prefer + 理由。",
+      "hint": "Focus on the preferences meaning. Look for the sentence that expresses “軽い味なので紅茶の方が好きです。”.",
       "hintJa": "prefer + 理由。",
-      "explanation": "prefer + 理由。",
-      "explanationJa": "prefer + 理由。",
+      "explanation": "A natural translation is “I prefer tea because it’s lighter.”. It expresses “軽い味なので紅茶の方が好きです。” with the lesson’s preferences pattern.",
+      "explanationJa": "自然な英訳は「I prefer tea because it’s lighter.」です。「軽い味なので紅茶の方が好きです。」を今回のpreferences表現で伝えています。",
       "prompt": "Translate into English: 軽い味なので紅茶の方が好きです。",
       "promptJa": "英語にしてください：軽い味なので紅茶の方が好きです。",
       "accepted": [
@@ -1064,10 +1064,10 @@
       "section": "Use It",
       "topic": "predictions",
       "isOriginal": false,
-      "hint": "will で予想。",
+      "hint": "Focus on the predictions meaning. Look for the sentence that expresses “誰が勝つと思いますか？”.",
       "hintJa": "will で予想。",
-      "explanation": "will で予想。",
-      "explanationJa": "will で予想。",
+      "explanation": "“Who do you think will win?” directly expresses “誰が勝つと思いますか？”. The other choices describe different situations.",
+      "explanationJa": "「Who do you think will win?」が「誰が勝つと思いますか？」を直接表します。他の選択肢は別の場面を表しています。",
       "prompt": "Which sentence best expresses this meaning: 誰が勝つと思いますか？",
       "promptJa": "「誰が勝つと思いますか？」に最も合う英文はどれですか？",
       "choices": [
@@ -1083,13 +1083,13 @@
         },
         {
           "id": "c",
-          "en": "They scored in the first half.",
-          "jp": "前半に得点しました。"
+          "en": "The second half was exciting.",
+          "jp": "後半はわくわくしました。"
         },
         {
           "id": "d",
-          "en": "The second half was exciting.",
-          "jp": "後半はわくわくしました。"
+          "en": "The noise is annoying.",
+          "jp": "その音はイライラさせます。"
         }
       ],
       "correct": "a"
@@ -1103,10 +1103,10 @@
       "section": "Listen & Speak",
       "topic": "conversation",
       "isOriginal": false,
-      "hint": "Actually で本当の情報を加える。",
+      "hint": "Focus on the conversation meaning. Look for the sentence that expresses “実は今日は少し疲れています。”.",
       "hintJa": "Actually で本当の情報を加える。",
-      "explanation": "Actually で本当の情報を加える。",
-      "explanationJa": "Actually で本当の情報を加える。",
+      "explanation": "The sentence in the audio is “Actually, I’m a little tired today.”. Listen for the complete phrase, not just one familiar word.",
+      "explanationJa": "音声の英文は「Actually, I’m a little tired today.」です。知っている単語一つだけでなく、文全体を聞き取りましょう。",
       "prompt": "Listen and choose the sentence you hear.",
       "promptJa": "音声を聞いて、聞こえた英文を選んでください。",
       "audioText": "Actually, I’m a little tired today.",
@@ -1123,13 +1123,13 @@
         },
         {
           "id": "c",
-          "en": "Something came up.",
-          "jp": "急な事情ができました。"
+          "en": "It can’t be helped.",
+          "jp": "仕方ありません。"
         },
         {
           "id": "d",
-          "en": "It can’t be helped.",
-          "jp": "仕方ありません。"
+          "en": "Don’t mention it.",
+          "jp": "どういたしまして。"
         }
       ],
       "correct": "a"
@@ -1141,10 +1141,10 @@
       "section": "Listen & Speak",
       "topic": "safety",
       "isOriginal": false,
-      "hint": "avoid + 動詞-ing。",
+      "hint": "Focus on the safety meaning. Look for the sentence that expresses “疲れている時は運転を避けます。”.",
       "hintJa": "avoid + 動詞-ing。",
-      "explanation": "avoid + 動詞-ing。",
-      "explanationJa": "avoid + 動詞-ing。",
+      "explanation": "The sentence in the audio is “I avoid driving when I’m tired.”. Listen for the complete phrase, not just one familiar word.",
+      "explanationJa": "音声の英文は「I avoid driving when I’m tired.」です。知っている単語一つだけでなく、文全体を聞き取りましょう。",
       "prompt": "Listen and choose the sentence you hear.",
       "promptJa": "音声を聞いて、聞こえた英文を選んでください。",
       "audioText": "I avoid driving when I’m tired.",
@@ -1161,13 +1161,13 @@
         },
         {
           "id": "c",
-          "en": "It can’t be helped.",
-          "jp": "仕方ありません。"
+          "en": "He didn’t do it on purpose.",
+          "jp": "彼はわざとしたのではありません。"
         },
         {
           "id": "d",
-          "en": "He didn’t do it on purpose.",
-          "jp": "彼はわざとしたのではありません。"
+          "en": "It might rain later.",
+          "jp": "あとで雨が降るかもしれません。"
         }
       ],
       "correct": "a"
@@ -1179,10 +1179,10 @@
       "section": "Listen & Speak",
       "topic": "unexpected events",
       "isOriginal": false,
-      "hint": "予定変更の自然な説明。",
+      "hint": "Focus on the unexpected events meaning. Look for the sentence that expresses “急な事情ができました。”.",
       "hintJa": "予定変更の自然な説明。",
-      "explanation": "予定変更の自然な説明。",
-      "explanationJa": "予定変更の自然な説明。",
+      "explanation": "The complete sentence is “Something came up.”. Compare articles, auxiliaries and verb endings when you check your answer.",
+      "explanationJa": "全文は「Something came up.」です。答え合わせでは冠詞・助動詞・動詞の語尾まで確認しましょう。",
       "prompt": "Type the complete sentence you hear.",
       "promptJa": "聞こえた英文をそのまま入力してください。",
       "audioText": "Something came up.",
@@ -1197,10 +1197,10 @@
       "section": "Listen & Speak",
       "topic": "responses",
       "isOriginal": false,
-      "hint": "変えられない状況への反応。",
+      "hint": "Focus on the responses meaning. Look for the sentence that expresses “仕方ありません。”.",
       "hintJa": "変えられない状況への反応。",
-      "explanation": "変えられない状況への反応。",
-      "explanationJa": "変えられない状況への反応。",
+      "explanation": "The complete sentence is “It can’t be helped.”. Compare articles, auxiliaries and verb endings when you check your answer.",
+      "explanationJa": "全文は「It can’t be helped.」です。答え合わせでは冠詞・助動詞・動詞の語尾まで確認しましょう。",
       "prompt": "Type the complete sentence you hear.",
       "promptJa": "聞こえた英文をそのまま入力してください。",
       "audioText": "It can’t be helped.",
@@ -1215,10 +1215,10 @@
       "section": "Listen & Speak",
       "topic": "intention",
       "isOriginal": false,
-      "hint": "on purpose = わざと。",
+      "hint": "Focus on the intention meaning. Look for the sentence that expresses “彼はわざとしたのではありません。”.",
       "hintJa": "on purpose = わざと。",
-      "explanation": "on purpose = わざと。",
-      "explanationJa": "on purpose = わざと。",
+      "explanation": "Model: “He didn’t do it on purpose.” (彼はわざとしたのではありません。). Practise the whole thought as one natural phrase.",
+      "explanationJa": "お手本は「He didn’t do it on purpose.」（彼はわざとしたのではありません。）です。意味のまとまりとして自然に言う練習をしましょう。",
       "prompt": "Listen, then say the sentence naturally.",
       "promptJa": "音声を聞いてから、自然に言ってみましょう。",
       "speakText": "He didn’t do it on purpose.",
@@ -1231,10 +1231,10 @@
       "section": "Listen & Speak",
       "topic": "gratitude",
       "isOriginal": false,
-      "hint": "Thank you より気持ちを強く伝える。",
+      "hint": "Focus on the gratitude meaning. Look for the sentence that expresses “本当に感謝しています。”.",
       "hintJa": "Thank you より気持ちを強く伝える。",
-      "explanation": "Thank you より気持ちを強く伝える。",
-      "explanationJa": "Thank you より気持ちを強く伝える。",
+      "explanation": "Model: “I really appreciate it.” (本当に感謝しています。). Practise the whole thought as one natural phrase.",
+      "explanationJa": "お手本は「I really appreciate it.」（本当に感謝しています。）です。意味のまとまりとして自然に言う練習をしましょう。",
       "prompt": "Listen, then say the sentence naturally.",
       "promptJa": "音声を聞いてから、自然に言ってみましょう。",
       "speakText": "I really appreciate it.",
@@ -1247,10 +1247,10 @@
       "section": "Use It",
       "topic": "responses",
       "isOriginal": false,
-      "hint": "お礼への自然な返答。",
+      "hint": "Focus on the responses meaning. Look for the sentence that expresses “どういたしまして。”.",
       "hintJa": "お礼への自然な返答。",
-      "explanation": "お礼への自然な返答。",
-      "explanationJa": "お礼への自然な返答。",
+      "explanation": "True. “Don’t mention it.” means “どういたしまして。”.",
+      "explanationJa": "正解はTrueです。「Don’t mention it.」は「どういたしまして。」という意味です。",
       "prompt": "“Don’t mention it.” means “どういたしまして。”.",
       "promptJa": "「Don’t mention it.」は「どういたしまして。」という意味です。",
       "correct": true
@@ -1262,10 +1262,10 @@
       "section": "Use It",
       "topic": "possibility",
       "isOriginal": false,
-      "hint": "might は不確かな可能性。",
+      "hint": "Focus on the possibility meaning. Look for the sentence that expresses “あとで雨が降るかもしれません。”.",
       "hintJa": "might は不確かな可能性。",
-      "explanation": "might は不確かな可能性。",
-      "explanationJa": "might は不確かな可能性。",
+      "explanation": "Correct order: “It might rain later.”. Keep the subject, verb and remaining information in that order.",
+      "explanationJa": "正しい語順は「It might rain later.」です。主語・動詞・残りの情報の順を確認しましょう。",
       "prompt": "Put the words in order: あとで雨が降るかもしれません。",
       "promptJa": "語順を並べましょう：あとで雨が降るかもしれません。",
       "words": [
@@ -1288,10 +1288,10 @@
       "section": "Use It",
       "topic": "conversation",
       "isOriginal": false,
-      "hint": "Actually で本当の情報を加える。",
+      "hint": "Focus on the conversation meaning. Look for the sentence that expresses “実は今日は少し疲れています。”.",
       "hintJa": "Actually で本当の情報を加える。",
-      "explanation": "Actually で本当の情報を加える。",
-      "explanationJa": "Actually で本当の情報を加える。",
+      "explanation": "Each English phrase has one Japanese partner with the same meaning. Recheck the complete phrase when two items share a similar word.",
+      "explanationJa": "各英文には、同じ意味の日本語が一つずつあります。似た単語がある時も、表現全体の意味で確認しましょう。",
       "prompt": "Match each English phrase with its natural Japanese meaning.",
       "promptJa": "英文と自然な日本語を組み合わせてください。",
       "pairs": [
@@ -1334,10 +1334,10 @@
       "section": "Use It",
       "topic": "safety",
       "isOriginal": false,
-      "hint": "avoid + 動詞-ing。",
+      "hint": "Focus on the safety meaning. Look for the sentence that expresses “疲れている時は運転を避けます。”.",
       "hintJa": "avoid + 動詞-ing。",
-      "explanation": "avoid + 動詞-ing。",
-      "explanationJa": "avoid + 動詞-ing。",
+      "explanation": "The categories describe language purpose: conversation, safety. Sort by what each complete phrase does in conversation.",
+      "explanationJa": "分類は「conversation・safety」です。単語一つではなく、会話でその表現が果たす役割で分けましょう。",
       "prompt": "Sort each phrase by its language purpose.",
       "promptJa": "各表現を目的別に分類してください。",
       "categories": [
@@ -1362,10 +1362,10 @@
       "section": "Use It",
       "topic": "safety",
       "isOriginal": false,
-      "hint": "avoid + 動詞-ing。",
+      "hint": "Focus on the safety meaning. Look for the sentence that expresses “疲れている時は運転を避けます。”.",
       "hintJa": "avoid + 動詞-ing。",
-      "explanation": "avoid + 動詞-ing。",
-      "explanationJa": "avoid + 動詞-ing。",
+      "explanation": "“I avoid driving when I’m tired.” responds directly and naturally to the previous line.",
+      "explanationJa": "「I avoid driving when I’m tired.」は、直前の発言に直接答える自然な一文です。",
       "prompt": "Choose the most natural next line in the conversation.",
       "promptJa": "会話の次に続く最も自然な一文を選んでください。",
       "context": "A: What do you do when you’re too tired to drive safely?\nB: ...",
@@ -1383,13 +1383,13 @@
         },
         {
           "id": "c",
-          "en": "It can’t be helped.",
-          "jp": "仕方ありません。"
+          "en": "He didn’t do it on purpose.",
+          "jp": "彼はわざとしたのではありません。"
         },
         {
           "id": "d",
-          "en": "He didn’t do it on purpose.",
-          "jp": "彼はわざとしたのではありません。"
+          "en": "It might rain later.",
+          "jp": "あとで雨が降るかもしれません。"
         }
       ],
       "correct": "a"
@@ -1401,10 +1401,10 @@
       "section": "Use It",
       "topic": "unexpected events",
       "isOriginal": false,
-      "hint": "予定変更の自然な説明。",
+      "hint": "Focus on the unexpected events meaning. Look for the sentence that expresses “急な事情ができました。”.",
       "hintJa": "予定変更の自然な説明。",
-      "explanation": "予定変更の自然な説明。",
-      "explanationJa": "予定変更の自然な説明。",
+      "explanation": "A natural translation is “Something came up.”. It expresses “急な事情ができました。” with the lesson’s unexpected events pattern.",
+      "explanationJa": "自然な英訳は「Something came up.」です。「急な事情ができました。」を今回のunexpected events表現で伝えています。",
       "prompt": "Translate into English: 急な事情ができました。",
       "promptJa": "英語にしてください：急な事情ができました。",
       "accepted": [
@@ -1418,10 +1418,10 @@
       "section": "Use It",
       "topic": "responses",
       "isOriginal": false,
-      "hint": "変えられない状況への反応。",
+      "hint": "Focus on the responses meaning. Look for the sentence that expresses “仕方ありません。”.",
       "hintJa": "変えられない状況への反応。",
-      "explanation": "変えられない状況への反応。",
-      "explanationJa": "変えられない状況への反応。",
+      "explanation": "“It can’t be helped.” directly expresses “仕方ありません。”. The other choices describe different situations.",
+      "explanationJa": "「It can’t be helped.」が「仕方ありません。」を直接表します。他の選択肢は別の場面を表しています。",
       "prompt": "Which sentence best expresses this meaning: 仕方ありません。",
       "promptJa": "「仕方ありません。」に最も合う英文はどれですか？",
       "choices": [
@@ -1437,13 +1437,13 @@
         },
         {
           "id": "c",
-          "en": "I really appreciate it.",
-          "jp": "本当に感謝しています。"
+          "en": "Don’t mention it.",
+          "jp": "どういたしまして。"
         },
         {
           "id": "d",
-          "en": "Don’t mention it.",
-          "jp": "どういたしまして。"
+          "en": "I avoid driving when I’m tired.",
+          "jp": "疲れている時は運転を避けます。"
         }
       ],
       "correct": "a"
@@ -1457,10 +1457,10 @@
       "section": "Listen & Speak",
       "topic": "reactions",
       "isOriginal": false,
-      "hint": "説明に納得した時。",
+      "hint": "Focus on the reactions meaning. Look for the sentence that expresses “なるほど、筋が通っています。”.",
       "hintJa": "説明に納得した時。",
-      "explanation": "説明に納得した時。",
-      "explanationJa": "説明に納得した時。",
+      "explanation": "The sentence in the audio is “That makes sense.”. Listen for the complete phrase, not just one familiar word.",
+      "explanationJa": "音声の英文は「That makes sense.」です。知っている単語一つだけでなく、文全体を聞き取りましょう。",
       "prompt": "Listen and choose the sentence you hear.",
       "promptJa": "音声を聞いて、聞こえた英文を選んでください。",
       "audioText": "That makes sense.",
@@ -1477,13 +1477,13 @@
         },
         {
           "id": "c",
-          "en": "It depends on the weather.",
-          "jp": "天気によります。"
+          "en": "I’m not sure yet.",
+          "jp": "まだ分かりません。"
         },
         {
           "id": "d",
-          "en": "I’m not sure yet.",
-          "jp": "まだ分かりません。"
+          "en": "I changed my mind.",
+          "jp": "考えが変わりました。"
         }
       ],
       "correct": "a"
@@ -1495,10 +1495,10 @@
       "section": "Listen & Speak",
       "topic": "preferences",
       "isOriginal": false,
-      "hint": "would rather + 動詞原形。",
+      "hint": "Focus on the preferences meaning. Look for the sentence that expresses “今夜は家にいたいです。”.",
       "hintJa": "would rather + 動詞原形。",
-      "explanation": "would rather + 動詞原形。",
-      "explanationJa": "would rather + 動詞原形。",
+      "explanation": "The sentence in the audio is “I’d rather stay home tonight.”. Listen for the complete phrase, not just one familiar word.",
+      "explanationJa": "音声の英文は「I’d rather stay home tonight.」です。知っている単語一つだけでなく、文全体を聞き取りましょう。",
       "prompt": "Listen and choose the sentence you hear.",
       "promptJa": "音声を聞いて、聞こえた英文を選んでください。",
       "audioText": "I’d rather stay home tonight.",
@@ -1515,13 +1515,13 @@
         },
         {
           "id": "c",
-          "en": "I’m not sure yet.",
-          "jp": "まだ分かりません。"
+          "en": "Let me think about it.",
+          "jp": "少し考えさせてください。"
         },
         {
           "id": "d",
-          "en": "Let me think about it.",
-          "jp": "少し考えさせてください。"
+          "en": "Either option works for me.",
+          "jp": "どちらの選択肢でも大丈夫です。"
         }
       ],
       "correct": "a"
@@ -1533,10 +1533,10 @@
       "section": "Listen & Speak",
       "topic": "decisions",
       "isOriginal": false,
-      "hint": "It depends on...",
+      "hint": "Focus on the decisions meaning. Look for the sentence that expresses “天気によります。”.",
       "hintJa": "It depends on...",
-      "explanation": "It depends on...",
-      "explanationJa": "It depends on...",
+      "explanation": "The complete sentence is “It depends on the weather.”. Compare articles, auxiliaries and verb endings when you check your answer.",
+      "explanationJa": "全文は「It depends on the weather.」です。答え合わせでは冠詞・助動詞・動詞の語尾まで確認しましょう。",
       "prompt": "Type the complete sentence you hear.",
       "promptJa": "聞こえた英文をそのまま入力してください。",
       "audioText": "It depends on the weather.",
@@ -1551,10 +1551,10 @@
       "section": "Listen & Speak",
       "topic": "responses",
       "isOriginal": false,
-      "hint": "決まっていない時。",
+      "hint": "Focus on the responses meaning. Look for the sentence that expresses “まだ分かりません。”.",
       "hintJa": "決まっていない時。",
-      "explanation": "決まっていない時。",
-      "explanationJa": "決まっていない時。",
+      "explanation": "The complete sentence is “I’m not sure yet.”. Compare articles, auxiliaries and verb endings when you check your answer.",
+      "explanationJa": "全文は「I’m not sure yet.」です。答え合わせでは冠詞・助動詞・動詞の語尾まで確認しましょう。",
       "prompt": "Type the complete sentence you hear.",
       "promptJa": "聞こえた英文をそのまま入力してください。",
       "audioText": "I’m not sure yet.",
@@ -1569,10 +1569,10 @@
       "section": "Listen & Speak",
       "topic": "decisions",
       "isOriginal": false,
-      "hint": "即答を避ける丁寧な表現。",
+      "hint": "Focus on the decisions meaning. Look for the sentence that expresses “少し考えさせてください。”.",
       "hintJa": "即答を避ける丁寧な表現。",
-      "explanation": "即答を避ける丁寧な表現。",
-      "explanationJa": "即答を避ける丁寧な表現。",
+      "explanation": "Model: “Let me think about it.” (少し考えさせてください。). Practise the whole thought as one natural phrase.",
+      "explanationJa": "お手本は「Let me think about it.」（少し考えさせてください。）です。意味のまとまりとして自然に言う練習をしましょう。",
       "prompt": "Listen, then say the sentence naturally.",
       "promptJa": "音声を聞いてから、自然に言ってみましょう。",
       "speakText": "Let me think about it.",
@@ -1585,10 +1585,10 @@
       "section": "Listen & Speak",
       "topic": "opinions",
       "isOriginal": false,
-      "hint": "相手の意見を認める。",
+      "hint": "Focus on the opinions meaning. Look for the sentence that expresses “それはいい指摘ですね。”.",
       "hintJa": "相手の意見を認める。",
-      "explanation": "相手の意見を認める。",
-      "explanationJa": "相手の意見を認める。",
+      "explanation": "Model: “That’s a good point.” (それはいい指摘ですね。). Practise the whole thought as one natural phrase.",
+      "explanationJa": "お手本は「That’s a good point.」（それはいい指摘ですね。）です。意味のまとまりとして自然に言う練習をしましょう。",
       "prompt": "Listen, then say the sentence naturally.",
       "promptJa": "音声を聞いてから、自然に言ってみましょう。",
       "speakText": "That’s a good point.",
@@ -1601,10 +1601,10 @@
       "section": "Use It",
       "topic": "choices",
       "isOriginal": false,
-      "hint": "決定を変えた時。",
+      "hint": "Focus on the choices meaning. Look for the sentence that expresses “考えが変わりました。”.",
       "hintJa": "決定を変えた時。",
-      "explanation": "決定を変えた時。",
-      "explanationJa": "決定を変えた時。",
+      "explanation": "True. “I changed my mind.” means “考えが変わりました。”.",
+      "explanationJa": "正解はTrueです。「I changed my mind.」は「考えが変わりました。」という意味です。",
       "prompt": "“I changed my mind.” means “考えが変わりました。”.",
       "promptJa": "「I changed my mind.」は「考えが変わりました。」という意味です。",
       "correct": true
@@ -1616,10 +1616,10 @@
       "section": "Use It",
       "topic": "choices",
       "isOriginal": false,
-      "hint": "either = どちらでも。",
+      "hint": "Focus on the choices meaning. Look for the sentence that expresses “どちらの選択肢でも大丈夫です。”.",
       "hintJa": "either = どちらでも。",
-      "explanation": "either = どちらでも。",
-      "explanationJa": "either = どちらでも。",
+      "explanation": "Correct order: “Either option works for me.”. Keep the subject, verb and remaining information in that order.",
+      "explanationJa": "正しい語順は「Either option works for me.」です。主語・動詞・残りの情報の順を確認しましょう。",
       "prompt": "Put the words in order: どちらの選択肢でも大丈夫です。",
       "promptJa": "語順を並べましょう：どちらの選択肢でも大丈夫です。",
       "words": [
@@ -1644,10 +1644,10 @@
       "section": "Use It",
       "topic": "reactions",
       "isOriginal": false,
-      "hint": "説明に納得した時。",
+      "hint": "Focus on the reactions meaning. Look for the sentence that expresses “なるほど、筋が通っています。”.",
       "hintJa": "説明に納得した時。",
-      "explanation": "説明に納得した時。",
-      "explanationJa": "説明に納得した時。",
+      "explanation": "Each English phrase has one Japanese partner with the same meaning. Recheck the complete phrase when two items share a similar word.",
+      "explanationJa": "各英文には、同じ意味の日本語が一つずつあります。似た単語がある時も、表現全体の意味で確認しましょう。",
       "prompt": "Match each English phrase with its natural Japanese meaning.",
       "promptJa": "英文と自然な日本語を組み合わせてください。",
       "pairs": [
@@ -1690,10 +1690,10 @@
       "section": "Use It",
       "topic": "preferences",
       "isOriginal": false,
-      "hint": "would rather + 動詞原形。",
+      "hint": "Focus on the preferences meaning. Look for the sentence that expresses “今夜は家にいたいです。”.",
       "hintJa": "would rather + 動詞原形。",
-      "explanation": "would rather + 動詞原形。",
-      "explanationJa": "would rather + 動詞原形。",
+      "explanation": "The categories describe language purpose: reactions, preferences. Sort by what each complete phrase does in conversation.",
+      "explanationJa": "分類は「reactions・preferences」です。単語一つではなく、会話でその表現が果たす役割で分けましょう。",
       "prompt": "Sort each phrase by its language purpose.",
       "promptJa": "各表現を目的別に分類してください。",
       "categories": [
@@ -1718,10 +1718,10 @@
       "section": "Use It",
       "topic": "preferences",
       "isOriginal": false,
-      "hint": "would rather + 動詞原形。",
+      "hint": "Focus on the preferences meaning. Look for the sentence that expresses “今夜は家にいたいです。”.",
       "hintJa": "would rather + 動詞原形。",
-      "explanation": "would rather + 動詞原形。",
-      "explanationJa": "would rather + 動詞原形。",
+      "explanation": "“I’d rather stay home tonight.” responds directly and naturally to the previous line.",
+      "explanationJa": "「I’d rather stay home tonight.」は、直前の発言に直接答える自然な一文です。",
       "prompt": "Choose the most natural next line in the conversation.",
       "promptJa": "会話の次に続く最も自然な一文を選んでください。",
       "context": "A: Do you want to go out tonight?\nB: ...",
@@ -1757,10 +1757,10 @@
       "section": "Use It",
       "topic": "decisions",
       "isOriginal": false,
-      "hint": "It depends on...",
+      "hint": "Focus on the decisions meaning. Look for the sentence that expresses “天気によります。”.",
       "hintJa": "It depends on...",
-      "explanation": "It depends on...",
-      "explanationJa": "It depends on...",
+      "explanation": "A natural translation is “It depends on the weather.”. It expresses “天気によります。” with the lesson’s decisions pattern.",
+      "explanationJa": "自然な英訳は「It depends on the weather.」です。「天気によります。」を今回のdecisions表現で伝えています。",
       "prompt": "Translate into English: 天気によります。",
       "promptJa": "英語にしてください：天気によります。",
       "accepted": [
@@ -1774,10 +1774,10 @@
       "section": "Use It",
       "topic": "responses",
       "isOriginal": false,
-      "hint": "決まっていない時。",
+      "hint": "Focus on the responses meaning. Look for the sentence that expresses “まだ分かりません。”.",
       "hintJa": "決まっていない時。",
-      "explanation": "決まっていない時。",
-      "explanationJa": "決まっていない時。",
+      "explanation": "“I’m not sure yet.” directly expresses “まだ分かりません。”. The other choices describe different situations.",
+      "explanationJa": "「I’m not sure yet.」が「まだ分かりません。」を直接表します。他の選択肢は別の場面を表しています。",
       "prompt": "Which sentence best expresses this meaning: まだ分かりません。",
       "promptJa": "「まだ分かりません。」に最も合う英文はどれですか？",
       "choices": [
@@ -1793,13 +1793,13 @@
         },
         {
           "id": "c",
-          "en": "That’s a good point.",
-          "jp": "それはいい指摘ですね。"
+          "en": "I changed my mind.",
+          "jp": "考えが変わりました。"
         },
         {
           "id": "d",
-          "en": "I changed my mind.",
-          "jp": "考えが変わりました。"
+          "en": "I’d rather stay home tonight.",
+          "jp": "今夜は家にいたいです。"
         }
       ],
       "correct": "a"
@@ -1813,10 +1813,10 @@
       "section": "Listen & Speak",
       "topic": "clarification",
       "isOriginal": false,
-      "hint": "聞き返す丁寧な表現。",
+      "hint": "Focus on the clarification meaning. Look for the sentence that expresses “もう一度言っていただけますか？”.",
       "hintJa": "聞き返す丁寧な表現。",
-      "explanation": "聞き返す丁寧な表現。",
-      "explanationJa": "聞き返す丁寧な表現。",
+      "explanation": "The sentence in the audio is “Could you say that again?”. Listen for the complete phrase, not just one familiar word.",
+      "explanationJa": "音声の英文は「Could you say that again?」です。知っている単語一つだけでなく、文全体を聞き取りましょう。",
       "prompt": "Listen and choose the sentence you hear.",
       "promptJa": "音声を聞いて、聞こえた英文を選んでください。",
       "audioText": "Could you say that again?",
@@ -1833,13 +1833,13 @@
         },
         {
           "id": "c",
-          "en": "I’m getting used to it.",
-          "jp": "だんだん慣れてきました。"
+          "en": "I’ve never tried that before.",
+          "jp": "それは今まで試したことがありません。"
         },
         {
           "id": "d",
-          "en": "I’ve never tried that before.",
-          "jp": "それは今まで試したことがありません。"
+          "en": "I’ll check and let you know.",
+          "jp": "確認してお知らせします。"
         }
       ],
       "correct": "a"
@@ -1851,10 +1851,10 @@
       "section": "Listen & Speak",
       "topic": "clarification",
       "isOriginal": false,
-      "hint": "意味を確認する。",
+      "hint": "Focus on the clarification meaning. Look for the sentence that expresses “どういう意味ですか？”.",
       "hintJa": "意味を確認する。",
-      "explanation": "意味を確認する。",
-      "explanationJa": "意味を確認する。",
+      "explanation": "The sentence in the audio is “What do you mean?”. Listen for the complete phrase, not just one familiar word.",
+      "explanationJa": "音声の英文は「What do you mean?」です。知っている単語一つだけでなく、文全体を聞き取りましょう。",
       "prompt": "Listen and choose the sentence you hear.",
       "promptJa": "音声を聞いて、聞こえた英文を選んでください。",
       "audioText": "What do you mean?",
@@ -1871,13 +1871,13 @@
         },
         {
           "id": "c",
-          "en": "I’ve never tried that before.",
-          "jp": "それは今まで試したことがありません。"
+          "en": "It was better than I expected.",
+          "jp": "思っていたより良かったです。"
         },
         {
           "id": "d",
-          "en": "It was better than I expected.",
-          "jp": "思っていたより良かったです。"
+          "en": "That’s the part I find difficult.",
+          "jp": "そこが難しいと感じる部分です。"
         }
       ],
       "correct": "a"
@@ -1889,10 +1889,10 @@
       "section": "Listen & Speak",
       "topic": "change",
       "isOriginal": false,
-      "hint": "get used to + 名詞。",
+      "hint": "Focus on the change meaning. Look for the sentence that expresses “だんだん慣れてきました。”.",
       "hintJa": "get used to + 名詞。",
-      "explanation": "get used to + 名詞。",
-      "explanationJa": "get used to + 名詞。",
+      "explanation": "The complete sentence is “I’m getting used to it.”. Compare articles, auxiliaries and verb endings when you check your answer.",
+      "explanationJa": "全文は「I’m getting used to it.」です。答え合わせでは冠詞・助動詞・動詞の語尾まで確認しましょう。",
       "prompt": "Type the complete sentence you hear.",
       "promptJa": "聞こえた英文をそのまま入力してください。",
       "audioText": "I’m getting used to it.",
@@ -1907,10 +1907,10 @@
       "section": "Listen & Speak",
       "topic": "experience",
       "isOriginal": false,
-      "hint": "現在完了の経験。",
+      "hint": "Focus on the experience meaning. Look for the sentence that expresses “それは今まで試したことがありません。”.",
       "hintJa": "現在完了の経験。",
-      "explanation": "現在完了の経験。",
-      "explanationJa": "現在完了の経験。",
+      "explanation": "The complete sentence is “I’ve never tried that before.”. Compare articles, auxiliaries and verb endings when you check your answer.",
+      "explanationJa": "全文は「I’ve never tried that before.」です。答え合わせでは冠詞・助動詞・動詞の語尾まで確認しましょう。",
       "prompt": "Type the complete sentence you hear.",
       "promptJa": "聞こえた英文をそのまま入力してください。",
       "audioText": "I’ve never tried that before.",
@@ -1925,10 +1925,10 @@
       "section": "Listen & Speak",
       "topic": "comparisons",
       "isOriginal": false,
-      "hint": "better than expected。",
+      "hint": "Focus on the comparisons meaning. Look for the sentence that expresses “思っていたより良かったです。”.",
       "hintJa": "better than expected。",
-      "explanation": "better than expected。",
-      "explanationJa": "better than expected。",
+      "explanation": "Model: “It was better than I expected.” (思っていたより良かったです。). Practise the whole thought as one natural phrase.",
+      "explanationJa": "お手本は「It was better than I expected.」（思っていたより良かったです。）です。意味のまとまりとして自然に言う練習をしましょう。",
       "prompt": "Listen, then say the sentence naturally.",
       "promptJa": "音声を聞いてから、自然に言ってみましょう。",
       "speakText": "It was better than I expected.",
@@ -1941,10 +1941,10 @@
       "section": "Listen & Speak",
       "topic": "learning",
       "isOriginal": false,
-      "hint": "説明を具体化する質問。",
+      "hint": "Focus on the learning meaning. Look for the sentence that expresses “例を一つ教えてもらえますか？”.",
       "hintJa": "説明を具体化する質問。",
-      "explanation": "説明を具体化する質問。",
-      "explanationJa": "説明を具体化する質問。",
+      "explanation": "Model: “Can you give me an example?” (例を一つ教えてもらえますか？). Practise the whole thought as one natural phrase.",
+      "explanationJa": "お手本は「Can you give me an example?」（例を一つ教えてもらえますか？）です。意味のまとまりとして自然に言う練習をしましょう。",
       "prompt": "Listen, then say the sentence naturally.",
       "promptJa": "音声を聞いてから、自然に言ってみましょう。",
       "speakText": "Can you give me an example?",
@@ -1957,10 +1957,10 @@
       "section": "Use It",
       "topic": "work",
       "isOriginal": false,
-      "hint": "その場で分からない時。",
+      "hint": "Focus on the work meaning. Look for the sentence that expresses “確認してお知らせします。”.",
       "hintJa": "その場で分からない時。",
-      "explanation": "その場で分からない時。",
-      "explanationJa": "その場で分からない時。",
+      "explanation": "True. “I’ll check and let you know.” means “確認してお知らせします。”.",
+      "explanationJa": "正解はTrueです。「I’ll check and let you know.」は「確認してお知らせします。」という意味です。",
       "prompt": "“I’ll check and let you know.” means “確認してお知らせします。”.",
       "promptJa": "「I’ll check and let you know.」は「確認してお知らせします。」という意味です。",
       "correct": true
@@ -1972,10 +1972,10 @@
       "section": "Use It",
       "topic": "learning",
       "isOriginal": false,
-      "hint": "苦手な箇所を説明する。",
+      "hint": "Focus on the learning meaning. Look for the sentence that expresses “そこが難しいと感じる部分です。”.",
       "hintJa": "苦手な箇所を説明する。",
-      "explanation": "苦手な箇所を説明する。",
-      "explanationJa": "苦手な箇所を説明する。",
+      "explanation": "Correct order: “That’s the part I find difficult.”. Keep the subject, verb and remaining information in that order.",
+      "explanationJa": "正しい語順は「That’s the part I find difficult.」です。主語・動詞・残りの情報の順を確認しましょう。",
       "prompt": "Put the words in order: そこが難しいと感じる部分です。",
       "promptJa": "語順を並べましょう：そこが難しいと感じる部分です。",
       "words": [
@@ -2002,10 +2002,10 @@
       "section": "Use It",
       "topic": "clarification",
       "isOriginal": false,
-      "hint": "聞き返す丁寧な表現。",
+      "hint": "Focus on the clarification meaning. Look for the sentence that expresses “もう一度言っていただけますか？”.",
       "hintJa": "聞き返す丁寧な表現。",
-      "explanation": "聞き返す丁寧な表現。",
-      "explanationJa": "聞き返す丁寧な表現。",
+      "explanation": "Each English phrase has one Japanese partner with the same meaning. Recheck the complete phrase when two items share a similar word.",
+      "explanationJa": "各英文には、同じ意味の日本語が一つずつあります。似た単語がある時も、表現全体の意味で確認しましょう。",
       "prompt": "Match each English phrase with its natural Japanese meaning.",
       "promptJa": "英文と自然な日本語を組み合わせてください。",
       "pairs": [
@@ -2048,10 +2048,10 @@
       "section": "Use It",
       "topic": "clarification",
       "isOriginal": false,
-      "hint": "意味を確認する。",
+      "hint": "Focus on the clarification meaning. Look for the sentence that expresses “どういう意味ですか？”.",
       "hintJa": "意味を確認する。",
-      "explanation": "意味を確認する。",
-      "explanationJa": "意味を確認する。",
+      "explanation": "The categories describe language purpose: clarification, change. Sort by what each complete phrase does in conversation.",
+      "explanationJa": "分類は「clarification・change」です。単語一つではなく、会話でその表現が果たす役割で分けましょう。",
       "prompt": "Sort each phrase by its language purpose.",
       "promptJa": "各表現を目的別に分類してください。",
       "categories": [
@@ -2080,10 +2080,10 @@
       "section": "Use It",
       "topic": "clarification",
       "isOriginal": false,
-      "hint": "意味を確認する。",
+      "hint": "Focus on the clarification meaning. Look for the sentence that expresses “どういう意味ですか？”.",
       "hintJa": "意味を確認する。",
-      "explanation": "意味を確認する。",
-      "explanationJa": "意味を確認する。",
+      "explanation": "“What do you mean?” responds directly and naturally to the previous line.",
+      "explanationJa": "「What do you mean?」は、直前の発言に直接答える自然な一文です。",
       "prompt": "Choose the most natural next line in the conversation.",
       "promptJa": "会話の次に続く最も自然な一文を選んでください。",
       "context": "A: This part is a little abstract.\nB: ...",
@@ -2101,13 +2101,13 @@
         },
         {
           "id": "c",
-          "en": "I’ve never tried that before.",
-          "jp": "それは今まで試したことがありません。"
+          "en": "It was better than I expected.",
+          "jp": "思っていたより良かったです。"
         },
         {
           "id": "d",
-          "en": "It was better than I expected.",
-          "jp": "思っていたより良かったです。"
+          "en": "That’s the part I find difficult.",
+          "jp": "そこが難しいと感じる部分です。"
         }
       ],
       "correct": "a"
@@ -2119,10 +2119,10 @@
       "section": "Use It",
       "topic": "change",
       "isOriginal": false,
-      "hint": "get used to + 名詞。",
+      "hint": "Focus on the change meaning. Look for the sentence that expresses “だんだん慣れてきました。”.",
       "hintJa": "get used to + 名詞。",
-      "explanation": "get used to + 名詞。",
-      "explanationJa": "get used to + 名詞。",
+      "explanation": "A natural translation is “I’m getting used to it.”. It expresses “だんだん慣れてきました。” with the lesson’s change pattern.",
+      "explanationJa": "自然な英訳は「I’m getting used to it.」です。「だんだん慣れてきました。」を今回のchange表現で伝えています。",
       "prompt": "Translate into English: だんだん慣れてきました。",
       "promptJa": "英語にしてください：だんだん慣れてきました。",
       "accepted": [
@@ -2136,10 +2136,10 @@
       "section": "Use It",
       "topic": "experience",
       "isOriginal": false,
-      "hint": "現在完了の経験。",
+      "hint": "Focus on the experience meaning. Look for the sentence that expresses “それは今まで試したことがありません。”.",
       "hintJa": "現在完了の経験。",
-      "explanation": "現在完了の経験。",
-      "explanationJa": "現在完了の経験。",
+      "explanation": "“I’ve never tried that before.” directly expresses “それは今まで試したことがありません。”. The other choices describe different situations.",
+      "explanationJa": "「I’ve never tried that before.」が「それは今まで試したことがありません。」を直接表します。他の選択肢は別の場面を表しています。",
       "prompt": "Which sentence best expresses this meaning: それは今まで試したことがありません。",
       "promptJa": "「それは今まで試したことがありません。」に最も合う英文はどれですか？",
       "choices": [
@@ -2155,13 +2155,13 @@
         },
         {
           "id": "c",
-          "en": "Can you give me an example?",
-          "jp": "例を一つ教えてもらえますか？"
+          "en": "I’ll check and let you know.",
+          "jp": "確認してお知らせします。"
         },
         {
           "id": "d",
-          "en": "I’ll check and let you know.",
-          "jp": "確認してお知らせします。"
+          "en": "What do you mean?",
+          "jp": "どういう意味ですか？"
         }
       ],
       "correct": "a"

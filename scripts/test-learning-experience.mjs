@@ -81,14 +81,31 @@ store.updateSettings({ sound: true, playbackRate: 0.5 });
 assert.equal(store.getSettings().playbackRate, 0.5, "The slow 0.5× voice speed is stored exactly.");
 store.updateSettings({ playbackRate: 1.5 });
 assert.equal(store.getSettings().playbackRate, 1.5, "The fast 1.5× voice speed is stored exactly.");
+store.updateSettings({ shuffleChoices: false });
+assert.equal(
+  store.getSettings().shuffleChoices,
+  true,
+  "An old unchecked preference cannot disable automatic choice shuffling.",
+);
 
 let currentAuthUserId = "student-a";
+let authStateListener = null;
 const remoteSettings = new Map([
   ["student-a", { voice: "gb", sound: false }],
 ]);
 const fakeSupabaseClient = {
   auth: {
     getSession: async () => ({
+      data: {
+        session: currentAuthUserId ? { user: { id: currentAuthUserId } } : null,
+      },
+      error: null,
+    }),
+    onAuthStateChange: (callback) => {
+      authStateListener = callback;
+      return { data: { subscription: { unsubscribe() {} } } };
+    },
+    signInWithPassword: async () => ({
       data: {
         session: currentAuthUserId ? { user: { id: currentAuthUserId } } : null,
       },
@@ -128,6 +145,24 @@ globalThis.window.supabase = {
   createClient: () => fakeSupabaseClient,
 };
 const remote = await import(`../src/supabase.js?settings-test=${Date.now()}`);
+let deferredAuthSession = null;
+remote.onStudentAuthChange(async (session) => {
+  deferredAuthSession = session;
+});
+assert.equal(typeof authStateListener, "function");
+authStateListener("SIGNED_IN", { user: { id: "student-a" } });
+assert.equal(
+  deferredAuthSession,
+  null,
+  "Supabase auth callbacks return before application database work starts.",
+);
+await new Promise((resolve) => setTimeout(resolve, 0));
+assert.equal(deferredAuthSession?.user?.id, "student-a");
+assert.equal(
+  (await remote.signInStudent("learner@example.com", "safe-test-password")).data.session.user.id,
+  "student-a",
+  "Password sign-in settles normally after auth listeners are registered.",
+);
 const loadedSettings = await remote.loadUserSettings("student-a");
 assert.equal(loadedSettings.loaded, true);
 assert.equal(loadedSettings.settings.voice, "gb");
@@ -171,6 +206,13 @@ if (originalWindow === undefined) delete globalThis.window;
 else globalThis.window = originalWindow;
 if (originalCustomEvent === undefined) delete globalThis.CustomEvent;
 else globalThis.CustomEvent = originalCustomEvent;
+
+const lessonScript = fs.readFileSync(path.join(root, "src", "lesson.js"), "utf8");
+const lessonPage = fs.readFileSync(path.join(root, "lesson.html"), "utf8");
+assert.match(lessonScript, /orderFor\(`\$\{question\.id\}:choices`, ids, true\)/);
+assert.match(lessonScript, /state\.questionOrder = shuffleArray\(state\.questionOrder\)/);
+assert.doesNotMatch(lessonPage, /id="shuffleChoices"/);
+assert.match(lessonPage, /Questions &amp; choices shuffle automatically/);
 
 const {
   normalizePlaybackRate,
@@ -301,8 +343,6 @@ assert.equal(
   "Quoted Japanese targets remain available as the actual meaning.",
 );
 
-const lessonScript = fs.readFileSync(path.join(root, "src", "lesson.js"), "utf8");
-const lessonPage = fs.readFileSync(path.join(root, "lesson.html"), "utf8");
 const hubScript = fs.readFileSync(path.join(root, "src", "hub.js"), "utf8");
 const phraseScript = fs.readFileSync(path.join(root, "src", "phrases.js"), "utf8");
 assert.match(lessonScript, /querySelectorAll\("\[data-audio-text\]"\)/);

@@ -140,6 +140,24 @@ function applyQuestionCorrection(directory, question) {
   };
 }
 
+function completeQuestionGuidance(question) {
+  const completed = { ...question };
+  if (!completed.prompt && completed.promptJP) {
+    const target = String(completed.promptJP).trim();
+    completed.prompt = {
+      en: `Write this meaning in natural English: ${target}`,
+      jp: `次の意味を自然な英語にしてください：${target}`,
+    };
+  }
+  if (!completed.explanation && completed.type === "matching") {
+    completed.explanation = {
+      en: `There are ${completed.pairs?.length || "several"} one-to-one pairs. Match each complete English expression with the Japanese text that has the same meaning; similar-looking words are not enough.`,
+      jp: `${completed.pairs?.length || "複数"}組を一対一で合わせます。似た単語だけで判断せず、英文全体と同じ意味の日本語を選びましょう。`,
+    };
+  }
+  return completed;
+}
+
 const directories = fs
   .readdirSync(lessonsRoot, { withFileTypes: true })
   .filter((entry) => entry.isDirectory())
@@ -167,7 +185,9 @@ const lessons = directories.map((directory) => {
     categoryLabels: quizData.categoryLabels || {},
     originalQuestionCount: quizData.questions.length,
     questions: quizData.questions.map((rawQuestion, index) => {
-      const question = applyQuestionCorrection(directory, rawQuestion);
+      const question = completeQuestionGuidance(
+        applyQuestionCorrection(directory, rawQuestion),
+      );
       return {
       ...question,
       id: `${directory}-original-${question.id || index + 1}`,

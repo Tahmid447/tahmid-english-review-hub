@@ -32,7 +32,7 @@
       </div>
       <div class="lesson-mode">
         <label><span data-ui-en="Practice set" data-ui-ja="練習セット">Practice set / 練習セット</span><select id="practiceMode"><option value="all">All questions / 全問題</option><option value="original">Original Review / 元の復習</option><option value="extra">Listen & Speak / 聞く・話す</option><option value="wrong">Mistakes only / 間違いだけ</option><option value="unanswered">Unanswered only / 未回答だけ</option></select></label>
-        <button class="secondary-btn" id="shuffleQuestions" type="button" data-ui-en="Shuffle questions" data-ui-ja="問題順をシャッフル">Shuffle questions / 問題順をシャッフル</button>
+        <button class="secondary-btn" id="shuffleQuestions" type="button" data-ui-en="Shuffle again" data-ui-ja="もう一度シャッフル">Shuffle again / もう一度シャッフル</button>
       </div>
     </section>
 
@@ -46,7 +46,7 @@
         <button class="active" data-check="manual" type="button" data-ui-en="Manual Check" data-ui-ja="自分で確認">Manual Check / 自分で確認</button>
         <button data-check="instant" type="button" data-ui-en="Instant Check" data-ui-ja="すぐ採点">Instant Check / すぐ採点</button>
       </div>
-      <label class="toggle-label"><input id="shuffleChoices" type="checkbox"> <span data-ui-en="Shuffle choices" data-ui-ja="選択肢をシャッフル">Shuffle choices / 選択肢をシャッフル</span></label>
+      <span class="toggle-label automatic-shuffle" role="status"><span aria-hidden="true">🔀</span> <span data-ui-en="Questions & choices shuffle automatically" data-ui-ja="問題・選択肢は毎回自動シャッフル">Questions &amp; choices shuffle automatically / 問題・選択肢は毎回自動シャッフル</span></span>
       <label class="toggle-label choice-help-toggle"><input id="showChoiceTranslations" type="checkbox"> <span data-ui-en="Choice translations" data-ui-ja="選択肢の日本語">Choice translations / 選択肢の日本語</span><small data-ui-en="Off during challenge" data-ui-ja="問題中は非表示">Off during challenge</small></label>
       <div class="segmented hint-mode-toggle" role="group" aria-label="Hint behaviour">
         <button class="active" data-hint-mode="auto" type="button" data-ui-en="Hint · Auto-close" data-ui-ja="ヒント・自動で閉じる">Hint · Auto-close / ヒント・自動で閉じる</button>
@@ -84,6 +84,8 @@
         <button class="secondary-btn" data-retry="all" type="button" data-ui-en="Practise all again" data-ui-ja="すべてもう一度">Practise all again</button>
       </div>
     </section>
+
+    <section class="premium-tasks-panel" id="premiumTasksPanel" hidden aria-live="polite"></section>
   </main>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js"></script>

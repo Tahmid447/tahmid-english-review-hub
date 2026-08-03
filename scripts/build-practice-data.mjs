@@ -15,11 +15,31 @@ for (const visual of visualManifest.questions || []) {
   visualQuestionsByLesson.set(visual.lessonId, lessonQuestions);
 }
 
-const choice = (phrases, correctIndex, field = "en") =>
-  [0, 1, 2, 3].map((offset) => {
+const choice = (phrases, correctIndex, field = "en") => {
+  const offsets = [0, 1, Math.ceil(phrases.length / 3), Math.ceil((phrases.length * 2) / 3)];
+  return offsets.map((offset, position) => {
     const item = phrases[(correctIndex + offset) % phrases.length];
-    return { id: String.fromCharCode(97 + offset), en: item[field], jp: item[field === "en" ? "jp" : "en"] };
+    return { id: String.fromCharCode(97 + position), en: item[field], jp: item[field === "en" ? "jp" : "en"] };
   });
+};
+
+const visualChoice = (phrases, visual, field = "en") => {
+  const requested = Array.isArray(visual.distractorIndexes)
+    ? [visual.phraseIndex, ...visual.distractorIndexes]
+    : null;
+  if (!requested || requested.length !== 4 || new Set(requested).size !== 4) {
+    return choice(phrases, visual.phraseIndex, field);
+  }
+  return requested.map((phraseIndex, position) => {
+    const item = phrases[phraseIndex];
+    if (!item) throw new Error(`${visual.lessonId} visual ${visual.slot} has an invalid distractor index.`);
+    return {
+      id: String.fromCharCode(97 + position),
+      en: item[field],
+      jp: item[field === "en" ? "jp" : "en"],
+    };
+  });
+};
 
 const stableShuffle = (items) =>
   items
@@ -139,18 +159,32 @@ const makeIncorrectSentence = (sentence) => {
   return `${sentence.replace(/[.!?]+$/, "")} yesterday now.`;
 };
 
-const base = (id, format, section, phrase) => ({
+const phraseHint = (phrase) => ({
+  en: `Focus on the ${phrase?.topic || "lesson"} meaning. Look for the sentence that expresses “${phrase?.jp || "the target meaning"}”.`,
+  jp: phrase?.note || `「${phrase?.jp || "目標の意味"}」を表す英文と、${phrase?.topic || "今回の表現"}の形に注目しましょう。`,
+});
+
+const phraseExplanation = (phrase) => ({
+  en: `“${phrase?.en || "The model sentence"}” means “${phrase?.jp || "the target meaning"}”. This is the lesson model for ${phrase?.topic || "this language point"}.`,
+  jp: `「${phrase?.en || "この英文"}」は「${phrase?.jp || "目標の意味"}」という意味です。${phrase?.note || `${phrase?.topic || "今回の表現"}の形と使う場面を一緒に確認しましょう。`}`,
+});
+
+const base = (id, format, section, phrase) => {
+  const hint = phraseHint(phrase);
+  const explanation = phraseExplanation(phrase);
+  return ({
   id,
   format,
   type: format,
   section,
   topic: phrase?.topic || "review",
   isOriginal: false,
-  hint: phrase?.note || "Read the full sentence before you answer.",
-  hintJa: phrase?.note || "文全体を確認して答えましょう。",
-  explanation: phrase?.note || phrase?.en || "",
-  explanationJa: phrase?.note || phrase?.jp || "",
-});
+  hint: hint.en,
+  hintJa: hint.jp,
+  explanation: explanation.en,
+  explanationJa: explanation.jp,
+  });
+};
 
 function makeLegacyQuestions(lessonId, phrases) {
   const section = "Listen & Speak";
@@ -167,6 +201,8 @@ function makeLegacyQuestions(lessonId, phrases) {
       audioText: target.en,
       choices: options,
       correct: "a",
+      explanation: `The sentence in the audio is “${target.en}”. Listen for the complete phrase, not just one familiar word.`,
+      explanationJa: `音声の英文は「${target.en}」です。知っている単語一つだけでなく、文全体を聞き取りましょう。`,
     });
   });
 
@@ -178,6 +214,8 @@ function makeLegacyQuestions(lessonId, phrases) {
       promptJa: "聞こえた英文をそのまま入力してください。",
       audioText: target.en,
       accepted: [target.en],
+      explanation: `The complete sentence is “${target.en}”. Compare articles, auxiliaries and verb endings when you check your answer.`,
+      explanationJa: `全文は「${target.en}」です。答え合わせでは冠詞・助動詞・動詞の語尾まで確認しましょう。`,
     });
   });
 
@@ -189,6 +227,8 @@ function makeLegacyQuestions(lessonId, phrases) {
       promptJa: "音声を聞いてから、自然に言ってみましょう。",
       speakText: target.en,
       speakJa: target.jp,
+      explanation: `Model: “${target.en}” (${target.jp}). Practise the whole thought as one natural phrase.`,
+      explanationJa: `お手本は「${target.en}」（${target.jp}）です。意味のまとまりとして自然に言う練習をしましょう。`,
     });
   });
 
@@ -198,6 +238,8 @@ function makeLegacyQuestions(lessonId, phrases) {
     prompt: `“${truth.en}” means “${truth.jp}”.`,
     promptJa: `「${truth.en}」は「${truth.jp}」という意味です。`,
     correct: true,
+    explanation: `True. “${truth.en}” means “${truth.jp}”.`,
+    explanationJa: `正解はTrueです。「${truth.en}」は「${truth.jp}」という意味です。`,
   });
 
   const orderTarget = get(7);
@@ -207,6 +249,8 @@ function makeLegacyQuestions(lessonId, phrases) {
     promptJa: `語順を並べましょう：${orderTarget.jp}`,
     words: stableShuffle(words(orderTarget.en)),
     correctWords: words(orderTarget.en),
+    explanation: `Correct order: “${orderTarget.en}”. Keep the subject, verb and remaining information in that order.`,
+    explanationJa: `正しい語順は「${orderTarget.en}」です。主語・動詞・残りの情報の順を確認しましょう。`,
   });
 
   result.push({
@@ -214,6 +258,8 @@ function makeLegacyQuestions(lessonId, phrases) {
     prompt: "Match each English phrase with its natural Japanese meaning.",
     promptJa: "英文と自然な日本語を組み合わせてください。",
     pairs: phrases.slice(0, 6).map(({ en, jp, topic }) => ({ en, jp, cat: topic })),
+    explanation: "Each English phrase has one Japanese partner with the same meaning. Recheck the complete phrase when two items share a similar word.",
+    explanationJa: "各英文には、同じ意味の日本語が一つずつあります。似た単語がある時も、表現全体の意味で確認しましょう。",
   });
 
   const categories = [...new Set(phrases.map(({ topic }) => topic))].slice(0, 2);
@@ -227,6 +273,8 @@ function makeLegacyQuestions(lessonId, phrases) {
     promptJa: "各表現を目的別に分類してください。",
     categories,
     items: sortingItems,
+    explanation: `The categories describe language purpose: ${categories.join(", ")}. Sort by what each complete phrase does in conversation.`,
+    explanationJa: `分類は「${categories.join("・")}」です。単語一つではなく、会話でその表現が果たす役割で分けましょう。`,
   });
 
   const dialogue = get(1);
@@ -242,6 +290,8 @@ function makeLegacyQuestions(lessonId, phrases) {
     contextJa: dialogueContext.jp,
     choices: legacyDialogueChoiceOverrides[lessonId] || choice(phrases, 1),
     correct: "a",
+    explanation: `“${(legacyDialogueChoiceOverrides[lessonId]?.[0] || dialogue).en}” responds directly and naturally to the previous line.`,
+    explanationJa: `「${(legacyDialogueChoiceOverrides[lessonId]?.[0] || dialogue).en}」は、直前の発言に直接答える自然な一文です。`,
   });
 
   const translation = get(2);
@@ -250,6 +300,8 @@ function makeLegacyQuestions(lessonId, phrases) {
     prompt: `Translate into English: ${translation.jp}`,
     promptJa: `英語にしてください：${translation.jp}`,
     accepted: [translation.en],
+    explanation: `A natural translation is “${translation.en}”. It expresses “${translation.jp}” with the lesson’s ${translation.topic} pattern.`,
+    explanationJa: `自然な英訳は「${translation.en}」です。「${translation.jp}」を今回の${translation.topic}表現で伝えています。`,
   });
 
   const situation = get(3);
@@ -259,6 +311,8 @@ function makeLegacyQuestions(lessonId, phrases) {
     promptJa: `「${situation.jp}」に最も合う英文はどれですか？`,
     choices: choice(phrases, 3),
     correct: "a",
+    explanation: `“${situation.en}” directly expresses “${situation.jp}”. The other choices describe different situations.`,
+    explanationJa: `「${situation.en}」が「${situation.jp}」を直接表します。他の選択肢は別の場面を表しています。`,
   });
 
   return result;
@@ -277,6 +331,8 @@ function makeDraftQuestions(lesson) {
       promptJa: `「${target.jp}」に合う英文を選んでください。`,
       choices: choice(phrases, index),
       correct: "a",
+      explanation: `“${target.en}” is the sentence that means “${target.jp}”. Check the complete meaning before choosing.`,
+      explanationJa: `「${target.en}」が「${target.jp}」を表す英文です。単語一つではなく文全体の意味で選びましょう。`,
     });
   });
 
@@ -288,6 +344,12 @@ function makeDraftQuestions(lesson) {
       prompt: `“${target.en}” means “${displayedMeaning}”.`,
       promptJa: `「${target.en}」は「${displayedMeaning}」という意味です。`,
       correct: offset === 0,
+      explanation: offset === 0
+        ? `True. “${target.en}” means “${target.jp}”.`
+        : `False. “${target.en}” means “${target.jp}”, not “${displayedMeaning}”.`,
+      explanationJa: offset === 0
+        ? `正解はTrueです。「${target.en}」は「${target.jp}」という意味です。`
+        : `正解はFalseです。「${target.en}」は「${target.jp}」であり、「${displayedMeaning}」ではありません。`,
     });
   });
 
@@ -298,6 +360,8 @@ function makeDraftQuestions(lesson) {
       prompt: `Translate into English: ${target.jp}`,
       promptJa: `英語にしてください：${target.jp}`,
       accepted: [target.en],
+      explanation: `A natural translation is “${target.en}”. It expresses “${target.jp}” with the lesson’s ${target.topic} pattern.`,
+      explanationJa: `自然な英訳は「${target.en}」です。「${target.jp}」を今回の${target.topic}表現で伝えています。`,
     });
   });
 
@@ -309,6 +373,8 @@ function makeDraftQuestions(lesson) {
       promptJa: `語順を並べましょう：${target.jp}`,
       words: stableShuffle(words(target.en)),
       correctWords: words(target.en),
+      explanation: `Correct order: “${target.en}”. Build the sentence around the ${target.topic} pattern.`,
+      explanationJa: `正しい語順は「${target.en}」です。${target.topic}の形を中心に文を組み立てます。`,
     });
   });
 
@@ -317,6 +383,8 @@ function makeDraftQuestions(lesson) {
     prompt: "Match the English and Japanese.",
     promptJa: "英語と日本語を組み合わせてください。",
     pairs: phrases.slice(0, 6).map(({ en, jp, topic }) => ({ en, jp, cat: topic })),
+    explanation: "Each English phrase has exactly one Japanese meaning. Match the whole message rather than isolated words.",
+    explanationJa: "各英文に対応する日本語は一つです。単語だけではなく、表現全体の意味で組み合わせましょう。",
   });
 
   const categories = [...new Set(phrases.map(({ topic }) => topic))].slice(0, 3);
@@ -329,6 +397,8 @@ function makeDraftQuestions(lesson) {
       .filter(({ topic }) => categories.includes(topic))
       .slice(0, 9)
       .map(({ en, topic }) => [en, topic]),
+    explanation: `Sort by the purpose of the complete phrase. The available topics are ${categories.join(", ")}.`,
+    explanationJa: `英文全体の目的で分類します。今回の分類は「${categories.join("・")}」です。`,
   });
 
   [0, 3, 6].forEach((index, offset) => {
@@ -340,6 +410,8 @@ function makeDraftQuestions(lesson) {
       audioText: target.en,
       choices: choice(phrases, index),
       correct: "a",
+      explanation: `The sentence in the audio is “${target.en}”. Listen through to the end before choosing.`,
+      explanationJa: `音声の英文は「${target.en}」です。最後まで聞いてから選びましょう。`,
     });
   });
 
@@ -351,6 +423,8 @@ function makeDraftQuestions(lesson) {
       promptJa: "聞こえた英文を入力してください。",
       audioText: target.en,
       accepted: [target.en],
+      explanation: `The complete sentence is “${target.en}”. Check every small word as well as the main vocabulary.`,
+      explanationJa: `全文は「${target.en}」です。中心の単語だけでなく、短い機能語も確認しましょう。`,
     });
   });
 
@@ -362,6 +436,8 @@ function makeDraftQuestions(lesson) {
       promptJa: "聞いてから話してみましょう。",
       speakText: target.en,
       speakJa: target.jp,
+      explanation: `Model: “${target.en}” (${target.jp}). Say it as one connected message, then compare with the model.`,
+      explanationJa: `お手本は「${target.en}」（${target.jp}）です。一つの意味のまとまりとして話し、お手本と比べましょう。`,
     });
   });
 
@@ -373,6 +449,8 @@ function makeDraftQuestions(lesson) {
       promptJa: "自然に言ってから、英文を見ずにもう一度話してみましょう。",
       speakText: target.en,
       speakJa: target.jp,
+      explanation: `Model: “${target.en}” (${target.jp}). The second attempt checks whether you can recall the whole phrase independently.`,
+      explanationJa: `お手本は「${target.en}」（${target.jp}）です。2回目は英文を見ずに、表現全体を思い出せるか確認します。`,
     });
   });
 
@@ -384,6 +462,8 @@ function makeDraftQuestions(lesson) {
     contextJa: draftDialogueContexts[lesson.id]?.[1] || `A: ${get(8).jp}\nB: …`,
     choices: draftDialogueChoiceOverrides[lesson.id] || choice(phrases, 9),
     correct: "a",
+    explanation: `“${(draftDialogueChoiceOverrides[lesson.id]?.[0] || get(9)).en}” answers the previous speaker directly and keeps the conversation coherent.`,
+    explanationJa: `「${(draftDialogueChoiceOverrides[lesson.id]?.[0] || get(9)).en}」は直前の発言に直接答え、会話の流れが自然につながります。`,
   });
 
   const mistakeTarget = get(10);
@@ -393,6 +473,8 @@ function makeDraftQuestions(lesson) {
     promptJa: "英文を自然な形に直してください。",
     wrongSentence: makeIncorrectSentence(mistakeTarget.en),
     accepted: [mistakeTarget.en],
+    explanation: `Correct sentence: “${mistakeTarget.en}”. Compare it with the incorrect version and restore the missing or incorrect grammar word.`,
+    explanationJa: `正しい英文は「${mistakeTarget.en}」です。誤文と比べ、抜けた語や誤った文法部分を直しましょう。`,
   });
 
   const situation = get(11);
@@ -402,6 +484,8 @@ function makeDraftQuestions(lesson) {
     promptJa: `「${situation.jp}」と言いたい時、どの英文を使いますか？`,
     choices: choice(phrases, 11),
     correct: "a",
+    explanation: `“${situation.en}” directly expresses “${situation.jp}”. The other choices answer different situations.`,
+    explanationJa: `「${situation.en}」が「${situation.jp}」を直接表します。他の選択肢は別の場面に使う表現です。`,
   });
 
   const visualQuestions = visualQuestionsByLesson.get(lesson.id) || [];
@@ -417,11 +501,15 @@ function makeDraftQuestions(lesson) {
         ...base(`${lesson.id}-draft-visual-${visual.slot}`, "situation", "See It", target),
         prompt: "Which sentence best matches the illustration?",
         promptJa: "イラストの場面に最も合う英文を選んでください。",
-        choices: choice(phrases, visual.phraseIndex),
+        choices: visualChoice(phrases, visual),
         correct: "a",
         image: visual.asset,
         imageAlt: visual.imageAlt,
         visualAssetId: `${lesson.id}-${String(visual.slot).padStart(2, "0")}`,
+        hint: `Use the visible action and objects as evidence: ${visual.imageAlt} Choose the sentence that describes that complete scene.`,
+        hintJa: `イラストの人物の動作や物を確認し、「${target.jp}」に合う場面か考えましょう。場面全体を説明する英文を選んでください。`,
+        explanation: `The illustration shows this scene: ${visual.imageAlt} That directly matches “${target.en}” (${target.jp}); the other choices describe different actions or situations.`,
+        explanationJa: `イラストの人物の動作や物が「${target.jp}」という場面を表しています。そのため「${target.en}」が一致し、他の選択肢は別の動作・場面を表します。`,
       });
     });
 

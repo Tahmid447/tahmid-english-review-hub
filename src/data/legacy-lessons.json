@@ -1051,6 +1051,10 @@
             "cat": "gratitude"
           }
         ],
+        "explanation": {
+          "en": "There are 10 one-to-one pairs. Match each complete English expression with the Japanese text that has the same meaning; similar-looking words are not enough.",
+          "jp": "10組を一対一で合わせます。似た単語だけで判断せず、英文全体と同じ意味の日本語を選びましょう。"
+        },
         "legacyId": "q23",
         "section": "Original Review",
         "isOriginal": true
@@ -1071,6 +1075,10 @@
         "explanation": {
           "en": "“It can’t be helped” is a natural phrase for 仕方ない.",
           "jp": "“It can’t be helped.” は「仕方ない」に自然です。"
+        },
+        "prompt": {
+          "en": "Write this meaning in natural English: 「仕方ない。」",
+          "jp": "次の意味を自然な英語にしてください：「仕方ない。」"
         },
         "legacyId": "q24",
         "section": "Original Review",
@@ -1095,6 +1103,10 @@
           "en": "This is a vivid, natural way to talk about a dangerous highway.",
           "jp": "危ない高速について言う時、リアルで自然な表現です。"
         },
+        "prompt": {
+          "en": "Write this meaning in natural English: 「もしこの高速で事故ったら、確実に死んでるわ。」",
+          "jp": "次の意味を自然な英語にしてください：「もしこの高速で事故ったら、確実に死んでるわ。」"
+        },
         "legacyId": "q25",
         "section": "Original Review",
         "isOriginal": true
@@ -1114,6 +1126,10 @@
         "explanation": {
           "en": "“Did you do that on purpose?” is the natural question.",
           "jp": "“Did you do that on purpose?” が自然な質問です。"
+        },
+        "prompt": {
+          "en": "Write this meaning in natural English: 「それわざとやったの？」",
+          "jp": "次の意味を自然な英語にしてください：「それわざとやったの？」"
         },
         "legacyId": "q26",
         "section": "Original Review",
@@ -1136,6 +1152,10 @@
         "explanation": {
           "en": "“I really appreciate it” is direct, natural, and useful.",
           "jp": "“I really appreciate it.” は自然でとても使いやすい感謝表現です。"
+        },
+        "prompt": {
+          "en": "Write this meaning in natural English: 「本当に感謝しています。」",
+          "jp": "次の意味を自然な英語にしてください：「本当に感謝しています。」"
         },
         "legacyId": "q27",
         "section": "Original Review",
@@ -1578,6 +1598,10 @@
             "cat": "replies"
           }
         ],
+        "explanation": {
+          "en": "There are 7 one-to-one pairs. Match each complete English expression with the Japanese text that has the same meaning; similar-looking words are not enough.",
+          "jp": "7組を一対一で合わせます。似た単語だけで判断せず、英文全体と同じ意味の日本語を選びましょう。"
+        },
         "legacyId": "q9",
         "section": "Original Review",
         "isOriginal": true
@@ -1998,6 +2022,10 @@
           "en": "“I’m just sitting here, though” is a natural soft reply.",
           "jp": "“I’m just sitting here, though.” は自然でやわらかい返事です。"
         },
+        "prompt": {
+          "en": "Write this meaning in natural English: 「ただ座ってるだけだけどね。」",
+          "jp": "次の意味を自然な英語にしてください：「ただ座ってるだけだけどね。」"
+        },
         "legacyId": "q20",
         "section": "Original Review",
         "isOriginal": true
@@ -2018,6 +2046,10 @@
         "explanation": {
           "en": "“No problem” is very common. “No worries” also works kindly.",
           "jp": "“No problem.” はとてもよく使います。“No worries.” も優しく自然です。"
+        },
+        "prompt": {
+          "en": "Write this meaning in natural English: 「全然大丈夫。」",
+          "jp": "次の意味を自然な英語にしてください：「全然大丈夫。」"
         },
         "legacyId": "q21",
         "section": "Original Review",
@@ -2043,6 +2075,10 @@
           "en": "“To go, please” and “Can I get this to go?” are both natural.",
           "jp": "“To go, please.” と “Can I get this to go?” はどちらも自然です。"
         },
+        "prompt": {
+          "en": "Write this meaning in natural English: 「持ち帰りでお願いします。」",
+          "jp": "次の意味を自然な英語にしてください：「持ち帰りでお願いします。」"
+        },
         "legacyId": "q22",
         "section": "Original Review",
         "isOriginal": true
@@ -2064,6 +2100,10 @@
         "explanation": {
           "en": "“For here or to go?” is the standard café/restaurant question.",
           "jp": "“For here or to go?” はカフェやレストランでよく聞く質問です。"
+        },
+        "prompt": {
+          "en": "Write this meaning in natural English: 「店内ですか？お持ち帰りですか？」",
+          "jp": "次の意味を自然な英語にしてください：「店内ですか？お持ち帰りですか？」"
         },
         "legacyId": "q23",
         "section": "Original Review",
@@ -2087,6 +2127,10 @@
         "explanation": {
           "en": "“This is my go-to coffee” means this is the coffee you usually choose.",
           "jp": "“This is my go-to coffee.” は「いつも選ぶ定番コーヒー」という意味です。"
+        },
+        "prompt": {
+          "en": "Write this meaning in natural English: 「これは私の定番コーヒーです。」",
+          "jp": "次の意味を自然な英語にしてください：「これは私の定番コーヒーです。」"
         },
         "legacyId": "q24",
         "section": "Original Review",
@@ -2623,6 +2667,10 @@
             "cat": "part1"
           }
         ],
+        "explanation": {
+          "en": "There are 6 one-to-one pairs. Match each complete English expression with the Japanese text that has the same meaning; similar-looking words are not enough.",
+          "jp": "6組を一対一で合わせます。似た単語だけで判断せず、英文全体と同じ意味の日本語を選びましょう。"
+        },
         "legacyId": "q11",
         "section": "Original Review",
         "isOriginal": true
@@ -3204,6 +3252,10 @@
             "cat": "part2"
           }
         ],
+        "explanation": {
+          "en": "There are 6 one-to-one pairs. Match each complete English expression with the Japanese text that has the same meaning; similar-looking words are not enough.",
+          "jp": "6組を一対一で合わせます。似た単語だけで判断せず、英文全体と同じ意味の日本語を選びましょう。"
+        },
         "legacyId": "q25",
         "section": "Original Review",
         "isOriginal": true
@@ -3290,6 +3342,10 @@
           "en": "This is the most natural daily sentence.",
           "jp": "日常ではこの文がとても自然です。"
         },
+        "prompt": {
+          "en": "Write this meaning in natural English: 今日はまだお酒を飲んでいません。",
+          "jp": "次の意味を自然な英語にしてください：今日はまだお酒を飲んでいません。"
+        },
         "legacyId": "q28",
         "section": "Original Review",
         "isOriginal": true
@@ -3313,6 +3369,10 @@
           "en": "“I don’t like watching soccer” is a softer accepted version.",
           "jp": "“I don’t like watching soccer.” はやわらかい言い方です。"
         },
+        "prompt": {
+          "en": "Write this meaning in natural English: サッカーを見るのが嫌いです。",
+          "jp": "次の意味を自然な英語にしてください：サッカーを見るのが嫌いです。"
+        },
         "legacyId": "q29",
         "section": "Original Review",
         "isOriginal": true
@@ -3333,6 +3393,10 @@
         "explanation": {
           "en": "For SNS platforms, use on.",
           "jp": "SNSには on を使います。"
+        },
+        "prompt": {
+          "en": "Write this meaning in natural English: インスタで見ました。",
+          "jp": "次の意味を自然な英語にしてください：インスタで見ました。"
         },
         "legacyId": "q30",
         "section": "Original Review",
@@ -3355,6 +3419,10 @@
           "en": "“I like sparkly things” is natural and easy.",
           "jp": "“I like sparkly things.” は自然で使いやすいです。"
         },
+        "prompt": {
+          "en": "Write this meaning in natural English: キラキラしたものが好きです。",
+          "jp": "次の意味を自然な英語にしてください：キラキラしたものが好きです。"
+        },
         "legacyId": "q31",
         "section": "Original Review",
         "isOriginal": true
@@ -3375,6 +3443,10 @@
         "explanation": {
           "en": "Use interested for your feeling.",
           "jp": "自分の気持ちには interested を使います。"
+        },
+        "prompt": {
+          "en": "Write this meaning in natural English: 英語に興味があります。",
+          "jp": "次の意味を自然な英語にしてください：英語に興味があります。"
         },
         "legacyId": "q32",
         "section": "Original Review",
@@ -3399,6 +3471,10 @@
           "en": "Use interesting for the thing or story.",
           "jp": "物や話には interesting を使います。"
         },
+        "prompt": {
+          "en": "Write this meaning in natural English: それは面白いです。",
+          "jp": "次の意味を自然な英語にしてください：それは面白いです。"
+        },
         "legacyId": "q33",
         "section": "Original Review",
         "isOriginal": true
@@ -3420,6 +3496,10 @@
         "explanation": {
           "en": "“Can you reply on my behalf?” is natural.",
           "jp": "“Can you reply on my behalf?” が自然です。"
+        },
+        "prompt": {
+          "en": "Write this meaning in natural English: 私の代わりに返信してくれますか？",
+          "jp": "次の意味を自然な英語にしてください：私の代わりに返信してくれますか？"
         },
         "legacyId": "q34",
         "section": "Original Review",
@@ -4151,6 +4231,10 @@
             "cat": "reasonWith"
           }
         ],
+        "explanation": {
+          "en": "There are 8 one-to-one pairs. Match each complete English expression with the Japanese text that has the same meaning; similar-looking words are not enough.",
+          "jp": "8組を一対一で合わせます。似た単語だけで判断せず、英文全体と同じ意味の日本語を選びましょう。"
+        },
         "legacyId": "q16",
         "section": "Original Review",
         "isOriginal": true
@@ -4170,6 +4254,10 @@
         "explanation": {
           "en": "The natural polite question is “What would you like to drink?”",
           "jp": "丁寧で自然な質問は “What would you like to drink?” です。"
+        },
+        "prompt": {
+          "en": "Write this meaning in natural English: 何を飲みたいですか？",
+          "jp": "次の意味を自然な英語にしてください：何を飲みたいですか？"
         },
         "legacyId": "q17a",
         "section": "Original Review",
@@ -4192,6 +4280,10 @@
           "en": "“I’d like coffee” is short, polite, and natural.",
           "jp": "“I’d like coffee.” は短くて丁寧で自然です。"
         },
+        "prompt": {
+          "en": "Write this meaning in natural English: コーヒーがいいです。",
+          "jp": "次の意味を自然な英語にしてください：コーヒーがいいです。"
+        },
         "legacyId": "q17b",
         "section": "Original Review",
         "isOriginal": true
@@ -4211,6 +4303,10 @@
         "explanation": {
           "en": "“How about you?” is a natural way to ask the same question back.",
           "jp": "“How about you?” は「あなたは？」と自然に聞き返す表現です。"
+        },
+        "prompt": {
+          "en": "Write this meaning in natural English: あなたはどうですか？",
+          "jp": "次の意味を自然な英語にしてください：あなたはどうですか？"
         },
         "legacyId": "q17c",
         "section": "Original Review",
@@ -4232,6 +4328,10 @@
           "en": "“Did he help you yesterday?” uses the base verb “help” after Did.",
           "jp": "“Did he help you yesterday?” では Did の後なので help を使います。"
         },
+        "prompt": {
+          "en": "Write this meaning in natural English: 彼は昨日あなたを手伝いましたか？",
+          "jp": "次の意味を自然な英語にしてください：彼は昨日あなたを手伝いましたか？"
+        },
         "legacyId": "q17d",
         "section": "Original Review",
         "isOriginal": true
@@ -4252,6 +4352,10 @@
         "explanation": {
           "en": "“It can’t be helped” is close to 「仕方ない」 when accepting a situation.",
           "jp": "“It can’t be helped.” は、状況を受け入れる「仕方ない」に近い表現です。"
+        },
+        "prompt": {
+          "en": "Write this meaning in natural English: 仕方ない。",
+          "jp": "次の意味を自然な英語にしてください：仕方ない。"
         },
         "legacyId": "q17e",
         "section": "Original Review",
@@ -4755,6 +4859,10 @@
             "cat": "position"
           }
         ],
+        "explanation": {
+          "en": "There are 8 one-to-one pairs. Match each complete English expression with the Japanese text that has the same meaning; similar-looking words are not enough.",
+          "jp": "8組を一対一で合わせます。似た単語だけで判断せず、英文全体と同じ意味の日本語を選びましょう。"
+        },
         "legacyId": "q11",
         "section": "Original Review",
         "isOriginal": true
@@ -4774,6 +4882,10 @@
         "explanation": {
           "en": "“I think I heard about it” fits because it's about a topic or story, not a sound.",
           "jp": "話題や出来事について聞いた場合は “I heard about it” を使います。"
+        },
+        "prompt": {
+          "en": "Write this meaning in natural English: 「それについて聞いた気がする。」",
+          "jp": "次の意味を自然な英語にしてください：「それについて聞いた気がする。」"
         },
         "legacyId": "q12a",
         "section": "Original Review",
@@ -4796,6 +4908,10 @@
           "en": "“I've heard of it” is for names or things you recognize but don't know in detail.",
           "jp": "名前や存在を知っているときは “I've heard of it” が自然です。"
         },
+        "prompt": {
+          "en": "Write this meaning in natural English: 「名前は聞いたことある。」",
+          "jp": "次の意味を自然な英語にしてください：「名前は聞いたことある。」"
+        },
         "legacyId": "q12b",
         "section": "Original Review",
         "isOriginal": true
@@ -4816,6 +4932,10 @@
           "en": "“That's so true” is a warm, natural way to agree with someone's feeling or opinion.",
           "jp": "相手の意見に共感するときは “That's so true” が自然です。"
         },
+        "prompt": {
+          "en": "Write this meaning in natural English: 「それほんとだよね。」",
+          "jp": "次の意味を自然な英語にしてください：「それほんとだよね。」"
+        },
         "legacyId": "q12c",
         "section": "Original Review",
         "isOriginal": true
@@ -4835,6 +4955,10 @@
         "explanation": {
           "en": "“Top right” describes the upper-right position — top is 上, right is 右.",
           "jp": "“top right” は「右上」、top = 上、right = 右です。"
+        },
+        "prompt": {
+          "en": "Write this meaning in natural English: 「右上」",
+          "jp": "次の意味を自然な英語にしてください：「右上」"
         },
         "legacyId": "q12d",
         "section": "Original Review",
@@ -5579,6 +5703,10 @@
             "cat": "flow"
           }
         ],
+        "explanation": {
+          "en": "There are 8 one-to-one pairs. Match each complete English expression with the Japanese text that has the same meaning; similar-looking words are not enough.",
+          "jp": "8組を一対一で合わせます。似た単語だけで判断せず、英文全体と同じ意味の日本語を選びましょう。"
+        },
         "legacyId": "q16",
         "section": "Original Review",
         "isOriginal": true
@@ -5600,6 +5728,10 @@
           "en": "“I’m annoyed” describes your feeling.",
           "jp": "“I’m annoyed.” は自分の気持ちを表します。"
         },
+        "prompt": {
+          "en": "Write this meaning in natural English: 「私はイライラしています。」",
+          "jp": "次の意味を自然な英語にしてください：「私はイライラしています。」"
+        },
         "legacyId": "q17",
         "section": "Original Review",
         "isOriginal": true
@@ -5620,6 +5752,10 @@
         "explanation": {
           "en": "“It’s annoying” describes the thing or situation that causes the feeling.",
           "jp": "“It’s annoying.” は、イライラさせる物・状況を表します。"
+        },
+        "prompt": {
+          "en": "Write this meaning in natural English: 「それはイライラします。」",
+          "jp": "次の意味を自然な英語にしてください：「それはイライラします。」"
         },
         "legacyId": "q18",
         "section": "Original Review",
@@ -5644,6 +5780,10 @@
           "en": "In sports, “who” can naturally refer to teams or countries.",
           "jp": "スポーツでは、チームや国にも “who” が自然に使えます。"
         },
+        "prompt": {
+          "en": "Write this meaning in natural English: 「日本とブラジル、どちらが勝つと思う？」",
+          "jp": "次の意味を自然な英語にしてください：「日本とブラジル、どちらが勝つと思う？」"
+        },
         "legacyId": "q19",
         "section": "Original Review",
         "isOriginal": true
@@ -5663,6 +5803,10 @@
         "explanation": {
           "en": "“Do you prefer coffee or tea?” is natural and clear.",
           "jp": "“Do you prefer coffee or tea?” は自然で分かりやすい質問です。"
+        },
+        "prompt": {
+          "en": "Write this meaning in natural English: 「コーヒーと紅茶、どちらが好きですか？」",
+          "jp": "次の意味を自然な英語にしてください：「コーヒーと紅茶、どちらが好きですか？」"
         },
         "legacyId": "q20",
         "section": "Original Review",
@@ -5684,6 +5828,10 @@
           "en": "“I prefer coffee because it smells good” gives both preference and reason.",
           "jp": "“I prefer coffee because it smells good.” は、好みと理由を両方言えます。"
         },
+        "prompt": {
+          "en": "Write this meaning in natural English: 「香りがいいのでコーヒーが好きです。」",
+          "jp": "次の意味を自然な英語にしてください：「香りがいいのでコーヒーが好きです。」"
+        },
         "legacyId": "q21",
         "section": "Original Review",
         "isOriginal": true
@@ -5704,6 +5852,10 @@
         "explanation": {
           "en": "“It’s easier to play golf in summer than in winter” is the clean comparison sentence.",
           "jp": "“It’s easier to play golf in summer than in winter.” がきれいな比較の文です。"
+        },
+        "prompt": {
+          "en": "Write this meaning in natural English: 「冬より夏の方がゴルフしやすいです。」",
+          "jp": "次の意味を自然な英語にしてください：「冬より夏の方がゴルフしやすいです。」"
         },
         "legacyId": "q22",
         "section": "Original Review",

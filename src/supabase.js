@@ -3,6 +3,41 @@ import { SUPABASE_ANON_KEY, SUPABASE_URL } from "./config.js";
 let studentClient;
 let teacherClient;
 const userSettingsWriteQueues = new Map();
+const AUTH_OPERATION_TIMEOUT_MS = 15000;
+
+const withOperationTimeout = async (
+  operation,
+  message = "The request took too long. Please check your connection and try again.",
+  timeoutMs = AUTH_OPERATION_TIMEOUT_MS,
+) => {
+  let timeout;
+  try {
+    return await Promise.race([
+      Promise.resolve(operation),
+      new Promise((_, reject) => {
+        timeout = globalThis.setTimeout(() => reject(new Error(message)), timeoutMs);
+      }),
+    ]);
+  } finally {
+    globalThis.clearTimeout(timeout);
+  }
+};
+
+const dispatchAuthChange = (callback, session, event) => {
+  // Supabase fires this callback while its auth client still owns an internal
+  // lock. Starting another Supabase request before the callback returns can
+  // deadlock signInWithPassword and leave the UI on “Signing in…” forever.
+  // Release the auth callback immediately, then do application work next tick.
+  globalThis.setTimeout(() => {
+    try {
+      Promise.resolve(callback(session, event)).catch((error) => {
+        console.error("Authentication state refresh failed.", error);
+      });
+    } catch (error) {
+      console.error("Authentication state refresh failed.", error);
+    }
+  }, 0);
+};
 
 const createBrowserClient = (storageKey) => {
   if (
@@ -69,21 +104,35 @@ export async function getTeacherSession() {
 export function onStudentAuthChange(callback) {
   const client = getStudentClient();
   if (!client || typeof callback !== "function") return () => {};
-  const { data } = client.auth.onAuthStateChange((event, session) => callback(session, event));
+  const { data } = client.auth.onAuthStateChange((event, session) => {
+    dispatchAuthChange(callback, session, event);
+  });
   return () => data.subscription.unsubscribe();
 }
 
 export function onTeacherAuthChange(callback) {
   const client = getTeacherClient();
   if (!client || typeof callback !== "function") return () => {};
-  const { data } = client.auth.onAuthStateChange((event, session) => callback(session, event));
+  const { data } = client.auth.onAuthStateChange((event, session) => {
+    dispatchAuthChange(callback, session, event);
+  });
   return () => data.subscription.unsubscribe();
 }
 
 export async function signInStudent(email, password) {
   const client = getStudentClient();
   if (!client) return { data: null, error: new Error("Sign-in is not available right now.") };
-  return client.auth.signInWithPassword({ email: String(email || "").trim(), password: String(password || "") });
+  try {
+    return await withOperationTimeout(
+      client.auth.signInWithPassword({
+        email: String(email || "").trim(),
+        password: String(password || ""),
+      }),
+      "Sign-in took too long. Nothing was changed. Please check your connection and try again.",
+    );
+  } catch (error) {
+    return { data: null, error };
+  }
 }
 
 export async function signUpStudent(profile = {}) {
@@ -91,23 +140,30 @@ export async function signUpStudent(profile = {}) {
   if (!client) return { data: null, error: new Error("Account creation is not available right now.") };
   const firstName = String(profile.firstName || "").trim();
   const lastName = String(profile.lastName || "").trim();
-  return client.auth.signUp({
-    email: String(profile.email || "").trim(),
-    password: String(profile.password || ""),
-    options: {
-      emailRedirectTo: `${window.location.origin}${window.location.pathname}?account=confirmed`,
-      data: {
-        app: "review_hub",
-        display_name: [firstName, lastName].filter(Boolean).join(" "),
-        first_name: firstName,
-        last_name: lastName,
-        age_group: String(profile.ageGroup || "").trim(),
-        native_language: String(profile.nativeLanguage || "").trim(),
-        english_level: String(profile.englishLevel || "").trim(),
-        learning_goal: String(profile.learningGoal || "").trim(),
-      },
-    },
-  });
+  try {
+    return await withOperationTimeout(
+      client.auth.signUp({
+        email: String(profile.email || "").trim(),
+        password: String(profile.password || ""),
+        options: {
+          emailRedirectTo: `${window.location.origin}${window.location.pathname}?account=confirmed`,
+          data: {
+            app: "review_hub",
+            display_name: [firstName, lastName].filter(Boolean).join(" "),
+            first_name: firstName,
+            last_name: lastName,
+            age_group: String(profile.ageGroup || "").trim(),
+            native_language: String(profile.nativeLanguage || "").trim(),
+            english_level: String(profile.englishLevel || "").trim(),
+            learning_goal: String(profile.learningGoal || "").trim(),
+          },
+        },
+      }),
+      "Account creation took too long. Please check your connection and try again.",
+    );
+  } catch (error) {
+    return { data: null, error };
+  }
 }
 
 export async function googleStudentAuthAvailable() {
@@ -134,14 +190,18 @@ export async function signInStudentWithGoogle() {
   if (!await googleStudentAuthAvailable()) {
     return { data: null, error: new Error("Google sign-in is not configured yet.") };
   }
-  return client.auth.signInWithOAuth({
-    provider: "google",
-    options: {
-      skipBrowserRedirect: true,
-      redirectTo: `${window.location.origin}${window.location.pathname}?account=google`,
-      queryParams: { access_type: "offline", prompt: "select_account" },
-    },
-  });
+  try {
+    return await withOperationTimeout(client.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        skipBrowserRedirect: true,
+        redirectTo: `${window.location.origin}${window.location.pathname}?account=google`,
+        queryParams: { access_type: "offline", prompt: "select_account" },
+      },
+    }), "Google sign-in took too long. Please try again.");
+  } catch (error) {
+    return { data: null, error };
+  }
 }
 
 export async function ensureStudentProfile(session, values = {}) {
@@ -197,7 +257,7 @@ export async function getStudentMembership() {
   if (!client || !session?.user) return { membership: null, active: false, signedIn: false };
   const { data, error } = await client
     .from("review_memberships")
-    .select("user_id,status,access_scope,plan_label,starts_at,expires_at,approval_source")
+    .select("user_id,status,access_scope,plan_tier,plan_label,starts_at,expires_at,approval_source")
     .eq("user_id", session.user.id)
     .maybeSingle();
   if (error) return { membership: null, active: false, signedIn: true, error };
@@ -214,6 +274,112 @@ export async function hasStudentAccess(scope = "general") {
     requested_scope: scope,
   });
   return !error && data === true;
+}
+
+export async function fetchPremiumLessonTasks(databaseLessonId) {
+  const client = getStudentClient();
+  const session = await getStudentSession();
+  if (!client || !session?.user || !databaseLessonId) {
+    return { plan: "standard", tasks: [], submissions: [], feedback: [], signedIn: Boolean(session?.user), error: null };
+  }
+  const { data: planData, error: planError } = await client.rpc("review_effective_plan");
+  if (planError) return { plan: "standard", tasks: [], submissions: [], feedback: [], signedIn: true, error: planError };
+  const plan = planData === "premium" ? "premium" : "standard";
+  if (plan !== "premium") return { plan, tasks: [], submissions: [], feedback: [], signedIn: true, error: null };
+  const { data: tasks, error: taskError } = await client
+    .from("review_premium_tasks")
+    .select("id,lesson_id,stable_key,task_type,title_en,title_ja,prompt_en,prompt_ja,instructions_en,instructions_ja,required_phrases,required_vocabulary,target_seconds,min_word_count,max_word_count,max_attempts,active")
+    .eq("lesson_id", databaseLessonId)
+    .eq("active", true)
+    .order("task_type", { ascending: true });
+  if (taskError) return { plan, tasks: [], submissions: [], feedback: [], signedIn: true, error: taskError };
+  const taskIds = (tasks || []).map((task) => task.id);
+  if (!taskIds.length) return { plan, tasks: [], submissions: [], feedback: [], signedIn: true, error: null };
+  const { data: submissions, error: submissionError } = await client
+    .from("review_task_submissions")
+    .select("id,task_id,user_id,attempt_number,status,text_response,audio_object_path,transcript,duration_seconds,submitted_at,reviewed_at,created_at,updated_at")
+    .in("task_id", taskIds)
+    .eq("user_id", session.user.id)
+    .order("attempt_number", { ascending: false });
+  if (submissionError) return { plan, tasks: tasks || [], submissions: [], feedback: [], signedIn: true, error: submissionError };
+  const submissionIds = (submissions || []).map((submission) => submission.id);
+  let feedback = [];
+  if (submissionIds.length) {
+    const { data, error } = await client
+      .from("review_submission_feedback")
+      .select("id,submission_id,score,rubric,feedback_en,feedback_ja,ai_assisted,published_at,created_at,updated_at")
+      .in("submission_id", submissionIds);
+    if (error) return { plan, tasks: tasks || [], submissions: submissions || [], feedback: [], signedIn: true, error };
+    feedback = data || [];
+  }
+  return { plan, tasks: tasks || [], submissions: submissions || [], feedback, signedIn: true, error: null };
+}
+
+const nextPremiumAttempt = (submissions, taskId) => (
+  Math.max(0, ...submissions.filter((item) => item.task_id === taskId).map((item) => Number(item.attempt_number || 0))) + 1
+);
+
+export async function savePremiumTextSubmission({ taskId, textResponse, submit = false, knownSubmissions = [] }) {
+  const client = getStudentClient();
+  const session = await getStudentSession();
+  if (!client || !session?.user) return { data: null, error: new Error("Sign in before saving a Premium submission.") };
+  const editable = knownSubmissions.find((item) => item.task_id === taskId && ["draft", "returned"].includes(item.status));
+  const payload = {
+    text_response: String(textResponse || ""),
+    status: submit ? "submitted" : "draft",
+    submitted_at: submit ? new Date().toISOString() : null,
+  };
+  if (editable) {
+    return client.from("review_task_submissions").update(payload).eq("id", editable.id).select("*").single();
+  }
+  return client.from("review_task_submissions").insert({
+    ...payload,
+    task_id: taskId,
+    user_id: session.user.id,
+    attempt_number: nextPremiumAttempt(knownSubmissions, taskId),
+    client_submission_key: globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+  }).select("*").single();
+}
+
+export async function submitPremiumRecording({ taskId, recording, durationSeconds, knownSubmissions = [] }) {
+  const client = getStudentClient();
+  const session = await getStudentSession();
+  if (!client || !session?.user) return { data: null, error: new Error("Sign in before submitting a recording.") };
+  if (!(recording instanceof Blob) || !recording.size) return { data: null, error: new Error("Record your answer before submitting it.") };
+  const editable = knownSubmissions.find((item) => item.task_id === taskId && ["draft", "returned"].includes(item.status));
+  const attemptNumber = editable?.attempt_number || nextPremiumAttempt(knownSubmissions, taskId);
+  const objectName = `${session.user.id}/${taskId}/${globalThis.crypto?.randomUUID?.() || Date.now()}.webm`;
+  const { error: uploadError } = await client.storage.from("review-premium-recordings").upload(objectName, recording, {
+    cacheControl: "3600",
+    contentType: recording.type || "audio/webm",
+    upsert: false,
+  });
+  if (uploadError) return { data: null, error: uploadError };
+  const payload = {
+    audio_object_path: objectName,
+    duration_seconds: Math.max(1, Math.round(Number(durationSeconds || 1))),
+    status: "submitted",
+    submitted_at: new Date().toISOString(),
+  };
+  const result = editable
+    ? await client.from("review_task_submissions").update(payload).eq("id", editable.id).select("*").single()
+    : await client.from("review_task_submissions").insert({
+        ...payload,
+        task_id: taskId,
+        user_id: session.user.id,
+        attempt_number: attemptNumber,
+        client_submission_key: globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+      }).select("*").single();
+  if (result.error) await client.storage.from("review-premium-recordings").remove([objectName]);
+  return result;
+}
+
+export async function getPremiumRecordingUrl(objectPath, expiresIn = 900) {
+  const client = getStudentClient();
+  if (!client || !objectPath) return { data: null, error: new Error("Recording is unavailable.") };
+  return client.storage
+    .from("review-premium-recordings")
+    .createSignedUrl(String(objectPath), Math.max(60, Math.min(3600, Number(expiresIn || 900))));
 }
 
 const invokeMembershipAccess = async (client, body) => {
@@ -266,7 +432,7 @@ export async function redeemStudentAccessCode(code) {
   });
 }
 
-export async function createTeacherAccessCode({ label, durationDays, accessScope, maxUses, validUntil = null }) {
+export async function createTeacherAccessCode({ label, durationDays, accessScope, planTier = "standard", maxUses, validUntil = null }) {
   const client = getTeacherClient();
   if (!client) return { data: null, error: new Error("Code generation is not available right now.") };
   return invokeMembershipAccess(client, {
@@ -274,15 +440,61 @@ export async function createTeacherAccessCode({ label, durationDays, accessScope
     label,
     durationDays,
     accessScope,
+    planTier,
     maxUses,
     validUntil,
   });
 }
 
+export async function updateTeacherAccessCode({
+  codeId,
+  label,
+  durationDays,
+  accessScope,
+  planTier = "standard",
+  maxUses,
+  validUntil = null,
+  enabled = true,
+}) {
+  return invokeMembershipAccess(getTeacherClient(), {
+    action: "update",
+    codeId,
+    label,
+    durationDays,
+    accessScope,
+    planTier,
+    maxUses,
+    validUntil,
+    enabled,
+  });
+}
+
+export async function deleteTeacherAccessCode(codeId) {
+  return invokeMembershipAccess(getTeacherClient(), { action: "delete", codeId });
+}
+
+export async function reissueTeacherAccessCode(codeId) {
+  return invokeMembershipAccess(getTeacherClient(), { action: "reissue", codeId });
+}
+
+export async function getTeacherLearnerAuthStatus(learnerId) {
+  return invokeMembershipAccess(getTeacherClient(), { action: "learner-auth-status", learnerId });
+}
+
 export async function signInTeacher(email, password) {
   const client = getTeacherClient();
   if (!client) return { data: null, error: new Error("Teacher sign-in is not available right now.") };
-  return client.auth.signInWithPassword({ email: String(email || "").trim(), password: String(password || "") });
+  try {
+    return await withOperationTimeout(
+      client.auth.signInWithPassword({
+        email: String(email || "").trim(),
+        password: String(password || ""),
+      }),
+      "Teacher sign-in took too long. Nothing was changed. Please check your connection and try again.",
+    );
+  } catch (error) {
+    return { data: null, error };
+  }
 }
 
 export async function signInTeacherWithGoogle() {
@@ -291,14 +503,18 @@ export async function signInTeacherWithGoogle() {
   if (!await googleStudentAuthAvailable()) {
     return { data: null, error: new Error("Google sign-in is not configured yet.") };
   }
-  return client.auth.signInWithOAuth({
-    provider: "google",
-    options: {
-      skipBrowserRedirect: true,
-      redirectTo: `${window.location.origin}/teacher.html?account=google`,
-      queryParams: { access_type: "offline", prompt: "select_account" },
-    },
-  });
+  try {
+    return await withOperationTimeout(client.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        skipBrowserRedirect: true,
+        redirectTo: `${window.location.origin}/teacher.html?account=google`,
+        queryParams: { access_type: "offline", prompt: "select_account" },
+      },
+    }), "Google sign-in took too long. Please try again.");
+  } catch (error) {
+    return { data: null, error };
+  }
 }
 
 export async function signOutStudent() {
@@ -353,35 +569,59 @@ export async function fetchDatabaseLessons({ audience = "general" } = {}) {
   const client = getStudentClient();
   if (!client) return { lessons: null, reason: "client-unavailable" };
   const authenticated = Boolean((await getStudentSession())?.user);
-  const hasAccess = authenticated && await hasStudentAccess(audience === "takiwaki" ? "takiwaki" : "general");
-  const usePrivateCatalog = authenticated && hasAccess;
-  const lessonTable = usePrivateCatalog ? "review_lessons" : "review_public_lessons";
-  const questionTable = usePrivateCatalog ? "review_questions" : "review_public_questions";
-  let lessonQuery = client
-    .from(lessonTable)
-    .select(lessonTable === "review_lessons"
-      ? "id,slug,lesson_date,title_en,title_ja,summary_en,summary_ja,status,audience,content_version,content,is_preview"
-      : "id,slug,lesson_date,title_en,title_ja,summary_en,summary_ja,status,audience,content_version,content,is_preview,question_count")
-    .eq("status", "published")
-    .order("lesson_date", { ascending: true });
-  if (lessonTable === "review_lessons") {
-    if (audience === "takiwaki") lessonQuery = lessonQuery.in("audience", ["takiwaki", "both"]);
-    if (audience === "general") lessonQuery = lessonQuery.in("audience", ["general", "both"]);
+  let publicRows = [];
+  let publicQuestions = [];
+  if (audience !== "takiwaki") {
+    const { data, error } = await client
+      .from("review_public_lessons")
+      .select("id,slug,lesson_date,title_en,title_ja,summary_en,summary_ja,status,audience,content_version,content,is_preview,question_count")
+      .eq("status", "published")
+      .order("lesson_date", { ascending: true });
+    if (error) return { lessons: null, reason: "lesson-query-failed", error };
+    publicRows = data || [];
+    if (publicRows.length) {
+      const result = await client
+        .from("review_public_questions")
+        .select("id,lesson_id,stable_key,position,section,format,payload,is_original,points")
+        .in("lesson_id", publicRows.map((lesson) => lesson.id))
+        .order("position", { ascending: true });
+      if (result.error) return { lessons: null, reason: "question-query-failed", error: result.error };
+      publicQuestions = result.data || [];
+    }
   }
-  const { data: lessonRows, error: lessonError } = await lessonQuery;
-  if (lessonError) return { lessons: null, reason: "lesson-query-failed", error: lessonError };
-  if (!lessonRows?.length) return { lessons: [], reason: null };
 
-  let questionQuery = client
-    .from(questionTable)
-    .select("id,lesson_id,stable_key,position,section,format,payload,is_original,points")
-    .in("lesson_id", lessonRows.map((lesson) => lesson.id))
-    .order("position", { ascending: true });
-  if (questionTable === "review_questions") questionQuery = questionQuery.eq("active", true);
-  const { data: questionRows, error: questionError } = await questionQuery;
-  if (questionError) return { lessons: null, reason: "question-query-failed", error: questionError };
+  let privateRows = [];
+  let privateQuestions = [];
+  if (authenticated) {
+    let query = client
+      .from("review_lessons")
+      .select("id,slug,lesson_date,title_en,title_ja,summary_en,summary_ja,status,audience,content_version,content,is_preview")
+      .eq("status", "published")
+      .order("lesson_date", { ascending: true });
+    if (audience === "takiwaki") query = query.in("audience", ["takiwaki", "both"]);
+    if (audience === "general") query = query.in("audience", ["general", "both"]);
+    const result = await query;
+    if (!result.error) privateRows = result.data || [];
+    if (privateRows.length) {
+      const questionResult = await client
+        .from("review_questions")
+        .select("id,lesson_id,stable_key,position,section,format,payload,is_original,points")
+        .in("lesson_id", privateRows.map((lesson) => lesson.id))
+        .eq("active", true)
+        .order("position", { ascending: true });
+      if (questionResult.error) return { lessons: null, reason: "question-query-failed", error: questionResult.error };
+      privateQuestions = questionResult.data || [];
+    }
+  }
+
+  const privateById = new Map(privateRows.map((lesson) => [lesson.id, lesson]));
+  const lessonRows = audience === "takiwaki"
+    ? privateRows
+    : [...publicRows, ...privateRows.filter((lesson) => !publicRows.some((item) => item.id === lesson.id))];
+  if (!lessonRows.length) return { lessons: [], reason: null };
   const questionsByLesson = new Map();
-  (questionRows || []).forEach((question) => {
+  [...publicQuestions, ...privateQuestions].forEach((question) => {
+    if (privateQuestions.some((item) => item.lesson_id === question.lesson_id) && !privateQuestions.includes(question)) return;
     const current = questionsByLesson.get(question.lesson_id) || [];
     current.push(databaseQuestion(question));
     questionsByLesson.set(question.lesson_id, current);
@@ -389,27 +629,29 @@ export async function fetchDatabaseLessons({ audience = "general" } = {}) {
 
   return {
     lessons: lessonRows.map((lesson) => {
-      const content = lesson.content && typeof lesson.content === "object" && !Array.isArray(lesson.content)
-        ? lesson.content
+      const accessible = privateById.get(lesson.id) || null;
+      const source = accessible || lesson;
+      const content = source.content && typeof source.content === "object" && !Array.isArray(source.content)
+        ? source.content
         : {};
       return {
-        id: lesson.slug,
-        databaseLessonId: lesson.id,
-        lessonDate: lesson.lesson_date,
-        title: lesson.title_en,
-        titleJa: lesson.title_ja || "",
-        summary: lesson.summary_en || "",
-        summaryJa: lesson.summary_ja || "",
-        status: lesson.status,
-        audience: lesson.audience,
-        contentVersion: lesson.content_version,
+        id: source.slug,
+        databaseLessonId: source.id,
+        lessonDate: source.lesson_date,
+        title: source.title_en,
+        titleJa: source.title_ja || "",
+        summary: source.summary_en || "",
+        summaryJa: source.summary_ja || "",
+        status: source.status,
+        audience: source.audience,
+        contentVersion: source.content_version,
         themes: Array.isArray(content.themes) ? content.themes : [],
         phrases: Array.isArray(content.phrases) ? content.phrases : [],
         notes: content.notes && typeof content.notes === "object" ? content.notes : {},
-        questions: questionsByLesson.get(lesson.id) || [],
-        isPreview: lesson.is_preview === true,
-        locked: !usePrivateCatalog && lesson.is_preview !== true,
-        questionCount: Number(lesson.question_count || questionsByLesson.get(lesson.id)?.length || 0),
+        questions: questionsByLesson.get(source.id) || [],
+        isPreview: source.is_preview === true,
+        locked: !accessible && source.is_preview !== true,
+        questionCount: Number(lesson.question_count || questionsByLesson.get(source.id)?.length || 0),
       };
     }),
     reason: null,
@@ -431,27 +673,37 @@ export async function fetchDatabaseLesson(lessonSlug, { preview = false } = {}) 
     authenticated = Boolean((await getStudentSession())?.user);
   }
 
-  const hasAccess = preview || (authenticated && await hasStudentAccess("general"));
-  const lessonTable = hasAccess ? "review_lessons" : "review_public_lessons";
-  const questionTable = hasAccess ? "review_questions" : "review_public_questions";
-  const lessonColumns = hasAccess
-    ? "id,slug,lesson_date,title_en,title_ja,summary_en,summary_ja,status,audience,source_type,content_version,content,is_preview"
-    : "id,slug,lesson_date,title_en,title_ja,summary_en,summary_ja,status,audience,content_version,content,is_preview";
-  const { data: lesson, error: lessonError } = await client
-    .from(lessonTable)
-    .select(lessonColumns)
-    .eq("slug", slug)
-    .maybeSingle();
-  if (lessonError) {
-    return { lesson: null, reason: "lesson-query-failed", error: lessonError };
+  let hasAccess = false;
+  let lesson = null;
+  if (preview || authenticated) {
+    const { data, error } = await client
+      .from("review_lessons")
+      .select("id,slug,lesson_date,title_en,title_ja,summary_en,summary_ja,status,audience,source_type,content_version,content,is_preview")
+      .eq("slug", slug)
+      .maybeSingle();
+    if (error && preview) return { lesson: null, reason: "lesson-query-failed", error };
+    if (!error && data) {
+      lesson = data;
+      hasAccess = true;
+    }
+  }
+  if (!lesson && !preview) {
+    const { data, error } = await client
+      .from("review_public_lessons")
+      .select("id,slug,lesson_date,title_en,title_ja,summary_en,summary_ja,status,audience,content_version,content,is_preview")
+      .eq("slug", slug)
+      .maybeSingle();
+    if (error) return { lesson: null, reason: "lesson-query-failed", error };
+    lesson = data;
   }
   if (!lesson) return { lesson: null, reason: "lesson-not-readable" };
 
+  const questionTable = hasAccess ? "review_questions" : "review_public_questions";
   let questionQuery = client
     .from(questionTable)
     .select("id,stable_key,position,section,format,payload,is_original,points")
     .eq("lesson_id", lesson.id);
-  if (authenticated) questionQuery = questionQuery.eq("active", true);
+  if (questionTable === "review_questions") questionQuery = questionQuery.eq("active", true);
   questionQuery = questionQuery.order("position", { ascending: true });
   const { data: questions, error: questionError } = await questionQuery;
   if (questionError) {

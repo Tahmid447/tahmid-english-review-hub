@@ -70,7 +70,8 @@ Deno.serve(async (request) => {
       auth: { persistSession: false, autoRefreshToken: false },
     });
 
-    if (action === "create") {
+    const teacherActions = new Set(["create", "update", "delete", "reissue", "learner-auth-status"]);
+    if (teacherActions.has(action)) {
       const { data: teacher } = await admin
         .from("review_teachers")
         .select("user_id")
@@ -78,19 +79,29 @@ Deno.serve(async (request) => {
         .eq("active", true)
         .maybeSingle();
       if (!teacher) return json(request, { error: "Teacher authorisation is required." }, 403);
+    }
+
+    if (action === "create") {
 
       const label = String(body?.label || "").trim();
       const durationDays = Number(body?.durationDays || 0);
       const accessScope = ["general", "takiwaki", "both"].includes(body?.accessScope)
         ? body.accessScope
         : "general";
+      const planTier = ["standard", "premium"].includes(body?.planTier)
+        ? body.planTier
+        : "standard";
       const maxUses = Number(body?.maxUses || 1);
+      const validUntil = body?.validUntil ? new Date(String(body.validUntil)) : null;
       if (!label || label.length > 100) return json(request, { error: "Enter a plan label." }, 400);
       if (!Number.isInteger(durationDays) || durationDays < 1 || durationDays > 730) {
         return json(request, { error: "Duration must be between 1 and 730 days." }, 400);
       }
       if (!Number.isInteger(maxUses) || maxUses < 1 || maxUses > 1000) {
         return json(request, { error: "Maximum uses must be between 1 and 1000." }, 400);
+      }
+      if (validUntil && Number.isNaN(validUntil.getTime())) {
+        return json(request, { error: "Enter a valid code expiry date, or leave it blank." }, 400);
       }
 
       const accessCode = secureCode();
@@ -100,18 +111,146 @@ Deno.serve(async (request) => {
         code_last4: accessCode.slice(-4),
         duration_days: durationDays,
         access_scope: accessScope,
+        plan_tier: planTier,
         max_uses: maxUses,
-        valid_until: body?.validUntil || null,
+        valid_until: validUntil?.toISOString() || null,
         created_by: user.id,
       }).select("id").single();
       if (error) throw error;
       return json(request, { accessCode, codeId: data.id });
     }
 
+    if (action === "learner-auth-status") {
+      const learnerId = String(body?.learnerId || "").trim();
+      if (!learnerId) return json(request, { error: "Choose a learner account." }, 400);
+      const { data, error } = await admin.auth.admin.getUserById(learnerId);
+      if (error) throw error;
+      if (!data?.user) return json(request, { error: "Learner account not found." }, 404);
+      const bannedUntil = data.user.banned_until || null;
+      return json(request, {
+        account: {
+          createdAt: data.user.created_at || null,
+          lastSignInAt: data.user.last_sign_in_at || null,
+          emailConfirmedAt: data.user.email_confirmed_at || null,
+          phoneConfirmedAt: data.user.phone_confirmed_at || null,
+          bannedUntil,
+          status: bannedUntil && new Date(bannedUntil).getTime() > Date.now() ? "banned" : "active",
+        },
+      });
+    }
+
+    if (action === "update") {
+      const codeId = String(body?.codeId || "").trim();
+      const label = String(body?.label || "").trim();
+      const durationDays = Number(body?.durationDays || 0);
+      const accessScope = ["general", "takiwaki", "both"].includes(body?.accessScope)
+        ? body.accessScope
+        : "general";
+      const planTier = ["standard", "premium"].includes(body?.planTier)
+        ? body.planTier
+        : "standard";
+      const maxUses = Number(body?.maxUses || 0);
+      const validUntil = body?.validUntil ? new Date(String(body.validUntil)) : null;
+      if (!codeId) return json(request, { error: "Choose an access code to edit." }, 400);
+      if (!label || label.length > 100) return json(request, { error: "Enter a plan label." }, 400);
+      if (!Number.isInteger(durationDays) || durationDays < 1 || durationDays > 730) {
+        return json(request, { error: "Duration must be between 1 and 730 days." }, 400);
+      }
+      if (!Number.isInteger(maxUses) || maxUses < 1 || maxUses > 1000) {
+        return json(request, { error: "Maximum uses must be between 1 and 1000." }, 400);
+      }
+      if (validUntil && Number.isNaN(validUntil.getTime())) {
+        return json(request, { error: "Enter a valid code expiry date, or leave it blank." }, 400);
+      }
+      const { data: current, error: currentError } = await admin
+        .from("review_access_codes")
+        .select("id,use_count")
+        .eq("id", codeId)
+        .maybeSingle();
+      if (currentError) throw currentError;
+      if (!current) return json(request, { error: "Access code not found." }, 404);
+      if (maxUses < Number(current.use_count || 0)) {
+        return json(request, { error: "Maximum uses cannot be lower than the number already used." }, 400);
+      }
+      const { data, error } = await admin.from("review_access_codes").update({
+        label,
+        duration_days: durationDays,
+        access_scope: accessScope,
+        plan_tier: planTier,
+        max_uses: maxUses,
+        valid_until: validUntil?.toISOString() || null,
+        enabled: body?.enabled !== false,
+      }).eq("id", codeId)
+        .select("id,label,code_last4,duration_days,access_scope,plan_tier,max_uses,use_count,enabled,valid_until,created_at")
+        .single();
+      if (error) throw error;
+      return json(request, { code: data });
+    }
+
+    if (action === "delete") {
+      const codeId = String(body?.codeId || "").trim();
+      if (!codeId) return json(request, { error: "Choose an access code to delete." }, 400);
+      const { data: current, error: currentError } = await admin
+        .from("review_access_codes")
+        .select("id,use_count")
+        .eq("id", codeId)
+        .maybeSingle();
+      if (currentError) throw currentError;
+      if (!current) return json(request, { error: "Access code not found." }, 404);
+      if (Number(current.use_count || 0) > 0) {
+        const { error } = await admin.from("review_access_codes")
+          .update({ enabled: false })
+          .eq("id", codeId);
+        if (error) throw error;
+        return json(request, { disposition: "disabled", preservedHistory: true });
+      }
+      const { error } = await admin.from("review_access_codes").delete().eq("id", codeId);
+      if (error) throw error;
+      return json(request, { disposition: "deleted", preservedHistory: false });
+    }
+
+    if (action === "reissue") {
+      const codeId = String(body?.codeId || "").trim();
+      if (!codeId) return json(request, { error: "Choose an access code to reissue." }, 400);
+      const { data: current, error: currentError } = await admin
+        .from("review_access_codes")
+        .select("label,duration_days,access_scope,plan_tier,max_uses,valid_until")
+        .eq("id", codeId)
+        .maybeSingle();
+      if (currentError) throw currentError;
+      if (!current) return json(request, { error: "Access code not found." }, 404);
+      const accessCode = secureCode();
+      const { data: replacement, error: insertError } = await admin
+        .from("review_access_codes")
+        .insert({
+          ...current,
+          label: `${current.label} (reissued)`.slice(0, 100),
+          code_hash: await sha256(accessCode),
+          code_last4: accessCode.slice(-4),
+          use_count: 0,
+          enabled: true,
+          created_by: user.id,
+        })
+        .select("id")
+        .single();
+      if (insertError) throw insertError;
+      const { error: disableError } = await admin.from("review_access_codes")
+        .update({ enabled: false })
+        .eq("id", codeId);
+      if (disableError) {
+        await admin.from("review_access_codes").delete().eq("id", replacement.id);
+        throw disableError;
+      }
+      return json(request, { accessCode, codeId: replacement.id });
+    }
+
     if (action === "redeem") {
       const rawCode = String(body?.code || "").trim().toUpperCase();
       if (!/^TEC-[A-F0-9]{12}$/.test(rawCode)) {
-        return json(request, { error: "This code is invalid, expired, or has reached its use limit." }, 400);
+        return json(request, {
+          error: "The code format is invalid. Enter the complete code beginning TEC-.",
+          reason: "invalid_format",
+        }, 400);
       }
       const { data: code, error: codeError } = await admin
         .from("review_access_codes")
@@ -119,9 +258,18 @@ Deno.serve(async (request) => {
         .eq("code_hash", await sha256(rawCode))
         .maybeSingle();
       if (codeError) throw codeError;
+      if (!code) {
+        return json(request, { error: "This access code was not found.", reason: "not_found" }, 404);
+      }
       const expired = code?.valid_until && new Date(code.valid_until).getTime() <= Date.now();
-      if (!code || !code.enabled || expired || Number(code.use_count) >= Number(code.max_uses)) {
-        return json(request, { error: "This code is invalid, expired, or has reached its use limit." }, 400);
+      if (!code.enabled) {
+        return json(request, { error: "This access code has been disabled by the teacher.", reason: "disabled" }, 409);
+      }
+      if (expired) {
+        return json(request, { error: "This access code has expired. Please ask the teacher for a new code.", reason: "expired" }, 410);
+      }
+      if (Number(code.use_count) >= Number(code.max_uses)) {
+        return json(request, { error: "This access code has already reached its use limit.", reason: "used_up" }, 409);
       }
       const { data: usedAlready } = await admin
         .from("review_access_code_redemptions")
@@ -129,7 +277,12 @@ Deno.serve(async (request) => {
         .eq("code_id", code.id)
         .eq("user_id", user.id)
         .maybeSingle();
-      if (usedAlready) return json(request, { error: "This account has already used this code." }, 409);
+      if (usedAlready) {
+        return json(request, {
+          error: "This account has already used this access code.",
+          reason: "already_redeemed",
+        }, 409);
+      }
 
       const nextUseCount = Number(code.use_count) + 1;
       const { data: reserved, error: reserveError } = await admin
@@ -141,7 +294,12 @@ Deno.serve(async (request) => {
         .select("id")
         .maybeSingle();
       if (reserveError) throw reserveError;
-      if (!reserved) return json(request, { error: "This code has just reached its use limit." }, 409);
+      if (!reserved) {
+        return json(request, {
+          error: "This code has just reached its use limit. Please ask the teacher for another code.",
+          reason: "used_up",
+        }, 409);
+      }
 
       const { error: redemptionError } = await admin.from("review_access_code_redemptions").insert({
         code_id: code.id,
@@ -166,6 +324,7 @@ Deno.serve(async (request) => {
         user_id: user.id,
         status: "active",
         access_scope: code.access_scope,
+        plan_tier: code.plan_tier || "standard",
         plan_label: code.label,
         starts_at: startsAt,
         expires_at: expiresAt,
@@ -184,6 +343,7 @@ Deno.serve(async (request) => {
       return json(request, {
         membershipStatus: "active",
         membershipScope: code.access_scope,
+        membershipPlan: code.plan_tier || "standard",
         membershipExpiresAt: expiresAt,
       });
     }

@@ -1,0 +1,17 @@
+{
+  "checkedAt": "2026-08-03",
+  "method": "Human visual inspection of every WebP against its manifest scene, target sentence, and displayed objects/actions.",
+  "manifestAssetCount": 55,
+  "allManifestAssetsChecked": true,
+  "status": "pass_after_correction",
+  "findings": [
+    {
+      "asset": "/assets/questions/visual/july-25-04-on-my-nerves.webp",
+      "questionId": "july-25-draft-visual-4",
+      "before": "The image showed repeated phone notifications but did not identify the male person referred to by ‘He’.",
+      "fix": "Replaced the illustration with one that shows repeated calls from the same identifiable male contact and the learner's frustration.",
+      "after": "The subject, pronoun, repeated action, and emotional meaning now match ‘He’s getting on my nerves.’",
+      "status": "fixed_and_rechecked"
+    }
+  ]
+}

@@ -1,12 +1,16 @@
 import {
   createTeacherAccessCode,
+  deleteTeacherAccessCode,
+  getTeacherLearnerAuthStatus,
   getTeacherClient,
   getTeacherSession,
   googleStudentAuthAvailable,
   onTeacherAuthChange,
+  reissueTeacherAccessCode,
   signInTeacher,
   signInTeacherWithGoogle,
   signOutTeacher,
+  updateTeacherAccessCode,
 } from "./supabase.js";
 
 const client = getTeacherClient();
@@ -36,6 +40,7 @@ const elements = {
   editorDate: document.querySelector("#editorDate"),
   editorStatus: document.querySelector("#editorStatus"),
   editorAudience: document.querySelector("#editorAudience"),
+  editorIsPreview: document.querySelector("#editorIsPreview"),
   editorSummary: document.querySelector("#editorSummary"),
   editorMessage: document.querySelector("#editorStatusMessage"),
   editorQuestionSummary: document.querySelector("#editorQuestionSummary"),
@@ -95,6 +100,10 @@ const state = {
   attempts: [],
   assignments: [],
   accessOverrides: [],
+  premiumTasks: [],
+  taskSubmissions: [],
+  submissionFeedback: [],
+  premiumSchemaReady: true,
   teacherControlsReady: true,
   answers: [],
   analyticsQuestions: [],
@@ -108,6 +117,7 @@ const state = {
   questionSaving: false,
   lessonListView: "published",
   lastGeneratedCode: null,
+  learnerAuthStatus: {},
 };
 
 function make(tag, options = {}) {
@@ -161,6 +171,20 @@ function formatDate(value, includeTime = false) {
     day: "numeric",
     ...(includeTime ? { hour: "2-digit", minute: "2-digit" } : {}),
   }).format(date);
+}
+
+function localDateTimeValue(value) {
+  if (!value) return "";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+  const local = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+  return local.toISOString().slice(0, 16);
+}
+
+function isoDateTimeValue(value) {
+  if (!value) return null;
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? null : date.toISOString();
 }
 
 function statusLabel(status) {
@@ -399,6 +423,9 @@ async function refreshDashboard() {
       memberships,
       accessCodes,
       accessOverrides,
+      premiumTasks,
+      taskSubmissions,
+      submissionFeedback,
     ] = await Promise.all([
       fetchAll("review_lessons", "*, review_questions(count)", {
         order: { column: "lesson_date", ascending: false },
@@ -412,7 +439,7 @@ async function refreshDashboard() {
       ),
       fetchAll(
         "review_assignments",
-        "id, lesson_id, student_id, assigned_by, due_at, status, note, created_at",
+        "id, lesson_id, student_id, assigned_by, due_at, status, note, visible_to_student, opens_at, closes_at, required_plan, teacher_review_required, created_at",
         { order: { column: "created_at", ascending: false } },
       ),
       fetchAll(
@@ -437,17 +464,32 @@ async function refreshDashboard() {
       ),
       fetchAll(
         "review_memberships",
-        "user_id,status,access_scope,plan_label,starts_at,expires_at,approval_source,approved_at,notes,created_at,updated_at",
+        "user_id,status,access_scope,plan_tier,plan_label,starts_at,expires_at,approval_source,approved_at,notes,created_at,updated_at",
         { order: { column: "created_at", ascending: false } },
       ),
       fetchAll(
         "review_access_codes",
-        "id,label,code_last4,duration_days,access_scope,max_uses,use_count,enabled,valid_until,created_at",
+        "id,label,code_last4,duration_days,access_scope,plan_tier,max_uses,use_count,enabled,valid_until,created_at",
         { order: { column: "created_at", ascending: false } },
       ),
       fetchOptional(
         "review_lesson_access_overrides",
         "lesson_id,student_id,access_mode,note,updated_at",
+        { order: { column: "updated_at", ascending: false } },
+      ),
+      fetchOptional(
+        "review_premium_tasks",
+        "id,lesson_id,stable_key,task_type,title_en,title_ja,prompt_en,prompt_ja,instructions_en,instructions_ja,required_phrases,required_vocabulary,target_seconds,min_word_count,max_word_count,max_attempts,active,created_at,updated_at",
+        { order: { column: "created_at", ascending: false } },
+      ),
+      fetchOptional(
+        "review_task_submissions",
+        "id,task_id,user_id,attempt_number,status,text_response,audio_object_path,transcript,duration_seconds,submitted_at,reviewed_at,created_at,updated_at",
+        { order: { column: "submitted_at", ascending: false } },
+      ),
+      fetchOptional(
+        "review_submission_feedback",
+        "id,submission_id,teacher_id,score,rubric,feedback_en,feedback_ja,ai_assisted,published_at,created_at,updated_at",
         { order: { column: "updated_at", ascending: false } },
       ),
     ]);
@@ -469,6 +511,10 @@ async function refreshDashboard() {
     state.accessCodes = accessCodes;
     state.accessOverrides = accessOverrides.rows;
     state.teacherControlsReady = accessOverrides.available;
+    state.premiumTasks = premiumTasks.rows;
+    state.taskSubmissions = taskSubmissions.rows;
+    state.submissionFeedback = submissionFeedback.rows;
+    state.premiumSchemaReady = premiumTasks.available && taskSubmissions.available && submissionFeedback.available;
     updateMetrics();
     renderActiveTab();
   } catch (error) {
@@ -661,6 +707,22 @@ function membershipFor(userId) {
   return state.memberships.find((membership) => membership.user_id === userId) || null;
 }
 
+async function loadLearnerAuthStatus(profile, output) {
+  const cached = state.learnerAuthStatus[profile.user_id];
+  if (cached) {
+    output.textContent = `Account: ${cached.status} · Registered: ${formatDate(cached.createdAt, true)} · Last sign-in: ${cached.lastSignInAt ? formatDate(cached.lastSignInAt, true) : "Never"} · Email confirmed: ${cached.emailConfirmedAt ? "Yes" : "No"}`;
+    return;
+  }
+  output.textContent = "Loading secure account status…";
+  const { data, error } = await getTeacherLearnerAuthStatus(profile.user_id);
+  if (error || !data?.account) {
+    output.textContent = readableError(error, "Account status could not be loaded.");
+    return;
+  }
+  state.learnerAuthStatus[profile.user_id] = data.account;
+  if (output.isConnected) loadLearnerAuthStatus(profile, output);
+}
+
 function activeMembershipStatus(membership) {
   if (!membership) return "Pending";
   if (membership.status === "active" && new Date(membership.expires_at || 0).getTime() <= Date.now()) {
@@ -675,17 +737,18 @@ function activeMembershipStatus(membership) {
   }[membership.status] || membership.status;
 }
 
-async function activateMembership(profile, days, scope, button) {
+async function activateMembership(profile, days, scope, plan, button) {
   const duration = Math.max(1, Math.min(730, Number(days || 30)));
   button.disabled = true;
   try {
-    const { error } = await client.rpc("review_approve_membership", {
+    const { error } = await client.rpc("review_approve_membership_tiered", {
       learner_id: profile.user_id,
       duration_days: duration,
       membership_scope: scope,
+      membership_plan: plan,
     });
     if (error) throw error;
-    showToast(`${profileName(profile.user_id)} now has ${duration} days of ${scope} access.`, "success");
+    showToast(`${profileName(profile.user_id)} now has ${duration} days of ${plan} · ${scope} access.`, "success");
     await refreshDashboard();
     if (elements.learnerDialog?.open) openLearnerDialog(profile);
   } catch (error) {
@@ -742,11 +805,153 @@ function generatedCodeResult() {
     make("strong", { text: "New full code — copy and send this now" }),
     code,
     make("p", {
-      text: `${state.lastGeneratedCode.label} · ${state.lastGeneratedCode.durationDays} days · ${audienceLabel(state.lastGeneratedCode.accessScope)}. For security, the history below shows only the last four characters.`,
+      text: `${state.lastGeneratedCode.label} · ${state.lastGeneratedCode.durationDays} days · ${audienceLabel(state.lastGeneratedCode.accessScope)} · ${state.lastGeneratedCode.planTier === "premium" ? "Premium" : "Standard"}. For security, the history below shows only the last four characters.`,
     }),
   );
   output.append(text, copy);
   return output;
+}
+
+function accessCodeStatus(code) {
+  if (!code.enabled) return { key: "disabled", label: "Disabled / 無効" };
+  if (code.valid_until && new Date(code.valid_until).getTime() <= Date.now()) {
+    return { key: "expired", label: "Expired / 期限切れ" };
+  }
+  if (Number(code.use_count || 0) >= Number(code.max_uses || 0)) {
+    return { key: "used", label: "Used up / 使用済み" };
+  }
+  if (Number(code.use_count || 0) > 0) {
+    return { key: "partial", label: "Partly used / 一部使用" };
+  }
+  return { key: "unused", label: "Unused / 未使用" };
+}
+
+function accessCodeEditor(code) {
+  const details = make("details", { className: "code-history-item" });
+  const status = accessCodeStatus(code);
+  const summary = make("summary");
+  const title = make("span");
+  title.append(
+    make("strong", { text: code.label }),
+    make("small", {
+      text: `••••${code.code_last4} · ${code.plan_tier === "premium" ? "Premium" : "Standard"} · ${code.use_count}/${code.max_uses} uses`,
+    }),
+  );
+  summary.append(title, make("b", { className: `code-status code-status-${status.key}`, text: status.label }));
+
+  const fields = make("div", { className: "code-edit-fields" });
+  const label = make("input");
+  label.value = code.label || "";
+  label.maxLength = 100;
+  label.setAttribute("aria-label", "Access code label");
+  const days = make("input");
+  days.type = "number";
+  days.min = "1";
+  days.max = "730";
+  days.value = String(code.duration_days || 30);
+  days.setAttribute("aria-label", "Access duration in days");
+  const scope = make("select");
+  [["general", "General"], ["takiwaki", "Takiwaki"], ["both", "Both"]].forEach(([value, textValue]) => {
+    const option = make("option", { text: textValue });
+    option.value = value;
+    scope.append(option);
+  });
+  scope.value = code.access_scope || "general";
+  scope.setAttribute("aria-label", "Access scope");
+  const plan = make("select");
+  [["standard", "Standard"], ["premium", "Premium"]].forEach(([value, textValue]) => {
+    const option = make("option", { text: textValue });
+    option.value = value;
+    plan.append(option);
+  });
+  plan.value = code.plan_tier || "standard";
+  plan.setAttribute("aria-label", "Membership plan");
+  const uses = make("input");
+  uses.type = "number";
+  uses.min = String(Math.max(1, Number(code.use_count || 0)));
+  uses.max = "1000";
+  uses.value = String(code.max_uses || 1);
+  uses.setAttribute("aria-label", "Maximum uses");
+  const expiry = make("input");
+  expiry.type = "datetime-local";
+  expiry.value = localDateTimeValue(code.valid_until);
+  expiry.setAttribute("aria-label", "Code expiry; leave blank for no expiry");
+  const enabledLabel = make("label", { className: "code-enabled-field" });
+  const enabled = make("input");
+  enabled.type = "checkbox";
+  enabled.checked = Boolean(code.enabled);
+  enabledLabel.append(enabled, document.createTextNode(" Enabled / 有効"));
+  fields.append(label, days, scope, plan, uses, expiry, enabledLabel);
+
+  const metadata = make("p", {
+    className: "code-history-meta",
+    text: `Issued ${formatDate(code.created_at, true)} · Expires ${code.valid_until ? formatDate(code.valid_until, true) : "No fixed expiry"}. The full code is never stored and cannot be displayed again.`,
+  });
+  const actions = make("div", { className: "code-history-actions" });
+  const save = makeAction("Save changes", async () => {
+    const durationDays = Math.max(1, Math.min(730, Number(days.value || 30)));
+    const maxUses = Math.max(Number(code.use_count || 0), Math.min(1000, Number(uses.value || 1)));
+    if (!label.value.trim()) {
+      showToast("Enter a plan label before saving.", "error");
+      return;
+    }
+    save.disabled = true;
+    const { error } = await updateTeacherAccessCode({
+      codeId: code.id,
+      label: label.value.trim(),
+      durationDays,
+      accessScope: scope.value,
+      planTier: plan.value,
+      maxUses,
+      validUntil: isoDateTimeValue(expiry.value),
+      enabled: enabled.checked,
+    });
+    if (error) {
+      showToast(readableError(error, "The access code could not be updated."), "error");
+      save.disabled = false;
+      return;
+    }
+    showToast("Access code settings updated.", "success");
+    await refreshDashboard();
+  });
+  const reissue = makeAction("Reissue", async () => {
+    if (!window.confirm("Reissue this code? The old code will be disabled and a new full code will be shown once.")) return;
+    reissue.disabled = true;
+    const { data, error } = await reissueTeacherAccessCode(code.id);
+    if (error || !data?.accessCode) {
+      showToast(readableError(error, "The access code could not be reissued."), "error");
+      reissue.disabled = false;
+      return;
+    }
+    state.lastGeneratedCode = {
+      code: data.accessCode,
+      label: `${code.label} (reissued)`,
+      durationDays: code.duration_days,
+      accessScope: code.access_scope,
+      planTier: code.plan_tier || "standard",
+    };
+    showToast("New full code created. Copy it now; the old code is disabled.", "success");
+    await refreshDashboard();
+  });
+  const remove = makeAction(Number(code.use_count || 0) > 0 ? "Disable & preserve history" : "Delete unused code", async () => {
+    const prompt = Number(code.use_count || 0) > 0
+      ? "This code has redemption history, so it will be disabled rather than erased. Continue?"
+      : "Permanently delete this unused code? This cannot be undone.";
+    if (!window.confirm(prompt)) return;
+    remove.disabled = true;
+    const { data, error } = await deleteTeacherAccessCode(code.id);
+    if (error) {
+      showToast(readableError(error, "The access code could not be removed."), "error");
+      remove.disabled = false;
+      return;
+    }
+    showToast(data?.disposition === "disabled" ? "Used code disabled; redemption history preserved." : "Unused code deleted.", "success");
+    await refreshDashboard();
+  });
+  remove.classList.add("danger-action");
+  actions.append(save, reissue, remove);
+  details.append(summary, metadata, fields, actions);
+  return details;
 }
 
 function renderAccessCodeManager() {
@@ -774,12 +979,22 @@ function renderAccessCodeManager() {
     option.value = value;
     scope.append(option);
   });
+  const plan = make("select");
+  [["standard", "Standard"], ["premium", "Premium"]].forEach(([value, textValue]) => {
+    const option = make("option", { text: textValue });
+    option.value = value;
+    plan.append(option);
+  });
+  plan.setAttribute("aria-label", "Membership plan");
   const uses = make("input");
   uses.type = "number";
   uses.min = "1";
   uses.max = "1000";
   uses.value = "1";
   uses.setAttribute("aria-label", "Maximum uses");
+  const expiry = make("input");
+  expiry.type = "datetime-local";
+  expiry.setAttribute("aria-label", "Code expiry; leave blank for no expiry");
   const create = makeAction("Generate secure code", async () => {
     if (!label.value.trim()) return;
     const durationDays = Math.max(1, Math.min(730, Number(days.value || 30)));
@@ -790,7 +1005,9 @@ function renderAccessCodeManager() {
         label: label.value.trim(),
         durationDays,
         accessScope: scope.value,
+        planTier: plan.value,
         maxUses: Number(uses.value),
+        validUntil: isoDateTimeValue(expiry.value),
       });
       if (error) throw error;
       const rawCode = data?.accessCode;
@@ -800,6 +1017,7 @@ function renderAccessCodeManager() {
         label: label.value.trim(),
         durationDays,
         accessScope: scope.value,
+        planTier: plan.value,
       };
       showToast("Access code generated.", "success");
       await refreshDashboard();
@@ -809,7 +1027,7 @@ function renderAccessCodeManager() {
     }
   });
   form.addEventListener("submit", (event) => event.preventDefault());
-  form.append(label, days, scope, uses, create);
+  form.append(label, days, scope, plan, uses, expiry, create);
   section.append(heading, form);
   const generated = generatedCodeResult();
   if (generated) section.append(generated);
@@ -819,11 +1037,7 @@ function renderAccessCodeManager() {
       text: "Code history — masked for security. “••••1234” is only the last four characters and cannot be used to unlock an account.",
     }));
     const codeList = make("div", { className: "code-list" });
-    state.accessCodes.slice(0, 8).forEach((code) => {
-      codeList.append(make("span", {
-        text: `${code.label} · last 4: ••••${code.code_last4} · ${code.duration_days} days · ${code.use_count}/${code.max_uses} used${code.enabled ? "" : " · disabled"}`,
-      }));
-    });
+    state.accessCodes.forEach((code) => codeList.append(accessCodeEditor(code)));
     section.append(codeList);
   }
   return section;
@@ -851,12 +1065,12 @@ async function setLessonAssignment(profile, lesson, assigned, control) {
       student_id: profile.user_id,
       assigned_by: state.session.user.id,
       status: "assigned",
-    }, { onConflict: "lesson_id,student_id" }).select("id,lesson_id,student_id,assigned_by,due_at,status,note,created_at").single();
+    }, { onConflict: "lesson_id,student_id" }).select("id,lesson_id,student_id,assigned_by,due_at,status,note,visible_to_student,opens_at,closes_at,required_plan,teacher_review_required,created_at").single();
   } else if (existing) {
     result = await client.from("review_assignments")
       .update({ status: "dismissed" })
       .eq("id", existing.id)
-      .select("id,lesson_id,student_id,assigned_by,due_at,status,note,created_at")
+      .select("id,lesson_id,student_id,assigned_by,due_at,status,note,visible_to_student,opens_at,closes_at,required_plan,teacher_review_required,created_at")
       .single();
   } else {
     result = { data: null, error: null };
@@ -874,6 +1088,86 @@ async function setLessonAssignment(profile, lesson, assigned, control) {
   showToast(assigned ? "Lesson added to this learner’s plan." : "Lesson removed from this learner’s plan.", "success");
   renderStudents();
   openLearnerDialog(profile);
+}
+
+async function saveLessonAssignmentSettings(profile, lesson, settings, button) {
+  const opensAt = isoDateTimeValue(settings.opensAt);
+  const closesAt = isoDateTimeValue(settings.closesAt);
+  if (opensAt && closesAt && new Date(closesAt).getTime() <= new Date(opensAt).getTime()) {
+    showToast("The closing date must be later than the opening date.", "error");
+    return;
+  }
+  button.disabled = true;
+  const { data, error } = await client.from("review_assignments").upsert({
+    lesson_id: lesson.id,
+    student_id: profile.user_id,
+    assigned_by: state.session.user.id,
+    status: "assigned",
+    visible_to_student: settings.visible,
+    opens_at: opensAt,
+    closes_at: closesAt,
+    required_plan: settings.requiredPlan,
+    teacher_review_required: settings.teacherReviewRequired,
+  }, { onConflict: "lesson_id,student_id" })
+    .select("id,lesson_id,student_id,assigned_by,due_at,status,note,visible_to_student,opens_at,closes_at,required_plan,teacher_review_required,created_at")
+    .single();
+  if (error) {
+    showToast(readableError(error, "The assignment settings could not be saved."), "error");
+    button.disabled = false;
+    return;
+  }
+  state.assignments = state.assignments.filter((item) => item.id !== data.id);
+  state.assignments.push(data);
+  showToast("Assignment visibility, dates and plan requirement saved.", "success");
+  openLearnerDialog(profile);
+}
+
+async function applyBulkLessonAction(profile, lessonIds, action, button) {
+  if (!lessonIds.length) {
+    showToast("Select at least one lesson first.", "error");
+    return;
+  }
+  button.disabled = true;
+  let result = { error: null };
+  if (action === "recommend") {
+    result = await client.from("review_assignments").upsert(
+      lessonIds.map((lessonId) => ({
+        lesson_id: lessonId,
+        student_id: profile.user_id,
+        assigned_by: state.session.user.id,
+        status: "assigned",
+      })),
+      { onConflict: "lesson_id,student_id" },
+    );
+  } else if (action === "remove") {
+    result = await client.from("review_assignments")
+      .update({ status: "dismissed" })
+      .eq("student_id", profile.user_id)
+      .in("lesson_id", lessonIds);
+  } else if (action === "inherit") {
+    result = await client.from("review_lesson_access_overrides")
+      .delete()
+      .eq("student_id", profile.user_id)
+      .in("lesson_id", lessonIds);
+  } else {
+    result = await client.from("review_lesson_access_overrides").upsert(
+      lessonIds.map((lessonId) => ({
+        lesson_id: lessonId,
+        student_id: profile.user_id,
+        access_mode: action,
+        updated_by: state.session.user.id,
+      })),
+      { onConflict: "lesson_id,student_id" },
+    );
+  }
+  if (result.error) {
+    showToast(readableError(result.error, "The selected lessons could not be updated."), "error");
+    button.disabled = false;
+    return;
+  }
+  showToast(`${lessonIds.length} lesson(s) updated.`, "success");
+  await refreshDashboard();
+  if (elements.learnerDialog?.open) openLearnerDialog(profile);
 }
 
 async function setLessonLock(profile, lesson, accessMode, control) {
@@ -914,7 +1208,14 @@ async function setLessonLock(profile, lesson, accessMode, control) {
       updated_at: new Date().toISOString(),
     });
   }
-  showToast(accessMode === "block" ? "This lesson is now locked for the learner." : "Normal membership access restored.", "success");
+  showToast(
+    accessMode === "block"
+      ? "This lesson is now locked for the learner."
+      : accessMode === "allow"
+        ? "Teacher exception saved: this learner can open the lesson even when their plan would normally lock it."
+        : "Normal membership and plan rules restored.",
+    "success",
+  );
   renderStudents();
   openLearnerDialog(profile);
 }
@@ -962,6 +1263,14 @@ function learnerActivity(profile) {
       detail: item.status === "completed" ? "Assignment completed" : `Assignment status: ${item.status}`,
     });
   });
+  state.taskSubmissions.filter((item) => item.user_id === profile.user_id).forEach((item) => {
+    const task = state.premiumTasks.find((candidate) => candidate.id === item.task_id);
+    events.push({
+      at: item.submitted_at || item.updated_at || item.created_at,
+      title: `Premium ${task?.task_type || "task"} · ${task?.title_en || "Submission"}`,
+      detail: `Submission status: ${item.status}`,
+    });
+  });
   return events
     .filter((item) => item.at)
     .sort((left, right) => new Date(right.at).getTime() - new Date(left.at).getTime())
@@ -973,7 +1282,7 @@ function learnerLessonControls(profile) {
   section.append(
     make("h3", { text: "Lesson plan & visibility / レッスン割り当て・表示管理" }),
     make("p", {
-      text: "Recommendation adds a lesson to the learner’s personal plan. Visibility follows the membership by default; choose Locked only when this learner must not open that lesson.",
+      text: "Recommendation adds a lesson to the learner’s plan. Assignment settings control when that recommendation appears and which plan it requires. Teacher unlock/lock is a separate learner-specific exception and has priority over normal plan access.",
     }),
   );
   if (!state.teacherControlsReady) {
@@ -987,9 +1296,51 @@ function learnerLessonControls(profile) {
     section.append(make("p", { text: "Publish a lesson before assigning it." }));
     return section;
   }
-  const { table, tbody } = makeTable(["Lesson", "Recommend", "Learner visibility", "Practice"]);
+  const selectedLessonIds = new Set();
+  const bulk = make("div", { className: "lesson-bulk-controls" });
+  const selectAllLabel = make("label");
+  const selectAll = make("input");
+  selectAll.type = "checkbox";
+  selectAllLabel.append(selectAll, document.createTextNode(" Select all / 全選択"));
+  const bulkAction = make("select");
+  [
+    ["recommend", "Recommend selected"],
+    ["remove", "Remove recommendations"],
+    ["allow", "Teacher-unlock selected"],
+    ["block", "Teacher-lock selected"],
+    ["inherit", "Restore plan rules"],
+  ].forEach(([value, label]) => {
+    const option = make("option", { text: label });
+    option.value = value;
+    bulkAction.append(option);
+  });
+  const applyBulk = makeAction("Apply to selected", () => (
+    applyBulkLessonAction(profile, [...selectedLessonIds], bulkAction.value, applyBulk)
+  ));
+  bulk.append(selectAllLabel, bulkAction, applyBulk);
+  section.append(bulk);
+
+  const selectionBoxes = [];
+  selectAll.addEventListener("change", () => {
+    selectionBoxes.forEach(({ id, checkbox }) => {
+      checkbox.checked = selectAll.checked;
+      if (selectAll.checked) selectedLessonIds.add(id);
+      else selectedLessonIds.delete(id);
+    });
+  });
+
+  const { table, tbody } = makeTable(["Select", "Lesson", "Recommend", "Access exception", "Assignment settings", "Practice"]);
   for (const lesson of published) {
     const assignment = assignmentFor(profile.user_id, lesson.id);
+    const selected = make("input");
+    selected.type = "checkbox";
+    selected.setAttribute("aria-label", `Select ${lesson.title_en} for bulk action`);
+    selected.addEventListener("change", () => {
+      if (selected.checked) selectedLessonIds.add(lesson.id);
+      else selectedLessonIds.delete(lesson.id);
+      selectAll.checked = selectedLessonIds.size === published.length;
+    });
+    selectionBoxes.push({ id: lesson.id, checkbox: selected });
     const checkbox = make("input");
     checkbox.type = "checkbox";
     checkbox.checked = Boolean(assignment && assignment.status !== "dismissed");
@@ -997,7 +1348,11 @@ function learnerLessonControls(profile) {
     checkbox.addEventListener("change", () => setLessonAssignment(profile, lesson, checkbox.checked, checkbox));
 
     const visibility = make("select");
-    [["inherit", "Membership rules (available)"], ["block", "Locked for this learner"]].forEach(([value, label]) => {
+    [
+      ["inherit", "Use normal plan rules"],
+      ["allow", "Teacher unlock (priority)"],
+      ["block", "Teacher lock (priority)"],
+    ].forEach(([value, label]) => {
       const option = make("option", { text: label });
       option.value = value;
       visibility.append(option);
@@ -1006,6 +1361,49 @@ function learnerLessonControls(profile) {
     visibility.disabled = !state.teacherControlsReady;
     visibility.setAttribute("aria-label", `Visibility of ${lesson.title_en}`);
     visibility.addEventListener("change", () => setLessonLock(profile, lesson, visibility.value, visibility));
+
+    const assignmentSettings = make("details", { className: "assignment-settings" });
+    assignmentSettings.append(make("summary", { text: assignment && assignment.status !== "dismissed" ? "Configure" : "Create & configure" }));
+    const assignmentFields = make("div");
+    const opens = make("input");
+    opens.type = "datetime-local";
+    opens.value = localDateTimeValue(assignment?.opens_at);
+    opens.setAttribute("aria-label", `Open ${lesson.title_en} assignment from`);
+    const closes = make("input");
+    closes.type = "datetime-local";
+    closes.value = localDateTimeValue(assignment?.closes_at);
+    closes.setAttribute("aria-label", `Close ${lesson.title_en} assignment at`);
+    const requiredPlan = make("select");
+    [["standard", "Standard or Premium"], ["premium", "Premium only"]].forEach(([value, label]) => {
+      const option = make("option", { text: label });
+      option.value = value;
+      requiredPlan.append(option);
+    });
+    requiredPlan.value = assignment?.required_plan || "standard";
+    requiredPlan.setAttribute("aria-label", `Plan requirement for ${lesson.title_en}`);
+    const visibleLabel = make("label");
+    const visible = make("input");
+    visible.type = "checkbox";
+    visible.checked = assignment?.visible_to_student !== false;
+    visibleLabel.append(visible, document.createTextNode(" Show assignment"));
+    const reviewLabel = make("label");
+    const teacherReview = make("input");
+    teacherReview.type = "checkbox";
+    teacherReview.checked = Boolean(assignment?.teacher_review_required);
+    reviewLabel.append(teacherReview, document.createTextNode(" Teacher review"));
+    const saveSettings = makeAction("Save settings", () => saveLessonAssignmentSettings(profile, lesson, {
+      opensAt: opens.value,
+      closesAt: closes.value,
+      requiredPlan: requiredPlan.value,
+      visible: visible.checked,
+      teacherReviewRequired: teacherReview.checked,
+    }, saveSettings));
+    assignmentFields.append(
+      make("small", { text: "Opens / 公開開始" }), opens,
+      make("small", { text: "Closes / 公開終了" }), closes,
+      requiredPlan, visibleLabel, reviewLabel, saveSettings,
+    );
+    assignmentSettings.append(assignmentFields);
 
     const attempts = state.attempts.filter(
       (attempt) => attempt.user_id === profile.user_id && attempt.lesson_id === lesson.id,
@@ -1017,17 +1415,22 @@ function learnerLessonControls(profile) {
       return Math.max(maximum, value);
     }, 0);
     const row = make("tr");
+    const selectedCell = make("td");
+    selectedCell.append(selected);
     const lessonCell = make("td");
     lessonCell.append(make("strong", { text: lesson.title_en }), make("br"), make("small", { text: formatDate(lesson.lesson_date) }));
     const recommendCell = make("td");
     recommendCell.append(checkbox);
     row.append(
+      selectedCell,
       lessonCell,
       recommendCell,
       make("td"),
+      make("td"),
       make("td", { text: attempts.length ? `${attempts.length} session(s) · best ${Math.round(best * 100)}%` : "Not practised" }),
     );
-    row.children[2].append(visibility);
+    row.children[3].append(visibility);
+    row.children[4].append(assignmentSettings);
     tbody.append(row);
   }
   const tableWrap = make("div", { className: "table-scroll" });
@@ -1042,6 +1445,7 @@ function openLearnerDialog(profile) {
   const membership = membershipFor(current.user_id);
   const attempts = state.attempts.filter((item) => item.user_id === current.user_id);
   const speaking = state.speaking.filter((item) => item.user_id === current.user_id);
+  const premiumSubmissions = state.taskSubmissions.filter((item) => item.user_id === current.user_id);
   const phraseCount = state.phrases
     .filter((item) => item.user_id === current.user_id)
     .reduce((sum, item) => sum + Number(item.practice_count || 0), 0);
@@ -1051,16 +1455,20 @@ function openLearnerDialog(profile) {
   elements.learnerDialogHeading.textContent = profileName(current.user_id);
 
   const profileCard = make("section", { className: "learner-profile-card" });
+  const authStatus = make("p", { text: "Loading secure account status…" });
   profileCard.append(
     make("div", { text: current.contact_email || "No email recorded" }),
     make("p", { text: [current.english_level || "Level not set", current.age_group || "Age not shared", current.native_language || "Language not set"].join(" · ") }),
     make("p", { text: current.learning_goal ? `Goal: ${current.learning_goal}` : "No learning goal recorded yet." }),
+    authStatus,
   );
+  loadLearnerAuthStatus(current, authStatus);
 
   const metrics = make("section", { className: "learner-metrics" });
   [
     ["Practice sessions", attempts.length],
     ["Speaking records", speaking.length],
+    ["Premium submissions", premiumSubmissions.length],
     ["Phrase repetitions", phraseCount],
     ["Assigned lessons", assigned],
   ].forEach(([label, value]) => {
@@ -1072,7 +1480,7 @@ function openLearnerDialog(profile) {
   const access = make("section", { className: "learner-control-section" });
   access.append(
     make("h3", { text: "Membership & account safety / 会員期間・安全管理" }),
-    make("p", { text: `Status: ${activeMembershipStatus(membership)} · Scope: ${membership?.access_scope || "general"} · Expires: ${membership?.expires_at ? formatDate(membership.expires_at, true) : "—"}` }),
+    make("p", { text: `Status: ${activeMembershipStatus(membership)} · Plan: ${membership?.plan_tier === "premium" ? "Premium" : "Standard"} · Scope: ${membership?.access_scope || "general"} · Expires: ${membership?.expires_at ? formatDate(membership.expires_at, true) : "—"}` }),
   );
   const duration = make("input");
   duration.type = "number";
@@ -1087,11 +1495,18 @@ function openLearnerDialog(profile) {
     if (membership?.access_scope === value) option.selected = true;
     scope.append(option);
   });
-  const approve = makeAction("Approve / extend", () => activateMembership(current, duration.value, scope.value, approve));
+  const plan = make("select");
+  [["standard", "Standard"], ["premium", "Premium"]].forEach(([value, label]) => {
+    const option = make("option", { text: label });
+    option.value = value;
+    if ((membership?.plan_tier || "standard") === value) option.selected = true;
+    plan.append(option);
+  });
+  const approve = makeAction("Approve / extend", () => activateMembership(current, duration.value, scope.value, plan.value, approve));
   const pause = makeAction("Pause access", () => pauseMembership(current, pause));
   const reset = makeAction("Send password-reset email", () => sendPasswordReset(current, reset));
   const controls = make("div", { className: "learner-access-actions" });
-  controls.append(duration, scope, approve, pause, reset);
+  controls.append(duration, scope, plan, approve, pause, reset);
   access.append(
     controls,
     make("small", { text: "For security, teachers can never see or retrieve learner passwords. A reset email lets the learner choose a new password privately." }),
@@ -1846,12 +2261,299 @@ function renderActivity() {
   elements.panel.replaceChildren(wrap);
 }
 
+function csvValues(value) {
+  return String(value || "").split(/[,\n]/).map((item) => item.trim()).filter(Boolean);
+}
+
+async function createPremiumTask(fields, button) {
+  const lesson = state.lessons.find((item) => item.id === fields.lessonId);
+  if (!lesson || !fields.titleEn.trim() || !fields.promptEn.trim()) {
+    showToast("Choose a lesson and add an English title and prompt.", "error");
+    return;
+  }
+  button.disabled = true;
+  const isSpeaking = fields.taskType === "speaking";
+  const payload = {
+    lesson_id: lesson.id,
+    stable_key: `${lesson.slug}-premium-${fields.taskType}-${Date.now().toString(36)}`,
+    task_type: fields.taskType,
+    title_en: fields.titleEn.trim(),
+    title_ja: fields.titleJa.trim() || null,
+    prompt_en: fields.promptEn.trim(),
+    prompt_ja: fields.promptJa.trim() || null,
+    instructions_en: fields.instructionsEn.trim() || null,
+    instructions_ja: fields.instructionsJa.trim() || null,
+    required_phrases: csvValues(fields.phrases),
+    required_vocabulary: csvValues(fields.vocabulary),
+    target_seconds: isSpeaking ? Math.max(30, Math.min(600, Number(fields.targetSeconds || 120))) : null,
+    min_word_count: isSpeaking ? null : Math.max(10, Math.min(1000, Number(fields.minWords || 80))),
+    max_word_count: isSpeaking ? null : Math.max(Number(fields.minWords || 80), Math.min(2000, Number(fields.maxWords || 180))),
+    max_attempts: Math.max(1, Math.min(20, Number(fields.maxAttempts || 3))),
+    active: true,
+    created_by: state.session.user.id,
+  };
+  const { error } = await client.from("review_premium_tasks").insert(payload);
+  if (error) {
+    showToast(readableError(error, "The Premium task could not be created."), "error");
+    button.disabled = false;
+    return;
+  }
+  showToast("Premium review task created.", "success");
+  await refreshDashboard();
+}
+
+async function setPremiumTaskActive(task, active, button) {
+  button.disabled = true;
+  const { error } = await client.from("review_premium_tasks").update({ active }).eq("id", task.id);
+  if (error) {
+    showToast(readableError(error, "The Premium task could not be updated."), "error");
+    button.disabled = false;
+    return;
+  }
+  showToast(active ? "Premium task reopened." : "Premium task hidden from learners.", "success");
+  await refreshDashboard();
+}
+
+async function deletePremiumTask(task, button) {
+  const submissions = state.taskSubmissions.filter((item) => item.task_id === task.id);
+  if (submissions.length) {
+    if (!window.confirm("This task has learner submissions and cannot be erased safely. Hide it from new submissions instead?")) return;
+    await setPremiumTaskActive(task, false, button);
+    return;
+  }
+  if (!window.confirm(`Permanently delete the unused task “${task.title_en}”?`)) return;
+  button.disabled = true;
+  const { error } = await client.from("review_premium_tasks").delete().eq("id", task.id);
+  if (error) {
+    showToast(readableError(error, "The unused Premium task could not be deleted."), "error");
+    button.disabled = false;
+    return;
+  }
+  showToast("Unused Premium task deleted.", "success");
+  await refreshDashboard();
+}
+
+async function openTeacherRecording(path, button) {
+  button.disabled = true;
+  const { data, error } = await client.storage
+    .from("review-premium-recordings")
+    .createSignedUrl(path, 900);
+  button.disabled = false;
+  if (error || !data?.signedUrl) {
+    showToast(readableError(error, "The private recording could not be opened."), "error");
+    return;
+  }
+  window.open(data.signedUrl, "_blank", "noopener,noreferrer");
+}
+
+async function saveSubmissionFeedback(submission, values, action, button) {
+  if (!values.feedbackEn.trim() && !values.feedbackJa.trim()) {
+    showToast("Add English or Japanese feedback before saving.", "error");
+    return;
+  }
+  button.disabled = true;
+  const published = action === "publish" || action === "return";
+  const feedback = state.submissionFeedback.find((item) => item.submission_id === submission.id);
+  const payload = {
+    submission_id: submission.id,
+    teacher_id: state.session.user.id,
+    score: values.score === "" ? null : Math.max(0, Math.min(100, Number(values.score))),
+    feedback_en: values.feedbackEn.trim() || null,
+    feedback_ja: values.feedbackJa.trim() || null,
+    ai_assisted: values.aiAssisted,
+    published_at: published ? new Date().toISOString() : null,
+  };
+  const feedbackResult = feedback
+    ? await client.from("review_submission_feedback").update(payload).eq("id", feedback.id)
+    : await client.from("review_submission_feedback").insert(payload);
+  if (feedbackResult.error) {
+    showToast(readableError(feedbackResult.error, "The feedback could not be saved."), "error");
+    button.disabled = false;
+    return;
+  }
+  const nextStatus = action === "publish" ? "reviewed" : action === "return" ? "returned" : "in_review";
+  const { error: statusError } = await client.from("review_task_submissions")
+    .update({ status: nextStatus })
+    .eq("id", submission.id);
+  if (statusError) {
+    showToast(readableError(statusError, "Feedback was saved, but the submission status could not be updated."), "error");
+    button.disabled = false;
+    return;
+  }
+  showToast(
+    action === "publish" ? "Feedback published to the learner." : action === "return" ? "Submission returned with feedback." : "Private feedback draft saved; learner cannot see it yet.",
+    "success",
+  );
+  await refreshDashboard();
+}
+
+function premiumTaskBuilder() {
+  const section = make("section", { className: "premium-admin-section" });
+  section.append(
+    make("h2", { text: "Create a Premium review task / プレミアム課題作成" }),
+    make("p", { text: "Speaking and essay tasks are visible only to Premium learners who can open the selected lesson." }),
+  );
+  const form = make("form", { className: "premium-task-builder" });
+  const lesson = make("select");
+  state.lessons.filter((item) => item.status === "published").forEach((item) => {
+    const option = make("option", { text: `${item.title_en} · ${formatDate(item.lesson_date)}` });
+    option.value = item.id;
+    lesson.append(option);
+  });
+  const type = make("select");
+  [["speaking", "Speaking recording"], ["essay", "Essay"]].forEach(([value, label]) => {
+    const option = make("option", { text: label });
+    option.value = value;
+    type.append(option);
+  });
+  const titleEn = make("input"); titleEn.placeholder = "English task title";
+  const titleJa = make("input"); titleJa.placeholder = "Japanese title / 日本語タイトル";
+  const promptEn = make("textarea"); promptEn.placeholder = "English prompt"; promptEn.rows = 3;
+  const promptJa = make("textarea"); promptJa.placeholder = "Japanese prompt / 日本語課題文"; promptJa.rows = 3;
+  const instructionsEn = make("input"); instructionsEn.placeholder = "Extra instructions (English)";
+  const instructionsJa = make("input"); instructionsJa.placeholder = "追加指示（日本語）";
+  const phrases = make("input"); phrases.placeholder = "Required phrases, comma separated";
+  const vocabulary = make("input"); vocabulary.placeholder = "Required vocabulary, comma separated";
+  const targetSeconds = make("input"); targetSeconds.type = "number"; targetSeconds.min = "30"; targetSeconds.max = "600"; targetSeconds.value = "120"; targetSeconds.placeholder = "Target seconds";
+  const minWords = make("input"); minWords.type = "number"; minWords.min = "10"; minWords.max = "1000"; minWords.value = "80"; minWords.placeholder = "Minimum words";
+  const maxWords = make("input"); maxWords.type = "number"; maxWords.min = "10"; maxWords.max = "2000"; maxWords.value = "180"; maxWords.placeholder = "Maximum words";
+  const maxAttempts = make("input"); maxAttempts.type = "number"; maxAttempts.min = "1"; maxAttempts.max = "20"; maxAttempts.value = "3"; maxAttempts.placeholder = "Attempts";
+  const create = makeAction("Create task", () => createPremiumTask({
+    lessonId: lesson.value,
+    taskType: type.value,
+    titleEn: titleEn.value,
+    titleJa: titleJa.value,
+    promptEn: promptEn.value,
+    promptJa: promptJa.value,
+    instructionsEn: instructionsEn.value,
+    instructionsJa: instructionsJa.value,
+    phrases: phrases.value,
+    vocabulary: vocabulary.value,
+    targetSeconds: targetSeconds.value,
+    minWords: minWords.value,
+    maxWords: maxWords.value,
+    maxAttempts: maxAttempts.value,
+  }, create));
+  create.className = "primary-btn";
+  const syncTypeFields = () => {
+    targetSeconds.hidden = type.value !== "speaking";
+    minWords.hidden = type.value !== "essay";
+    maxWords.hidden = type.value !== "essay";
+  };
+  type.addEventListener("change", syncTypeFields);
+  syncTypeFields();
+  form.addEventListener("submit", (event) => event.preventDefault());
+  form.append(lesson, type, titleEn, titleJa, promptEn, promptJa, instructionsEn, instructionsJa, phrases, vocabulary, targetSeconds, minWords, maxWords, maxAttempts, create);
+  section.append(form);
+  return section;
+}
+
+function premiumTaskList() {
+  const section = make("section", { className: "premium-admin-section" });
+  section.append(make("h2", { text: "Premium tasks / 課題一覧" }));
+  if (!state.premiumTasks.length) {
+    section.append(make("p", { text: "No Premium tasks have been created yet." }));
+    return section;
+  }
+  const { table, tbody } = makeTable(["Task", "Lesson", "Type", "Status", "Submissions", "Actions"]);
+  state.premiumTasks.forEach((task) => {
+    const submissions = state.taskSubmissions.filter((item) => item.task_id === task.id);
+    const actions = make("div", { className: "table-actions" });
+    const toggle = makeAction(task.active ? "Hide" : "Reopen", () => setPremiumTaskActive(task, !task.active, toggle));
+    const remove = makeAction(submissions.length ? "Hide (history kept)" : "Delete", () => deletePremiumTask(task, remove));
+    remove.classList.add("danger-action");
+    actions.append(toggle, remove);
+    const row = make("tr");
+    row.append(
+      make("td", { text: task.title_en }),
+      make("td", { text: lessonTitle(task.lesson_id) }),
+      make("td", { text: task.task_type }),
+      make("td", { text: task.active ? "Active" : "Hidden" }),
+      make("td", { text: submissions.length }),
+      make("td"),
+    );
+    row.lastElementChild.append(actions);
+    tbody.append(row);
+  });
+  const wrap = make("div", { className: "table-scroll" });
+  wrap.append(table);
+  section.append(wrap);
+  return section;
+}
+
+function premiumSubmissionQueue() {
+  const section = make("section", { className: "premium-admin-section" });
+  section.append(
+    make("h2", { text: "Submission queue / 提出・添削" }),
+    make("p", { text: "Feedback drafts stay private until Publish or Return is selected. AI-assisted must be marked honestly; the teacher remains responsible for the final feedback." }),
+  );
+  if (!state.taskSubmissions.length) {
+    section.append(make("p", { text: "No learner submissions yet." }));
+    return section;
+  }
+  const list = make("div", { className: "premium-review-list" });
+  state.taskSubmissions.forEach((submission) => {
+    const task = state.premiumTasks.find((item) => item.id === submission.task_id);
+    const feedback = state.submissionFeedback.find((item) => item.submission_id === submission.id);
+    const card = make("article", { className: "premium-review-card" });
+    card.append(
+      make("span", { text: `${submission.status} · ${formatDate(submission.submitted_at || submission.created_at, true)}` }),
+      make("h3", { text: `${profileName(submission.user_id)} · ${task?.title_en || "Premium task"}` }),
+      make("p", { text: `${task?.task_type || "task"} · attempt ${submission.attempt_number}` }),
+    );
+    if (submission.text_response) {
+      const response = make("details");
+      response.append(make("summary", { text: "Read submitted essay" }), make("p", { className: "premium-response-text", text: submission.text_response }));
+      card.append(response);
+    }
+    if (submission.audio_object_path) {
+      const play = makeAction("Open private recording", () => openTeacherRecording(submission.audio_object_path, play));
+      card.append(play);
+    }
+    const review = make("div", { className: "premium-feedback-editor" });
+    const score = make("input"); score.type = "number"; score.min = "0"; score.max = "100"; score.value = feedback?.score ?? ""; score.placeholder = "Score / 100";
+    const feedbackEn = make("textarea"); feedbackEn.rows = 4; feedbackEn.value = feedback?.feedback_en || ""; feedbackEn.placeholder = "Feedback in English";
+    const feedbackJa = make("textarea"); feedbackJa.rows = 4; feedbackJa.value = feedback?.feedback_ja || ""; feedbackJa.placeholder = "日本語フィードバック";
+    const aiLabel = make("label");
+    const ai = make("input"); ai.type = "checkbox"; ai.checked = Boolean(feedback?.ai_assisted);
+    aiLabel.append(ai, document.createTextNode(" AI-assisted draft (teacher reviewed)"));
+    const values = () => ({ score: score.value, feedbackEn: feedbackEn.value, feedbackJa: feedbackJa.value, aiAssisted: ai.checked });
+    const actions = make("div", { className: "premium-task-actions" });
+    const save = makeAction("Save private draft", () => saveSubmissionFeedback(submission, values(), "draft", save));
+    const publish = makeAction("Publish feedback", () => {
+      if (window.confirm("Publish this score and feedback to the learner now?")) saveSubmissionFeedback(submission, values(), "publish", publish);
+    });
+    publish.className = "primary-btn";
+    const returnWork = makeAction("Return for revision", () => {
+      if (window.confirm("Return this work so the learner can revise and resubmit it?")) saveSubmissionFeedback(submission, values(), "return", returnWork);
+    });
+    actions.append(save, publish, returnWork);
+    review.append(score, feedbackEn, feedbackJa, aiLabel, actions);
+    card.append(review);
+    list.append(card);
+  });
+  section.append(list);
+  return section;
+}
+
+function renderPremium() {
+  const wrap = make("div", { className: "premium-admin" });
+  if (!state.premiumSchemaReady) {
+    wrap.append(make("p", { className: "control-warning", text: "Apply the Premium database migration before using review tasks." }));
+    elements.panel.replaceChildren(wrap);
+    return;
+  }
+  wrap.append(premiumTaskBuilder(), premiumTaskList(), premiumSubmissionQueue());
+  elements.panel.replaceChildren(wrap);
+}
+
 function renderActiveTab() {
   for (const button of elements.tabs) {
     button.classList.toggle("active", button.dataset.teacherTab === state.tab);
   }
   if (state.tab === "drafts" || state.tab === "lessons") renderLessons(state.tab);
   if (state.tab === "students") renderStudents();
+  if (state.tab === "premium") renderPremium();
   if (state.tab === "activity") renderActivity();
 }
 
@@ -2469,6 +3171,7 @@ function openEditor(lesson = null) {
   elements.editorDate.value = lesson?.lesson_date || new Date().toISOString().slice(0, 10);
   elements.editorStatus.value = lesson?.status || "draft";
   elements.editorAudience.value = lesson?.audience || "both";
+  elements.editorIsPreview.checked = Boolean(lesson?.is_preview);
   elements.editorSummary.value = lesson?.summary_en || "";
   updateLessonEditorControls(lesson);
   elements.editor.showModal();
@@ -2587,6 +3290,7 @@ async function saveLesson(event) {
     lesson_date: lessonDate,
     status,
     audience: elements.editorAudience.value,
+    is_preview: elements.editorIsPreview.checked,
     summary_en: elements.editorSummary.value.trim() || null,
   };
 
