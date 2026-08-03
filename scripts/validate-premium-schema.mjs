@@ -13,6 +13,7 @@ const recordingSql = await readFile(
   "utf8",
 );
 const learnerUi = await readFile(resolve(here, "../src/premium-tasks.js"), "utf8");
+const supabaseClient = await readFile(resolve(here, "../src/supabase.js"), "utf8");
 const teacherUi = await readFile(resolve(here, "../src/teacher.js"), "utf8");
 
 const requiredFragments = [
@@ -54,6 +55,12 @@ for (const fragment of ["review-premium-recordings", "public = false", "review_r
 }
 for (const fragment of ["Save draft / 下書き保存", "Re-record / 録り直す", "Submit recording / 録音を提出", "Teacher feedback"]) {
   if (!learnerUi.includes(fragment)) throw new Error(`Premium learner UI is missing: ${fragment}`);
+}
+if (!supabaseClient.includes("remove([editable.audio_object_path])")) {
+  throw new Error("Replacing a returned recording must remove the superseded private object.");
+}
+for (const fragment of ["audio/mp4\": \"m4a", "audio/ogg\": \"ogg", "audio/mpeg\": \"mp3", "contentType,"]) {
+  if (!supabaseClient.includes(fragment)) throw new Error(`Cross-browser recording upload support is missing: ${fragment}`);
 }
 for (const fragment of ["Create a Premium review task", "Publish feedback", "AI-assisted draft", "item.status !== \"draft\""]) {
   if (!teacherUi.includes(fragment)) throw new Error(`Premium teacher UI is missing: ${fragment}`);

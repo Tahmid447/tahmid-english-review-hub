@@ -348,10 +348,19 @@ export async function submitPremiumRecording({ taskId, recording, durationSecond
   if (!(recording instanceof Blob) || !recording.size) return { data: null, error: new Error("Record your answer before submitting it.") };
   const editable = knownSubmissions.find((item) => item.task_id === taskId && ["draft", "returned"].includes(item.status));
   const attemptNumber = editable?.attempt_number || nextPremiumAttempt(knownSubmissions, taskId);
-  const objectName = `${session.user.id}/${taskId}/${globalThis.crypto?.randomUUID?.() || Date.now()}.webm`;
+  const requestedType = String(recording.type || "audio/webm").split(";", 1)[0].toLowerCase();
+  const contentType = ["audio/webm", "audio/mp4", "audio/ogg", "audio/mpeg"].includes(requestedType)
+    ? requestedType
+    : "audio/webm";
+  const extension = {
+    "audio/mp4": "m4a",
+    "audio/ogg": "ogg",
+    "audio/mpeg": "mp3",
+  }[contentType] || "webm";
+  const objectName = `${session.user.id}/${taskId}/${globalThis.crypto?.randomUUID?.() || Date.now()}.${extension}`;
   const { error: uploadError } = await client.storage.from("review-premium-recordings").upload(objectName, recording, {
     cacheControl: "3600",
-    contentType: recording.type || "audio/webm",
+    contentType,
     upsert: false,
   });
   if (uploadError) return { data: null, error: uploadError };
@@ -370,7 +379,14 @@ export async function submitPremiumRecording({ taskId, recording, durationSecond
         attempt_number: attemptNumber,
         client_submission_key: globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`,
       }).select("*").single();
-  if (result.error) await client.storage.from("review-premium-recordings").remove([objectName]);
+  if (result.error) {
+    await client.storage.from("review-premium-recordings").remove([objectName]);
+  } else if (editable?.audio_object_path && editable.audio_object_path !== objectName) {
+    // A returned recording may be replaced. Remove the superseded private
+    // object only after the database points at the new upload, preventing
+    // orphaned recordings and unnecessary storage costs.
+    await client.storage.from("review-premium-recordings").remove([editable.audio_object_path]);
+  }
   return result;
 }
 
