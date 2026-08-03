@@ -48,16 +48,18 @@ Do not place OAuth client secrets, passwords, service-role keys, or access token
   `upgrade/review-hub-v9-playful-jp`. Its origin is present in the Edge CORS
   allow-list and the Supabase Auth redirect allow-list. Hosted Google callback,
   sign-out, 85/85 WebP delivery, shuffle, audio speed selection and
-  English/Japanese audio complete without browser console errors.
+  English/Japanese audio complete without browser console errors. A 390 × 844
+  viewport check found and fixed one bilingual hint-control overflow; the
+  corrected page has no horizontal overflow (`scrollWidth = 390`).
 
 ## Must be completed before deployment
 
 1. With a valid teacher-authorised account, test access-code
    create/edit/reissue/delete and one real redemption; learner controls;
    archive/restore; and Premium task submission/teacher return.
-2. Complete real-device mobile QA and microphone recording. The in-app browser
-   viewport control did not enter 390 px mode, so mobile is deliberately not
-   reported as passed.
+2. Complete real-device mobile touch QA and microphone recording. Browser-based
+   390 × 844 responsive QA passes, but it is not a substitute for a real iPhone
+   or Android device and microphone permission/upload.
 3. Use a valid teacher account to set at least one test question to Standard or
    Premium on a non-production test lesson, then confirm both payload-free
    teaser and complete hiding behaviour with below-tier learner accounts.

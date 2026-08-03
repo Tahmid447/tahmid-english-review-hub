@@ -33,8 +33,8 @@ npm run verify:live
   files remain excluded from `dist/`.
 - `npm run verify:visuals`: PASS — all 85 WebP visual-question assets exist and
   match the manifest dimensions/type checks.
-- Local built-site HTTP visual check: PASS — the previously published 55/55 assets returned HTTP 200;
-  `image/webp`, and non-empty image bytes. The local preview server's missing
+- Hosted preview visual check: PASS — all 85/85 assets return HTTP 200,
+  `image/webp`, and non-empty image bytes with concurrency limited to four. The local preview server's missing
   WebP MIME mapping was found during this check and fixed.
 - `npm run verify:live`: PASS — 17 public catalogue lessons, exactly two free
   previews, 80 anonymous preview activities, two plan descriptions, and 18
@@ -42,7 +42,7 @@ npm run verify:live
 - `npm run audit:audio-live`: PASS — one live natural-English request for every
   lesson plus Japanese and British voice requests; every listening/speaking
   activity has a non-empty target.
-- Local browser before the current preview deploy: PASS — the home summary displayed 17 lessons and 562 activities;
+- Hosted browser: PASS — the home summary displays 17 lessons and 616 activities;
   new runs automatically shuffle both question and choice order; 0.5x, 1x and
   1.5x playback and mixed Japanese/English sequencing complete without a stuck
   control.
@@ -66,10 +66,12 @@ npm run verify:live
   tier-locked in the live catalogue.
 - New v9 Netlify preview: PASS at
   `https://tahmid-english-review-hub-v9-preview.netlify.app`, deployed from the
-  working v9 branch. The previous hosted checks passed for 17/562 summary, 55/55 WebP
+  working v9 branch. Hosted checks pass for 17/616 summary, 85/85 WebP
   responses, automatic reshuffle, 0.5x/1.5x selection, natural and mixed
   English/Japanese audio, Google callback, sign-out and the protected Teacher
-  Studio entry page. Real-device mobile, microphone upload and valid-teacher
+  Studio entry page. A 390 × 844 check found a bilingual hint-button overflow;
+  it was fixed and rechecked at `width = scrollWidth = 390` with no browser
+  warnings/errors. Real-device touch, microphone upload and valid-teacher
   end-to-end controls remain pending.
 
 The July 30 sections below are retained as dated historical evidence. Their
