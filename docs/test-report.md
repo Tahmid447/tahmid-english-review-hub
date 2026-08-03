@@ -51,6 +51,9 @@ npm run verify:live
   a well-formed unknown code and received the distinct bilingual "not found"
   result instead of an endless loading state. A valid teacher session is still
   required for the full create/edit/reissue/delete/redeem browser workflow.
+- Supabase migrations 010 and 011: PASS in the authenticated dashboard on
+  August 3. The private Premium recording bucket and all three authenticated
+  storage policies are visible after application.
 
 The July 30 sections below are retained as dated historical evidence. Their
 485-question counts describe the pre-expansion deployment and are not the

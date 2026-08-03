@@ -153,11 +153,11 @@ Google sign-in, callback cleanup and sign-out were verified on August 3. Every
 new hosted Netlify URL must still be added to the Supabase redirect allow-list
 before its Google callback is tested.
 
-Migrations 007, 008 and 009 are present in the live schema. Migration 010
-(teacher allow/block priority) and migration 011 (private Premium recording
-bucket and policies) remain pending until the authenticated SQL Editor session
-is available. Do not report those two features as live before applying and
-verifying both files.
+Migrations 007, 008, 009, 010 and 011 are present in the live schema. Migrations
+010 and 011 were applied through the authenticated SQL Editor on August 3,
+2026. The dashboard verifies the private `review-premium-recordings` bucket,
+its 10 MB limit and four allowed audio MIME types, plus the SELECT, INSERT and
+DELETE storage policies for authenticated users.
 
 The July 30 preview setup was applied through the trusted Supabase SQL Editor.
 The local CLI could link to the project, but the shared project’s existing

@@ -1,6 +1,6 @@
 # Live audio audit
 
-Checked: 2026-08-03T04:38:50.979Z
+Checked: 2026-08-03T13:20:51.882Z
 
 Every lesson passed a structural check for all listening and speaking audio targets. One representative natural-English request per lesson was then sent to the live speech service and validated as a non-empty audio response. Japanese Nanami and British Libby requests were also validated. Browser playback speed and mixed-language sequencing are covered separately by the learning-experience browser/unit tests.
 

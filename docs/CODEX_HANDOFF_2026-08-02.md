@@ -31,24 +31,24 @@ Do not place OAuth client secrets, passwords, service-role keys, or access token
   in `docs/question-quality-audit.md`.
 - New practice runs always shuffle question and choice order. Resumed runs keep
   their saved order.
-- Supabase migrations 007, 008 and 009 are reflected in the live schema.
+- Supabase migrations 007, 008, 009, 010 and 011 are reflected in the live
+  schema. Migration 011 was verified in the dashboard: the private
+  `review-premium-recordings` bucket has a 10 MB limit, four allowed audio
+  MIME types, and the three authenticated storage policies.
 - `membership-access` Edge Function version 2 is live and returns bounded,
   reason-specific access-code errors.
 
 ## Must be completed before deployment
 
-1. Sign in to the Supabase dashboard and apply, in order:
-   - `202608030010_teacher_access_priority.sql`
-   - `202608030011_private_premium_recordings.sql`
-2. Create the new Netlify preview. Add its exact origin to the
+1. Create the new Netlify preview. Add its exact origin to the
    `membership-access` CORS allow-list and its callback to the Supabase Auth
    redirect allow-list.
-3. With a valid teacher-authorised account, test access-code
+2. With a valid teacher-authorised account, test access-code
    create/edit/reissue/delete and one real redemption; learner controls;
    archive/restore; and Premium task submission/teacher return.
-4. Complete hosted desktop and 390 px/mobile QA, including Google callback,
+3. Complete hosted desktop and 390 px/mobile QA, including Google callback,
    sign-out, audio speed, mixed-language audio and microphone recording.
-5. Only after the preview passes, publish production. Per-question teacher
+4. Only after the preview passes, publish production. Per-question teacher
    configuration for free/blurred/hidden/premium questions is not yet
    implemented; current controls are lesson-, learner-, assignment- and
    Premium-task-level.
