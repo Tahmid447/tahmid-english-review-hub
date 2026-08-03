@@ -38,7 +38,7 @@ Do not place OAuth client secrets, passwords, service-role keys, or access token
   MIME types, and the three authenticated storage policies.
 - `membership-access` Edge Function version 2 is live and returns bounded,
   reason-specific access-code errors.
-- The v9 preview is deployed from commit `447c7d7` on
+- The v9 preview deploys automatically from
   `upgrade/review-hub-v9-playful-jp`. Its origin is present in the Edge CORS
   allow-list and the Supabase Auth redirect allow-list. Hosted Google callback,
   sign-out, 55/55 WebP delivery, shuffle, audio speed selection and

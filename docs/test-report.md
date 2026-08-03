@@ -55,8 +55,8 @@ npm run verify:live
   August 3. The private Premium recording bucket and all three authenticated
   storage policies are visible after application.
 - New v9 Netlify preview: PASS at
-  `https://tahmid-english-review-hub-v9-preview.netlify.app`, deployed from
-  commit `447c7d7`. Hosted checks passed for 17/562 summary, 55/55 WebP
+  `https://tahmid-english-review-hub-v9-preview.netlify.app`, deployed from the
+  working v9 branch. Hosted checks passed for 17/562 summary, 55/55 WebP
   responses, automatic reshuffle, 0.5x/1.5x selection, natural and mixed
   English/Japanese audio, Google callback, sign-out and the protected Teacher
   Studio entry page. Real-device mobile, microphone upload and valid-teacher
