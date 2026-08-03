@@ -347,6 +347,7 @@ assert.equal(
 
 const hubScript = fs.readFileSync(path.join(root, "src", "hub.js"), "utf8");
 const phraseScript = fs.readFileSync(path.join(root, "src", "phrases.js"), "utf8");
+const sharedStyles = fs.readFileSync(path.join(root, "src", "styles.css"), "utf8");
 assert.match(lessonScript, /querySelectorAll\("\[data-audio-text\]"\)/);
 assert.match(lessonScript, /Listen to the question/);
 assert.match(lessonScript, /Listen to choice/);
@@ -364,6 +365,11 @@ assert.match(lessonScript, /rate: state\.settings\.playbackRate/);
 assert.match(lessonScript, /<details class="guide-card/);
 assert.match(lessonPage, /data-hint-mode="auto"/);
 assert.match(lessonPage, /data-hint-mode="manual"/);
+assert.match(
+  sharedStyles,
+  /@media \(max-width: 620px\)[\s\S]*?\.hint-mode-toggle button \{ white-space: normal; overflow-wrap: anywhere; \}/,
+  "Bilingual hint controls wrap instead of causing horizontal mobile overflow.",
+);
 assert.match(lessonPage, /id="vibrationToggle"/);
 assert.match(lessonScript, /onStudentAuthChange/);
 assert.match(lessonScript, /authScopeLocked = true/);

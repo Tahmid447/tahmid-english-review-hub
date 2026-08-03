@@ -493,6 +493,8 @@ input:focus, select:focus, textarea:focus { border-color: var(--teal); box-shado
   .quiz-toolbar { align-items: stretch; }
   .segmented { width: 100%; }
   .segmented button { flex: 1; }
+  [data-page="lesson"] .hint-mode-toggle { max-width: 100%; }
+  [data-page="lesson"] .hint-mode-toggle button { white-space: normal; overflow-wrap: anywhere; }
   .score-pill { margin-left: 0; }
   .question-card { min-height: 260px; }
   [data-page="lesson"] .prompt-heading-row,
