@@ -599,7 +599,15 @@ async function handleAccessCode(event) {
     const result = await redeemStudentAccessCode(code);
     if (result?.error) throw result.error;
     if (input) input.value = "";
-    showToast(t("Membership unlocked.", "メンバーシップを開放しました。"));
+    const plan = result?.data?.membershipPlan === "premium" ? "Premium" : "Standard";
+    const scope = result?.data?.membershipScope || "general";
+    const expires = result?.data?.membershipExpiresAt ? formatDate(result.data.membershipExpiresAt) : "—";
+    const success = t(
+      `${plan} membership unlocked (${scope}) until ${expires}.`,
+      `${plan}会員（${scope}）を開放しました。有効期限：${expires}。`,
+    );
+    showToast(success);
+    setLoginStatus(success);
     await refreshAuthView();
     await reloadLessons();
   } catch (error) {
@@ -609,10 +617,16 @@ async function handleAccessCode(event) {
           "The secure code service is being updated. Please contact the teacher.",
           "アクセスコード機能を更新中です。担当講師へご連絡ください。",
         )
-      : /invalid, expired, or already used/i.test(rawMessage)
+      : /not found/i.test(rawMessage)
+        ? t("This access code was not found. Check every character.", "アクセスコードが見つかりません。すべての文字を確認してください。")
+        : /disabled/i.test(rawMessage)
+          ? t("This access code was disabled by the teacher.", "このアクセスコードは先生によって無効化されています。")
+          : /has expired/i.test(rawMessage)
+            ? t("This access code has expired. Ask the teacher for a new code.", "アクセスコードの有効期限が切れています。先生に新しいコードをご確認ください。")
+            : /already.*used|already reached|use limit/i.test(rawMessage)
         ? t(
-            "This code is invalid, expired, or has already reached its use limit.",
-            "コードが正しくないか、期限切れ、または利用上限に達しています。",
+            "This access code has already been used by this account or reached its use limit.",
+            "このアカウントですでに使用済み、またはコードの利用上限に達しています。",
           )
         : /full code in the format/i.test(rawMessage)
           ? t(
@@ -1183,9 +1197,7 @@ async function reloadLessons() {
       0,
     );
     if (publishedCount) publishedCount.textContent = String(publishedLessons.length);
-    if (questionCount) questionCount.textContent = currentMembership?.status === "active"
-      ? String(totalQuestions)
-      : "485";
+    if (questionCount) questionCount.textContent = String(totalQuestions);
     renderLessonGrid();
   }
 }

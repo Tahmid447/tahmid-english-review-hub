@@ -1,6 +1,6 @@
 # Test Report / 動作確認レポート
 
-Test date: **July 30, 2026**
+Last updated: **August 3, 2026**
 
 ## Automated content and security checks
 
@@ -24,6 +24,32 @@ npm run build
 npm test
 npm run verify:live
 ```
+
+## August 3 current verification snapshot
+
+- `npm test`: PASS — 17 lessons, 562 activities, 14 formats and 1,369
+  integrity/security assertions.
+- `npm run build`: PASS — 562 protected question rows generated; private source
+  files remain excluded from `dist/`.
+- `npm run verify:visuals`: PASS — all 55 WebP visual-question assets exist and
+  match the manifest dimensions/type checks.
+- `npm run verify:live`: PASS — 17 public catalogue lessons, exactly two free
+  previews, 62 anonymous preview activities, two plan descriptions, and 18
+  private/base resources denying anonymous reads.
+- `npm run audit:audio-live`: PASS — one live natural-English request for every
+  lesson plus Japanese and British voice requests; every listening/speaking
+  activity has a non-empty target.
+- Local browser: PASS — the home summary displays 17 lessons and 562 activities;
+  new runs automatically shuffle both question and choice order; 0.5x, 1x and
+  1.5x playback and mixed Japanese/English sequencing complete without a stuck
+  control.
+- `membership-access` Edge Function: deployed as version 2; CORS preflight and
+  unauthenticated rejection were verified. A valid teacher session is still
+  required for the full create/edit/reissue/delete/redeem browser workflow.
+
+The July 30 sections below are retained as dated historical evidence. Their
+485-question counts describe the pre-expansion deployment and are not the
+current 562-activity source/build total.
 
 ## July 30 live Supabase verification (before the 31-activity expansion)
 

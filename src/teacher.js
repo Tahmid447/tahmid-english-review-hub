@@ -120,6 +120,14 @@ const state = {
   learnerAuthStatus: {},
 };
 
+// A learner's saved essay draft is private until they explicitly submit it.
+// Teachers can still protect the underlying task from destructive deletion by
+// checking every stored row, but draft text must not appear in learner activity,
+// submission counts, or the review queue.
+const teacherVisibleSubmissions = () => state.taskSubmissions.filter(
+  (item) => item.status !== "draft",
+);
+
 function make(tag, options = {}) {
   const node = document.createElement(tag);
   if (options.className) node.className = options.className;
@@ -1263,7 +1271,7 @@ function learnerActivity(profile) {
       detail: item.status === "completed" ? "Assignment completed" : `Assignment status: ${item.status}`,
     });
   });
-  state.taskSubmissions.filter((item) => item.user_id === profile.user_id).forEach((item) => {
+  teacherVisibleSubmissions().filter((item) => item.user_id === profile.user_id).forEach((item) => {
     const task = state.premiumTasks.find((candidate) => candidate.id === item.task_id);
     events.push({
       at: item.submitted_at || item.updated_at || item.created_at,
@@ -1445,7 +1453,7 @@ function openLearnerDialog(profile) {
   const membership = membershipFor(current.user_id);
   const attempts = state.attempts.filter((item) => item.user_id === current.user_id);
   const speaking = state.speaking.filter((item) => item.user_id === current.user_id);
-  const premiumSubmissions = state.taskSubmissions.filter((item) => item.user_id === current.user_id);
+  const premiumSubmissions = teacherVisibleSubmissions().filter((item) => item.user_id === current.user_id);
   const phraseCount = state.phrases
     .filter((item) => item.user_id === current.user_id)
     .reduce((sum, item) => sum + Number(item.practice_count || 0), 0);
@@ -2457,10 +2465,11 @@ function premiumTaskList() {
   }
   const { table, tbody } = makeTable(["Task", "Lesson", "Type", "Status", "Submissions", "Actions"]);
   state.premiumTasks.forEach((task) => {
-    const submissions = state.taskSubmissions.filter((item) => item.task_id === task.id);
+    const submissions = teacherVisibleSubmissions().filter((item) => item.task_id === task.id);
+    const hasStoredSubmission = state.taskSubmissions.some((item) => item.task_id === task.id);
     const actions = make("div", { className: "table-actions" });
     const toggle = makeAction(task.active ? "Hide" : "Reopen", () => setPremiumTaskActive(task, !task.active, toggle));
-    const remove = makeAction(submissions.length ? "Hide (history kept)" : "Delete", () => deletePremiumTask(task, remove));
+    const remove = makeAction(hasStoredSubmission ? "Hide (history kept)" : "Delete", () => deletePremiumTask(task, remove));
     remove.classList.add("danger-action");
     actions.append(toggle, remove);
     const row = make("tr");
@@ -2483,16 +2492,17 @@ function premiumTaskList() {
 
 function premiumSubmissionQueue() {
   const section = make("section", { className: "premium-admin-section" });
+  const submissions = teacherVisibleSubmissions();
   section.append(
     make("h2", { text: "Submission queue / 提出・添削" }),
     make("p", { text: "Feedback drafts stay private until Publish or Return is selected. AI-assisted must be marked honestly; the teacher remains responsible for the final feedback." }),
   );
-  if (!state.taskSubmissions.length) {
+  if (!submissions.length) {
     section.append(make("p", { text: "No learner submissions yet." }));
     return section;
   }
   const list = make("div", { className: "premium-review-list" });
-  state.taskSubmissions.forEach((submission) => {
+  submissions.forEach((submission) => {
     const task = state.premiumTasks.find((item) => item.id === submission.task_id);
     const feedback = state.submissionFeedback.find((item) => item.submission_id === submission.id);
     const card = make("article", { className: "premium-review-card" });

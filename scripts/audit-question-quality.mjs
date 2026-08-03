@@ -18,6 +18,13 @@ const clean = (value) => String(value ?? "").replace(/\s+/g, " ").trim();
 const comparable = (value) => clean(value).toLocaleLowerCase("en").replace(/[‘’'“”".,!?;:()]/g, "");
 const unique = (values) => new Set(values).size === values.length;
 const escapeCell = (value) => clean(value).replaceAll("|", "\\|");
+const visualTargetByAsset = new Map(manifest.questions.map((entry) => {
+  const lesson = drafts.find((candidate) => candidate.id === entry.lessonId);
+  return [entry.asset, {
+    lessonId: entry.lessonId,
+    phrase: lesson?.phrases?.[entry.phraseIndex] || null,
+  }];
+}));
 
 function bilingual(question, field) {
   const value = question[field];
@@ -133,6 +140,26 @@ function validateQuestion(lessonId, question, index) {
     if (manifestEntry && clean(manifestEntry.imageAlt) !== clean(question.imageAlt)) {
       fail(lessonId, id, "question alt text differs from the approved visual brief");
     }
+    const visualTarget = visualTargetByAsset.get(asset);
+    const correctChoice = Array.isArray(question.choices)
+      ? question.choices.find((choice) => clean(choice?.id) === clean(question.correct))
+      : null;
+    if (!visualTarget?.phrase || visualTarget.lessonId !== lessonId) {
+      fail(lessonId, id, "visual target phrase cannot be resolved from the lesson manifest");
+    } else {
+      if (
+        comparable(correctChoice?.en) !== comparable(visualTarget.phrase.en)
+        || comparable(correctChoice?.jp) !== comparable(visualTarget.phrase.jp)
+      ) {
+        fail(lessonId, id, "visual correct choice does not match the manifest target phrase");
+      }
+      if (
+        !comparable(explanation.en).includes(comparable(visualTarget.phrase.en))
+        || !comparable(explanation.jp).includes(comparable(visualTarget.phrase.jp))
+      ) {
+        fail(lessonId, id, "visual explanation does not identify the matching model answer in both languages");
+      }
+    }
   }
 
   const passed = errors.length === beforeCount;
@@ -195,6 +222,7 @@ const report = [
   "",
   `- Audited all ${lessons.length} lessons and ${rows.length} activities one by one with format-specific integrity checks.`,
   "- Every activity was checked for bilingual prompt, hint, and explanation; answer completeness; unique choice text; exactly one keyed choice where applicable; and required audio/speaking/order/matching/sorting fields.",
+  "- Every visual activity was also checked that its keyed English/Japanese answer equals the lesson phrase selected by the manifest and that both explanations explicitly identify that model answer.",
   `- Audited all ${manifest.questions.length} visual questions against the manifest and file inventory; the visual QA record confirms human inspection of every WebP scene.`,
   "- This report distinguishes programmatic whole-corpus checks from the human image review; it does not label an unchecked item as complete.",
   "",

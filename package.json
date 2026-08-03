@@ -13,6 +13,7 @@
     "dev": "node scripts/serve.mjs",
     "generate:migration": "node scripts/generate-question-migration.mjs",
     "audit:questions": "node scripts/audit-question-quality.mjs",
+    "audit:audio-live": "node scripts/audit-live-audio.mjs",
     "verify:visuals": "node scripts/verify-visual-assets.mjs",
     "build": "npm run config:public && npm run extract:legacy && npm run generate:practice && npm run generate:migration && node scripts/build.mjs",
     "preview": "node scripts/serve.mjs dist",

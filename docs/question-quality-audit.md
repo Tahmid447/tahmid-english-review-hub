@@ -1,11 +1,12 @@
 # Question quality audit
 
-Generated: 2026-08-03T04:07:37.240Z
+Generated: 2026-08-03T04:41:59.290Z
 
 ## Scope and method
 
 - Audited all 17 lessons and 562 activities one by one with format-specific integrity checks.
 - Every activity was checked for bilingual prompt, hint, and explanation; answer completeness; unique choice text; exactly one keyed choice where applicable; and required audio/speaking/order/matching/sorting fields.
+- Every visual activity was also checked that its keyed English/Japanese answer equals the lesson phrase selected by the manifest and that both explanations explicitly identify that model answer.
 - Audited all 55 visual questions against the manifest and file inventory; the visual QA record confirms human inspection of every WebP scene.
 - This report distinguishes programmatic whole-corpus checks from the human image review; it does not label an unchecked item as complete.
 

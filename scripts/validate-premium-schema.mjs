@@ -55,7 +55,7 @@ for (const fragment of ["review-premium-recordings", "public = false", "review_r
 for (const fragment of ["Save draft / 下書き保存", "Re-record / 録り直す", "Submit recording / 録音を提出", "Teacher feedback"]) {
   if (!learnerUi.includes(fragment)) throw new Error(`Premium learner UI is missing: ${fragment}`);
 }
-for (const fragment of ["Create a Premium review task", "Publish feedback", "AI-assisted draft"]) {
+for (const fragment of ["Create a Premium review task", "Publish feedback", "AI-assisted draft", "item.status !== \"draft\""]) {
   if (!teacherUi.includes(fragment)) throw new Error(`Premium teacher UI is missing: ${fragment}`);
 }
 
