@@ -806,6 +806,21 @@ body {
 
 /* Premium teacher-reviewed submissions */
 .premium-tasks-panel { display: grid; gap: 18px; margin: 26px 0; padding: clamp(18px,3vw,30px); border: 1px solid rgba(47,143,135,.28); border-radius: 24px; background: linear-gradient(145deg,#fffaf0,var(--teal-soft)); }
+.locked-question-teasers { display: grid; gap: 18px; margin: 26px 0; padding: clamp(18px,3vw,30px); border: 1px solid rgba(215,169,73,.4); border-radius: 24px; background: linear-gradient(145deg,#fffaf0,#f2f8f7); }
+.locked-question-heading > span, .locked-question-plan { color: var(--teal); font-size: .66rem; font-weight: 950; letter-spacing: .12em; text-transform: uppercase; }
+.locked-question-heading h2 { margin: 6px 0; color: var(--navy); font-size: clamp(1.4rem,3vw,2rem); }
+.locked-question-heading p { margin: 0; color: var(--ink-soft); line-height: 1.6; }
+.locked-question-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap: 12px; }
+.locked-question-teaser { display: grid; gap: 9px; padding: 16px; border: 1px solid rgba(21,59,85,.12); border-radius: 16px; background: rgba(255,255,255,.88); }
+.locked-question-teaser h3, .locked-question-teaser p { margin: 0; }
+.locked-question-teaser h3 { color: var(--navy); }
+.locked-question-teaser p { color: var(--ink-soft); font-size: .76rem; line-height: 1.55; }
+.locked-question-placeholder { display: grid; gap: 7px; padding: 13px; border-radius: 12px; background: var(--cream); filter: blur(2px); }
+.locked-question-placeholder i { display: block; height: 9px; border-radius: 999px; background: linear-gradient(90deg,rgba(21,59,85,.15),rgba(47,143,135,.26)); }
+.locked-question-placeholder i:nth-child(2) { width: 78%; }
+.locked-question-placeholder i:nth-child(3) { width: 58%; }
+.locked-question-teasers > .primary-btn { width: fit-content; text-decoration: none; }
+.question-access-note { color: var(--ink-soft); line-height: 1.55; }
 .premium-task-heading span, .premium-task-lock > span { color: var(--teal); font-size: .66rem; font-weight: 950; letter-spacing: .16em; }
 .premium-task-heading h2, .premium-task-lock h2 { margin: 6px 0; color: var(--navy); font-size: clamp(1.5rem,3vw,2.3rem); }
 .premium-task-heading p, .premium-task-lock p { margin: 0; color: var(--ink-soft); line-height: 1.6; }

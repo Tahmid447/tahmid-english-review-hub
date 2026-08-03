@@ -578,6 +578,8 @@ const databaseQuestion = (row = {}) => {
     section: row.section ?? payload.section ?? "",
     isOriginal: row.is_original !== false,
     maxPoints: Number(row.points || payload.maxPoints || 1),
+    requiredPlan: row.required_plan || "free",
+    lockedDisplay: row.locked_display || "blur",
   };
 };
 
@@ -598,7 +600,7 @@ export async function fetchDatabaseLessons({ audience = "general" } = {}) {
     if (publicRows.length) {
       const result = await client
         .from("review_public_questions")
-        .select("id,lesson_id,stable_key,position,section,format,payload,is_original,points")
+        .select("id,lesson_id,stable_key,position,section,format,payload,is_original,points,required_plan,locked_display")
         .in("lesson_id", publicRows.map((lesson) => lesson.id))
         .order("position", { ascending: true });
       if (result.error) return { lessons: null, reason: "question-query-failed", error: result.error };
@@ -621,7 +623,7 @@ export async function fetchDatabaseLessons({ audience = "general" } = {}) {
     if (privateRows.length) {
       const questionResult = await client
         .from("review_questions")
-        .select("id,lesson_id,stable_key,position,section,format,payload,is_original,points")
+        .select("id,lesson_id,stable_key,position,section,format,payload,is_original,points,required_plan,locked_display")
         .in("lesson_id", privateRows.map((lesson) => lesson.id))
         .eq("active", true)
         .order("position", { ascending: true });
@@ -717,13 +719,22 @@ export async function fetchDatabaseLesson(lessonSlug, { preview = false } = {}) 
   const questionTable = hasAccess ? "review_questions" : "review_public_questions";
   let questionQuery = client
     .from(questionTable)
-    .select("id,stable_key,position,section,format,payload,is_original,points")
+    .select("id,stable_key,position,section,format,payload,is_original,points,required_plan,locked_display")
     .eq("lesson_id", lesson.id);
   if (questionTable === "review_questions") questionQuery = questionQuery.eq("active", true);
   questionQuery = questionQuery.order("position", { ascending: true });
   const { data: questions, error: questionError } = await questionQuery;
   if (questionError) {
     return { lesson: null, reason: "question-query-failed", error: questionError };
+  }
+
+  const { data: lockedQuestions, error: teaserError } = await client
+    .from("review_question_teasers")
+    .select("id,position,section,format,required_plan")
+    .eq("lesson_id", lesson.id)
+    .order("position", { ascending: true });
+  if (teaserError) {
+    return { lesson: null, reason: "question-teaser-query-failed", error: teaserError };
   }
 
   const content = lesson.content && typeof lesson.content === "object" && !Array.isArray(lesson.content)
@@ -748,6 +759,13 @@ export async function fetchDatabaseLesson(lessonSlug, { preview = false } = {}) 
         ? content.categoryLabels
         : {},
       questions: Array.isArray(questions) ? questions.map(databaseQuestion) : [],
+      lockedQuestions: Array.isArray(lockedQuestions) ? lockedQuestions.map((question) => ({
+        id: String(question.id || ""),
+        position: Number(question.position || 0),
+        section: String(question.section || ""),
+        format: String(question.format || "mcq"),
+        requiredPlan: String(question.required_plan || "standard"),
+      })) : [],
       isPreview: lesson.is_preview === true,
       locked: !hasAccess && lesson.is_preview !== true,
     },

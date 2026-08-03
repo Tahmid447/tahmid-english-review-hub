@@ -65,6 +65,7 @@ const elements = {
   resultPanel: $("#resultPanel"),
   resultHeading: $("#resultHeading"),
   resultSummary: $("#resultSummary"),
+  lockedQuestionTeasers: $("#lockedQuestionTeasers"),
   premiumTasksPanel: $("#premiumTasksPanel"),
   retryButtons: [...document.querySelectorAll("[data-retry]")],
   toast: $("#toast"),
@@ -1322,11 +1323,57 @@ const renderScore = () => {
   );
 };
 
+const renderLockedQuestionTeasers = () => {
+  const lockedQuestions = Array.isArray(state.lesson?.lockedQuestions)
+    ? state.lesson.lockedQuestions
+    : [];
+  if (!lockedQuestions.length) {
+    elements.lockedQuestionTeasers.hidden = true;
+    elements.lockedQuestionTeasers.replaceChildren();
+    return;
+  }
+  const cards = lockedQuestions.map((question) => {
+    const premium = question.requiredPlan === "premium";
+    const planEn = premium ? "Premium" : "Standard";
+    const planJa = premium ? "プレミアム" : "スタンダード";
+    return `
+      <article class="locked-question-teaser">
+        <span class="locked-question-plan">${escapeHTML(planEn)} · ${escapeHTML(planJa)}</span>
+        <div class="locked-question-placeholder" aria-hidden="true">
+          <i></i><i></i><i></i>
+        </div>
+        <h3>${escapeHTML(questionTypeLabel(question.format))}</h3>
+        <p>${escapeHTML(t(
+          `This ${planEn} practice is locked. Its question, choices, hint, explanation and answer stay private until your plan includes it.`,
+          `この問題は${planJa}対象です。対象プランになるまで、問題文・選択肢・ヒント・説明・正解は表示・送信されません。`,
+        ))}</p>
+      </article>
+    `;
+  }).join("");
+  elements.lockedQuestionTeasers.innerHTML = `
+    <div class="locked-question-heading">
+      <span>${escapeHTML(t("More practice available", "追加問題があります"))}</span>
+      <h2>${escapeHTML(t(
+        `${lockedQuestions.length} plan-locked question${lockedQuestions.length === 1 ? "" : "s"}`,
+        `プラン限定問題 ${lockedQuestions.length}問`,
+      ))}</h2>
+      <p>${escapeHTML(t(
+        "Only safe labels are shown here. Locked learning content is protected by the database.",
+        "ここには安全な分類情報だけを表示しています。限定問題の内容はデータベース側で保護されています。",
+      ))}</p>
+    </div>
+    <div class="locked-question-grid">${cards}</div>
+    <a class="primary-btn" href="/#membership">${escapeHTML(t("Compare plans", "プランを見る"))}</a>
+  `;
+  elements.lockedQuestionTeasers.hidden = false;
+};
+
 const renderAll = () => {
   updatePracticeModeLabels();
   renderSettings();
   renderScore();
   renderQuestion();
+  renderLockedQuestionTeasers();
 };
 
 const runIsComplete = () => {

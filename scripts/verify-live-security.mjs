@@ -21,7 +21,14 @@ async function readRows(resource, column) {
 }
 
 const publicLessons = await readRows("review_public_lessons", "id,is_preview");
-const publicQuestions = await readRows("review_public_questions", "id");
+const publicQuestions = await readRows(
+  "review_public_questions",
+  "id,required_plan,locked_display",
+);
+const questionTeasers = await readRows(
+  "review_question_teasers",
+  "id,lesson_id,position,section,format,required_plan",
+);
 const publicPlans = await readRows("review_plan_catalog", "plan_key,active");
 const protectedResources = [
   ["review_profiles", "user_id"],
@@ -69,6 +76,19 @@ if (publicQuestions.status !== 200 || publicQuestions.rows?.length !== 62) {
     } rows.`,
   );
 }
+if (
+  Array.isArray(publicQuestions.rows)
+  && publicQuestions.rows.some((question) => question.required_plan !== "free")
+) {
+  failures.push("The anonymous full-payload question view returned a non-Free question.");
+}
+if (questionTeasers.status !== 200 || questionTeasers.rows?.length !== 0) {
+  failures.push(
+    `Expected no plan-locked teaser rows before teacher configuration; received status ${questionTeasers.status} and ${
+      Array.isArray(questionTeasers.rows) ? questionTeasers.rows.length : "no"
+    } rows.`,
+  );
+}
 if (publicPlans.status !== 200 || publicPlans.rows?.length !== 2) {
   failures.push(
     `Expected 2 public plan descriptions; received status ${publicPlans.status} and ${
@@ -93,6 +113,7 @@ if (failures.length) {
   console.log("  ✓ 17 published public lessons");
   console.log("  ✓ exactly 2 free preview lessons");
   console.log("  ✓ 62 anonymous preview activities; expanded member activities remain protected");
+  console.log("  ✓ anonymous full payloads are Free-only; safe teaser view currently has 0 configured rows");
   console.log("  ✓ 2 public Standard/Premium plan descriptions");
   console.log(
     `  ✓ ${protectedResults.length} personal/base resources reject anonymous reads`,

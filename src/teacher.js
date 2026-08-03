@@ -61,6 +61,8 @@ const elements = {
   questionStableKey: document.querySelector("#questionStableKey"),
   questionSection: document.querySelector("#questionSection"),
   questionFormat: document.querySelector("#questionFormat"),
+  questionRequiredPlan: document.querySelector("#questionRequiredPlan"),
+  questionLockedDisplay: document.querySelector("#questionLockedDisplay"),
   questionPromptEn: document.querySelector("#questionPromptEn"),
   questionPromptJa: document.querySelector("#questionPromptJa"),
   questionHintEn: document.querySelector("#questionHintEn"),
@@ -457,7 +459,7 @@ async function refreshDashboard() {
       ),
       fetchAll(
         "review_questions",
-        "id, lesson_id, stable_key, section, format, payload, active",
+        "id, lesson_id, stable_key, section, format, payload, active, required_plan, locked_display",
         { order: { column: "position", ascending: true } },
       ),
       fetchAll(
@@ -2589,6 +2591,16 @@ function questionPrompt(question) {
   return bilingualValue(payload.prompt, payload.promptJa || payload.promptJP || "");
 }
 
+function questionAccessLabel(question) {
+  const plan = {
+    free: "Free",
+    standard: "Standard+",
+    premium: "Premium",
+  }[question.required_plan || "free"] || "Free";
+  if ((question.required_plan || "free") === "free") return plan;
+  return `${plan} · ${question.locked_display === "hidden" ? "hidden below plan" : "safe teaser below plan"}`;
+}
+
 function renderQuestionManager() {
   const lesson = state.questionLesson;
   if (!lesson) return;
@@ -2613,6 +2625,7 @@ function renderQuestionManager() {
     "Question",
     "Section",
     "Format",
+    "Access",
     "State",
     "Actions",
   ]);
@@ -2648,10 +2661,11 @@ function renderQuestionManager() {
       questionCell,
       make("td", { text: question.section || "—" }),
       make("td", { text: formatQuestionLabel(question.format) }),
+      make("td", { text: questionAccessLabel(question) }),
       make("td"),
       actions,
     );
-    row.children[4].append(status);
+    row.children[5].append(status);
     tbody.append(row);
   });
   elements.questionManagerPanel.replaceChildren(table);
@@ -2674,7 +2688,7 @@ async function loadLessonQuestions(lesson, { open = false } = {}) {
     ({ data, error } = await client
       .from("review_questions")
       .select(
-        "id,lesson_id,stable_key,position,section,format,payload,is_original,points,active",
+        "id,lesson_id,stable_key,position,section,format,payload,is_original,points,active,required_plan,locked_display",
       )
       .eq("lesson_id", lesson.id)
       .order("position", { ascending: true })
@@ -2842,6 +2856,8 @@ function openQuestionEditor(question = null) {
       `${lesson.slug}-custom-${Date.now().toString(36)}`;
     elements.questionSection.value = "Extra Practice";
     elements.questionFormat.value = "mcq";
+    elements.questionRequiredPlan.value = "free";
+    elements.questionLockedDisplay.value = "blur";
     elements.questionPromptEn.value = "";
     elements.questionPromptJa.value = "";
     elements.easyChoiceAEn.value = "";
@@ -2870,6 +2886,8 @@ function openQuestionEditor(question = null) {
   elements.questionStableKey.value = question.stable_key;
   elements.questionSection.value = question.section || payload.section || "";
   elements.questionFormat.value = format;
+  elements.questionRequiredPlan.value = question.required_plan || "free";
+  elements.questionLockedDisplay.value = question.locked_display || "blur";
   elements.questionPromptEn.value = prompt.en;
   elements.questionPromptJa.value = prompt.jp;
   elements.questionHintEn.value = hint.en;
@@ -3052,6 +3070,8 @@ async function saveQuestion(event) {
   const stableKey = elements.questionStableKey.value.trim();
   const section = elements.questionSection.value.trim();
   const format = elements.questionFormat.value;
+  const requiredPlan = elements.questionRequiredPlan.value;
+  const lockedDisplay = elements.questionLockedDisplay.value;
   const fields = {
     promptEn: elements.questionPromptEn.value.trim(),
     promptJa: elements.questionPromptJa.value.trim(),
@@ -3103,6 +3123,8 @@ async function saveQuestion(event) {
       format,
       payload,
       points: questionPoints(payload),
+      required_plan: requiredPlan,
+      locked_display: lockedDisplay,
     };
 
     state.questionSaving = true;

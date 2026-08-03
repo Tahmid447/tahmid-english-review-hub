@@ -51,9 +51,18 @@ npm run verify:live
   a well-formed unknown code and received the distinct bilingual "not found"
   result instead of an endless loading state. A valid teacher session is still
   required for the full create/edit/reissue/delete/redeem browser workflow.
-- Supabase migrations 010 and 011: PASS in the authenticated dashboard on
+- Supabase migrations 010, 011 and 012: PASS in the authenticated dashboard on
   August 3. The private Premium recording bucket and all three authenticated
-  storage policies are visible after application.
+  storage policies are visible after application. Migration 012 verification
+  returned two question-access columns, the payload-free teaser view and the
+  question-access function. All 562 existing questions still have the Free
+  default; no lesson was silently moved behind a paid tier.
+- Per-question plan controls: PASS in local static/security tests — Teacher
+  Studio exposes Free, Standard, Premium, safe-teaser and hidden settings. The
+  teaser view cannot select payload, stable key, prompt, choices, hint,
+  explanation or answer fields. Valid-teacher and below-tier learner browser
+  confirmation remains pending because no test question has been deliberately
+  tier-locked in the live catalogue.
 - New v9 Netlify preview: PASS at
   `https://tahmid-english-review-hub-v9-preview.netlify.app`, deployed from the
   working v9 branch. Hosted checks passed for 17/562 summary, 55/55 WebP

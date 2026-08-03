@@ -107,6 +107,15 @@ Do not place a Notion integration secret in browser JavaScript. A future
 automatic import must run in a Netlify Function or Supabase Edge Function and
 must still create a draft first.
 
+### Per-question plan access
+
+Open a lesson's Question Manager and edit the target question. Set **Question
+access** to Free, Standard or Premium. For an ineligible learner, **Safe
+teaser** shows only the plan and activity type; **Hidden** returns no row at
+all. The prompt, choices, hint, explanation and answer are protected by the
+database in both modes. Existing questions default to Free, so applying
+migration 012 does not silently change learner access.
+
 ## 6. Code and deployment updates
 
 For lesson content managed entirely in Supabase, no website deployment is
@@ -156,8 +165,8 @@ Supabase redirect allow-list and the `membership-access` Edge CORS allow-list.
 Every future hosted Netlify URL must be added to both lists before its callback
 and access-code flow are tested.
 
-Migrations 007, 008, 009, 010 and 011 are present in the live schema. Migrations
-010 and 011 were applied through the authenticated SQL Editor on August 3,
+Migrations 007, 008, 009, 010, 011 and 012 are present in the live schema. Migrations
+010, 011 and 012 were applied through the authenticated SQL Editor on August 3,
 2026. The dashboard verifies the private `review-premium-recordings` bucket,
 its 10 MB limit and four allowed audio MIME types, plus the SELECT, INSERT and
 DELETE storage policies for authenticated users.

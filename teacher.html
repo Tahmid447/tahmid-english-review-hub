@@ -118,6 +118,20 @@
             <option value="mistake">Correct the mistake</option>
           </select>
         </label>
+        <label>Question access / 問題の公開範囲
+          <select id="questionRequiredPlan">
+            <option value="free">Free / 無料（レッスン閲覧者全員）</option>
+            <option value="standard">Standard / スタンダード以上</option>
+            <option value="premium">Premium / プレミアムのみ</option>
+          </select>
+        </label>
+        <label>Below-plan display / 対象外の表示
+          <select id="questionLockedDisplay">
+            <option value="blur">Safe teaser / 内容を隠した案内</option>
+            <option value="hidden">Hidden / 完全非表示</option>
+          </select>
+        </label>
+        <small class="wide question-access-note">Locked questions never send their prompt, choices, hint, explanation or answer to an ineligible learner. / 対象プラン未満の生徒には、問題文・選択肢・ヒント・説明・正解データを送信しません。</small>
         <label>Prompt — English<input id="questionPromptEn" required></label>
         <label class="wide">Prompt — Japanese<input id="questionPromptJa"></label>
         <label>Hint — English<textarea id="questionHintEn" rows="3"></textarea></label>

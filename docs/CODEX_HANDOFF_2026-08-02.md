@@ -32,10 +32,15 @@ Do not place OAuth client secrets, passwords, service-role keys, or access token
   in `docs/question-quality-audit.md`.
 - New practice runs always shuffle question and choice order. Resumed runs keep
   their saved order.
-- Supabase migrations 007, 008, 009, 010 and 011 are reflected in the live
+- Supabase migrations 007, 008, 009, 010, 011 and 012 are reflected in the live
   schema. Migration 011 was verified in the dashboard: the private
   `review-premium-recordings` bucket has a 10 MB limit, four allowed audio
   MIME types, and the three authenticated storage policies.
+- Migration 012 adds secure per-question Free, Standard and Premium controls.
+  Teacher Studio can choose a payload-free teaser or complete hiding below the
+  required plan. The live schema check confirmed both columns, the safe teaser
+  view and the question-access function. All existing 562 questions remain
+  Free until the teacher deliberately changes an individual question.
 - `membership-access` Edge Function version 2 is live and returns bounded,
   reason-specific access-code errors.
 - The v9 preview deploys automatically from
@@ -52,10 +57,10 @@ Do not place OAuth client secrets, passwords, service-role keys, or access token
 2. Complete real-device mobile QA and microphone recording. The in-app browser
    viewport control did not enter 390 px mode, so mobile is deliberately not
    reported as passed.
-3. Only after the preview passes, publish production. Per-question teacher
-   configuration for free/blurred/hidden/premium questions is not yet
-   implemented; current controls are lesson-, learner-, assignment- and
-   Premium-task-level.
+3. Use a valid teacher account to set at least one test question to Standard or
+   Premium on a non-production test lesson, then confirm both payload-free
+   teaser and complete hiding behaviour with below-tier learner accounts.
+4. Only after the preview passes, publish production.
 
 ## Verification commands
 
