@@ -3,6 +3,282 @@
   "globalArtDirection": "Warm, polished editorial anime-style illustration for an adult English-learning app. Believable Japanese everyday-life setting, expressive but natural body language, soft daylight, clean shapes, teal/coral/navy palette, landscape 16:10 composition, one clear focal action, no words, no captions, no logos, no watermarks.",
   "questions": [
     {
+      "lessonId": "june-28",
+      "slot": 1,
+      "phraseIndex": 0,
+      "distractorIndexes": [3, 4, 7],
+      "asset": "/assets/questions/visual/june-28-01-order-coffee.webp",
+      "imageAlt": "A customer politely orders a cup of coffee from a café server.",
+      "scenePrompt": "At a calm Japanese café counter, an adult customer politely gestures toward a cup of coffee while placing an order with a friendly server; the server is ready to prepare the coffee. Make the requested coffee unmistakable without written menus or text."
+    },
+    {
+      "lessonId": "june-28",
+      "slot": 2,
+      "phraseIndex": 3,
+      "distractorIndexes": [0, 4, 6],
+      "asset": "/assets/questions/visual/june-28-02-cant-be-helped.webp",
+      "imageAlt": "A traveler calmly accepts that a train has been cancelled.",
+      "scenePrompt": "At a train platform, an adult traveler sees a clear cancellation symbol on the departure display, then gives a resigned but calm shrug and accepts the situation; no readable words or letters."
+    },
+    {
+      "lessonId": "june-28",
+      "slot": 3,
+      "phraseIndex": 4,
+      "distractorIndexes": [0, 5, 7],
+      "asset": "/assets/questions/visual/june-28-03-request-menu.webp",
+      "imageAlt": "A diner politely asks a server for the menu.",
+      "scenePrompt": "A seated diner at a restaurant politely raises one hand and gestures toward a closed menu held by the server, clearly asking to receive it; empty place setting, warm respectful interaction, no readable text."
+    },
+    {
+      "lessonId": "june-28",
+      "slot": 4,
+      "phraseIndex": 5,
+      "distractorIndexes": [0, 2, 6],
+      "asset": "/assets/questions/visual/june-28-04-tea-instead.webp",
+      "imageAlt": "A café customer chooses tea instead of coffee.",
+      "scenePrompt": "At a café table, a customer has deliberately chosen a steaming cup of tea while gently moving an offered coffee cup aside; make the replacement choice tea instead of coffee visually clear, no text."
+    },
+    {
+      "lessonId": "june-28",
+      "slot": 5,
+      "phraseIndex": 7,
+      "distractorIndexes": [1, 4, 5],
+      "asset": "/assets/questions/visual/june-28-05-anything-else.webp",
+      "imageAlt": "A server offers a diner an additional drink or dessert after the meal.",
+      "scenePrompt": "Near the end of a restaurant meal, a friendly server presents a small dessert tray and drink options with an inviting open-hand gesture while the diner considers whether to order anything else; no written menu text."
+    },
+
+    {
+      "lessonId": "june-29",
+      "slot": 1,
+      "phraseIndex": 1,
+      "distractorIndexes": [0, 2, 7],
+      "asset": "/assets/questions/visual/june-29-01-heard-of-restaurant.webp",
+      "imageAlt": "A person recognizes a restaurant shown by a friend.",
+      "scenePrompt": "Two adults chat while one shows a photo of a distinctive restaurant exterior on a phone; the other person immediately recognizes it with an aha expression and a knowing nod, indicating they have heard of that restaurant, no readable text."
+    },
+    {
+      "lessonId": "june-29",
+      "slot": 2,
+      "phraseIndex": 2,
+      "distractorIndexes": [0, 4, 7],
+      "asset": "/assets/questions/visual/june-29-02-heard-clearly.webp",
+      "imageAlt": "A listener hears an announcement clearly through headphones.",
+      "scenePrompt": "An adult wearing headphones listens to a clear voice announcement, smiles and gives a confident confirmation gesture; clean even sound-wave symbols reach both ears without noise or obstruction, no words."
+    },
+    {
+      "lessonId": "june-29",
+      "slot": 3,
+      "phraseIndex": 5,
+      "distractorIndexes": [2, 6, 7],
+      "asset": "/assets/questions/visual/june-29-03-top-right-box.webp",
+      "imageAlt": "A finger selects the top-right cell of a simple grid.",
+      "scenePrompt": "Close view of a hand using a tablet that displays a clean three-by-three grid with no text; the finger is unmistakably pressing the cell in the top-right corner while all other cells remain neutral."
+    },
+    {
+      "lessonId": "june-29",
+      "slot": 4,
+      "phraseIndex": 6,
+      "distractorIndexes": [1, 5, 7],
+      "asset": "/assets/questions/visual/june-29-04-bottom-left-button.webp",
+      "imageAlt": "A button is clearly located in the bottom-left corner of a screen.",
+      "scenePrompt": "A simple tablet interface contains a three-by-three layout with one obvious round button placed only in the bottom-left corner; an adult points directly to that location, no text or letters."
+    },
+    {
+      "lessonId": "june-29",
+      "slot": 5,
+      "phraseIndex": 7,
+      "distractorIndexes": [1, 2, 4],
+      "asset": "/assets/questions/visual/june-29-05-could-not-hear.webp",
+      "imageAlt": "A listener cannot hear a woman speaking because of loud background noise.",
+      "scenePrompt": "In a noisy station, a woman speaks to another adult, but the listener leans closer with a hand behind one ear and a confused expression; surrounding train and crowd noise visually interrupts the woman's speech, no text."
+    },
+
+    {
+      "lessonId": "june-30",
+      "slot": 1,
+      "phraseIndex": 0,
+      "distractorIndexes": [1, 2, 7],
+      "asset": "/assets/questions/visual/june-30-01-annoyed-by-noise.webp",
+      "imageAlt": "A person looks annoyed by loud construction noise outside.",
+      "scenePrompt": "Inside an apartment, an adult covers one ear and looks visibly annoyed as loud construction machinery operates just outside the window; strong sound waves point from the machinery toward the person, no text."
+    },
+    {
+      "lessonId": "june-30",
+      "slot": 2,
+      "phraseIndex": 2,
+      "distractorIndexes": [0, 4, 5],
+      "asset": "/assets/questions/visual/june-30-02-prefers-light-tea.webp",
+      "imageAlt": "A person chooses light tea instead of a darker coffee.",
+      "scenePrompt": "At a café tasting table, an adult happily chooses a pale, light cup of tea and sets aside a darker heavy coffee; the tea choice and preference for its lighter quality are visually clear, no words."
+    },
+    {
+      "lessonId": "june-30",
+      "slot": 3,
+      "phraseIndex": 5,
+      "distractorIndexes": [2, 3, 6],
+      "asset": "/assets/questions/visual/june-30-03-first-half-goal.webp",
+      "imageAlt": "A football team scores before the halftime break.",
+      "scenePrompt": "During the first half of a football match, a ball has just entered the goal and players celebrate while the stadium clock visually shows the game before halftime using simple numerals only; no team logos or words."
+    },
+    {
+      "lessonId": "june-30",
+      "slot": 4,
+      "phraseIndex": 6,
+      "distractorIndexes": [0, 4, 5],
+      "asset": "/assets/questions/visual/june-30-04-exciting-second-half.webp",
+      "imageAlt": "Fans react excitedly during the second half of a close football match.",
+      "scenePrompt": "Late in a close football match after the halftime break, fans leap up excitedly as both teams race toward the goal; energetic second-half action, simple late-game clock numerals only, no team logos or words."
+    },
+    {
+      "lessonId": "june-30",
+      "slot": 5,
+      "phraseIndex": 7,
+      "distractorIndexes": [0, 1, 4],
+      "asset": "/assets/questions/visual/june-30-05-nothing-worked.webp",
+      "imageAlt": "A frustrated person faces several devices that are not working.",
+      "scenePrompt": "At a desk, an adult looks deeply frustrated while a laptop is frozen, a printer shows an error symbol and a phone has no connection; repeated attempts have failed and nothing works, no readable text."
+    },
+
+    {
+      "lessonId": "july-04",
+      "slot": 1,
+      "phraseIndex": 1,
+      "distractorIndexes": [0, 2, 7],
+      "asset": "/assets/questions/visual/july-04-01-avoid-driving-tired.webp",
+      "imageAlt": "A tired person leaves the car keys at home and chooses the train.",
+      "scenePrompt": "A visibly tired adult makes a safe decision: they leave car keys on a hook and pick up a transit card while heading toward a train, clearly avoiding driving because of fatigue, no text."
+    },
+    {
+      "lessonId": "july-04",
+      "slot": 2,
+      "phraseIndex": 2,
+      "distractorIndexes": [0, 3, 5],
+      "asset": "/assets/questions/visual/july-04-02-something-came-up.webp",
+      "imageAlt": "An urgent phone call unexpectedly interrupts a planned appointment.",
+      "scenePrompt": "An adult prepared to leave for a planned appointment suddenly receives an urgent phone call and stops with a surprised, concerned expression; coat and appointment items are ready, but an unexpected matter has come up, no readable text."
+    },
+    {
+      "lessonId": "july-04",
+      "slot": 3,
+      "phraseIndex": 4,
+      "distractorIndexes": [2, 3, 5],
+      "asset": "/assets/questions/visual/july-04-03-not-on-purpose.webp",
+      "imageAlt": "A man accidentally bumps a table and apologizes for spilling a drink.",
+      "scenePrompt": "In a café, a man accidentally catches his bag on a table and spills a drink; he immediately looks surprised and apologetic with open hands while helping clean up, making it clear the act was not intentional, no text."
+    },
+    {
+      "lessonId": "july-04",
+      "slot": 4,
+      "phraseIndex": 5,
+      "distractorIndexes": [0, 3, 6],
+      "asset": "/assets/questions/visual/july-04-04-appreciate-help.webp",
+      "imageAlt": "A grateful person sincerely thanks someone who helped carry heavy boxes.",
+      "scenePrompt": "After a neighbour helps carry several heavy boxes upstairs, the recipient places a hand over their heart and gives a sincere grateful bow; warm eye contact makes deep appreciation unmistakable, no words."
+    },
+    {
+      "lessonId": "july-04",
+      "slot": 5,
+      "phraseIndex": 7,
+      "distractorIndexes": [0, 1, 5],
+      "asset": "/assets/questions/visual/july-04-05-might-rain.webp",
+      "imageAlt": "A person notices dark clouds and carries an umbrella because it might rain later.",
+      "scenePrompt": "An adult looks up at gathering dark clouds in the distance, then thoughtfully places a folded umbrella into a bag before leaving; streets are still dry, showing rain is possible later rather than already falling, no text."
+    },
+
+    {
+      "lessonId": "july-05",
+      "slot": 1,
+      "phraseIndex": 1,
+      "distractorIndexes": [2, 4, 7],
+      "asset": "/assets/questions/visual/july-05-01-rather-stay-home.webp",
+      "imageAlt": "A person chooses a cozy evening at home instead of going out.",
+      "scenePrompt": "On a rainy evening, an adult happily chooses to relax at home with tea and a book while friends outside gesture toward a night out; the person warmly waves goodbye and prefers staying home, no text."
+    },
+    {
+      "lessonId": "july-05",
+      "slot": 2,
+      "phraseIndex": 2,
+      "distractorIndexes": [0, 3, 6],
+      "asset": "/assets/questions/visual/july-05-02-depends-weather.webp",
+      "imageAlt": "A person waits to decide on a picnic after comparing sunny and rainy weather.",
+      "scenePrompt": "An adult holds a picnic basket but pauses before deciding, comparing a bright-sun forecast symbol and a rain-cloud forecast symbol on a phone; the decision clearly depends on the weather, no words."
+    },
+    {
+      "lessonId": "july-05",
+      "slot": 3,
+      "phraseIndex": 4,
+      "distractorIndexes": [0, 3, 7],
+      "asset": "/assets/questions/visual/july-05-03-let-me-think.webp",
+      "imageAlt": "A shopper pauses thoughtfully before choosing between two options.",
+      "scenePrompt": "A shopper considers two different practical items, rests a hand on the chin and politely signals for a moment to think instead of deciding immediately; calm thoughtful body language, no text."
+    },
+    {
+      "lessonId": "july-05",
+      "slot": 4,
+      "phraseIndex": 6,
+      "distractorIndexes": [1, 3, 5],
+      "asset": "/assets/questions/visual/july-05-04-changed-mind.webp",
+      "imageAlt": "A diner changes from choosing one dish to choosing another.",
+      "scenePrompt": "At a restaurant, a diner first points toward one dish, then visibly reconsiders and moves the choice marker to a different dish with an aha expression; make the change of mind clear, no readable menu text."
+    },
+    {
+      "lessonId": "july-05",
+      "slot": 5,
+      "phraseIndex": 7,
+      "distractorIndexes": [1, 2, 6],
+      "asset": "/assets/questions/visual/july-05-05-either-option.webp",
+      "imageAlt": "A person happily accepts either of two appointment options.",
+      "scenePrompt": "An adult compares two simple appointment cards with different clock symbols and gives an equally positive thumbs-up to both, showing either option works; no words or letters."
+    },
+
+    {
+      "lessonId": "july-06",
+      "slot": 1,
+      "phraseIndex": 0,
+      "distractorIndexes": [1, 5, 7],
+      "asset": "/assets/questions/visual/july-06-01-say-again.webp",
+      "imageAlt": "A learner politely asks a speaker to repeat what was said.",
+      "scenePrompt": "During a friendly conversation, an adult learner leans forward slightly with one hand near the ear and makes a polite repeat gesture toward the speaker; the speaker prepares to say the sentence again, no text."
+    },
+    {
+      "lessonId": "july-06",
+      "slot": 2,
+      "phraseIndex": 2,
+      "distractorIndexes": [3, 4, 7],
+      "asset": "/assets/questions/visual/july-06-02-getting-used-to-it.webp",
+      "imageAlt": "A commuter becomes more comfortable using a crowded train over time.",
+      "scenePrompt": "A gentle three-stage progression shows the same adult commuter initially tense on a crowded train, then calmer, then confidently relaxed while holding the strap; clearly becoming accustomed over time, no text."
+    },
+    {
+      "lessonId": "july-06",
+      "slot": 3,
+      "phraseIndex": 3,
+      "distractorIndexes": [2, 4, 6],
+      "asset": "/assets/questions/visual/july-06-03-never-tried-before.webp",
+      "imageAlt": "A beginner hesitantly tries pottery for the first time.",
+      "scenePrompt": "In a pottery studio, an adult beginner sits at a wheel for the very first time, hesitant but curious, while an instructor gently demonstrates; untouched tools and uncertain hands emphasize no previous experience, no text."
+    },
+    {
+      "lessonId": "july-06",
+      "slot": 4,
+      "phraseIndex": 5,
+      "distractorIndexes": [0, 1, 6],
+      "asset": "/assets/questions/visual/july-06-04-give-example.webp",
+      "imageAlt": "A learner asks a teacher to demonstrate one concrete example.",
+      "scenePrompt": "In a small class, a learner raises a hand and points from an abstract diagram to one empty example card; the teacher responds by demonstrating a single concrete object, clearly giving an example, no readable text."
+    },
+    {
+      "lessonId": "july-06",
+      "slot": 5,
+      "phraseIndex": 7,
+      "distractorIndexes": [0, 4, 5],
+      "asset": "/assets/questions/visual/july-06-05-difficult-part.webp",
+      "imageAlt": "A learner points to one difficult step in otherwise completed work.",
+      "scenePrompt": "A learner has completed most steps of a practical exercise but points with a worried expression to one visibly complex tangled step in the middle; the teacher looks specifically at that difficult part, no text."
+    },
+
+    {
       "lessonId": "july-07",
       "slot": 1,
       "phraseIndex": 0,

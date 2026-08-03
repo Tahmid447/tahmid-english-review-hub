@@ -84,8 +84,8 @@ Each of the six existing lessons receives 13 additive activities:
 - 1 Japanese-to-English Translation
 - 1 Situation Choice
 
-That adds **78** activities while preserving the **143** original activities.
-The six public lessons therefore contain **221** top-level activities.
+That now adds **132** activities while preserving the **143** original activities.
+The six public lessons therefore contain **275** top-level activities.
 
 ## 6. Notion-derived drafts
 
@@ -99,9 +99,9 @@ migration after review.
 The complete reviewed source bundle contains:
 
 - 143 migrated originals
-- 78 additions
+- 132 additions
 - 341 Notion-derived activities, published to both audiences
-- **562 total activities**
+- **616 total activities**
 - **14 implemented formats**
 
 Draft JSON and curriculum source files are not copied to the public Netlify

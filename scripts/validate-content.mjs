@@ -168,7 +168,7 @@ for (const lessonId of Object.keys(expectedLegacyCounts)) {
   assert(Array.isArray(lessonAdditions), `${lessonId}: additive practice exists.`);
   if (!Array.isArray(lessonAdditions)) continue;
   additionTotal += lessonAdditions.length;
-  assert(lessonAdditions.length === 13, `${lessonId}: exactly 13 activities were added.`);
+  assert(lessonAdditions.length === 22, `${lessonId}: exactly 22 activities were added.`);
   assert(
     lessonAdditions.every((question) => question.isOriginal === false),
     `${lessonId}: additions are clearly separated from originals.`,
@@ -179,7 +179,7 @@ for (const lessonId of Object.keys(expectedLegacyCounts)) {
     `${lessonId}: listening, speaking, and eight mixed formats are covered.`,
   );
 }
-assert(additionTotal === 78, "Exactly 78 additive activities are present (13 × 6).");
+assert(additionTotal === 132, "Exactly 132 additive activities are present (22 × 6).");
 
 assert(Array.isArray(drafts) && drafts.length === 11, "Exactly 11 Notion-derived lessons exist.");
 const notionIds = drafts.map((lesson) => lesson.sourceNotionPageId);
@@ -187,8 +187,8 @@ assert(notionIds.every(Boolean), "Every Notion draft keeps its source page ID.")
 assert(unique(notionIds), "Notion source page IDs are unique.");
 assert(unique(drafts.map((lesson) => lesson.id)), "Notion draft slugs are unique.");
 assert(
-  Array.isArray(visualManifest.questions) && visualManifest.questions.length === 55,
-  "The visual-question manifest contains five briefs for each of 11 lessons.",
+  Array.isArray(visualManifest.questions) && visualManifest.questions.length === 85,
+  "The visual-question manifest contains five briefs for each of 17 lessons.",
 );
 assert(
   unique(visualManifest.questions.map((question) => question.asset)),
@@ -255,7 +255,7 @@ const allQuestions = [
 ];
 const allQuestionIds = allQuestions.map((question) => question.id);
 const allFormats = new Set(allQuestions.map((question) => question.format || question.type));
-assert(allQuestions.length >= 562, "The complete bundle contains at least 562 activities.");
+assert(allQuestions.length >= 616, "The complete bundle contains at least 616 activities.");
 assert(unique(allQuestionIds), "Question IDs are unique across the complete bundle.");
 assert(allFormats.size >= 9, `The complete bundle has ${allFormats.size} activity formats.`);
 

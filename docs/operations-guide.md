@@ -147,7 +147,9 @@ on `backup/v8-calm-baseline`; the last verified v9 release is commit `b7e4ac9`.
 
 Apply the numbered migration files in filename order. Migration 003 is generated
 from the private reviewed source and stores the protected question payloads
-behind RLS; migration 009 expands the current source to 562 activities.
+behind RLS; migration 009 installs the 11 expanded lessons and migration 013
+adds the final 54 visual/listening/speaking activities to the six legacy lessons,
+for 616 activities in total.
 Migration 004 publishes all 17 reviewed lessons to both audiences, adds the
 teacher account’s private learner-preview profile, and attaches the three
 late-July illustrations.

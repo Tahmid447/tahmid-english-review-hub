@@ -3,10 +3,10 @@
 -- This migration seeds catalogue metadata only. The bundled question JSON remains
 -- the source of truth in src/data/. After both migrations run,
 -- sign in to Teacher Studio and choose “Sync bundled content” to upsert all
--- 485 question activities:
+-- 616 question activities:
 --   • 143 migrated legacy questions (stable IDs and structure preserved)
---   • 78 additive listening/speaking/mixed activities
---   • 264 draft activities (24 × 11 Notion-derived lessons)
+--   • 132 additive visual/listening/speaking/mixed activities
+--   • 341 draft activities (31 × 11 Notion-derived lessons)
 --
 -- Running this migration again is safe. It does not create users, store passwords,
 -- use a service-role key, or touch the separate Do/Does application.
@@ -20,37 +20,37 @@ values
     '00000000-0000-4000-8000-000000000628', 'june-28', '2026-06-28',
     'Café Talk & Polite Answers', 'Polite Conversation Review',
     'published', 'both', 'legacy_zip', 1,
-    '{"bundled":true,"original_questions":21,"added_questions":13}'::jsonb
+    '{"bundled":true,"original_questions":21,"added_questions":22}'::jsonb
   ),
   (
     '00000000-0000-4000-8000-000000000629', 'june-29', '2026-06-29',
     'What Did You Hear? Reactions & Position', 'Heard, Reactions & Position',
     'published', 'both', 'legacy_zip', 1,
-    '{"bundled":true,"original_questions":15,"added_questions":13}'::jsonb
+    '{"bundled":true,"original_questions":15,"added_questions":22}'::jsonb
   ),
   (
     '00000000-0000-4000-8000-000000000630', 'june-30', '2026-06-30',
     'Feelings, Preferences & Match Talk', 'Feelings, Prefer & Sports English',
     'published', 'both', 'legacy_zip', 1,
-    '{"bundled":true,"original_questions":22,"added_questions":13}'::jsonb
+    '{"bundled":true,"original_questions":22,"added_questions":22}'::jsonb
   ),
   (
     '00000000-0000-4000-8000-000000000704', 'july-04', '2026-07-04',
     'Everyday English: When Life Happens', 'Daily Life Survival English',
     'published', 'both', 'legacy_zip', 1,
-    '{"bundled":true,"original_questions":27,"added_questions":13}'::jsonb
+    '{"bundled":true,"original_questions":27,"added_questions":22}'::jsonb
   ),
   (
     '00000000-0000-4000-8000-000000000705', 'july-05', '2026-07-05',
     'Natural Reactions & Everyday Choices', 'Reactions, Reasons & Choices',
     'published', 'both', 'legacy_zip', 1,
-    '{"bundled":true,"original_questions":24,"added_questions":13}'::jsonb
+    '{"bundled":true,"original_questions":24,"added_questions":22}'::jsonb
   ),
   (
     '00000000-0000-4000-8000-000000000706', 'july-06', '2026-07-06',
     'Connected Speech & Useful Conversation', 'July 6 Complete Review',
     'published', 'both', 'legacy_zip', 1,
-    '{"bundled":true,"original_questions":34,"added_questions":13}'::jsonb
+    '{"bundled":true,"original_questions":34,"added_questions":22}'::jsonb
   )
 -- Refresh descriptive catalogue fields without undoing a teacher's publishing
 -- or audience decision on a subsequent seed run.

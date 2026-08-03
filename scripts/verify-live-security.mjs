@@ -69,9 +69,9 @@ const previewLessonCount = Array.isArray(publicLessons.rows)
 if (previewLessonCount !== 2) {
   failures.push(`Expected exactly 2 public preview lessons; received ${previewLessonCount}.`);
 }
-if (publicQuestions.status !== 200 || publicQuestions.rows?.length !== 62) {
+if (publicQuestions.status !== 200 || publicQuestions.rows?.length !== 80) {
   failures.push(
-    `Expected 62 anonymous preview questions; received status ${publicQuestions.status} and ${
+    `Expected 80 anonymous preview questions; received status ${publicQuestions.status} and ${
       Array.isArray(publicQuestions.rows) ? publicQuestions.rows.length : "no"
     } rows.`,
   );
@@ -112,7 +112,7 @@ if (failures.length) {
   console.log("Live Supabase security verification passed.");
   console.log("  ✓ 17 published public lessons");
   console.log("  ✓ exactly 2 free preview lessons");
-  console.log("  ✓ 62 anonymous preview activities; expanded member activities remain protected");
+  console.log("  ✓ 80 anonymous preview activities; expanded member activities remain protected");
   console.log("  ✓ anonymous full payloads are Free-only; safe teaser view currently has 0 configured rows");
   console.log("  ✓ 2 public Standard/Premium plan descriptions");
   console.log(

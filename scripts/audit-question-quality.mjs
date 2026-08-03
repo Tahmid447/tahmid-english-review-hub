@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { legacyAdditions as legacyPhrases } from "../src/data/curriculum.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const readJson = (relative) => JSON.parse(fs.readFileSync(path.join(root, relative), "utf8"));
@@ -20,9 +21,10 @@ const unique = (values) => new Set(values).size === values.length;
 const escapeCell = (value) => clean(value).replaceAll("|", "\\|");
 const visualTargetByAsset = new Map(manifest.questions.map((entry) => {
   const lesson = drafts.find((candidate) => candidate.id === entry.lessonId);
+  const phrases = lesson?.phrases || legacyPhrases[entry.lessonId];
   return [entry.asset, {
     lessonId: entry.lessonId,
-    phrase: lesson?.phrases?.[entry.phraseIndex] || null,
+    phrase: phrases?.[entry.phraseIndex] || null,
   }];
 }));
 
@@ -200,9 +202,9 @@ for (const lesson of lessons) {
   });
 }
 
-if (rows.length !== 562) errors.push(`Expected 562 activities; found ${rows.length}.`);
+if (rows.length !== 616) errors.push(`Expected 616 activities; found ${rows.length}.`);
 if (!unique(rows.map((row) => row.id))) errors.push("Question IDs are not unique across all lessons.");
-if (manifest.questions.length !== 55) errors.push(`Expected 55 visual briefs; found ${manifest.questions.length}.`);
+if (manifest.questions.length !== 85) errors.push(`Expected 85 visual briefs; found ${manifest.questions.length}.`);
 if (!visualQa.allManifestAssetsChecked || visualQa.manifestAssetCount !== manifest.questions.length) {
   errors.push("Human visual QA record does not cover the current manifest.");
 }
@@ -230,9 +232,9 @@ const report = [
   "",
   `- ${legacyTypingIds.length} legacy typing activities had only a Japanese prompt. Added an explicit English instruction and retained the Japanese target: ${legacyTypingIds.join(", ")}.`,
   `- ${legacyMatchingIds.length} legacy matching activities lacked a learning explanation. Added a bilingual explanation of one-to-one whole-meaning matching: ${legacyMatchingIds.join(", ")}.`,
-  "- Replaced generic generated hints/explanations across all 419 generated activities (78 legacy additions + 341 expanded activities) with format-specific bilingual guidance that states the model answer and why it fits.",
-  `- Corrected ${customVisuals.length} potentially ambiguous visual choice sets by selecting semantically distinct distractors: ${customVisuals.map((item) => `${item.lessonId}-draft-visual-${item.slot}`).join(", ")}.`,
-  `- Corrected the image mismatch documented in scripts/visual-human-qa.json: ${visualQa.findings.map((finding) => `${finding.questionId} — ${finding.fix}`).join(" ")}`,
+  "- Replaced generic generated hints/explanations across all 473 generated activities (132 legacy additions + 341 expanded activities) with format-specific bilingual guidance that states the model answer and why it fits.",
+  `- Corrected ${customVisuals.length} potentially ambiguous visual choice sets by selecting semantically distinct distractors: ${customVisuals.map((item) => `${item.lessonId}-visual-${item.slot}`).join(", ")}.`,
+  `- Visual corrections and additions documented in scripts/visual-human-qa.json: ${visualQa.findings.map((finding) => `${finding.questionId || finding.questionIds} — ${finding.fix}`).join(" ")}`,
   "- Changed runtime behavior so each new practice run shuffles both question order and choice order automatically; a resumed run retains its saved order.",
   "",
   "## Lesson summary",

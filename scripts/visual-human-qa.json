@@ -1,7 +1,7 @@
 {
   "checkedAt": "2026-08-03",
   "method": "Human visual inspection of every WebP against its manifest scene, target sentence, and displayed objects/actions.",
-  "manifestAssetCount": 55,
+  "manifestAssetCount": 85,
   "allManifestAssetsChecked": true,
   "status": "pass_after_correction",
   "findings": [
@@ -11,6 +11,22 @@
       "before": "The image showed repeated phone notifications but did not identify the male person referred to by ‘He’.",
       "fix": "Replaced the illustration with one that shows repeated calls from the same identifiable male contact and the learner's frustration.",
       "after": "The subject, pronoun, repeated action, and emotional meaning now match ‘He’s getting on my nerves.’",
+      "status": "fixed_and_rechecked"
+    },
+    {
+      "assets": "/assets/questions/visual/{june-28,june-29,june-30,july-04,july-05,july-06}-*.webp",
+      "questionIds": "The 30 legacy expansion questions ending in extra-visual-1 through extra-visual-5",
+      "before": "The first six lessons had no visual questions, so learners could not practise matching these lesson phrases to concrete scenes.",
+      "fix": "Created and inspected five lesson-specific WebP illustrations for each of the six lessons, then checked every image against its manifest scene, target sentence, distractors, alt text, hint, and explanations.",
+      "after": "All six lessons now have five visually distinct questions whose target meaning is supported by the visible action and whose distractors describe materially different situations.",
+      "status": "added_and_checked"
+    },
+    {
+      "assets": "/assets/questions/visual/june-30-03-first-half-goal.webp and /assets/questions/visual/june-30-04-exciting-second-half.webp",
+      "questionIds": "june-30-extra-visual-3 and june-30-extra-visual-4",
+      "before": "The first generated versions used ambiguous analog clocks that did not reliably distinguish the first half from the second half.",
+      "fix": "Rejected both drafts and regenerated them with clear digital match clocks showing 32:00 and 78:00.",
+      "after": "The goal scene is unambiguously before halftime and the excited late-match scene is unambiguously in the second half.",
       "status": "fixed_and_rechecked"
     }
   ]

@@ -1,34 +1,34 @@
 # Question quality audit
 
-Generated: 2026-08-03T13:54:20.520Z
+Generated: 2026-08-03T14:49:05.687Z
 
 ## Scope and method
 
-- Audited all 17 lessons and 562 activities one by one with format-specific integrity checks.
+- Audited all 17 lessons and 616 activities one by one with format-specific integrity checks.
 - Every activity was checked for bilingual prompt, hint, and explanation; answer completeness; unique choice text; exactly one keyed choice where applicable; and required audio/speaking/order/matching/sorting fields.
 - Every visual activity was also checked that its keyed English/Japanese answer equals the lesson phrase selected by the manifest and that both explanations explicitly identify that model answer.
-- Audited all 55 visual questions against the manifest and file inventory; the visual QA record confirms human inspection of every WebP scene.
+- Audited all 85 visual questions against the manifest and file inventory; the visual QA record confirms human inspection of every WebP scene.
 - This report distinguishes programmatic whole-corpus checks from the human image review; it does not label an unchecked item as complete.
 
 ## Corrections made in this audit
 
 - 31 legacy typing activities had only a Japanese prompt. Added an explicit English instruction and retained the Japanese target: july-04-original-q24, july-04-original-q25, july-04-original-q26, july-04-original-q27, july-05-original-q20, july-05-original-q21, july-05-original-q22, july-05-original-q23, july-05-original-q24, july-06-original-q28, july-06-original-q29, july-06-original-q30, july-06-original-q31, july-06-original-q32, july-06-original-q33, july-06-original-q34, june-28-original-q17a, june-28-original-q17b, june-28-original-q17c, june-28-original-q17d, june-28-original-q17e, june-29-original-q12a, june-29-original-q12b, june-29-original-q12c, june-29-original-q12d, june-30-original-q17, june-30-original-q18, june-30-original-q19, june-30-original-q20, june-30-original-q21, june-30-original-q22.
 - 7 legacy matching activities lacked a learning explanation. Added a bilingual explanation of one-to-one whole-meaning matching: july-04-original-q23, july-05-original-q9, july-06-original-q11, july-06-original-q25, june-28-original-q16, june-29-original-q11, june-30-original-q16.
-- Replaced generic generated hints/explanations across all 419 generated activities (78 legacy additions + 341 expanded activities) with format-specific bilingual guidance that states the model answer and why it fits.
-- Corrected 6 potentially ambiguous visual choice sets by selecting semantically distinct distractors: july-19-draft-visual-3, july-22-draft-visual-5, july-25-draft-visual-1, july-25-draft-visual-4, july-26-draft-visual-1, july-26-draft-visual-5.
-- Corrected the image mismatch documented in scripts/visual-human-qa.json: july-25-draft-visual-4 — Replaced the illustration with one that shows repeated calls from the same identifiable male contact and the learner's frustration.
+- Replaced generic generated hints/explanations across all 473 generated activities (132 legacy additions + 341 expanded activities) with format-specific bilingual guidance that states the model answer and why it fits.
+- Corrected 36 potentially ambiguous visual choice sets by selecting semantically distinct distractors: june-28-visual-1, june-28-visual-2, june-28-visual-3, june-28-visual-4, june-28-visual-5, june-29-visual-1, june-29-visual-2, june-29-visual-3, june-29-visual-4, june-29-visual-5, june-30-visual-1, june-30-visual-2, june-30-visual-3, june-30-visual-4, june-30-visual-5, july-04-visual-1, july-04-visual-2, july-04-visual-3, july-04-visual-4, july-04-visual-5, july-05-visual-1, july-05-visual-2, july-05-visual-3, july-05-visual-4, july-05-visual-5, july-06-visual-1, july-06-visual-2, july-06-visual-3, july-06-visual-4, july-06-visual-5, july-19-visual-3, july-22-visual-5, july-25-visual-1, july-25-visual-4, july-26-visual-1, july-26-visual-5.
+- Visual corrections and additions documented in scripts/visual-human-qa.json: july-25-draft-visual-4 — Replaced the illustration with one that shows repeated calls from the same identifiable male contact and the learner's frustration. The 30 legacy expansion questions ending in extra-visual-1 through extra-visual-5 — Created and inspected five lesson-specific WebP illustrations for each of the six lessons, then checked every image against its manifest scene, target sentence, distractors, alt text, hint, and explanations. june-30-extra-visual-3 and june-30-extra-visual-4 — Rejected both drafts and regenerated them with clear digital match clocks showing 32:00 and 78:00.
 - Changed runtime behavior so each new practice run shuffles both question order and choice order automatically; a resumed run retains its saved order.
 
 ## Lesson summary
 
 | Lesson | Activities | Format inventory | Result |
 |---|---:|---|---|
-| july-04 | 40 | dialogue:1, listenChoice:2, listenType:2, matching:2, mcq:12, order:4, situation:8, sorting:1, speaking:2, translation:1, truefalse:1, typing:4 | PASS |
-| july-05 | 37 | dialogue:1, listenChoice:2, listenType:2, matching:2, mcq:9, order:4, situation:7, sorting:1, speaking:2, translation:1, truefalse:1, typing:5 | PASS |
-| july-06 | 47 | dialogue:1, listenChoice:2, listenType:2, matching:3, mcq:12, order:6, situation:9, sorting:1, speaking:2, translation:1, truefalse:1, typing:7 | PASS |
-| june-28 | 34 | dialogue:1, listenChoice:2, listenType:2, matching:2, mcq:8, order:1, situation:8, sorting:1, speaking:2, translation:1, truefalse:1, typing:5 | PASS |
-| june-29 | 28 | dialogue:1, grid:1, listenChoice:2, listenType:2, matching:2, mcq:7, order:1, situation:3, sorting:1, speaking:2, translation:1, truefalse:1, typing:4 | PASS |
-| june-30 | 35 | dialogue:1, listenChoice:2, listenType:2, matching:2, mcq:7, order:4, situation:6, sorting:1, speaking:2, translation:1, truefalse:1, typing:6 | PASS |
+| july-04 | 49 | dialogue:1, listenChoice:2, listenType:3, matching:2, mcq:12, order:4, situation:13, sorting:1, speaking:5, translation:1, truefalse:1, typing:4 | PASS |
+| july-05 | 46 | dialogue:1, listenChoice:2, listenType:3, matching:2, mcq:9, order:4, situation:12, sorting:1, speaking:5, translation:1, truefalse:1, typing:5 | PASS |
+| july-06 | 56 | dialogue:1, listenChoice:2, listenType:3, matching:3, mcq:12, order:6, situation:14, sorting:1, speaking:5, translation:1, truefalse:1, typing:7 | PASS |
+| june-28 | 43 | dialogue:1, listenChoice:2, listenType:3, matching:2, mcq:8, order:1, situation:13, sorting:1, speaking:5, translation:1, truefalse:1, typing:5 | PASS |
+| june-29 | 37 | dialogue:1, grid:1, listenChoice:2, listenType:3, matching:2, mcq:7, order:1, situation:8, sorting:1, speaking:5, translation:1, truefalse:1, typing:4 | PASS |
+| june-30 | 44 | dialogue:1, listenChoice:2, listenType:3, matching:2, mcq:7, order:4, situation:11, sorting:1, speaking:5, translation:1, truefalse:1, typing:6 | PASS |
 | july-07 | 31 | dialogue:1, listenChoice:3, listenType:3, matching:1, mcq:4, mistake:1, order:2, situation:6, sorting:1, speaking:5, translation:2, truefalse:2 | PASS |
 | july-11 | 31 | dialogue:1, listenChoice:3, listenType:3, matching:1, mcq:4, mistake:1, order:2, situation:6, sorting:1, speaking:5, translation:2, truefalse:2 | PASS |
 | july-12 | 31 | dialogue:1, listenChoice:3, listenType:3, matching:1, mcq:4, mistake:1, order:2, situation:6, sorting:1, speaking:5, translation:2, truefalse:2 | PASS |
@@ -78,6 +78,10 @@ Generated: 2026-08-03T13:54:20.520Z
 | july-04 | july-04-extra-dictation-2 | listenType | Type the complete sentence you hear. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
 | july-04 | july-04-extra-speaking-1 | speaking | Listen, then say the sentence naturally. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
 | july-04 | july-04-extra-speaking-2 | speaking | Listen, then say the sentence naturally. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
+| july-04 | july-04-extra-dictation-3 | listenType | Type the complete sentence you hear. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
+| july-04 | july-04-extra-speaking-3 | speaking | Say the sentence naturally, then try once more without looking. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
+| july-04 | july-04-extra-speaking-4 | speaking | Say the sentence naturally, then try once more without looking. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
+| july-04 | july-04-extra-speaking-5 | speaking | Say the sentence naturally, then try once more without looking. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
 | july-04 | july-04-extra-true-false | truefalse | “Don’t mention it.” means “どういたしまして。”. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
 | july-04 | july-04-extra-order | order | Put the words in order: あとで雨が降るかもしれません。 | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
 | july-04 | july-04-extra-matching | matching | Match each English phrase with its natural Japanese meaning. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
@@ -85,6 +89,11 @@ Generated: 2026-08-03T13:54:20.520Z
 | july-04 | july-04-extra-dialogue | dialogue | Choose the most natural next line in the conversation. | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | not required | PASS |
 | july-04 | july-04-extra-translation | translation | Translate into English: 急な事情ができました。 | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
 | july-04 | july-04-extra-situation | situation | Which sentence best expresses this meaning: 仕方ありません。 | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | not required | PASS |
+| july-04 | july-04-extra-visual-1 | situation | Which sentence best matches the illustration? | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | manifest + file + human QA | PASS |
+| july-04 | july-04-extra-visual-2 | situation | Which sentence best matches the illustration? | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | manifest + file + human QA | PASS |
+| july-04 | july-04-extra-visual-3 | situation | Which sentence best matches the illustration? | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | manifest + file + human QA | PASS |
+| july-04 | july-04-extra-visual-4 | situation | Which sentence best matches the illustration? | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | manifest + file + human QA | PASS |
+| july-04 | july-04-extra-visual-5 | situation | Which sentence best matches the illustration? | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | manifest + file + human QA | PASS |
 | july-05 | july-05-original-q1 | situation | You want to say 「まあ、美味しいけどね」. Which sentence is natural? | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | not required | PASS |
 | july-05 | july-05-original-q2 | mcq | Which Japanese feeling is closest to “It’s expensive, though”? | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | not required | PASS |
 | july-05 | july-05-original-q3 | mcq | True or False: In casual conversation, “sentence + though” can mean 「〜だけどね」. | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | not required | PASS |
@@ -115,6 +124,10 @@ Generated: 2026-08-03T13:54:20.520Z
 | july-05 | july-05-extra-dictation-2 | listenType | Type the complete sentence you hear. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
 | july-05 | july-05-extra-speaking-1 | speaking | Listen, then say the sentence naturally. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
 | july-05 | july-05-extra-speaking-2 | speaking | Listen, then say the sentence naturally. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
+| july-05 | july-05-extra-dictation-3 | listenType | Type the complete sentence you hear. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
+| july-05 | july-05-extra-speaking-3 | speaking | Say the sentence naturally, then try once more without looking. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
+| july-05 | july-05-extra-speaking-4 | speaking | Say the sentence naturally, then try once more without looking. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
+| july-05 | july-05-extra-speaking-5 | speaking | Say the sentence naturally, then try once more without looking. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
 | july-05 | july-05-extra-true-false | truefalse | “I changed my mind.” means “考えが変わりました。”. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
 | july-05 | july-05-extra-order | order | Put the words in order: どちらの選択肢でも大丈夫です。 | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
 | july-05 | july-05-extra-matching | matching | Match each English phrase with its natural Japanese meaning. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
@@ -122,6 +135,11 @@ Generated: 2026-08-03T13:54:20.520Z
 | july-05 | july-05-extra-dialogue | dialogue | Choose the most natural next line in the conversation. | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | not required | PASS |
 | july-05 | july-05-extra-translation | translation | Translate into English: 天気によります。 | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
 | july-05 | july-05-extra-situation | situation | Which sentence best expresses this meaning: まだ分かりません。 | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | not required | PASS |
+| july-05 | july-05-extra-visual-1 | situation | Which sentence best matches the illustration? | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | manifest + file + human QA | PASS |
+| july-05 | july-05-extra-visual-2 | situation | Which sentence best matches the illustration? | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | manifest + file + human QA | PASS |
+| july-05 | july-05-extra-visual-3 | situation | Which sentence best matches the illustration? | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | manifest + file + human QA | PASS |
+| july-05 | july-05-extra-visual-4 | situation | Which sentence best matches the illustration? | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | manifest + file + human QA | PASS |
+| july-05 | july-05-extra-visual-5 | situation | Which sentence best matches the illustration? | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | manifest + file + human QA | PASS |
 | july-06 | july-06-original-q1 | situation | Choose the most natural way to say 「今日はまだお酒を飲んでいません」. | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | not required | PASS |
 | july-06 | july-06-original-q2 | mcq | Which sentence sounds like a finished-day result? | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | not required | PASS |
 | july-06 | july-06-original-q3 | mcq | True or False: “I didn’t drink alcohol yet” is the best standard sentence for 「まだ飲んでいない」. | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | not required | PASS |
@@ -162,6 +180,10 @@ Generated: 2026-08-03T13:54:20.520Z
 | july-06 | july-06-extra-dictation-2 | listenType | Type the complete sentence you hear. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
 | july-06 | july-06-extra-speaking-1 | speaking | Listen, then say the sentence naturally. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
 | july-06 | july-06-extra-speaking-2 | speaking | Listen, then say the sentence naturally. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
+| july-06 | july-06-extra-dictation-3 | listenType | Type the complete sentence you hear. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
+| july-06 | july-06-extra-speaking-3 | speaking | Say the sentence naturally, then try once more without looking. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
+| july-06 | july-06-extra-speaking-4 | speaking | Say the sentence naturally, then try once more without looking. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
+| july-06 | july-06-extra-speaking-5 | speaking | Say the sentence naturally, then try once more without looking. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
 | july-06 | july-06-extra-true-false | truefalse | “I’ll check and let you know.” means “確認してお知らせします。”. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
 | july-06 | july-06-extra-order | order | Put the words in order: そこが難しいと感じる部分です。 | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
 | july-06 | july-06-extra-matching | matching | Match each English phrase with its natural Japanese meaning. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
@@ -169,6 +191,11 @@ Generated: 2026-08-03T13:54:20.520Z
 | july-06 | july-06-extra-dialogue | dialogue | Choose the most natural next line in the conversation. | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | not required | PASS |
 | july-06 | july-06-extra-translation | translation | Translate into English: だんだん慣れてきました。 | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
 | july-06 | july-06-extra-situation | situation | Which sentence best expresses this meaning: それは今まで試したことがありません。 | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | not required | PASS |
+| july-06 | july-06-extra-visual-1 | situation | Which sentence best matches the illustration? | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | manifest + file + human QA | PASS |
+| july-06 | july-06-extra-visual-2 | situation | Which sentence best matches the illustration? | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | manifest + file + human QA | PASS |
+| july-06 | july-06-extra-visual-3 | situation | Which sentence best matches the illustration? | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | manifest + file + human QA | PASS |
+| july-06 | july-06-extra-visual-4 | situation | Which sentence best matches the illustration? | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | manifest + file + human QA | PASS |
+| july-06 | july-06-extra-visual-5 | situation | Which sentence best matches the illustration? | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | manifest + file + human QA | PASS |
 | june-28 | june-28-original-q1 | mcq | Warm-up: Which sentence is the most polite way to ask 「何を飲みたいですか？」? | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | not required | PASS |
 | june-28 | june-28-original-q2 | situation | Café Mission: Choose the best reply. | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | not required | PASS |
 | june-28 | june-28-original-q3 | mcq | TRUE or FALSE: “I like coffee” and “I’d like coffee” mean exactly the same thing. | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | not required | PASS |
@@ -196,6 +223,10 @@ Generated: 2026-08-03T13:54:20.520Z
 | june-28 | june-28-extra-dictation-2 | listenType | Type the complete sentence you hear. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
 | june-28 | june-28-extra-speaking-1 | speaking | Listen, then say the sentence naturally. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
 | june-28 | june-28-extra-speaking-2 | speaking | Listen, then say the sentence naturally. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
+| june-28 | june-28-extra-dictation-3 | listenType | Type the complete sentence you hear. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
+| june-28 | june-28-extra-speaking-3 | speaking | Say the sentence naturally, then try once more without looking. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
+| june-28 | june-28-extra-speaking-4 | speaking | Say the sentence naturally, then try once more without looking. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
+| june-28 | june-28-extra-speaking-5 | speaking | Say the sentence naturally, then try once more without looking. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
 | june-28 | june-28-extra-true-false | truefalse | “That sounds good.” means “それはよさそうですね。”. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
 | june-28 | june-28-extra-order | order | Put the words in order: ほかに何かいかがですか？ | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
 | june-28 | june-28-extra-matching | matching | Match each English phrase with its natural Japanese meaning. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
@@ -203,6 +234,11 @@ Generated: 2026-08-03T13:54:20.520Z
 | june-28 | june-28-extra-dialogue | dialogue | Choose the most natural next line in the conversation. | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | not required | PASS |
 | june-28 | june-28-extra-translation | translation | Translate into English: 何を注文しましたか？ | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
 | june-28 | june-28-extra-situation | situation | Which sentence best expresses this meaning: 仕方ありません。 | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | not required | PASS |
+| june-28 | june-28-extra-visual-1 | situation | Which sentence best matches the illustration? | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | manifest + file + human QA | PASS |
+| june-28 | june-28-extra-visual-2 | situation | Which sentence best matches the illustration? | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | manifest + file + human QA | PASS |
+| june-28 | june-28-extra-visual-3 | situation | Which sentence best matches the illustration? | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | manifest + file + human QA | PASS |
+| june-28 | june-28-extra-visual-4 | situation | Which sentence best matches the illustration? | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | manifest + file + human QA | PASS |
+| june-28 | june-28-extra-visual-5 | situation | Which sentence best matches the illustration? | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | manifest + file + human QA | PASS |
 | june-29 | june-29-original-q1 | mcq | Which sentence means 「それ聞こえた」? | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | not required | PASS |
 | june-29 | june-29-original-q2 | mcq | Which sentence means 「それ聞いたよ」 as information? | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | not required | PASS |
 | june-29 | june-29-original-q3 | mcq | Which sentence means 「それについて聞いた」? | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | not required | PASS |
@@ -224,6 +260,10 @@ Generated: 2026-08-03T13:54:20.520Z
 | june-29 | june-29-extra-dictation-2 | listenType | Type the complete sentence you hear. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
 | june-29 | june-29-extra-speaking-1 | speaking | Listen, then say the sentence naturally. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
 | june-29 | june-29-extra-speaking-2 | speaking | Listen, then say the sentence naturally. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
+| june-29 | june-29-extra-dictation-3 | listenType | Type the complete sentence you hear. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
+| june-29 | june-29-extra-speaking-3 | speaking | Say the sentence naturally, then try once more without looking. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
+| june-29 | june-29-extra-speaking-4 | speaking | Say the sentence naturally, then try once more without looking. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
+| june-29 | june-29-extra-speaking-5 | speaking | Say the sentence naturally, then try once more without looking. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
 | june-29 | june-29-extra-true-false | truefalse | “The button is in the bottom-left corner.” means “ボタンは左下にあります。”. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
 | june-29 | june-29-extra-order | order | Put the words in order: 彼女が言ったことが聞こえませんでした。 | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
 | june-29 | june-29-extra-matching | matching | Match each English phrase with its natural Japanese meaning. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
@@ -231,6 +271,11 @@ Generated: 2026-08-03T13:54:20.520Z
 | june-29 | june-29-extra-dialogue | dialogue | Choose the most natural next line in the conversation. | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | not required | PASS |
 | june-29 | june-29-extra-translation | translation | Translate into English: それがはっきり聞こえました。 | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
 | june-29 | june-29-extra-situation | situation | Which sentence best expresses this meaning: その通り。それが私の言いたいことです。 | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | not required | PASS |
+| june-29 | june-29-extra-visual-1 | situation | Which sentence best matches the illustration? | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | manifest + file + human QA | PASS |
+| june-29 | june-29-extra-visual-2 | situation | Which sentence best matches the illustration? | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | manifest + file + human QA | PASS |
+| june-29 | june-29-extra-visual-3 | situation | Which sentence best matches the illustration? | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | manifest + file + human QA | PASS |
+| june-29 | june-29-extra-visual-4 | situation | Which sentence best matches the illustration? | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | manifest + file + human QA | PASS |
+| june-29 | june-29-extra-visual-5 | situation | Which sentence best matches the illustration? | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | manifest + file + human QA | PASS |
 | june-30 | june-30-original-q1 | situation | You want to say 「それがイライラする」. Which sentence is natural? | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | not required | PASS |
 | june-30 | june-30-original-q2 | mcq | Which sentence means 「私はイライラしています」? | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | not required | PASS |
 | june-30 | june-30-original-q3 | situation | Which feeling word fits best? | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | not required | PASS |
@@ -259,6 +304,10 @@ Generated: 2026-08-03T13:54:20.520Z
 | june-30 | june-30-extra-dictation-2 | listenType | Type the complete sentence you hear. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
 | june-30 | june-30-extra-speaking-1 | speaking | Listen, then say the sentence naturally. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
 | june-30 | june-30-extra-speaking-2 | speaking | Listen, then say the sentence naturally. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
+| june-30 | june-30-extra-dictation-3 | listenType | Type the complete sentence you hear. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
+| june-30 | june-30-extra-speaking-3 | speaking | Say the sentence naturally, then try once more without looking. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
+| june-30 | june-30-extra-speaking-4 | speaking | Say the sentence naturally, then try once more without looking. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
+| june-30 | june-30-extra-speaking-5 | speaking | Say the sentence naturally, then try once more without looking. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
 | june-30 | june-30-extra-true-false | truefalse | “The second half was exciting.” means “後半はわくわくしました。”. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
 | june-30 | june-30-extra-order | order | Put the words in order: 何もうまくいかず、もどかしかったです。 | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
 | june-30 | june-30-extra-matching | matching | Match each English phrase with its natural Japanese meaning. | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
@@ -266,6 +315,11 @@ Generated: 2026-08-03T13:54:20.520Z
 | june-30 | june-30-extra-dialogue | dialogue | Choose the most natural next line in the conversation. | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | not required | PASS |
 | june-30 | june-30-extra-translation | translation | Translate into English: 軽い味なので紅茶の方が好きです。 | format answer valid | EN/JP prompt + hint + explanation | not required | PASS |
 | june-30 | june-30-extra-situation | situation | Which sentence best expresses this meaning: 誰が勝つと思いますか？ | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | not required | PASS |
+| june-30 | june-30-extra-visual-1 | situation | Which sentence best matches the illustration? | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | manifest + file + human QA | PASS |
+| june-30 | june-30-extra-visual-2 | situation | Which sentence best matches the illustration? | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | manifest + file + human QA | PASS |
+| june-30 | june-30-extra-visual-3 | situation | Which sentence best matches the illustration? | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | manifest + file + human QA | PASS |
+| june-30 | june-30-extra-visual-4 | situation | Which sentence best matches the illustration? | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | manifest + file + human QA | PASS |
+| june-30 | june-30-extra-visual-5 | situation | Which sentence best matches the illustration? | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | manifest + file + human QA | PASS |
 | july-07 | july-07-draft-choice-1 | mcq | Choose the English sentence that means: ノートを持ってきました。 | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | not required | PASS |
 | july-07 | july-07-draft-choice-2 | mcq | Choose the English sentence that means: 新しいノートを買いました。 | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | not required | PASS |
 | july-07 | july-07-draft-choice-3 | mcq | Choose the English sentence that means: あなたは私にそうするよう言いました。 | one keyed choice; distractors unique | EN/JP prompt + hint + explanation | not required | PASS |

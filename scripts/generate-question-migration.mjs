@@ -21,6 +21,12 @@ const expandedOutput = path.join(
   "migrations",
   "202608020009_expanded_lesson_questions.sql",
 );
+const legacySkillExpansionOutput = path.join(
+  root,
+  "supabase",
+  "migrations",
+  "202608030013_expand_legacy_lesson_skills.sql",
+);
 
 const sqlString = (value) =>
   `'${String(value ?? "").replaceAll("'", "''")}'`;
@@ -52,6 +58,7 @@ const bundles = [
 
 const rows = [];
 const expandedRows = [];
+const legacySkillExpansionRows = [];
 for (const bundle of bundles) {
   bundle.questions.forEach((question, position) => {
     const format = question.format || question.type;
@@ -67,6 +74,12 @@ for (const bundle of bundles) {
     ].join(", ");
     rows.push(row);
     if (bundle.sourceType === "notion") expandedRows.push(row);
+    if (
+      bundle.sourceType === "legacy"
+      && /-extra-(?:dictation-3|speaking-[3-5]|visual-[1-5])$/.test(question.id)
+    ) {
+      legacySkillExpansionRows.push(row);
+    }
   });
 }
 
@@ -122,8 +135,20 @@ where slug in (
   'july-22', 'july-23', 'july-25', 'july-26', 'july-27'
 );
 `;
+const legacySkillExpansionSql = `${makeQuestionUpsert(
+  legacySkillExpansionRows,
+  "-- Add visual, listening, and speaking coverage to the six legacy lessons",
+)}
+update public.review_lessons
+set content_version = greatest(content_version, 3),
+    content = jsonb_set(content, '{added_questions}', '22'::jsonb, true),
+    updated_at = now()
+where slug in ('june-28', 'june-29', 'june-30', 'july-04', 'july-05', 'july-06');
+`;
 
 fs.writeFileSync(output, sql);
 fs.writeFileSync(expandedOutput, expandedSql);
+fs.writeFileSync(legacySkillExpansionOutput, legacySkillExpansionSql);
 console.log(`Generated ${rows.length} RLS-protected question rows.`);
 console.log(`Generated ${expandedRows.length} expanded lesson rows for migration 009.`);
+console.log(`Generated ${legacySkillExpansionRows.length} legacy skill-expansion rows for migration 013.`);

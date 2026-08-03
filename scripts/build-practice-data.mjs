@@ -232,6 +232,30 @@ function makeLegacyQuestions(lessonId, phrases) {
     });
   });
 
+  const fifthListening = get(6);
+  result.push({
+    ...base(`${lessonId}-extra-dictation-3`, "listenType", section, fifthListening),
+    prompt: "Type the complete sentence you hear.",
+    promptJa: "聞こえた英文をそのまま入力してください。",
+    audioText: fifthListening.en,
+    accepted: [fifthListening.en],
+    explanation: `The complete sentence is “${fifthListening.en}”. Listen for every short grammar word as well as the key expression.`,
+    explanationJa: `全文は「${fifthListening.en}」です。中心表現だけでなく、短い文法語まで聞き取りましょう。`,
+  });
+
+  [0, 3, 7].forEach((index, offset) => {
+    const target = get(index);
+    result.push({
+      ...base(`${lessonId}-extra-speaking-${offset + 3}`, "speaking", section, target),
+      prompt: "Say the sentence naturally, then try once more without looking.",
+      promptJa: "自然に言ってから、英文を見ずにもう一度話してみましょう。",
+      speakText: target.en,
+      speakJa: target.jp,
+      explanation: `Model: “${target.en}” (${target.jp}). Connect the complete message naturally; the second attempt checks independent recall.`,
+      explanationJa: `お手本は「${target.en}」（${target.jp}）です。文全体を自然につなげ、2回目は見ずに思い出して言いましょう。`,
+    });
+  });
+
   const truth = get(6);
   result.push({
     ...base(`${lessonId}-extra-true-false`, "truefalse", "Use It", truth),
@@ -314,6 +338,39 @@ function makeLegacyQuestions(lessonId, phrases) {
     explanation: `“${situation.en}” directly expresses “${situation.jp}”. The other choices describe different situations.`,
     explanationJa: `「${situation.en}」が「${situation.jp}」を直接表します。他の選択肢は別の場面を表しています。`,
   });
+
+  const visualQuestions = visualQuestionsByLesson.get(lessonId) || [];
+  if (visualQuestions.length !== 5) {
+    throw new Error(`${lessonId} needs exactly five visual-question briefs; found ${visualQuestions.length}`);
+  }
+  visualQuestions
+    .sort((left, right) => left.slot - right.slot)
+    .forEach((visual) => {
+      const target = get(visual.phraseIndex);
+      result.push({
+        ...base(`${lessonId}-extra-visual-${visual.slot}`, "situation", "See It", target),
+        prompt: "Which sentence best matches the illustration?",
+        promptJa: "イラストの場面に最も合う英文を選んでください。",
+        choices: visualChoice(phrases, visual),
+        correct: "a",
+        image: visual.asset,
+        imageAlt: visual.imageAlt,
+        visualAssetId: `${lessonId}-${String(visual.slot).padStart(2, "0")}`,
+        hint: `Use the visible action and objects as evidence: ${visual.imageAlt} Choose the sentence that describes the complete scene.`,
+        hintJa: `人物の動作や物を確認し、「${target.jp}」に合う場面か考えましょう。見えている場面全体を説明する英文を選んでください。`,
+        explanation: `The illustration shows this scene: ${visual.imageAlt} That directly matches “${target.en}” (${target.jp}); the other choices describe different actions or situations.`,
+        explanationJa: `人物の動作や物が「${target.jp}」という場面を表しています。そのため「${target.en}」が一致し、他の選択肢は別の動作・場面です。`,
+      });
+    });
+
+  const listeningCount = result.filter(({ format }) => ["listenChoice", "listenType"].includes(format)).length;
+  const speakingCount = result.filter(({ format }) => format === "speaking").length;
+  const visualCount = result.filter(({ image }) => Boolean(image)).length;
+  if (listeningCount < 5 || speakingCount < 5 || visualCount < 5) {
+    throw new Error(
+      `${lessonId} skill minimums not met (visual ${visualCount}, listening ${listeningCount}, speaking ${speakingCount})`,
+    );
+  }
 
   return result;
 }

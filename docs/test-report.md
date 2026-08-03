@@ -8,8 +8,8 @@ Last updated: **August 3, 2026**
   recorded SHA-256 hashes.
 - All six original lessons and all **143 original activities** are present with
   stable IDs.
-- All **78 added activities** and **341 Notion-derived activities** are present.
-- The complete reviewed source contains **562 activities in 14 formats**.
+- All **132 added activities** and **341 Notion-derived activities** are present.
+- The complete reviewed source contains **616 activities in 14 formats**.
 - The production build excludes `notion-drafts.json` and `curriculum.js`.
 - The public route catalogue contains all 17 reviewed lessons after the v9
   publication decision.
@@ -27,22 +27,22 @@ npm run verify:live
 
 ## August 3 current verification snapshot
 
-- `npm test`: PASS — 17 lessons, 562 activities, 14 formats and 1,369
+- `npm test`: PASS — 17 lessons, 616 activities, 14 formats and 1,369
   integrity/security assertions.
-- `npm run build`: PASS — 562 protected question rows generated; private source
+- `npm run build`: PASS — 616 protected question rows generated; private source
   files remain excluded from `dist/`.
-- `npm run verify:visuals`: PASS — all 55 WebP visual-question assets exist and
+- `npm run verify:visuals`: PASS — all 85 WebP visual-question assets exist and
   match the manifest dimensions/type checks.
-- Local built-site HTTP visual check: PASS — 55/55 assets return HTTP 200,
+- Local built-site HTTP visual check: PASS — the previously published 55/55 assets returned HTTP 200;
   `image/webp`, and non-empty image bytes. The local preview server's missing
   WebP MIME mapping was found during this check and fixed.
 - `npm run verify:live`: PASS — 17 public catalogue lessons, exactly two free
-  previews, 62 anonymous preview activities, two plan descriptions, and 18
+  previews, 80 anonymous preview activities, two plan descriptions, and 18
   private/base resources denying anonymous reads.
 - `npm run audit:audio-live`: PASS — one live natural-English request for every
   lesson plus Japanese and British voice requests; every listening/speaking
   activity has a non-empty target.
-- Local browser: PASS — the home summary displays 17 lessons and 562 activities;
+- Local browser before the current preview deploy: PASS — the home summary displayed 17 lessons and 562 activities;
   new runs automatically shuffle both question and choice order; 0.5x, 1x and
   1.5x playback and mixed Japanese/English sequencing complete without a stuck
   control.
@@ -55,7 +55,8 @@ npm run verify:live
   August 3. The private Premium recording bucket and all three authenticated
   storage policies are visible after application. Migration 012 verification
   returned two question-access columns, the payload-free teaser view and the
-  question-access function. All 562 existing questions still have the Free
+  question-access function. Migration 013 then raised the live total to 616;
+  all 616 questions still have the Free
   default; no lesson was silently moved behind a paid tier.
 - Per-question plan controls: PASS in local static/security tests — Teacher
   Studio exposes Free, Standard, Premium, safe-teaser and hidden settings. The
@@ -65,7 +66,7 @@ npm run verify:live
   tier-locked in the live catalogue.
 - New v9 Netlify preview: PASS at
   `https://tahmid-english-review-hub-v9-preview.netlify.app`, deployed from the
-  working v9 branch. Hosted checks passed for 17/562 summary, 55/55 WebP
+  working v9 branch. The previous hosted checks passed for 17/562 summary, 55/55 WebP
   responses, automatic reshuffle, 0.5x/1.5x selection, natural and mixed
   English/Japanese audio, Google callback, sign-out and the protected Teacher
   Studio entry page. Real-device mobile, microphone upload and valid-teacher
@@ -73,7 +74,7 @@ npm run verify:live
 
 The July 30 sections below are retained as dated historical evidence. Their
 485-question counts describe the pre-expansion deployment and are not the
-current 562-activity source/build total.
+current 616-activity source/build total.
 
 ## July 30 live Supabase verification (before the 31-activity expansion)
 
@@ -221,7 +222,7 @@ and authorised.
 - Sign-in and create-account panels switch correctly and expose eight
   privacy-conscious profile fields/controls.
 - The complete source now passes all 1,369 content/security assertions and
-  all 562-activity validation.
+  all 616-activity validation.
 - The Lesson Guide shows non-empty, bilingual key points and playable phrases.
 - Natural voice playback completed without browser console errors; requests now
   retry once and reject invalid/empty audio without falling back to a computer
@@ -238,7 +239,7 @@ and authorised.
 - All 11 Notion-derived lessons generate 31 activities each.
 - Every lesson has five distinct illustration-led activities, six listening
   activities, and five speaking activities.
-- The reviewed source and protected question migration contain 562 activities.
+- The reviewed source and protected question migration contain 616 activities.
 - The visual production manifest contains 55 unique WebP paths, alt text, and
   lesson-specific scene briefs.
 - `npm test` passes with 1,369 assertions.

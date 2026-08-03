@@ -19,12 +19,13 @@ Do not place OAuth client secrets, passwords, service-role keys, or access token
 - Japanese explanation playback can switch naturally between Japanese and quoted English voices.
 - Teacher Studio now has learner detail views, assignment and learner-lock controls, archive restore, guarded permanent deletion, complete newly generated access-code display/copy, and safer access-code validation/timeout UX.
 - Standard/Premium database foundation was added for speaking/essay submissions, teacher feedback, tier controls, and feature overrides.
-- The complete library contains 17 lessons and 562 activities. The 11
-  Notion-derived lessons have 31 activities each: 5 visual, 6 listening, 5
-  speaking, and 15 varied reading/writing/dialogue activities.
+- The complete library contains 17 lessons and 616 activities. Every lesson now
+  has at least 5 visual, 5 listening and 5 speaking activities. The 11
+  Notion-derived lessons have 31 activities each; the six legacy lessons retain
+  every original activity and now have 22 additive activities each.
 - Google OAuth client was created in Google Cloud, registered in Supabase, limited to `openid`, email, and profile, and pushed to production status.
 - Supabase Site URL and redirect allow-list already include production, preview, and local test URLs.
-- All 55 WebP illustration assets are present and visually inspected;
+- All 85 WebP illustration assets are present and visually inspected;
   `npm run verify:visuals` passes. One July 25 image mismatch was replaced and
   rechecked.
 - `npm test`, `npm run build`, `npm run verify:live`, question-quality audit,
@@ -32,21 +33,21 @@ Do not place OAuth client secrets, passwords, service-role keys, or access token
   in `docs/question-quality-audit.md`.
 - New practice runs always shuffle question and choice order. Resumed runs keep
   their saved order.
-- Supabase migrations 007, 008, 009, 010, 011 and 012 are reflected in the live
+- Supabase migrations 007, 008, 009, 010, 011, 012 and 013 are reflected in the live
   schema. Migration 011 was verified in the dashboard: the private
   `review-premium-recordings` bucket has a 10 MB limit, four allowed audio
   MIME types, and the three authenticated storage policies.
 - Migration 012 adds secure per-question Free, Standard and Premium controls.
   Teacher Studio can choose a payload-free teaser or complete hiding below the
   required plan. The live schema check confirmed both columns, the safe teaser
-  view and the question-access function. All existing 562 questions remain
+  view and the question-access function. All existing 616 questions remain
   Free until the teacher deliberately changes an individual question.
 - `membership-access` Edge Function version 2 is live and returns bounded,
   reason-specific access-code errors.
 - The v9 preview deploys automatically from
   `upgrade/review-hub-v9-playful-jp`. Its origin is present in the Edge CORS
   allow-list and the Supabase Auth redirect allow-list. Hosted Google callback,
-  sign-out, 55/55 WebP delivery, shuffle, audio speed selection and
+  sign-out, 85/85 WebP delivery, shuffle, audio speed selection and
   English/Japanese audio complete without browser console errors.
 
 ## Must be completed before deployment

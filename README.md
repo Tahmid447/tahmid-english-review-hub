@@ -30,9 +30,9 @@ Supabase Auth and Row Level Security.
 ## Content inventory
 
 - 143 migrated original questions across six verified lessons
-- 78 added listening, dictation, speaking, and mixed-format activities
+- 132 added visual, listening, dictation, speaking, and mixed-format activities
 - 341 activities across 11 Notion-derived, now-published lessons
-- 562 activities in the reviewed source bundle
+- 616 activities in the reviewed source bundle
 - 14 implemented activity formats
 
 All 17 reviewed lessons are listed in the general catalogue. Two lessons are

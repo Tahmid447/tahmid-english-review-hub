@@ -1,17 +1,17 @@
 # Live audio audit
 
-Checked: 2026-08-03T13:52:38.334Z
+Checked: 2026-08-03T14:59:28.692Z
 
 Every lesson passed a structural check for all listening and speaking audio targets. One representative natural-English request per lesson was then sent to the live speech service and validated as a non-empty audio response. Japanese Nanami and British Libby requests were also validated. Browser playback speed and mixed-language sequencing are covered separately by the learning-experience browser/unit tests.
 
 | Lesson | Listening targets | Speaking targets | EN explanations | JA explanations | Live request |
 |---|---:|---:|---:|---:|---|
-| 2026-06-28 · Café Talk & Polite Answers (june-28) | 4 | 2 | 34 | 34 | PASS · audio/mpeg · 11808 bytes |
-| 2026-06-29 · What Did You Hear? Reactions & Position (june-29) | 4 | 2 | 28 | 28 | PASS · audio/mpeg · 11088 bytes |
-| 2026-06-30 · Feelings, Preferences & Match Talk (june-30) | 4 | 2 | 35 | 35 | PASS · audio/mpeg · 12384 bytes |
-| 2026-07-04 · Everyday English: When Life Happens (july-04) | 4 | 2 | 40 | 40 | PASS · audio/mpeg · 13824 bytes |
-| 2026-07-05 · Natural Reactions & Everyday Choices (july-05) | 4 | 2 | 37 | 37 | PASS · audio/mpeg · 10656 bytes |
-| 2026-07-06 · Connected Speech & Useful Conversation (july-06) | 4 | 2 | 47 | 47 | PASS · audio/mpeg · 10656 bytes |
+| 2026-06-28 · Café Talk & Polite Answers (june-28) | 5 | 5 | 43 | 43 | PASS · audio/mpeg · 11808 bytes |
+| 2026-06-29 · What Did You Hear? Reactions & Position (june-29) | 5 | 5 | 37 | 37 | PASS · audio/mpeg · 11088 bytes |
+| 2026-06-30 · Feelings, Preferences & Match Talk (june-30) | 5 | 5 | 44 | 44 | PASS · audio/mpeg · 12384 bytes |
+| 2026-07-04 · Everyday English: When Life Happens (july-04) | 5 | 5 | 49 | 49 | PASS · audio/mpeg · 13824 bytes |
+| 2026-07-05 · Natural Reactions & Everyday Choices (july-05) | 5 | 5 | 46 | 46 | PASS · audio/mpeg · 10656 bytes |
+| 2026-07-06 · Connected Speech & Useful Conversation (july-06) | 5 | 5 | 56 | 56 | PASS · audio/mpeg · 10656 bytes |
 | 2026-07-07 · Bring, Buy & Acting for Someone (july-07) | 6 | 5 | 31 | 31 | PASS · audio/mpeg · 10656 bytes |
 | 2026-07-11 · Connected, Live & Noticing Things (july-11) | 6 | 5 | 31 | 31 | PASS · audio/mpeg · 15408 bytes |
 | 2026-07-12 · Have, Had, Any & Yet (july-12) | 6 | 5 | 31 | 31 | PASS · audio/mpeg · 12672 bytes |
