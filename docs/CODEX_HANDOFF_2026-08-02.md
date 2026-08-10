@@ -46,9 +46,10 @@ Do not place OAuth client secrets, passwords, service-role keys, or access token
   practice is derived from the formats present in each lesson.
 - Teacher Studio now includes Premium+ in membership, access-code, assignment
   and per-question controls, plus expiring per-learner tier/feature overrides.
-- Migration `202608110014_premium_plus_and_entitlements.sql` adds Free and
-  Premium+ catalog rows, ranked plan checks and Premium+ question/RLS support.
-  It is committed locally but must not be described as live until applied.
+- Migration `202608110014_premium_plus_and_entitlements.sql` is live. It adds
+  Free and Premium+ catalog rows, ranked plan checks and Premium+ question/RLS
+  support. A dashboard readback confirmed all four active rows, Premium+ rank
+  30, the safe teaser view and the new catalog constraint.
 - Supabase migrations 007, 008, 009, 010, 011, 012 and 013 are reflected in the live
   schema. Migration 011 was verified in the dashboard: the private
   `review-premium-recordings` bucket has a 10 MB limit, four allowed audio
@@ -58,32 +59,30 @@ Do not place OAuth client secrets, passwords, service-role keys, or access token
   required plan. The live schema check confirmed both columns, the safe teaser
   view and the question-access function. All existing 616 questions remain
   Free until the teacher deliberately changes an individual question.
-- `membership-access` Edge Function version 2 is live and returns bounded,
-  reason-specific access-code errors.
+- The updated `membership-access` Edge Function is live, accepts Premium+ in
+  access-code create/update flows and preserves bounded, reason-specific
+  access-code errors.
 - The v9 preview deploys automatically from
-  `upgrade/review-hub-v9-playful-jp`. Its origin is present in the Edge CORS
-  allow-list and the Supabase Auth redirect allow-list. Hosted Google callback,
-  sign-out, 85/85 WebP delivery, shuffle, audio speed selection and
-  English/Japanese audio complete without browser console errors. A 390 × 844
-  viewport check found and fixed one bilingual hint-control overflow; the
-  corrected page has no horizontal overflow (`scrollWidth = 390`).
+  `upgrade/review-hub-v9-premium-platform`. Netlify published commit `fe81008`
+  with no build, redirect, header or post-processing errors. Its origin is
+  present in the Edge CORS allow-list and Supabase Auth redirect allow-list.
+  Hosted `/plans` desktop/mobile checks pass for all fixed prices, the exact
+  LINE/Instagram destinations and modal fit. Hosted lesson checks pass for
+  Settings, 1.0x playback, type filtering, reshuffle and 390 px horizontal fit.
 
 ## Must be completed before deployment
 
-1. Apply `202608110014_premium_plus_and_entitlements.sql`, then deploy the
-   updated `membership-access` Edge Function.
-2. With a valid teacher-authorised account, test access-code
+1. With a valid teacher-authorised account, test access-code
    create/edit/reissue/delete and one real redemption; learner controls;
    archive/restore; and Premium task submission/teacher return.
-3. Complete real-device mobile touch QA and microphone recording. Browser-based
+2. Complete real-device mobile touch QA and microphone recording. Browser-based
    390 × 844 responsive QA passes, but it is not a substitute for a real iPhone
    or Android device and microphone permission/upload.
-4. Use a valid teacher account to set test questions to Standard, Premium and
+3. Use a valid teacher account to set test questions to Standard, Premium and
    Premium+ on a non-production test lesson, then confirm both payload-free
    teaser and complete hiding behaviour with below-tier learner accounts.
-5. Deploy the branch to a non-production Netlify preview and verify `/plans`,
-   Settings and question-type practice at desktop and 390 px width.
-6. Only after the preview passes, publish production.
+4. Only after the authenticated teacher/learner and real-device checks pass,
+   publish production.
 
 ## Verification commands
 

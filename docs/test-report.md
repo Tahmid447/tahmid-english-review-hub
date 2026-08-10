@@ -2,7 +2,7 @@
 
 Last updated: **August 11, 2026**
 
-## August 11 Premium platform local verification
+## August 11 Premium platform preview verification
 
 - `npm test`: PASS, including the new fixed-price/contact/Premium+ platform
   checks.
@@ -18,15 +18,24 @@ Last updated: **August 11, 2026**
 - Central lesson Settings, 1.0x fresh playback, default-on selected-choice
   pronunciation, always-on new-run shuffle and derived question-type practice
   pass static/runtime regression checks.
-- Migration 014 and the matching Edge Function code include Premium+ access
-  codes, ranked entitlement checks, RLS question access and Teacher Studio
-  feature overrides.
-- Hosted browser/mobile verification is still pending. The local server was
-  healthy at `127.0.0.1:4173`, but the available in-app browser blocked local
-  addresses and no connected Chrome session was available. This is not recorded
-  as a visual pass.
-- Migration 014 and the updated Edge Function are not recorded as live until an
-  authenticated deployment confirms them.
+- Migration 014 is applied to Supabase project `ycmybggetemkhorkhfnf`. A live
+  readback confirmed active Free, Standard, Premium and Premium+ rows, plan
+  ranks 0/10/20/30, the safe teaser view and the new catalog constraint.
+- The matching `membership-access` Edge Function was deployed from the committed
+  source. The dashboard showed the new deployment timestamp and cleared its
+  modified-file marker.
+- Netlify preview
+  `https://tahmid-english-review-hub-v9-preview.netlify.app` is published from
+  commit `fe81008` on `upgrade/review-hub-v9-premium-platform`; build, redirects,
+  headers and post-processing completed without errors.
+- Hosted desktop and 390 × 844 browser checks pass for `/plans`: all four
+  monthly and six-month prices, selected-plan contact copy, exact LINE and
+  Instagram destinations, modal fit and zero page-level horizontal overflow.
+- Hosted lesson checks pass for the consolidated Settings dialog, 1.0x playback,
+  default-on selected-choice pronunciation, dynamic question-type filtering,
+  reshuffle and zero desktop/mobile horizontal overflow.
+- Valid-teacher browser controls remain pending because the test browser has no
+  teacher-authorised login session. No password was entered or requested.
 
 ## Automated content and security checks
 

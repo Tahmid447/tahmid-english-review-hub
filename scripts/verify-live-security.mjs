@@ -89,11 +89,19 @@ if (questionTeasers.status !== 200 || questionTeasers.rows?.length !== 0) {
     } rows.`,
   );
 }
-if (publicPlans.status !== 200 || publicPlans.rows?.length !== 2) {
+const expectedPublicPlanKeys = ["free", "premium", "premium_plus", "standard"];
+const publicPlanKeys = Array.isArray(publicPlans.rows)
+  ? publicPlans.rows.map((plan) => plan.plan_key).sort()
+  : [];
+if (
+  publicPlans.status !== 200
+  || publicPlanKeys.length !== expectedPublicPlanKeys.length
+  || publicPlanKeys.some((key, index) => key !== expectedPublicPlanKeys[index])
+) {
   failures.push(
-    `Expected 2 public plan descriptions; received status ${publicPlans.status} and ${
-      Array.isArray(publicPlans.rows) ? publicPlans.rows.length : "no"
-    } rows.`,
+    `Expected public Free, Standard, Premium and Premium+ descriptions; received status ${publicPlans.status} and keys ${
+      publicPlanKeys.length ? publicPlanKeys.join(", ") : "none"
+    }.`,
   );
 }
 for (const result of protectedResults) {
@@ -114,7 +122,7 @@ if (failures.length) {
   console.log("  ✓ exactly 2 free preview lessons");
   console.log("  ✓ 80 anonymous preview activities; expanded member activities remain protected");
   console.log("  ✓ anonymous full payloads are Free-only; safe teaser view currently has 0 configured rows");
-  console.log("  ✓ 2 public Standard/Premium plan descriptions");
+  console.log("  ✓ public Free, Standard, Premium and Premium+ plan descriptions");
   console.log(
     `  ✓ ${protectedResults.length} personal/base resources reject anonymous reads`,
   );

@@ -1,6 +1,6 @@
 # Question quality audit
 
-Generated: 2026-08-10T15:44:52.839Z
+Generated: 2026-08-10T16:06:26.846Z
 
 ## Scope and method
 
