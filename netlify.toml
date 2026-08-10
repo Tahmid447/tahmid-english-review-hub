@@ -29,3 +29,8 @@
   from = "/phrases"
   to = "/phrases.html"
   status = 200
+
+[[redirects]]
+  from = "/plans"
+  to = "/pricing.html"
+  status = 200

@@ -42,6 +42,8 @@ assert.equal(
   "gb",
   "Anonymous learners retain legacy settings.",
 );
+assert.equal(store.getSettings().playbackRate, 1, "Fresh settings use natural 1.0× playback.");
+assert.equal(store.getSettings().autoPronounceChoices, true, "Choice pronunciation defaults on.");
 store.saveLessonProgress("june-28", { answeredCount: 4 });
 
 store.setStorageUser("student-a");
@@ -87,6 +89,8 @@ assert.equal(
   true,
   "An old unchecked preference cannot disable automatic choice shuffling.",
 );
+store.updateSettings({ autoPronounceChoices: false });
+assert.equal(store.getSettings().autoPronounceChoices, false, "Learners can explicitly disable choice pronunciation.");
 
 let currentAuthUserId = "student-a";
 let authStateListener = null;

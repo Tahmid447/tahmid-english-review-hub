@@ -15,10 +15,8 @@
       <img class="brand-logo" src="/assets/tahmid-english-club-logo.png" alt="Tahmid English Club logo"><span><strong>Review Hub</strong><small>Back to lessons · レッスン一覧へ</small></span>
     </a>
     <nav class="header-actions">
-      <label class="voice-select"><span data-ui-en="Language" data-ui-ja="表示">Language / 表示</span><select id="languageToggle"><option value="en">English</option><option value="bilingual">English + 日本語</option><option value="ja">日本語UI</option></select></label>
-      <button class="quiet-btn" id="soundToggle" type="button" data-ui-en="Sound On" data-ui-ja="音声オン">Sound On / 音声オン</button>
-      <label class="voice-select"><span data-ui-en="Voice" data-ui-ja="英語音声">Voice / 英語音声</span><select id="voiceSelect"><option value="us">US · Ava</option><option value="gb">UK · Libby</option></select></label>
-      <label class="voice-select"><span data-ui-en="Speed" data-ui-ja="速さ">Speed / 速さ</span><select id="playbackRate"><option value="0.5">0.5×</option><option value="1">1×</option><option value="1.5">1.5×</option></select></label>
+      <a class="quiet-btn" href="/plans" data-ui-en="Plans" data-ui-ja="料金プラン">Plans / 料金プラン</a>
+      <button class="quiet-btn settings-open" id="openLessonSettings" type="button" aria-haspopup="dialog"><span aria-hidden="true">⚙</span> <span data-ui-en="Settings" data-ui-ja="設定">Settings / 設定</span></button>
     </nav>
   </header>
 
@@ -32,6 +30,7 @@
       </div>
       <div class="lesson-mode">
         <label><span data-ui-en="Practice set" data-ui-ja="練習セット">Practice set / 練習セット</span><select id="practiceMode"><option value="all">All questions / 全問題</option><option value="original">Original Review / 元の復習</option><option value="extra">Listen & Speak / 聞く・話す</option><option value="wrong">Mistakes only / 間違いだけ</option><option value="unanswered">Unanswered only / 未回答だけ</option></select></label>
+        <label><span data-ui-en="Question type" data-ui-ja="問題タイプ">Question type / 問題タイプ</span><select id="questionTypeFilter"><option value="all">All types / 全タイプ</option></select></label>
         <button class="secondary-btn" id="shuffleQuestions" type="button" data-ui-en="Shuffle again" data-ui-ja="もう一度シャッフル">Shuffle again / もう一度シャッフル</button>
       </div>
     </section>
@@ -42,17 +41,7 @@
     </details>
 
     <section class="quiz-toolbar" aria-label="Quiz settings">
-      <div class="segmented" role="group" aria-label="Checking mode">
-        <button class="active" data-check="manual" type="button" data-ui-en="Manual Check" data-ui-ja="自分で確認">Manual Check / 自分で確認</button>
-        <button data-check="instant" type="button" data-ui-en="Instant Check" data-ui-ja="すぐ採点">Instant Check / すぐ採点</button>
-      </div>
       <span class="toggle-label automatic-shuffle" role="status"><span aria-hidden="true">🔀</span> <span data-ui-en="Questions & choices shuffle automatically" data-ui-ja="問題・選択肢は毎回自動シャッフル">Questions &amp; choices shuffle automatically / 問題・選択肢は毎回自動シャッフル</span></span>
-      <label class="toggle-label choice-help-toggle"><input id="showChoiceTranslations" type="checkbox"> <span data-ui-en="Choice translations" data-ui-ja="選択肢の日本語">Choice translations / 選択肢の日本語</span><small data-ui-en="Off during challenge" data-ui-ja="問題中は非表示">Off during challenge</small></label>
-      <div class="segmented hint-mode-toggle" role="group" aria-label="Hint behaviour">
-        <button class="active" data-hint-mode="auto" type="button" data-ui-en="Hint · Auto-close" data-ui-ja="ヒント・自動で閉じる">Hint · Auto-close / ヒント・自動で閉じる</button>
-        <button data-hint-mode="manual" type="button" data-ui-en="Hint · Keep open" data-ui-ja="ヒント・開いたまま">Hint · Keep open / ヒント・開いたまま</button>
-      </div>
-      <button class="quiet-btn" id="vibrationToggle" type="button" data-ui-en="Vibration On" data-ui-ja="振動オン">Vibration On / 振動オン</button>
       <button class="quiet-btn" id="checkAnswered" type="button" data-ui-en="Check answered" data-ui-ja="回答済みを採点">Check answered / 回答済みを採点</button>
       <span class="score-pill" id="scorePill">First score / 初回スコア 0 / 0</span>
     </section>
@@ -88,6 +77,40 @@
     <section class="locked-question-teasers" id="lockedQuestionTeasers" hidden aria-live="polite"></section>
     <section class="premium-tasks-panel" id="premiumTasksPanel" hidden aria-live="polite"></section>
   </main>
+  <dialog class="lesson-settings-dialog" id="lessonSettingsDialog" aria-labelledby="lessonSettingsHeading">
+    <form method="dialog"><button class="dialog-close" value="cancel" aria-label="Close settings">×</button></form>
+    <p class="eyebrow" data-ui-en="Lesson preferences" data-ui-ja="レッスン設定">Lesson preferences / レッスン設定</p>
+    <h2 id="lessonSettingsHeading" data-ui-en="Settings" data-ui-ja="設定">Settings / 設定</h2>
+    <p class="settings-intro" data-ui-en="These preferences apply to every lesson and stay with your signed-in account." data-ui-ja="この設定はすべてのレッスンに適用され、ログイン中のアカウントに保存されます。">These preferences apply to every lesson and stay with your signed-in account. / この設定はすべてのレッスンに適用され、ログイン中のアカウントに保存されます。</p>
+    <section class="settings-group" aria-labelledby="audioSettingsHeading">
+      <h3 id="audioSettingsHeading" data-ui-en="Audio & Voice" data-ui-ja="音声・ボイス">Audio &amp; Voice / 音声・ボイス</h3>
+      <div class="settings-grid">
+        <button class="quiet-btn" id="soundToggle" type="button" data-ui-en="Sound On" data-ui-ja="音声オン">Sound On / 音声オン</button>
+        <label><span data-ui-en="English voice" data-ui-ja="英語音声">English voice / 英語音声</span><select id="voiceSelect"><option value="us">US · Ava</option><option value="gb">UK · Libby</option></select></label>
+        <label><span data-ui-en="Playback speed" data-ui-ja="再生速度">Playback speed / 再生速度</span><select id="playbackRate"><option value="0.5">0.5×</option><option value="1">1×</option><option value="1.5">1.5×</option></select></label>
+        <label class="settings-check"><input id="autoPronounceChoices" type="checkbox"> <span><b data-ui-en="Pronounce selected English choices" data-ui-ja="選んだ英語の選択肢を発音">Pronounce selected English choices / 選んだ英語の選択肢を発音</b><small data-ui-en="On by default; plays once after selection" data-ui-ja="初期設定はオン・選択後に1回だけ再生">On by default; plays once after selection / 初期設定はオン・選択後に1回だけ再生</small></span></label>
+      </div>
+    </section>
+    <section class="settings-group" aria-labelledby="quizSettingsHeading">
+      <h3 id="quizSettingsHeading" data-ui-en="Quiz & Practice" data-ui-ja="クイズ・練習">Quiz &amp; Practice / クイズ・練習</h3>
+      <div class="segmented" role="group" aria-label="Checking mode">
+        <button class="active" data-check="manual" type="button" data-ui-en="Manual Check" data-ui-ja="自分で確認">Manual Check / 自分で確認</button>
+        <button data-check="instant" type="button" data-ui-en="Instant Check" data-ui-ja="すぐ採点">Instant Check / すぐ採点</button>
+      </div>
+      <label class="settings-check"><input id="showChoiceTranslations" type="checkbox"> <span><b data-ui-en="Show Japanese under choices" data-ui-ja="選択肢の日本語を表示">Show Japanese under choices / 選択肢の日本語を表示</b><small data-ui-en="Leave off for a harder challenge" data-ui-ja="難しくしたいときはオフ">Leave off for a harder challenge / 難しくしたいときはオフ</small></span></label>
+      <div class="segmented hint-mode-toggle" role="group" aria-label="Hint behaviour">
+        <button class="active" data-hint-mode="auto" type="button" data-ui-en="Hints auto-close" data-ui-ja="ヒントを自動で閉じる">Hints auto-close / ヒントを自動で閉じる</button>
+        <button data-hint-mode="manual" type="button" data-ui-en="Keep hints open" data-ui-ja="ヒントを開いたまま">Keep hints open / ヒントを開いたまま</button>
+      </div>
+      <button class="quiet-btn" id="vibrationToggle" type="button" data-ui-en="Vibration On" data-ui-ja="振動オン">Vibration On / 振動オン</button>
+      <p class="settings-note" data-ui-en="Question and choice order always shuffle at the start of a new run." data-ui-ja="新しい練習を始めるたびに、問題と選択肢は必ずシャッフルされます。">Question and choice order always shuffle at the start of a new run. / 新しい練習を始めるたびに、問題と選択肢は必ずシャッフルされます。</p>
+    </section>
+    <section class="settings-group" aria-labelledby="displaySettingsHeading">
+      <h3 id="displaySettingsHeading" data-ui-en="Display & Language" data-ui-ja="表示・言語">Display &amp; Language / 表示・言語</h3>
+      <label><span data-ui-en="Interface language" data-ui-ja="表示言語">Interface language / 表示言語</span><select id="languageToggle"><option value="en">English</option><option value="bilingual">English + 日本語</option><option value="ja">日本語UI</option></select></label>
+    </section>
+    <form method="dialog"><button class="primary-btn full-width" value="done" data-ui-en="Done" data-ui-ja="完了">Done / 完了</button></form>
+  </dialog>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js"></script>
   <script type="module" src="/src/lesson.js"></script>

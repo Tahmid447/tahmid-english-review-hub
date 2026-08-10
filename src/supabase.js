@@ -1,4 +1,5 @@
 import { SUPABASE_ANON_KEY, SUPABASE_URL } from "./config.js";
+import { normalizePlanKey, planMeetsRequirement } from "./plans.js";
 
 let studentClient;
 let teacherClient;
@@ -280,12 +281,12 @@ export async function fetchPremiumLessonTasks(databaseLessonId) {
   const client = getStudentClient();
   const session = await getStudentSession();
   if (!client || !session?.user || !databaseLessonId) {
-    return { plan: "standard", tasks: [], submissions: [], feedback: [], signedIn: Boolean(session?.user), error: null };
+    return { plan: "free", tasks: [], submissions: [], feedback: [], signedIn: Boolean(session?.user), error: null };
   }
   const { data: planData, error: planError } = await client.rpc("review_effective_plan");
-  if (planError) return { plan: "standard", tasks: [], submissions: [], feedback: [], signedIn: true, error: planError };
-  const plan = planData === "premium" ? "premium" : "standard";
-  if (plan !== "premium") return { plan, tasks: [], submissions: [], feedback: [], signedIn: true, error: null };
+  if (planError) return { plan: "free", tasks: [], submissions: [], feedback: [], signedIn: true, error: planError };
+  const plan = normalizePlanKey(planData);
+  if (!planMeetsRequirement(plan, "premium")) return { plan, tasks: [], submissions: [], feedback: [], signedIn: true, error: null };
   const { data: tasks, error: taskError } = await client
     .from("review_premium_tasks")
     .select("id,lesson_id,stable_key,task_type,title_en,title_ja,prompt_en,prompt_ja,instructions_en,instructions_ja,required_phrases,required_vocabulary,target_seconds,min_word_count,max_word_count,max_attempts,active")

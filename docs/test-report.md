@@ -1,6 +1,32 @@
 # Test Report / 動作確認レポート
 
-Last updated: **August 3, 2026**
+Last updated: **August 11, 2026**
+
+## August 11 Premium platform local verification
+
+- `npm test`: PASS, including the new fixed-price/contact/Premium+ platform
+  checks.
+- `npm run build`: PASS; `/plans`, `src/plans.js` and `src/pricing.js` are in
+  the public allowlist while private authoring sources remain excluded.
+- `npm run verify:visuals`: PASS for all 85 WebP question assets.
+- `git diff --check` and JavaScript syntax checks: PASS.
+- Fixed source-of-truth values: Free ¥0, Standard ¥3,980, Premium ¥6,980 and
+  Premium+ ¥16,800 monthly; six-month values ¥0/¥20,300/¥35,600/¥85,700.
+- The supplied LINE QR decoded to the same URL now stored in the central contact
+  config. The exact supplied Instagram URL is also asserted by test. No
+  placeholder profile and no fake payment-success copy remain.
+- Central lesson Settings, 1.0x fresh playback, default-on selected-choice
+  pronunciation, always-on new-run shuffle and derived question-type practice
+  pass static/runtime regression checks.
+- Migration 014 and the matching Edge Function code include Premium+ access
+  codes, ranked entitlement checks, RLS question access and Teacher Studio
+  feature overrides.
+- Hosted browser/mobile verification is still pending. The local server was
+  healthy at `127.0.0.1:4173`, but the available in-app browser blocked local
+  addresses and no connected Chrome session was available. This is not recorded
+  as a visual pass.
+- Migration 014 and the updated Edge Function are not recorded as live until an
+  authenticated deployment confirms them.
 
 ## Automated content and security checks
 

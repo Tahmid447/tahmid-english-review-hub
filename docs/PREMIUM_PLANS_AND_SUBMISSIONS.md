@@ -1,136 +1,141 @@
-# Standard / Premium plans and teacher-reviewed submissions
+# Free / Standard / Premium / Premium+ plans and teacher review
 
-This document describes the recommended product model implemented at the data
-layer by `202608020008_premium_plans_and_submissions.sql`. It is a product and
-operations recommendation—not a statement of current pricing or a promise that
-the learner/teacher screens are already complete.
+Updated: 2026-08-11 (Asia/Tokyo)
 
-## Recommended plan split
+This is the product and operations specification implemented by
+`src/plans.js`, the existing Premium submission schema, and
+`202608110014_premium_plus_and_entitlements.sql`. Prices, plan names and contact
+links have one browser-side source of truth in `src/plans.js`; database plan
+keys and entitlements remain in Supabase.
 
-| Feature | Standard | Premium |
-| --- | --- | --- |
-| Full self-study lesson library | Yes | Yes |
-| Balanced listening, speaking, reading and writing practice | Yes | Yes |
-| Core illustration-based questions | Yes | Yes |
-| Phrase/vocabulary library and learning history | Yes | Yes |
-| Advanced visual missions | — | Yes |
-| Lesson-specific 2-minute speaking challenge | — | Yes |
-| Lesson-specific 50–100 word essay | — | Yes |
-| Personal teacher score and feedback | — | Yes |
+## Fixed public plans and prices
 
-Core illustration questions remain in Standard because visual context improves
-learning for everyone. Premium should sell personal guidance and deeper output,
-not remove essential practice from the base product.
+| Plan | Monthly | Six months | Main purpose |
+| --- | ---: | ---: | --- |
+| Free | ¥0 | ¥0 | Two complete sample lessons and safe paid-feature previews |
+| Standard | ¥3,980 | ¥20,300 | Complete self-study Review Hub |
+| Premium | ¥6,980 | ¥35,600 | Standard plus teacher-reviewed speaking and writing |
+| Premium+ | ¥16,800 | ¥85,700 | Premium plus three 50-minute live 1:1 lessons each month |
 
-### Launch pricing recommendation
+The six-month values are approximately 15% below six monthly payments. Do not
+rename the plans or publish different prices in page-specific HTML. Premium+
+uses the database key `premium_plus` and the public label **Premium+**.
 
-These are suggested launch prices only and should be reviewed after observing
-teacher workload, conversion and renewal rates:
+## Feature split
 
-- **Standard:** ¥3,980 per month, or ¥20,300 for six months (about 15% off).
-- **Premium:** ¥5,980 per month, or ¥30,500 for six months (about 15% off).
-- If an early-adopter offer is needed, use a time-limited/capped discount rather
-  than permanently reducing the teacher-reviewed plan. Personal review time is
-  the scarce part of the product.
+| Feature | Free | Standard | Premium | Premium+ |
+| --- | :---: | :---: | :---: | :---: |
+| Two complete sample lessons | Yes | Yes | Yes | Yes |
+| Full lesson and phrase libraries | — | Yes | Yes | Yes |
+| All 14 practice formats | Selected | Yes | Yes | Yes |
+| Account progress across devices | Yes | Yes | Yes | Yes |
+| Advanced visual missions | Preview | — | Yes | Yes |
+| One reviewed speaking task per lesson | Preview | — | Yes | Yes |
+| One reviewed essay per lesson | Preview | — | Yes | Yes |
+| Teacher feedback target: 3 business days | — | — | Yes | Yes |
+| Discount on extra 1:1 lessons | — | — | 10% | 15% |
+| Three 50-minute live 1:1 lessons per month | — | — | — | Yes |
+| Monthly progress note | — | — | — | Yes |
 
-The premium promise should include a clear review allowance (for example, one
-speaking and one essay submission per lesson, with a stated turnaround target).
-Do not advertise unlimited review until real workload is known.
+Core illustration questions can remain Standard. Premium should sell deeper
+output and human guidance, not remove essential visual learning from the base
+product. The teacher can mark individual questions Free, Standard, Premium or
+Premium+ and choose a payload-free teaser or complete hiding below the required
+tier.
 
-## Learner workflow
+## Deterministic entitlement priority
 
-### Two-minute speaking challenge
+The shared site is never forked per learner. Supabase resolves access in this
+order:
 
-1. The learner opens an active Premium speaking task for a lesson.
-2. The task shows the topic, a target of about two minutes, required lesson
-   phrases/vocabulary and one short example.
-3. The learner records or provides a transcript, reviews it, then submits it.
-4. The submission moves from `draft` to `submitted`; it becomes locked while the
-   teacher reviews it.
-5. The teacher may return it for another attempt or publish a score and feedback.
-6. Published feedback appears in the learner account beside the original work.
+1. authorised teacher access;
+2. active learner tier/feature override created in Teacher Studio;
+3. active learner membership tier;
+4. Free public access.
 
-### 50–100 word essay
+A learner feature override may explicitly allow or block `premium_image_missions`,
+`speaking_submission`, `essay_submission`, `teacher_review`, `live_coaching`, or
+`monthly_progress_note`. `Inherit` leaves the normal tier value unchanged. An
+expiry date returns the learner to normal membership rules automatically.
 
-1. The task shows a lesson-specific prompt, target length and required language.
-2. The learner drafts the English response. Final submission is rejected outside
-   the task's configured word range.
-3. The teacher reviews meaning, grammar, naturalness and use of target language.
-4. The teacher publishes a score, a concise explanation and an improved model
-   version where useful.
+Question payloads are protected by RLS. A below-tier teaser contains only the
+question position, format and required plan. It never contains the prompt,
+choices, hint, explanation or answer.
 
-Each task has its own maximum number of attempts. A returned submission can be
-revised; a submission already under review cannot be silently changed.
+## Learner submission workflow
 
-## Teacher workflow and AI assistance
+### Speaking
 
-1. Create one speaking task and/or one essay task for the lesson.
-2. Add lesson-specific required phrases and vocabulary.
-3. Review the queue of `submitted` work and mark an item `in_review`.
-4. Write feedback manually, or ask AI to prepare a **draft** based on an explicit
-   rubric. The teacher checks and edits every AI-assisted draft.
-5. Set `published_at` only when the feedback is ready for the learner.
+1. The learner opens an active speaking task.
+2. The task shows the topic, target duration and required phrases/vocabulary.
+3. The learner records, listens, and either re-records or submits.
+4. The private object is stored in `review-premium-recordings`; Postgres stores
+   only `audio_object_path` and submission metadata.
+5. A submitted item is locked during review. The teacher can return it or
+   publish feedback.
 
-`ai_assisted` records whether AI helped draft the learner-visible feedback. AI
-must not publish directly. Prompts, service keys and private teacher notes do not
-belong in the learner-visible feedback record.
+### Essay
 
-Teachers can set a learner's Standard/Premium tier, add a temporary per-feature
-override, control assignment visibility and open/close dates, and require a plan
-for an assignment. These controls never expose or copy a learner password.
+1. The learner writes against the lesson-specific prompt and visible word range.
+2. A draft remains private to the learner. It does not enter the teacher queue.
+3. Final submission validates the configured word range and becomes read-only
+   during review.
+4. Published feedback appears beside the learner's original work.
 
-## Data and access model
+Submission statuses remain `draft`, `submitted`, `in_review`, `reviewed` and
+`returned`. The Teacher Studio queue intentionally excludes private drafts.
+Not every submission needs a written reply, but any published feedback is tied
+to a teacher and optional score.
 
-- `review_plan_catalog`: Standard/Premium feature definitions.
-- `review_memberships.plan_tier`: normal effective tier.
-- `review_learner_plan_overrides`: temporary tier or feature exceptions.
-- `review_premium_tasks`: lesson-specific speaking/essay briefs.
-- `review_task_submissions`: learner drafts and submitted work.
-- `review_submission_feedback`: teacher feedback; learners see only rows with a
-  publication time.
-- `review_assignments`: visibility, open/close dates, required plan and whether
-  teacher review is required.
+## Teacher Studio controls
 
-RLS rules make tasks, submissions and feedback private. Learners read their own
-records; teachers manage and review. The migration does not read `auth.users`
-password data, and no Review Hub table has a password column.
+The learner detail dialog contains:
 
-## Free-tier-conscious audio approach
+- membership period, audience and Standard/Premium/Premium+ tier;
+- expiring tier and per-feature overrides;
+- lesson recommendations, open/close dates and minimum plan;
+- learner-specific teacher unlock/block rules with priority over normal lesson
+  visibility;
+- password-reset email only—passwords are never shown or stored;
+- learning activity and Premium submission history.
 
-Start with text/essay submissions and transcript-only speaking practice while the
-review workflow is proven. When recordings are enabled:
+Access-code creation/edit/reissue supports Standard, Premium and Premium+.
+Newly generated full codes are shown once; history stores only the final four
+characters.
 
-- record in the browser as compressed WebM/Opus;
-- cap each clip near two minutes and reject oversized files before upload;
-- store the file in a **private** object-storage bucket, not in Postgres;
-- keep only `audio_object_path` in the submission row;
-- use signed, short-lived playback URLs for the learner and teacher;
-- retain only necessary versions (for example, remove abandoned drafts and set a
-  documented retention period after feedback);
-- monitor storage and bandwidth before raising submission limits.
+## Contact-first checkout
 
-The migration deliberately does not create a bucket. Bucket limits, MIME checks,
-retention and object-level RLS should be deployed together when recording UI is
-ready, rather than leaving a partially secured upload path.
+`/plans` does not process payments and never displays a fake success state. The
+learner selects a plan and billing period, copies the prepared bilingual message,
+then opens the configured LINE or Instagram profile. The selected plan and
+price remain visible in the dialog.
 
-## Publishing cadence recommendation
+- LINE: decoded from the supplied QR asset and stored in `CONTACT_CHANNELS`.
+- Instagram: the exact supplied profile URL is stored in `CONTACT_CHANNELS`.
+- QR asset: `assets/contact/line-qr.jpeg`.
 
-Launch with **one polished general lesson per week**. It is easier to maintain
-audio, illustrations, QA and teacher feedback quality at that pace. After four to
-six stable weeks, add a second weekly practice set only if review turnaround and
-content QA remain healthy. Private lessons can still be published immediately to
-the assigned learner.
+Payment details and access are confirmed separately by Tahmid. OAuth secrets,
+service-role keys, passwords and access tokens never belong in this config.
 
-For Premium, alternate the highlighted output focus—speaking one week, essay the
-next—while keeping both task types available in the lesson. This creates variety
-without doubling the promised teacher-review workload every week.
+## AI and cost boundary
 
-## Safe rollout order
+There is no paid AI grading or learner-facing AI score. `ai_assisted` only
+records whether a teacher used AI to prepare a draft; the teacher remains
+responsible for checking and publishing it. No AI API key is shipped to the
+browser.
 
-1. Review and deploy the migration in a staging project.
-2. Add Teacher Studio controls for plan tier, task authoring and the review queue.
-3. Add learner text submissions and published feedback; test RLS with separate
-   teacher and learner accounts.
-4. Add private audio storage only after object policies and retention are tested.
-5. Pilot Premium with a small number of learners before publishing paid limits.
+## Safe rollout
 
+1. Apply migrations through 013, then apply
+   `202608110014_premium_plus_and_entitlements.sql`.
+2. Deploy the updated `membership-access` Edge Function so Premium+ access
+   codes are accepted.
+3. Run the automated suite and `npm run verify:live`.
+4. Test one below-tier learner, Premium learner, Premium+ learner and authorised
+   teacher in the preview environment.
+5. Test one real speaking upload/return and one essay feedback publication.
+6. Review the Netlify preview on a physical phone before production promotion.
+
+Do not publish production until migration 014 and the matching Edge Function
+are both live; otherwise the new UI could offer a tier that the backend cannot
+yet accept.

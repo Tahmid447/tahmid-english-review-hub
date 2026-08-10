@@ -12,7 +12,8 @@ After bank-transfer confirmation:
 
 1. Enter any access period from 1 to 730 days (for example, 30 days for one month or 180 days for six months).
 2. Choose General, Takiwaki, or Both.
-3. Press **Approve**.
+3. Choose Standard, Premium or Premium+.
+4. Press **Approve**.
 
 Access codes use the same 1-to-730-day range and also let you choose the scope
 and maximum number of uses. The complete code is shown only once; later the
@@ -110,11 +111,16 @@ must still create a draft first.
 ### Per-question plan access
 
 Open a lesson's Question Manager and edit the target question. Set **Question
-access** to Free, Standard or Premium. For an ineligible learner, **Safe
+access** to Free, Standard, Premium or Premium+. For an ineligible learner, **Safe
 teaser** shows only the plan and activity type; **Hidden** returns no row at
 all. The prompt, choices, hint, explanation and answer are protected by the
 database in both modes. Existing questions default to Free, so applying
 migration 012 does not silently change learner access.
+
+The learner detail dialog also has **Tier & feature override**. `Inherit` keeps
+the normal membership value. `Allow` or `Block` controls the selected feature
+until the optional expiry. Precedence is teacher override, then active
+membership tier, then Free public access.
 
 ## 6. Code and deployment updates
 
@@ -167,11 +173,17 @@ Supabase redirect allow-list and the `membership-access` Edge CORS allow-list.
 Every future hosted Netlify URL must be added to both lists before its callback
 and access-code flow are tested.
 
-Migrations 007, 008, 009, 010, 011 and 012 are present in the live schema. Migrations
+Migrations 007, 008, 009, 010, 011, 012 and 013 are present in the live schema. Migrations
 010, 011 and 012 were applied through the authenticated SQL Editor on August 3,
 2026. The dashboard verifies the private `review-premium-recordings` bucket,
 its 10 MB limit and four allowed audio MIME types, plus the SELECT, INSERT and
 DELETE storage policies for authenticated users.
+
+Migration 014 adds Free/Premium+ catalog entries and ranked four-tier question,
+assignment and feature entitlement checks. Apply it after 013, then deploy the
+matching `membership-access` Edge Function before exposing Premium+ controls in
+a hosted preview. As of August 11, 2026, the migration is present in the branch
+but is not recorded here as live.
 
 The July 30 preview setup was applied through the trusted Supabase SQL Editor.
 The local CLI could link to the project, but the shared project’s existing

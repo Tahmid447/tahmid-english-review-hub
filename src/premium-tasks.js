@@ -4,6 +4,7 @@ import {
   savePremiumTextSubmission,
   submitPremiumRecording,
 } from "./supabase.js";
+import { planMeetsRequirement } from "./plans.js";
 
 const make = (tag, options = {}) => {
   const node = document.createElement(tag);
@@ -249,7 +250,7 @@ export async function renderPremiumLessonTasks({ lesson, container, showJapanese
     container.replaceChildren(make("p", { text: "Premium review tasks are temporarily unavailable." }));
     return;
   }
-  if (data.plan !== "premium") {
+  if (!planMeetsRequirement(data.plan, "premium")) {
     const lock = make("article", { className: "premium-task-lock" });
     lock.append(
       make("span", { text: "PREMIUM" }),
@@ -258,7 +259,7 @@ export async function renderPremiumLessonTasks({ lesson, container, showJapanese
       make("p", { className: "jp", text: "プレミアム会員は、スピーキング録音・英作文を提出し、先生から個別添削を受けられます。" }),
       make("a", { text: "See membership options / プランを見る" }),
     );
-    lock.lastElementChild.href = "/#membership";
+    lock.lastElementChild.href = "/plans";
     lock.lastElementChild.className = "primary-btn";
     container.replaceChildren(lock);
     return;

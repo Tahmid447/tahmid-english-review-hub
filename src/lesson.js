@@ -29,22 +29,27 @@ import { applyLanguageMode, languageModeFromSettings, learningText, uiText } fro
 import { DEEP_LESSON_GUIDES } from "./lesson-guides.js";
 import { celebrate, installPlayfulInteractions } from "./effects.js";
 import { renderPremiumLessonTasks } from "./premium-tasks.js";
+import { planFor } from "./plans.js";
 
 const $ = (selector) => document.querySelector(selector);
 
 const elements = {
   hubBackLink: $("#hubBackLink"),
+  openLessonSettings: $("#openLessonSettings"),
+  lessonSettingsDialog: $("#lessonSettingsDialog"),
   languageToggle: $("#languageToggle"),
   soundToggle: $("#soundToggle"),
   vibrationToggle: $("#vibrationToggle"),
   voiceSelect: $("#voiceSelect"),
   playbackRate: $("#playbackRate"),
+  autoPronounceChoices: $("#autoPronounceChoices"),
   lessonDate: $("#lessonDate"),
   lessonTitle: $("#lessonTitle"),
   lessonSummary: $("#lessonSummary"),
   lessonSummaryJa: $("#lessonSummaryJa"),
   lessonGuideContent: $("#lessonGuideContent"),
   practiceMode: $("#practiceMode"),
+  questionTypeFilter: $("#questionTypeFilter"),
   shuffleQuestions: $("#shuffleQuestions"),
   checkModeButtons: [...document.querySelectorAll("[data-check]")],
   hintModeButtons: [...document.querySelectorAll("[data-hint-mode]")],
@@ -91,6 +96,7 @@ const state = {
   visibleQuestions: [],
   currentIndex: 0,
   practiceMode: "all",
+  questionTypeFilter: "all",
   settings: getSettings(),
   startedAt: new Date().toISOString(),
   runAttemptId: uuid(),
@@ -258,6 +264,9 @@ const restoreProgress = () => {
   state.practiceMode = ["all", "original", "extra", "wrong", "unanswered"].includes(saved.practiceMode)
     ? saved.practiceMode
     : "all";
+  state.questionTypeFilter = typeof saved.questionTypeFilter === "string"
+    ? saved.questionTypeFilter
+    : "all";
 };
 
 const officialTotals = (questions = state.masterQuestions) => questions.reduce((totals, question) => {
@@ -281,6 +290,7 @@ const saveLocalState = () => {
     runAttemptId: state.runAttemptId,
     runStartedAt: state.runStartedAt,
     practiceMode: state.practiceMode,
+    questionTypeFilter: state.questionTypeFilter,
     questionOrder: state.questionOrder,
     answers: state.answers,
     official: state.official,
@@ -376,6 +386,9 @@ const renderSettings = () => {
   );
   elements.voiceSelect.value = state.settings.voice;
   elements.playbackRate.value = String(state.settings.playbackRate || 1);
+  if (elements.autoPronounceChoices) {
+    elements.autoPronounceChoices.checked = state.settings.autoPronounceChoices !== false;
+  }
   if (elements.showChoiceTranslations) {
     elements.showChoiceTranslations.checked = state.settings.showChoiceTranslations;
   }
@@ -430,29 +443,61 @@ const choiceOrder = (question) => {
   return order.map((id) => question.choices.find((choice) => choice.id === id)).filter(Boolean);
 };
 
-const selectQuestionSet = (mode) => {
+const selectQuestionSet = (mode, { questionType = state.questionTypeFilter } = {}) => {
   const byOrder = state.questionOrder
     .map((id) => state.masterQuestions.find((question) => question.id === id))
     .filter(Boolean);
-  if (mode === "original") return byOrder.filter((question) => question.isOriginal);
-  if (mode === "extra") return byOrder.filter((question) => !question.isOriginal);
+  let selected = byOrder;
+  if (mode === "original") selected = byOrder.filter((question) => question.isOriginal);
+  if (mode === "extra") selected = byOrder.filter((question) => !question.isOriginal);
   if (mode === "wrong") {
-    return byOrder.filter((question) => {
+    selected = byOrder.filter((question) => {
       const result = state.official[question.id];
       return result && Number(result.score) < Number(question.maxPoints || 1);
     });
   }
-  if (mode === "unanswered") return byOrder.filter((question) => !state.official[question.id]);
-  return byOrder;
+  if (mode === "unanswered") selected = byOrder.filter((question) => !state.official[question.id]);
+  if (questionType !== "all") {
+    selected = selected.filter((question) => String(question.format || question.type || "unknown") === questionType);
+  }
+  return selected;
+};
+
+const updateQuestionTypeOptions = () => {
+  if (!elements.questionTypeFilter) return;
+  const counts = state.masterQuestions.reduce((result, question) => {
+    const format = String(question.format || question.type || "unknown");
+    result.set(format, (result.get(format) || 0) + 1);
+    return result;
+  }, new Map());
+  const validTypes = new Set(counts.keys());
+  if (state.questionTypeFilter !== "all" && !validTypes.has(state.questionTypeFilter)) {
+    state.questionTypeFilter = "all";
+  }
+  elements.questionTypeFilter.replaceChildren();
+  const all = document.createElement("option");
+  all.value = "all";
+  all.textContent = t(`All types (${state.masterQuestions.length})`, `全タイプ (${state.masterQuestions.length})`);
+  elements.questionTypeFilter.append(all);
+  [...counts.entries()]
+    .sort(([left], [right]) => questionTypeLabel(left).localeCompare(questionTypeLabel(right)))
+    .forEach(([format, count]) => {
+      const option = document.createElement("option");
+      option.value = format;
+      option.textContent = `${questionTypeLabel(format)} (${count})`;
+      elements.questionTypeFilter.append(option);
+    });
+  elements.questionTypeFilter.value = state.questionTypeFilter;
 };
 
 const updatePracticeModeLabels = () => {
-  const originals = state.masterQuestions.filter((question) => question.isOriginal).length;
-  const extras = state.masterQuestions.length - originals;
+  const allCount = selectQuestionSet("all").length;
+  const originals = selectQuestionSet("original").length;
+  const extras = selectQuestionSet("extra").length;
   const wrong = selectQuestionSet("wrong").length;
   const unanswered = selectQuestionSet("unanswered").length;
   const labels = {
-    all: t(`All questions (${state.masterQuestions.length})`, `全問題 (${state.masterQuestions.length})`),
+    all: t(`All questions (${allCount})`, `全問題 (${allCount})`),
     original: t(`Original Review (${originals})`, `元の復習 (${originals})`),
     extra: t(`Listen & Speak (${extras})`, `聞く・話す (${extras})`),
     wrong: t(`Mistakes only (${wrong})`, `間違いだけ (${wrong})`),
@@ -483,6 +528,27 @@ const setPracticeMode = (mode, { clearCurrentAnswers = false, force = false } = 
   state.currentIndex = 0;
   state.requireRunChecks = clearCurrentAnswers || mode === "wrong";
   elements.practiceMode.value = mode;
+  elements.resultPanel.hidden = true;
+  saveLocalState();
+  renderAll();
+};
+
+const setQuestionTypeFilter = (questionType) => {
+  const availableTypes = new Set(
+    state.masterQuestions.map((question) => String(question.format || question.type || "unknown")),
+  );
+  const nextType = questionType === "all" || availableTypes.has(questionType)
+    ? questionType
+    : "all";
+  state.questionTypeFilter = nextType;
+  if (!selectQuestionSet(state.practiceMode).length) {
+    state.practiceMode = "all";
+    elements.practiceMode.value = "all";
+    showToast(t("Practice set changed to All questions for this type.", "この問題タイプを表示するため、練習セットを全問題に変更しました。"));
+  }
+  beginNewRun();
+  state.visibleQuestions = selectQuestionSet(state.practiceMode);
+  state.currentIndex = 0;
   elements.resultPanel.hidden = true;
   saveLocalState();
   renderAll();
@@ -1114,8 +1180,18 @@ const attachQuestionHandlers = (question) => {
       const value = question.format === "truefalse"
         ? button.dataset.choice === "true"
         : button.dataset.choice;
+      const pronunciation = question.format === "truefalse"
+        ? (value ? "True" : "False")
+        : question.choices?.find((choice) => String(choice.id) === String(value))?.en;
       setAnswer(question, value, { render: true });
       maybeInstantCheck(question, true);
+      if (state.settings.autoPronounceChoices !== false && state.settings.sound && pronunciation) {
+        speakText(pronunciation, {
+          voice: state.settings.voice,
+          language: "en",
+          rate: state.settings.playbackRate,
+        }).catch(() => {});
+      }
     });
   });
   const typedInput = $("#typedAnswer");
@@ -1333,11 +1409,11 @@ const renderLockedQuestionTeasers = () => {
     return;
   }
   const cards = lockedQuestions.map((question) => {
-    const premium = question.requiredPlan === "premium";
-    const planEn = premium ? "Premium" : "Standard";
-    const planJa = premium ? "プレミアム" : "スタンダード";
+    const requiredPlan = planFor(question.requiredPlan || "standard");
+    const planEn = requiredPlan.name;
+    const planJa = requiredPlan.nameJa;
     return `
-      <article class="locked-question-teaser">
+      <article class="locked-question-teaser locked-${escapeHTML(requiredPlan.key)}">
         <span class="locked-question-plan">${escapeHTML(planEn)} · ${escapeHTML(planJa)}</span>
         <div class="locked-question-placeholder" aria-hidden="true">
           <i></i><i></i><i></i>
@@ -1363,12 +1439,13 @@ const renderLockedQuestionTeasers = () => {
       ))}</p>
     </div>
     <div class="locked-question-grid">${cards}</div>
-    <a class="primary-btn" href="/#membership">${escapeHTML(t("Compare plans", "プランを見る"))}</a>
+    <a class="primary-btn" href="/plans">${escapeHTML(t("Compare plans", "プランを見る"))}</a>
   `;
   elements.lockedQuestionTeasers.hidden = false;
 };
 
 const renderAll = () => {
+  updateQuestionTypeOptions();
   updatePracticeModeLabels();
   renderSettings();
   renderScore();
@@ -1501,6 +1578,7 @@ const initialiseLesson = async () => {
       elements.previousQuestion.disabled = true;
       elements.nextQuestion.disabled = true;
       elements.practiceMode.disabled = true;
+      elements.questionTypeFilter.disabled = true;
       elements.shuffleQuestions.disabled = true;
       elements.premiumTasksPanel.hidden = true;
       return;
@@ -1528,6 +1606,7 @@ const initialiseLesson = async () => {
       : shuffleArray(allIds);
     if (!state.hasPersistedRunState) state.choiceOrders = {};
     elements.practiceMode.value = state.practiceMode;
+    updateQuestionTypeOptions();
     const selected = selectQuestionSet(state.practiceMode);
     if (!selected.length) state.practiceMode = "all";
     state.visibleQuestions = selectQuestionSet(state.practiceMode);
@@ -1601,6 +1680,9 @@ elements.playbackRate.addEventListener("change", () => {
   stopAudio();
   persistSettings({ playbackRate: Number(elements.playbackRate.value) });
 });
+elements.autoPronounceChoices?.addEventListener("change", () => {
+  persistSettings({ autoPronounceChoices: elements.autoPronounceChoices.checked });
+});
 elements.checkModeButtons.forEach((button) => {
   button.addEventListener("click", () => persistSettings({ checkMode: button.dataset.check }));
 });
@@ -1619,6 +1701,17 @@ elements.showChoiceTranslations?.addEventListener("change", () => {
   renderQuestion();
 });
 elements.practiceMode.addEventListener("change", () => setPracticeMode(elements.practiceMode.value));
+elements.questionTypeFilter?.addEventListener("change", () => {
+  setQuestionTypeFilter(elements.questionTypeFilter.value);
+});
+elements.openLessonSettings?.addEventListener("click", () => {
+  renderSettings();
+  if (typeof elements.lessonSettingsDialog?.showModal === "function") {
+    elements.lessonSettingsDialog.showModal();
+  } else {
+    elements.lessonSettingsDialog?.setAttribute("open", "");
+  }
+});
 elements.shuffleQuestions.addEventListener("click", () => {
   state.questionOrder = shuffleArray(state.questionOrder);
   state.choiceOrders = {};

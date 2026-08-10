@@ -11,6 +11,7 @@ lives in this repository and on dedicated branches. The unrelated legacy
 - `/` — general learner Review Hub
 - `/lesson/june-28` — shared lesson player
 - `/phrases` — Phrase & Vocabulary Library (previews before membership)
+- `/plans` — Free, Standard, Premium and Premium+ comparison and contact
 - `/takiwaki` — authenticated personal hub
 - `/teacher` — authenticated Teacher Studio
 
@@ -37,9 +38,10 @@ Supabase Auth and Row Level Security.
 
 All 17 reviewed lessons are listed in the general catalogue. Two lessons are
 free previews; complete questions and the full phrase/vocabulary catalogue are
-served only to an active membership. Teacher Studio can approve 30-, 180-, or
-365-day access, pause access, generate limited-use codes, change the lesson
-audience, or archive a lesson without a code deployment.
+served only to an active membership. Teacher Studio can approve any 1-to-730-day
+Standard, Premium or Premium+ period, set expiring feature overrides, pause
+access, generate limited-use codes, change lesson access, or archive a lesson
+without a code deployment.
 
 ## Local commands
 
@@ -64,6 +66,11 @@ Apply the migrations in filename order:
 3. `202607300003_review_hub_questions.sql`
 4. `202607300004_v9_publish_and_preview.sql`
 5. `202608020005_memberships_and_signup.sql`
+
+Continue applying the remaining numbered files through
+`202608110014_premium_plus_and_entitlements.sql`. Migration 014 must be paired
+with the updated `membership-access` Edge Function before Premium+ is offered
+in a hosted preview.
 
 All new objects use the `review_` prefix. The migrations do not alter or drop
 the existing Do/Does tables. The browser receives only the public anon key; no

@@ -1,11 +1,11 @@
 # Codex Handoff — Tahmid English Review Hub
 
-Updated: 2026-08-03 (Asia/Tokyo)
+Updated: 2026-08-11 (Asia/Tokyo)
 
 ## Open this project
 
 - Repository folder: `/Users/tahmidahmed/Documents/Codex/2026-07-30/referenced-chatgpt-conversation-this-is-untrusted/work/tahmid-english-review-hub`
-- Working branch: `upgrade/review-hub-v9-playful-jp`
+- Working branch: `upgrade/review-hub-v9-premium-platform`
 - Production: https://jocular-chaja-86e78d.netlify.app
 - Current v9 preview: https://tahmid-english-review-hub-v9-preview.netlify.app
 - Legacy preview: https://tahmid-english-review-hub-preview.netlify.app
@@ -33,6 +33,22 @@ Do not place OAuth client secrets, passwords, service-role keys, or access token
   in `docs/question-quality-audit.md`.
 - New practice runs always shuffle question and choice order. Resumed runs keep
   their saved order.
+- The four fixed public plans are now Free ¥0, Standard ¥3,980/month, Premium
+  ¥6,980/month and Premium+ ¥16,800/month. Six-month values and contact details
+  are centralised in `src/plans.js`; `/plans` renders from that source.
+- The supplied LINE QR was decoded and preserved at
+  `assets/contact/line-qr.jpeg`. The contact dialog shows the selected plan and
+  opens only the verified LINE profile or the exact supplied Instagram URL. It
+  does not process payment or show a fake payment-success state.
+- Lesson preferences are consolidated into one bilingual Settings dialog.
+  Playback starts at 1.0x, selected English choices pronounce once by default,
+  and learners can disable only that automatic pronunciation. Question-type
+  practice is derived from the formats present in each lesson.
+- Teacher Studio now includes Premium+ in membership, access-code, assignment
+  and per-question controls, plus expiring per-learner tier/feature overrides.
+- Migration `202608110014_premium_plus_and_entitlements.sql` adds Free and
+  Premium+ catalog rows, ranked plan checks and Premium+ question/RLS support.
+  It is committed locally but must not be described as live until applied.
 - Supabase migrations 007, 008, 009, 010, 011, 012 and 013 are reflected in the live
   schema. Migration 011 was verified in the dashboard: the private
   `review-premium-recordings` bucket has a 10 MB limit, four allowed audio
@@ -54,16 +70,20 @@ Do not place OAuth client secrets, passwords, service-role keys, or access token
 
 ## Must be completed before deployment
 
-1. With a valid teacher-authorised account, test access-code
+1. Apply `202608110014_premium_plus_and_entitlements.sql`, then deploy the
+   updated `membership-access` Edge Function.
+2. With a valid teacher-authorised account, test access-code
    create/edit/reissue/delete and one real redemption; learner controls;
    archive/restore; and Premium task submission/teacher return.
-2. Complete real-device mobile touch QA and microphone recording. Browser-based
+3. Complete real-device mobile touch QA and microphone recording. Browser-based
    390 × 844 responsive QA passes, but it is not a substitute for a real iPhone
    or Android device and microphone permission/upload.
-3. Use a valid teacher account to set at least one test question to Standard or
-   Premium on a non-production test lesson, then confirm both payload-free
+4. Use a valid teacher account to set test questions to Standard, Premium and
+   Premium+ on a non-production test lesson, then confirm both payload-free
    teaser and complete hiding behaviour with below-tier learner accounts.
-4. Only after the preview passes, publish production.
+5. Deploy the branch to a non-production Netlify preview and verify `/plans`,
+   Settings and question-type practice at desktop and 390 px width.
+6. Only after the preview passes, publish production.
 
 ## Verification commands
 
@@ -75,13 +95,14 @@ npm run verify:live
 npm run audit:audio-live
 node scripts/test-teacher-controls.mjs
 node scripts/validate-premium-schema.mjs
+node scripts/test-plan-platform.mjs
 ```
 
 ## Important product decisions
 
 - Never reveal or store learner passwords. Teachers may send password-reset email only.
-- Standard launch price recommendation: ¥3,980/month.
-- Premium launch price recommendation: ¥5,980/month with a capped number of teacher-reviewed submissions.
+- Fixed plan prices: Free ¥0, Standard ¥3,980/month, Premium ¥6,980/month and
+  Premium+ ¥16,800/month. Do not rename or change them in page-specific code.
 - Six-month prepaid discount: about 15%, not 20–30%, because human feedback has ongoing cost.
 - Publish one polished general lesson per week at launch; publish the private learner lesson after each real lesson.
 - Prefer pre-generated static neural audio on Netlify/GitHub when possible; store only private learner recordings in protected storage.

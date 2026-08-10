@@ -25,6 +25,7 @@ import {
 } from "./supabase.js";
 import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js";
 import { installPlayfulInteractions } from "./effects.js";
+import { planFor } from "./plans.js";
 
 const page = document.body.dataset.page || "general";
 
@@ -599,7 +600,7 @@ async function handleAccessCode(event) {
     const result = await redeemStudentAccessCode(code);
     if (result?.error) throw result.error;
     if (input) input.value = "";
-    const plan = result?.data?.membershipPlan === "premium" ? "Premium" : "Standard";
+    const plan = planFor(result?.data?.membershipPlan || "standard").name;
     const scope = result?.data?.membershipScope || "general";
     const expires = result?.data?.membershipExpiresAt ? formatDate(result.data.membershipExpiresAt) : "—";
     const success = t(
@@ -770,8 +771,9 @@ async function refreshMembershipPanel() {
     ? formatDate(currentMembership.expires_at, true)
     : "—";
   if (status) {
+    const activePlan = planFor(currentMembership?.plan_tier || "free").name;
     status.textContent = result.active
-      ? t(`Active until ${expires}.`, `${expires}まで利用できます。`)
+      ? t(`${activePlan} active until ${expires}.`, `${activePlan}は${expires}まで利用できます。`)
       : t(
         `Signed in as ${authSession.user?.email || "learner"}. Approval is pending, or enter an access code below.`,
         `${authSession.user?.email || "学習者"}でログイン中です。承認を待つか、アクセスコードを入力してください。`,

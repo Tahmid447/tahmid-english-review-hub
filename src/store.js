@@ -12,6 +12,7 @@ export const DEFAULT_SETTINGS = Object.freeze({
   vibration: true,
   voice: "us",
   playbackRate: 1,
+  autoPronounceChoices: true,
   checkMode: "manual",
   shuffleChoices: true,
   hintMode: "auto",
@@ -86,6 +87,9 @@ export function getSettings() {
     voice: saved?.voice === "gb" ? "gb" : "us",
     languageMode,
     playbackRate,
+    // New and migrated accounts default to one English pronunciation after a
+    // choice is selected. Only an explicit saved false value disables it.
+    autoPronounceChoices: saved?.autoPronounceChoices !== false,
     checkMode: saved?.checkMode === "instant" ? "instant" : "manual",
     showJapanese: languageMode !== "en",
     showChoiceTranslations: saved?.showChoiceTranslations === true,
@@ -109,6 +113,7 @@ export function updateSettings(patch = {}) {
   next.playbackRate = [0.5, 1, 1.5].includes(Number(next.playbackRate))
     ? Number(next.playbackRate)
     : 1;
+  next.autoPronounceChoices = next.autoPronounceChoices !== false;
   next.checkMode = next.checkMode === "instant" ? "instant" : "manual";
   next.sound = next.sound !== false;
   next.vibration = next.vibration !== false;

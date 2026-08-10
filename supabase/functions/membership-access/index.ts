@@ -89,7 +89,7 @@ Deno.serve(async (request) => {
       const accessScope = ["general", "takiwaki", "both"].includes(body?.accessScope)
         ? body.accessScope
         : "general";
-      const planTier = ["standard", "premium"].includes(body?.planTier)
+      const planTier = ["standard", "premium", "premium_plus"].includes(body?.planTier)
         ? body.planTier
         : "standard";
       const maxUses = Number(body?.maxUses || 1);
@@ -147,7 +147,7 @@ Deno.serve(async (request) => {
       const accessScope = ["general", "takiwaki", "both"].includes(body?.accessScope)
         ? body.accessScope
         : "general";
-      const planTier = ["standard", "premium"].includes(body?.planTier)
+      const planTier = ["standard", "premium", "premium_plus"].includes(body?.planTier)
         ? body.planTier
         : "standard";
       const maxUses = Number(body?.maxUses || 0);

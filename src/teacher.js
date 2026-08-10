@@ -12,6 +12,7 @@ import {
   signOutTeacher,
   updateTeacherAccessCode,
 } from "./supabase.js";
+import { planFor } from "./plans.js";
 
 const client = getTeacherClient();
 
@@ -102,6 +103,7 @@ const state = {
   attempts: [],
   assignments: [],
   accessOverrides: [],
+  planOverrides: [],
   premiumTasks: [],
   taskSubmissions: [],
   submissionFeedback: [],
@@ -433,6 +435,7 @@ async function refreshDashboard() {
       memberships,
       accessCodes,
       accessOverrides,
+      planOverrides,
       premiumTasks,
       taskSubmissions,
       submissionFeedback,
@@ -488,6 +491,11 @@ async function refreshDashboard() {
         { order: { column: "updated_at", ascending: false } },
       ),
       fetchOptional(
+        "review_learner_plan_overrides",
+        "user_id,plan_tier,feature_flags,reason,starts_at,expires_at,updated_at",
+        { order: { column: "updated_at", ascending: false } },
+      ),
+      fetchOptional(
         "review_premium_tasks",
         "id,lesson_id,stable_key,task_type,title_en,title_ja,prompt_en,prompt_ja,instructions_en,instructions_ja,required_phrases,required_vocabulary,target_seconds,min_word_count,max_word_count,max_attempts,active,created_at,updated_at",
         { order: { column: "created_at", ascending: false } },
@@ -520,6 +528,7 @@ async function refreshDashboard() {
     state.memberships = memberships;
     state.accessCodes = accessCodes;
     state.accessOverrides = accessOverrides.rows;
+    state.planOverrides = planOverrides.rows;
     state.teacherControlsReady = accessOverrides.available;
     state.premiumTasks = premiumTasks.rows;
     state.taskSubmissions = taskSubmissions.rows;
@@ -717,6 +726,51 @@ function membershipFor(userId) {
   return state.memberships.find((membership) => membership.user_id === userId) || null;
 }
 
+function planOverrideFor(userId) {
+  return state.planOverrides.find((override) => override.user_id === userId) || null;
+}
+
+async function saveLearnerPlanOverride(profile, values, button) {
+  const featureFlags = Object.fromEntries(
+    Object.entries(values.featureFlags || {}).filter(([, value]) => typeof value === "boolean"),
+  );
+  const expiresAt = values.expiresAt ? new Date(values.expiresAt) : null;
+  if (expiresAt && (Number.isNaN(expiresAt.getTime()) || expiresAt.getTime() <= Date.now())) {
+    showToast("Override expiry must be in the future.", "error");
+    return;
+  }
+  button.disabled = true;
+  const hasOverride = Boolean(values.planTier)
+    || Object.keys(featureFlags).length > 0
+    || Boolean(values.reason)
+    || Boolean(expiresAt);
+  const result = hasOverride
+    ? await client.from("review_learner_plan_overrides").upsert({
+      user_id: profile.user_id,
+      plan_tier: values.planTier || null,
+      feature_flags: featureFlags,
+      reason: values.reason || null,
+      starts_at: new Date().toISOString(),
+      expires_at: expiresAt?.toISOString() || null,
+      updated_by: state.session.user.id,
+    }, { onConflict: "user_id" }).select("user_id,plan_tier,feature_flags,reason,starts_at,expires_at,updated_at").single()
+    : await client.from("review_learner_plan_overrides").delete().eq("user_id", profile.user_id);
+  button.disabled = false;
+  if (result.error) {
+    showToast(readableError(result.error, "The learner feature override could not be saved."), "error");
+    return;
+  }
+  state.planOverrides = state.planOverrides.filter((item) => item.user_id !== profile.user_id);
+  if (hasOverride && result.data) state.planOverrides.push(result.data);
+  showToast(
+    hasOverride
+      ? "Learner tier and feature override saved. It has priority until it expires or is cleared."
+      : "Learner override cleared; normal membership rules now apply.",
+    "success",
+  );
+  openLearnerDialog(profile);
+}
+
 async function loadLearnerAuthStatus(profile, output) {
   const cached = state.learnerAuthStatus[profile.user_id];
   if (cached) {
@@ -815,7 +869,7 @@ function generatedCodeResult() {
     make("strong", { text: "New full code — copy and send this now" }),
     code,
     make("p", {
-      text: `${state.lastGeneratedCode.label} · ${state.lastGeneratedCode.durationDays} days · ${audienceLabel(state.lastGeneratedCode.accessScope)} · ${state.lastGeneratedCode.planTier === "premium" ? "Premium" : "Standard"}. For security, the history below shows only the last four characters.`,
+      text: `${state.lastGeneratedCode.label} · ${state.lastGeneratedCode.durationDays} days · ${audienceLabel(state.lastGeneratedCode.accessScope)} · ${planFor(state.lastGeneratedCode.planTier).name}. For security, the history below shows only the last four characters.`,
     }),
   );
   output.append(text, copy);
@@ -844,7 +898,7 @@ function accessCodeEditor(code) {
   title.append(
     make("strong", { text: code.label }),
     make("small", {
-      text: `••••${code.code_last4} · ${code.plan_tier === "premium" ? "Premium" : "Standard"} · ${code.use_count}/${code.max_uses} uses`,
+      text: `••••${code.code_last4} · ${planFor(code.plan_tier).name} · ${code.use_count}/${code.max_uses} uses`,
     }),
   );
   summary.append(title, make("b", { className: `code-status code-status-${status.key}`, text: status.label }));
@@ -869,7 +923,7 @@ function accessCodeEditor(code) {
   scope.value = code.access_scope || "general";
   scope.setAttribute("aria-label", "Access scope");
   const plan = make("select");
-  [["standard", "Standard"], ["premium", "Premium"]].forEach(([value, textValue]) => {
+  [["standard", "Standard"], ["premium", "Premium"], ["premium_plus", "Premium+"]].forEach(([value, textValue]) => {
     const option = make("option", { text: textValue });
     option.value = value;
     plan.append(option);
@@ -990,7 +1044,7 @@ function renderAccessCodeManager() {
     scope.append(option);
   });
   const plan = make("select");
-  [["standard", "Standard"], ["premium", "Premium"]].forEach(([value, textValue]) => {
+  [["standard", "Standard"], ["premium", "Premium"], ["premium_plus", "Premium+"]].forEach(([value, textValue]) => {
     const option = make("option", { text: textValue });
     option.value = value;
     plan.append(option);
@@ -1384,7 +1438,7 @@ function learnerLessonControls(profile) {
     closes.value = localDateTimeValue(assignment?.closes_at);
     closes.setAttribute("aria-label", `Close ${lesson.title_en} assignment at`);
     const requiredPlan = make("select");
-    [["standard", "Standard or Premium"], ["premium", "Premium only"]].forEach(([value, label]) => {
+    [["standard", "Standard or above"], ["premium", "Premium or Premium+"], ["premium_plus", "Premium+ only"]].forEach(([value, label]) => {
       const option = make("option", { text: label });
       option.value = value;
       requiredPlan.append(option);
@@ -1449,6 +1503,86 @@ function learnerLessonControls(profile) {
   return section;
 }
 
+function learnerFeatureControls(profile) {
+  const current = planOverrideFor(profile.user_id);
+  const section = make("section", { className: "learner-control-section" });
+  section.append(
+    make("h3", { text: "Tier & feature override / プラン・機能の例外設定" }),
+    make("p", {
+      text: "Priority: this teacher override → active membership tier → Free public access. Inherit leaves the normal plan value unchanged; Allow or Block controls only that feature.",
+    }),
+  );
+
+  const plan = make("select");
+  [
+    ["", "Inherit membership tier"],
+    ["standard", "Standard"],
+    ["premium", "Premium"],
+    ["premium_plus", "Premium+"],
+  ].forEach(([value, label]) => {
+    const option = make("option", { text: label });
+    option.value = value;
+    plan.append(option);
+  });
+  plan.value = current?.plan_tier || "";
+  plan.setAttribute("aria-label", "Temporary learner plan override");
+
+  const featureFields = {};
+  const features = make("div", { className: "learner-feature-flags" });
+  [
+    ["premium_image_missions", "Premium visual missions"],
+    ["speaking_submission", "Speaking submissions"],
+    ["essay_submission", "Essay submissions"],
+    ["teacher_review", "Teacher review"],
+    ["live_coaching", "Live coaching"],
+    ["monthly_progress_note", "Monthly progress note"],
+  ].forEach(([key, label]) => {
+    const wrapper = make("label");
+    wrapper.append(make("span", { text: label }));
+    const select = make("select");
+    [["", "Inherit"], ["true", "Allow"], ["false", "Block"]].forEach(([value, text]) => {
+      const option = make("option", { text });
+      option.value = value;
+      select.append(option);
+    });
+    const saved = current?.feature_flags?.[key];
+    select.value = typeof saved === "boolean" ? String(saved) : "";
+    select.setAttribute("aria-label", `${label} override`);
+    featureFields[key] = select;
+    wrapper.append(select);
+    features.append(wrapper);
+  });
+
+  const reason = make("input");
+  reason.maxLength = 500;
+  reason.value = current?.reason || "";
+  reason.placeholder = "Reason / 理由（任意）";
+  reason.setAttribute("aria-label", "Override reason");
+  const expiry = make("input");
+  expiry.type = "datetime-local";
+  expiry.value = localDateTimeValue(current?.expires_at);
+  expiry.setAttribute("aria-label", "Override expiry");
+  const save = makeAction("Save override", () => saveLearnerPlanOverride(profile, {
+    planTier: plan.value,
+    featureFlags: Object.fromEntries(Object.entries(featureFields).map(([key, select]) => [
+      key,
+      select.value === "" ? null : select.value === "true",
+    ])),
+    reason: reason.value.trim(),
+    expiresAt: expiry.value,
+  }, save));
+  const clear = makeAction("Clear override", () => {
+    if (!current || window.confirm("Clear this learner's tier and feature override?")) {
+      saveLearnerPlanOverride(profile, { planTier: "", featureFlags: {}, reason: "", expiresAt: "" }, clear);
+    }
+  });
+  clear.className = "secondary-btn";
+  const actions = make("div", { className: "learner-access-actions" });
+  actions.append(plan, reason, expiry, save, clear);
+  section.append(features, actions);
+  return section;
+}
+
 function openLearnerDialog(profile) {
   if (!elements.learnerDialog || !elements.learnerDialogContent) return;
   const current = state.profiles.find((item) => item.user_id === profile.user_id) || profile;
@@ -1490,7 +1624,7 @@ function openLearnerDialog(profile) {
   const access = make("section", { className: "learner-control-section" });
   access.append(
     make("h3", { text: "Membership & account safety / 会員期間・安全管理" }),
-    make("p", { text: `Status: ${activeMembershipStatus(membership)} · Plan: ${membership?.plan_tier === "premium" ? "Premium" : "Standard"} · Scope: ${membership?.access_scope || "general"} · Expires: ${membership?.expires_at ? formatDate(membership.expires_at, true) : "—"}` }),
+    make("p", { text: `Status: ${activeMembershipStatus(membership)} · Plan: ${planFor(membership?.plan_tier || "free").name} · Scope: ${membership?.access_scope || "general"} · Expires: ${membership?.expires_at ? formatDate(membership.expires_at, true) : "—"}` }),
   );
   const duration = make("input");
   duration.type = "number";
@@ -1506,7 +1640,7 @@ function openLearnerDialog(profile) {
     scope.append(option);
   });
   const plan = make("select");
-  [["standard", "Standard"], ["premium", "Premium"]].forEach(([value, label]) => {
+  [["standard", "Standard"], ["premium", "Premium"], ["premium_plus", "Premium+"]].forEach(([value, label]) => {
     const option = make("option", { text: label });
     option.value = value;
     if ((membership?.plan_tier || "standard") === value) option.selected = true;
@@ -1541,6 +1675,7 @@ function openLearnerDialog(profile) {
     profileCard,
     metrics,
     access,
+    learnerFeatureControls(current),
     learnerLessonControls(current),
     timeline,
   );
@@ -2592,13 +2727,10 @@ function questionPrompt(question) {
 }
 
 function questionAccessLabel(question) {
-  const plan = {
-    free: "Free",
-    standard: "Standard+",
-    premium: "Premium",
-  }[question.required_plan || "free"] || "Free";
-  if ((question.required_plan || "free") === "free") return plan;
-  return `${plan} · ${question.locked_display === "hidden" ? "hidden below plan" : "safe teaser below plan"}`;
+  const key = question.required_plan || "free";
+  const plan = planFor(key).name;
+  if (key === "free") return plan;
+  return `${plan} or above · ${question.locked_display === "hidden" ? "hidden below plan" : "safe teaser below plan"}`;
 }
 
 function renderQuestionManager() {
