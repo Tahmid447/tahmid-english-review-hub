@@ -63,9 +63,10 @@ Do not place OAuth client secrets, passwords, service-role keys, or access token
   access-code create/update flows and preserves bounded, reason-specific
   access-code errors.
 - The v9 preview deploys automatically from
-  `upgrade/review-hub-v9-premium-platform`. Netlify published commit `fe81008`
-  with no build, redirect, header or post-processing errors. Its origin is
-  present in the Edge CORS allow-list and Supabase Auth redirect allow-list.
+  `upgrade/review-hub-v9-premium-platform`. The application implementation is
+  commit `fe81008`; Netlify completed its build, redirect, header and
+  post-processing stages without errors. Its origin is present in the Edge
+  CORS allow-list and Supabase Auth redirect allow-list.
   Hosted `/plans` desktop/mobile checks pass for all fixed prices, the exact
   LINE/Instagram destinations and modal fit. Hosted lesson checks pass for
   Settings, 1.0x playback, type filtering, reshuffle and 390 px horizontal fit.

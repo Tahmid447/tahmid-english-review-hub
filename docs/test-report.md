@@ -26,8 +26,9 @@ Last updated: **August 11, 2026**
   modified-file marker.
 - Netlify preview
   `https://tahmid-english-review-hub-v9-preview.netlify.app` is published from
-  commit `fe81008` on `upgrade/review-hub-v9-premium-platform`; build, redirects,
-  headers and post-processing completed without errors.
+  `upgrade/review-hub-v9-premium-platform`. The application implementation is
+  commit `fe81008`; build, redirects, headers and post-processing completed
+  without errors.
 - Hosted desktop and 390 × 844 browser checks pass for `/plans`: all four
   monthly and six-month prices, selected-plan contact copy, exact LINE and
   Instagram destinations, modal fit and zero page-level horizontal overflow.
