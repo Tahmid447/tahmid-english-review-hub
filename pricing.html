@@ -4,7 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="description" content="Compare Free, Standard, Premium and Premium+ Tahmid English Review Hub plans.">
+  <meta name="theme-color" content="#0b2234">
   <title>Plans · Tahmid English Review Hub</title>
+  <link rel="manifest" href="/manifest.webmanifest">
   <link rel="stylesheet" href="/src/styles.css">
   <link rel="icon" href="/assets/tahmid-english-club-logo.png">
 </head>
@@ -16,7 +18,7 @@
       <span><strong>Tahmid English Club</strong><small>English Review Hub · 英語復習ハブ</small></span>
     </a>
     <nav class="header-actions" aria-label="Plan page controls">
-      <a class="quiet-btn" href="/" data-ui-en="Lessons" data-ui-ja="レッスン">Lessons / レッスン</a>
+      <a class="quiet-btn pricing-return" href="/" data-ui-en="Back to Review Hub" data-ui-ja="Review Hubへ戻る">Back to Review Hub / Review Hubへ戻る</a>
       <label class="voice-select"><span data-ui-en="Language" data-ui-ja="表示">Language / 表示</span>
         <select id="languageToggle" aria-label="Interface language">
           <option value="en">English</option>
@@ -28,36 +30,92 @@
   </header>
 
   <main id="plansMain">
-    <section class="pricing-hero shell">
-      <p class="eyebrow" data-ui-en="Clear plans, no surprise checkout" data-ui-ja="分かりやすいプラン・突然の決済なし">Clear plans, no surprise checkout / 分かりやすいプラン・突然の決済なし</p>
-      <h1 data-ui-en="Choose the support that fits your English goals." data-ui-ja="英語の目標に合うサポートを選べます。">Choose the support that fits your English goals. / 英語の目標に合うサポートを選べます。</h1>
-      <p data-ui-en="Start free, unlock the complete self-study hub, or add direct teacher feedback and live coaching." data-ui-ja="無料体験から始めて、全教材・先生の添削・ライブ個人レッスンへ段階的に進めます。">Start free, unlock the complete self-study hub, or add direct teacher feedback and live coaching. / 無料体験から始めて、全教材・先生の添削・ライブ個人レッスンへ段階的に進めます。</p>
-      <div class="billing-switch" role="group" aria-label="Billing period">
-        <button class="active" id="billingMonthly" type="button" data-billing="monthly" data-ui-en="Monthly" data-ui-ja="月額">Monthly / 月額</button>
-        <button id="billingSixMonths" type="button" data-billing="six_months"><span data-ui-en="6 months" data-ui-ja="6ヶ月">6 months / 6ヶ月</span><small data-ui-en="Save about 15%" data-ui-ja="約15%お得">Save about 15% / 約15%お得</small></button>
+    <section class="pricing-hero shell" aria-labelledby="pricingHeading">
+      <div class="pricing-hero-copy">
+        <p class="eyebrow" data-ui-en="A clear path from practice to personal feedback" data-ui-ja="自習から個別フィードバックまで、分かりやすく">A clear path from practice to personal feedback / 自習から個別フィードバックまで、分かりやすく</p>
+        <h1 id="pricingHeading" data-ui-en="Choose how much support helps you keep moving." data-ui-ja="自分に合うサポートで、英語学習を前へ。">Choose how much support helps you keep moving. / 自分に合うサポートで、英語学習を前へ。</h1>
+        <p data-ui-en="Start with two complete lessons, unlock the full Review Hub, or add personal feedback and live coaching from Tahmid." data-ui-ja="まずは完成版2レッスンを無料体験。全教材、個別添削、ライブ指導へ、必要なサポートに合わせて選べます。">Start with two complete lessons, unlock the full Review Hub, or add personal feedback and live coaching from Tahmid. / まずは完成版2レッスンを無料体験。全教材、個別添削、ライブ指導へ、必要なサポートに合わせて選べます。</p>
+        <div class="pricing-proof" aria-label="Plan highlights">
+          <span><b>17</b><small data-ui-en="real-lesson reviews" data-ui-ja="実レッスン復習教材">real-lesson reviews / 実レッスン復習教材</small></span>
+          <span><b>14</b><small data-ui-en="practice formats" data-ui-ja="練習形式">practice formats / 練習形式</small></span>
+          <span><b>1:1</b><small data-ui-en="human support" data-ui-ja="人によるサポート">human support / 人によるサポート</small></span>
+        </div>
       </div>
+      <aside class="pricing-hero-note">
+        <span class="pricing-note-mark" aria-hidden="true">T</span>
+        <p data-ui-en="Built from real lessons, so your review stays connected to the English you actually want to use." data-ui-ja="実際のレッスン内容から作っているため、使いたい英語をそのまま復習できます。">Built from real lessons, so your review stays connected to the English you actually want to use. / 実際のレッスン内容から作っているため、使いたい英語をそのまま復習できます。</p>
+        <strong>— Tahmid</strong>
+      </aside>
+    </section>
+
+    <section class="pricing-selector shell" aria-labelledby="billingHeading">
+      <div>
+        <p class="eyebrow" data-ui-en="Choose a billing period" data-ui-ja="利用期間を選ぶ">Choose a billing period / 利用期間を選ぶ</p>
+        <h2 id="billingHeading" data-ui-en="Monthly flexibility or six-month continuity" data-ui-ja="月額の気軽さ、または6か月の継続プラン">Monthly flexibility or six-month continuity / 月額の気軽さ、または6か月の継続プラン</h2>
+      </div>
+      <div class="billing-switch" role="group" aria-label="Billing period">
+        <button class="active" id="billingMonthly" type="button" data-billing="monthly" aria-pressed="true"><span data-ui-en="Monthly" data-ui-ja="月額">Monthly / 月額</span><small data-ui-en="Pay month by month" data-ui-ja="1か月ごと">Pay month by month / 1か月ごと</small></button>
+        <button id="billingSixMonths" type="button" data-billing="six_months" aria-pressed="false"><span data-ui-en="Six months" data-ui-ja="6か月">Six months / 6か月</span><small data-ui-en="Save about 15%" data-ui-ja="約15%お得">Save about 15% / 約15%お得</small></button>
+      </div>
+      <p class="billing-summary" id="billingSummary" role="status" aria-live="polite"></p>
     </section>
 
     <section class="plan-grid shell" id="planGrid" aria-label="Membership plans"></section>
 
-    <section class="contact-assurance shell">
-      <div>
-        <p class="eyebrow" data-ui-en="A real conversation before payment" data-ui-ja="支払い前に直接相談できます">A real conversation before payment / 支払い前に直接相談できます</p>
-        <h2 data-ui-en="Choose a plan, then message Tahmid securely." data-ui-ja="プランを選び、Tahmidへ安全にメッセージしてください。">Choose a plan, then message Tahmid securely. / プランを選び、Tahmidへ安全にメッセージしてください。</h2>
-        <p data-ui-en="The Review Hub does not claim that payment is complete. Tahmid confirms availability, payment details and your access separately through LINE or Instagram." data-ui-ja="Review Hub上で支払い完了とは表示しません。空き状況・支払い方法・アクセス情報は、LINEまたはInstagramでTahmidが個別に確認します。">The Review Hub does not claim that payment is complete. Tahmid confirms availability, payment details and your access separately through LINE or Instagram. / Review Hub上で支払い完了とは表示しません。空き状況・支払い方法・アクセス情報は、LINEまたはInstagramでTahmidが個別に確認します。</p>
+    <section class="plan-comparison shell" aria-labelledby="comparisonHeading">
+      <div class="section-heading comparison-heading">
+        <div>
+          <p class="eyebrow" data-ui-en="Compare every plan" data-ui-ja="プランを詳しく比較">Compare every plan / プランを詳しく比較</p>
+          <h2 id="comparisonHeading" data-ui-en="See the difference in seconds." data-ui-ja="違いがすぐに分かります。">See the difference in seconds. / 違いがすぐに分かります。</h2>
+        </div>
+        <p data-ui-en="Premium is recommended when personal corrections are the missing piece. Premium+ adds deeper live coaching." data-ui-ja="個別添削が必要ならPremiumがおすすめ。Premium+では、さらに深いライブ指導が加わります。">Premium is recommended when personal corrections are the missing piece. Premium+ adds deeper live coaching. / 個別添削が必要ならPremiumがおすすめ。Premium+では、さらに深いライブ指導が加わります。</p>
       </div>
-      <img src="/assets/contact/line-qr.jpeg" alt="LINE contact QR code for Tahmid English Club" width="240" height="240">
+      <div id="comparisonTable" class="comparison-table-wrap"></div>
+      <div id="comparisonCards" class="comparison-mobile" aria-label="Mobile plan comparison"></div>
+    </section>
+
+    <section class="contact-assurance shell" id="contact">
+      <div class="contact-copy">
+        <p class="eyebrow" data-ui-en="Talk to the person who teaches you" data-ui-ja="担当する先生に直接相談">Talk to the person who teaches you / 担当する先生に直接相談</p>
+        <h2 data-ui-en="Not sure which plan is right for you? Message me." data-ui-ja="どのプランが合うか迷ったら、お気軽にご相談ください。">Not sure which plan is right for you? Message me. / どのプランが合うか迷ったら、お気軽にご相談ください。</h2>
+        <p data-ui-en="Select the plan you're interested in and I'll prepare a message for you. Edit it freely before contacting me through LINE or Instagram." data-ui-ja="気になるプランを選ぶと、問い合わせ文を自動で作成します。内容は自由に編集して、LINEまたはInstagramから送れます。">Select the plan you're interested in and I'll prepare a message for you. Edit it freely before contacting me through LINE or Instagram. / 気になるプランを選ぶと、問い合わせ文を自動で作成します。内容は自由に編集して、LINEまたはInstagramから送れます。</p>
+        <ul class="contact-steps">
+          <li><span>1</span><b data-ui-en="Choose a plan" data-ui-ja="プランを選ぶ">Choose a plan / プランを選ぶ</b></li>
+          <li><span>2</span><b data-ui-en="Edit your message" data-ui-ja="文面を編集">Edit your message / 文面を編集</b></li>
+          <li><span>3</span><b data-ui-en="Send it in your preferred app" data-ui-ja="使いやすいアプリから送る">Send it in your preferred app / 使いやすいアプリから送る</b></li>
+        </ul>
+        <p class="contact-disclaimer" data-ui-en="No payment is processed here. I will personally confirm availability, payment details and access." data-ui-ja="このページでは決済されません。空き状況・支払い方法・アクセスについて、Tahmidが個別にご案内します。">No payment is processed here. I will personally confirm availability, payment details and access. / このページでは決済されません。空き状況・支払い方法・アクセスについて、Tahmidが個別にご案内します。</p>
+      </div>
+      <div class="contact-qr-card">
+        <img src="/assets/contact/line-qr.jpeg" alt="LINE contact QR code for Tahmid English Club" width="240" height="240">
+        <strong>LINE</strong>
+        <small data-ui-en="Scan to start a conversation" data-ui-ja="読み取って相談を始める">Scan to start a conversation / 読み取って相談を始める</small>
+      </div>
+    </section>
+
+    <section class="pricing-faq shell" aria-labelledby="faqHeading">
+      <p class="eyebrow" data-ui-en="Good to know" data-ui-ja="よくあるご質問">Good to know / よくあるご質問</p>
+      <h2 id="faqHeading" data-ui-en="A simple start, without surprises." data-ui-ja="安心して始められる、シンプルな流れ。">A simple start, without surprises. / 安心して始められる、シンプルな流れ。</h2>
+      <div class="faq-grid">
+        <details><summary data-ui-en="Can I try it before joining?" data-ui-ja="入会前に試せますか？">Can I try it before joining? / 入会前に試せますか？</summary><p data-ui-en="Yes. Free includes two complete sample lessons and safe previews of plan-only activities." data-ui-ja="はい。Freeでは完成版2レッスンと、プラン限定問題の安全なプレビューを利用できます。">Yes. Free includes two complete sample lessons and safe previews of plan-only activities. / はい。Freeでは完成版2レッスンと、プラン限定問題の安全なプレビューを利用できます。</p></details>
+        <details><summary data-ui-en="What does teacher review include?" data-ui-ja="先生の添削には何が含まれますか？">What does teacher review include? / 先生の添削には何が含まれますか？</summary><p data-ui-en="Premium and Premium+ include one speaking task and one essay task per lesson, reviewed by Tahmid within three business days." data-ui-ja="PremiumとPremium+では、各レッスンのスピーキング課題1件・英作文課題1件をTahmidが3営業日以内に添削します。">Premium and Premium+ include one speaking task and one essay task per lesson, reviewed by Tahmid within three business days. / PremiumとPremium+では、各レッスンのスピーキング課題1件・英作文課題1件をTahmidが3営業日以内に添削します。</p></details>
+        <details><summary data-ui-en="What happens after I message you?" data-ui-ja="問い合わせ後はどうなりますか？">What happens after I message you? / 問い合わせ後はどうなりますか？</summary><p data-ui-en="I will reply personally, answer questions and explain the next steps. Sending a message does not complete a payment." data-ui-ja="Tahmidが直接返信し、ご質問への回答と次の手順をご案内します。メッセージ送信だけで決済完了にはなりません。">I will reply personally, answer questions and explain the next steps. Sending a message does not complete a payment. / Tahmidが直接返信し、ご質問への回答と次の手順をご案内します。メッセージ送信だけで決済完了にはなりません。</p></details>
+      </div>
     </section>
   </main>
 
   <dialog class="contact-dialog" id="contactDialog" aria-labelledby="contactDialogHeading">
     <form method="dialog" class="dialog-close-row"><button class="dialog-close" value="cancel" aria-label="Close">×</button></form>
     <p class="eyebrow" data-ui-en="Plan enquiry" data-ui-ja="プラン相談">Plan enquiry / プラン相談</p>
-    <h2 id="contactDialogHeading" data-ui-en="Message Tahmid to continue" data-ui-ja="Tahmidへメッセージして続ける">Message Tahmid to continue / Tahmidへメッセージして続ける</h2>
-    <div class="contact-plan-summary"><strong id="contactPlanName">Standard</strong><span id="contactPlanPrice">¥3,980 / month</span></div>
-    <p id="contactDialogHelp" data-ui-en="Copy the prepared message, then open LINE or Instagram. No payment is processed on this page." data-ui-ja="準備された文面をコピーして、LINEまたはInstagramを開いてください。このページで決済は行われません。">Copy the prepared message, then open LINE or Instagram. No payment is processed on this page. / 準備された文面をコピーして、LINEまたはInstagramを開いてください。このページで決済は行われません。</p>
-    <label class="contact-message-label"><span data-ui-en="Prepared message" data-ui-ja="送信用メッセージ">Prepared message / 送信用メッセージ</span><textarea id="contactMessage" rows="5" readonly></textarea></label>
-    <button class="secondary-btn full-width" id="copyContactMessage" type="button" data-ui-en="Copy message" data-ui-ja="メッセージをコピー">Copy message / メッセージをコピー</button>
+    <h2 id="contactDialogHeading" data-ui-en="Prepare your message" data-ui-ja="問い合わせ文を準備する">Prepare your message / 問い合わせ文を準備する</h2>
+    <p id="contactDialogHelp" data-ui-en="Edit the message in your own words, then copy it and open LINE or Instagram." data-ui-ja="内容を自由に編集し、コピーしてからLINEまたはInstagramを開いてください。">Edit the message in your own words, then copy it and open LINE or Instagram. / 内容を自由に編集し、コピーしてからLINEまたはInstagramを開いてください。</p>
+    <label class="contact-field"><span data-ui-en="Your name" data-ui-ja="お名前">Your name / お名前</span><input id="contactName" autocomplete="name" data-placeholder-en="Your name" data-placeholder-ja="お名前"></label>
+    <div class="contact-plan-summary" aria-label="Selected plan"><span><small data-ui-en="Selected plan" data-ui-ja="選択中のプラン">Selected plan / 選択中のプラン</small><strong id="contactPlanName">Standard</strong></span><span id="contactPlanPrice">¥3,980 / month</span></div>
+    <label class="contact-field contact-message-label"><span data-ui-en="Message" data-ui-ja="メッセージ">Message / メッセージ</span><textarea id="contactMessage" rows="7"></textarea></label>
+    <div class="contact-message-actions">
+      <button class="secondary-btn" id="resetContactMessage" type="button" data-ui-en="Reset message" data-ui-ja="文面をリセット">Reset message / 文面をリセット</button>
+      <button class="primary-btn" id="copyContactMessage" type="button" data-ui-en="Copy current message" data-ui-ja="現在の文面をコピー">Copy current message / 現在の文面をコピー</button>
+    </div>
     <div class="contact-actions">
       <a class="contact-channel line-channel" id="lineContact" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">LINE</span><b data-ui-en="Open LINE" data-ui-ja="LINEを開く">Open LINE / LINEを開く</b></a>
       <a class="contact-channel instagram-channel" id="instagramContact" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">◎</span><b data-ui-en="Open Instagram" data-ui-ja="Instagramを開く">Open Instagram / Instagramを開く</b></a>
@@ -67,7 +125,7 @@
 
   <footer class="site-footer">
     <span>Created by Tahmid Ahmed</span>
-    <nav><a href="/" data-ui-en="Lesson library" data-ui-ja="レッスン一覧">Lesson library / レッスン一覧</a><a href="/teacher" data-ui-en="Teacher sign-in" data-ui-ja="先生用ログイン">Teacher sign-in / 先生用ログイン</a></nav>
+    <nav><a href="/" data-ui-en="Return to Review Hub" data-ui-ja="Review Hubへ戻る">Return to Review Hub / Review Hubへ戻る</a><a href="/teacher" target="_blank" rel="noopener noreferrer" data-ui-en="Teacher Studio" data-ui-ja="Teacher Studio">Teacher Studio</a></nav>
   </footer>
   <script type="module" src="/src/pricing.js"></script>
 </body>
