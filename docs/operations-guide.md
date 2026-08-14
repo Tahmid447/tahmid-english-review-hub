@@ -4,8 +4,8 @@ Updated: 2026-08-14 (Asia/Tokyo)
 
 This guide distinguishes the final-product code prepared locally from behavior
 already available on the hosted sites. The working branch is
-`upgrade/review-hub-v9-final-product`; implementation checkpoint `338d09d` is
-committed locally and its final remote push must be confirmed before rollout.
+`upgrade/review-hub-v9-final-product`; canonical GitHub implementation checkpoint
+`c14625d5` and handoff checkpoint `a87eb5e1` are published.
 The dedicated v9 preview is still the older `aad5749` deployment and production
 is still pre-v9. Migration `015`, migration `016`, and the matching updated
 `membership-access` Edge Function are not live.

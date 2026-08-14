@@ -6,9 +6,11 @@ Updated: 2026-08-14 (Asia/Tokyo)
 
 - Repository folder: `/Users/tahmidahmed/Documents/Codex/2026-08-03/codex-handoff-tahmid-english-review-hub/work/tahmid-english-review-hub`
 - Working branch: `upgrade/review-hub-v9-final-product`
-- Final implementation checkpoint: `338d09d`
-- Documentation checkpoint: pending while this handoff records the exact
-  implementation commit; confirm the branch's final pushed SHA after push
+- Canonical GitHub implementation checkpoint: `c14625d50204227c917ecc01d59322cb63006cee`
+- Published handoff checkpoint: `a87eb5e1aaa9cff079319b68dfed40bdb2b1a408`
+- The status-only documentation commit that contains this update follows the
+  published handoff checkpoint; use `git rev-parse HEAD` for its self-referential
+  final SHA.
 - Production: https://jocular-chaja-86e78d.netlify.app
 - Dedicated v9 preview: https://tahmid-english-review-hub-v9-preview.netlify.app
 - Supabase project ref: `ycmybggetemkhorkhfnf`
@@ -103,8 +105,8 @@ See `docs/test-report.md` for dated evidence and remaining gates.
 
 1. Review the worktree and create a recoverable database backup/export before any Supabase change.
 2. Run the complete local test/build/visual suite and `git diff --check`; resolve every failure.
-3. Push the committed checkpoints on `upgrade/review-hub-v9-final-product` and
-   record the remote SHA before any backend change.
+3. Confirm `upgrade/review-hub-v9-final-product` still contains published
+   checkpoint `a87eb5e1` (completed on August 14) before any backend change.
 4. Apply `202608140015_teacher_preview_and_premium_workflows.sql` to the intended Supabase project.
 5. Apply `202608140016_visual_question_content_corrections.sql` only after `015` succeeds.
 6. Deploy the matching `supabase/functions/membership-access` implementation.
@@ -127,8 +129,7 @@ See `docs/test-report.md` for dated evidence and remaining gates.
 
 ## Exact next step
 
-From this repository and branch, inspect the clean checkpoint and push
-`upgrade/review-hub-v9-final-product`; then record the exact remote SHA.
+From this repository and branch, confirm the clean published checkpoint.
 Before touching Supabase, take a recoverable backup and verify the remote
 migration ledger/schema through `014`; then apply migration `015`, verify it,
 apply `016`, verify it, and deploy the matching Edge Function. Deploy only the
