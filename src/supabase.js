@@ -318,8 +318,20 @@ async function updateStudentProfileRow(client, userId, payload) {
     .maybeSingle();
 }
 
-export async function persistStudentProfileRow(client, userId, payload, exists) {
-  if (exists) return updateStudentProfileRow(client, userId, payload);
+function selectStudentProfileRow(client, userId) {
+  return client
+    .from("review_profiles")
+    .select("*")
+    .eq("user_id", userId)
+    .maybeSingle();
+}
+
+export async function persistStudentProfileRow(client, userId, payload, exists, allowUpdate = true) {
+  if (exists) {
+    return allowUpdate
+      ? updateStudentProfileRow(client, userId, payload)
+      : selectStudentProfileRow(client, userId);
+  }
 
   const inserted = await client
     .from("review_profiles")
@@ -328,10 +340,12 @@ export async function persistStudentProfileRow(client, userId, payload, exists) 
     .maybeSingle();
 
   // Initial session delivery and the auth-state callback may race on a brand
-  // new account. If the other request inserted first, safely update the row
-  // that is now owned by this learner instead of surfacing a duplicate error.
+  // new account. An explicit form save may safely update the now-owned row;
+  // an automatic ensure only re-reads it so stale metadata cannot win later.
   if (inserted.error?.code === "23505") {
-    return updateStudentProfileRow(client, userId, payload);
+    return allowUpdate
+      ? updateStudentProfileRow(client, userId, payload)
+      : selectStudentProfileRow(client, userId);
   }
   return inserted;
 }
@@ -340,12 +354,14 @@ export async function ensureStudentProfile(session, values = {}) {
   const client = getStudentClient();
   const user = session?.user;
   if (!client || !user) return { profile: null, error: null };
-  const { data: existingProfile, error: profileReadError } = await client
-    .from("review_profiles")
-    .select("*")
-    .eq("user_id", user.id)
-    .maybeSingle();
+  const { data: existingProfile, error: profileReadError } = await selectStudentProfileRow(client, user.id);
   if (profileReadError) return { profile: null, error: profileReadError };
+  const hasExplicitValues = Object.keys(values).length > 0;
+  // Session initialisation only needs to ensure that a row exists. Once it
+  // does, never rewrite it from a possibly stale automatic auth callback.
+  if (existingProfile && !hasExplicitValues) {
+    return { profile: existingProfile, error: null };
+  }
   const metadata = user.user_metadata || {};
   const fullName = String(metadata.full_name || metadata.name || "").trim();
   const nameParts = fullName.split(/\s+/).filter(Boolean);
@@ -369,6 +385,7 @@ export async function ensureStudentProfile(session, values = {}) {
     user.id,
     payload,
     Boolean(existingProfile),
+    hasExplicitValues,
   );
   return { profile: data || null, error };
 }

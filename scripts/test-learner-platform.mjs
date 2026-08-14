@@ -152,6 +152,11 @@ const existingUpdate = existingProfileWrite.calls.find(([operation]) => operatio
 assert.equal(Object.hasOwn(existingUpdate, "user_id"), false,
   "Existing-profile saves never request UPDATE permission on the protected owner key.");
 assert.equal(existingProfileWrite.calls.some(([operation]) => operation === "insert"), false);
+assert.deepEqual(
+  existingProfileWrite.calls.find(([operation]) => operation === "eq"),
+  ["eq", "user_id", profilePayload.user_id],
+  "Existing-profile saves stay scoped to the authenticated owner row.",
+);
 
 const newProfileWrite = profileClient([{ data: profilePayload, error: null }]);
 await persistStudentProfileRow(newProfileWrite.client, profilePayload.user_id, profilePayload, false);
@@ -165,6 +170,36 @@ const racedProfileWrite = profileClient([
 await persistStudentProfileRow(racedProfileWrite.client, profilePayload.user_id, profilePayload, false);
 assert.equal(racedProfileWrite.calls.filter(([operation]) => operation === "update").length, 1,
   "A concurrent first-login INSERT race retries as an owner-scoped UPDATE.");
+assert.equal(
+  Object.hasOwn(racedProfileWrite.calls.find(([operation]) => operation === "update")?.[1], "user_id"),
+  false,
+  "The duplicate-insert fallback also keeps the owner key out of UPDATE.",
+);
+
+const automaticRaceWrite = profileClient([
+  { data: null, error: { code: "23505" } },
+  { data: profilePayload, error: null },
+]);
+await persistStudentProfileRow(
+  automaticRaceWrite.client,
+  profilePayload.user_id,
+  profilePayload,
+  false,
+  false,
+);
+assert.equal(automaticRaceWrite.calls.some(([operation]) => operation === "update"), false,
+  "An automatic first-login race re-reads the winning row instead of overwriting newer profile values.");
+
+const failedProfileWrite = profileClient([{ data: null, error: { code: "42501" } }]);
+const failedProfileResult = await persistStudentProfileRow(
+  failedProfileWrite.client,
+  profilePayload.user_id,
+  profilePayload,
+  false,
+);
+assert.equal(failedProfileResult.error?.code, "42501");
+assert.equal(failedProfileWrite.calls.some(([operation]) => operation === "update"), false,
+  "Non-conflict INSERT errors are returned without an unsafe fallback write.");
 
 const lessonScript = fs.readFileSync(path.join(root, "src", "lesson.js"), "utf8");
 const lessonPage = fs.readFileSync(path.join(root, "lesson.html"), "utf8");
@@ -188,6 +223,7 @@ assert.match(homePage, /id="profileGateDialog"/);
 assert.match(hubScript, /isGoogleSession/);
 assert.match(hubScript, /id = "profileCompletionStatus"/);
 assert.match(hubScript, /Saving your profile…/);
+assert.match(supabaseScript, /existingProfile && !hasExplicitValues/);
 assert.match(supabaseScript, /signOutStudent[\s\S]*?withOperationTimeout/);
 assert.match(supabaseScript, /removeItem\(STUDENT_AUTH_STORAGE_KEY\)/);
 assert.match(supabaseScript, /studentClient = undefined/);
