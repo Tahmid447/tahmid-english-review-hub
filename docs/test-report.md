@@ -1,8 +1,107 @@
 # Test Report / 動作確認レポート
 
-Last updated: **August 11, 2026**
+Last updated: **August 14, 2026**
 
-## August 11 Premium platform preview verification
+## August 14 final-product local verification
+
+Current release status must be read separately from local test results:
+
+- Working branch: `upgrade/review-hub-v9-final-product`.
+- Last pushed checkpoint: `830c596`; the final integrated local commit is pending.
+- The dedicated v9 preview is still the older `aad5749` deployment. Production
+  is still pre-v9.
+- Migrations `202608140015_teacher_preview_and_premium_workflows.sql` and
+  `202608140016_visual_question_content_corrections.sql` are not live.
+- The matching updated `membership-access` Edge Function is not deployed.
+- Authenticated Supabase/RLS/OAuth/access-code/submission QA and real-device QA
+  are pending. Local/static PASS results below do not prove those live paths.
+
+### Passing local tranche evidence
+
+- `npm test` — PASS after the final visual-content regeneration: content,
+  question-quality, learning-experience, learner-platform, Teacher Studio,
+  premium-schema, plan-platform, and v15 workflow suites passed.
+- `npm run build` — PASS in the learner, Teacher/Auth, visual-content, and
+  frontend tranches.
+- `npm run verify:visuals` — PASS: all 85 required WebPs are present and pass
+  file checks.
+- `node scripts/audit-question-quality.mjs` — PASS: 17 lessons, 616 activities,
+  and 85 visual questions.
+- `node scripts/validate-content.mjs` — PASS: 1,369 integrity/security
+  assertions.
+- `node scripts/test-learning-experience.mjs` — PASS after the final learner
+  experience and accessibility changes.
+- `node scripts/test-learner-platform.mjs` — PASS: all 14 formats, immediate
+  retry, format-aware completeness, checked-only totals, profile gate, theme,
+  and PWA regression assertions.
+- `node scripts/test-teacher-workflows-v15.mjs` — PASS.
+- `node scripts/test-teacher-controls.mjs` — PASS.
+- `node scripts/validate-premium-schema.mjs` — PASS.
+- `node scripts/test-plan-platform.mjs` — PASS after pricing/theme/PWA and
+  accessibility changes.
+- PostgreSQL 18 parser checks — PASS: migration `015` parsed as 60 statements
+  and migration `016` parsed as 2 statements. This proves syntax, not live
+  schema dependencies or RLS behaviour.
+- `node scripts/generate-question-migration.mjs` — PASS and regenerated
+  forward-only migration `016` with an exact 85-row postcondition.
+- JavaScript syntax checks and final integrated `git diff --check` — PASS.
+- Local Browser QA — PASS for the checked public flows: 390 px and 430 px
+  home/pricing/phrase/lesson layouts have no page-level horizontal overflow;
+  621/768/900 px learner headers stay compact; desktop layout was visually
+  checked at 1,024 and 1,440 px; light/dark persistence, six-month calculations,
+  editable/reset/copied plan message, 24-item progressive phrase rendering,
+  roving radio keys, immediate Retry, and immutable first score were exercised.
+  The local browser console log was empty during the final checked route.
+- `npm run verify:live` — BLOCKED in this sandbox on August 14: DNS resolution
+  for `ycmybggetemkhorkhfnf.supabase.co` returned `ENOTFOUND` before any live
+  assertion ran.
+- `npm run audit:audio-live` — BLOCKED for the same DNS restriction before any
+  live request ran. Historical PASS evidence below is retained but does not
+  replace a fresh post-deployment run.
+
+The full combined suite was rerun after the learner, content, frontend,
+Teacher/Auth, security, final Dashboard, and documentation tranches were
+integrated. It must be rerun once more only if a source/build/test file changes
+after this record; the intentional commit itself does not invalidate the run.
+
+### Content review evidence
+
+- All 85 illustration-led questions were manually reviewed across the rendered
+  image, prompt, four choices, answer, hint, bilingual explanations, and alt
+  text.
+- All 85 now have unique, question-specific, non-answer-revealing English and
+  Japanese guidance, one bilingual correct-evidence pair, and three bilingual
+  distractor-conflict reason pairs.
+- Four images were replaced and rechecked:
+  `july-13-03-rush-back.webp`, `july-19-02-either-day.webp`,
+  `july-22-01-availability.webp`, and `july-27-02-poured-sauce.webp`.
+- The valid July 27 splash image was kept while its inaccurate alt/brief was
+  corrected. Six ambiguous distractor sets were corrected.
+- The exact lesson/question/fix ledger is
+  `docs/VISUAL_CONTENT_REAUDIT_2026-08-14.md`.
+
+### Final-product checks still required
+
+- Fresh live-security and live-audio checks from an environment with Supabase
+  network access, plus one final exact-commit test/build/diff check if anything
+  changes after this report.
+- Deployed light/dark Lighthouse checks for home, phrases, pricing, and lesson;
+  390 px, 430 px, 768 px, 900 px, desktop, and console/overflow inspection.
+- Authenticated Google first-time/returning, email signup/login/logout/reload,
+  Free/Standard/Premium/Premium+ access, Teacher preview, and full access-code
+  lifecycle.
+- Draft privacy, real speaking recording/upload/return/resubmission, essay
+  review/publication, and RLS-negative checks after migration/function rollout.
+- Real iPhone Safari and Android Chrome touch, microphone, PWA install/update,
+  and offline-shell checks.
+
+## August 11 Premium platform preview verification (dated record)
+
+This section is retained as historical evidence from the prior session. It is
+not the current deployment source of truth: the August 14 Netlify audit observed
+the dedicated preview at `aad5749`, not the final-product branch. The reported
+migration `014`/older Edge deployment was not independently re-read from the
+remote migration ledger during the August 14 audit.
 
 - `npm test`: PASS, including the new fixed-price/contact/Premium+ platform
   checks.
@@ -274,11 +373,15 @@ and authorised.
 
 ## August 2 lesson skill expansion (local source)
 
+This is a dated intermediate snapshot. The final August 14 source contains 85
+visual questions/assets, not 55; see the current verification section above.
+
 - All 11 Notion-derived lessons generate 31 activities each.
 - Every lesson has five distinct illustration-led activities, six listening
   activities, and five speaking activities.
 - The reviewed source and protected question migration contain 616 activities.
-- The visual production manifest contains 55 unique WebP paths, alt text, and
-  lesson-specific scene briefs.
+- At this intermediate point, the visual production manifest contained 55
+  unique WebP paths, alt text, and lesson-specific scene briefs.
 - `npm test` passes with 1,369 assertions.
-- `npm run verify:visuals` now passes with all 55 final illustrations present.
+- At this intermediate point, `npm run verify:visuals` passed with all 55
+  then-required illustrations present.

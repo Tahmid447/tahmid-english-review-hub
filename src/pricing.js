@@ -1,5 +1,12 @@
 import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js";
-import { getSettings, onSettingsChange, updateSettings } from "./store.js";
+import {
+  applyThemePreference,
+  getSettings,
+  onSettingsChange,
+  updateSettings,
+  watchSystemTheme,
+} from "./store.js";
+import "./pwa.js";
 import {
   BILLING_OPTIONS,
   CONTACT_CHANNELS,
@@ -14,6 +21,9 @@ import {
 
 const elements = {
   language: document.querySelector("#languageToggle"),
+  theme: document.querySelector("#themeToggle"),
+  mobileSettingsToggle: document.querySelector("#mobileSettingsToggle"),
+  settingsControls: document.querySelector("#siteSettingsControls"),
   grid: document.querySelector("#planGrid"),
   monthly: document.querySelector("#billingMonthly"),
   sixMonths: document.querySelector("#billingSixMonths"),
@@ -182,6 +192,8 @@ async function copyCurrentMessage() {
 function applySettings(settings = getSettings()) {
   applyLanguageMode(languageModeFromSettings(settings));
   elements.language.value = languageModeFromSettings(settings);
+  if (elements.theme) elements.theme.value = settings.theme || "system";
+  applyThemePreference(settings.theme);
   renderPlans();
   renderComparison();
   renderBillingSummary();
@@ -196,6 +208,14 @@ elements.language.addEventListener("change", () => {
     ? elements.language.value
     : "bilingual";
   updateSettings({ languageMode, showJapanese: languageMode !== "en" });
+});
+elements.theme?.addEventListener("change", () => {
+  updateSettings({ theme: elements.theme.value });
+});
+elements.mobileSettingsToggle?.addEventListener("click", () => {
+  const expanded = elements.mobileSettingsToggle.getAttribute("aria-expanded") === "true";
+  elements.mobileSettingsToggle.setAttribute("aria-expanded", String(!expanded));
+  elements.settingsControls?.classList.toggle("mobile-open", !expanded);
 });
 elements.monthly.addEventListener("click", () => setBilling(BILLING_OPTIONS.monthly));
 elements.sixMonths.addEventListener("click", () => setBilling(BILLING_OPTIONS.sixMonths));
@@ -216,3 +236,4 @@ elements.copy.addEventListener("click", copyCurrentMessage);
 onSettingsChange(applySettings);
 setBilling(BILLING_OPTIONS.monthly);
 applySettings();
+watchSystemTheme(() => applyThemePreference(getSettings().theme));

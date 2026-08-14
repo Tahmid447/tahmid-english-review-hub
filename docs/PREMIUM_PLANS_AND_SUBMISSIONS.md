@@ -1,25 +1,32 @@
 # Free / Standard / Premium / Premium+ plans and teacher review
 
-Updated: 2026-08-11 (Asia/Tokyo)
+Updated: 2026-08-14 (Asia/Tokyo)
 
-This is the product and operations specification implemented by
-`src/plans.js`, the existing Premium submission schema, and
-`202608110014_premium_plus_and_entitlements.sql`. Prices, plan names and contact
-links have one browser-side source of truth in `src/plans.js`; database plan
-keys and entitlements remain in Supabase.
+This is the product and operations specification for the four public plans,
+contact-first sales flow, Premium submissions, and human teacher review. Public
+names, prices, comparison rows, and contact destinations have one browser-side
+source of truth in `src/plans.js`; database plan keys and entitlements remain
+in Supabase.
+
+The final-product implementation is local. Migration
+`202608140015_teacher_preview_and_premium_workflows.sql`, migration
+`202608140016_visual_question_content_corrections.sql`, and the matching updated
+`membership-access` Edge Function are **not live**. The v9 preview is still the
+older `aad5749` deployment, and production remains pre-v9.
 
 ## Fixed public plans and prices
 
-| Plan | Monthly | Six months | Main purpose |
-| --- | ---: | ---: | --- |
-| Free | ¥0 | ¥0 | Two complete sample lessons and safe paid-feature previews |
-| Standard | ¥3,980 | ¥20,300 | Complete self-study Review Hub |
-| Premium | ¥6,980 | ¥35,600 | Standard plus teacher-reviewed speaking and writing |
-| Premium+ | ¥16,800 | ¥85,700 | Premium plus three 50-minute live 1:1 lessons each month |
+| Plan | Monthly | Six months | Exact saving | Monthly equivalent |
+| --- | ---: | ---: | ---: | ---: |
+| Free | ¥0 | ¥0 | ¥0 | ¥0 |
+| Standard | ¥3,980 | ¥20,300 | ¥3,580 (about 15%) | ¥3,383 |
+| Premium | ¥6,980 | ¥35,600 | ¥6,280 (about 15%) | ¥5,933 |
+| Premium+ | ¥16,800 | ¥85,700 | ¥15,100 (about 15%) | ¥14,283 |
 
-The six-month values are approximately 15% below six monthly payments. Do not
-rename the plans or publish different prices in page-specific HTML. Premium+
-uses the database key `premium_plus` and the public label **Premium+**.
+The monthly equivalent is the six-month total divided by six and rounded to
+the nearest yen. Do not rename the plans or publish different prices in
+page-specific HTML. Premium+ uses the database key `premium_plus` and the
+public label **Premium+**. Premium is the recommended option in the pricing UI.
 
 ## Feature split
 
@@ -37,105 +44,153 @@ uses the database key `premium_plus` and the public label **Premium+**.
 | Three 50-minute live 1:1 lessons per month | — | — | — | Yes |
 | Monthly progress note | — | — | — | Yes |
 
-Core illustration questions can remain Standard. Premium should sell deeper
-output and human guidance, not remove essential visual learning from the base
-product. The teacher can mark individual questions Free, Standard, Premium or
-Premium+ and choose a payload-free teaser or complete hiding below the required
-tier.
+The pricing page renders a 13-row comparison. Core illustration questions can
+remain Standard; Premium should sell deeper output and human guidance, not
+remove essential visual learning from the base product. An authorised teacher
+can mark individual questions Free, Standard, Premium, or Premium+ and choose
+a payload-free teaser or complete hiding below the required tier.
 
 ## Deterministic entitlement priority
 
 The shared site is never forked per learner. Supabase resolves access in this
 order:
 
-1. authorised teacher access;
+1. authorised teacher preview;
 2. active learner tier/feature override created in Teacher Studio;
 3. active learner membership tier;
 4. Free public access.
 
-A learner feature override may explicitly allow or block `premium_image_missions`,
-`speaking_submission`, `essay_submission`, `teacher_review`, `live_coaching`, or
-`monthly_progress_note`. `Inherit` leaves the normal tier value unchanged. An
-expiry date returns the learner to normal membership rules automatically.
+A learner feature override may explicitly allow or block
+`premium_image_missions`, `speaking_submission`, `essay_submission`,
+`teacher_review`, `live_coaching`, or `monthly_progress_note`. `Inherit` leaves
+the normal tier value unchanged. An expiry date returns the learner to normal
+membership rules automatically.
 
 Question payloads are protected by RLS. A below-tier teaser contains only the
-question position, format and required plan. It never contains the prompt,
-choices, hint, explanation or answer.
+question position, format, and required plan. It never contains the prompt,
+choices, hint, explanation, or answer. A visual blur is presentation only and
+must never be treated as access control.
 
-## Learner submission workflow
+## Task inventory and learner submission workflow
+
+Migration `015` seeds exactly 34 active tasks: one speaking and one essay task
+for every one of the 17 lessons. The migration has a hard 34-row postcondition.
+This seed is local and will not exist in the hosted database until migration
+`015` is applied successfully.
 
 ### Speaking
 
 1. The learner opens an active speaking task.
-2. The task shows the topic, target duration and required phrases/vocabulary.
+2. The task shows the topic, target duration, and required phrases/vocabulary.
 3. The learner records, listens, and either re-records or submits.
 4. The private object is stored in `review-premium-recordings`; Postgres stores
    only `audio_object_path` and submission metadata.
-5. A submitted item is locked during review. The teacher can return it or
-   publish feedback.
+5. Migration `015` validates learner ownership, active speaking-task binding,
+   object existence, and upload limits before the path can be accepted.
+6. A submitted item is locked during review. The teacher can return it or
+   publish human feedback.
 
 ### Essay
 
-1. The learner writes against the lesson-specific prompt and visible word range.
-2. A draft remains private to the learner. It does not enter the teacher queue.
-3. Final submission validates the configured word range and becomes read-only
-   during review.
+1. The learner writes against the lesson-specific prompt and visible word
+   range.
+2. A draft remains private to the learner and does not enter the teacher queue.
+3. Final submission validates the word range and becomes read-only during
+   review. Essay rows cannot carry an audio object path.
 4. Published feedback appears beside the learner's original work.
 
-Submission statuses remain `draft`, `submitted`, `in_review`, `reviewed` and
-`returned`. The Teacher Studio queue intentionally excludes private drafts.
-Not every submission needs a written reply, but any published feedback is tied
-to a teacher and optional score.
+Submission statuses remain `draft`, `submitted`, `in_review`, `reviewed`, and
+`returned`. Teachers cannot read learner drafts under migration `015`.
+Returning work and resubmitting refreshes the queue timestamps. Review feedback
+and status are changed through one transactional teacher RPC so a partial
+write cannot publish one without the other.
 
 ## Teacher Studio controls
 
-The learner detail dialog contains:
+Teacher Studio is organised around seven teacher jobs:
 
-- membership period, audience and Standard/Premium/Premium+ tier;
-- expiring tier and per-feature overrides;
-- lesson recommendations, open/close dates and minimum plan;
-- learner-specific teacher unlock/block rules with priority over normal lesson
-  visibility;
-- password-reset email only—passwords are never shown or stored;
-- learning activity and Premium submission history.
+1. **Dashboard** — what needs attention;
+2. **Learners** — accounts, membership, assignments, and access;
+3. **Access codes** — create, edit, reissue, disable, and delete;
+4. **Lessons & content** — lesson and question publishing controls;
+5. **Submissions** — speaking and essay review queue;
+6. **Sources** — origin and sync status;
+7. **Insights** — learning activity and outcomes.
 
-Access-code creation/edit/reissue supports Standard, Premium and Premium+.
-Newly generated full codes are shown once; history stores only the final four
-characters.
+The workspace supports one-language-at-a-time English/Japanese display,
+learner search and plan/status filters, submission-status filters, and a
+teacher-only Free/Standard/Premium/Premium+ preview. Preview is visibly marked,
+does not change a learner membership, and disables learner submission actions.
+
+The learner detail view includes membership dates, expiring tier/feature
+overrides, assignments, learner-specific unlock/block rules, activity history,
+and submitted Premium work. Draft Premium work remains private. Password-reset
+email is the only password-related teacher action; passwords are never shown or
+stored.
+
+Access-code creation/edit/reissue supports Standard, Premium, and Premium+.
+New full codes are displayed only at creation/reissue time; stored history
+shows only the safe suffix. Migration `015` makes redemption and reissue
+transactional and rejects incompatible overlapping grants rather than silently
+over-granting access.
+
+## No AI grading
+
+There is no automatic grading, learner-facing AI score, or AI review workflow.
+No AI API key is shipped to the browser. The legacy `ai_assisted` database
+column remains only for schema compatibility; the new review workflow always
+writes it as `false`. Tahmid is responsible for reading/listening, deciding the
+feedback and score, and publishing the result.
 
 ## Contact-first checkout
 
 `/plans` does not process payments and never displays a fake success state. The
-learner selects a plan and billing period, copies the prepared bilingual message,
-then opens the configured LINE or Instagram profile. The selected plan and
-price remain visible in the dialog.
+learner selects a plan and billing period, may enter a name and edit the
+bilingual message, copies the current edited text, and then opens the configured
+LINE or Instagram profile. A reset action intentionally restores the generated
+message. The selected plan, period, price, and savings remain visible.
 
-- LINE: decoded from the supplied QR asset and stored in `CONTACT_CHANNELS`.
-- Instagram: the exact supplied profile URL is stored in `CONTACT_CHANNELS`.
-- QR asset: `assets/contact/line-qr.jpeg`.
+- LINE: decoded from the supplied QR and stored in `CONTACT_CHANNELS`.
+- Instagram: the exact supplied profile URL stored in `CONTACT_CHANNELS`.
+- QR asset: `assets/contact/line-qr.jpeg` (loaded lazily on the pricing page).
 
 Payment details and access are confirmed separately by Tahmid. OAuth secrets,
-service-role keys, passwords and access tokens never belong in this config.
+service-role keys, passwords, and access tokens never belong in this config.
 
-## AI and cost boundary
+## Human-review capacity warning
 
-There is no paid AI grading or learner-facing AI score. `ai_assisted` only
-records whether a teacher used AI to prepare a draft; the teacher remains
-responsible for checking and publishing it. No AI API key is shipped to the
-browser.
+The advertised human-feedback promise has an ongoing labour cost and needs a
+launch cap. A planning scenario—not a measured usage forecast—illustrates the
+risk: if 100 Premium learners each submit one speaking task and one essay in a
+week, the queue receives 200 reviews. At 10–15 minutes per review, that is about
+33–50 teacher hours per week before follow-up and administration. Separately,
+100 Premium+ members using three included 50-minute sessions would require 250
+live-teaching hours per month.
+
+Before opening sales, define and enforce a realistic active-member cap,
+submission allowance or cadence, booking capacity, holiday policy, and queue
+fallback. Do not promise unlimited review. Recheck the three-business-day target
+against actual queue time during a small preview cohort before scaling.
 
 ## Safe rollout
 
-1. Apply migrations through 013, then apply
-   `202608110014_premium_plus_and_entitlements.sql`.
-2. Deploy the updated `membership-access` Edge Function so Premium+ access
-   codes are accepted.
-3. Run the automated suite and `npm run verify:live`.
-4. Test one below-tier learner, Premium learner, Premium+ learner and authorised
-   teacher in the preview environment.
-5. Test one real speaking upload/return and one essay feedback publication.
-6. Review the Netlify preview on a physical phone before production promotion.
+1. Export/back up the current Supabase schema and relevant Review Hub data.
+2. Confirm the final local suite and build pass on the exact commit to deploy.
+3. Apply `202608140015_teacher_preview_and_premium_workflows.sql`.
+4. Apply `202608140016_visual_question_content_corrections.sql` only after
+   migration `015` succeeds.
+5. Deploy the matching updated `membership-access` Edge Function.
+6. Deploy the exact final-product commit to the dedicated v9 preview only.
+7. Test an authorised teacher and Free, Standard, Premium, and Premium+ learner
+   accounts, including below-tier payload withholding.
+8. Test access-code create/reissue/redeem conflicts and one real speaking
+   upload/return/resubmission plus one essay feedback publication.
+9. Complete real-phone touch, microphone, PWA install/update, and offline-shell
+   checks.
+10. Promote to production only after every preview gate passes and a known-good
+    rollback point is preserved.
 
-Do not publish production until migration 014 and the matching Edge Function
-are both live; otherwise the new UI could offer a tier that the backend cannot
-yet accept.
+Migration `015`, migration `016`, and the updated Edge Function are not live as
+of this document's update. Do not expose the final UI in production before the
+matching backend, authenticated preview QA, and physical-device gate are all
+complete.

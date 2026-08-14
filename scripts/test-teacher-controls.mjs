@@ -28,9 +28,9 @@ const [
 assert.match(teacher, /lastGeneratedCode/);
 assert.match(teacher, /Copy full code/);
 assert.match(teacher, /last four characters/);
-assert.match(teacher, /Open profile & controls/);
-assert.match(teacher, /Teacher lock \(priority\)/);
-assert.match(teacher, /Teacher unlock \(priority\)/);
+assert.match(teacher, /Open learner/);
+assert.match(teacher, /Hide this lesson/);
+assert.match(teacher, /Allow this lesson/);
 assert.match(teacher, /Apply to selected/);
 assert.match(teacher, /required_plan/);
 assert.match(teacher, /review_approve_membership_tiered/);
@@ -76,12 +76,19 @@ assert.doesNotMatch(teaserSelect, /q\.(?:payload|stable_key)|prompt|choice|hint|
 assert.match(lessonPage, /id="lockedQuestionTeasers"/);
 assert.match(lessonUi, /renderLockedQuestionTeasers/);
 assert.match(lessonUi, /question, choices, hint, explanation and answer stay private/);
-assert.match(membershipFunction, /reason: "expired"/);
-assert.match(membershipFunction, /reason: "used_up"/);
-assert.match(membershipFunction, /teacherActions = new Set\(\["create", "update", "delete", "reissue", "learner-auth-status"\]\)/);
-assert.match(teacherPage, /Premium reviews/);
+assert.match(membershipFunction, /"expired"/);
+assert.match(membershipFunction, /"used_up"/);
+assert.match(membershipFunction, /serviceRoleTeacherActions = new Set\(\["create", "update", "delete", "learner-auth-status"\]\)/);
+assert.match(membershipFunction, /if \(action === "reissue"\)[\s\S]*?"review_reissue_access_code"/);
+assert.match(teacherPage, /data-teacher-tab="submissions"/);
 assert.match(teacher, /Open private recording/);
 assert.match(teacher, /Publish feedback/);
+assert.match(teacher, /New learners \(30 days\)/);
+assert.match(teacher, /\["free", "Free", "無料"\][\s\S]*?\["standard", "Standard", "スタンダード"\][\s\S]*?\["premium", "Premium", "プレミアム"\][\s\S]*?\["premium_plus", "Premium\+", "プレミアムプラス"\]/);
+assert.match(teacher, /state\.profiles\.forEach\(\(profile\) => \{[\s\S]*?membershipFor\(profile\.user_id\)[\s\S]*?planCounts\[planKey\] \+= 1/);
+assert.match(teacher, /Bundled lesson · source link unavailable/);
+assert.match(teacher, /Teacher-created · source link unavailable/);
+assert.doesNotMatch(teacher, /sourceCell\.textContent = lesson\.source_type === "legacy_zip" \? "Original site" : "Manual"/);
 
 console.log("Teacher controls regression tests passed.");
 console.log("  ✓ full-code handoff and masked history");
@@ -91,3 +98,4 @@ console.log("  ✓ access-code edit, reissue, safe delete/disable, and distinct 
 console.log("  ✓ archived restore and guarded permanent deletion");
 console.log("  ✓ teacher-authorised Google sign-in without password sharing");
 console.log("  ✓ payload-safe per-question Free, Standard, Premium, teaser, and hidden access controls");
+console.log("  ✓ dashboard learner-plan counts and honest localized lesson provenance");

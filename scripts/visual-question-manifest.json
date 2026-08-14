@@ -6,285 +6,1112 @@
       "lessonId": "june-28",
       "slot": 1,
       "phraseIndex": 0,
-      "distractorIndexes": [3, 4, 7],
+      "distractorIndexes": [
+        3,
+        4,
+        7
+      ],
       "asset": "/assets/questions/visual/june-28-01-order-coffee.webp",
       "imageAlt": "A customer politely orders a cup of coffee from a café server.",
-      "scenePrompt": "At a calm Japanese café counter, an adult customer politely gestures toward a cup of coffee while placing an order with a friendly server; the server is ready to prepare the coffee. Make the requested coffee unmistakable without written menus or text."
+      "scenePrompt": "At a calm Japanese café counter, an adult customer politely gestures toward a cup of coffee while placing an order with a friendly server; the server is ready to prepare the coffee. Make the requested coffee unmistakable without written menus or text.",
+      "reviewedGuidance": {
+        "hintEn": "Focus on the drink the customer is requesting and the polite exchange at the counter.",
+        "hintJa": "カウンターで、客がどの飲み物を丁寧に頼んでいるかに注目しましょう。",
+        "evidenceEn": "The customer is politely requesting coffee while the server prepares to take the order.",
+        "evidenceJa": "客が店員にコーヒーを丁寧に注文している場面です。",
+        "reasons": [
+          {
+            "choice": "It can’t be helped.",
+            "en": "no one is accepting an unavoidable problem; a café order is taking place",
+            "ja": "避けられない問題を受け入れる場面ではなく、カフェで注文しています"
+          },
+          {
+            "choice": "Could I have the menu?",
+            "en": "the customer is asking for coffee, not requesting a menu",
+            "ja": "メニューを求めているのではなく、コーヒーを注文しています"
+          },
+          {
+            "choice": "Would you like anything else?",
+            "en": "the customer is making the request; the server is not offering an additional item after an order",
+            "ja": "追加注文を店員が尋ねているのではなく、客が飲み物を頼んでいます"
+          }
+        ]
+      }
     },
     {
       "lessonId": "june-28",
       "slot": 2,
       "phraseIndex": 3,
-      "distractorIndexes": [0, 4, 6],
+      "distractorIndexes": [
+        0,
+        4,
+        6
+      ],
       "asset": "/assets/questions/visual/june-28-02-cant-be-helped.webp",
       "imageAlt": "A traveler calmly accepts that a train has been cancelled.",
-      "scenePrompt": "At a train platform, an adult traveler sees a clear cancellation symbol on the departure display, then gives a resigned but calm shrug and accepts the situation; no readable words or letters."
+      "scenePrompt": "At a train platform, an adult traveler sees a clear cancellation symbol on the departure display, then gives a resigned but calm shrug and accepts the situation; no readable words or letters.",
+      "reviewedGuidance": {
+        "hintEn": "Notice the cancelled journey and the traveler’s calm, resigned reaction.",
+        "hintJa": "運休になった移動予定と、旅行者の落ち着いた諦めの表情を見ましょう。",
+        "evidenceEn": "The train is cancelled, and the traveler responds with a calm shrug instead of trying to change it.",
+        "evidenceJa": "列車が運休となり、旅行者は状況を変えようとせず静かに受け入れています。",
+        "reasons": [
+          {
+            "choice": "I’d like a coffee, please.",
+            "en": "there is no café drink order; the visible problem is a cancelled train",
+            "ja": "カフェで飲み物を注文しておらず、見えている問題は列車の運休です"
+          },
+          {
+            "choice": "Could I have the menu?",
+            "en": "no diner or menu is shown at the station",
+            "ja": "駅の場面に食事客やメニューは描かれていません"
+          },
+          {
+            "choice": "That sounds good.",
+            "en": "the traveler looks resigned about bad news, not pleased by an appealing suggestion",
+            "ja": "魅力的な提案に賛成しているのではなく、悪い知らせを諦めて受け止めています"
+          }
+        ]
+      }
     },
     {
       "lessonId": "june-28",
       "slot": 3,
       "phraseIndex": 4,
-      "distractorIndexes": [0, 5, 7],
+      "distractorIndexes": [
+        0,
+        5,
+        7
+      ],
       "asset": "/assets/questions/visual/june-28-03-request-menu.webp",
       "imageAlt": "A diner politely asks a server for the menu.",
-      "scenePrompt": "A seated diner at a restaurant politely raises one hand and gestures toward a closed menu held by the server, clearly asking to receive it; empty place setting, warm respectful interaction, no readable text."
+      "scenePrompt": "A seated diner at a restaurant politely raises one hand and gestures toward a closed menu held by the server, clearly asking to receive it; empty place setting, warm respectful interaction, no readable text.",
+      "reviewedGuidance": {
+        "hintEn": "Look at what the seated diner is asking the server to hand over.",
+        "hintJa": "座っている客が店員に何を渡してほしいと頼んでいるかを見ましょう。",
+        "evidenceEn": "The diner gestures toward the menu held by the server and politely asks to receive it.",
+        "evidenceJa": "客は店員が持つメニューを指し、渡してもらうよう丁寧に頼んでいます。",
+        "reasons": [
+          {
+            "choice": "I’d like a coffee, please.",
+            "en": "the requested object is the menu, not a cup of coffee",
+            "ja": "求めている物はコーヒーではなくメニューです"
+          },
+          {
+            "choice": "I ordered tea instead.",
+            "en": "no tea replacement has been chosen; the diner has not yet received the menu",
+            "ja": "紅茶への変更は示されておらず、客はまだメニューを受け取ろうとしています"
+          },
+          {
+            "choice": "Would you like anything else?",
+            "en": "the diner is asking the server for something, rather than the server offering an extra item",
+            "ja": "店員が追加注文を尋ねているのではなく、客が店員に依頼しています"
+          }
+        ]
+      }
     },
     {
       "lessonId": "june-28",
       "slot": 4,
       "phraseIndex": 5,
-      "distractorIndexes": [0, 2, 6],
+      "distractorIndexes": [
+        0,
+        2,
+        6
+      ],
       "asset": "/assets/questions/visual/june-28-04-tea-instead.webp",
       "imageAlt": "A café customer chooses tea instead of coffee.",
-      "scenePrompt": "At a café table, a customer has deliberately chosen a steaming cup of tea while gently moving an offered coffee cup aside; make the replacement choice tea instead of coffee visually clear, no text."
+      "scenePrompt": "At a café table, a customer has deliberately chosen a steaming cup of tea while gently moving an offered coffee cup aside; make the replacement choice tea instead of coffee visually clear, no text.",
+      "reviewedGuidance": {
+        "hintEn": "Compare the drink the customer keeps with the one being moved aside.",
+        "hintJa": "客が選んだ飲み物と、脇へよけた飲み物を比べましょう。",
+        "evidenceEn": "The customer keeps the tea and moves the offered coffee aside, showing a replacement choice.",
+        "evidenceJa": "客は紅茶を選び、提示されたコーヒーを脇へよけて変更を示しています。",
+        "reasons": [
+          {
+            "choice": "I’d like a coffee, please.",
+            "en": "coffee is being rejected, while tea is the chosen drink",
+            "ja": "コーヒーは断られ、紅茶が選ばれています"
+          },
+          {
+            "choice": "What did you order?",
+            "en": "the image shows the completed choice, not a question asking what was ordered",
+            "ja": "何を注文したか尋ねる場面ではなく、選択した結果が示されています"
+          },
+          {
+            "choice": "That sounds good.",
+            "en": "there is no response to a suggestion; the visible evidence is a switch from coffee to tea",
+            "ja": "提案への賛成ではなく、コーヒーから紅茶への変更が見えます"
+          }
+        ]
+      }
     },
     {
       "lessonId": "june-28",
       "slot": 5,
       "phraseIndex": 7,
-      "distractorIndexes": [1, 4, 5],
+      "distractorIndexes": [
+        1,
+        4,
+        5
+      ],
       "asset": "/assets/questions/visual/june-28-05-anything-else.webp",
       "imageAlt": "A server offers a diner an additional drink or dessert after the meal.",
-      "scenePrompt": "Near the end of a restaurant meal, a friendly server presents a small dessert tray and drink options with an inviting open-hand gesture while the diner considers whether to order anything else; no written menu text."
+      "scenePrompt": "Near the end of a restaurant meal, a friendly server presents a small dessert tray and drink options with an inviting open-hand gesture while the diner considers whether to order anything else; no written menu text.",
+      "reviewedGuidance": {
+        "hintEn": "Notice who is speaking and the extra items offered after the meal.",
+        "hintJa": "食後に誰が話し、追加で何を勧めているかに注目しましょう。",
+        "evidenceEn": "After the meal, the server presents extra drink and dessert choices to the diner.",
+        "evidenceJa": "食後、店員が客に追加の飲み物やデザートを勧めています。",
+        "reasons": [
+          {
+            "choice": "How about you?",
+            "en": "the server is offering more food or drink, not returning a personal question to the diner",
+            "ja": "相手にも同じ質問を返しているのではなく、追加の飲食物を勧めています"
+          },
+          {
+            "choice": "Could I have the menu?",
+            "en": "the server already has options in hand; the diner is not requesting a menu",
+            "ja": "店員がすでに選択肢を示しており、客がメニューを求めてはいません"
+          },
+          {
+            "choice": "I ordered tea instead.",
+            "en": "no customer is changing an order to tea; several extra choices are being offered",
+            "ja": "客が紅茶へ注文変更しているのではなく、複数の追加品が提示されています"
+          }
+        ]
+      }
     },
-
     {
       "lessonId": "june-29",
       "slot": 1,
       "phraseIndex": 1,
-      "distractorIndexes": [0, 2, 7],
+      "distractorIndexes": [
+        2,
+        4,
+        5
+      ],
       "asset": "/assets/questions/visual/june-29-01-heard-of-restaurant.webp",
       "imageAlt": "A person recognizes a restaurant shown by a friend.",
-      "scenePrompt": "Two adults chat while one shows a photo of a distinctive restaurant exterior on a phone; the other person immediately recognizes it with an aha expression and a knowing nod, indicating they have heard of that restaurant, no readable text."
+      "scenePrompt": "Two adults chat while one shows a photo of a distinctive restaurant exterior on a phone; the other person immediately recognizes it with an aha expression and a knowing nod, indicating they have heard of that restaurant, no readable text.",
+      "reviewedGuidance": {
+        "hintEn": "Look at the restaurant image on the phone and the other person’s recognition reaction.",
+        "hintJa": "スマートフォンのレストラン画像と、それを見た相手の思い出した表情を見ましょう。",
+        "evidenceEn": "A friend shows a restaurant, and the other person recognizes its name or reputation.",
+        "evidenceJa": "友人がレストランを見せると、相手はその店を知っている反応をしています。",
+        "reasons": [
+          {
+            "choice": "I heard it clearly.",
+            "en": "the reaction is recognition of a restaurant, not confirmation that a sound was audible",
+            "ja": "音が明瞭に聞こえた確認ではなく、レストランを知っている反応です"
+          },
+          {
+            "choice": "For real?",
+            "en": "the person looks knowingly familiar with the restaurant rather than surprised or doubtful",
+            "ja": "驚いて疑っているのではなく、店を知っている様子です"
+          },
+          {
+            "choice": "Click the top-right box.",
+            "en": "the phone displays a restaurant image, not a grid with a top-right cell",
+            "ja": "画面はレストラン画像で、右上のマスを押す操作ではありません"
+          }
+        ]
+      }
     },
     {
       "lessonId": "june-29",
       "slot": 2,
       "phraseIndex": 2,
-      "distractorIndexes": [0, 4, 7],
+      "distractorIndexes": [
+        0,
+        4,
+        7
+      ],
       "asset": "/assets/questions/visual/june-29-02-heard-clearly.webp",
       "imageAlt": "A listener hears an announcement clearly through headphones.",
-      "scenePrompt": "An adult wearing headphones listens to a clear voice announcement, smiles and gives a confident confirmation gesture; clean even sound-wave symbols reach both ears without noise or obstruction, no words."
+      "scenePrompt": "An adult wearing headphones listens to a clear voice announcement, smiles and gives a confident confirmation gesture; clean even sound-wave symbols reach both ears without noise or obstruction, no words.",
+      "reviewedGuidance": {
+        "hintEn": "Follow the clean sound waves reaching both headphones and the listener’s confident response.",
+        "hintJa": "両耳のヘッドホンに届く明瞭な音の波と、聞き手の確信した反応を見ましょう。",
+        "evidenceEn": "Clear sound reaches both ears, and the listener confirms that the announcement was audible.",
+        "evidenceJa": "明瞭な音が両耳に届き、聞き手は放送を聞き取れたと示しています。",
+        "reasons": [
+          {
+            "choice": "I heard about it yesterday.",
+            "en": "the image shows listening now, with no evidence of learning news yesterday",
+            "ja": "今まさに聞いている場面で、昨日その話を知った証拠はありません"
+          },
+          {
+            "choice": "For real?",
+            "en": "the listener is confirming clear reception, not reacting with disbelief",
+            "ja": "疑って驚いているのではなく、音を明瞭に受け取れたと確認しています"
+          },
+          {
+            "choice": "I didn’t hear what she said.",
+            "en": "the sound waves reach the listener cleanly and the expression shows understanding, not failure to hear",
+            "ja": "音は明瞭に届き、聞き手も理解した表情なので、聞き取れなかった場面ではありません"
+          }
+        ]
+      }
     },
     {
       "lessonId": "june-29",
       "slot": 3,
       "phraseIndex": 5,
-      "distractorIndexes": [2, 6, 7],
+      "distractorIndexes": [
+        2,
+        6,
+        7
+      ],
       "asset": "/assets/questions/visual/june-29-03-top-right-box.webp",
       "imageAlt": "A finger selects the top-right cell of a simple grid.",
-      "scenePrompt": "Close view of a hand using a tablet that displays a clean three-by-three grid with no text; the finger is unmistakably pressing the cell in the top-right corner while all other cells remain neutral."
+      "scenePrompt": "Close view of a hand using a tablet that displays a clean three-by-three grid with no text; the finger is unmistakably pressing the cell in the top-right corner while all other cells remain neutral.",
+      "reviewedGuidance": {
+        "hintEn": "Check the exact corner of the grid touched by the finger.",
+        "hintJa": "指が触れているマスが、グリッドのどの角にあるか確認しましょう。",
+        "evidenceEn": "The finger is pressing the cell at the upper-right corner of the grid.",
+        "evidenceJa": "指はグリッドの右上にあるマスを押しています。",
+        "reasons": [
+          {
+            "choice": "I heard it clearly.",
+            "en": "the image shows a touch-screen position, with no listening action or sound",
+            "ja": "聞き取りや音ではなく、画面上の位置を押す操作です"
+          },
+          {
+            "choice": "The button is in the bottom-left corner.",
+            "en": "the selected cell is upper-right, the opposite corner from bottom-left",
+            "ja": "選ばれているのは右上で、左下とは反対の角です"
+          },
+          {
+            "choice": "I didn’t hear what she said.",
+            "en": "no speaker or failed listening is pictured; a grid cell is being selected",
+            "ja": "話し手や聞き取り失敗はなく、グリッドのマスを選んでいます"
+          }
+        ]
+      }
     },
     {
       "lessonId": "june-29",
       "slot": 4,
       "phraseIndex": 6,
-      "distractorIndexes": [1, 5, 7],
+      "distractorIndexes": [
+        1,
+        5,
+        7
+      ],
       "asset": "/assets/questions/visual/june-29-04-bottom-left-button.webp",
       "imageAlt": "A button is clearly located in the bottom-left corner of a screen.",
-      "scenePrompt": "A simple tablet interface contains a three-by-three layout with one obvious round button placed only in the bottom-left corner; an adult points directly to that location, no text or letters."
+      "scenePrompt": "A simple tablet interface contains a three-by-three layout with one obvious round button placed only in the bottom-left corner; an adult points directly to that location, no text or letters.",
+      "reviewedGuidance": {
+        "hintEn": "Identify the one corner containing the round button.",
+        "hintJa": "丸いボタンが置かれている角を特定しましょう。",
+        "evidenceEn": "The only button appears in the lower-left corner of the screen.",
+        "evidenceJa": "画面上の唯一のボタンは左下の角にあります。",
+        "reasons": [
+          {
+            "choice": "I’ve heard of that restaurant.",
+            "en": "the screen is a simple layout, not a restaurant being recognized",
+            "ja": "画面は単純な配置図で、レストランを知っている場面ではありません"
+          },
+          {
+            "choice": "Click the top-right box.",
+            "en": "the visible control is bottom-left, not a box at the top-right",
+            "ja": "見えている操作対象は左下で、右上のマスではありません"
+          },
+          {
+            "choice": "I didn’t hear what she said.",
+            "en": "the visual concerns a button’s location, not difficulty hearing a woman",
+            "ja": "女性の声を聞き取れない場面ではなく、ボタンの位置を示しています"
+          }
+        ]
+      }
     },
     {
       "lessonId": "june-29",
       "slot": 5,
       "phraseIndex": 7,
-      "distractorIndexes": [1, 2, 4],
+      "distractorIndexes": [
+        1,
+        2,
+        4
+      ],
       "asset": "/assets/questions/visual/june-29-05-could-not-hear.webp",
       "imageAlt": "A listener cannot hear a woman speaking because of loud background noise.",
-      "scenePrompt": "In a noisy station, a woman speaks to another adult, but the listener leans closer with a hand behind one ear and a confused expression; surrounding train and crowd noise visually interrupts the woman's speech, no text."
+      "scenePrompt": "In a noisy station, a woman speaks to another adult, but the listener leans closer with a hand behind one ear and a confused expression; surrounding train and crowd noise visually interrupts the woman's speech, no text.",
+      "reviewedGuidance": {
+        "hintEn": "Compare the woman speaking with the noise that interrupts what reaches the listener.",
+        "hintJa": "女性が話す様子と、聞き手に届く声を妨げる周囲の騒音を比べましょう。",
+        "evidenceEn": "Crowd and train noise block the woman’s words, and the listener cups an ear in confusion.",
+        "evidenceJa": "人混みと列車の騒音が女性の言葉を遮り、聞き手は困って耳に手を当てています。",
+        "reasons": [
+          {
+            "choice": "I’ve heard of that restaurant.",
+            "en": "no restaurant is being recognized; the problem is inaudible speech in a noisy station",
+            "ja": "レストランを知っている場面ではなく、騒がしい駅で声が聞こえない状況です"
+          },
+          {
+            "choice": "I heard it clearly.",
+            "en": "noise visibly interrupts the speech and the listener looks confused, so the message was not clear",
+            "ja": "騒音が声を遮り、聞き手も困っているため、明瞭に聞こえた場面ではありません"
+          },
+          {
+            "choice": "For real?",
+            "en": "the hand-to-ear gesture signals a hearing problem, not disbelief about surprising news",
+            "ja": "耳に手を当てる動作は聞き取りの問題で、驚く話を疑う反応ではありません"
+          }
+        ]
+      }
     },
-
     {
       "lessonId": "june-30",
       "slot": 1,
       "phraseIndex": 0,
-      "distractorIndexes": [1, 2, 7],
+      "distractorIndexes": [
+        2,
+        4,
+        5
+      ],
       "asset": "/assets/questions/visual/june-30-01-annoyed-by-noise.webp",
       "imageAlt": "A person looks annoyed by loud construction noise outside.",
-      "scenePrompt": "Inside an apartment, an adult covers one ear and looks visibly annoyed as loud construction machinery operates just outside the window; strong sound waves point from the machinery toward the person, no text."
+      "scenePrompt": "Inside an apartment, an adult covers one ear and looks visibly annoyed as loud construction machinery operates just outside the window; strong sound waves point from the machinery toward the person, no text.",
+      "reviewedGuidance": {
+        "hintEn": "Use the construction sound waves and the person’s facial expression as the main clues.",
+        "hintJa": "工事の音の波と、人物の表情を主な手掛かりにしましょう。",
+        "evidenceEn": "Loud construction reaches the room, and the person covers an ear with an irritated expression.",
+        "evidenceJa": "大きな工事音が部屋まで届き、人物は苛立った表情で耳をふさいでいます。",
+        "reasons": [
+          {
+            "choice": "I prefer tea because it’s lighter.",
+            "en": "there are no drinks or taste comparison; the person is reacting to construction noise",
+            "ja": "飲み物や味の比較はなく、人物は工事音に反応しています"
+          },
+          {
+            "choice": "This exercise is easier than the last one.",
+            "en": "no exercises are being compared; the visible source of discomfort is noise",
+            "ja": "練習問題を比較しておらず、不快感の原因は見えている騒音です"
+          },
+          {
+            "choice": "They scored in the first half.",
+            "en": "no football match or goal appears in the apartment scene",
+            "ja": "室内の場面にサッカーの試合や得点はありません"
+          }
+        ]
+      }
     },
     {
       "lessonId": "june-30",
       "slot": 2,
       "phraseIndex": 2,
-      "distractorIndexes": [0, 4, 5],
+      "distractorIndexes": [
+        0,
+        4,
+        5
+      ],
       "asset": "/assets/questions/visual/june-30-02-prefers-light-tea.webp",
       "imageAlt": "A person chooses light tea instead of a darker coffee.",
-      "scenePrompt": "At a café tasting table, an adult happily chooses a pale, light cup of tea and sets aside a darker heavy coffee; the tea choice and preference for its lighter quality are visually clear, no words."
+      "scenePrompt": "At a café tasting table, an adult happily chooses a pale, light cup of tea and sets aside a darker heavy coffee; the tea choice and preference for its lighter quality are visually clear, no words.",
+      "reviewedGuidance": {
+        "hintEn": "Compare the pale drink being chosen with the darker drink set aside.",
+        "hintJa": "選ばれた淡い色の飲み物と、脇に置かれた濃い色の飲み物を比べましょう。",
+        "evidenceEn": "The person chooses the pale tea and rejects the darker coffee because of the lighter quality.",
+        "evidenceJa": "人物は軽い味を示す淡い紅茶を選び、濃いコーヒーをよけています。",
+        "reasons": [
+          {
+            "choice": "I’m annoyed by the noise.",
+            "en": "the person looks pleased with a drink choice; no noise source is shown",
+            "ja": "人物は飲み物の選択に満足しており、騒音源は描かれていません"
+          },
+          {
+            "choice": "This exercise is easier than the last one.",
+            "en": "the image compares beverages, not two learning exercises",
+            "ja": "比較しているのは飲み物で、二つの練習問題ではありません"
+          },
+          {
+            "choice": "They scored in the first half.",
+            "en": "there is no sport, scoreboard, or goal in the café scene",
+            "ja": "カフェの場面に競技・得点表示・ゴールはありません"
+          }
+        ]
+      }
     },
     {
       "lessonId": "june-30",
       "slot": 3,
       "phraseIndex": 5,
-      "distractorIndexes": [2, 3, 6],
+      "distractorIndexes": [
+        2,
+        3,
+        6
+      ],
       "asset": "/assets/questions/visual/june-30-03-first-half-goal.webp",
       "imageAlt": "A football team scores before the halftime break.",
-      "scenePrompt": "During the first half of a football match, a ball has just entered the goal and players celebrate while the stadium clock visually shows the game before halftime using simple numerals only; no team logos or words."
+      "scenePrompt": "During the first half of a football match, a ball has just entered the goal and players celebrate while the stadium clock visually shows the game before halftime using simple numerals only; no team logos or words.",
+      "reviewedGuidance": {
+        "hintEn": "Read the match clock and notice when the ball enters the goal.",
+        "hintJa": "試合時計を確認し、ボールがいつゴールに入ったかを見ましょう。",
+        "evidenceEn": "The ball enters the goal while the clock still shows a time before halftime.",
+        "evidenceJa": "ハーフタイム前の時刻を示す時計のもとで、ボールがゴールに入っています。",
+        "reasons": [
+          {
+            "choice": "I prefer tea because it’s lighter.",
+            "en": "the visual is a football goal, not a comparison between tea and coffee",
+            "ja": "紅茶とコーヒーの比較ではなく、サッカーの得点場面です"
+          },
+          {
+            "choice": "Who do you think will win?",
+            "en": "the image records an actual early goal, not a conversation asking for a prediction",
+            "ja": "勝敗予想を尋ねる会話ではなく、実際の前半の得点を示しています"
+          },
+          {
+            "choice": "The second half was exciting.",
+            "en": "the clock places this goal before halftime, not in the second half",
+            "ja": "時計はハーフタイム前を示しており、後半の場面ではありません"
+          }
+        ]
+      }
     },
     {
       "lessonId": "june-30",
       "slot": 4,
       "phraseIndex": 6,
-      "distractorIndexes": [0, 4, 5],
+      "distractorIndexes": [
+        0,
+        4,
+        5
+      ],
       "asset": "/assets/questions/visual/june-30-04-exciting-second-half.webp",
       "imageAlt": "Fans react excitedly during the second half of a close football match.",
-      "scenePrompt": "Late in a close football match after the halftime break, fans leap up excitedly as both teams race toward the goal; energetic second-half action, simple late-game clock numerals only, no team logos or words."
+      "scenePrompt": "Late in a close football match after the halftime break, fans leap up excitedly as both teams race toward the goal; energetic second-half action, simple late-game clock numerals only, no team logos or words.",
+      "reviewedGuidance": {
+        "hintEn": "Use the late match clock and the crowd’s energetic reaction together.",
+        "hintJa": "試合後半の時計と、観客の熱狂した反応を合わせて考えましょう。",
+        "evidenceEn": "The clock shows the match well past halftime, and the close action excites the fans.",
+        "evidenceJa": "時計はハーフタイム後を示し、接戦の展開に観客が興奮しています。",
+        "reasons": [
+          {
+            "choice": "I’m annoyed by the noise.",
+            "en": "the crowd is cheering with excitement, not covering their ears in irritation",
+            "ja": "観客は騒音に苛立って耳をふさぐのではなく、興奮して応援しています"
+          },
+          {
+            "choice": "This exercise is easier than the last one.",
+            "en": "a live football match is shown, with no comparison of exercises",
+            "ja": "映っているのは試合で、練習問題の難易度比較ではありません"
+          },
+          {
+            "choice": "They scored in the first half.",
+            "en": "the visible clock is after halftime, so it cannot support a first-half statement",
+            "ja": "見える時計はハーフタイム後なので、前半の得点を表していません"
+          }
+        ]
+      }
     },
     {
       "lessonId": "june-30",
       "slot": 5,
       "phraseIndex": 7,
-      "distractorIndexes": [0, 1, 4],
+      "distractorIndexes": [
+        0,
+        1,
+        4
+      ],
       "asset": "/assets/questions/visual/june-30-05-nothing-worked.webp",
       "imageAlt": "A frustrated person faces several devices that are not working.",
-      "scenePrompt": "At a desk, an adult looks deeply frustrated while a laptop is frozen, a printer shows an error symbol and a phone has no connection; repeated attempts have failed and nothing works, no readable text."
+      "scenePrompt": "At a desk, an adult looks deeply frustrated while a laptop is frozen, a printer shows an error symbol and a phone has no connection; repeated attempts have failed and nothing works, no readable text.",
+      "reviewedGuidance": {
+        "hintEn": "Count the different devices failing and notice the user’s overall reaction.",
+        "hintJa": "動かない機器がいくつあるかと、利用者の全体的な反応を見ましょう。",
+        "evidenceEn": "The laptop, printer, and phone all fail, leaving the person visibly frustrated.",
+        "evidenceJa": "パソコン・プリンター・電話がすべて動かず、人物は強くもどかしさを感じています。",
+        "reasons": [
+          {
+            "choice": "I’m annoyed by the noise.",
+            "en": "the problem is several broken devices, not an audible noise source",
+            "ja": "問題は複数の機器の故障で、騒音源ではありません"
+          },
+          {
+            "choice": "The noise is annoying.",
+            "en": "no sound waves or noisy activity appear; the screens and printer show failures",
+            "ja": "音の波や騒がしい活動はなく、画面とプリンターの不具合が見えます"
+          },
+          {
+            "choice": "This exercise is easier than the last one.",
+            "en": "nothing is being compared for difficulty; every attempted device is failing",
+            "ja": "難易度の比較ではなく、試した機器がすべて失敗しています"
+          }
+        ]
+      }
     },
-
     {
       "lessonId": "july-04",
       "slot": 1,
       "phraseIndex": 1,
-      "distractorIndexes": [0, 2, 7],
+      "distractorIndexes": [
+        0,
+        2,
+        7
+      ],
       "asset": "/assets/questions/visual/july-04-01-avoid-driving-tired.webp",
       "imageAlt": "A tired person leaves the car keys at home and chooses the train.",
-      "scenePrompt": "A visibly tired adult makes a safe decision: they leave car keys on a hook and pick up a transit card while heading toward a train, clearly avoiding driving because of fatigue, no text."
+      "scenePrompt": "A visibly tired adult makes a safe decision: they leave car keys on a hook and pick up a transit card while heading toward a train, clearly avoiding driving because of fatigue, no text.",
+      "reviewedGuidance": {
+        "hintEn": "Notice the person’s tiredness, the keys left behind, and the transport chosen instead.",
+        "hintJa": "人物の疲れ、置いていく車の鍵、代わりに選ぶ交通手段に注目しましょう。",
+        "evidenceEn": "Because the person is tired, the car keys stay on the hook and a transit card is taken instead.",
+        "evidenceJa": "疲れているため車の鍵を置き、代わりに交通カードを持って電車を選んでいます。",
+        "reasons": [
+          {
+            "choice": "Actually, I’m a little tired today.",
+            "en": "tiredness is only the reason; the key evidence is the deliberate choice not to drive",
+            "ja": "疲れは理由にすぎず、重要なのは運転しない選択をしていることです"
+          },
+          {
+            "choice": "Something came up.",
+            "en": "no unexpected call or emergency interrupts a plan; the person makes a safety choice",
+            "ja": "急な連絡や予定の中断ではなく、安全のために移動手段を選んでいます"
+          },
+          {
+            "choice": "It might rain later.",
+            "en": "no clouds or umbrella suggest future rain; the scene concerns fatigue and driving",
+            "ja": "雲や傘はなく、場面の中心は疲労と運転です"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-04",
       "slot": 2,
       "phraseIndex": 2,
-      "distractorIndexes": [0, 3, 5],
+      "distractorIndexes": [
+        0,
+        3,
+        5
+      ],
       "asset": "/assets/questions/visual/july-04-02-something-came-up.webp",
       "imageAlt": "An urgent phone call unexpectedly interrupts a planned appointment.",
-      "scenePrompt": "An adult prepared to leave for a planned appointment suddenly receives an urgent phone call and stops with a surprised, concerned expression; coat and appointment items are ready, but an unexpected matter has come up, no readable text."
+      "scenePrompt": "An adult prepared to leave for a planned appointment suddenly receives an urgent phone call and stops with a surprised, concerned expression; coat and appointment items are ready, but an unexpected matter has come up, no readable text.",
+      "reviewedGuidance": {
+        "hintEn": "Look at the prepared appointment items and the urgent interruption that stops the person leaving.",
+        "hintJa": "準備済みの予定の持ち物と、出発を止める急な出来事を見ましょう。",
+        "evidenceEn": "The person is ready for an appointment but an urgent phone call unexpectedly interrupts the plan.",
+        "evidenceJa": "約束へ出かける準備を終えた人物が、突然の緊急電話で足を止めています。",
+        "reasons": [
+          {
+            "choice": "Actually, I’m a little tired today.",
+            "en": "the person looks surprised by a call, not physically tired",
+            "ja": "疲れた様子ではなく、電話に驚いています"
+          },
+          {
+            "choice": "It can’t be helped.",
+            "en": "the visual shows the unexpected event itself, not a calm acceptance after it",
+            "ja": "出来事を諦めて受け入れる反応ではなく、急な出来事そのものが描かれています"
+          },
+          {
+            "choice": "I really appreciate it.",
+            "en": "no one is being thanked for help; the appointment is interrupted by urgent news",
+            "ja": "助けへの感謝ではなく、緊急連絡で予定が中断されています"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-04",
       "slot": 3,
       "phraseIndex": 4,
-      "distractorIndexes": [2, 3, 5],
+      "distractorIndexes": [
+        2,
+        3,
+        5
+      ],
       "asset": "/assets/questions/visual/july-04-03-not-on-purpose.webp",
       "imageAlt": "A man accidentally bumps a table and apologizes for spilling a drink.",
-      "scenePrompt": "In a café, a man accidentally catches his bag on a table and spills a drink; he immediately looks surprised and apologetic with open hands while helping clean up, making it clear the act was not intentional, no text."
+      "scenePrompt": "In a café, a man accidentally catches his bag on a table and spills a drink; he immediately looks surprised and apologetic with open hands while helping clean up, making it clear the act was not intentional, no text.",
+      "reviewedGuidance": {
+        "hintEn": "Use the caught bag, sudden spill, and immediate apologetic reaction to judge intent.",
+        "hintJa": "引っ掛かったかばん、突然のこぼれ、すぐ謝る反応から意図があったか考えましょう。",
+        "evidenceEn": "His bag catches the table by accident, and he immediately apologizes and helps clean the spill.",
+        "evidenceJa": "かばんが偶然テーブルに引っ掛かり、男性はすぐ謝って片付けようとしています。",
+        "reasons": [
+          {
+            "choice": "Something came up.",
+            "en": "there is no outside emergency changing a plan; the visible event is an accidental spill",
+            "ja": "予定を変える急用ではなく、目の前で偶然飲み物をこぼしています"
+          },
+          {
+            "choice": "It can’t be helped.",
+            "en": "the man is actively apologizing for the accident, not merely accepting an unavoidable situation",
+            "ja": "仕方ないと受け流すのではなく、事故について積極的に謝っています"
+          },
+          {
+            "choice": "I really appreciate it.",
+            "en": "his open hands show apology and surprise, not thanks for receiving help",
+            "ja": "手の動きは助けへの感謝ではなく、驚きと謝罪を示しています"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-04",
       "slot": 4,
       "phraseIndex": 5,
-      "distractorIndexes": [0, 3, 6],
+      "distractorIndexes": [
+        0,
+        3,
+        6
+      ],
       "asset": "/assets/questions/visual/july-04-04-appreciate-help.webp",
       "imageAlt": "A grateful person sincerely thanks someone who helped carry heavy boxes.",
-      "scenePrompt": "After a neighbour helps carry several heavy boxes upstairs, the recipient places a hand over their heart and gives a sincere grateful bow; warm eye contact makes deep appreciation unmistakable, no words."
+      "scenePrompt": "After a neighbour helps carry several heavy boxes upstairs, the recipient places a hand over their heart and gives a sincere grateful bow; warm eye contact makes deep appreciation unmistakable, no words.",
+      "reviewedGuidance": {
+        "hintEn": "Notice the heavy boxes, the helper, and the recipient’s hand-over-heart bow.",
+        "hintJa": "重い箱、手伝った人、胸に手を当ててお辞儀する受け手を見ましょう。",
+        "evidenceEn": "One person has carried heavy boxes, and the recipient gives a sincere hand-over-heart thank-you.",
+        "evidenceJa": "一人が重い箱を運び、助けてもらった人が胸に手を当てて心から感謝しています。",
+        "reasons": [
+          {
+            "choice": "Actually, I’m a little tired today.",
+            "en": "the recipient’s expression and bow communicate gratitude, not a complaint about tiredness",
+            "ja": "表情とお辞儀は疲れの訴えではなく感謝を表しています"
+          },
+          {
+            "choice": "It can’t be helped.",
+            "en": "the scene celebrates helpful effort rather than accepting an unavoidable setback",
+            "ja": "避けられない不運を受け入れるのではなく、助けてもらったことを喜んでいます"
+          },
+          {
+            "choice": "Don’t mention it.",
+            "en": "the grateful recipient is speaking first; this would be the helper’s reply after being thanked",
+            "ja": "話しているのは感謝する側で、この表現は感謝された側の返答です"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-04",
       "slot": 5,
       "phraseIndex": 7,
-      "distractorIndexes": [0, 1, 5],
+      "distractorIndexes": [
+        0,
+        1,
+        5
+      ],
       "asset": "/assets/questions/visual/july-04-05-might-rain.webp",
       "imageAlt": "A person notices dark clouds and carries an umbrella because it might rain later.",
-      "scenePrompt": "An adult looks up at gathering dark clouds in the distance, then thoughtfully places a folded umbrella into a bag before leaving; streets are still dry, showing rain is possible later rather than already falling, no text."
+      "scenePrompt": "An adult looks up at gathering dark clouds in the distance, then thoughtfully places a folded umbrella into a bag before leaving; streets are still dry, showing rain is possible later rather than already falling, no text.",
+      "reviewedGuidance": {
+        "hintEn": "Check the dry street, gathering clouds, and the umbrella packed before leaving.",
+        "hintJa": "まだ乾いた道、集まる雨雲、出発前に入れる傘を確認しましょう。",
+        "evidenceEn": "The street is still dry, but dark clouds lead the person to pack an umbrella for a possible later shower.",
+        "evidenceJa": "道はまだ乾いていますが、黒い雲を見て、あとで降るかもしれない雨に備えて傘を入れています。",
+        "reasons": [
+          {
+            "choice": "Actually, I’m a little tired today.",
+            "en": "the person is preparing for weather, with no sign of fatigue",
+            "ja": "疲れた様子ではなく、天候に備えています"
+          },
+          {
+            "choice": "I avoid driving when I’m tired.",
+            "en": "no car keys, car, or transport choice appears; the visible decision concerns an umbrella",
+            "ja": "車や鍵、交通手段の選択はなく、傘を持つ判断が描かれています"
+          },
+          {
+            "choice": "I really appreciate it.",
+            "en": "no helper or thankful exchange is present; the person is watching the clouds",
+            "ja": "手伝う人や感謝のやり取りはなく、雲を見ています"
+          }
+        ]
+      }
     },
-
     {
       "lessonId": "july-05",
       "slot": 1,
       "phraseIndex": 1,
-      "distractorIndexes": [2, 4, 7],
+      "distractorIndexes": [
+        2,
+        4,
+        7
+      ],
       "asset": "/assets/questions/visual/july-05-01-rather-stay-home.webp",
       "imageAlt": "A person chooses a cozy evening at home instead of going out.",
-      "scenePrompt": "On a rainy evening, an adult happily chooses to relax at home with tea and a book while friends outside gesture toward a night out; the person warmly waves goodbye and prefers staying home, no text."
+      "scenePrompt": "On a rainy evening, an adult happily chooses to relax at home with tea and a book while friends outside gesture toward a night out; the person warmly waves goodbye and prefers staying home, no text.",
+      "reviewedGuidance": {
+        "hintEn": "Compare the warm indoor choice with the invitation to go out in the rain.",
+        "hintJa": "雨の中の外出の誘いと、暖かい室内で選んだ過ごし方を比べましょう。",
+        "evidenceEn": "The person cheerfully waves friends goodbye and settles in at home with tea and a book.",
+        "evidenceJa": "人物は友人を笑顔で見送り、家でお茶と本を楽しむことを選んでいます。",
+        "reasons": [
+          {
+            "choice": "It depends on the weather.",
+            "en": "the person has already chosen to stay in, rather than waiting for weather before deciding",
+            "ja": "天気を見て決めるのではなく、すでに家にいることを選んでいます"
+          },
+          {
+            "choice": "Let me think about it.",
+            "en": "the relaxed setup and goodbye wave show a completed decision, not a request for thinking time",
+            "ja": "くつろぐ準備と別れの手振りは決定済みで、考える時間を求めてはいません"
+          },
+          {
+            "choice": "Either option works for me.",
+            "en": "the home option is clearly preferred over going out; the two choices are not equally accepted",
+            "ja": "外出より家を明確に選んでおり、二つを同じように受け入れてはいません"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-05",
       "slot": 2,
       "phraseIndex": 2,
-      "distractorIndexes": [0, 3, 6],
+      "distractorIndexes": [
+        0,
+        3,
+        6
+      ],
       "asset": "/assets/questions/visual/july-05-02-depends-weather.webp",
       "imageAlt": "A person waits to decide on a picnic after comparing sunny and rainy weather.",
-      "scenePrompt": "An adult holds a picnic basket but pauses before deciding, comparing a bright-sun forecast symbol and a rain-cloud forecast symbol on a phone; the decision clearly depends on the weather, no words."
+      "scenePrompt": "An adult holds a picnic basket but pauses before deciding, comparing a bright-sun forecast symbol and a rain-cloud forecast symbol on a phone; the decision clearly depends on the weather, no words.",
+      "reviewedGuidance": {
+        "hintEn": "Notice why the picnic basket stays ready while the final decision is delayed.",
+        "hintJa": "ピクニックかごを持ったまま、何を理由に最終決定を待っているか見ましょう。",
+        "evidenceEn": "The picnic decision is paused while the person compares sunny and rainy forecasts.",
+        "evidenceJa": "人物は晴れと雨の予報を比べ、ピクニックの決定を保留しています。",
+        "reasons": [
+          {
+            "choice": "That makes sense.",
+            "en": "no explanation is being accepted; two weather outcomes are controlling a future plan",
+            "ja": "説明に納得しているのではなく、二つの天候が今後の予定を左右しています"
+          },
+          {
+            "choice": "I’m not sure yet.",
+            "en": "this only states uncertainty and misses the visible reason: the weather forecast",
+            "ja": "単なる未決定では、画面に示された天気という理由を説明できません"
+          },
+          {
+            "choice": "I changed my mind.",
+            "en": "no earlier choice is being replaced; the person is waiting for forecast information",
+            "ja": "以前の選択を変更しておらず、予報を見て判断を待っています"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-05",
       "slot": 3,
       "phraseIndex": 4,
-      "distractorIndexes": [0, 3, 7],
+      "distractorIndexes": [
+        0,
+        5,
+        7
+      ],
       "asset": "/assets/questions/visual/july-05-03-let-me-think.webp",
       "imageAlt": "A shopper pauses thoughtfully before choosing between two options.",
-      "scenePrompt": "A shopper considers two different practical items, rests a hand on the chin and politely signals for a moment to think instead of deciding immediately; calm thoughtful body language, no text."
+      "scenePrompt": "A shopper considers two different practical items, rests a hand on the chin and politely signals for a moment to think instead of deciding immediately; calm thoughtful body language, no text.",
+      "reviewedGuidance": {
+        "hintEn": "Read the shopper’s hand-on-chin pose and the gesture asking for a moment.",
+        "hintJa": "あごに手を当てた姿勢と、少し待ってほしいという手の動きを読み取りましょう。",
+        "evidenceEn": "Faced with two items, the shopper pauses and signals for time before choosing.",
+        "evidenceJa": "二つの商品を前に、買い物客は選ぶ前に考える時間を求めています。",
+        "reasons": [
+          {
+            "choice": "That makes sense.",
+            "en": "the shopper is weighing options, not agreeing that another person’s explanation is logical",
+            "ja": "相手の説明に納得しているのではなく、選択肢を検討しています"
+          },
+          {
+            "choice": "That’s a good point.",
+            "en": "no argument or useful point is being acknowledged; the focus is a personal decision",
+            "ja": "意見の良さを認める会話ではなく、自分の選択を考えています"
+          },
+          {
+            "choice": "Either option works for me.",
+            "en": "the thoughtful pause shows the options are not yet equally acceptable",
+            "ja": "考え込む様子から、どちらでも同じように良いとは決めていません"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-05",
       "slot": 4,
       "phraseIndex": 6,
-      "distractorIndexes": [1, 3, 5],
+      "distractorIndexes": [
+        1,
+        3,
+        5
+      ],
       "asset": "/assets/questions/visual/july-05-04-changed-mind.webp",
       "imageAlt": "A diner changes from choosing one dish to choosing another.",
-      "scenePrompt": "At a restaurant, a diner first points toward one dish, then visibly reconsiders and moves the choice marker to a different dish with an aha expression; make the change of mind clear, no readable menu text."
+      "scenePrompt": "At a restaurant, a diner first points toward one dish, then visibly reconsiders and moves the choice marker to a different dish with an aha expression; make the change of mind clear, no readable menu text.",
+      "reviewedGuidance": {
+        "hintEn": "Follow the diner’s hand from the first dish toward the newly selected dish.",
+        "hintJa": "最初の料理から、新しく選び直した料理へ向かう手の動きを追いましょう。",
+        "evidenceEn": "The diner moves away from the original dish and points to a different final choice.",
+        "evidenceJa": "客は最初の料理をやめ、別の料理を最終的に指して選び直しています。",
+        "reasons": [
+          {
+            "choice": "I’d rather stay home tonight.",
+            "en": "the setting is a restaurant choice, not a decision between home and going out",
+            "ja": "家にいるか外出するかではなく、レストランで料理を選んでいます"
+          },
+          {
+            "choice": "I’m not sure yet.",
+            "en": "the pointing gesture identifies a new choice, so the diner is no longer undecided",
+            "ja": "指差しで新しい選択を示しているため、まだ決めていない状態ではありません"
+          },
+          {
+            "choice": "That’s a good point.",
+            "en": "no opinion is being praised; one menu choice replaces another",
+            "ja": "意見を評価しているのではなく、料理の選択を変更しています"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-05",
       "slot": 5,
       "phraseIndex": 7,
-      "distractorIndexes": [1, 2, 6],
+      "distractorIndexes": [
+        1,
+        2,
+        6
+      ],
       "asset": "/assets/questions/visual/july-05-05-either-option.webp",
       "imageAlt": "A person happily accepts either of two appointment options.",
-      "scenePrompt": "An adult compares two simple appointment cards with different clock symbols and gives an equally positive thumbs-up to both, showing either option works; no words or letters."
+      "scenePrompt": "An adult compares two simple appointment cards with different clock symbols and gives an equally positive thumbs-up to both, showing either option works; no words or letters.",
+      "reviewedGuidance": {
+        "hintEn": "Compare the person’s equally positive reaction to the two appointment choices.",
+        "hintJa": "二つの予定候補に対する、人物の同じように前向きな反応を比べましょう。",
+        "evidenceEn": "The person gives equal approval to both appointment options with no preference between them.",
+        "evidenceJa": "人物は二つの予定候補を同じように承認し、どちらにも偏っていません。",
+        "reasons": [
+          {
+            "choice": "I’d rather stay home tonight.",
+            "en": "the options are appointment times, not staying home versus going out",
+            "ja": "選択肢は予定の日時で、家にいるか外出するかではありません"
+          },
+          {
+            "choice": "It depends on the weather.",
+            "en": "no forecast or weather condition affects the equal approval",
+            "ja": "予報や天候条件はなく、両方を同等に承認しています"
+          },
+          {
+            "choice": "I changed my mind.",
+            "en": "neither option replaces an earlier decision; both remain acceptable",
+            "ja": "以前の決定を変えたのではなく、両方とも受け入れています"
+          }
+        ]
+      }
     },
-
     {
       "lessonId": "july-06",
       "slot": 1,
       "phraseIndex": 0,
-      "distractorIndexes": [1, 5, 7],
+      "distractorIndexes": [
+        1,
+        5,
+        7
+      ],
       "asset": "/assets/questions/visual/july-06-01-say-again.webp",
       "imageAlt": "A learner politely asks a speaker to repeat what was said.",
-      "scenePrompt": "During a friendly conversation, an adult learner leans forward slightly with one hand near the ear and makes a polite repeat gesture toward the speaker; the speaker prepares to say the sentence again, no text."
+      "scenePrompt": "During a friendly conversation, an adult learner leans forward slightly with one hand near the ear and makes a polite repeat gesture toward the speaker; the speaker prepares to say the sentence again, no text.",
+      "reviewedGuidance": {
+        "hintEn": "Notice the learner’s listening gesture and the request directed back to the speaker.",
+        "hintJa": "聞き手の耳に向けた動作と、話し手に返している依頼に注目しましょう。",
+        "evidenceEn": "The learner did not catch the utterance and politely asks the speaker to repeat it.",
+        "evidenceJa": "学習者は発言を聞き取れず、話し手に丁寧に繰り返してもらおうとしています。",
+        "reasons": [
+          {
+            "choice": "What do you mean?",
+            "en": "the gesture asks to hear the words again, not to explain their meaning",
+            "ja": "意味の説明ではなく、言葉をもう一度聞くための動作です"
+          },
+          {
+            "choice": "Can you give me an example?",
+            "en": "no example or demonstration is requested; the original speech needs repeating",
+            "ja": "例や実演を求めておらず、元の発言の繰り返しが必要です"
+          },
+          {
+            "choice": "That’s the part I find difficult.",
+            "en": "the learner does not point to a difficult section; attention remains on the speaker’s utterance",
+            "ja": "難しい箇所を指しておらず、話し手の発言に注意を向けています"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-06",
       "slot": 2,
       "phraseIndex": 2,
-      "distractorIndexes": [3, 4, 7],
+      "distractorIndexes": [
+        3,
+        4,
+        7
+      ],
       "asset": "/assets/questions/visual/july-06-02-getting-used-to-it.webp",
       "imageAlt": "A commuter becomes more comfortable using a crowded train over time.",
-      "scenePrompt": "A gentle three-stage progression shows the same adult commuter initially tense on a crowded train, then calmer, then confidently relaxed while holding the strap; clearly becoming accustomed over time, no text."
+      "scenePrompt": "A gentle three-stage progression shows the same adult commuter initially tense on a crowded train, then calmer, then confidently relaxed while holding the strap; clearly becoming accustomed over time, no text.",
+      "reviewedGuidance": {
+        "hintEn": "Compare the commuter’s earlier discomfort with the calmer response after repeated trips.",
+        "hintJa": "以前の不安そうな様子と、何度も乗った後の落ち着いた様子を比べましょう。",
+        "evidenceEn": "Across repeated crowded-train trips, the commuter becomes progressively calmer and more comfortable.",
+        "evidenceJa": "混雑した電車に何度も乗るうちに、通勤者は徐々に慣れ、落ち着いてきています。",
+        "reasons": [
+          {
+            "choice": "I’ve never tried that before.",
+            "en": "the sequence shows repeated experience, not a first attempt",
+            "ja": "何度も経験している流れで、初めて試す場面ではありません"
+          },
+          {
+            "choice": "It was better than I expected.",
+            "en": "the evidence shows gradual adjustment over time, not one experience exceeding an expectation",
+            "ja": "一度の経験が予想以上だったのではなく、時間をかけて順応しています"
+          },
+          {
+            "choice": "That’s the part I find difficult.",
+            "en": "no task section is identified; the change concerns comfort with train crowds",
+            "ja": "課題の難所ではなく、電車の混雑への慣れが描かれています"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-06",
       "slot": 3,
       "phraseIndex": 3,
-      "distractorIndexes": [2, 4, 6],
+      "distractorIndexes": [
+        2,
+        4,
+        6
+      ],
       "asset": "/assets/questions/visual/july-06-03-never-tried-before.webp",
       "imageAlt": "A beginner hesitantly tries pottery for the first time.",
-      "scenePrompt": "In a pottery studio, an adult beginner sits at a wheel for the very first time, hesitant but curious, while an instructor gently demonstrates; untouched tools and uncertain hands emphasize no previous experience, no text."
+      "scenePrompt": "In a pottery studio, an adult beginner sits at a wheel for the very first time, hesitant but curious, while an instructor gently demonstrates; untouched tools and uncertain hands emphasize no previous experience, no text.",
+      "reviewedGuidance": {
+        "hintEn": "Use the untouched clay, beginner’s hesitation, and first instruction from the teacher.",
+        "hintJa": "まだ手を付けていない粘土、初心者のためらい、先生の最初の説明を見ましょう。",
+        "evidenceEn": "The beginner approaches pottery hesitantly and is about to attempt it for the first time.",
+        "evidenceJa": "初心者はためらいながら陶芸に向き合い、初めて挑戦しようとしています。",
+        "reasons": [
+          {
+            "choice": "I’m getting used to it.",
+            "en": "the person is just beginning and has not had repeated practice to become accustomed",
+            "ja": "始めたばかりで、慣れるほど繰り返し練習していません"
+          },
+          {
+            "choice": "It was better than I expected.",
+            "en": "the activity has not been completed, so no after-the-fact evaluation is visible",
+            "ja": "まだ体験を終えておらず、結果を予想と比べる場面ではありません"
+          },
+          {
+            "choice": "I’ll check and let you know.",
+            "en": "no information is being checked for a later reply; a new craft is being attempted",
+            "ja": "後で知らせるための確認ではなく、新しい作業に挑戦しています"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-06",
       "slot": 4,
       "phraseIndex": 5,
-      "distractorIndexes": [0, 1, 6],
+      "distractorIndexes": [
+        0,
+        1,
+        6
+      ],
       "asset": "/assets/questions/visual/july-06-04-give-example.webp",
       "imageAlt": "A learner asks a teacher to demonstrate one concrete example.",
-      "scenePrompt": "In a small class, a learner raises a hand and points from an abstract diagram to one empty example card; the teacher responds by demonstrating a single concrete object, clearly giving an example, no readable text."
+      "scenePrompt": "In a small class, a learner raises a hand and points from an abstract diagram to one empty example card; the teacher responds by demonstrating a single concrete object, clearly giving an example, no readable text.",
+      "reviewedGuidance": {
+        "hintEn": "Look at the learner asking the teacher to show one concrete case on the board.",
+        "hintJa": "学習者が先生に、板上で具体的な一例を示してほしいと頼む様子を見ましょう。",
+        "evidenceEn": "The learner requests one concrete demonstration, and the teacher is ready to illustrate it.",
+        "evidenceJa": "学習者は具体的な実演を一つ求め、先生は示す準備をしています。",
+        "reasons": [
+          {
+            "choice": "Could you say that again?",
+            "en": "the learner wants a concrete demonstration, not repetition of the same words",
+            "ja": "同じ言葉の繰り返しではなく、具体的な実演を求めています"
+          },
+          {
+            "choice": "What do you mean?",
+            "en": "the request is for a sample case, more specific than a general meaning question",
+            "ja": "一般的な意味の質問ではなく、具体例を求めています"
+          },
+          {
+            "choice": "I’ll check and let you know.",
+            "en": "the teacher is being asked to demonstrate now, not check information and reply later",
+            "ja": "後で確認して返答するのではなく、今その場で示すよう頼まれています"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-06",
       "slot": 5,
       "phraseIndex": 7,
-      "distractorIndexes": [0, 4, 5],
+      "distractorIndexes": [
+        0,
+        4,
+        5
+      ],
       "asset": "/assets/questions/visual/july-06-05-difficult-part.webp",
       "imageAlt": "A learner points to one difficult step in otherwise completed work.",
-      "scenePrompt": "A learner has completed most steps of a practical exercise but points with a worried expression to one visibly complex tangled step in the middle; the teacher looks specifically at that difficult part, no text."
+      "scenePrompt": "A learner has completed most steps of a practical exercise but points with a worried expression to one visibly complex tangled step in the middle; the teacher looks specifically at that difficult part, no text.",
+      "reviewedGuidance": {
+        "hintEn": "Notice that most work is complete and only one step is being pointed out.",
+        "hintJa": "ほとんどの作業は終わり、一つの手順だけを指している点に注目しましょう。",
+        "evidenceEn": "The learner points to one unresolved step within otherwise completed work.",
+        "evidenceJa": "学習者はほぼ完成した作業の中で、解決できない一つの手順を指しています。",
+        "reasons": [
+          {
+            "choice": "Could you say that again?",
+            "en": "the problem is a visible work step, not unheard speech",
+            "ja": "問題は目に見える作業手順で、聞き取れなかった発言ではありません"
+          },
+          {
+            "choice": "It was better than I expected.",
+            "en": "the learner is identifying an ongoing difficulty, not evaluating a finished result positively",
+            "ja": "完成結果を良く評価するのではなく、残る難点を示しています"
+          },
+          {
+            "choice": "Can you give me an example?",
+            "en": "the gesture isolates a difficult part; it does not ask for a separate example",
+            "ja": "難しい部分を特定しており、別の例を求めてはいません"
+          }
+        ]
+      }
     },
-
     {
       "lessonId": "july-07",
       "slot": 1,
       "phraseIndex": 0,
       "asset": "/assets/questions/visual/july-07-01-brought-notebook.webp",
       "imageAlt": "A learner arrives in a classroom holding the notebook they brought.",
-      "scenePrompt": "A learner has just entered an English classroom and is holding up the familiar notebook they brought from home; a teacher welcomes them beside an open desk. Make the act of bringing the notebook unmistakable."
+      "scenePrompt": "A learner has just entered an English classroom and is holding up the familiar notebook they brought from home; a teacher welcomes them beside an open desk. Make the act of bringing the notebook unmistakable.",
+      "reviewedGuidance": {
+        "hintEn": "Focus on the notebook already in the learner’s hands upon arrival.",
+        "hintJa": "学習者が到着した時点ですでに手に持っているノートを見ましょう。",
+        "evidenceEn": "The learner arrives at class carrying the notebook from another place.",
+        "evidenceJa": "学習者は別の場所からノートを持って教室に到着しています。",
+        "reasons": [
+          {
+            "choice": "I bought a new notebook.",
+            "en": "no purchase, shop, or new price tag is visible; the notebook is simply being carried in",
+            "ja": "購入・店・値札はなく、ノートを持参しているだけです"
+          },
+          {
+            "choice": "Where will she come from?",
+            "en": "the pictured learner has already arrived, and no question about another woman’s origin is shown",
+            "ja": "学習者はすでに到着しており、別の女性の出発地を尋ねていません"
+          },
+          {
+            "choice": "Could you do it for me?",
+            "en": "the learner performs the action personally; no task is delegated to someone else",
+            "ja": "本人が行動しており、他人に作業を依頼していません"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-07",
@@ -292,7 +1119,30 @@
       "phraseIndex": 1,
       "asset": "/assets/questions/visual/july-07-02-bought-notebook.webp",
       "imageAlt": "A shopper buys a new notebook at a stationery shop.",
-      "scenePrompt": "Inside a modern stationery shop, a shopper pays at the register for a visibly new notebook while the clerk hands over a receipt and shopping bag."
+      "scenePrompt": "Inside a modern stationery shop, a shopper pays at the register for a visibly new notebook while the clerk hands over a receipt and shopping bag.",
+      "reviewedGuidance": {
+        "hintEn": "Look for the stationery-shop exchange and the clearly new item received by the shopper.",
+        "hintJa": "文房具店でのやり取りと、買い物客が受け取る新品を見ましょう。",
+        "evidenceEn": "At the shop, the customer pays for and receives a new notebook.",
+        "evidenceJa": "店で客が代金を払い、新しいノートを受け取っています。",
+        "reasons": [
+          {
+            "choice": "You told me to do so.",
+            "en": "no instruction from another person motivates the scene; a purchase is taking place",
+            "ja": "他人の指示に従う場面ではなく、商品を購入しています"
+          },
+          {
+            "choice": "I got a flat tire.",
+            "en": "there is no vehicle or damaged tire in the stationery shop",
+            "ja": "文房具店に車やパンクしたタイヤはありません"
+          },
+          {
+            "choice": "He attended instead of me.",
+            "en": "no event attendance or substitute person appears; the shopper personally buys an item",
+            "ja": "行事への代理出席ではなく、買い物客本人が商品を買っています"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-07",
@@ -300,7 +1150,30 @@
       "phraseIndex": 3,
       "asset": "/assets/questions/visual/july-07-03-phone-died.webp",
       "imageAlt": "A commuter looks worried at a phone with an empty battery.",
-      "scenePrompt": "At a train station, a commuter looks worried at a smartphone whose screen has gone black with a clear empty-battery symbol; a charging cable is out of reach in the bag."
+      "scenePrompt": "At a train station, a commuter looks worried at a smartphone whose screen has gone black with a clear empty-battery symbol; a charging cable is out of reach in the bag.",
+      "reviewedGuidance": {
+        "hintEn": "Check the empty battery symbol and the commuter’s worried attempt to use the phone.",
+        "hintJa": "空のバッテリー表示と、電話を使おうとして困る通勤者を確認しましょう。",
+        "evidenceEn": "The phone shows no battery power and will not operate when the commuter needs it.",
+        "evidenceJa": "電話のバッテリーは空で、通勤者が必要な時に動かなくなっています。",
+        "reasons": [
+          {
+            "choice": "Where will she come from?",
+            "en": "no woman’s travel origin is being discussed; the issue is a powerless phone",
+            "ja": "女性の出発地の話ではなく、電話の電池切れが問題です"
+          },
+          {
+            "choice": "She signed it on my behalf.",
+            "en": "no document, signature, or representative is pictured",
+            "ja": "書類・署名・代理人は描かれていません"
+          },
+          {
+            "choice": "Please bring it tomorrow.",
+            "en": "the commuter is not requesting a future delivery; the phone has stopped working now",
+            "ja": "明日持参する依頼ではなく、今電話が動かない状態です"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-07",
@@ -308,7 +1181,30 @@
       "phraseIndex": 5,
       "asset": "/assets/questions/visual/july-07-04-flat-tire.webp",
       "imageAlt": "A driver discovers a flat tire beside a parked car.",
-      "scenePrompt": "On a safe roadside shoulder, a driver crouches beside a car and points in surprise at one visibly deflated tire; warning triangle placed behind the car."
+      "scenePrompt": "On a safe roadside shoulder, a driver crouches beside a car and points in surprise at one visibly deflated tire; warning triangle placed behind the car.",
+      "reviewedGuidance": {
+        "hintEn": "Inspect the wheel beside the stopped car and the driver’s reaction.",
+        "hintJa": "止まった車の横にあるタイヤと、運転手の反応を見ましょう。",
+        "evidenceEn": "The driver finds a visibly deflated tire on the parked car.",
+        "evidenceJa": "運転手は停車した車のタイヤが明らかにしぼんでいるのを発見しています。",
+        "reasons": [
+          {
+            "choice": "I’m good at cooking.",
+            "en": "no kitchen or cooking skill is shown; the problem is with a car wheel",
+            "ja": "台所や料理の能力ではなく、車輪の問題が描かれています"
+          },
+          {
+            "choice": "He attended instead of me.",
+            "en": "no meeting or substitute attendee appears at the roadside",
+            "ja": "道路脇の場面に会議や代理出席者はありません"
+          },
+          {
+            "choice": "I bought a new notebook.",
+            "en": "there is no stationery purchase; the driver is examining a damaged tire",
+            "ja": "文房具の購入ではなく、運転手が傷んだタイヤを調べています"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-07",
@@ -316,16 +1212,61 @@
       "phraseIndex": 7,
       "asset": "/assets/questions/visual/july-07-05-on-my-behalf.webp",
       "imageAlt": "A woman signs a document as an authorized representative for a colleague.",
-      "scenePrompt": "At an office desk, a woman signs an official document as an authorized representative while her colleague joins by video call and gives an approving nod; convey that she is signing for the colleague, not for herself."
+      "scenePrompt": "At an office desk, a woman signs an official document as an authorized representative while her colleague joins by video call and gives an approving nod; convey that she is signing for the colleague, not for herself.",
+      "reviewedGuidance": {
+        "hintEn": "Notice whose document it is and who is authorized to write the signature.",
+        "hintJa": "書類が誰のもので、誰が権限を得て署名しているかに注目しましょう。",
+        "evidenceEn": "The woman signs a colleague’s document with clear authorization to represent that person.",
+        "evidenceJa": "女性は同僚の代理権を得て、その人の書類に署名しています。",
+        "reasons": [
+          {
+            "choice": "Could you do it for me?",
+            "en": "the image shows the authorized action already being completed, not the original request for help",
+            "ja": "助けを依頼する段階ではなく、権限を得た行為が実際に行われています"
+          },
+          {
+            "choice": "Please bring it tomorrow.",
+            "en": "nothing is scheduled for delivery tomorrow; the document is being signed now",
+            "ja": "明日の持参予定ではなく、今その場で書類に署名しています"
+          },
+          {
+            "choice": "My phone died.",
+            "en": "no phone or empty battery is visible; the central object is a signed document",
+            "ja": "電話や電池切れはなく、中心にあるのは署名する書類です"
+          }
+        ]
+      }
     },
-
     {
       "lessonId": "july-11",
       "slot": 1,
       "phraseIndex": 0,
       "asset": "/assets/questions/visual/july-11-01-wifi-connected.webp",
       "imageAlt": "A phone is successfully connected to home Wi-Fi.",
-      "scenePrompt": "A person smiles at a smartphone showing a strong connected Wi-Fi symbol while standing beside a home router with steady indicator lights."
+      "scenePrompt": "A person smiles at a smartphone showing a strong connected Wi-Fi symbol while standing beside a home router with steady indicator lights.",
+      "reviewedGuidance": {
+        "hintEn": "Follow the successful link between the phone and the home wireless router.",
+        "hintJa": "スマートフォンと家庭用無線ルーターの間に成立した接続を見ましょう。",
+        "evidenceEn": "A stable wireless link joins the phone to the home router, and the connection indicator is successful.",
+        "evidenceJa": "スマートフォンと家庭のルーターが安定した無線表示で接続されています。",
+        "reasons": [
+          {
+            "choice": "I connected the cable.",
+            "en": "the link is wireless and no cable is being attached",
+            "ja": "接続は無線で、ケーブルは取り付けられていません"
+          },
+          {
+            "choice": "I went back to my hometown.",
+            "en": "the scene is about a device network at home, not travel to a hometown",
+            "ja": "故郷への移動ではなく、家庭内の機器接続です"
+          },
+          {
+            "choice": "People sometimes stand close when they talk.",
+            "en": "no face-to-face conversation or interpersonal distance is shown",
+            "ja": "対面会話や人同士の距離は描かれていません"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-11",
@@ -333,15 +1274,66 @@
       "phraseIndex": 2,
       "asset": "/assets/questions/visual/july-11-02-live-broadcast.webp",
       "imageAlt": "A television presenter appears in a live broadcast studio.",
-      "scenePrompt": "A professional television presenter speaks to camera in an active broadcast studio; a glowing red tally light and behind-the-scenes crew clearly communicate that the program is happening live, without any written text."
+      "scenePrompt": "A professional television presenter speaks to camera in an active broadcast studio; a glowing red tally light and behind-the-scenes crew clearly communicate that the program is happening live, without any written text.",
+      "reviewedGuidance": {
+        "hintEn": "Use the studio camera, presenter, and real-time broadcast indicators.",
+        "hintJa": "スタジオのカメラ、司会者、リアルタイム配信の表示を手掛かりにしましょう。",
+        "evidenceEn": "A presenter speaks in a television studio while cameras transmit the program in real time.",
+        "evidenceJa": "テレビスタジオで司会者が話し、カメラが番組をリアルタイムで送っています。",
+        "reasons": [
+          {
+            "choice": "We watched the live stream.",
+            "en": "the image shows production and transmission, not viewers watching a stream",
+            "ja": "視聴者が配信を見る場面ではなく、番組を制作して送信しています"
+          },
+          {
+            "choice": "I noticed a strange sound.",
+            "en": "no unexpected noise draws attention; the presenter is intentionally on camera",
+            "ja": "不審な音に気づく場面ではなく、司会者が意図的に撮影されています"
+          },
+          {
+            "choice": "Is the meeting being streamed live?",
+            "en": "this is clearly a television program already broadcasting, not a question about a meeting",
+            "ja": "会議の配信を尋ねているのではなく、テレビ番組が実際に放送されています"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-11",
       "slot": 3,
       "phraseIndex": 4,
+      "distractorIndexes": [
+        0,
+        2,
+        8
+      ],
       "asset": "/assets/questions/visual/july-11-03-hometown.webp",
       "imageAlt": "A traveler returns to their hometown and greets family.",
-      "scenePrompt": "A traveler with a small suitcase arrives in a familiar quiet hometown street and warmly greets family outside the old family home."
+      "scenePrompt": "A traveler with a small suitcase arrives in a familiar quiet hometown street and warmly greets family outside the old family home.",
+      "reviewedGuidance": {
+        "hintEn": "Notice the traveler arriving at a familiar family home and greeting relatives.",
+        "hintJa": "旅行者が親しみのある実家に到着し、家族と再会する様子を見ましょう。",
+        "evidenceEn": "With luggage in hand, the traveler returns to the family home and is welcomed by relatives.",
+        "evidenceJa": "荷物を持った旅行者が家族の家へ戻り、親族に迎えられています。",
+        "reasons": [
+          {
+            "choice": "My phone is connected to the Wi-Fi.",
+            "en": "no phone or router is shown; the visible action is a homecoming",
+            "ja": "電話やルーターはなく、帰省の場面です"
+          },
+          {
+            "choice": "The program is broadcast live.",
+            "en": "there is no studio, camera, or broadcast; family members greet a traveler",
+            "ja": "スタジオ・カメラ・放送はなく、家族が旅行者を迎えています"
+          },
+          {
+            "choice": "People sometimes stand close when they talk.",
+            "en": "their closeness comes from a reunion, not a general observation about conversation distance",
+            "ja": "近さは再会によるもので、会話距離について一般的に述べる場面ではありません"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-11",
@@ -349,7 +1341,30 @@
       "phraseIndex": 6,
       "asset": "/assets/questions/visual/july-11-04-noticed-sound.webp",
       "imageAlt": "A person suddenly notices a strange sound from another room.",
-      "scenePrompt": "In a calm home, a person suddenly pauses and turns toward another room after noticing a strange mechanical sound; subtle sound-wave marks point toward the source."
+      "scenePrompt": "In a calm home, a person suddenly pauses and turns toward another room after noticing a strange mechanical sound; subtle sound-wave marks point toward the source.",
+      "reviewedGuidance": {
+        "hintEn": "Look at the person’s sudden turn toward the room where the unfamiliar sound begins.",
+        "hintJa": "聞き慣れない音がした部屋へ、人物が突然振り向く様子を見ましょう。",
+        "evidenceEn": "An unexpected sound comes from another room, causing the person to stop and turn toward it.",
+        "evidenceJa": "別の部屋から予想外の音がし、人物は立ち止まってそちらへ振り向いています。",
+        "reasons": [
+          {
+            "choice": "I realized I had the wrong key.",
+            "en": "there is no locked door or key; attention is drawn by a sound",
+            "ja": "鍵や施錠されたドアはなく、音に注意を引かれています"
+          },
+          {
+            "choice": "Is the meeting being streamed live?",
+            "en": "no meeting or streaming device appears in the room",
+            "ja": "会議や配信用機器は室内にありません"
+          },
+          {
+            "choice": "The program is broadcast live.",
+            "en": "the sound is an unexplained household event, not a planned studio broadcast",
+            "ja": "計画されたスタジオ放送ではなく、家の中の原因不明の音です"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-11",
@@ -357,16 +1372,61 @@
       "phraseIndex": 7,
       "asset": "/assets/questions/visual/july-11-05-wrong-key.webp",
       "imageAlt": "A person realizes they brought the wrong key at a locked door.",
-      "scenePrompt": "At an apartment door, a person tries a key that clearly does not fit, then looks at a different key tag in sudden realization; expressive aha moment."
+      "scenePrompt": "At an apartment door, a person tries a key that clearly does not fit, then looks at a different key tag in sudden realization; expressive aha moment.",
+      "reviewedGuidance": {
+        "hintEn": "Compare the key in hand with the lock it fails to open and the person’s realization.",
+        "hintJa": "手に持つ鍵、開かない錠、間違いに気づいた表情を比べましょう。",
+        "evidenceEn": "At the locked door, the key does not fit and the person recognizes it is the wrong one.",
+        "evidenceJa": "施錠されたドアで鍵が合わず、人物は違う鍵を持ってきたと気づいています。",
+        "reasons": [
+          {
+            "choice": "People sometimes stand close when they talk.",
+            "en": "only one person and a lock are central; no close conversation occurs",
+            "ja": "中心は一人と錠で、近距離の会話はありません"
+          },
+          {
+            "choice": "I didn’t notice the sign.",
+            "en": "no overlooked sign is shown; the failed key identifies the mistake",
+            "ja": "見落とした標識はなく、合わない鍵が間違いを示しています"
+          },
+          {
+            "choice": "We watched the live stream.",
+            "en": "there is no screen or stream; the person is stranded at a locked door",
+            "ja": "画面や配信はなく、人物は施錠されたドアの前にいます"
+          }
+        ]
+      }
     },
-
     {
       "lessonId": "july-12",
       "slot": 1,
       "phraseIndex": 2,
       "asset": "/assets/questions/visual/july-12-01-lunch-noon.webp",
       "imageAlt": "A person eats lunch at noon.",
-      "scenePrompt": "A person eats a complete lunch at a café table while a nearby analog wall clock clearly shows twelve noon; bright midday light."
+      "scenePrompt": "A person eats a complete lunch at a café table while a nearby analog wall clock clearly shows twelve noon; bright midday light.",
+      "reviewedGuidance": {
+        "hintEn": "Use both the midday clock and the meal being eaten.",
+        "hintJa": "正午を示す時計と、食べている食事の両方を手掛かりにしましょう。",
+        "evidenceEn": "The clock reads noon while the person is eating a midday meal.",
+        "evidenceJa": "時計が正午を示す時に、人物が昼の食事を取っています。",
+        "reasons": [
+          {
+            "choice": "I don’t drink alcohol.",
+            "en": "the visible event is a timed meal, with no alcohol or refusal",
+            "ja": "時間の分かる食事で、酒や飲酒拒否はありません"
+          },
+          {
+            "choice": "She has already had breakfast.",
+            "en": "the clock and food place the meal at noon, not breakfast earlier in the day",
+            "ja": "時計と食事は正午の昼食を示し、朝食ではありません"
+          },
+          {
+            "choice": "He hasn’t had any coffee.",
+            "en": "the image establishes lunch at noon, not the absence of coffee",
+            "ja": "示されているのは正午の昼食で、コーヒーを飲んでいないことではありません"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-12",
@@ -374,7 +1434,30 @@
       "phraseIndex": 5,
       "asset": "/assets/questions/visual/july-12-02-not-eaten-today.webp",
       "imageAlt": "A hungry person has an empty lunchbox late in the day.",
-      "scenePrompt": "Late in the afternoon, a hungry person opens a completely empty lunchbox and realizes they have eaten nothing all day; a sequence of untouched meal moments is suggested in faint background vignettes."
+      "scenePrompt": "Late in the afternoon, a hungry person opens a completely empty lunchbox and realizes they have eaten nothing all day; a sequence of untouched meal moments is suggested in faint background vignettes.",
+      "reviewedGuidance": {
+        "hintEn": "Check the late time, empty lunchbox, and the person’s hunger.",
+        "hintJa": "遅い時刻、空の弁当箱、人物の空腹の様子を確認しましょう。",
+        "evidenceEn": "Late in the day, the person is hungry and the lunchbox remains empty, showing no food has been eaten.",
+        "evidenceJa": "一日の遅い時間でも空腹で弁当箱が空のままなので、まだ何も食べていません。",
+        "reasons": [
+          {
+            "choice": "She has already had breakfast.",
+            "en": "the hungry person and empty container contradict a completed breakfast",
+            "ja": "空腹の人物と空の容器は、朝食を済ませた状況と合いません"
+          },
+          {
+            "choice": "I’ve had this bag for years.",
+            "en": "the important container is an empty lunchbox, not an old bag kept for years",
+            "ja": "重要なのは空の弁当箱で、長年持つかばんではありません"
+          },
+          {
+            "choice": "Have you had lunch yet?",
+            "en": "the image answers the eating status directly rather than showing someone asking a question",
+            "ja": "昼食を尋ねる会話ではなく、食べていない状態そのものを示しています"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-12",
@@ -382,7 +1465,30 @@
       "phraseIndex": 6,
       "asset": "/assets/questions/visual/july-12-03-breakfast-already.webp",
       "imageAlt": "A satisfied woman has already finished breakfast.",
-      "scenePrompt": "In a sunny kitchen, a satisfied woman sits beside an empty breakfast plate, finished toast crumbs and an empty cup, clearly showing that breakfast is already over."
+      "scenePrompt": "In a sunny kitchen, a satisfied woman sits beside an empty breakfast plate, finished toast crumbs and an empty cup, clearly showing that breakfast is already over.",
+      "reviewedGuidance": {
+        "hintEn": "Notice the finished breakfast dishes and the woman’s satisfied expression.",
+        "hintJa": "食べ終えた朝食の皿と、女性の満足した表情を見ましょう。",
+        "evidenceEn": "The breakfast plate is already empty and the woman looks satisfied after finishing it.",
+        "evidenceJa": "朝食の皿はすでに空で、女性は食べ終えて満足しています。",
+        "reasons": [
+          {
+            "choice": "We haven’t decided yet.",
+            "en": "no group decision is pending; the completed meal is visible",
+            "ja": "集団での未決定事項ではなく、食事が完了しています"
+          },
+          {
+            "choice": "He hasn’t had any coffee.",
+            "en": "the subject is a woman with a finished breakfast, not a man lacking coffee",
+            "ja": "コーヒーを飲んでいない男性ではなく、朝食を終えた女性です"
+          },
+          {
+            "choice": "I had lunch at noon.",
+            "en": "the meal shown is breakfast and is already finished, not lunch at midday",
+            "ja": "示されているのは昼食ではなく、すでに終えた朝食です"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-12",
@@ -390,7 +1496,30 @@
       "phraseIndex": 9,
       "asset": "/assets/questions/visual/july-12-04-bag-for-years.webp",
       "imageAlt": "The same well-loved bag is used over many years.",
-      "scenePrompt": "A tasteful split-time composition shows the same person using the same distinctive, slightly worn bag across several years, from younger adult to present day; the bag remains clearly identical."
+      "scenePrompt": "A tasteful split-time composition shows the same person using the same distinctive, slightly worn bag across several years, from younger adult to present day; the bag remains clearly identical.",
+      "reviewedGuidance": {
+        "hintEn": "Follow the same distinctive bag through the sequence of passing years.",
+        "hintJa": "年月が進む連続場面で、同じ特徴的なかばんを追いましょう。",
+        "evidenceEn": "The same worn and well-loved bag remains with its owner across several years.",
+        "evidenceJa": "使い込まれた同じかばんを、持ち主が何年にもわたって使い続けています。",
+        "reasons": [
+          {
+            "choice": "He hasn’t had any coffee.",
+            "en": "no man, drink, or missing coffee appears; the evidence is long-term possession",
+            "ja": "男性や飲み物はなく、長期間の所有が示されています"
+          },
+          {
+            "choice": "Have you had lunch yet?",
+            "en": "no meal question or lunch scene appears in the time sequence",
+            "ja": "年月の流れに昼食の質問や食事場面はありません"
+          },
+          {
+            "choice": "I haven’t eaten anything today.",
+            "en": "the repeated bag over years, not food eaten today, is the subject",
+            "ja": "今日の食事ではなく、何年も同じかばんを持つことが主題です"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-12",
@@ -398,16 +1527,66 @@
       "phraseIndex": 11,
       "asset": "/assets/questions/visual/july-12-05-dinner-last-night.webp",
       "imageAlt": "Friends ate dinner together last night.",
-      "scenePrompt": "A warm evening dinner scene from the previous night: friends finish a shared meal under moonlight through the window, with yesterday indicated visually by a turned calendar page but no readable text."
+      "scenePrompt": "A warm evening dinner scene from the previous night: friends finish a shared meal under moonlight through the window, with yesterday indicated visually by a turned calendar page but no readable text.",
+      "reviewedGuidance": {
+        "hintEn": "Use the evening setting, shared meal, and calendar cue for the previous night.",
+        "hintJa": "夜の雰囲気、皆で食べる食事、前夜を示す時間の手掛かりを使いましょう。",
+        "evidenceEn": "The friends share an evening meal, and the time cue places it on the previous night.",
+        "evidenceJa": "友人たちが夕食を共にしており、時間の手掛かりから昨夜の出来事だと分かります。",
+        "reasons": [
+          {
+            "choice": "I haven’t had any alcohol yet.",
+            "en": "the scene shows a completed shared dinner, not one person’s alcohol status",
+            "ja": "一人の飲酒状況ではなく、皆で終えた夕食です"
+          },
+          {
+            "choice": "I don’t drink alcohol.",
+            "en": "no refusal or general drinking habit is communicated by the dinner scene",
+            "ja": "飲酒拒否や一般的な習慣は、夕食場面から示されません"
+          },
+          {
+            "choice": "We haven’t decided yet.",
+            "en": "the event has already happened; no unresolved group choice is pictured",
+            "ja": "出来事はすでに起きており、未解決の集団決定は描かれていません"
+          }
+        ]
+      }
     },
-
     {
       "lessonId": "july-13",
       "slot": 1,
       "phraseIndex": 0,
+      "distractorIndexes": [
+        2,
+        5,
+        8
+      ],
       "asset": "/assets/questions/visual/july-13-01-expected-call.webp",
       "imageAlt": "A person watches the clock while expecting a possible phone call.",
-      "scenePrompt": "Around the usual evening time, a person watches both a clock and a silent phone on the table, anticipating that someone might call; uncertain but expectant expression."
+      "scenePrompt": "Around the usual evening time, a person watches both a clock and a silent phone on the table, anticipating that someone might call; uncertain but expectant expression.",
+      "reviewedGuidance": {
+        "hintEn": "Use the clock, the waiting posture, and the person’s attention to the silent phone.",
+        "hintJa": "時計、待っている姿勢、鳴っていない電話を気にする様子を手掛かりにしましょう。",
+        "evidenceEn": "At the expected time, the person watches the phone and waits for a possible incoming call.",
+        "evidenceJa": "予想される時間になり、人物は電話を見ながら着信の可能性を待っています。",
+        "reasons": [
+          {
+            "choice": "My signal is weak.",
+            "en": "no weak-signal bars or connection failure appear; the phone is simply being watched",
+            "ja": "弱い電波表示や接続不良はなく、電話を待って見ています"
+          },
+          {
+            "choice": "That’s unusual.",
+            "en": "the person expects something possible at this time rather than reacting to an abnormal event",
+            "ja": "異常な出来事に驚くのではなく、この時間に起こり得ることを待っています"
+          },
+          {
+            "choice": "The streets are packed with people.",
+            "en": "the scene centers on one person and a phone indoors, not a crowded street",
+            "ja": "人混みの道路ではなく、室内の一人と電話が中心です"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-13",
@@ -415,7 +1594,30 @@
       "phraseIndex": 2,
       "asset": "/assets/questions/visual/july-13-02-weak-signal.webp",
       "imageAlt": "A phone has a weak mobile signal.",
-      "scenePrompt": "On a city street, a person raises a smartphone searching for reception; the screen shows only one tiny signal bar and the call is struggling."
+      "scenePrompt": "On a city street, a person raises a smartphone searching for reception; the screen shows only one tiny signal bar and the call is struggling.",
+      "reviewedGuidance": {
+        "hintEn": "Count the mobile-signal bars and notice the difficulty using the connection.",
+        "hintJa": "携帯電波の本数と、接続を使いにくそうな様子を確認しましょう。",
+        "evidenceEn": "The phone displays very few mobile-signal bars, indicating poor reception.",
+        "evidenceJa": "電話の携帯電波表示がごく少なく、受信状態の悪さを示しています。",
+        "reasons": [
+          {
+            "choice": "The Wi-Fi connection is unstable.",
+            "en": "the display identifies weak mobile reception, not fluctuating Wi-Fi",
+            "ja": "表示は不安定なWi-Fiではなく、弱い携帯電波を示しています"
+          },
+          {
+            "choice": "This shop doesn’t have tiramisu, but that one does.",
+            "en": "no shops, desserts, or comparison between locations appears",
+            "ja": "店・デザート・場所の比較は描かれていません"
+          },
+          {
+            "choice": "Will you be there this time?",
+            "en": "no meeting place or attendance question is shown; the phone’s reception is the issue",
+            "ja": "集合場所や出席の質問ではなく、電話の受信状態が問題です"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-13",
@@ -423,7 +1625,30 @@
       "phraseIndex": 4,
       "asset": "/assets/questions/visual/july-13-03-rush-back.webp",
       "imageAlt": "A person rushes back toward an office after forgetting something.",
-      "scenePrompt": "A person suddenly turns around and runs back toward an office entrance after realizing something was forgotten, checking the time with urgency."
+      "scenePrompt": "An adult who has just left work suddenly realizes that a document was forgotten, turns their whole body around, and runs clearly back toward an open office entrance while checking the time. Show the office interior and the forgotten document ahead of the runner so the return direction is unmistakable; no words.",
+      "reviewedGuidance": {
+        "hintEn": "Follow the runner’s direction and the forgotten item visible inside the office.",
+        "hintJa": "走る向きと、オフィス内に見える忘れ物を追いましょう。",
+        "evidenceEn": "After noticing the forgotten document, the person turns and runs quickly back into the office.",
+        "evidenceJa": "忘れた書類に気づき、人物は方向を変えて急いでオフィスへ戻っています。",
+        "reasons": [
+          {
+            "choice": "That’s unusual.",
+            "en": "the person is taking urgent corrective action, not merely observing something strange",
+            "ja": "珍しいと眺めるのではなく、急いで問題を直そうと行動しています"
+          },
+          {
+            "choice": "The streets are packed with people.",
+            "en": "the route to the office is not crowded; the focal evidence is one runner returning",
+            "ja": "道路の人混みではなく、一人が戻って走ることが中心です"
+          },
+          {
+            "choice": "Someone might call me around this time.",
+            "en": "no expected call or phone is involved; a forgotten office item causes the return",
+            "ja": "電話を待っておらず、オフィスの忘れ物が戻る理由です"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-13",
@@ -431,7 +1656,30 @@
       "phraseIndex": 7,
       "asset": "/assets/questions/visual/july-13-04-week-flew-by.webp",
       "imageAlt": "Calendar pages seem to fly past during a quick week.",
-      "scenePrompt": "A surprised person looks at a desk calendar as seven daily pages sweep past quickly like a gentle breeze, expressing that the week went by fast; no readable words."
+      "scenePrompt": "A surprised person looks at a desk calendar as seven daily pages sweep past quickly like a gentle breeze, expressing that the week went by fast; no readable words.",
+      "reviewedGuidance": {
+        "hintEn": "Track how rapidly the calendar pages move from the start to the end of the week.",
+        "hintJa": "週の初めから終わりまで、カレンダーのページがどれほど速く進むか見ましょう。",
+        "evidenceEn": "Successive calendar pages sweep past rapidly, compressing the whole week into a short visual sequence.",
+        "evidenceJa": "連続するカレンダーが急速にめくられ、一週間が短く感じられる流れです。",
+        "reasons": [
+          {
+            "choice": "The streets are packed with people.",
+            "en": "the visual depicts passing calendar time, not dense pedestrian traffic",
+            "ja": "歩行者で混雑した道路ではなく、カレンダー上の時間経過です"
+          },
+          {
+            "choice": "There are many people walking in Tokyo.",
+            "en": "no Tokyo street or walkers appear; calendar pages are the moving elements",
+            "ja": "東京の道や歩行者はなく、動いているのはカレンダーです"
+          },
+          {
+            "choice": "The Wi-Fi connection is unstable.",
+            "en": "there is no device or network indicator; the changing pages represent time",
+            "ja": "機器やネットワーク表示はなく、ページの変化は時間を表します"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-13",
@@ -439,16 +1687,61 @@
       "phraseIndex": 8,
       "asset": "/assets/questions/visual/july-13-05-packed-street.webp",
       "imageAlt": "A city street is packed with pedestrians.",
-      "scenePrompt": "A wide urban crosswalk and shopping street are densely packed with pedestrians in daytime, while one foreground person carefully navigates the crowd."
+      "scenePrompt": "A wide urban crosswalk and shopping street are densely packed with pedestrians in daytime, while one foreground person carefully navigates the crowd.",
+      "reviewedGuidance": {
+        "hintEn": "Look at how little open space remains between pedestrians across the street.",
+        "hintJa": "道路全体で歩行者同士の空間がどれほど少ないか見ましょう。",
+        "evidenceEn": "Pedestrians fill the street from side to side, leaving almost no open walking space.",
+        "evidenceJa": "歩行者が通り一面を埋め、歩ける空間がほとんど残っていません。",
+        "reasons": [
+          {
+            "choice": "It feels long at the beginning of the week.",
+            "en": "no calendar or subjective passage of time appears; the evidence is crowd density",
+            "ja": "カレンダーや時間感覚ではなく、人の密集度が示されています"
+          },
+          {
+            "choice": "Someone might call me around this time.",
+            "en": "no phone, clock, or waiting caller appears among the crowd",
+            "ja": "人混みの中に電話・時計・着信を待つ人は示されていません"
+          },
+          {
+            "choice": "I need to rush back.",
+            "en": "no one is turning back toward a destination; many people simply fill the street",
+            "ja": "目的地へ引き返す人物ではなく、多くの人が道路を埋めています"
+          }
+        ]
+      }
     },
-
     {
       "lessonId": "july-18",
       "slot": 1,
       "phraseIndex": 1,
       "asset": "/assets/questions/visual/july-18-01-has-cat.webp",
       "imageAlt": "A woman happily holds her pet cat at home.",
-      "scenePrompt": "At home, a woman happily holds her own relaxed pet cat; cat bed, food bowl and toys make ownership unmistakable."
+      "scenePrompt": "At home, a woman happily holds her own relaxed pet cat; cat bed, food bowl and toys make ownership unmistakable.",
+      "reviewedGuidance": {
+        "hintEn": "Identify the animal the woman is holding comfortably in her home.",
+        "hintJa": "女性が家で親しそうに抱いている動物を確認しましょう。",
+        "evidenceEn": "The woman happily holds her own cat in a familiar home setting.",
+        "evidenceJa": "女性は自宅らしい場所で、自分の猫を嬉しそうに抱いています。",
+        "reasons": [
+          {
+            "choice": "She doesn’t have a cat.",
+            "en": "a cat is visibly in her arms, directly contradicting the negative statement",
+            "ja": "猫を腕に抱いており、猫がいないという否定文と直接矛盾します"
+          },
+          {
+            "choice": "The pot was on the stove.",
+            "en": "no kitchen pot or stove appears; the central subject is a pet",
+            "ja": "鍋やコンロはなく、中心はペットです"
+          },
+          {
+            "choice": "I have a driver’s license.",
+            "en": "no license, vehicle, or driving context is shown",
+            "ja": "免許証・車・運転の場面はありません"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-18",
@@ -456,7 +1749,30 @@
       "phraseIndex": 5,
       "asset": "/assets/questions/visual/july-18-02-pot-on-stove.webp",
       "imageAlt": "A cooking pot sits safely on the stove.",
-      "scenePrompt": "A normal kitchen scene with a cooking pot sitting safely on a lit stove, gentle steam rising, no fire outside the burner and a cook nearby."
+      "scenePrompt": "A normal kitchen scene with a cooking pot sitting safely on a lit stove, gentle steam rising, no fire outside the burner and a cook nearby.",
+      "reviewedGuidance": {
+        "hintEn": "Look at the cookware’s exact position and its safe, unlit condition.",
+        "hintJa": "調理器具の正確な位置と、火が出ていない安全な状態を見ましょう。",
+        "evidenceEn": "A cooking pot rests normally on top of the stove with no flames or danger.",
+        "evidenceJa": "調理用の鍋がコンロの上に通常どおり置かれ、炎や危険はありません。",
+        "reasons": [
+          {
+            "choice": "The pot caught fire.",
+            "en": "the pot is intact and no flames or smoke are visible",
+            "ja": "鍋は無事で、炎や煙は見えません"
+          },
+          {
+            "choice": "I have a driver’s license.",
+            "en": "the image is a kitchen scene without a license or vehicle",
+            "ja": "台所の場面で、免許証や車はありません"
+          },
+          {
+            "choice": "She has a cat.",
+            "en": "no woman or cat appears; the only focal object is cookware",
+            "ja": "女性や猫はおらず、中心の物は調理器具です"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-18",
@@ -464,7 +1780,30 @@
       "phraseIndex": 6,
       "asset": "/assets/questions/visual/july-18-03-pot-caught-fire.webp",
       "imageAlt": "A cooking pot has caught fire on the stove.",
-      "scenePrompt": "In a kitchen emergency, visible flames rise from inside a pot on the stove while the cook reaches safely for a fire blanket; clear contrast with ordinary cooking."
+      "scenePrompt": "In a kitchen emergency, visible flames rise from inside a pot on the stove while the cook reaches safely for a fire blanket; clear contrast with ordinary cooking.",
+      "reviewedGuidance": {
+        "hintEn": "Distinguish the flames on the cookware from a larger fire elsewhere.",
+        "hintJa": "調理器具に上がる炎と、建物全体の火災を区別しましょう。",
+        "evidenceEn": "Flames rise directly from the pot while it sits on the stove.",
+        "evidenceJa": "コンロ上の鍋そのものから炎が上がっています。",
+        "reasons": [
+          {
+            "choice": "The house is on fire.",
+            "en": "the flames are confined to the pot; the building is not burning",
+            "ja": "炎は鍋に限られ、建物全体は燃えていません"
+          },
+          {
+            "choice": "We’re supposed to meet at ten.",
+            "en": "no clock, appointment, or meeting people appear in the emergency scene",
+            "ja": "時計・約束・待ち合わせる人は火災場面にありません"
+          },
+          {
+            "choice": "She doesn’t have a cat.",
+            "en": "the visual gives no information about a woman or pet ownership",
+            "ja": "女性やペットの所有について分かるものはありません"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-18",
@@ -472,7 +1811,30 @@
       "phraseIndex": 7,
       "asset": "/assets/questions/visual/july-18-04-house-on-fire.webp",
       "imageAlt": "Firefighters respond to a house on fire.",
-      "scenePrompt": "Firefighters respond from a safe distance to a house with visible smoke and flames, using a hose while residents stand safely away."
+      "scenePrompt": "Firefighters respond from a safe distance to a house with visible smoke and flames, using a hose while residents stand safely away.",
+      "reviewedGuidance": {
+        "hintEn": "Use the burning building and firefighters’ response to identify what is literally aflame.",
+        "hintJa": "燃えている建物と消防隊の対応から、実際に何が火事なのか判断しましょう。",
+        "evidenceEn": "Flames and smoke come from the house while firefighters work outside it.",
+        "evidenceJa": "家から炎と煙が出ており、消防士が外で消火活動をしています。",
+        "reasons": [
+          {
+            "choice": "He’s on fire today.",
+            "en": "the flames are literal and on a building, not an idiom for a man performing brilliantly",
+            "ja": "炎は建物で実際に燃えており、男性の絶好調を表す比喩ではありません"
+          },
+          {
+            "choice": "She’s fired up and ready.",
+            "en": "no energized woman preparing for action appears; firefighters face a literal blaze",
+            "ja": "意気込む女性ではなく、消防士が実際の火災に対応しています"
+          },
+          {
+            "choice": "She hasn’t eaten yet.",
+            "en": "no meal or eating status is visible in the fire response",
+            "ja": "消火活動の場面に食事や食べたかどうかの情報はありません"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-18",
@@ -480,16 +1842,61 @@
       "phraseIndex": 8,
       "asset": "/assets/questions/visual/july-18-05-on-fire-idiom.webp",
       "imageAlt": "An athlete performs brilliantly and celebrates a winning streak.",
-      "scenePrompt": "A tennis player performs brilliantly, winning several points in a row and celebrating confidently while the crowd cheers; use a subtle energetic glow, not literal flames, to show the idiom 'on fire'."
+      "scenePrompt": "A tennis player performs brilliantly, winning several points in a row and celebrating confidently while the crowd cheers; use a subtle energetic glow, not literal flames, to show the idiom 'on fire'.",
+      "reviewedGuidance": {
+        "hintEn": "Read the athlete’s repeated success, dominant performance, and celebration as an idiomatic clue.",
+        "hintJa": "選手の連続した成功、圧倒的なプレー、喜ぶ姿を比喩表現の手掛かりにしましょう。",
+        "evidenceEn": "The athlete performs exceptionally well and celebrates another success in a winning streak.",
+        "evidenceJa": "選手は非常に良いプレーを続け、連勝中の新たな成功を喜んでいます。",
+        "reasons": [
+          {
+            "choice": "I have a driver’s license.",
+            "en": "no license or driving appears; the evidence is athletic performance",
+            "ja": "免許や運転ではなく、競技での活躍が示されています"
+          },
+          {
+            "choice": "I was supposed to join the class.",
+            "en": "no missed class or expected attendance is pictured",
+            "ja": "参加するはずだった授業や欠席は描かれていません"
+          },
+          {
+            "choice": "I do like this song.",
+            "en": "no music or emphatic song preference appears; the athlete is celebrating sport",
+            "ja": "音楽や曲の好みではなく、選手が競技の成功を喜んでいます"
+          }
+        ]
+      }
     },
-
     {
       "lessonId": "july-19",
       "slot": 1,
       "phraseIndex": 0,
       "asset": "/assets/questions/visual/july-19-01-both-drinks.webp",
       "imageAlt": "A person happily chooses both tea and coffee.",
-      "scenePrompt": "At breakfast, a person happily enjoys both a cup of tea and a cup of coffee together, clearly choosing both rather than only one."
+      "scenePrompt": "At breakfast, a person happily enjoys both a cup of tea and a cup of coffee together, clearly choosing both rather than only one.",
+      "reviewedGuidance": {
+        "hintEn": "Notice that neither drink is rejected and each receives the same positive reaction.",
+        "hintJa": "どちらの飲み物も断られず、同じように好意的な反応を受けている点を見ましょう。",
+        "evidenceEn": "The person happily accepts and enjoys both the tea and the coffee.",
+        "evidenceJa": "人物は紅茶とコーヒーの両方を喜んで受け入れています。",
+        "reasons": [
+          {
+            "choice": "Either day works for me.",
+            "en": "the two items are drinks, not calendar days or scheduling options",
+            "ja": "二つは飲み物で、日付や予定候補ではありません"
+          },
+          {
+            "choice": "I’d rather stay home than go out.",
+            "en": "no home-versus-outing decision appears at the drink table",
+            "ja": "飲み物の場面に、家か外出かの選択はありません"
+          },
+          {
+            "choice": "I ran into an old friend.",
+            "en": "no unexpected reunion occurs; one person is comparing beverages",
+            "ja": "偶然の再会ではなく、一人が飲み物を選んでいます"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-19",
@@ -497,16 +1904,66 @@
       "phraseIndex": 1,
       "asset": "/assets/questions/visual/july-19-02-either-day.webp",
       "imageAlt": "A person is equally available on either of two calendar days.",
-      "scenePrompt": "A person compares two adjacent calendar-day cards and gives a relaxed thumbs-up to both, showing that either day works equally well; use symbols only, no words."
+      "scenePrompt": "An adult compares two adjacent calendar cards with clearly different dates and gives the same relaxed approval gesture to both, showing that either day works equally well. The cards must visibly be calendar days, not abstract circle and triangle cards; use date numerals only, no words.",
+      "reviewedGuidance": {
+        "hintEn": "Compare the two calendar dates and the identical approval shown for each.",
+        "hintJa": "二つのカレンダーの日付と、それぞれに示された同じ承認を比べましょう。",
+        "evidenceEn": "Two different calendar days receive equal approval, showing no scheduling preference.",
+        "evidenceJa": "異なる二つの日付に同じ承認が示され、どちらの日でも都合がよいことが分かります。",
+        "reasons": [
+          {
+            "choice": "I like neither option.",
+            "en": "both dates receive positive approval, not rejection",
+            "ja": "両方の日付が肯定されており、どちらも嫌だという反応ではありません"
+          },
+          {
+            "choice": "I’d rather not talk about it.",
+            "en": "the person is openly responding to schedule choices, not avoiding a topic",
+            "ja": "話題を避けず、予定候補に明確に答えています"
+          },
+          {
+            "choice": "I’m on my way to work.",
+            "en": "no commute or workplace destination appears; the image compares dates",
+            "ja": "通勤や職場への移動ではなく、日付を比較しています"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-19",
       "slot": 3,
       "phraseIndex": 2,
-      "distractorIndexes": [4, 6, 10],
+      "distractorIndexes": [
+        4,
+        6,
+        10
+      ],
       "asset": "/assets/questions/visual/july-19-03-neither-option.webp",
       "imageAlt": "A person rejects both of two options.",
-      "scenePrompt": "A person considers two clearly different options on a table and rejects both with crossed hands and an unhappy expression; both options are visibly marked as unsuitable without text."
+      "scenePrompt": "A person considers two clearly different options on a table and rejects both with crossed hands and an unhappy expression; both options are visibly marked as unsuitable without text.",
+      "reviewedGuidance": {
+        "hintEn": "Read the negative reaction applied equally to the two offered choices.",
+        "hintJa": "提示された二つの選択肢の両方に向けられた否定的な反応を見ましょう。",
+        "evidenceEn": "The person rejects both displayed options with the same negative response.",
+        "evidenceJa": "人物は示された二つの選択肢を、同じ否定的な反応で両方とも断っています。",
+        "reasons": [
+          {
+            "choice": "I’d rather stay home than go out.",
+            "en": "the two pictured options are both rejected; they are not home and an outing with one preferred",
+            "ja": "二つとも拒否されており、家と外出の一方を好む選択ではありません"
+          },
+          {
+            "choice": "That was hilarious.",
+            "en": "the expression is disapproval, not laughter at something funny",
+            "ja": "表情は否定で、面白いことに笑ってはいません"
+          },
+          {
+            "choice": "I won’t have coffee.",
+            "en": "two options are rejected together; the image does not isolate coffee as the only refusal",
+            "ja": "二つを一緒に拒否しており、コーヒーだけを断ってはいません"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-19",
@@ -514,7 +1971,30 @@
       "phraseIndex": 4,
       "asset": "/assets/questions/visual/july-19-04-rather-home.webp",
       "imageAlt": "A person prefers relaxing at home instead of going out.",
-      "scenePrompt": "A cozy person chooses to stay home with tea and a book while, through the window, friends head out into a busy rainy evening; preference for home is clear."
+      "scenePrompt": "A cozy person chooses to stay home with tea and a book while, through the window, friends head out into a busy rainy evening; preference for home is clear.",
+      "reviewedGuidance": {
+        "hintEn": "Compare the person’s relaxed home setup with the declined invitation outside.",
+        "hintJa": "家でくつろぐ準備と、外からの誘いを断る様子を比べましょう。",
+        "evidenceEn": "The person deliberately chooses the comfortable home activity over going outside.",
+        "evidenceJa": "人物は外出よりも、家でくつろぐ過ごし方を明確に選んでいます。",
+        "reasons": [
+          {
+            "choice": "I’d rather not talk about it.",
+            "en": "the person declines an outing, not a conversation topic",
+            "ja": "話題を避けるのではなく、外出を断っています"
+          },
+          {
+            "choice": "I ran into an old friend.",
+            "en": "no chance meeting or friend reunion occurs; an invitation is being declined",
+            "ja": "偶然の再会ではなく、誘いを断る場面です"
+          },
+          {
+            "choice": "I like both tea and coffee.",
+            "en": "the visible contrast is home versus going out, not two beverages",
+            "ja": "比較は家と外出で、二つの飲み物ではありません"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-19",
@@ -522,16 +2002,61 @@
       "phraseIndex": 8,
       "asset": "/assets/questions/visual/july-19-05-ran-into-friend.webp",
       "imageAlt": "Two old friends unexpectedly meet on a city sidewalk.",
-      "scenePrompt": "Two adults unexpectedly recognize each other on a city sidewalk, stop in surprise, then smile warmly; the accidental meeting is unmistakable."
+      "scenePrompt": "Two adults unexpectedly recognize each other on a city sidewalk, stop in surprise, then smile warmly; the accidental meeting is unmistakable.",
+      "reviewedGuidance": {
+        "hintEn": "Notice the surprise and recognition when the two pedestrians unexpectedly meet.",
+        "hintJa": "二人の歩行者が予期せず会った時の驚きと、相手に気づく表情を見ましょう。",
+        "evidenceEn": "Two people recognize each other with surprise during an unplanned sidewalk encounter.",
+        "evidenceJa": "二人は歩道で予定外に出会い、驚きながら互いを認識しています。",
+        "reasons": [
+          {
+            "choice": "I’m on my way to work.",
+            "en": "the destination is not established; the defining event is the unexpected reunion",
+            "ja": "目的地は示されず、重要なのは予期しない再会です"
+          },
+          {
+            "choice": "I like both tea and coffee.",
+            "en": "no drinks or preference comparison appear on the sidewalk",
+            "ja": "歩道に飲み物や好みの比較はありません"
+          },
+          {
+            "choice": "I’d rather stay home than go out.",
+            "en": "both people are already outside and meeting; no home preference is shown",
+            "ja": "二人はすでに外で会っており、家にいたいという希望は示されません"
+          }
+        ]
+      }
     },
-
     {
       "lessonId": "july-22",
       "slot": 1,
       "phraseIndex": 0,
       "asset": "/assets/questions/visual/july-22-01-availability.webp",
-      "imageAlt": "A person checks whether a morning appointment time is available.",
-      "scenePrompt": "A professional checks a calendar appointment card for a morning meeting and then gives a tentative confirming gesture; show an August calendar page, day four and a clock at ten using visual numerals only."
+      "imageAlt": "A professional asks whether August 4 at 10 a.m. is available.",
+      "scenePrompt": "During an online scheduling conversation, a professional asks whether an appointment is available. Show one appointment card clearly marked 8/4 beside a clock at exactly 10:00, and give the professional a questioning expression while waiting for confirmation; use numerals only, no words.",
+      "reviewedGuidance": {
+        "hintEn": "Combine the appointment card, the clock, and the questioning gesture rather than treating them separately.",
+        "hintJa": "予定カード、時計、質問する手の動きを別々でなく組み合わせて考えましょう。",
+        "evidenceEn": "The scheduler points to August 4 and 10:00 while asking the other person for availability.",
+        "evidenceJa": "予定を調整する人が8月4日と10時を示し、相手の都合を尋ねています。",
+        "reasons": [
+          {
+            "choice": "Are you guys ready?",
+            "en": "one person is being asked about a specific appointment, not a group’s readiness to leave",
+            "ja": "集団の出発準備ではなく、一人に特定日時の都合を尋ねています"
+          },
+          {
+            "choice": "Neither is okay.",
+            "en": "the scene asks about one exact date and time; it does not reject two options",
+            "ja": "一つの正確な日時を尋ねており、二つの選択肢を拒否してはいません"
+          },
+          {
+            "choice": "That’s right. I don’t like it.",
+            "en": "there is no agreement about disliking an item; the gesture is an open scheduling question",
+            "ja": "何かを嫌いだと同意する場面ではなく、予定について質問しています"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-22",
@@ -539,15 +2064,66 @@
       "phraseIndex": 1,
       "asset": "/assets/questions/visual/july-22-02-group-ready.webp",
       "imageAlt": "A group is ready to leave together.",
-      "scenePrompt": "A friendly mixed group stands by the door with bags and shoes on, everyone giving a ready thumbs-up before leaving together."
+      "scenePrompt": "A friendly mixed group stands by the door with bags and shoes on, everyone giving a ready thumbs-up before leaving together.",
+      "reviewedGuidance": {
+        "hintEn": "Look at the whole group’s bags, forward movement, and final readiness check.",
+        "hintJa": "グループ全員の荷物、出発する動き、最後の準備確認を見ましょう。",
+        "evidenceEn": "The group has gathered with their things and one member checks whether everyone can leave.",
+        "evidenceJa": "皆が荷物を持って集まり、一人が全員出発できるか確認しています。",
+        "reasons": [
+          {
+            "choice": "I like both.",
+            "en": "no pair of items is being approved; a group is preparing to move",
+            "ja": "二つの品を好んでいるのではなく、集団が出発準備をしています"
+          },
+          {
+            "choice": "I prefer cucumber to eggplant.",
+            "en": "no vegetables or food preference appears among the travelers",
+            "ja": "移動する人々の場面に野菜や食の好みはありません"
+          },
+          {
+            "choice": "Actually, I do like it.",
+            "en": "no single object is being emphatically liked; readiness is being checked",
+            "ja": "一つの物を強調して好むのではなく、準備ができたか確認しています"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-22",
       "slot": 3,
       "phraseIndex": 2,
+      "distractorIndexes": [
+        0,
+        5,
+        10
+      ],
       "asset": "/assets/questions/visual/july-22-03-like-both.webp",
       "imageAlt": "A diner happily likes both dishes.",
-      "scenePrompt": "A diner enthusiastically tastes and approves two different dishes side by side, clearly liking both equally."
+      "scenePrompt": "A diner enthusiastically tastes and approves two different dishes side by side, clearly liking both equally.",
+      "reviewedGuidance": {
+        "hintEn": "Notice the diner’s equally happy response to each of the two dishes together.",
+        "hintJa": "二つの料理それぞれに対する、客の同じように嬉しそうな反応を見ましょう。",
+        "evidenceEn": "The diner enthusiastically approves both dishes rather than choosing only one.",
+        "evidenceJa": "客は一方だけを選ぶのではなく、二つの料理を両方とも気に入っている様子です。",
+        "reasons": [
+          {
+            "choice": "Would you be available on August 4th at 10 a.m.?",
+            "en": "there is no calendar, clock, or appointment request at the table",
+            "ja": "食卓にカレンダー・時計・予定の質問はありません"
+          },
+          {
+            "choice": "I prefer cucumber to eggplant.",
+            "en": "the diner gives equal approval, not a preference for one vegetable over another",
+            "ja": "一方の野菜を好むのではなく、両方を同じように喜んでいます"
+          },
+          {
+            "choice": "Night shifts are still better.",
+            "en": "no workplace schedule or comparison of shifts appears; the subjects are two dishes",
+            "ja": "勤務時間の比較ではなく、二つの料理が対象です"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-22",
@@ -555,25 +2131,97 @@
       "phraseIndex": 4,
       "asset": "/assets/questions/visual/july-22-04-neither-okay.webp",
       "imageAlt": "Neither of two damaged items is acceptable.",
-      "scenePrompt": "A customer inspects two damaged products on a counter and rejects both as unacceptable; each item has a visible defect and a simple cross symbol, no text."
+      "scenePrompt": "A customer inspects two damaged products on a counter and rejects both as unacceptable; each item has a visible defect and a simple cross symbol, no text.",
+      "reviewedGuidance": {
+        "hintEn": "Check the damaged condition of both items and the rejection mark applied to each.",
+        "hintJa": "二つの品の壊れた状態と、それぞれに付けられた拒否の印を確認しましょう。",
+        "evidenceEn": "Both offered items are damaged, and each one is clearly rejected as unacceptable.",
+        "evidenceJa": "提示された二つの品はいずれも壊れており、両方とも受け入れられないと示されています。",
+        "reasons": [
+          {
+            "choice": "I prefer cucumber to eggplant.",
+            "en": "the items are damaged objects, not vegetables being ranked by preference",
+            "ja": "壊れた物であり、野菜を好みで比較してはいません"
+          },
+          {
+            "choice": "That’s right. I don’t like it.",
+            "en": "the negative judgment applies to two unusable items, not agreement about disliking one thing",
+            "ja": "一つを嫌う同意ではなく、使えない二品の両方への否定です"
+          },
+          {
+            "choice": "Would you be available on August 4th at 10 a.m.?",
+            "en": "no date, time, or person’s availability is shown",
+            "ja": "日付・時刻・人の都合は示されていません"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-22",
       "slot": 5,
       "phraseIndex": 6,
-      "distractorIndexes": [0, 4, 10],
+      "distractorIndexes": [
+        0,
+        4,
+        10
+      ],
       "asset": "/assets/questions/visual/july-22-05-likes-yakiniku.webp",
       "imageAlt": "A diner enthusiastically enjoys yakiniku.",
-      "scenePrompt": "At a Japanese yakiniku restaurant, a diner smiles enthusiastically and gives a strong yes gesture while enjoying grilled meat at the table."
+      "scenePrompt": "At a Japanese yakiniku restaurant, a diner smiles enthusiastically and gives a strong yes gesture while enjoying grilled meat at the table.",
+      "reviewedGuidance": {
+        "hintEn": "Identify the food being eaten and the diner’s unmistakably positive reaction.",
+        "hintJa": "食べている料理と、客の明らかに好意的な反応を確認しましょう。",
+        "evidenceEn": "The diner eats yakiniku enthusiastically and responds positively to the food.",
+        "evidenceJa": "客は焼肉をおいしそうに食べ、その料理を気に入っていることが分かります。",
+        "reasons": [
+          {
+            "choice": "Would you be available on August 4th at 10 a.m.?",
+            "en": "there is no scheduling card or time request; the scene is about enjoying food",
+            "ja": "予定カードや時刻の質問はなく、料理を楽しむ場面です"
+          },
+          {
+            "choice": "Neither is okay.",
+            "en": "the diner positively accepts the visible food rather than rejecting two items",
+            "ja": "二つを拒否するのではなく、目の前の料理を肯定的に受け入れています"
+          },
+          {
+            "choice": "Night shifts are still better.",
+            "en": "no work shift or schedule comparison appears at the yakiniku table",
+            "ja": "焼肉の食卓に勤務時間や予定の比較はありません"
+          }
+        ]
+      }
     },
-
     {
       "lessonId": "july-23",
       "slot": 1,
       "phraseIndex": 1,
       "asset": "/assets/questions/visual/july-23-01-under-weather.webp",
       "imageAlt": "A person feels mildly ill at home.",
-      "scenePrompt": "A person rests at home under a blanket with tissues, warm tea and a thermometer, looking mildly unwell rather than seriously ill."
+      "scenePrompt": "A person rests at home under a blanket with tissues, warm tea and a thermometer, looking mildly unwell rather than seriously ill.",
+      "reviewedGuidance": {
+        "hintEn": "Use the person’s low energy, thermometer, and resting-at-home behavior.",
+        "hintJa": "人物の元気のなさ、体温計、家で休む様子を手掛かりにしましょう。",
+        "evidenceEn": "The person rests at home with mild symptoms and looks slightly unwell rather than seriously ill.",
+        "evidenceJa": "人物は軽い体調不良の様子で、自宅で静かに休んでいます。",
+        "reasons": [
+          {
+            "choice": "It’s too hot to go outside.",
+            "en": "no extreme heat, sun, or blocked outing appears; the person has mild illness symptoms",
+            "ja": "猛暑や日差し、外出断念ではなく、軽い病気の症状があります"
+          },
+          {
+            "choice": "It fell on the floor.",
+            "en": "no object has fallen; the focal evidence is the person’s physical condition",
+            "ja": "床に落ちた物はなく、人物の体調が中心です"
+          },
+          {
+            "choice": "I ordered a chicken-and-egg rice bowl.",
+            "en": "no restaurant order or rice bowl appears in the home recovery scene",
+            "ja": "自宅で休む場面に注文や親子丼はありません"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-23",
@@ -581,7 +2229,30 @@
       "phraseIndex": 2,
       "asset": "/assets/questions/visual/july-23-02-too-hot-outside.webp",
       "imageAlt": "It is too hot for a person to go outside.",
-      "scenePrompt": "A person opens the front door, recoils from intense summer heat and blazing sunlight, and decides not to step outside; heat waves visible."
+      "scenePrompt": "A person opens the front door, recoils from intense summer heat and blazing sunlight, and decides not to step outside; heat waves visible.",
+      "reviewedGuidance": {
+        "hintEn": "Compare the intense outdoor heat with the person stopping at the doorway.",
+        "hintJa": "外の激しい暑さと、玄関で出るのをやめる人物を比べましょう。",
+        "evidenceEn": "Severe heat outside makes the person turn back instead of leaving the cool interior.",
+        "evidenceJa": "外の厳しい暑さのため、人物は涼しい室内から出るのをやめています。",
+        "reasons": [
+          {
+            "choice": "I’ve just ordered lunch.",
+            "en": "no food order or restaurant interaction is visible; weather prevents an outing",
+            "ja": "食事注文やレストランのやり取りはなく、暑さが外出を妨げています"
+          },
+          {
+            "choice": "It’s lying on the floor.",
+            "en": "no object on the floor is central; the doorway and outdoor heat are the evidence",
+            "ja": "床の物ではなく、玄関と外の暑さが手掛かりです"
+          },
+          {
+            "choice": "Doraemon is a cat-shaped robot.",
+            "en": "no character or robot appears; the scene concerns dangerous heat",
+            "ja": "キャラクターやロボットはなく、危険な暑さの場面です"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-23",
@@ -589,7 +2260,30 @@
       "phraseIndex": 4,
       "asset": "/assets/questions/visual/july-23-03-car-appeared.webp",
       "imageAlt": "A car suddenly appears from a side street.",
-      "scenePrompt": "At a quiet intersection, a car suddenly emerges from a narrow side street and startles a pedestrian, with safe distance and dynamic surprise."
+      "scenePrompt": "At a quiet intersection, a car suddenly emerges from a narrow side street and startles a pedestrian, with safe distance and dynamic surprise.",
+      "reviewedGuidance": {
+        "hintEn": "Notice the car emerging without warning and the pedestrian’s immediate surprise.",
+        "hintJa": "車が前触れなく出てくる動きと、歩行者の即座の驚きを見ましょう。",
+        "evidenceEn": "A car abruptly emerges from a side street, surprising the nearby pedestrian.",
+        "evidenceJa": "脇道から車が突然現れ、近くの歩行者を驚かせています。",
+        "reasons": [
+          {
+            "choice": "It fell on the floor.",
+            "en": "the moving object is a car entering the street, not an item dropping downward",
+            "ja": "動いているのは道路へ出る車で、物が床へ落ちたのではありません"
+          },
+          {
+            "choice": "I just got home.",
+            "en": "no arrival at a residence is shown; the event occurs on a street",
+            "ja": "自宅への到着ではなく、道路上の出来事です"
+          },
+          {
+            "choice": "I haven’t thought of one yet.",
+            "en": "no idea-generation conversation occurs; the person reacts to immediate traffic",
+            "ja": "案を考える会話ではなく、目の前の交通に反応しています"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-23",
@@ -597,7 +2291,30 @@
       "phraseIndex": 9,
       "asset": "/assets/questions/visual/july-23-04-oyakodon-order.webp",
       "imageAlt": "A customer receives a chicken-and-egg rice bowl.",
-      "scenePrompt": "In a Japanese restaurant, a server places a steaming chicken-and-egg rice bowl in front of a customer who has just ordered it; ingredients clearly visible."
+      "scenePrompt": "In a Japanese restaurant, a server places a steaming chicken-and-egg rice bowl in front of a customer who has just ordered it; ingredients clearly visible.",
+      "reviewedGuidance": {
+        "hintEn": "Identify the finished dish being handed to the waiting customer.",
+        "hintJa": "待っている客に渡される完成した料理が何か確認しましょう。",
+        "evidenceEn": "The server delivers a chicken-and-egg rice bowl that the customer selected.",
+        "evidenceJa": "店員が、客の選んだ鶏肉と卵の丼料理を届けています。",
+        "reasons": [
+          {
+            "choice": "Doraemon is a cat-shaped robot.",
+            "en": "no animated character or robot appears in the restaurant",
+            "ja": "レストランにアニメのキャラクターやロボットはありません"
+          },
+          {
+            "choice": "I’m feeling under the weather.",
+            "en": "the customer is awaiting food, with no symptom or illness cue",
+            "ja": "客は料理を待っており、病気の症状は示されません"
+          },
+          {
+            "choice": "It fell on the floor.",
+            "en": "the bowl is carried safely to the table and has not fallen",
+            "ja": "丼は安全にテーブルへ運ばれ、床に落ちていません"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-23",
@@ -605,17 +2322,66 @@
       "phraseIndex": 11,
       "asset": "/assets/questions/visual/july-23-05-anywhere-door.webp",
       "imageAlt": "A magical freestanding door opens onto a distant tropical place.",
-      "scenePrompt": "A whimsical freestanding pink door opens directly from an ordinary room onto a distant sunny tropical beach, visually showing that the door can take someone anywhere; original design, no copyrighted characters."
+      "scenePrompt": "A whimsical freestanding pink door opens directly from an ordinary room onto a distant sunny tropical beach, visually showing that the door can take someone anywhere; original design, no copyrighted characters.",
+      "reviewedGuidance": {
+        "hintEn": "Compare the ordinary doorway with the distant tropical place visible immediately through it.",
+        "hintJa": "普通の場所に立つドアと、開いた先にすぐ見える遠い南国を比べましょう。",
+        "evidenceEn": "The freestanding magical door opens directly onto a faraway tropical destination.",
+        "evidenceJa": "独立して立つ不思議なドアが、遠くの南国へ直接つながっています。",
+        "reasons": [
+          {
+            "choice": "I haven’t thought of one yet.",
+            "en": "no person struggles to produce an idea; the door visibly provides transportation",
+            "ja": "案を思いつけない人物ではなく、ドアが移動手段として描かれています"
+          },
+          {
+            "choice": "I’ve just ordered lunch.",
+            "en": "no meal, menu, or order appears around the magical doorway",
+            "ja": "不思議なドアの周囲に食事・メニュー・注文はありません"
+          },
+          {
+            "choice": "I put it on the floor.",
+            "en": "the doorway stands upright and connects places; no object is being placed on the floor",
+            "ja": "ドアは立って場所をつないでおり、物を床に置いてはいません"
+          }
+        ]
+      }
     },
-
     {
       "lessonId": "july-25",
       "slot": 1,
       "phraseIndex": 0,
-      "distractorIndexes": [3, 6, 10],
+      "distractorIndexes": [
+        3,
+        6,
+        10
+      ],
       "asset": "/assets/questions/visual/july-25-01-getting-hungry.webp",
       "imageAlt": "A person gradually starts to feel hungry before lunch.",
-      "scenePrompt": "Before lunchtime, a person begins to feel hungry, glances at the clock and lightly holds their stomach while noticing food aromas from a nearby kitchen."
+      "scenePrompt": "Before lunchtime, a person begins to feel hungry, glances at the clock and lightly holds their stomach while noticing food aromas from a nearby kitchen.",
+      "reviewedGuidance": {
+        "hintEn": "Notice the gradual change in appetite as lunchtime approaches.",
+        "hintJa": "昼食時刻が近づくにつれて、食欲が徐々に変化する様子を見ましょう。",
+        "evidenceEn": "Before lunch, the person begins to notice a growing desire for food.",
+        "evidenceJa": "昼食前、人物は食べたい気持ちが徐々に強くなるのを感じています。",
+        "reasons": [
+          {
+            "choice": "I’m frustrated because nothing is working.",
+            "en": "no broken device or failed attempt appears; the change is physical appetite",
+            "ja": "壊れた機器や失敗ではなく、身体的な食欲の変化です"
+          },
+          {
+            "choice": "It’s getting cold.",
+            "en": "no temperature drop or winter cue appears; the person is thinking about food",
+            "ja": "気温低下や冬の手掛かりはなく、食べ物を考えています"
+          },
+          {
+            "choice": "No one knows the answer.",
+            "en": "no question or group lacking knowledge is shown",
+            "ja": "問題や答えを知らない集団は描かれていません"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-25",
@@ -623,7 +2389,30 @@
       "phraseIndex": 1,
       "asset": "/assets/questions/visual/july-25-02-starving.webp",
       "imageAlt": "An extremely hungry person waits at an empty table.",
-      "scenePrompt": "An extremely hungry person waits dramatically but realistically at an empty restaurant table, stomach rumbling, while food is still being prepared in the distance."
+      "scenePrompt": "An extremely hungry person waits dramatically but realistically at an empty restaurant table, stomach rumbling, while food is still being prepared in the distance.",
+      "reviewedGuidance": {
+        "hintEn": "Use the completely empty table and the person’s extreme physical reaction to hunger.",
+        "hintJa": "何もないテーブルと、空腹に対する人物の強い身体反応を見ましょう。",
+        "evidenceEn": "The person waits at an empty table with an intense, urgent need for food.",
+        "evidenceJa": "人物は何もない食卓で、今すぐ食べ物が必要なほど強い空腹を感じています。",
+        "reasons": [
+          {
+            "choice": "I’m annoyed by the noise.",
+            "en": "no sound source or ear-covering reaction appears; the distress comes from hunger",
+            "ja": "音源や耳をふさぐ反応はなく、苦しさの原因は空腹です"
+          },
+          {
+            "choice": "He’s making me nervous.",
+            "en": "no other man is causing anxiety; the person reacts to an empty stomach",
+            "ja": "不安にさせる男性はおらず、空腹に反応しています"
+          },
+          {
+            "choice": "Is anyone there?",
+            "en": "the person is not calling into an empty place; attention is fixed on the lack of food",
+            "ja": "誰かを呼んでいるのではなく、食べ物がないことに注意が向いています"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-25",
@@ -631,16 +2420,66 @@
       "phraseIndex": 2,
       "asset": "/assets/questions/visual/july-25-03-annoyed-noise.webp",
       "imageAlt": "A person is annoyed by loud construction noise.",
-      "scenePrompt": "At home, a person covers one ear and looks visibly annoyed by repeated loud construction noise coming through the window; sound-wave marks show the cause."
+      "scenePrompt": "At home, a person covers one ear and looks visibly annoyed by repeated loud construction noise coming through the window; sound-wave marks show the cause.",
+      "reviewedGuidance": {
+        "hintEn": "Trace the construction sound toward the person covering an ear and frowning.",
+        "hintJa": "工事音が、耳をふさいで顔をしかめる人物へ届く様子を追いましょう。",
+        "evidenceEn": "Loud construction reaches the person, whose frown and covered ear show irritation.",
+        "evidenceJa": "大きな工事音が人物に届き、しかめた顔と耳をふさぐ動作が苛立ちを示しています。",
+        "reasons": [
+          {
+            "choice": "I’m frustrated because nothing is working.",
+            "en": "no equipment is failing; one clearly visible noise source causes the reaction",
+            "ja": "機器の故障ではなく、一つの明確な騒音源が反応を引き起こしています"
+          },
+          {
+            "choice": "It’s getting cold.",
+            "en": "the person reacts to sound, not falling temperature",
+            "ja": "気温の低下ではなく、音に反応しています"
+          },
+          {
+            "choice": "No one knows the answer.",
+            "en": "no question or uncertain group appears in the construction scene",
+            "ja": "工事の場面に問題や答えを知らない集団はありません"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-25",
       "slot": 4,
       "phraseIndex": 4,
-      "distractorIndexes": [1, 7, 10],
+      "distractorIndexes": [
+        1,
+        7,
+        10
+      ],
       "asset": "/assets/questions/visual/july-25-04-on-my-nerves.webp",
       "imageAlt": "Repeated phone notifications are getting on a person's nerves.",
-      "scenePrompt": "A person becomes increasingly irritated as the same contact sends many repeated phone notifications; the phone vibrates again and again while patience visibly runs out."
+      "scenePrompt": "A person becomes increasingly irritated as the same contact sends many repeated phone notifications; the phone vibrates again and again while patience visibly runs out.",
+      "reviewedGuidance": {
+        "hintEn": "Identify who keeps calling and how the repeated notifications change the recipient’s mood.",
+        "hintJa": "誰が繰り返し電話し、その通知で受け手の気分がどう変わるか見ましょう。",
+        "evidenceEn": "Repeated calls from the same identifiable man progressively irritate the phone’s owner.",
+        "evidenceJa": "同じ男性から繰り返しかかってくる電話が、持ち主を次第に苛立たせています。",
+        "reasons": [
+          {
+            "choice": "I’m starving.",
+            "en": "the distress is triggered by repeated calls, not an empty table or need for food",
+            "ja": "苦しさの原因は繰り返しかかってくる電話で、食べ物がないことではありません"
+          },
+          {
+            "choice": "Have you ever been hypnotized?",
+            "en": "no hypnosis or past-experience question appears; the phone identifies the irritating caller",
+            "ja": "催眠や経験を尋ねる会話ではなく、電話が苛立たせる相手を示しています"
+          },
+          {
+            "choice": "No one knows the answer.",
+            "en": "no unanswered question or group appears; one caller is the clear source of annoyance",
+            "ja": "未解決の問題や集団ではなく、一人の発信者が苛立ちの原因です"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-25",
@@ -648,17 +2487,66 @@
       "phraseIndex": 8,
       "asset": "/assets/questions/visual/july-25-05-gut-feeling.webp",
       "imageAlt": "A person trusts a bad gut feeling before entering a dark alley.",
-      "scenePrompt": "A person pauses before entering a dim unfamiliar alley, hand lightly on stomach, sensing that something is wrong and choosing to turn back; intuitive caution, no visible danger."
+      "scenePrompt": "A person pauses before entering a dim unfamiliar alley, hand lightly on stomach, sensing that something is wrong and choosing to turn back; intuitive caution, no visible danger.",
+      "reviewedGuidance": {
+        "hintEn": "Read the person’s hesitation and bodily warning before entering the dark alley.",
+        "hintJa": "暗い路地へ入る前のためらいと、身体が警告するような反応を読み取りましょう。",
+        "evidenceEn": "Before entering the dark alley, the person stops because an instinctive warning suggests danger.",
+        "evidenceJa": "暗い路地へ入る前、直感的な警告で危険を感じて立ち止まっています。",
+        "reasons": [
+          {
+            "choice": "Is anyone there?",
+            "en": "the person does not call out for someone; the response is an internal warning",
+            "ja": "誰かを呼んでいるのではなく、自分の内側の警告に反応しています"
+          },
+          {
+            "choice": "I’m getting hungry.",
+            "en": "no food or appetite cue appears; the physical feeling concerns danger",
+            "ja": "食べ物や食欲の手掛かりはなく、身体感覚は危険に関するものです"
+          },
+          {
+            "choice": "He’s getting on my nerves.",
+            "en": "no irritating man or repeated action appears; the alley itself triggers unease",
+            "ja": "苛立たせる男性や反復行動はなく、路地が不安を引き起こしています"
+          }
+        ]
+      }
     },
-
     {
       "lessonId": "july-26",
       "slot": 1,
       "phraseIndex": 0,
-      "distractorIndexes": [4, 7, 10],
+      "distractorIndexes": [
+        4,
+        7,
+        10
+      ],
       "asset": "/assets/questions/visual/july-26-01-hope-malaysia.webp",
       "imageAlt": "A hopeful traveler plans to visit Malaysia next year.",
-      "scenePrompt": "A hopeful traveler looks at a future calendar, passport and Malaysia travel photos while planning a possible trip next year; optimistic but not certain."
+      "scenePrompt": "A hopeful traveler looks at a future calendar, passport and Malaysia travel photos while planning a possible trip next year; optimistic but not certain.",
+      "reviewedGuidance": {
+        "hintEn": "Use the future calendar, Malaysia travel image, and hopeful planning posture.",
+        "hintJa": "来年のカレンダー、マレーシア旅行のイメージ、希望を持つ姿勢を手掛かりにしましょう。",
+        "evidenceEn": "The traveler looks ahead to next year and hopes for a future visit to Malaysia.",
+        "evidenceJa": "旅行者は来年を見据え、将来マレーシアを訪れたいと願っています。",
+        "reasons": [
+          {
+            "choice": "I have already eaten breakfast.",
+            "en": "no breakfast or completed meal appears; the focus is a future travel hope",
+            "ja": "朝食や食事完了ではなく、将来の旅行への希望です"
+          },
+          {
+            "choice": "I have lived here since 2016.",
+            "en": "no residence timeline beginning in 2016 is shown",
+            "ja": "2016年から続く居住期間は示されていません"
+          },
+          {
+            "choice": "I haven’t taken a bath yet.",
+            "en": "no bathroom or unfinished bathing routine appears in the travel plan",
+            "ja": "旅行計画の場面に浴室や未完了の入浴はありません"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-26",
@@ -666,7 +2554,30 @@
       "phraseIndex": 1,
       "asset": "/assets/questions/visual/july-26-02-wish-in-malaysia.webp",
       "imageAlt": "A person in a rainy room wishes they were in sunny Malaysia.",
-      "scenePrompt": "A person sits by a rainy window at home and imagines being in sunny Malaysia, with a soft thought-bubble transition to tropical Kuala Lumpur scenery; clearly a present unreal wish."
+      "scenePrompt": "A person sits by a rainy window at home and imagines being in sunny Malaysia, with a soft thought-bubble transition to tropical Kuala Lumpur scenery; clearly a present unreal wish.",
+      "reviewedGuidance": {
+        "hintEn": "Compare the rainy present location with the sunny Malaysian scene the person imagines.",
+        "hintJa": "雨の現在地と、人物が思い描く晴れたマレーシアを比べましょう。",
+        "evidenceEn": "Stuck in a rainy room, the person imagines being in sunny Malaysia at this moment.",
+        "evidenceJa": "雨の部屋にいる人物が、今この瞬間に晴れたマレーシアにいたらいいのにと想像しています。",
+        "reasons": [
+          {
+            "choice": "I wish I had studied harder.",
+            "en": "there is no test, book, or regret about past study; the desired alternative is a present location",
+            "ja": "試験・本・過去の勉強への後悔はなく、今いる場所を変えたい願いです"
+          },
+          {
+            "choice": "I haven’t eaten dinner yet.",
+            "en": "no meal or unfinished dinner appears; the contrast is between two places",
+            "ja": "食事や未完了の夕食ではなく、二つの場所の対比です"
+          },
+          {
+            "choice": "I had already eaten when you arrived.",
+            "en": "no arrival or earlier completed meal is shown in the imagined travel scene",
+            "ja": "誰かの到着や、それ以前に済ませた食事は描かれていません"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-26",
@@ -674,7 +2585,30 @@
       "phraseIndex": 2,
       "asset": "/assets/questions/visual/july-26-03-studied-harder.webp",
       "imageAlt": "A learner regrets not studying harder before a test.",
-      "scenePrompt": "After receiving a disappointing test result, a learner looks regretfully at an unopened study book and imagines an earlier scene of studying diligently; past regret is clear without written grades."
+      "scenePrompt": "After receiving a disappointing test result, a learner looks regretfully at an unopened study book and imagines an earlier scene of studying diligently; past regret is clear without written grades.",
+      "reviewedGuidance": {
+        "hintEn": "Look at the disappointing test result and the unused study materials from before the test.",
+        "hintJa": "残念な試験結果と、試験前に十分使われなかった教材を見ましょう。",
+        "evidenceEn": "After receiving a poor result, the learner regrets the lack of sufficient study beforehand.",
+        "evidenceJa": "悪い結果を受け取り、学習者は事前に十分勉強しなかったことを後悔しています。",
+        "reasons": [
+          {
+            "choice": "I wish I had been born there.",
+            "en": "no birthplace or country of birth appears; the regret concerns preparation for a test",
+            "ja": "出生地ではなく、試験への準備不足を後悔しています"
+          },
+          {
+            "choice": "I’ve just arrived home.",
+            "en": "no doorway, luggage, or recent home arrival is shown",
+            "ja": "玄関・荷物・帰宅したばかりの様子はありません"
+          },
+          {
+            "choice": "I haven’t taken a bath yet.",
+            "en": "no bathing routine is relevant to the test paper and study books",
+            "ja": "試験用紙や教材に、入浴の状況は関係ありません"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-26",
@@ -682,41 +2616,159 @@
       "phraseIndex": 4,
       "asset": "/assets/questions/visual/july-26-04-already-breakfast.webp",
       "imageAlt": "A person has already finished breakfast.",
-      "scenePrompt": "In a morning kitchen, a person is already finished with breakfast: empty plate, cup and fruit peel neatly arranged, satisfied expression and morning sunlight."
+      "scenePrompt": "In a morning kitchen, a person is already finished with breakfast: empty plate, cup and fruit peel neatly arranged, satisfied expression and morning sunlight.",
+      "reviewedGuidance": {
+        "hintEn": "Notice the empty breakfast plate and the evidence that the morning meal is complete now.",
+        "hintJa": "空になった朝食の皿と、朝の食事が今すでに終わっている証拠を見ましょう。",
+        "evidenceEn": "The breakfast dishes are empty, showing the person has completed the meal already.",
+        "evidenceJa": "朝食の食器が空で、人物がすでに食事を終えたことを示しています。",
+        "reasons": [
+          {
+            "choice": "I haven’t eaten dinner yet.",
+            "en": "the pictured meal is a completed breakfast, not an unfinished dinner",
+            "ja": "描かれているのは完了した朝食で、まだ食べていない夕食ではありません"
+          },
+          {
+            "choice": "I had finished dinner before he called.",
+            "en": "there is no dinner or phone-call sequence; only the present result of breakfast is shown",
+            "ja": "夕食や電話の前後関係はなく、朝食を終えた現在の結果だけが示されています"
+          },
+          {
+            "choice": "I hope I can visit Malaysia next year.",
+            "en": "no map, calendar, or travel hope appears at the breakfast table",
+            "ja": "朝食の食卓に地図・カレンダー・旅行の希望はありません"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-26",
       "slot": 5,
       "phraseIndex": 8,
-      "distractorIndexes": [0, 5, 10],
+      "distractorIndexes": [
+        0,
+        5,
+        10
+      ],
       "asset": "/assets/questions/visual/july-26-05-dinner-before-call.webp",
       "imageAlt": "Dinner was finished before a phone call arrived.",
-      "scenePrompt": "A clear two-step composition: first an empty dinner plate after the meal is finished, then a phone begins ringing moments later; show chronological order with visual flow, no text."
+      "scenePrompt": "A clear two-step composition: first an empty dinner plate after the meal is finished, then a phone begins ringing moments later; show chronological order with visual flow, no text.",
+      "reviewedGuidance": {
+        "hintEn": "Establish the order: the empty dinner setting comes before the incoming call.",
+        "hintJa": "順序を確認しましょう。空になった夕食の食卓が先で、電話の着信が後です。",
+        "evidenceEn": "Dinner is already finished when the later phone call arrives.",
+        "evidenceJa": "後から電話がかかってきた時には、夕食はすでに終わっています。",
+        "reasons": [
+          {
+            "choice": "I hope I can visit Malaysia next year.",
+            "en": "no future trip or Malaysia image appears; the visual establishes two past events",
+            "ja": "将来の旅行やマレーシアではなく、過去の二つの出来事の順序です"
+          },
+          {
+            "choice": "I haven’t eaten dinner yet.",
+            "en": "the empty dishes show dinner is complete, directly contradicting an uneaten meal",
+            "ja": "空の食器は夕食完了を示し、まだ食べていない状態と矛盾します"
+          },
+          {
+            "choice": "I haven’t taken a bath yet.",
+            "en": "no bathroom or bathing status appears; the later event is a phone call",
+            "ja": "浴室や入浴状況はなく、後の出来事は電話です"
+          }
+        ]
+      }
     },
-
     {
       "lessonId": "july-27",
       "slot": 1,
       "phraseIndex": 0,
       "asset": "/assets/questions/visual/july-27-01-spilled-coffee.webp",
       "imageAlt": "A person accidentally spills coffee on a white shirt.",
-      "scenePrompt": "At a café table, a person accidentally tips a coffee cup and coffee visibly spills onto their white shirt; surprised reaction, clearly unintentional."
+      "scenePrompt": "At a café table, a person accidentally tips a coffee cup and coffee visibly spills onto their white shirt; surprised reaction, clearly unintentional.",
+      "reviewedGuidance": {
+        "hintEn": "Identify the liquid, where it lands, and the person’s accidental reaction.",
+        "hintJa": "液体の種類、落ちた場所、人物の思いがけない反応を確認しましょう。",
+        "evidenceEn": "Coffee spills accidentally from the cup and leaves a visible stain on the person’s white shirt.",
+        "evidenceJa": "カップからコーヒーが偶然こぼれ、人物の白いシャツに明確なしみができています。",
+        "reasons": [
+          {
+            "choice": "She poured sauce over the pasta.",
+            "en": "the liquid is coffee landing accidentally on clothing, not sauce deliberately added to pasta",
+            "ja": "液体は服に偶然かかったコーヒーで、パスタへ意図的にかけるソースではありません"
+          },
+          {
+            "choice": "This dessert has a sophisticated flavor.",
+            "en": "no dessert tasting or refined flavor reaction appears; the person reacts to a stain",
+            "ja": "デザートの試食や洗練された味への反応ではなく、しみに驚いています"
+          },
+          {
+            "choice": "I had eaten before he arrived.",
+            "en": "no man’s arrival or sequence of completed eating appears",
+            "ja": "男性の到着や、それ以前に食べ終えた時間関係はありません"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-27",
       "slot": 2,
       "phraseIndex": 1,
       "asset": "/assets/questions/visual/july-27-02-poured-sauce.webp",
-      "imageAlt": "A cook deliberately pours sauce over pasta.",
-      "scenePrompt": "A cook deliberately and carefully pours sauce from a small jug over a plated pasta dish; controlled intentional action."
+      "imageAlt": "A woman deliberately pours sauce over pasta.",
+      "scenePrompt": "An adult woman cook deliberately and carefully pours sauce from a small jug over a plated pasta dish. Keep her face, pouring hand, the visible stream of sauce, and the pasta in one clear frame; controlled intentional action, no words.",
+      "reviewedGuidance": {
+        "hintEn": "Observe who controls the container, what flows out, and the food receiving it.",
+        "hintJa": "容器を持つ人物、流れ出る物、それを受ける料理を見ましょう。",
+        "evidenceEn": "An adult woman intentionally tips the container so sauce flows directly over the pasta.",
+        "evidenceJa": "成人女性が容器を意図的に傾け、ソースをパスタへ直接流しかけています。",
+        "reasons": [
+          {
+            "choice": "He splashed water on me.",
+            "en": "the actor is a woman pouring sauce carefully onto food, not a man splashing water at a person",
+            "ja": "女性が料理へ丁寧にソースを注いでおり、男性が人へ水をはねかけてはいません"
+          },
+          {
+            "choice": "He plays tennis every week.",
+            "en": "no man, racket, court, or repeated sports routine appears in the kitchen",
+            "ja": "台所に男性・ラケット・コート・毎週の競技習慣はありません"
+          },
+          {
+            "choice": "I used to live here.",
+            "en": "no former home or past residence is indicated; the action is food preparation",
+            "ja": "以前の住居や過去の居住は示されず、料理を仕上げています"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-27",
       "slot": 3,
       "phraseIndex": 2,
       "asset": "/assets/questions/visual/july-27-03-splashed-water.webp",
-      "imageAlt": "A child splashes water onto another person.",
-      "scenePrompt": "During safe summer play near a shallow fountain, one person playfully sends a visible splash of water onto another person's clothes; dynamic burst of droplets."
+      "imageAlt": "A man playfully splashes water onto a woman.",
+      "scenePrompt": "During safe summer play near a shallow fountain, an adult man playfully splashes water onto an adult woman's clothes. Make the man, the source and arc of the water, and the smiling wet recipient unmistakable; no children, no words.",
+      "reviewedGuidance": {
+        "hintEn": "Track the water from the man’s motion to the woman who receives the splash.",
+        "hintJa": "男性の動きから、女性にかかる水までを追いましょう。",
+        "evidenceEn": "A man sends a visible splash of water onto a woman, who reacts to being hit by it.",
+        "evidenceJa": "男性が女性へ目に見える水しぶきを飛ばし、女性は水がかかって驚いています。",
+        "reasons": [
+          {
+            "choice": "Coffee can be an acquired taste.",
+            "en": "no coffee or gradual change in taste appears; the visible action is water splashing",
+            "ja": "コーヒーや味への慣れではなく、水をかける動作です"
+          },
+          {
+            "choice": "I went to Malaysia last year.",
+            "en": "no travel, map, or past-year cue appears in the playful water scene",
+            "ja": "水遊びの場面に旅行・地図・昨年の手掛かりはありません"
+          },
+          {
+            "choice": "I wish I had been invited.",
+            "en": "no invitation or exclusion is shown; two people interact directly",
+            "ja": "招待や仲間外れではなく、二人が直接やり取りしています"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-27",
@@ -724,7 +2776,30 @@
       "phraseIndex": 3,
       "asset": "/assets/questions/visual/july-27-04-acquired-taste.webp",
       "imageAlt": "A person gradually learns to enjoy black coffee.",
-      "scenePrompt": "A gentle two-moment sequence shows the same adult first grimacing at black coffee, then later smiling while enjoying it, illustrating a taste learned over time."
+      "scenePrompt": "A gentle two-moment sequence shows the same adult first grimacing at black coffee, then later smiling while enjoying it, illustrating a taste learned over time.",
+      "reviewedGuidance": {
+        "hintEn": "Compare the person’s reaction to black coffee across repeated tastings over time.",
+        "hintJa": "時間をかけて何度かブラックコーヒーを飲む中で、反応がどう変わるか比べましょう。",
+        "evidenceEn": "Repeated tastings change the person’s reaction from dislike to genuine enjoyment of black coffee.",
+        "evidenceJa": "繰り返し飲むうちに、ブラックコーヒーへの反応が苦手そうな表情から心から楽しむ表情へ変わっています。",
+        "reasons": [
+          {
+            "choice": "This dessert has a sophisticated flavor.",
+            "en": "the item is coffee, and the sequence shows learned preference rather than one refined dessert taste",
+            "ja": "対象はコーヒーで、一度の洗練されたデザート味ではなく、好みの変化です"
+          },
+          {
+            "choice": "I have been to Malaysia.",
+            "en": "no travel memory or Malaysia landmark appears in the tasting sequence",
+            "ja": "試飲の連続場面に旅行経験やマレーシアの名所はありません"
+          },
+          {
+            "choice": "Don’t spill the beans.",
+            "en": "no secret is being revealed; the coffee beans and drink are literal taste cues",
+            "ja": "秘密を漏らす場面ではなく、豆と飲み物は実際の味の手掛かりです"
+          }
+        ]
+      }
     },
     {
       "lessonId": "july-27",
@@ -732,7 +2807,30 @@
       "phraseIndex": 4,
       "asset": "/assets/questions/visual/july-27-05-sophisticated-dessert.webp",
       "imageAlt": "An elegant dessert has a sophisticated flavor.",
-      "scenePrompt": "An adult diner appreciates an elegant, refined plated dessert with dark chocolate, subtle garnish and balanced presentation in a sophisticated restaurant setting."
+      "scenePrompt": "An adult diner appreciates an elegant, refined plated dessert with dark chocolate, subtle garnish and balanced presentation in a sophisticated restaurant setting.",
+      "reviewedGuidance": {
+        "hintEn": "Use the elegant plating and the taster’s careful, impressed reaction to the flavor.",
+        "hintJa": "上品な盛り付けと、味を確かめて感心する人の反応を手掛かりにしましょう。",
+        "evidenceEn": "The refined presentation and the taster’s impressed response communicate a complex, elegant dessert flavor.",
+        "evidenceJa": "上品な盛り付けと感心した反応が、複雑で洗練されたデザートの味を示しています。",
+        "reasons": [
+          {
+            "choice": "He plays tennis every week.",
+            "en": "no man, tennis equipment, or weekly routine appears at the dessert table",
+            "ja": "デザートの食卓に男性・テニス用品・毎週の習慣はありません"
+          },
+          {
+            "choice": "I had eaten before he arrived.",
+            "en": "no arrival or ordering of two past events is shown; the dessert is being evaluated now",
+            "ja": "誰かの到着や過去の前後関係ではなく、今デザートを味わっています"
+          },
+          {
+            "choice": "I spilled coffee on my shirt.",
+            "en": "the dessert remains neatly plated and no coffee stain or accident appears",
+            "ja": "デザートはきれいに盛られ、コーヒーのしみや事故はありません"
+          }
+        ]
+      }
     }
   ]
 }

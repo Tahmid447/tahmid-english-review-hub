@@ -9,6 +9,7 @@ const types = {
   ".js": "text/javascript; charset=utf-8",
   ".css": "text/css; charset=utf-8",
   ".json": "application/json; charset=utf-8",
+  ".webmanifest": "application/manifest+json; charset=utf-8",
   ".png": "image/png",
   ".jpg": "image/jpeg",
   ".jpeg": "image/jpeg",
@@ -20,7 +21,11 @@ http
   .createServer((request, response) => {
     const url = new URL(request.url, `http://${request.headers.host}`);
     let pathname = decodeURIComponent(url.pathname);
-    if (pathname === "/takiwaki") pathname = "/takiwaki.html";
+    if (pathname === "/takiwaki" || pathname === "/takiwaki.html") {
+      response.writeHead(302, { location: "/?legacy=takiwaki" });
+      response.end();
+      return;
+    }
     if (pathname === "/teacher") pathname = "/teacher.html";
     if (pathname === "/phrases") pathname = "/phrases.html";
     if (pathname.startsWith("/lesson/")) pathname = "/lesson.html";

@@ -7,17 +7,20 @@
   <meta name="theme-color" content="#0b2234">
   <title>Plans · Tahmid English Review Hub</title>
   <link rel="manifest" href="/manifest.webmanifest">
+  <script>try{const p=JSON.parse(localStorage.getItem("te-review-hub:theme:v1")||"\"system\"");const d=p==="dark"||(p==="system"&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.dataset.themePreference=["system","light","dark"].includes(p)?p:"system";document.documentElement.dataset.theme=d?"dark":"light";document.documentElement.style.colorScheme=d?"dark":"light"}catch{}</script>
   <link rel="stylesheet" href="/src/styles.css">
-  <link rel="icon" href="/assets/tahmid-english-club-logo.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/app-icon-192.png">
 </head>
 <body data-page="pricing">
   <a class="skip-link" href="#plansMain">Skip to plans</a>
   <header class="site-header pricing-header">
     <a class="brand" href="/" aria-label="Tahmid English Club home">
-      <img class="brand-logo" src="/assets/tahmid-english-club-logo.png" alt="Tahmid English Club logo">
+      <img class="brand-logo" src="/assets/app-icon-192.png" alt="Tahmid English Club logo" width="50" height="50">
       <span><strong>Tahmid English Club</strong><small>English Review Hub · 英語復習ハブ</small></span>
     </a>
     <nav class="header-actions" aria-label="Plan page controls">
+      <button class="quiet-btn mobile-settings-toggle" id="mobileSettingsToggle" type="button" aria-expanded="false" aria-controls="siteSettingsControls" data-ui-en="Settings" data-ui-ja="設定">Settings / 設定</button>
+      <span class="header-settings-controls" id="siteSettingsControls">
       <a class="quiet-btn pricing-return" href="/" data-ui-en="Back to Review Hub" data-ui-ja="Review Hubへ戻る">Back to Review Hub / Review Hubへ戻る</a>
       <label class="voice-select"><span data-ui-en="Language" data-ui-ja="表示">Language / 表示</span>
         <select id="languageToggle" aria-label="Interface language">
@@ -26,6 +29,10 @@
           <option value="ja">日本語UI</option>
         </select>
       </label>
+      <label class="voice-select"><span data-ui-en="Theme" data-ui-ja="外観">Theme / 外観</span>
+        <select id="themeToggle" aria-label="Colour theme"><option value="system">System / 端末設定</option><option value="light">Light / ライト</option><option value="dark">Dark / ダーク</option></select>
+      </label>
+      </span>
     </nav>
   </header>
 
@@ -33,7 +40,7 @@
     <section class="pricing-hero shell" aria-labelledby="pricingHeading">
       <div class="pricing-hero-copy">
         <p class="eyebrow" data-ui-en="A clear path from practice to personal feedback" data-ui-ja="自習から個別フィードバックまで、分かりやすく">A clear path from practice to personal feedback / 自習から個別フィードバックまで、分かりやすく</p>
-        <h1 id="pricingHeading" data-ui-en="Choose how much support helps you keep moving." data-ui-ja="自分に合うサポートで、英語学習を前へ。">Choose how much support helps you keep moving. / 自分に合うサポートで、英語学習を前へ。</h1>
+        <h1 id="pricingHeading"><span class="pricing-heading-en">Choose how much support helps you keep moving.</span><span class="pricing-heading-ja" lang="ja">自分に合うサポートで、英語学習を前へ。</span></h1>
         <p data-ui-en="Start with two complete lessons, unlock the full Review Hub, or add personal feedback and live coaching from Tahmid." data-ui-ja="まずは完成版2レッスンを無料体験。全教材、個別添削、ライブ指導へ、必要なサポートに合わせて選べます。">Start with two complete lessons, unlock the full Review Hub, or add personal feedback and live coaching from Tahmid. / まずは完成版2レッスンを無料体験。全教材、個別添削、ライブ指導へ、必要なサポートに合わせて選べます。</p>
         <div class="pricing-proof" aria-label="Plan highlights">
           <span><b>17</b><small data-ui-en="real-lesson reviews" data-ui-ja="実レッスン復習教材">real-lesson reviews / 実レッスン復習教材</small></span>
@@ -87,7 +94,7 @@
         <p class="contact-disclaimer" data-ui-en="No payment is processed here. I will personally confirm availability, payment details and access." data-ui-ja="このページでは決済されません。空き状況・支払い方法・アクセスについて、Tahmidが個別にご案内します。">No payment is processed here. I will personally confirm availability, payment details and access. / このページでは決済されません。空き状況・支払い方法・アクセスについて、Tahmidが個別にご案内します。</p>
       </div>
       <div class="contact-qr-card">
-        <img src="/assets/contact/line-qr.jpeg" alt="LINE contact QR code for Tahmid English Club" width="240" height="240">
+        <img src="/assets/contact/line-qr.jpeg" alt="LINE contact QR code for Tahmid English Club" width="240" height="240" loading="lazy" decoding="async" fetchpriority="low">
         <strong>LINE</strong>
         <small data-ui-en="Scan to start a conversation" data-ui-ja="読み取って相談を始める">Scan to start a conversation / 読み取って相談を始める</small>
       </div>

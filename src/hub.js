@@ -1,10 +1,12 @@
 import {
+  applyThemePreference,
   getAllLessonProgress,
   getLessonProgress,
   getSettings,
   onSettingsChange,
   setStorageUser,
   updateSettings,
+  watchSystemTheme,
 } from "./store.js";
 import { loadPublishedLessons } from "./data.js";
 import {
@@ -27,11 +29,11 @@ import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js";
 import { installPlayfulInteractions } from "./effects.js";
 import { planFor } from "./plans.js";
 
-const page = document.body.dataset.page || "general";
-
 let publishedLessons = [];
 let visibleLessons = [];
-let activeFilter = "all";
+const supportedFilters = new Set(["all", "conversation", "grammar", "listening", "continue", "weak"]);
+const requestedFilter = new URLSearchParams(window.location.search).get("filter") || "all";
+let activeFilter = supportedFilters.has(requestedFilter) ? requestedFilter : "all";
 
 const LANGUAGE_CODES = Object.freeze([
   "af","sq","am","ar","hy","as","ay","az","bm","eu","be","bn","bho","bs","bg","ca","ceb","zh","co","hr","cs","da","dv","doi","nl","en","eo","et","ee","fil","fi","fr","fy","gl","ka","de","el","gn","gu","ht","ha","haw","he","hi","hmn","hu","is","ig","ilo","id","ga","it","ja","jv","kn","kk","km","rw","gom","ko","kri","ku","ckb","ky","lo","la","lv","ln","lt","lg","lb","mk","mai","mg","ms","ml","mt","mi","mr","mni","lus","mn","my","ne","no","ny","or","om","ps","fa","pl","pt","pa","qu","ro","ru","sm","sa","gd","nso","sr","st","sn","sd","si","sk","sl","so","es","su","sw","sv","tg","ta","tt","te","th","ti","ts","tr","tk","ak","uk","ur","ug","uz","vi","cy","xh","yi","yo","zu"
@@ -115,6 +117,14 @@ function normaliseSession(value) {
   return null;
 }
 
+function isGoogleSession(session) {
+  if (!session?.user) return false;
+  if (String(session.user.app_metadata?.provider || "").toLowerCase() === "google") return true;
+  return (session.user.identities || []).some(
+    (identity) => String(identity?.provider || "").toLowerCase() === "google",
+  );
+}
+
 async function activateStorageScope(session) {
   const userId = session?.user?.id ? String(session.user.id) : null;
   if (pendingSettingsLoad && pendingSettingsUserId === userId) {
@@ -130,15 +140,8 @@ async function activateStorageScope(session) {
     remoteAssignments = [];
     remotePersonalLessons = [];
     personalLoadMessage = "";
-    if (page === "takiwaki") {
-      visibleLessons = [];
-      ["#privateHero", "#privateDashboard", "#assigned", "#history"].forEach((selector) => {
-        const section = document.querySelector(selector);
-        if (section) section.hidden = true;
-      });
-    }
   }
-  if (page === "general" && publishedLessons.length) renderLessonGrid();
+  if (publishedLessons.length) renderLessonGrid();
 
   const load = (async () => {
     if (!userId) return true;
@@ -205,6 +208,8 @@ function applySettings(settings = getSettings()) {
   const soundToggle = document.querySelector("#soundToggle");
   const voiceSelect = document.querySelector("#voiceSelect");
   const playbackRate = document.querySelector("#playbackRate");
+  const themeToggle = document.querySelector("#themeToggle");
+  const weeklyGoal = document.querySelector("#weeklyGoalSelect");
   if (languageToggle) languageToggle.value = language;
   if (soundToggle) {
     soundToggle.textContent = sound
@@ -214,6 +219,9 @@ function applySettings(settings = getSettings()) {
   }
   if (voiceSelect) voiceSelect.value = settings.voice || "us";
   if (playbackRate) playbackRate.value = String(settings.playbackRate || 1);
+  if (themeToggle) themeToggle.value = settings.theme || "system";
+  if (weeklyGoal) weeklyGoal.value = String(settings.weeklyGoal || 3);
+  applyThemePreference(settings.theme);
 }
 
 function bindSettings() {
@@ -221,6 +229,16 @@ function bindSettings() {
   const soundToggle = document.querySelector("#soundToggle");
   const voiceSelect = document.querySelector("#voiceSelect");
   const playbackRate = document.querySelector("#playbackRate");
+  const themeToggle = document.querySelector("#themeToggle");
+  const weeklyGoal = document.querySelector("#weeklyGoalSelect");
+  const mobileSettingsToggle = document.querySelector("#mobileSettingsToggle");
+  const settingsControls = document.querySelector("#siteSettingsControls");
+
+  mobileSettingsToggle?.addEventListener("click", () => {
+    const expanded = mobileSettingsToggle.getAttribute("aria-expanded") === "true";
+    mobileSettingsToggle.setAttribute("aria-expanded", String(!expanded));
+    settingsControls?.classList.toggle("mobile-open", !expanded);
+  });
 
   languageToggle?.addEventListener("change", () => {
     const next = ["en", "bilingual", "ja"].includes(languageToggle.value)
@@ -241,15 +259,23 @@ function bindSettings() {
   playbackRate?.addEventListener("change", () => {
     updateAndSyncSettings({ playbackRate: Number(playbackRate.value) });
   });
+  themeToggle?.addEventListener("change", () => {
+    updateAndSyncSettings({ theme: themeToggle.value });
+  });
+  weeklyGoal?.addEventListener("change", () => {
+    updateAndSyncSettings({ weeklyGoal: Number(weeklyGoal.value) });
+    updatePersonalMetrics();
+  });
   onSettingsChange((settings) => {
     applySettings(settings);
     if (visibleLessons.length) renderLessonGrid();
-    if (page === "takiwaki" && authSession) {
+    if (authSession) {
       updatePersonalMetrics();
       renderHistory();
     }
   });
   applySettings();
+  watchSystemTheme(() => applyThemePreference(getSettings().theme));
 }
 
 installPlayfulInteractions();
@@ -325,10 +351,26 @@ function lessonGroups(lesson) {
   return groups.size ? [...groups] : ["conversation"];
 }
 
+function currentReturnPath() {
+  const url = new URL(window.location.href);
+  ["account", "code", "error", "error_code", "error_description", "legacy"].forEach(
+    (key) => url.searchParams.delete(key),
+  );
+  return `${url.pathname}${url.search}${url.hash}`;
+}
+
 function lessonHref(lesson) {
   const query = new URLSearchParams({ id: lesson.id });
   if (lesson.assigned) query.set("assigned", "1");
+  query.set("return", currentReturnPath());
   return `/lesson.html?${query.toString()}`;
+}
+
+function syncNavigationContext() {
+  const returnPath = currentReturnPath();
+  document.querySelectorAll(".phrase-library-link").forEach((link) => {
+    link.href = `/phrases?return=${encodeURIComponent(returnPath)}`;
+  });
 }
 
 function createLessonCard(lesson, options = {}) {
@@ -402,11 +444,6 @@ function createLessonCard(lesson, options = {}) {
     attrs: {
       "data-groups": groups.join(" "),
       "data-lesson-id": lesson.id,
-      role: "link",
-      tabindex: "0",
-      "aria-label": locked
-        ? t(`${lesson.title}. Membership required.`, `${lesson.titleJa || lesson.title}。会員限定です。`)
-        : t(`Open ${lesson.title}`, `${lesson.titleJa || lesson.title}を開く`),
     },
   }, [top, title, titleJa, summary, summaryJa, meta, progressBar, action]);
   const destination = locked ? "#account" : lessonHref({ ...lesson, assigned: options.assigned });
@@ -416,11 +453,6 @@ function createLessonCard(lesson, options = {}) {
   };
   card.addEventListener("click", (event) => {
     if (event.target.closest("a,button,input,select,textarea")) return;
-    openCard();
-  });
-  card.addEventListener("keydown", (event) => {
-    if (event.key !== "Enter" && event.key !== " ") return;
-    event.preventDefault();
     openCard();
   });
   return card;
@@ -442,9 +474,7 @@ function renderLessonGrid() {
 
   grid.replaceChildren();
   if (!filtered.length) {
-    const message = page === "takiwaki" && activeFilter !== "all"
-      ? t("Nothing is waiting in this group. Keep up the steady work.", "このグループに待っている復習はありません。この調子です。")
-      : t("No lessons match this filter yet.", "この条件に合うレッスンはまだありません。");
+    const message = t("No lessons match this filter yet.", "この条件に合うレッスンはまだありません。");
     grid.append(element("article", { className: "lesson-card" }, [
       element("h3", { text: message }),
       element("p", { className: "jp", text: "この条件に合うレッスンはまだありません。" }),
@@ -458,12 +488,22 @@ function renderLessonGrid() {
 
 function bindFilters() {
   document.querySelectorAll(".filter-chip[data-filter]").forEach((button) => {
+    const active = button.dataset.filter === activeFilter;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-pressed", String(active));
+  });
+  document.querySelectorAll(".filter-chip[data-filter]").forEach((button) => {
     button.addEventListener("click", () => {
       activeFilter = button.dataset.filter || "all";
       document.querySelectorAll(".filter-chip[data-filter]").forEach((candidate) => {
         candidate.classList.toggle("active", candidate === button);
         candidate.setAttribute("aria-pressed", String(candidate === button));
       });
+      const url = new URL(window.location.href);
+      if (activeFilter === "all") url.searchParams.delete("filter");
+      else url.searchParams.set("filter", activeFilter);
+      window.history.replaceState({}, "", `${url.pathname}${url.search}#library`);
+      syncNavigationContext();
       renderLessonGrid();
     });
   });
@@ -495,11 +535,10 @@ async function handleLogin(event) {
     if (!scopeReady) return;
     form.reset();
     setLoginStatus(t("Signed in successfully.", "ログインしました。"));
-    showToast(
-      page === "takiwaki"
-        ? t("Signed in securely.", "安全にログインしました。")
-        : t("Welcome back. Your saved learning is ready.", "おかえりなさい。保存済みの学習を再開できます。"),
-    );
+    showToast(t(
+      "Welcome back. Your saved learning is ready.",
+      "おかえりなさい。保存済みの学習を再開できます。",
+    ));
     await refreshAuthView();
   } catch (error) {
     setLoginStatus(error?.message || t("Sign-in failed.", "ログインできませんでした。"), true);
@@ -636,8 +675,8 @@ async function handleAccessCode(event) {
             )
           : /took too long/i.test(rawMessage)
             ? t(
-                "The check took too long. Nothing was changed. Please check your connection and try again.",
-                "確認に時間がかかりすぎました。変更は行われていません。通信を確認してもう一度お試しください。",
+                "The result could not be confirmed. Refresh and check your membership before trying the code again.",
+                "結果を確認できませんでした。再度コードを使う前に、ページを更新して会員状態をご確認ください。",
               )
             : rawMessage || t("The code could not be used.", "コードを利用できませんでした。");
     setLoginStatus(safeMessage, true);
@@ -682,22 +721,26 @@ async function handleProfileCompletion(event) {
 
 async function handleLogout() {
   const result = await signOutStudent();
-  if (result?.error) {
-    showToast(result.error.message || t("Sign-out failed.", "ログアウトできませんでした。"));
-    return;
-  }
-  authSession = null;
-  currentMembership = null;
-  currentProfile = null;
-  const scopeReady = await activateStorageScope(null);
-  if (!scopeReady) return;
-  remoteAttempts = [];
-  remoteAssignments = [];
-  remotePersonalLessons = [];
-  personalLoadMessage = "";
-  setLoginStatus(t("Signed out.", "ログアウトしました。"));
-  showToast(t("Signed out safely.", "安全にログアウトしました。"));
-  await refreshAuthView();
+  // Always rebuild the page/client from cleared local storage. This also
+  // removes protected state from view when the SDK request times out.
+  const status = result?.error ? "local" : "complete";
+  window.location.replace(`/?signedOut=${status}`);
+}
+
+function finishSignOutTransition() {
+  const url = new URL(window.location.href);
+  const status = url.searchParams.get("signedOut");
+  if (!['complete', 'local'].includes(status)) return;
+  const message = status === "local"
+    ? t(
+      "Signed out on this device. The server response could not be confirmed.",
+      "この端末からログアウトしました。サーバーの応答は確認できませんでした。",
+    )
+    : t("Signed out safely.", "安全にログアウトしました。");
+  setLoginStatus(message, status === "local");
+  showToast(message);
+  url.searchParams.delete("signedOut");
+  window.history.replaceState({}, "", `${url.pathname}${url.search}${url.hash}`);
 }
 
 function bindAuth() {
@@ -708,17 +751,37 @@ function bindAuth() {
   document.querySelector("#profileCompletionForm")?.addEventListener("submit", handleProfileCompletion);
   document.querySelector("#logoutButton")?.addEventListener("click", handleLogout);
   document.querySelector("#studentLogout")?.addEventListener("click", handleLogout);
+  document.querySelector("#profileGateLogout")?.addEventListener("click", handleLogout);
+  document.querySelector("#profileGateDialog")?.addEventListener("cancel", (event) => {
+    if (isGoogleSession(authSession)) event.preventDefault();
+  });
 
   document.querySelectorAll("[data-auth-view]").forEach((button) => {
     button.addEventListener("click", () => {
       const view = button.dataset.authView;
       document.querySelectorAll("[data-auth-view]").forEach((candidate) => {
-        candidate.classList.toggle("active", candidate === button);
+        const active = candidate === button;
+        candidate.classList.toggle("active", active);
+        candidate.setAttribute("aria-selected", String(active));
+        candidate.tabIndex = active ? 0 : -1;
       });
       document.querySelectorAll("[data-auth-panel]").forEach((panel) => {
         panel.hidden = panel.dataset.authPanel !== view;
       });
     });
+  });
+  document.querySelector(".auth-tabs[role='tablist']")?.addEventListener("keydown", (event) => {
+    if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+    const tabs = [...event.currentTarget.querySelectorAll("[role='tab']")];
+    const currentIndex = Math.max(0, tabs.indexOf(document.activeElement));
+    const nextIndex = event.key === "Home"
+      ? 0
+      : event.key === "End"
+        ? tabs.length - 1
+        : (currentIndex + (event.key === "ArrowRight" ? 1 : -1) + tabs.length) % tabs.length;
+    event.preventDefault();
+    tabs[nextIndex]?.click();
+    tabs[nextIndex]?.focus();
   });
 
   const dialog = document.querySelector("#accountDialog");
@@ -788,8 +851,13 @@ async function refreshMembershipPanel() {
 async function refreshProfileCompletion() {
   const panel = document.querySelector("#profileCompletionPanel");
   const form = document.querySelector("#profileCompletionForm");
+  const home = document.querySelector("#profileCompletionHome");
+  const gate = document.querySelector("#profileGateDialog");
+  const gateMount = document.querySelector("#profileGateMount");
   if (!panel || !form || !authSession) {
     if (panel) panel.hidden = true;
+    if (gate?.open) gate.close();
+    if (panel && home?.parentNode && panel.parentNode !== home.parentNode) home.after(panel);
     currentProfile = null;
     return;
   }
@@ -797,10 +865,16 @@ async function refreshProfileCompletion() {
   currentProfile = result.profile;
   const required = ["first_name", "last_name", "age_group", "native_language", "english_level"];
   const incomplete = required.some((key) => !String(currentProfile?.[key] || "").trim());
+  const requiresGoogleGate = incomplete && isGoogleSession(authSession);
   panel.hidden = !incomplete;
+  if (requiresGoogleGate && gateMount && panel.parentNode !== gateMount) gateMount.append(panel);
+  if (!requiresGoogleGate && home?.parentNode && panel.parentNode !== home.parentNode) home.after(panel);
+  if (requiresGoogleGate && gate && !gate.open && typeof gate.showModal === "function") gate.showModal();
+  if (!requiresGoogleGate && gate?.open) gate.close();
   if (!incomplete) return;
   const metadata = authSession.user?.user_metadata || {};
   const fields = {
+    profileVerifiedEmail: authSession.user?.email || "",
     profileFirstName: currentProfile?.first_name || metadata.given_name || metadata.first_name || "",
     profileLastName: currentProfile?.last_name || metadata.family_name || metadata.last_name || "",
     profileAgeGroup: currentProfile?.age_group || "",
@@ -810,8 +884,11 @@ async function refreshProfileCompletion() {
   };
   Object.entries(fields).forEach(([id, value]) => {
     const control = form.querySelector(`#${id}`);
-    if (control && !control.value) control.value = value;
+    // Always replace the read-only identity field when auth accounts change;
+    // never leave a previous learner's address in the detached gate form.
+    if (control && (id === "profileVerifiedEmail" || !control.value)) control.value = value;
   });
+  if (requiresGoogleGate) form.querySelector("input, select, textarea")?.focus();
 }
 
 async function fetchPersonalRecords() {
@@ -965,16 +1042,111 @@ function allLocalProgress() {
   return [];
 }
 
+function attemptIdentity(attempt, fallback = "") {
+  return String(
+    attempt?.client_attempt_id
+    || attempt?.clientAttemptId
+    || attempt?.runAttemptId
+    || attempt?.id
+    || fallback,
+  );
+}
+
+function tokyoDateKey(value) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Tokyo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(date);
+  const values = Object.fromEntries(parts.map((part) => [part.type, part.value]));
+  return `${values.year}-${values.month}-${values.day}`;
+}
+
+function shiftDateKey(key, days) {
+  const date = new Date(`${key}T00:00:00Z`);
+  date.setUTCDate(date.getUTCDate() + days);
+  return date.toISOString().slice(0, 10);
+}
+
+function studyStreak(dateKeys) {
+  const dates = new Set(dateKeys.filter(Boolean));
+  const today = tokyoDateKey(new Date());
+  let cursor = dates.has(today) ? today : shiftDateKey(today, -1);
+  let count = 0;
+  while (dates.has(cursor)) {
+    count += 1;
+    cursor = shiftDateKey(cursor, -1);
+  }
+  return count;
+}
+
+function weekDateKeys(dateKeys) {
+  const today = tokyoDateKey(new Date());
+  const day = new Date(`${today}T00:00:00Z`).getUTCDay();
+  const mondayOffset = day === 0 ? -6 : 1 - day;
+  const monday = shiftDateKey(today, mondayOffset);
+  const sunday = shiftDateKey(monday, 6);
+  return new Set(dateKeys.filter((key) => key >= monday && key <= sunday));
+}
+
+function retryImprovementFromAttempt(attempt) {
+  let payload = attempt?.answers;
+  if (typeof payload === "string") {
+    try { payload = JSON.parse(payload); } catch { payload = {}; }
+  }
+  const first = payload?.firstResults || payload?.officialResults || {};
+  const final = payload?.results || {};
+  return Object.keys(first).reduce((totals, questionId) => {
+    const firstResult = first[questionId];
+    const finalResult = final[questionId];
+    const maximum = Number(firstResult?.max || finalResult?.max || 1);
+    if (!firstResult || Number(firstResult.score || 0) >= maximum) return totals;
+    totals.opportunities += 1;
+    if (finalResult && Number(finalResult.score || 0) > Number(firstResult.score || 0)) {
+      totals.improved += 1;
+    }
+    return totals;
+  }, { improved: 0, opportunities: 0 });
+}
+
+function retryImprovementFromLocal(progress) {
+  const official = progress?.official && typeof progress.official === "object" ? progress.official : {};
+  const retries = progress?.retryAttempts && typeof progress.retryAttempts === "object"
+    ? progress.retryAttempts
+    : {};
+  return Object.keys(official).reduce((totals, questionId) => {
+    const firstResult = official[questionId];
+    const maximum = Number(firstResult?.max || 1);
+    if (!firstResult || Number(firstResult.score || 0) >= maximum) return totals;
+    totals.opportunities += 1;
+    if ((retries[questionId] || []).some(
+      (retry) => Number(retry?.score || 0) > Number(firstResult.score || 0),
+    )) {
+      totals.improved += 1;
+    }
+    return totals;
+  }, { improved: 0, opportunities: 0 });
+}
+
 function updatePersonalMetrics() {
   const local = allLocalProgress();
+  const remoteKeys = new Set(remoteAttempts.map((attempt, index) => (
+    attemptIdentity(attempt, `remote-${index}`)
+  )));
+  const localWithoutRemoteDuplicate = local.filter((item, index) => {
+    const key = attemptIdentity(item, `local-${item.lessonId || index}`);
+    return !remoteKeys.has(key);
+  });
   const dates = [
-    ...local.map((item) => item.updatedAt || item.lastStudy || item.completedAt),
+    ...localWithoutRemoteDuplicate.map((item) => item.updatedAt || item.lastStudy || item.completedAt),
     ...remoteAttempts.map(attemptTimestamp),
   ].filter(Boolean).sort((a, b) => new Date(b) - new Date(a));
-  const scored = remoteAttempts
-    .map(attemptScore)
-    .filter(({ total }) => total > 0);
-  const localScored = local
+  const scored = remoteAttempts.map(attemptScore).filter(({ total }) => total > 0);
+  const localScored = localWithoutRemoteDuplicate
+    .filter((item) => item.completed || item.completedAt)
     .map((item) => ({
       correct: Number(item.firstScore ?? item.firstTryCorrect ?? 0),
       total: Number(item.maxScore ?? item.firstTryTotal ?? 0),
@@ -984,15 +1156,62 @@ function updatePersonalMetrics() {
   const correct = combined.reduce((sum, item) => sum + item.correct, 0);
   const total = combined.reduce((sum, item) => sum + item.total, 0);
   const weakLessons = visibleLessons.filter((lesson) => progressSummary(lesson).needsReview).length;
+  const dateKeys = dates.map(tokyoDateKey).filter(Boolean);
+  const streak = studyStreak(dateKeys);
+  const weeklyDays = weekDateKeys(dateKeys).size;
+  const weeklyGoal = Number(getSettings().weeklyGoal || 3);
+  const completedLessonIds = new Set([
+    ...local.filter((item) => item.completed || item.completedAt).map((item) => String(item.lessonId || item.id || "")),
+    ...remoteAttempts.map((attempt) => String(
+      lessonFromAttempt(attempt)?.id || attempt.lesson_id || attempt.lessonId || "",
+    )),
+  ].filter(Boolean));
+  const remoteRetry = remoteAttempts.reduce((sum, attempt) => {
+    const value = retryImprovementFromAttempt(attempt);
+    sum.improved += value.improved;
+    sum.opportunities += value.opportunities;
+    return sum;
+  }, { improved: 0, opportunities: 0 });
+  const localRetry = localWithoutRemoteDuplicate.reduce((sum, progress) => {
+    const value = retryImprovementFromLocal(progress);
+    sum.improved += value.improved;
+    sum.opportunities += value.opportunities;
+    return sum;
+  }, { improved: 0, opportunities: 0 });
+  const retryTotals = {
+    improved: remoteRetry.improved + localRetry.improved,
+    opportunities: remoteRetry.opportunities + localRetry.opportunities,
+  };
 
   const lastStudy = document.querySelector("#lastStudy");
   const averageScore = document.querySelector("#averageScore");
   const sessionCount = document.querySelector("#sessionCount");
   const weakCount = document.querySelector("#weakCount");
+  const streakCount = document.querySelector("#streakCount");
+  const weeklyGoalProgress = document.querySelector("#weeklyGoalProgress");
+  const completedCount = document.querySelector("#completedCount");
+  const retryImprovement = document.querySelector("#retryImprovement");
   if (lastStudy) lastStudy.textContent = dates[0] ? formatDate(dates[0]) : t("Not yet", "まだありません");
   if (averageScore) averageScore.textContent = total ? `${Math.round((correct / total) * 100)}%` : t("Not yet", "まだありません");
-  if (sessionCount) sessionCount.textContent = String(remoteAttempts.length + local.length);
+  if (sessionCount) sessionCount.textContent = String(
+    remoteAttempts.length + localWithoutRemoteDuplicate.filter((item) => item.completed || item.completedAt).length,
+  );
   if (weakCount) weakCount.textContent = String(weakLessons);
+  if (streakCount) streakCount.textContent = t(
+    `${streak} day${streak === 1 ? "" : "s"}`,
+    `${streak}日`,
+  );
+  if (weeklyGoalProgress) weeklyGoalProgress.textContent = t(
+    `${weeklyDays} / ${weeklyGoal} days`,
+    `${weeklyDays} / ${weeklyGoal}日`,
+  );
+  if (completedCount) completedCount.textContent = String(completedLessonIds.size);
+  if (retryImprovement) retryImprovement.textContent = retryTotals.opportunities
+    ? t(
+        `${retryTotals.improved} / ${retryTotals.opportunities} improved`,
+        `${retryTotals.opportunities}問中${retryTotals.improved}問が上達`,
+      )
+    : t("No retries yet", "再挑戦はまだありません");
 
   updateContinueCard(local, dates[0]);
 }
@@ -1018,7 +1237,7 @@ function updateContinueCard(local, latestDate) {
   if (!lesson) {
     cardTitle.textContent = t("No lesson assigned yet", "割り当てレッスンはまだありません");
     cardMeta.textContent = t("A new lesson will appear here when it is ready.", "新しいレッスンの準備ができると、ここに表示されます。");
-    cardLink.href = "#assigned";
+    cardLink.href = "#library";
     cardLink.textContent = t("Check lessons", "レッスンを見る");
     return;
   }
@@ -1070,7 +1289,7 @@ function renderHistory() {
       }),
       element("a", {
         className: "lesson-action",
-        attrs: { href: lesson ? lessonHref(lesson) : "#assigned" },
+        attrs: { href: lesson ? lessonHref(lesson) : "#library" },
       }, [
         element("span", { text: t("Review again", "もう一度復習") }),
         element("span", { text: "→", attrs: { "aria-hidden": "true" } }),
@@ -1079,72 +1298,20 @@ function renderHistory() {
   });
 }
 
-async function renderPrivateView() {
-  const gate = document.querySelector("#signInGate");
-  const accessDenied = document.querySelector("#privateAccessDenied");
-  const hero = document.querySelector("#privateHero");
-  const dashboard = document.querySelector("#privateDashboard");
-  const lessonsSection = document.querySelector("#assigned");
-  const historySection = document.querySelector("#history");
-  const learnerName = document.querySelector("#privateLearnerName");
-  const accountButton = document.querySelector("#accountButton");
-  const logoutButton = document.querySelector("#logoutButton");
-  const loginForm = document.querySelector("#studentLoginForm");
-
-  const isSignedIn = Boolean(authSession?.user);
-  if (gate) gate.hidden = isSignedIn;
-  if (accessDenied) accessDenied.hidden = true;
-  if (hero) hero.hidden = true;
-  if (dashboard) dashboard.hidden = true;
-  if (lessonsSection) lessonsSection.hidden = true;
-  if (historySection) historySection.hidden = true;
-  if (accountButton) accountButton.textContent = isSignedIn
-    ? t("Account", "アカウント")
-    : t("Sign in", "ログイン");
-  if (logoutButton) logoutButton.hidden = !isSignedIn;
-  if (loginForm) loginForm.hidden = isSignedIn;
-  if (!isSignedIn) {
-    visibleLessons = [];
-    renderLessonGrid();
-    return;
-  }
-
-  const userId = authSession.user.id;
-  const client = getStudentClient();
-  let hasPrivateAccess = false;
-  let privateDisplayName = "";
-  if (client) {
-    const { data, error } = await client
-      .from("review_profiles")
-      .select("access_scope, display_name")
-      .eq("user_id", userId)
-      .maybeSingle();
-    const membership = await getStudentMembership();
-    hasPrivateAccess = !error
-      && data?.access_scope === "takiwaki"
-      && membership.active
-      && ["takiwaki", "both"].includes(membership.membership?.access_scope);
-    privateDisplayName = hasPrivateAccess ? String(data?.display_name || "").trim() : "";
-  }
-  if (authSession?.user?.id !== userId) return;
-  if (!hasPrivateAccess) {
+async function renderLearnerProgress() {
+  const section = document.querySelector("#learningProgress");
+  if (!authSession?.user) {
+    if (section) section.hidden = true;
     remoteAttempts = [];
     remoteAssignments = [];
     remotePersonalLessons = [];
-    visibleLessons = [];
-    if (accessDenied) accessDenied.hidden = false;
-    renderLessonGrid();
+    renderHistory();
     return;
   }
-
-  if (hero) hero.hidden = false;
-  if (dashboard) dashboard.hidden = false;
-  if (lessonsSection) lessonsSection.hidden = false;
-  if (historySection) historySection.hidden = false;
-  if (learnerName) {
-    learnerName.textContent = `${privateDisplayName || "Learner"}.`;
-  }
+  const userId = String(authSession.user.id);
+  if (section) section.hidden = false;
   await fetchPersonalRecords();
+  if (String(authSession?.user?.id || "") !== userId) return;
   const assigned = remoteAssignments.map(lessonFromAssignment).filter(Boolean);
   const merged = new Map(publishedLessons.map((lesson) => [lesson.id, lesson]));
   remotePersonalLessons
@@ -1175,33 +1342,35 @@ async function renderPrivateView() {
 }
 
 async function refreshAuthView() {
-  if (page === "general") {
-    ensureGeneralLogoutButton();
-    await refreshMembershipPanel();
-    await refreshProfileCompletion();
-  } else if (page === "takiwaki") {
-    await refreshMembershipPanel();
-    await refreshProfileCompletion();
-    await renderPrivateView();
-  }
+  ensureGeneralLogoutButton();
+  await refreshMembershipPanel();
+  await refreshProfileCompletion();
+  await renderLearnerProgress();
 }
 
 async function reloadLessons() {
   publishedLessons = (await loadPublishedLessons({
-    audience: page === "takiwaki" ? "takiwaki" : "general",
+    audience: "all",
   })).filter((lesson) => lesson.status === "published");
-  visibleLessons = page === "general" ? publishedLessons : [];
-  if (page === "general") {
-    const publishedCount = document.querySelector("#publishedCount");
-    const questionCount = document.querySelector("#questionCount");
-    const totalQuestions = publishedLessons.reduce(
-      (sum, lesson) => sum + Number(lesson.questions?.length || lesson.questionCount || 0),
-      0,
-    );
-    if (publishedCount) publishedCount.textContent = String(publishedLessons.length);
-    if (questionCount) questionCount.textContent = String(totalQuestions);
-    renderLessonGrid();
-  }
+  visibleLessons = publishedLessons;
+  const publishedCount = document.querySelector("#publishedCount");
+  const questionCount = document.querySelector("#questionCount");
+  const totalQuestions = publishedLessons.reduce(
+    (sum, lesson) => sum + Number(lesson.questions?.length || lesson.questionCount || 0),
+    0,
+  );
+  if (publishedCount) publishedCount.textContent = String(publishedLessons.length);
+  if (questionCount) questionCount.textContent = String(totalQuestions);
+  renderLessonGrid();
+}
+
+function finishLegacyRouteTransition() {
+  const url = new URL(window.location.href);
+  if (url.searchParams.get("legacy") !== "takiwaki") return;
+  const target = authSession ? document.querySelector("#learningProgress") : document.querySelector("#account");
+  target?.scrollIntoView({ block: "start" });
+  url.searchParams.delete("legacy");
+  window.history.replaceState({}, "", `${url.pathname}${url.search}${target ? `#${target.id}` : ""}`);
 }
 
 async function initialise() {
@@ -1211,16 +1380,19 @@ async function initialise() {
   bindSettings();
   bindFilters();
   bindAuth();
+  syncNavigationContext();
 
   authSession = normaliseSession(await getStudentSession());
   if (authSession) await ensureStudentProfile(authSession);
   await activateStorageScope(authSession);
+  finishSignOutTransition();
   // Authentication and lesson controls should never wait on the provider
   // settings endpoint. The availability check updates the button separately.
   void configureGoogleButton();
 
   await reloadLessons();
   await refreshAuthView();
+  finishLegacyRouteTransition();
 }
 
 initialise().catch((error) => {

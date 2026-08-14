@@ -69,8 +69,11 @@ if (!supabaseClient.includes("remove([editable.audio_object_path])")) {
 for (const fragment of ["audio/mp4\": \"m4a", "audio/ogg\": \"ogg", "audio/mpeg\": \"mp3", "contentType,"]) {
   if (!supabaseClient.includes(fragment)) throw new Error(`Cross-browser recording upload support is missing: ${fragment}`);
 }
-for (const fragment of ["Create a Premium review task", "Publish feedback", "AI-assisted draft", "item.status !== \"draft\""]) {
+for (const fragment of ["Create a Premium review task", "Publish feedback", "teacher writes and remains responsible", "item.status !== \"draft\""]) {
   if (!teacherUi.includes(fragment)) throw new Error(`Premium teacher UI is missing: ${fragment}`);
+}
+if (/AI-assisted draft|ai\.type\s*=\s*"checkbox"/.test(teacherUi)) {
+  throw new Error("Teacher Studio must not expose a new AI-feedback workflow.");
 }
 
 console.log("Premium schema/UI static checks passed: tier controls, submissions, private recordings, teacher feedback, RLS markers and no password columns.");

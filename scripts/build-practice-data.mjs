@@ -41,6 +41,45 @@ const visualChoice = (phrases, visual, field = "en") => {
   });
 };
 
+const reviewedVisualGuidance = (visual) => {
+  const guidance = visual.reviewedGuidance;
+  if (!guidance || !guidance.hintEn || !guidance.hintJa || !guidance.evidenceEn || !guidance.evidenceJa) {
+    throw new Error(`${visual.lessonId} visual ${visual.slot} is missing reviewed bilingual guidance.`);
+  }
+  if (!Array.isArray(guidance.reasons) || guidance.reasons.length !== 3) {
+    throw new Error(`${visual.lessonId} visual ${visual.slot} needs three reviewed distractor reasons.`);
+  }
+  return guidance;
+};
+
+const visualHint = (visual, japanese = false) => {
+  const guidance = reviewedVisualGuidance(visual);
+  return japanese ? guidance.hintJa : guidance.hintEn;
+};
+
+const visualExplanation = (visual, target, choices, japanese = false) => {
+  const guidance = reviewedVisualGuidance(visual);
+  const distractors = choices.slice(1);
+  const reasons = new Map(guidance.reasons.map((reason) => [reason.choice, reason]));
+  for (const distractor of distractors) {
+    if (!reasons.has(distractor.en)) {
+      throw new Error(
+        `${visual.lessonId} visual ${visual.slot} has no reviewed reason for distractor “${distractor.en}”.`,
+      );
+    }
+  }
+  if (japanese) {
+    return `正解は「${target.en}」（${target.jp}）です。${guidance.evidenceJa} `+
+      distractors
+        .map(({ en }) => `「${en}」はこの場面とは一致しません。${reasons.get(en).ja}。`)
+        .join(" ");
+  }
+  return `“${target.en}” is correct. ${guidance.evidenceEn} `+
+    distractors
+      .map(({ en }) => `“${en}” does not fit because ${reasons.get(en).en}.`)
+      .join(" ");
+};
+
 const stableShuffle = (items) =>
   items
     .map((value, index) => ({ value, key: (index * 7 + 3) % items.length }))
@@ -347,19 +386,20 @@ function makeLegacyQuestions(lessonId, phrases) {
     .sort((left, right) => left.slot - right.slot)
     .forEach((visual) => {
       const target = get(visual.phraseIndex);
+      const choices = visualChoice(phrases, visual);
       result.push({
         ...base(`${lessonId}-extra-visual-${visual.slot}`, "situation", "See It", target),
         prompt: "Which sentence best matches the illustration?",
         promptJa: "イラストの場面に最も合う英文を選んでください。",
-        choices: visualChoice(phrases, visual),
+        choices,
         correct: "a",
         image: visual.asset,
         imageAlt: visual.imageAlt,
         visualAssetId: `${lessonId}-${String(visual.slot).padStart(2, "0")}`,
-        hint: `Use the visible action and objects as evidence: ${visual.imageAlt} Choose the sentence that describes the complete scene.`,
-        hintJa: `人物の動作や物を確認し、「${target.jp}」に合う場面か考えましょう。見えている場面全体を説明する英文を選んでください。`,
-        explanation: `The illustration shows this scene: ${visual.imageAlt} That directly matches “${target.en}” (${target.jp}); the other choices describe different actions or situations.`,
-        explanationJa: `人物の動作や物が「${target.jp}」という場面を表しています。そのため「${target.en}」が一致し、他の選択肢は別の動作・場面です。`,
+        hint: visualHint(visual),
+        hintJa: visualHint(visual, true),
+        explanation: visualExplanation(visual, target, choices),
+        explanationJa: visualExplanation(visual, target, choices, true),
       });
     });
 
@@ -554,19 +594,20 @@ function makeDraftQuestions(lesson) {
     .sort((left, right) => left.slot - right.slot)
     .forEach((visual) => {
       const target = get(visual.phraseIndex);
+      const choices = visualChoice(phrases, visual);
       result.push({
         ...base(`${lesson.id}-draft-visual-${visual.slot}`, "situation", "See It", target),
         prompt: "Which sentence best matches the illustration?",
         promptJa: "イラストの場面に最も合う英文を選んでください。",
-        choices: visualChoice(phrases, visual),
+        choices,
         correct: "a",
         image: visual.asset,
         imageAlt: visual.imageAlt,
         visualAssetId: `${lesson.id}-${String(visual.slot).padStart(2, "0")}`,
-        hint: `Use the visible action and objects as evidence: ${visual.imageAlt} Choose the sentence that describes that complete scene.`,
-        hintJa: `イラストの人物の動作や物を確認し、「${target.jp}」に合う場面か考えましょう。場面全体を説明する英文を選んでください。`,
-        explanation: `The illustration shows this scene: ${visual.imageAlt} That directly matches “${target.en}” (${target.jp}); the other choices describe different actions or situations.`,
-        explanationJa: `イラストの人物の動作や物が「${target.jp}」という場面を表しています。そのため「${target.en}」が一致し、他の選択肢は別の動作・場面を表します。`,
+        hint: visualHint(visual),
+        hintJa: visualHint(visual, true),
+        explanation: visualExplanation(visual, target, choices),
+        explanationJa: visualExplanation(visual, target, choices, true),
       });
     });
 

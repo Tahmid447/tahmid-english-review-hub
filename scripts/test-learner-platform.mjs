@@ -1,0 +1,145 @@
+import assert from "node:assert/strict";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import {
+  QUESTION_FORMATS,
+  answerExists,
+  calculateOfficialTotals,
+  gradeQuestionAnswer,
+  isAnswerGradeable,
+  preserveFirstResult,
+} from "../src/lesson-grading.js";
+import {
+  classifyLibraryEntry,
+  normalizeCatalogLanguages,
+  sentencePatternFor,
+} from "../src/data.js";
+import { DEFAULT_SETTINGS, resolvedTheme, safeLocalReturnPath } from "../src/store.js";
+
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const question = (format, extra = {}) => ({ id: format, format, maxPoints: 1, ...extra });
+const fixtures = new Map([
+  ["mcq", [question("mcq", { correct: "b" }), "b"]],
+  ["situation", [question("situation", { correct: "b" }), "b"]],
+  ["dialogue", [question("dialogue", { correct: "b" }), "b"]],
+  ["truefalse", [question("truefalse", { correct: true }), true]],
+  ["typing", [question("typing", { accepted: ["I agree."] }), "I agree"]],
+  ["translation", [question("translation", { accepted: ["I agree."] }), "I agree"]],
+  ["listenType", [question("listenType", { accepted: ["I agree."] }), "I agree"]],
+  ["listenChoice", [question("listenChoice", { correct: "b" }), "b"]],
+  ["speaking", [question("speaking"), { transcript: "I agree", matched: true }]],
+  ["mistake", [question("mistake", { accepted: ["I agree."] }), "I agree"]],
+  ["order", [question("order", { words: ["I", "agree"], correctWords: ["I", "agree"] }), [0, 1]]],
+  ["matching", [question("matching", {
+    maxPoints: 2,
+    pairs: [{ id: "a", jp: "猫" }, { id: "b", jp: "犬" }],
+  }), { a: "猫", b: "犬" }]],
+  ["sorting", [question("sorting", {
+    maxPoints: 2,
+    sortingItems: [{ id: "a", category: "noun" }, { id: "b", category: "verb" }],
+  }), { a: "noun", b: "verb" }]],
+  ["grid", [question("grid", { correctCell: "top-left" }), "top-left"]],
+]);
+
+assert.deepEqual([...fixtures.keys()], [...QUESTION_FORMATS], "Every supported format has a regression fixture.");
+for (const [format, [item, answer]] of fixtures) {
+  assert.equal(answerExists(item, answer), true, `${format} has an answer.`);
+  assert.equal(isAnswerGradeable(item, answer), true, `${format} is complete enough to grade.`);
+  assert.equal(gradeQuestionAnswer(item, answer, "2026-08-14T00:00:00.000Z")?.correct, true, `${format} grades correctly.`);
+}
+
+const [orderQuestion] = fixtures.get("order");
+const [matchingQuestion] = fixtures.get("matching");
+const [sortingQuestion] = fixtures.get("sorting");
+assert.equal(answerExists(orderQuestion, [0]), true);
+assert.equal(isAnswerGradeable(orderQuestion, [0]), false, "A partial sentence cannot lock its first score.");
+assert.equal(isAnswerGradeable(matchingQuestion, { a: "猫" }), false, "A partial match cannot lock its first score.");
+assert.equal(isAnswerGradeable(sortingQuestion, { a: "noun" }), false, "A partial sort cannot lock its first score.");
+
+const official = {};
+const retries = {};
+const firstWrong = { score: 0, max: 1, correct: false, answer: "a" };
+const retryCorrect = { score: 1, max: 1, correct: true, answer: "b" };
+assert.equal(preserveFirstResult(official, retries, "mcq", firstWrong), true);
+assert.equal(preserveFirstResult(official, retries, "mcq", retryCorrect), false);
+assert.equal(official.mcq, firstWrong, "Retry never overwrites the official first result.");
+assert.deepEqual(retries.mcq, [retryCorrect]);
+
+const totals = calculateOfficialTotals(
+  [question("mcq"), question("typing"), { ...matchingQuestion, id: "matching" }],
+  { mcq: firstWrong, matching: { score: 1, max: 2, correct: false } },
+);
+assert.deepEqual(totals, {
+  score: 1,
+  max: 3,
+  availableMax: 4,
+  checked: 2,
+  wrong: 2,
+}, "Unanswered questions stay out of the displayed first-score denominator.");
+
+assert.deepEqual(normalizeCatalogLanguages({ en: "右上", jp: "top right" }), {
+  en: "top right",
+  jp: "右上",
+  swapped: true,
+});
+assert.equal(classifyLibraryEntry("sparkly"), "word");
+assert.equal(classifyLibraryEntry("No worries."), "phrase");
+assert.equal(classifyLibraryEntry("I have been to Malaysia."), "pattern");
+assert.equal(sentencePatternFor("I have been to Malaysia."), "I have been to [place].");
+
+assert.equal(Object.hasOwn(DEFAULT_SETTINGS, "vibration"), false, "The unreliable vibration preference is retired.");
+assert.equal(resolvedTheme("system", true), "dark");
+assert.equal(resolvedTheme("system", false), "light");
+assert.equal(safeLocalReturnPath("https://evil.example/path", "/", "https://review.example"), "/");
+assert.equal(safeLocalReturnPath("/phrases?return=%2F#saved", "/", "https://review.example"), "/phrases?return=%2F#saved");
+assert.equal(safeLocalReturnPath("/teacher.html", "/", "https://review.example"), "/");
+assert.equal(safeLocalReturnPath("/lesson/june-29?filter=listening", "/", "https://review.example"), "/lesson/june-29?filter=listening");
+
+const lessonScript = fs.readFileSync(path.join(root, "src", "lesson.js"), "utf8");
+const lessonPage = fs.readFileSync(path.join(root, "lesson.html"), "utf8");
+const hubScript = fs.readFileSync(path.join(root, "src", "hub.js"), "utf8");
+const supabaseScript = fs.readFileSync(path.join(root, "src", "supabase.js"), "utf8");
+const homePage = fs.readFileSync(path.join(root, "index.html"), "utf8");
+const phraseScript = fs.readFileSync(path.join(root, "src", "phrases.js"), "utf8");
+const phrasePage = fs.readFileSync(path.join(root, "phrases.html"), "utf8");
+const serviceWorker = fs.readFileSync(path.join(root, "sw.js"), "utf8");
+const buildScript = fs.readFileSync(path.join(root, "scripts", "build.mjs"), "utf8");
+const netlify = fs.readFileSync(path.join(root, "netlify.toml"), "utf8");
+
+assert.doesNotMatch(lessonScript, /navigator\.vibrate|vibrationToggle/);
+assert.doesNotMatch(lessonPage, /vibrationToggle/);
+assert.match(lessonScript, /data-retry-question/);
+assert.match(lessonScript, /Check \$\{count\} answered/);
+assert.match(lessonScript, /role="radio" aria-checked=.*tabindex=/);
+assert.match(lessonScript, /bindRovingRadioGroup/);
+assert.match(lessonScript, /queueMicrotask/);
+assert.match(homePage, /id="profileGateDialog"/);
+assert.match(hubScript, /isGoogleSession/);
+assert.match(supabaseScript, /signOutStudent[\s\S]*?withOperationTimeout/);
+assert.match(supabaseScript, /removeItem\(STUDENT_AUTH_STORAGE_KEY\)/);
+assert.match(supabaseScript, /studentClient = undefined/);
+assert.match(hubScript, /window\.location\.replace\(`\/\?signedOut=\$\{status\}`\)/);
+assert.match(hubScript, /function finishSignOutTransition\(\)/);
+assert.match(hubScript, /url\.searchParams\.delete\("signedOut"\)/);
+assert.match(homePage, /role="tab" aria-selected="true" aria-controls="studentLoginForm"/);
+assert.match(homePage, /role="tabpanel" aria-labelledby="authTabSignin"/);
+assert.doesNotMatch(hubScript, /role:\s*"link"/);
+assert.match(homePage, /id="learningProgress"/);
+assert.match(homePage, /id="streakCount"/);
+assert.match(homePage, /id="retryImprovement"/);
+assert.match(netlify, /from = "\/takiwaki"[\s\S]*?to = "\/\?legacy=takiwaki"[\s\S]*?status = 301/);
+assert.doesNotMatch(buildScript, /"takiwaki\.html",/);
+assert.match(buildScript, /"manifest\.webmanifest"/);
+assert.match(buildScript, /"sw\.js"/);
+assert.match(homePage, /src="\/assets\/app-icon-192\.png"[^>]*width="50"[^>]*height="50"/);
+assert.match(phraseScript, /const PHRASE_PAGE_SIZE = 24/);
+assert.match(phraseScript, /phrases\.slice\(0, visiblePhraseLimit\)/);
+assert.match(phraseScript, /visiblePhraseLimit \+= PHRASE_PAGE_SIZE/);
+assert.match(phraseScript, /phrase\.audience !== "takiwaki"/);
+assert.match(phraseScript, /speechRecognitionSupported\(\)/);
+assert.match(phrasePage, /id="phraseLoadMore"/);
+assert.match(serviceWorker, /request\.headers\.has\("authorization"\)/);
+assert.doesNotMatch(serviceWorker, /supabase\.co|\/auth\/v1|\/rest\/v1|\/functions\/v1|\/storage\/v1/);
+
+console.log("Learner platform regression tests passed (14 formats, retry, navigation, profile gate, theme and PWA).");

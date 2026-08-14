@@ -30,27 +30,39 @@ const taskSubmission = (submissions, taskId) => (
 const appendRequirements = (card, task) => {
   const items = [];
   if (Array.isArray(task.required_phrases) && task.required_phrases.length) {
-    items.push(`Phrases: ${task.required_phrases.join(" · ")}`);
+    items.push({ kind: "phrase", text: `Use: ${task.required_phrases.join(" · ")}` });
   }
   if (Array.isArray(task.required_vocabulary) && task.required_vocabulary.length) {
-    items.push(`Vocabulary: ${task.required_vocabulary.join(" · ")}`);
+    items.push({ kind: "vocabulary", text: `Vocabulary: ${task.required_vocabulary.join(" · ")}` });
   }
-  if (task.task_type === "speaking") items.push(`Target: about ${task.target_seconds} seconds`);
-  if (task.task_type === "essay") items.push(`Length: ${task.min_word_count}–${task.max_word_count} words`);
-  items.push(`Maximum attempts: ${task.max_attempts}`);
+  if (task.task_type === "speaking") items.push({ kind: "length", text: `Target: about ${task.target_seconds} seconds` });
+  if (task.task_type === "essay") items.push({ kind: "length", text: `Length: ${task.min_word_count}–${task.max_word_count} words` });
+  items.push({ kind: "attempts", text: `Up to ${task.max_attempts} attempts` });
   const list = make("ul", { className: "premium-requirements" });
-  items.forEach((item) => list.append(make("li", { text: item })));
-  card.append(list);
+  items.forEach((item) => {
+    const row = make("li", { text: item.text });
+    row.dataset.requirement = item.kind;
+    list.append(row);
+  });
+  const block = make("section", { className: "premium-task-checklist" });
+  block.append(make("strong", { text: "Before you submit / 提出前のチェック" }), list);
+  card.append(block);
 };
 
 const appendFeedback = (card, submission, feedbackRows, showJapanese) => {
   const feedback = feedbackRows.find((item) => item.submission_id === submission?.id && item.published_at);
   if (!feedback) return;
   const box = make("section", { className: "premium-feedback" });
-  box.append(make("strong", { text: `Teacher feedback${feedback.score == null ? "" : ` · ${feedback.score}/100`}` }));
+  box.setAttribute("aria-label", "Teacher feedback");
+  const heading = make("header", { className: "premium-feedback-heading" });
+  heading.append(
+    make("span", { text: "TAHMID'S FEEDBACK / 先生からの添削" }),
+    make("strong", { text: feedback.score == null ? "Reviewed" : `${feedback.score}/100` }),
+  );
+  box.append(heading);
   if (feedback.feedback_en) box.append(make("p", { text: feedback.feedback_en }));
   if (showJapanese && feedback.feedback_ja) box.append(make("p", { className: "jp", text: feedback.feedback_ja }));
-  if (feedback.ai_assisted) box.append(make("small", { text: "AI helped draft this feedback; the teacher reviewed and published it." }));
+  box.append(make("small", { text: "Personally reviewed and published by Tahmid. / Tahmidが確認して返却しました。" }));
   card.append(box);
 };
 
@@ -63,6 +75,7 @@ const appendEssayTask = (card, task, data, context) => {
   response.value = submission?.text_response || "";
   response.placeholder = "Write your essay here… / ここに英作文を書いてください";
   response.disabled = !editable;
+  response.setAttribute("aria-label", "Your essay / 英作文の回答");
   const count = make("span", { className: "premium-word-count" });
   const updateCount = () => {
     const words = wordsIn(response.value);
@@ -106,7 +119,9 @@ const appendEssayTask = (card, task, data, context) => {
   save.addEventListener("click", () => perform(false, save));
   submit.addEventListener("click", () => perform(true, submit));
   actions.append(save, submit);
-  card.append(response, count, actions);
+  const responseField = make("label", { className: "premium-response-field" });
+  responseField.append(make("span", { text: "Your essay / 英作文の回答" }), response);
+  card.append(responseField, count, actions);
   appendFeedback(card, submission, data.feedback, context.showJapanese);
 };
 
@@ -116,6 +131,9 @@ const appendSpeakingTask = async (card, task, data, context) => {
   const recorderPanel = make("div", { className: "premium-recorder" });
   const timer = make("strong", { text: "0:00" });
   const status = make("p", { text: editable ? "Ready to record. Your microphone stays on this device until you submit." : taskStatus(submission) });
+  timer.setAttribute("aria-label", "Recording time");
+  status.setAttribute("role", "status");
+  status.setAttribute("aria-live", "polite");
   const audio = document.createElement("audio");
   audio.controls = true;
   audio.hidden = true;
@@ -230,7 +248,13 @@ const appendSpeakingTask = async (card, task, data, context) => {
   });
   const actions = make("div", { className: "premium-task-actions" });
   actions.append(record, stop, rerecord, submit);
-  recorderPanel.append(timer, status, audio, actions);
+  const steps = make("ol", { className: "premium-recorder-steps" });
+  [
+    "Record your answer / 回答を録音",
+    "Listen before sending / 送信前に確認",
+    "Submit to Tahmid / Tahmidへ提出",
+  ].forEach((text) => steps.append(make("li", { text })));
+  recorderPanel.append(steps, timer, status, audio, actions);
   if (!globalThis.MediaRecorder || !navigator.mediaDevices?.getUserMedia) {
     recorderPanel.append(make("small", { text: "Recording is not supported in this browser. Use a current Safari, Chrome or Edge browser." }));
   }
@@ -252,15 +276,19 @@ export async function renderPremiumLessonTasks({ lesson, container, showJapanese
   }
   if (!planMeetsRequirement(data.plan, "premium")) {
     const lock = make("article", { className: "premium-task-lock" });
+    const preview = make("div", { className: "premium-lock-preview", text: "Speaking prompt · Essay brief · Personal corrections" });
     lock.append(
       make("span", { text: "PREMIUM" }),
-      make("h2", { text: "Teacher-reviewed speaking & essay challenges" }),
-      make("p", { text: "Premium members can record a speaking answer or submit an essay and receive personal teacher feedback." }),
-      make("p", { className: "jp", text: "プレミアム会員は、スピーキング録音・英作文を提出し、先生から個別添削を受けられます。" }),
+      make("h2", { text: "Turn practice into personal feedback" }),
+      make("p", { text: "Premium adds one teacher-reviewed speaking task and one essay task to every lesson, with feedback from Tahmid within three business days." }),
+      make("p", { className: "jp", text: "Premiumでは、各レッスンのスピーキング課題1件・英作文課題1件を提出でき、Tahmidが3営業日以内に個別添削します。" }),
+      preview,
       make("a", { text: "See membership options / プランを見る" }),
     );
     lock.lastElementChild.href = "/plans";
     lock.lastElementChild.className = "primary-btn";
+    lock.lastElementChild.target = "_blank";
+    lock.lastElementChild.rel = "noopener noreferrer";
     container.replaceChildren(lock);
     return;
   }
@@ -269,10 +297,17 @@ export async function renderPremiumLessonTasks({ lesson, container, showJapanese
     return;
   }
   const heading = make("div", { className: "premium-task-heading" });
+  const promise = make("ul", { className: "premium-review-promise" });
+  [
+    "Private until you submit / 提出までは非公開",
+    "Reviewed by Tahmid / Tahmidが添削",
+    "Returned within 3 business days / 3営業日以内に返却",
+  ].forEach((text) => promise.append(make("li", { text })));
   heading.append(
     make("span", { text: "PREMIUM REVIEW" }),
-    make("h2", { text: "Submit work for teacher feedback" }),
-    make("p", { text: "Your submission is private. It is visible only to you and authorised teachers." }),
+    make("h2", { text: "Practise. Submit. Learn from personal corrections." }),
+    make("p", { text: "Complete the lesson first, then use these challenges to turn today's English into your own words." }),
+    promise,
   );
   const list = make("div", { className: "premium-task-list" });
   const context = {
@@ -280,11 +315,18 @@ export async function renderPremiumLessonTasks({ lesson, container, showJapanese
     showMessage,
     reload: () => renderPremiumLessonTasks({ lesson, container, showJapanese, showMessage }),
   };
-  for (const task of data.tasks) {
+  for (const [taskIndex, task] of data.tasks.entries()) {
     const card = make("article", { className: "premium-task-card" });
+    card.dataset.taskType = task.task_type;
     const submission = taskSubmission(data.submissions, task.id);
-    card.append(
+    const taskTop = make("div", { className: "premium-task-topline" });
+    taskTop.append(
+      make("span", { className: "premium-task-number", text: String(taskIndex + 1).padStart(2, "0") }),
       make("span", { className: "premium-task-type", text: task.task_type === "speaking" ? "Speaking / スピーキング" : "Essay / 英作文" }),
+      make("b", { className: "premium-submission-status", text: taskStatus(submission) }),
+    );
+    card.append(
+      taskTop,
       make("h3", { text: task.title_en }),
     );
     if (showJapanese && task.title_ja) card.append(make("p", { className: "jp", text: task.title_ja }));
@@ -292,7 +334,6 @@ export async function renderPremiumLessonTasks({ lesson, container, showJapanese
     if (showJapanese && task.prompt_ja) card.append(make("p", { className: "jp", text: task.prompt_ja }));
     if (task.instructions_en) card.append(make("small", { text: task.instructions_en }));
     appendRequirements(card, task);
-    card.append(make("b", { className: "premium-submission-status", text: taskStatus(submission) }));
     if (task.task_type === "essay") appendEssayTask(card, task, data, context);
     else await appendSpeakingTask(card, task, data, context);
     list.append(card);

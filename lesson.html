@@ -4,18 +4,21 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="description" content="Interactive English listening, speaking and review practice.">
+  <meta name="theme-color" content="#0b2234">
   <title>English Lesson Practice</title>
+  <link rel="manifest" href="/manifest.webmanifest">
+  <script>try{const p=JSON.parse(localStorage.getItem("te-review-hub:theme:v1")||"\"system\"");const d=p==="dark"||(p==="system"&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.dataset.themePreference=["system","light","dark"].includes(p)?p:"system";document.documentElement.dataset.theme=d?"dark":"light";document.documentElement.style.colorScheme=d?"dark":"light"}catch{}</script>
   <link rel="stylesheet" href="/src/styles.css">
-  <link rel="icon" href="/assets/tahmid-english-club-logo.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/app-icon-192.png">
 </head>
 <body data-page="lesson">
   <a class="skip-link" href="#quizMain">Skip to question</a>
   <header class="site-header quiz-header">
     <a class="brand" id="hubBackLink" href="/">
-      <img class="brand-logo" src="/assets/tahmid-english-club-logo.png" alt="Tahmid English Club logo"><span><strong>Review Hub</strong><small>Back to lessons · レッスン一覧へ</small></span>
+      <img class="brand-logo" src="/assets/app-icon-192.png" alt="Tahmid English Club logo" width="50" height="50"><span><strong>Review Hub</strong><small>Back to lessons · レッスン一覧へ</small></span>
     </a>
     <nav class="header-actions">
-      <a class="quiet-btn" href="/plans" data-ui-en="Plans" data-ui-ja="料金プラン">Plans / 料金プラン</a>
+      <a class="quiet-btn" href="/plans" target="_blank" rel="noopener" data-ui-en="Plans" data-ui-ja="料金プラン">Plans / 料金プラン</a>
       <button class="quiet-btn settings-open" id="openLessonSettings" type="button" aria-haspopup="dialog"><span aria-hidden="true">⚙</span> <span data-ui-en="Settings" data-ui-ja="設定">Settings / 設定</span></button>
     </nav>
   </header>
@@ -42,7 +45,7 @@
 
     <section class="quiz-toolbar" aria-label="Quiz settings">
       <span class="toggle-label automatic-shuffle" role="status"><span aria-hidden="true">🔀</span> <span data-ui-en="Questions & choices shuffle automatically" data-ui-ja="問題・選択肢は毎回自動シャッフル">Questions &amp; choices shuffle automatically / 問題・選択肢は毎回自動シャッフル</span></span>
-      <button class="quiet-btn" id="checkAnswered" type="button" data-ui-en="Check answered" data-ui-ja="回答済みを採点">Check answered / 回答済みを採点</button>
+      <button class="quiet-btn" id="checkAnswered" type="button" data-ui-en="Check 0 answered" data-ui-ja="回答済み 0問を採点">Check 0 answered / 回答済み 0問を採点</button>
       <span class="score-pill" id="scorePill">First score / 初回スコア 0 / 0</span>
     </section>
 
@@ -102,17 +105,18 @@
         <button class="active" data-hint-mode="auto" type="button" data-ui-en="Hints auto-close" data-ui-ja="ヒントを自動で閉じる">Hints auto-close / ヒントを自動で閉じる</button>
         <button data-hint-mode="manual" type="button" data-ui-en="Keep hints open" data-ui-ja="ヒントを開いたまま">Keep hints open / ヒントを開いたまま</button>
       </div>
-      <button class="quiet-btn" id="vibrationToggle" type="button" data-ui-en="Vibration On" data-ui-ja="振動オン">Vibration On / 振動オン</button>
       <p class="settings-note" data-ui-en="Question and choice order always shuffle at the start of a new run." data-ui-ja="新しい練習を始めるたびに、問題と選択肢は必ずシャッフルされます。">Question and choice order always shuffle at the start of a new run. / 新しい練習を始めるたびに、問題と選択肢は必ずシャッフルされます。</p>
     </section>
     <section class="settings-group" aria-labelledby="displaySettingsHeading">
       <h3 id="displaySettingsHeading" data-ui-en="Display & Language" data-ui-ja="表示・言語">Display &amp; Language / 表示・言語</h3>
       <label><span data-ui-en="Interface language" data-ui-ja="表示言語">Interface language / 表示言語</span><select id="languageToggle"><option value="en">English</option><option value="bilingual">English + 日本語</option><option value="ja">日本語UI</option></select></label>
+      <label><span data-ui-en="Appearance" data-ui-ja="外観">Appearance / 外観</span><select id="themeToggle"><option value="system">System / 端末設定</option><option value="light">Light / ライト</option><option value="dark">Dark / ダーク</option></select></label>
     </section>
     <form method="dialog"><button class="primary-btn full-width" value="done" data-ui-en="Done" data-ui-ja="完了">Done / 完了</button></form>
   </dialog>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js"></script>
+  <script type="module" src="/src/pwa.js"></script>
   <script type="module" src="/src/lesson.js"></script>
 </body>
 </html>

@@ -1,45 +1,37 @@
 # Operations Guide / 運用ガイド
 
-## 1. Create and approve a Review Hub learner account
+Updated: 2026-08-14 (Asia/Tokyo)
 
-Normally, the learner chooses **Create account** on the public site and uses
-Google or email/password. Email registration asks for name, optional age group,
-native language, English level, and an optional learning goal. It never exposes
-the password to the teacher.
+This guide distinguishes the final-product code prepared locally from behavior
+already available on the hosted sites. The working branch is
+`upgrade/review-hub-v9-final-product`; the last pushed checkpoint is `830c596`.
+The dedicated v9 preview is still the older `aad5749` deployment and production
+is still pre-v9. Migration `015`, migration `016`, and the matching updated
+`membership-access` Edge Function are not live.
 
-The new learner appears under **Learners & memberships** in Teacher Studio.
-After bank-transfer confirmation:
+## 1. Learner accounts and profile completion
 
-1. Enter any access period from 1 to 730 days (for example, 30 days for one month or 180 days for six months).
-2. Choose General, Takiwaki, or Both.
-3. Choose Standard, Premium or Premium+.
-4. Press **Approve**.
+Learners choose **Create account** and use Google or email/password. Registration
+collects privacy-conscious profile fields. A first-time Google user must finish
+the required profile fields before paid membership, access-code redemption, or
+direct paid lesson access can proceed. The verified sign-in email is displayed
+read-only. Returning users with a complete profile do not repeat this step.
 
-Access codes use the same 1-to-730-day range and also let you choose the scope
-and maximum number of uses. The complete code is shown only once; later the
-dashboard shows only its final four characters.
+- Prefer Supabase invitation, email confirmation, or password-reset email.
+- Never ask a learner to send a password to the teacher.
+- Never put a password in Notion, GitHub, site HTML, screenshots, chat, or a
+  normal database table.
+- Teacher Studio may send a password-reset email only; it cannot reveal or store
+  learner passwords.
 
-Manual Supabase creation remains available for an administrator:
+The former `/takiwaki` URL redirects to the common learner experience in the
+final-product code. General/Takiwaki/Both remains historical audience/access
+metadata, not a reason to maintain a second learner interface.
 
-1. Open Supabase Dashboard → Authentication → Users.
-2. Choose **Add user** or **Send invitation**.
-3. Use the learner’s email. Do not store the password in a database table.
-4. Add user metadata `{"app":"review_hub","display_name":"Learner"}`.
-5. For a personal Takiwaki account, run this once in the trusted SQL editor:
+## 2. Authorise a teacher account
 
-```sql
-insert into public.review_profiles (user_id, display_name, access_scope)
-values ('STUDENT-AUTH-UUID', 'Learner', 'takiwaki')
-on conflict (user_id) do update
-set display_name = excluded.display_name,
-    access_scope = excluded.access_scope;
-```
-
-Use `general` instead of `takiwaki` for an ordinary learner.
-
-## 2. Create or authorise a teacher account
-
-Create the Auth user with Review Hub metadata, then add the Auth UUID:
+Create the Supabase Auth user with Review Hub metadata, then add that user's
+Auth UUID from the trusted SQL editor:
 
 ```sql
 insert into public.review_teachers (user_id, display_name)
@@ -49,160 +41,211 @@ set display_name = excluded.display_name,
     active = true;
 ```
 
-Teacher access is checked by Supabase RLS, not by hiding `/teacher.html`.
+Teacher access is enforced by Supabase RLS and database functions, not by
+hiding `/teacher.html`. Never create an email-based owner backdoor.
 
-## 3. Hand login information to a learner
+## 3. Teacher Studio jobs
 
-- Prefer Supabase’s invitation or password-reset email.
-- If a temporary password must be used, send the email and temporary password
-  through separate private channels.
-- Ask the learner to change it immediately.
-- Never place a password in Notion, GitHub, the site HTML, or a normal database
-  table.
+The final-product Teacher Studio is organised into seven jobs:
 
-## 4. Add and publish content
+1. **Dashboard** — review counts and work that needs attention.
+2. **Learners** — search/filter accounts; manage membership, assignments,
+   access exceptions, and activity history.
+3. **Access codes** — create, edit, reissue, disable, and delete codes.
+4. **Lessons & content** — manage lesson/question publication and plan access.
+5. **Submissions** — review submitted speaking and essay work.
+6. **Sources** — see content origin and sync status.
+7. **Insights** — inspect learning activity and outcomes.
 
-Teacher Studio supports:
+Teacher Studio displays English or Japanese one at a time and persists that
+choice. It supports learner plan/status filters and submission-status filters.
 
-- lesson creation and metadata editing
-- draft/review/published/archived status
-- general/Takiwaki/both audience
-- draft preview
-- lesson assignment
-- activity/history review
-- question creation, editing, ordering, and deactivation
+The teacher-only learner preview selects Free, Standard, Premium, or Premium+.
+It is visibly labelled, does not modify any learner membership or progress, and
+disables learner submission controls. This preview depends on migration `015`
+and must be authenticated in the deployed preview before production.
 
-Use **New Draft Lesson** for normal day-to-day authoring. **Sync Bundled
-Content** is a maintenance tool for rebuilding the supplied lesson bundle; it
-is not needed for a normal new lesson. **Archive** hides an old lesson without
-deleting its content or learning history.
+## 4. Approve membership or issue an access code
 
-Selecting `General`, `Takiwaki`, or `Both` and changing the status to
-`published` updates the learner sites from Supabase immediately. A Netlify
-deployment is needed only for code, design, or feature changes.
+After confirming payment separately with the learner:
 
-Archive or deactivate content instead of hard-deleting it.
+1. Open **Learners**.
+2. Select the learner and choose the plan, access period, and relevant scope.
+3. Confirm the start/end date and save.
+4. Reopen the learner and verify the effective plan and expiry.
 
-Before publishing:
+For an access code:
+
+1. Open **Access codes**.
+2. Choose Standard, Premium, or Premium+, the 1–730-day access period, scope,
+   maximum uses, and optional label.
+3. Copy the complete generated code from the one-time result.
+4. Later lists must show only the safe suffix, not the complete code.
+
+Migration `015` makes redemption and reissue transactional and serialised. It
+rejects incompatible overlapping plan/scope grants rather than over-granting
+time. This is local code until migration `015` and the matching Edge Function
+are deployed; do not treat the older hosted flow as final verification.
+
+For account access problems, use password-reset email. Do not invent, inspect,
+or transmit a learner password.
+
+## 5. Plans, prices, and contact-first sales
+
+Use these exact public values:
+
+| Plan | Monthly | Six months | Saving | Monthly equivalent |
+| --- | ---: | ---: | ---: | ---: |
+| Free | ¥0 | ¥0 | ¥0 | ¥0 |
+| Standard | ¥3,980 | ¥20,300 | ¥3,580 (about 15%) | ¥3,383 |
+| Premium | ¥6,980 | ¥35,600 | ¥6,280 (about 15%) | ¥5,933 |
+| Premium+ | ¥16,800 | ¥85,700 | ¥15,100 (about 15%) | ¥14,283 |
+
+`/plans` starts a real LINE or Instagram conversation. It does not collect
+payment or claim payment success. The learner may add a name, edit the prepared
+message, copy the current text, and reset it deliberately. Confirm payment and
+access separately.
+
+Premium promises one reviewed speaking task and one reviewed essay per lesson;
+Premium+ also advertises three 50-minute live 1:1 lessons per month. Before
+launch, set a sustainable active-member/submission cap and booking policy. The
+detailed workload warning is in `docs/PREMIUM_PLANS_AND_SUBMISSIONS.md`.
+
+There is no automatic or AI grading. The compatibility database flag is always
+written `false`. Tahmid reads/listens, decides the feedback, and publishes it.
+
+## 6. Premium submission review
+
+Migration `015` seeds exactly 34 active tasks: one speaking and one essay for
+each of 17 lessons. After the migration and Edge rollout pass preview QA:
+
+1. Open **Submissions** and filter the queue.
+2. Open a submitted item. Learner drafts must not appear in the queue or be
+   readable by the teacher.
+3. Review the text or signed private recording.
+4. Save draft teacher feedback if needed, then explicitly publish or return the
+   work.
+5. For returned work, confirm that resubmission refreshes queue timestamps and
+   does not expose stale review state.
+
+The final review action uses one transactional RPC so feedback and status do
+not split into partially completed writes. Speaking paths must belong to the
+learner and active speaking task, reference an existing private object, and
+pass upload limits. Essay submissions cannot attach audio.
+
+Do not download or copy learner recordings into public storage. Do not include
+private text, recordings, answers, or feedback in service-worker caches.
+
+## 7. Add, review, and publish content
+
+Teacher Studio supports lesson creation/editing, draft/review/published/archive
+states, source metadata, assignments, question creation/editing/ordering, and
+question plan access. Use **New Draft Lesson** for normal authoring. **Sync
+Bundled Content** is a maintenance operation, not the normal way to add a
+lesson. Archive/deactivate instead of hard-deleting wherever possible.
+
+Before publishing a lesson or question:
 
 1. Confirm at least one active question exists.
-2. Preview the complete lesson.
-3. Check English, Japanese, official answer, hint, explanation, audio, and
-   distractors.
-4. Confirm the audience.
-5. Change the status to `published`.
+2. Preview the complete lesson at each intended plan.
+3. Check English, Japanese, official answer, prompt, all choices, hint,
+   explanation, audio, image, alt text, and distractors.
+4. Confirm only one defensible answer exists.
+5. Confirm audience and minimum plan.
+6. Publish only after the review is complete.
 
-The database rejects client-side publication of an empty lesson.
+For a question below a learner's tier, **Safe teaser** may return only position,
+format, and required plan. **Hidden** returns no row. Prompt, choices, hint,
+explanation, answer, and stable private payload remain protected by RLS. Blur is
+not authorization.
 
-## 5. Turn a new Notion note into a lesson
+The August 14 visual re-audit covers all 85 illustration questions. Four images
+were replaced, one alt/brief was corrected without replacing the valid image,
+six ambiguous distractor sets were corrected, and all 85 received unique
+bilingual guidance. Read `docs/VISUAL_CONTENT_REAUDIT_2026-08-14.md` before
+editing visual content. Migration `016` carries these 85 reviewed corrections
+to the live database and has not been applied.
 
-1. Read the new page from `📘 Lessons (Takiwaki)`.
+## 8. Notion-sourced lessons
+
+1. Read the source page from `📘 Lessons (Takiwaki)` without editing it.
 2. Record its exact Notion page ID and URL.
 3. Check whether `(source_type, source_notion_page_id)` already exists.
 4. Prepare varied activities as a private draft.
-5. Insert/upsert through a trusted server-side import or migration.
-6. Review in Teacher Studio.
+5. Insert/upsert through a trusted server-side import or forward migration.
+6. Review every learner-visible field in Teacher Studio.
 7. Publish only after approval.
 
-Do not place a Notion integration secret in browser JavaScript. A future
-automatic import must run in a Netlify Function or Supabase Edge Function and
-must still create a draft first.
+Never place a Notion integration secret in browser JavaScript. Any future
+automatic import must run server-side and create a draft first.
 
-### Per-question plan access
+## 9. PWA, themes, and public caching
 
-Open a lesson's Question Manager and edit the target question. Set **Question
-access** to Free, Standard, Premium or Premium+. For an ineligible learner, **Safe
-teaser** shows only the plan and activity type; **Hidden** returns no row at
-all. The prompt, choices, hint, explanation and answer are protected by the
-database in both modes. Existing questions default to Free, so applying
-migration 012 does not silently change learner access.
+The final-product code supports persisted System/Light/Dark themes and a PWA
+public shell. The service worker may cache versioned public static assets and
+the offline fallback only. It must not cache protected routes, Supabase/API
+responses, authenticated requests, learner records, question answers, teacher
+feedback, or recordings.
 
-The learner detail dialog also has **Tier & feature override**. `Inherit` keeps
-the normal membership value. `Allow` or `Block` controls the selected feature
-until the optional expiry. Precedence is teacher override, then active
-membership tier, then Free public access.
+Before release, test install, update, navigation, and offline fallback on a real
+iPhone and Android phone. Clear old preview service-worker data between release
+candidates when validating a new cache version.
 
-## 6. Code and deployment updates
+## 10. Forward-only Supabase rollout
 
-For lesson content managed entirely in Supabase, no website deployment is
-needed.
+Apply numbered migrations in filename order. Do not edit or replay a previously
+released migration to carry new behavior. Earlier project records report the
+Review Hub migrations through `014` and the older compatible Edge Function
+live; the August 14 audit did not independently re-read that remote ledger.
 
-For code, design, or new feature changes:
+For this release, use this exact order:
 
-1. Work on a branch.
-2. Run `npm run build`.
-3. Run `npm test`.
-4. Push to the private GitHub repository.
-5. Check the separate Netlify preview.
-6. Promote the reviewed package to production after approval.
+1. Export/back up the current schema and relevant `review_` data.
+2. Verify the target Supabase project is `ycmybggetemkhorkhfnf`.
+3. Apply `202608140015_teacher_preview_and_premium_workflows.sql`.
+4. Verify its functions, policies, and exact 34-task postcondition.
+5. Apply `202608140016_visual_question_content_corrections.sql`.
+6. Verify its exact 85-row update postcondition.
+7. Deploy the matching `supabase/functions/membership-access/index.ts`.
+8. Run anonymous, learner, and teacher negative/positive RLS checks in preview.
 
-### Beginner-friendly rollback
+Migration `015`, migration `016`, and the matching Edge Function are **not
+live** as of August 14. A website deploy before the matching backend is unsafe.
 
-No coding is required to restore the previous visual version:
-
-1. Open Netlify and choose the production project.
-2. Open **Deploys**.
-3. Choose the last successful deploy before the v10 membership release.
-4. Select **Publish deploy**.
-
-This restores the old website files. It does not delete lessons, learners, or
-study history in Supabase. For a developer rollback, the calm baseline remains
-on `backup/v8-calm-baseline`; the last verified v9 release is commit `b7e4ac9`.
-
-## 7. Supabase migrations
-
-Apply the numbered migration files in filename order. Migration 003 is generated
-from the private reviewed source and stores the protected question payloads
-behind RLS; migration 009 installs the 11 expanded lessons and migration 013
-adds the final 54 visual/listening/speaking activities to the six legacy lessons,
-for 616 activities in total.
-Migration 004 publishes all 17 reviewed lessons to both audiences, adds the
-teacher account’s private learner-preview profile, and attaches the three
-late-July illustrations.
-
-Migration 005 adds privacy-conscious learner profiles, memberships, manual
-approval, expiry dates, access codes, two public previews, and protected full
-lesson questions. It was applied through the trusted SQL Editor on August 2,
-2026. Authentication Site URL and approved redirect URLs were updated for the
-production site, preview site, and local review address. Email signup is
-enabled with confirmation. Google OAuth is now enabled in Supabase; local
-Google sign-in, callback cleanup and sign-out were verified on August 3. The
-current v9 preview origin,
-`https://tahmid-english-review-hub-v9-preview.netlify.app`, is present in the
-Supabase redirect allow-list and the `membership-access` Edge CORS allow-list.
-Every future hosted Netlify URL must be added to both lists before its callback
-and access-code flow are tested.
-
-Migrations 007, 008, 009, 010, 011, 012 and 013 are present in the live schema. Migrations
-010, 011 and 012 were applied through the authenticated SQL Editor on August 3,
-2026. The dashboard verifies the private `review-premium-recordings` bucket,
-its 10 MB limit and four allowed audio MIME types, plus the SELECT, INSERT and
-DELETE storage policies for authenticated users.
-
-Migration 014 adds Free/Premium+ catalog entries and ranked four-tier question,
-assignment and feature entitlement checks. Apply it after 013, then deploy the
-matching `membership-access` Edge Function before exposing Premium+ controls in
-a hosted preview. As of August 11, 2026, the migration is present in the branch
-but is not recorded here as live.
-
-The July 30 preview setup was applied through the trusted Supabase SQL Editor.
-The local CLI could link to the project, but the shared project’s existing
-`cli_login_postgres` role returned PostgreSQL `42501` before a normal
-`db push`. No role or database password was reset. The migrations are
-idempotent, so they can be safely rerun after that project-level CLI role is
-repaired.
-
-After application, verify:
+After rollout, confirm:
 
 - anonymous users receive no profile, assignment, attempt, answer, speaking,
-  phrase-history, or setting rows
-- anonymous users see only published general/both catalogue views
-- private drafts do not appear in the public site
-- a general learner cannot open Takiwaki-only content
-- the intended teacher account passes `is_review_teacher()`
+  phrase-history, setting, submission, or feedback rows;
+- below-tier question payloads are withheld;
+- learner drafts and draft recordings are invisible to teachers;
+- learners cannot forge another user's recording path or attach audio to an
+  essay;
+- teacher preview is authorised, plan-scoped, labelled, and non-mutating;
+- code redemption/reissue is transactional under concurrent requests;
+- incomplete profiles remain Free/locked until required fields are saved;
+- all 17 lessons have exactly one active speaking and one active essay task.
 
-Run the repeatable anonymous live check:
+## 11. Preview gate, production promotion, and rollback
 
-```bash
-npm run verify:live
-```
+For code/design/backend changes:
+
+1. Run the final integrated suite, build, visual verification, and
+   `git diff --check` on the exact worktree.
+2. Commit intentionally and push `upgrade/review-hub-v9-final-product`.
+3. Complete the Supabase/Edge rollout above after taking a backup.
+4. Deploy the exact pushed commit to
+   `https://tahmid-english-review-hub-v9-preview.netlify.app`.
+5. Test desktop, tablet, 430 px, and 390 px; light/dark Lighthouse; console and
+   overflow; all auth/access/submission workflows; and production-like headers.
+6. Test real iPhone Safari and Android Chrome touch, microphone, PWA, and
+   offline behavior.
+7. Promote only after all gates pass and the correct production Netlify account
+   is available.
+
+Keep the previous successful production deploy as a recoverable rollback. A
+Netlify rollback restores website files but does not roll back Supabase schema
+or learner data. Database changes therefore require the backup/export and a
+forward-fix plan; do not use destructive rollback SQL casually.
+
+The exact current status and next command sequence are maintained in
+`docs/CODEX_HANDOFF_2026-08-02.md`.

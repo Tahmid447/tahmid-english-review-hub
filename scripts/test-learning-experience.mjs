@@ -58,7 +58,7 @@ assert.equal(
   "A signed-in learner never inherits anonymous settings.",
 );
 store.saveLessonProgress("june-28", { answeredCount: 1, firstScore: 1 });
-store.updateSettings({ sound: false, hintMode: "manual", vibration: false });
+store.updateSettings({ sound: false, hintMode: "manual" });
 
 store.setStorageUser("student-b");
 assert.equal(
@@ -71,7 +71,7 @@ assert.equal(store.getSettings().hintMode, "auto");
 store.setStorageUser("student-a");
 assert.equal(store.getLessonProgress("june-28")?.answeredCount, 1);
 assert.equal(store.getSettings().hintMode, "manual");
-assert.equal(store.getSettings().vibration, false);
+assert.equal(Object.hasOwn(store.getSettings(), "vibration"), false);
 
 store.setStorageUser(null);
 assert.equal(
@@ -361,7 +361,7 @@ assert.match(lessonScript, /Listen to the original/);
 assert.match(lessonScript, /matching-term/);
 assert.match(lessonScript, /sorting-category-audio/);
 assert.match(lessonScript, /playAnswerFeedback\(Boolean\(correct\)\)/);
-assert.match(lessonScript, /navigator\.vibrate\(correct \? \[30, 40, 30\] : \[80, 40, 80\]\)/);
+assert.doesNotMatch(lessonScript, /navigator\.vibrate|vibrationToggle/);
 assert.match(lessonScript, /Date\.now\(\) \+ 5000/);
 assert.match(lessonScript, /data-audio-secondary-text/);
 assert.match(lessonScript, /result = await play\([\s\S]{0,160}audioSecondaryText/);
@@ -374,7 +374,7 @@ assert.match(
   /@media \(max-width: 620px\)[\s\S]*?\.hint-mode-toggle button \{ white-space: normal; overflow-wrap: anywhere; \}/,
   "Bilingual hint controls wrap instead of causing horizontal mobile overflow.",
 );
-assert.match(lessonPage, /id="vibrationToggle"/);
+assert.doesNotMatch(lessonPage, /id="vibrationToggle"/);
 assert.match(lessonScript, /onStudentAuthChange/);
 assert.match(lessonScript, /authScopeLocked = true/);
 assert.match(lessonScript, /window\.location\.reload\(\)/);
@@ -401,4 +401,4 @@ console.log("Learning experience tests passed.");
 console.log("  ✓ account-scoped local settings and progress");
 console.log("  ✓ race-safe cross-device settings load and save");
 console.log("  ✓ varied speaking feedback in every score band");
-console.log("  ✓ lesson text audio, hint timer, sound and vibration hooks");
+console.log("  ✓ lesson text audio, hint timer and sound feedback hooks");

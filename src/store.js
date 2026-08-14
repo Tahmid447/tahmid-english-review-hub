@@ -2,6 +2,7 @@ const LEGACY_SETTINGS_KEY = "te-review-hub:settings:v1";
 const LEGACY_PROGRESS_KEY = "te-review-hub:lesson-progress:v1";
 const SETTINGS_KEY_PREFIX = "te-review-hub:settings:v2";
 const PROGRESS_KEY_PREFIX = "te-review-hub:lesson-progress:v2";
+const THEME_BOOT_KEY = "te-review-hub:theme:v1";
 let activeStorageScope = "anonymous";
 
 export const DEFAULT_SETTINGS = Object.freeze({
@@ -9,13 +10,14 @@ export const DEFAULT_SETTINGS = Object.freeze({
   showJapanese: true,
   showChoiceTranslations: false,
   sound: true,
-  vibration: true,
   voice: "us",
   playbackRate: 1,
   autoPronounceChoices: true,
   checkMode: "manual",
   shuffleChoices: true,
   hintMode: "auto",
+  theme: "system",
+  weeklyGoal: 3,
 });
 
 const canUseStorage = () => {
@@ -75,15 +77,25 @@ export function getStorageScope() {
 
 export function getSettings() {
   const saved = readScopedJSON(SETTINGS_KEY_PREFIX, LEGACY_SETTINGS_KEY, {});
+  const savedSettings = saved && typeof saved === "object" ? { ...saved } : {};
+  // Retired settings remain harmless in old local/remote JSON, but are never
+  // returned or written again.
+  delete savedSettings.vibration;
   const languageMode = ["en", "bilingual", "ja"].includes(saved?.languageMode)
     ? saved.languageMode
     : (saved?.showJapanese === false ? "en" : "bilingual");
   const playbackRate = [0.5, 1, 1.5].includes(Number(saved?.playbackRate))
     ? Number(saved.playbackRate)
     : 1;
+  const theme = ["system", "light", "dark"].includes(saved?.theme)
+    ? saved.theme
+    : "system";
+  const weeklyGoal = [2, 3, 5, 7].includes(Number(saved?.weeklyGoal))
+    ? Number(saved.weeklyGoal)
+    : 3;
   return {
     ...DEFAULT_SETTINGS,
-    ...(saved && typeof saved === "object" ? saved : {}),
+    ...savedSettings,
     voice: saved?.voice === "gb" ? "gb" : "us",
     languageMode,
     playbackRate,
@@ -94,12 +106,13 @@ export function getSettings() {
     showJapanese: languageMode !== "en",
     showChoiceTranslations: saved?.showChoiceTranslations === true,
     sound: saved?.sound !== false,
-    vibration: saved?.vibration !== false,
     // Choices are always shuffled for a new practice run. Keep this field for
     // backward-compatible remote settings without allowing an old unchecked
     // preference to disable the learning safeguard.
     shuffleChoices: true,
     hintMode: saved?.hintMode === "manual" ? "manual" : "auto",
+    theme,
+    weeklyGoal,
   };
 }
 
@@ -116,13 +129,74 @@ export function updateSettings(patch = {}) {
   next.autoPronounceChoices = next.autoPronounceChoices !== false;
   next.checkMode = next.checkMode === "instant" ? "instant" : "manual";
   next.sound = next.sound !== false;
-  next.vibration = next.vibration !== false;
   next.shuffleChoices = true;
   next.showChoiceTranslations = Boolean(next.showChoiceTranslations);
   next.hintMode = next.hintMode === "manual" ? "manual" : "auto";
+  next.theme = ["system", "light", "dark"].includes(next.theme) ? next.theme : "system";
+  next.weeklyGoal = [2, 3, 5, 7].includes(Number(next.weeklyGoal))
+    ? Number(next.weeklyGoal)
+    : 3;
+  delete next.vibration;
   writeJSON(scopedKey(SETTINGS_KEY_PREFIX), next);
+  writeJSON(THEME_BOOT_KEY, next.theme);
   notify("te-review:settings", next);
   return next;
+}
+
+export function resolvedTheme(preference = "system", darkSystemPreference) {
+  if (preference === "light" || preference === "dark") return preference;
+  const prefersDark = typeof darkSystemPreference === "boolean"
+    ? darkSystemPreference
+    : Boolean(globalThis.matchMedia?.("(prefers-color-scheme: dark)")?.matches);
+  return prefersDark ? "dark" : "light";
+}
+
+export function applyThemePreference(preference = getSettings().theme) {
+  const cleanPreference = ["system", "light", "dark"].includes(preference)
+    ? preference
+    : "system";
+  const theme = resolvedTheme(cleanPreference);
+  if (typeof document !== "undefined") {
+    document.documentElement.dataset.themePreference = cleanPreference;
+    document.documentElement.dataset.theme = theme;
+    document.documentElement.style.colorScheme = theme;
+  }
+  return theme;
+}
+
+export function watchSystemTheme(callback) {
+  if (typeof globalThis.matchMedia !== "function") return () => {};
+  const query = globalThis.matchMedia("(prefers-color-scheme: dark)");
+  const listener = () => {
+    if (getSettings().theme !== "system") return;
+    const theme = applyThemePreference("system");
+    if (typeof callback === "function") callback(theme);
+  };
+  query.addEventListener?.("change", listener);
+  return () => query.removeEventListener?.("change", listener);
+}
+
+export function safeLocalReturnPath(value, fallback = "/", origin) {
+  if (!value) return fallback;
+  try {
+    const base = origin
+      || (typeof window !== "undefined" ? window.location.origin : "https://local.invalid");
+    const url = new URL(String(value), base);
+    if (url.origin !== new URL(base).origin || !url.pathname.startsWith("/")) return fallback;
+    const allowedPath = [
+      /^\/$/,
+      /^\/index\.html$/,
+      /^\/phrases(?:\.html)?\/?$/,
+      /^\/lesson\.html$/,
+      /^\/lesson\/[^/]+\/?$/,
+      /^\/pricing\.html$/,
+      /^\/plans\/?$/,
+    ].some((pattern) => pattern.test(url.pathname));
+    if (!allowedPath) return fallback;
+    return `${url.pathname}${url.search}${url.hash}`;
+  } catch {
+    return fallback;
+  }
 }
 
 export function onSettingsChange(callback) {

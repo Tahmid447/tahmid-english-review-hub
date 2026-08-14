@@ -12,8 +12,15 @@
 
 [[redirects]]
   from = "/takiwaki"
-  to = "/takiwaki.html"
-  status = 200
+  to = "/?legacy=takiwaki"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/takiwaki.html"
+  to = "/?legacy=takiwaki"
+  status = 301
+  force = true
 
 [[redirects]]
   from = "/teacher"
@@ -34,3 +41,13 @@
   from = "/plans"
   to = "/pricing.html"
   status = 200
+
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+
+[[headers]]
+  for = "/manifest.webmanifest"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"

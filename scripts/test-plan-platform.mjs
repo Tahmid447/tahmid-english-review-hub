@@ -1,6 +1,16 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
-import { BILLING_OPTIONS, CONTACT_CHANNELS, PLAN_CATALOG, PLAN_ORDER, planMeetsRequirement, planPrice } from "../src/plans.js";
+import {
+  BILLING_OPTIONS,
+  CONTACT_CHANNELS,
+  PLAN_CATALOG,
+  PLAN_COMPARISON,
+  PLAN_ORDER,
+  contactMessage,
+  planMeetsRequirement,
+  planPrice,
+  planSavings,
+} from "../src/plans.js";
 
 const root = new URL("../", import.meta.url);
 const [pricingPage, pricingUi, lessonPage, lessonUi, store, teacherUi, membershipFunction, migration, build] = await Promise.all([
@@ -31,12 +41,49 @@ assert.equal(planMeetsRequirement("premium_plus", "premium"), true);
 assert.equal(planMeetsRequirement("standard", "premium"), false);
 assert.equal(CONTACT_CHANNELS.line.url, "https://line.me/ti/p/v6YfxZ1gSI");
 assert.equal(CONTACT_CHANNELS.instagram.url, "https://www.instagram.com/tahmidahmedo?utm_source=qr");
+assert.deepEqual(planSavings("standard"), {
+  monthlyTotal: 23880,
+  savedYen: 3580,
+  percent: 15,
+  monthlyEquivalentYen: 3383,
+});
+assert.deepEqual(planSavings("premium"), {
+  monthlyTotal: 41880,
+  savedYen: 6280,
+  percent: 15,
+  monthlyEquivalentYen: 5933,
+});
+assert.deepEqual(planSavings("premium_plus"), {
+  monthlyTotal: 100800,
+  savedYen: 15100,
+  percent: 15,
+  monthlyEquivalentYen: 14283,
+});
+assert.equal(PLAN_COMPARISON.length, 13);
+assert.equal(PLAN_COMPARISON.find((row) => row.label === "Live lesson duration")?.values.premium_plus, "50 minutes");
+assert.match(contactMessage("premium", BILLING_OPTIONS.sixMonths, "en", "Aya"), /Aya/);
+assert.match(contactMessage("premium", BILLING_OPTIONS.sixMonths, "en", "Aya"), /¥35,600/);
+assert.match(contactMessage("premium", BILLING_OPTIONS.sixMonths, "ja", "彩"), /彩/);
 
 assert.doesNotMatch(`${pricingPage}\n${pricingUi}`, /YOUR_LINE_ID|YOUR_HANDLE|payment (?:complete|successful)/i);
 assert.match(pricingUi, /PLAN_CATALOG/);
 assert.match(pricingUi, /contactMessage/);
 assert.match(pricingPage, /id="contactDialog"/);
 assert.match(pricingPage, /line-qr\.jpeg/);
+assert.match(pricingPage, /line-qr\.jpeg[^>]*loading="lazy"[^>]*decoding="async"/);
+assert.match(pricingPage, /id="themeToggle"/);
+assert.match(pricingPage, /id="mobileSettingsToggle"/);
+assert.match(pricingPage, /te-review-hub:theme:v1/);
+assert.match(pricingUi, /applyThemePreference/);
+assert.match(pricingUi, /watchSystemTheme/);
+assert.match(pricingUi, /import "\.\/pwa\.js"/);
+assert.match(pricingPage, /id="contactName"/);
+assert.match(pricingPage, /id="resetContactMessage"/);
+assert.doesNotMatch(pricingPage.match(/<textarea id="contactMessage"[^>]*>/)?.[0] || "", /readonly/);
+assert.match(pricingUi, /messageDirty/);
+assert.match(pricingUi, /navigator\.clipboard\.writeText\(elements\.message\.value\)/);
+assert.match(pricingUi, /PLAN_COMPARISON/);
+assert.match(pricingUi, /planSavings/);
 assert.match(build, /"pricing\.html"/);
 assert.match(build, /"plans\.js"/);
 assert.match(build, /"pricing\.js"/);
@@ -49,6 +96,9 @@ assert.match(store, /autoPronounceChoices: true/);
 assert.match(lessonUi, /setQuestionTypeFilter/);
 assert.match(lessonUi, /state\.settings\.autoPronounceChoices !== false/);
 assert.match(lessonUi, /speakText\(pronunciation/);
+assert.match(lessonUi, /bindRovingRadioGroup/);
+assert.match(lessonUi, /event\.stopPropagation\(\)/);
+assert.match(lessonUi, /\[document\.body, document\.documentElement\]\.includes\(document\.activeElement\)/);
 
 for (const fragment of [
   "premium_plus",

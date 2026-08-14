@@ -58,22 +58,33 @@ Deno.serve(async (request) => {
   const supabaseUrl = Deno.env.get("SUPABASE_URL") || "";
   const anonKey = Deno.env.get("SUPABASE_ANON_KEY") || "";
   const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
-  if (!supabaseUrl || !anonKey || !serviceRoleKey) {
+  if (!supabaseUrl || !anonKey) {
     return json(request, { error: "The membership service is not configured." }, 503);
   }
 
   try {
     const user = await authenticatedUser(request, supabaseUrl, anonKey);
     if (!user) return json(request, { error: "Please sign in first." }, 401);
-    const body = await request.json();
-    const action = String(body?.action || "");
-    const admin = createClient(supabaseUrl, serviceRoleKey, {
+    const authorization = request.headers.get("authorization") || "";
+    const userClient = createClient(supabaseUrl, anonKey, {
+      global: { headers: { Authorization: authorization } },
       auth: { persistSession: false, autoRefreshToken: false },
     });
+    const body = await request.json();
+    const action = String(body?.action || "");
+    const teacherAdmin = serviceRoleKey
+      ? createClient(supabaseUrl, serviceRoleKey, {
+        auth: { persistSession: false, autoRefreshToken: false },
+      })
+      : null;
 
-    const teacherActions = new Set(["create", "update", "delete", "reissue", "learner-auth-status"]);
-    if (teacherActions.has(action)) {
-      const { data: teacher } = await admin
+    // Reissue is authorised inside its SECURITY DEFINER SQL function and does
+    // not need the service-role client. The remaining actions still use the
+    // admin client and retain this explicit active-teacher check.
+    const serviceRoleTeacherActions = new Set(["create", "update", "delete", "learner-auth-status"]);
+    if (serviceRoleTeacherActions.has(action)) {
+      if (!teacherAdmin) return json(request, { error: "Teacher membership actions are not configured." }, 503);
+      const { data: teacher } = await teacherAdmin
         .from("review_teachers")
         .select("user_id")
         .eq("user_id", user.id)
@@ -83,6 +94,7 @@ Deno.serve(async (request) => {
     }
 
     if (action === "create") {
+      if (!teacherAdmin) return json(request, { error: "Teacher membership actions are not configured." }, 503);
 
       const label = String(body?.label || "").trim();
       const durationDays = Number(body?.durationDays || 0);
@@ -106,7 +118,7 @@ Deno.serve(async (request) => {
       }
 
       const accessCode = secureCode();
-      const { data, error } = await admin.from("review_access_codes").insert({
+      const { data, error } = await teacherAdmin.from("review_access_codes").insert({
         label,
         code_hash: await sha256(accessCode),
         code_last4: accessCode.slice(-4),
@@ -122,9 +134,10 @@ Deno.serve(async (request) => {
     }
 
     if (action === "learner-auth-status") {
+      if (!teacherAdmin) return json(request, { error: "Teacher membership actions are not configured." }, 503);
       const learnerId = String(body?.learnerId || "").trim();
       if (!learnerId) return json(request, { error: "Choose a learner account." }, 400);
-      const { data, error } = await admin.auth.admin.getUserById(learnerId);
+      const { data, error } = await teacherAdmin.auth.admin.getUserById(learnerId);
       if (error) throw error;
       if (!data?.user) return json(request, { error: "Learner account not found." }, 404);
       const bannedUntil = data.user.banned_until || null;
@@ -141,6 +154,7 @@ Deno.serve(async (request) => {
     }
 
     if (action === "update") {
+      if (!teacherAdmin) return json(request, { error: "Teacher membership actions are not configured." }, 503);
       const codeId = String(body?.codeId || "").trim();
       const label = String(body?.label || "").trim();
       const durationDays = Number(body?.durationDays || 0);
@@ -163,7 +177,7 @@ Deno.serve(async (request) => {
       if (validUntil && Number.isNaN(validUntil.getTime())) {
         return json(request, { error: "Enter a valid code expiry date, or leave it blank." }, 400);
       }
-      const { data: current, error: currentError } = await admin
+      const { data: current, error: currentError } = await teacherAdmin
         .from("review_access_codes")
         .select("id,use_count")
         .eq("id", codeId)
@@ -173,7 +187,7 @@ Deno.serve(async (request) => {
       if (maxUses < Number(current.use_count || 0)) {
         return json(request, { error: "Maximum uses cannot be lower than the number already used." }, 400);
       }
-      const { data, error } = await admin.from("review_access_codes").update({
+      const { data, error } = await teacherAdmin.from("review_access_codes").update({
         label,
         duration_days: durationDays,
         access_scope: accessScope,
@@ -189,9 +203,10 @@ Deno.serve(async (request) => {
     }
 
     if (action === "delete") {
+      if (!teacherAdmin) return json(request, { error: "Teacher membership actions are not configured." }, 503);
       const codeId = String(body?.codeId || "").trim();
       if (!codeId) return json(request, { error: "Choose an access code to delete." }, 400);
-      const { data: current, error: currentError } = await admin
+      const { data: current, error: currentError } = await teacherAdmin
         .from("review_access_codes")
         .select("id,use_count")
         .eq("id", codeId)
@@ -199,13 +214,13 @@ Deno.serve(async (request) => {
       if (currentError) throw currentError;
       if (!current) return json(request, { error: "Access code not found." }, 404);
       if (Number(current.use_count || 0) > 0) {
-        const { error } = await admin.from("review_access_codes")
+        const { error } = await teacherAdmin.from("review_access_codes")
           .update({ enabled: false })
           .eq("id", codeId);
         if (error) throw error;
         return json(request, { disposition: "disabled", preservedHistory: true });
       }
-      const { error } = await admin.from("review_access_codes").delete().eq("id", codeId);
+      const { error } = await teacherAdmin.from("review_access_codes").delete().eq("id", codeId);
       if (error) throw error;
       return json(request, { disposition: "deleted", preservedHistory: false });
     }
@@ -213,36 +228,33 @@ Deno.serve(async (request) => {
     if (action === "reissue") {
       const codeId = String(body?.codeId || "").trim();
       if (!codeId) return json(request, { error: "Choose an access code to reissue." }, 400);
-      const { data: current, error: currentError } = await admin
-        .from("review_access_codes")
-        .select("label,duration_days,access_scope,plan_tier,max_uses,valid_until")
-        .eq("id", codeId)
-        .maybeSingle();
-      if (currentError) throw currentError;
-      if (!current) return json(request, { error: "Access code not found." }, 404);
-      const accessCode = secureCode();
-      const { data: replacement, error: insertError } = await admin
-        .from("review_access_codes")
-        .insert({
-          ...current,
-          label: `${current.label} (reissued)`.slice(0, 100),
-          code_hash: await sha256(accessCode),
-          code_last4: accessCode.slice(-4),
-          use_count: 0,
-          enabled: true,
-          created_by: user.id,
-        })
-        .select("id")
-        .single();
-      if (insertError) throw insertError;
-      const { error: disableError } = await admin.from("review_access_codes")
-        .update({ enabled: false })
-        .eq("id", codeId);
-      if (disableError) {
-        await admin.from("review_access_codes").delete().eq("id", replacement.id);
-        throw disableError;
+      const { data: replacementRows, error: reissueError } = await userClient.rpc(
+        "review_reissue_access_code",
+        { target_code: codeId },
+      );
+      if (reissueError) {
+        const message = String(reissueError.message || "");
+        if (/not found/i.test(message)) {
+          return json(request, { error: "Access code not found." }, 404);
+        }
+        if (/already disabled|reissued/i.test(message)) {
+          return json(request, { error: "This access code is already disabled or has been reissued." }, 409);
+        }
+        if (/teacher authorisation/i.test(message)) {
+          return json(request, { error: "Teacher authorisation is required." }, 403);
+        }
+        throw reissueError;
       }
-      return json(request, { accessCode, codeId: replacement.id });
+      const replacement = Array.isArray(replacementRows)
+        ? replacementRows[0]
+        : replacementRows;
+      if (!replacement?.access_code || !replacement?.code_id) {
+        throw new Error("The access-code reissue transaction returned no replacement.");
+      }
+      return json(request, {
+        accessCode: replacement.access_code,
+        codeId: replacement.code_id,
+      });
     }
 
     if (action === "redeem") {
@@ -253,104 +265,42 @@ Deno.serve(async (request) => {
           reason: "invalid_format",
         }, 400);
       }
-      const { data: code, error: codeError } = await admin
-        .from("review_access_codes")
-        .select("*")
-        .eq("code_hash", await sha256(rawCode))
-        .maybeSingle();
-      if (codeError) throw codeError;
-      if (!code) {
-        return json(request, { error: "This access code was not found.", reason: "not_found" }, 404);
-      }
-      const expired = code?.valid_until && new Date(code.valid_until).getTime() <= Date.now();
-      if (!code.enabled) {
-        return json(request, { error: "This access code has been disabled by the teacher.", reason: "disabled" }, 409);
-      }
-      if (expired) {
-        return json(request, { error: "This access code has expired. Please ask the teacher for a new code.", reason: "expired" }, 410);
-      }
-      if (Number(code.use_count) >= Number(code.max_uses)) {
-        return json(request, { error: "This access code has already reached its use limit.", reason: "used_up" }, 409);
-      }
-      const { data: usedAlready } = await admin
-        .from("review_access_code_redemptions")
-        .select("code_id")
-        .eq("code_id", code.id)
-        .eq("user_id", user.id)
-        .maybeSingle();
-      if (usedAlready) {
-        return json(request, {
-          error: "This account has already used this access code.",
-          reason: "already_redeemed",
-        }, 409);
-      }
-
-      const nextUseCount = Number(code.use_count) + 1;
-      const { data: reserved, error: reserveError } = await admin
-        .from("review_access_codes")
-        .update({ use_count: nextUseCount })
-        .eq("id", code.id)
-        .eq("use_count", code.use_count)
-        .lt("use_count", code.max_uses)
-        .select("id")
-        .maybeSingle();
-      if (reserveError) throw reserveError;
-      if (!reserved) {
-        return json(request, {
-          error: "This code has just reached its use limit. Please ask the teacher for another code.",
-          reason: "used_up",
-        }, 409);
-      }
-
-      const { error: redemptionError } = await admin.from("review_access_code_redemptions").insert({
-        code_id: code.id,
-        user_id: user.id,
-      });
+      // The SQL function owns the row locks, use-count reservation, redemption
+      // history and membership update in one transaction. Calling it with the
+      // learner's JWT preserves auth.uid() and avoids service-role partial writes.
+      const { data: redemptionRows, error: redemptionError } = await userClient.rpc(
+        "review_redeem_access_code",
+        { raw_code: rawCode },
+      );
       if (redemptionError) {
-        await admin.from("review_access_codes").update({ use_count: code.use_count }).eq("id", code.id);
+        const message = String(redemptionError.message || "");
+        const known = [
+          ["not found", "This access code was not found.", "not_found", 404],
+          ["disabled", "This access code has been disabled by the teacher.", "disabled", 409],
+          ["expired", "This access code has expired. Please ask the teacher for a new code.", "expired", 410],
+          ["used up", "This access code has already reached its use limit.", "used_up", 409],
+          ["already redeemed", "This account has already used this access code.", "already_redeemed", 409],
+          ["conflicts with the active membership", "This code has a different plan or lesson scope from the active membership. Ask the teacher to issue a compatible code or change the current access first.", "active_membership_conflict", 409],
+          ["complete the learner profile", "Complete the learner profile before using an access code.", "profile_required", 409],
+        ] as const;
+        const match = known.find(([needle]) => message.toLowerCase().includes(needle));
+        if (match) return json(request, { error: match[1], reason: match[2] }, match[3]);
         throw redemptionError;
       }
-
-      const { data: existing } = await admin
-        .from("review_memberships")
-        .select("starts_at,expires_at")
-        .eq("user_id", user.id)
-        .maybeSingle();
-      const baseTime = Math.max(Date.now(), new Date(existing?.expires_at || 0).getTime());
-      const expiresAt = new Date(baseTime + Number(code.duration_days) * 86400000).toISOString();
-      const startsAt = existing?.starts_at && new Date(existing.starts_at).getTime() <= Date.now()
-        ? existing.starts_at
-        : new Date().toISOString();
-      const { error: membershipError } = await admin.from("review_memberships").upsert({
-        user_id: user.id,
-        status: "active",
-        access_scope: code.access_scope,
-        plan_tier: code.plan_tier || "standard",
-        plan_label: code.label,
-        starts_at: startsAt,
-        expires_at: expiresAt,
-        approval_source: "access_code",
-        approved_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      }, { onConflict: "user_id" });
-      if (membershipError) {
-        await admin.from("review_access_code_redemptions").delete().eq("code_id", code.id).eq("user_id", user.id);
-        await admin.from("review_access_codes").update({ use_count: code.use_count }).eq("id", code.id);
-        throw membershipError;
-      }
-      if (["takiwaki", "both"].includes(code.access_scope)) {
-        await admin.from("review_profiles").update({ access_scope: "takiwaki" }).eq("user_id", user.id);
-      }
+      const redemption = Array.isArray(redemptionRows) ? redemptionRows[0] : redemptionRows;
       return json(request, {
-        membershipStatus: "active",
-        membershipScope: code.access_scope,
-        membershipPlan: code.plan_tier || "standard",
-        membershipExpiresAt: expiresAt,
+        membershipStatus: redemption?.membership_status || "active",
+        membershipScope: redemption?.membership_scope || "general",
+        membershipPlan: redemption?.membership_plan || "standard",
+        membershipExpiresAt: redemption?.membership_expires_at || null,
       });
     }
 
     return json(request, { error: "Unknown membership action." }, 400);
   } catch (error) {
-    return json(request, { error: error instanceof Error ? error.message : "Membership request failed." }, 500);
+    // Unexpected database/runtime details belong in server logs, not in a
+    // learner-facing response. Known validation errors are mapped above.
+    console.error("membership-access unexpected failure", error);
+    return json(request, { error: "Membership request failed. Please refresh and try again." }, 500);
   }
 });

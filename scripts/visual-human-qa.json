@@ -1,6 +1,6 @@
 {
-  "checkedAt": "2026-08-03",
-  "method": "Human visual inspection of every WebP against its manifest scene, target sentence, and displayed objects/actions.",
+  "checkedAt": "2026-08-14",
+  "method": "Human visual inspection of all 85 WebPs in 17 lesson contact sheets against the manifest scene, target sentence, prompt, four choices, keyed answer, alt text, and displayed objects/actions. A second content-specific pass then wrote and checked one unique English/Japanese hint, one bilingual correct-evidence statement, and three bilingual choice-keyed conflict reasons for every question. Uncertain scenes and all four 2026-08-14 replacement assets were reopened at original resolution.",
   "manifestAssetCount": 85,
   "allManifestAssetsChecked": true,
   "status": "pass_after_correction",
@@ -27,6 +27,60 @@
       "before": "The first generated versions used ambiguous analog clocks that did not reliably distinguish the first half from the second half.",
       "fix": "Rejected both drafts and regenerated them with clear digital match clocks showing 32:00 and 78:00.",
       "after": "The goal scene is unambiguously before halftime and the excited late-match scene is unambiguously in the second half.",
+      "status": "fixed_and_rechecked"
+    },
+    {
+      "asset": "/assets/questions/visual/july-13-03-rush-back.webp",
+      "questionId": "july-13-draft-visual-3",
+      "before": "The runner's direction did not clearly prove that the person was going back toward the office.",
+      "fix": "Replaced the asset with a scene showing the runner turned toward an open office entrance, with the forgotten document visible inside, and aligned the manifest brief.",
+      "after": "The return direction and reason for rushing back are visually clear at original resolution.",
+      "status": "fixed_and_rechecked"
+    },
+    {
+      "asset": "/assets/questions/visual/july-19-02-either-day.webp",
+      "questionId": "july-19-draft-visual-2",
+      "before": "The two options were abstract circle and triangle cards, so the image did not establish two calendar days.",
+      "fix": "Replaced the asset with two distinct calendar-date cards and equal approval for both, and aligned the manifest brief.",
+      "after": "The image now communicates that either of two days works.",
+      "status": "fixed_and_rechecked"
+    },
+    {
+      "asset": "/assets/questions/visual/july-22-01-availability.webp",
+      "questionId": "july-22-draft-visual-1",
+      "before": "The previous image did not establish August and used an affirmative thumbs-up rather than a scheduling question.",
+      "fix": "Replaced the asset with a visible 8/4 card, a clock at 10:00, and a questioning scheduling gesture; updated alt text and the manifest brief.",
+      "after": "The complete date, time, and availability-question meaning are visible.",
+      "status": "fixed_and_rechecked"
+    },
+    {
+      "asset": "/assets/questions/visual/july-27-02-poured-sauce.webp",
+      "questionId": "july-27-draft-visual-2",
+      "before": "The target sentence used ‘She,’ but the previous illustration showed an adult man pouring the sauce.",
+      "fix": "Replaced the asset with an adult woman pouring a visible stream of sauce onto pasta; updated alt text and the manifest brief.",
+      "after": "The subject, pronoun, action, sauce, and pasta now agree.",
+      "status": "fixed_and_rechecked"
+    },
+    {
+      "asset": "/assets/questions/visual/july-27-03-splashed-water.webp",
+      "questionId": "july-27-draft-visual-3",
+      "before": "The valid image showed an adult man splashing an adult woman, while its alt text incorrectly called the splasher a child.",
+      "fix": "Kept the image and corrected the alt text and manifest brief to identify the adult man and woman accurately.",
+      "after": "The image, pronouns, alt text, and scene brief now agree.",
+      "status": "fixed_and_rechecked"
+    },
+    {
+      "questionIds": "june-29-extra-visual-1, june-30-extra-visual-1, july-05-extra-visual-3, july-11-draft-visual-3, july-13-draft-visual-1, and july-22-draft-visual-3",
+      "before": "Each item contained a distractor that the pictured still scene could also reasonably support, preventing a uniquely best answer.",
+      "fix": "Selected three semantically distinct distractors for each item and added a regression list that rejects the six ambiguous choices if they return.",
+      "after": "Each visual has one uniquely supported keyed sentence and three educationally distinct alternatives.",
+      "status": "fixed_and_rechecked"
+    },
+    {
+      "questionIds": "All 85 visual questions",
+      "before": "The Japanese hint repeated the model answer. A first correction then replaced it with the same generic hint on all 85 questions and generated repetitive distractor explanations, including unnatural English such as ‘the illustration shows a customer orders’. That did not meet the requested question-by-question teaching standard.",
+      "fix": "Reviewed all 85 question records individually. Each manifest entry now stores a unique non-revealing hint in English and Japanese, bilingual visual evidence for the correct answer, and three bilingual reasons keyed to the exact displayed distractor text. Rebuilt explanations as natural standalone sentences and added failures for missing or mismatched reasons, duplicate hints, the retired generic rationale, and the known ungrammatical pattern.",
+      "after": "All 85 questions now give a scene-specific clue and explain exactly which visible person, action, object, position, time, or condition conflicts with each of the three displayed distractors. The generated data and forward-only migration contain the same reviewed text.",
       "status": "fixed_and_rechecked"
     }
   ]

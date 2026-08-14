@@ -6,52 +6,65 @@
   <meta name="robots" content="noindex,nofollow">
   <title>Teacher Studio · Tahmid English Club</title>
   <link rel="stylesheet" href="/src/styles.css">
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/app-icon-192.png">
 </head>
 <body data-page="teacher">
   <header class="site-header">
-    <a class="brand" href="/teacher"><img class="brand-logo" src="/assets/tahmid-english-club-logo.png" alt="Tahmid English Club logo"><span><strong>Teacher Studio</strong><small>Tahmid English Club · レッスン管理</small></span></a>
-    <nav class="header-actions"><span class="role-badge">Teacher only / 先生専用</span><button class="quiet-btn" id="teacherLogout" type="button" hidden>Sign out / ログアウト</button></nav>
+    <a class="brand" href="/teacher"><img class="brand-logo" src="/assets/tahmid-english-club-logo.png" alt="Tahmid English Club logo"><span><strong>Teacher Studio</strong><small data-teacher-en="Tahmid English Club · lesson management" data-teacher-ja="Tahmid English Club · レッスン管理">Tahmid English Club · lesson management</small></span></a>
+    <nav class="header-actions">
+      <label><span data-teacher-en="Language" data-teacher-ja="表示言語">Language</span>
+        <select id="teacherLanguage" aria-label="Teacher Studio language"><option value="en">English</option><option value="ja">日本語</option></select>
+      </label>
+      <span class="role-badge" data-teacher-en="Teacher only" data-teacher-ja="先生専用">Teacher only</span>
+      <button class="quiet-btn" id="teacherLogout" type="button" hidden data-teacher-en="Sign out" data-teacher-ja="ログアウト">Sign out</button>
+    </nav>
   </header>
   <main class="teacher-shell shell">
     <section class="teacher-login" id="teacherLoginPanel">
-      <div><p class="eyebrow">Protected access</p><h1>Teacher Studio</h1><p>Sign in with a teacher-authorised Supabase account. The page address alone does not grant access.</p></div>
+      <div><p class="eyebrow" data-teacher-en="Protected access" data-teacher-ja="保護された管理画面">Protected access</p><h1>Teacher Studio</h1><p data-teacher-en="Sign in with an authorised teacher account. Knowing this page address does not grant access." data-teacher-ja="承認済みの先生アカウントでログインしてください。このページのURLを知っているだけではアクセスできません。">Sign in with an authorised teacher account. Knowing this page address does not grant access.</p></div>
       <form id="teacherLoginForm" class="auth-card">
         <button class="google-btn" id="teacherGoogleSignIn" type="button"><span aria-hidden="true">G</span><span>Continue with Google / Googleで続ける</span></button>
         <div class="auth-divider"><span>or use email / またはメールアドレス</span></div>
         <label>Email<input id="teacherEmail" type="email" autocomplete="username" required></label>
         <label>Password<input id="teacherPassword" type="password" autocomplete="current-password" required></label>
-        <button class="primary-btn" type="submit">Sign in securely</button>
+        <button class="primary-btn" type="submit" data-teacher-en="Sign in securely" data-teacher-ja="安全にログイン">Sign in securely</button>
         <p class="form-status" id="teacherLoginStatus" role="status"></p>
       </form>
     </section>
 
     <section id="teacherApp" hidden>
       <div class="teacher-top">
-        <div><p class="eyebrow">Review Hub control room</p><h1>Good to see you, <span id="teacherName">Teacher</span>.</h1><p>Drafts stay private until you review and publish them. / 確認して公開するまでは、生徒には表示されません。</p></div>
-        <button class="primary-btn" id="newLessonButton" type="button">New draft lesson / 新しい下書き</button>
+        <div><p class="eyebrow" data-teacher-en="Review Hub workspace" data-teacher-ja="Review Hub 管理画面">Review Hub workspace</p><h1><span data-teacher-en="Good to see you," data-teacher-ja="こんにちは、">Good to see you,</span> <span id="teacherName">Teacher</span>.</h1><p data-teacher-en="Choose the job you want to do. Learner drafts stay private until they submit them." data-teacher-ja="行いたい作業を選んでください。生徒の下書きは、本人が提出するまで先生にも表示されません。">Choose the job you want to do. Learner drafts stay private until they submit them.</p></div>
+        <div>
+          <label><span data-teacher-en="Preview lessons as" data-teacher-ja="生徒プランでプレビュー">Preview lessons as</span>
+            <select id="teacherPreviewPlan" aria-label="Preview lessons as learner plan"><option value="free">Free</option><option value="standard">Standard</option><option value="premium">Premium</option><option value="premium_plus">Premium+</option></select>
+          </label>
+          <button class="primary-btn" id="newLessonButton" type="button" data-teacher-en="New draft lesson" data-teacher-ja="新しい下書きレッスン">New draft lesson</button>
+        </div>
       </div>
-      <details class="teacher-workflow" open>
-        <summary>How publishing works / 公開の流れ</summary>
+      <details class="teacher-workflow">
+        <summary data-teacher-en="How publishing works" data-teacher-ja="公開の流れ">How publishing works</summary>
         <div class="teacher-workflow-grid">
-          <article><strong>1. New Draft Lesson</strong><p>日常的に新しいレッスンを作るボタンです。タイトル・日付・問題を準備します。</p></article>
-          <article><strong>2. Audience</strong><p><b>General</b>＝一般、<b>Takiwaki only</b>＝専用、<b>Both</b>＝両方。公開先をここで選びます。</p></article>
-          <article><strong>3. Published</strong><p>Publishedで保存した瞬間、対象サイトへ反映されます。GitHubやNetlifyの操作は不要です。</p></article>
-          <article><strong>Archive</strong><p>削除ではなく非表示です。問題・学習記録は残り、後で元に戻せます。</p></article>
-          <article><strong>Sync Bundled Content</strong><p>コードに同梱された安全な初期データを再同期する保守用です。普段の追加には使いません。</p></article>
+          <article><strong data-teacher-en="1. Create a draft" data-teacher-ja="1. 下書きを作成">1. Create a draft</strong><p data-teacher-en="Add the lesson title, date and practice questions." data-teacher-ja="タイトル・日付・練習問題を準備します。">Add the lesson title, date and practice questions.</p></article>
+          <article><strong data-teacher-en="2. Choose learners" data-teacher-ja="2. 公開先を選択">2. Choose learners</strong><p data-teacher-en="Choose General, Takiwaki only, or Both." data-teacher-ja="一般、Takiwaki専用、または両方から選びます。">Choose General, Takiwaki only, or Both.</p></article>
+          <article><strong data-teacher-en="3. Preview and publish" data-teacher-ja="3. 確認して公開">3. Preview and publish</strong><p data-teacher-en="Preview the selected learner plan, then publish when ready." data-teacher-ja="対象プランの生徒表示を確認してから公開します。">Preview the selected learner plan, then publish when ready.</p></article>
+          <article><strong data-teacher-en="Archive" data-teacher-ja="アーカイブ">Archive</strong><p data-teacher-en="Hides a lesson without deleting questions or learning records." data-teacher-ja="問題や学習記録を削除せず、レッスンを非表示にします。">Hides a lesson without deleting questions or learning records.</p></article>
         </div>
       </details>
       <section class="dashboard-shell">
-        <article class="dashboard-card"><span>Students</span><strong id="teacherStudentCount">0</strong></article>
-        <article class="dashboard-card"><span>Published lessons</span><strong id="teacherPublishedCount">6</strong></article>
-        <article class="dashboard-card"><span>Draft lessons</span><strong id="teacherDraftCount">11</strong></article>
-        <article class="dashboard-card"><span>Recent sessions</span><strong id="teacherSessionCount">0</strong></article>
+        <article class="dashboard-card"><span data-teacher-en="Learners" data-teacher-ja="生徒">Learners</span><strong id="teacherStudentCount">0</strong></article>
+        <article class="dashboard-card"><span data-teacher-en="Published lessons" data-teacher-ja="公開中レッスン">Published lessons</span><strong id="teacherPublishedCount">6</strong></article>
+        <article class="dashboard-card"><span data-teacher-en="Draft lessons" data-teacher-ja="下書きレッスン">Draft lessons</span><strong id="teacherDraftCount">11</strong></article>
+        <article class="dashboard-card"><span data-teacher-en="Recent sessions" data-teacher-ja="最近の学習回数">Recent sessions</span><strong id="teacherSessionCount">0</strong></article>
       </section>
       <div class="teacher-tabs" role="tablist">
-        <button class="active" data-teacher-tab="drafts" type="button"><strong>Lesson builder</strong><small>下書き・問題作成</small></button>
-        <button data-teacher-tab="lessons" type="button"><strong>Published lessons</strong><small>公開・編集・非表示</small></button>
-        <button data-teacher-tab="students" type="button"><strong>Learners &amp; access</strong><small>会員・期間・コード管理</small></button>
-        <button data-teacher-tab="premium" type="button"><strong>Premium reviews</strong><small>課題・提出・添削</small></button>
-        <button data-teacher-tab="activity" type="button"><strong>Insights &amp; activity</strong><small>学習状況を確認</small></button>
+        <button class="active" data-teacher-tab="dashboard" type="button"><strong data-teacher-en="Dashboard" data-teacher-ja="ダッシュボード">Dashboard</strong><small data-teacher-en="What needs attention" data-teacher-ja="今必要な作業">What needs attention</small></button>
+        <button data-teacher-tab="learners" type="button"><strong data-teacher-en="Learners" data-teacher-ja="生徒">Learners</strong><small data-teacher-en="Accounts and access" data-teacher-ja="アカウント・利用期間">Accounts and access</small></button>
+        <button data-teacher-tab="codes" type="button"><strong data-teacher-en="Access codes" data-teacher-ja="アクセスコード">Access codes</strong><small data-teacher-en="Create and manage" data-teacher-ja="作成・管理">Create and manage</small></button>
+        <button data-teacher-tab="lessons" type="button"><strong data-teacher-en="Lessons &amp; content" data-teacher-ja="レッスン・教材">Lessons &amp; content</strong><small data-teacher-en="Draft, publish, archive" data-teacher-ja="下書き・公開・非表示">Draft, publish, archive</small></button>
+        <button data-teacher-tab="submissions" type="button"><strong data-teacher-en="Submissions" data-teacher-ja="提出・添削">Submissions</strong><small data-teacher-en="Speaking and essays" data-teacher-ja="スピーキング・英作文">Speaking and essays</small></button>
+        <button data-teacher-tab="sources" type="button"><strong data-teacher-en="Sources" data-teacher-ja="教材ソース">Sources</strong><small data-teacher-en="Origin and sync status" data-teacher-ja="出典・同期状況">Origin and sync status</small></button>
+        <button data-teacher-tab="insights" type="button"><strong data-teacher-en="Insights &amp; activity" data-teacher-ja="学習分析・アクティビティ">Insights &amp; activity</strong><small data-teacher-en="Progress and weak points" data-teacher-ja="進捗・苦手分野">Progress and weak points</small></button>
       </div>
       <section class="teacher-panel" id="teacherPanel"></section>
     </section>

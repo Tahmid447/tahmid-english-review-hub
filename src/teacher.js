@@ -7,6 +7,7 @@ import {
   googleStudentAuthAvailable,
   onTeacherAuthChange,
   reissueTeacherAccessCode,
+  saveTeacherSubmissionReview,
   signInTeacher,
   signInTeacherWithGoogle,
   signOutTeacher,
@@ -25,11 +26,14 @@ const elements = {
   loginStatus: document.querySelector("#teacherLoginStatus"),
   app: document.querySelector("#teacherApp"),
   logout: document.querySelector("#teacherLogout"),
+  language: document.querySelector("#teacherLanguage"),
+  previewPlan: document.querySelector("#teacherPreviewPlan"),
   name: document.querySelector("#teacherName"),
   students: document.querySelector("#teacherStudentCount"),
   published: document.querySelector("#teacherPublishedCount"),
   drafts: document.querySelector("#teacherDraftCount"),
   sessions: document.querySelector("#teacherSessionCount"),
+  dashboardMetrics: document.querySelector("#teacherApp > .dashboard-shell"),
   panel: document.querySelector("#teacherPanel"),
   tabs: [...document.querySelectorAll("[data-teacher-tab]")],
   newLesson: document.querySelector("#newLessonButton"),
@@ -95,7 +99,7 @@ const elements = {
 const state = {
   session: null,
   teacher: null,
-  tab: "drafts",
+  tab: "dashboard",
   lessons: [],
   profiles: [],
   memberships: [],
@@ -119,9 +123,70 @@ const state = {
   questions: [],
   questionLoading: false,
   questionSaving: false,
-  lessonListView: "published",
+  lessonListView: "all",
+  learnerSearch: "",
+  learnerPlanFilter: "all",
+  learnerStatusFilter: "all",
+  submissionStatusFilter: "waiting",
   lastGeneratedCode: null,
   learnerAuthStatus: {},
+};
+
+const TEACHER_LANGUAGE_STORAGE_KEY = "te-review-hub:teacher-language:v1";
+const TEACHER_PREVIEW_PLAN_STORAGE_KEY = "te-review-hub:teacher-preview-plan:v1";
+const teacherPairFor = (value) => {
+  const match = String(value || "").match(/^(.*?)\s+\/\s+(.+?[\u3040-\u30ff\u3400-\u9fff].*)$/u);
+  return match ? { en: match[1].trim(), ja: match[2].trim() } : null;
+};
+const initialTeacherLanguage = () => {
+  try {
+    const saved = window.localStorage.getItem(TEACHER_LANGUAGE_STORAGE_KEY);
+    if (["en", "ja"].includes(saved)) return saved;
+  } catch {
+    // Use the browser language when storage is unavailable.
+  }
+  return String(navigator.language || "").toLowerCase().startsWith("ja") ? "ja" : "en";
+};
+let teacherLanguage = initialTeacherLanguage();
+const teacherTextPairs = new WeakMap();
+
+const teacherText = (english, japanese) => (
+  teacherLanguage === "ja" ? String(japanese || english || "") : String(english || japanese || "")
+);
+
+const localizeTeacherText = (value) => {
+  const pair = teacherPairFor(value);
+  return pair ? teacherText(pair.en, pair.ja) : String(value ?? "");
+};
+
+const applyTeacherLanguage = (root = document) => {
+  document.documentElement.lang = teacherLanguage === "ja" ? "ja" : "en";
+  root.querySelectorAll?.("[data-teacher-en][data-teacher-ja]").forEach((node) => {
+    node.textContent = teacherText(node.dataset.teacherEn, node.dataset.teacherJa);
+  });
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  const textNodes = [];
+  while (walker.nextNode()) textNodes.push(walker.currentNode);
+  textNodes.forEach((node) => {
+    if (node.parentElement?.closest("[data-teacher-en][data-teacher-ja]")) return;
+    const pair = teacherTextPairs.get(node) || teacherPairFor(node.nodeValue);
+    if (pair) {
+      teacherTextPairs.set(node, pair);
+      node.nodeValue = teacherText(pair.en, pair.ja);
+    }
+  });
+  if (elements.language) elements.language.value = teacherLanguage;
+};
+
+const setTeacherLanguage = (language) => {
+  teacherLanguage = language === "ja" ? "ja" : "en";
+  try {
+    window.localStorage.setItem(TEACHER_LANGUAGE_STORAGE_KEY, teacherLanguage);
+  } catch {
+    // The selection still applies for this page visit.
+  }
+  applyTeacherLanguage();
+  if (state.session) renderActiveTab();
 };
 
 // A learner's saved essay draft is private until they explicitly submit it.
@@ -135,7 +200,15 @@ const teacherVisibleSubmissions = () => state.taskSubmissions.filter(
 function make(tag, options = {}) {
   const node = document.createElement(tag);
   if (options.className) node.className = options.className;
-  if (options.text !== undefined) node.textContent = String(options.text);
+  if (options.text !== undefined) {
+    const original = String(options.text);
+    const pair = teacherPairFor(original);
+    if (pair) {
+      node.dataset.teacherEn = pair.en;
+      node.dataset.teacherJa = pair.ja;
+    }
+    node.textContent = localizeTeacherText(original);
+  }
   if (options.type) node.type = options.type;
   if (options.title) node.title = options.title;
   return node;
@@ -593,6 +666,25 @@ function safeNotionLink(url) {
   }
 }
 
+function unavailableLessonSourceLabel(lesson) {
+  if (lesson.source_type === "legacy_zip") {
+    return teacherText(
+      "Bundled lesson · source link unavailable",
+      "同梱レッスン · ソースリンクなし",
+    );
+  }
+  if (lesson.source_type === "notion") {
+    return teacherText(
+      "Notion lesson · source link unavailable",
+      "Notionレッスン · ソースリンクなし",
+    );
+  }
+  return teacherText(
+    "Teacher-created · source link unavailable",
+    "先生作成 · ソースリンクなし",
+  );
+}
+
 function lessonRows(lessons) {
   const { table, tbody } = makeTable([
     "Lesson",
@@ -619,7 +711,7 @@ function lessonRows(lessons) {
       link.rel = "noopener noreferrer";
       sourceCell.append(link);
     } else {
-      sourceCell.textContent = lesson.source_type === "legacy_zip" ? "Original site" : "Manual";
+      sourceCell.textContent = unavailableLessonSourceLabel(lesson);
     }
 
     const actions = make("td", { className: "table-actions" });
@@ -662,20 +754,25 @@ function lessonRows(lessons) {
 function renderLessons(mode) {
   const filtered = mode === "drafts"
     ? state.lessons.filter((lesson) => ["draft", "review"].includes(lesson.status))
-    : state.lessons.filter((lesson) => {
-        if (state.lessonListView === "all") return ["published", "archived"].includes(lesson.status);
-        return lesson.status === state.lessonListView;
-      });
+    : state.lessons.filter((lesson) => (
+      state.lessonListView === "all" || lesson.status === state.lessonListView
+    ));
 
   const wrap = make("div", { className: "teacher-list-view" });
   if (mode === "lessons") {
     const controls = make("div", { className: "lesson-list-filters" });
-    const publishedCount = state.lessons.filter((lesson) => lesson.status === "published").length;
-    const archivedCount = state.lessons.filter((lesson) => lesson.status === "archived").length;
+    const counts = Object.fromEntries(
+      ["draft", "review", "published", "archived"].map((status) => [
+        status,
+        state.lessons.filter((lesson) => lesson.status === status).length,
+      ]),
+    );
     [
-      ["published", `Published (${publishedCount})`],
-      ["archived", `Archived (${archivedCount})`],
-      ["all", "All"],
+      ["all", teacherText("All", "すべて")],
+      ["draft", `${teacherText("Drafts", "下書き")} (${counts.draft})`],
+      ["review", `${teacherText("Ready for review", "確認待ち")} (${counts.review})`],
+      ["published", `${teacherText("Published", "公開中")} (${counts.published})`],
+      ["archived", `${teacherText("Archived", "非表示")} (${counts.archived})`],
     ].forEach(([value, label]) => {
       const button = makeAction(label, () => {
         state.lessonListView = value;
@@ -685,11 +782,15 @@ function renderLessons(mode) {
       button.setAttribute("aria-pressed", String(state.lessonListView === value));
       controls.append(button);
     });
-    const explanation = make("p", {
-      text: state.lessonListView === "archived"
-        ? "Archived lessons are hidden from learners but retain questions and study records. Restore or permanently delete an unused lesson here."
-        : "Published lessons are currently visible to their selected audience.",
-    });
+    const explanation = make("p", { text: state.lessonListView === "archived"
+      ? teacherText(
+        "Archived lessons are hidden but keep questions and learning records.",
+        "非表示のレッスンでも、問題と学習記録は保持されます。",
+      )
+      : teacherText(
+        "Filter by the stage of the publishing job.",
+        "公開作業の段階で絞り込めます。",
+      ) });
     controls.append(explanation);
     wrap.append(controls);
   }
@@ -764,7 +865,7 @@ async function saveLearnerPlanOverride(profile, values, button) {
   if (hasOverride && result.data) state.planOverrides.push(result.data);
   showToast(
     hasOverride
-      ? "Learner tier and feature override saved. It has priority until it expires or is cleared."
+      ? "Learner plan exception saved. It applies until it expires or is cleared."
       : "Learner override cleared; normal membership rules now apply.",
     "success",
   );
@@ -997,6 +1098,10 @@ function accessCodeEditor(code) {
     showToast("New full code created. Copy it now; the old code is disabled.", "success");
     await refreshDashboard();
   });
+  if (code.enabled === false) {
+    reissue.disabled = true;
+    reissue.title = "Only an enabled code can be reissued. Create a new code instead.";
+  }
   const remove = makeAction(Number(code.use_count || 0) > 0 ? "Disable & preserve history" : "Delete unused code", async () => {
     const prompt = Number(code.use_count || 0) > 0
       ? "This code has redemption history, so it will be disabled rather than erased. Continue?"
@@ -1346,7 +1451,7 @@ function learnerLessonControls(profile) {
   section.append(
     make("h3", { text: "Lesson plan & visibility / レッスン割り当て・表示管理" }),
     make("p", {
-      text: "Recommendation adds a lesson to the learner’s plan. Assignment settings control when that recommendation appears and which plan it requires. Teacher unlock/lock is a separate learner-specific exception and has priority over normal plan access.",
+      text: "Recommendation adds a lesson to the learner’s plan. Assignment settings control when it appears and which plan it needs. “Allow this lesson” or “Hide this lesson” changes visibility only for this learner.",
     }),
   );
   if (!state.teacherControlsReady) {
@@ -1370,9 +1475,9 @@ function learnerLessonControls(profile) {
   [
     ["recommend", "Recommend selected"],
     ["remove", "Remove recommendations"],
-    ["allow", "Teacher-unlock selected"],
-    ["block", "Teacher-lock selected"],
-    ["inherit", "Restore plan rules"],
+    ["allow", "Allow selected lessons"],
+    ["block", "Hide selected lessons"],
+    ["inherit", "Follow plan for selected"],
   ].forEach(([value, label]) => {
     const option = make("option", { text: label });
     option.value = value;
@@ -1413,9 +1518,9 @@ function learnerLessonControls(profile) {
 
     const visibility = make("select");
     [
-      ["inherit", "Use normal plan rules"],
-      ["allow", "Teacher unlock (priority)"],
-      ["block", "Teacher lock (priority)"],
+      ["inherit", "Follow plan"],
+      ["allow", "Allow this lesson"],
+      ["block", "Hide this lesson"],
     ].forEach(([value, label]) => {
       const option = make("option", { text: label });
       option.value = value;
@@ -1509,13 +1614,13 @@ function learnerFeatureControls(profile) {
   section.append(
     make("h3", { text: "Tier & feature override / プラン・機能の例外設定" }),
     make("p", {
-      text: "Priority: this teacher override → active membership tier → Free public access. Inherit leaves the normal plan value unchanged; Allow or Block controls only that feature.",
+      text: "Use plan default keeps the learner’s normal plan setting. Enable or Disable changes only the selected feature until this exception is cleared or expires.",
     }),
   );
 
   const plan = make("select");
   [
-    ["", "Inherit membership tier"],
+    ["", "Use membership plan"],
     ["standard", "Standard"],
     ["premium", "Premium"],
     ["premium_plus", "Premium+"],
@@ -1540,7 +1645,7 @@ function learnerFeatureControls(profile) {
     const wrapper = make("label");
     wrapper.append(make("span", { text: label }));
     const select = make("select");
-    [["", "Inherit"], ["true", "Allow"], ["false", "Block"]].forEach(([value, text]) => {
+    [["", "Use plan default"], ["true", "Enable"], ["false", "Disable"]].forEach(([value, text]) => {
       const option = make("option", { text });
       option.value = value;
       select.append(option);
@@ -1684,11 +1789,13 @@ function openLearnerDialog(profile) {
 
 function renderStudents() {
   const wrap = make("div", { className: "learner-admin" });
-  wrap.append(renderAccessCodeManager());
   const heading = make("div", { className: "teacher-panel-heading" });
   heading.append(
     make("div", { text: "Learners / 学習者" }),
-    make("p", { text: "Open a learner to manage membership, recommendations, lesson locks, password reset, and detailed activity." }),
+    make("p", { text: teacherText(
+      "Find a learner, then manage their plan, lesson visibility, password reset and activity.",
+      "生徒を検索し、プラン・レッスン表示・パスワード再設定・学習状況を管理します。",
+    ) }),
   );
   wrap.append(heading);
 
@@ -1698,48 +1805,135 @@ function renderStudents() {
     return;
   }
 
-  const { table, tbody } = makeTable([
-    "Learner",
-    "Profile",
-    "Membership",
-    "Latest practice",
-    "Assigned",
-    "Controls",
-  ]);
-  for (const profile of state.profiles) {
-    const attempts = state.attempts.filter((attempt) => attempt.user_id === profile.user_id);
+  const filters = make("div", { className: "lesson-list-filters" });
+  const search = make("input");
+  search.type = "search";
+  search.value = state.learnerSearch;
+  search.placeholder = teacherText("Search name or email", "名前・メールで検索");
+  search.setAttribute("aria-label", teacherText("Search learners", "生徒を検索"));
+  const plan = make("select");
+  [
+    ["all", teacherText("All plans", "すべてのプラン")],
+    ["free", "Free"],
+    ["standard", "Standard"],
+    ["premium", "Premium"],
+    ["premium_plus", "Premium+"],
+  ].forEach(([value, label]) => {
+    const option = make("option", { text: label });
+    option.value = value;
+    plan.append(option);
+  });
+  plan.value = state.learnerPlanFilter;
+  const status = make("select");
+  [
+    ["all", teacherText("All access states", "すべての利用状態")],
+    ["active", teacherText("Active", "利用中")],
+    ["pending", teacherText("Pending", "承認待ち")],
+    ["expired", teacherText("Expired", "期限切れ")],
+    ["suspended", teacherText("Paused", "一時停止")],
+  ].forEach(([value, label]) => {
+    const option = make("option", { text: label });
+    option.value = value;
+    status.append(option);
+  });
+  status.value = state.learnerStatusFilter;
+  filters.append(search, plan, status);
+  const results = make("div");
+  wrap.append(filters, results);
+
+  const effectiveLearnerPlan = (profile) => {
+    const override = planOverrideFor(profile.user_id);
+    const activeOverride = override
+      && new Date(override.starts_at || 0).getTime() <= Date.now()
+      && (!override.expires_at || new Date(override.expires_at).getTime() > Date.now());
     const membership = membershipFor(profile.user_id);
-    const assignments = state.assignments.filter(
-      (assignment) => assignment.student_id === profile.user_id && assignment.status !== "dismissed",
-    );
-    const latest = attempts
-      .map((attempt) => attempt.completed_at)
-      .filter(Boolean)
-      .sort((left, right) => new Date(right).getTime() - new Date(left).getTime())[0];
-    const open = makeAction("Open profile & controls", () => openLearnerDialog(profile));
-    open.className = "secondary-btn";
-    const actionCell = make("td");
-    actionCell.append(open);
-    const learnerCell = make("td");
-    learnerCell.append(
-      make("strong", { text: profileName(profile.user_id) }),
-      make("br"),
-      make("small", { text: profile.contact_email || "No email recorded" }),
-    );
-    const row = make("tr");
-    row.append(
-      learnerCell,
-      make("td", { text: [profile.english_level || "Level not set", profile.age_group || "Age not shared", profile.native_language || "Language not set"].join(" · ") }),
-      make("td", { text: `${activeMembershipStatus(membership)} · ${membership?.access_scope || "general"}\n${membership?.expires_at ? `until ${formatDate(membership.expires_at)}` : ""}` }),
-      make("td", { text: latest ? formatDate(latest, true) : "Not practised" }),
-      make("td", { text: assignments.length }),
-      actionCell,
-    );
-    tbody.append(row);
-  }
-  const tableWrap = make("div", { className: "table-scroll" });
-  tableWrap.append(table);
-  wrap.append(tableWrap);
+    const activeMembership = membership?.status === "active"
+      && new Date(membership.starts_at || 0).getTime() <= Date.now()
+      && new Date(membership.expires_at || 0).getTime() > Date.now();
+    return (activeOverride ? override.plan_tier : null)
+      || (activeMembership ? membership.plan_tier : null)
+      || "free";
+  };
+  const membershipState = (profile) => {
+    const membership = membershipFor(profile.user_id);
+    if (!membership) return "pending";
+    if (membership.status === "active" && new Date(membership.expires_at || 0).getTime() <= Date.now()) return "expired";
+    return membership.status;
+  };
+  const renderRows = () => {
+    const needle = state.learnerSearch.trim().toLowerCase();
+    const visible = state.profiles.filter((profile) => {
+      const haystack = `${profileName(profile.user_id)} ${profile.contact_email || ""}`.toLowerCase();
+      return (!needle || haystack.includes(needle))
+        && (state.learnerPlanFilter === "all" || effectiveLearnerPlan(profile) === state.learnerPlanFilter)
+        && (state.learnerStatusFilter === "all" || membershipState(profile) === state.learnerStatusFilter);
+    });
+    if (!visible.length) {
+      results.replaceChildren(make("p", { text: teacherText(
+        "No learners match these filters.",
+        "この条件に一致する生徒はいません。",
+      ) }));
+      return;
+    }
+    const { table, tbody } = makeTable([
+      teacherText("Learner", "生徒"),
+      teacherText("Profile", "プロフィール"),
+      teacherText("Plan and access", "プラン・利用状態"),
+      teacherText("Latest practice", "最新の学習"),
+      teacherText("Assigned", "割り当て"),
+      teacherText("Actions", "操作"),
+    ]);
+    for (const profile of visible) {
+      const attempts = state.attempts.filter((attempt) => attempt.user_id === profile.user_id);
+      const membership = membershipFor(profile.user_id);
+      const assignments = state.assignments.filter(
+        (assignment) => assignment.student_id === profile.user_id && assignment.status !== "dismissed",
+      );
+      const latest = attempts
+        .map((attempt) => attempt.completed_at)
+        .filter(Boolean)
+        .sort((left, right) => new Date(right).getTime() - new Date(left).getTime())[0];
+      const open = makeAction(
+        teacherText("Open learner", "生徒を開く"),
+        () => openLearnerDialog(profile),
+      );
+      open.className = "secondary-btn";
+      const actionCell = make("td");
+      actionCell.append(open);
+      const learnerCell = make("td");
+      learnerCell.append(
+        make("strong", { text: profileName(profile.user_id) }),
+        make("br"),
+        make("small", { text: profile.contact_email || teacherText("No email recorded", "メール未登録") }),
+      );
+      const row = make("tr");
+      row.append(
+        learnerCell,
+        make("td", { text: [profile.english_level || teacherText("Level not set", "レベル未設定"), profile.age_group || teacherText("Age not shared", "年齢未共有"), profile.native_language || teacherText("Language not set", "言語未設定")].join(" · ") }),
+        make("td", { text: `${planFor(effectiveLearnerPlan(profile)).name} · ${activeMembershipStatus(membership)}\n${membership?.expires_at ? `${teacherText("until", "期限")} ${formatDate(membership.expires_at)}` : ""}` }),
+        make("td", { text: latest ? formatDate(latest, true) : teacherText("Not practised", "学習記録なし") }),
+        make("td", { text: assignments.length }),
+        actionCell,
+      );
+      tbody.append(row);
+    }
+    const tableWrap = make("div", { className: "table-scroll" });
+    tableWrap.append(table);
+    results.replaceChildren(tableWrap);
+  };
+  search.addEventListener("input", () => {
+    state.learnerSearch = search.value;
+    renderRows();
+  });
+  plan.addEventListener("change", () => {
+    state.learnerPlanFilter = plan.value;
+    renderRows();
+  });
+  status.addEventListener("change", () => {
+    state.learnerStatusFilter = status.value;
+    renderRows();
+  });
+  renderRows();
   elements.panel.replaceChildren(wrap);
 }
 
@@ -2497,31 +2691,15 @@ async function saveSubmissionFeedback(submission, values, action, button) {
     return;
   }
   button.disabled = true;
-  const published = action === "publish" || action === "return";
-  const feedback = state.submissionFeedback.find((item) => item.submission_id === submission.id);
-  const payload = {
-    submission_id: submission.id,
-    teacher_id: state.session.user.id,
+  const { error } = await saveTeacherSubmissionReview({
+    submissionId: submission.id,
+    action,
     score: values.score === "" ? null : Math.max(0, Math.min(100, Number(values.score))),
-    feedback_en: values.feedbackEn.trim() || null,
-    feedback_ja: values.feedbackJa.trim() || null,
-    ai_assisted: values.aiAssisted,
-    published_at: published ? new Date().toISOString() : null,
-  };
-  const feedbackResult = feedback
-    ? await client.from("review_submission_feedback").update(payload).eq("id", feedback.id)
-    : await client.from("review_submission_feedback").insert(payload);
-  if (feedbackResult.error) {
-    showToast(readableError(feedbackResult.error, "The feedback could not be saved."), "error");
-    button.disabled = false;
-    return;
-  }
-  const nextStatus = action === "publish" ? "reviewed" : action === "return" ? "returned" : "in_review";
-  const { error: statusError } = await client.from("review_task_submissions")
-    .update({ status: nextStatus })
-    .eq("id", submission.id);
-  if (statusError) {
-    showToast(readableError(statusError, "Feedback was saved, but the submission status could not be updated."), "error");
+    feedbackEn: values.feedbackEn,
+    feedbackJa: values.feedbackJa,
+  });
+  if (error) {
+    showToast(readableError(error, "The review could not be saved."), "error");
     button.disabled = false;
     return;
   }
@@ -2629,13 +2807,41 @@ function premiumTaskList() {
 
 function premiumSubmissionQueue() {
   const section = make("section", { className: "premium-admin-section" });
-  const submissions = teacherVisibleSubmissions();
+  const visibleSubmissions = teacherVisibleSubmissions();
+  const waitingStatuses = new Set(["submitted", "in_review"]);
+  const submissions = state.submissionStatusFilter === "all"
+    ? visibleSubmissions
+    : state.submissionStatusFilter === "waiting"
+      ? visibleSubmissions.filter((item) => waitingStatuses.has(item.status))
+      : visibleSubmissions.filter((item) => item.status === state.submissionStatusFilter);
   section.append(
     make("h2", { text: "Submission queue / 提出・添削" }),
-    make("p", { text: "Feedback drafts stay private until Publish or Return is selected. AI-assisted must be marked honestly; the teacher remains responsible for the final feedback." }),
+    make("p", { text: "Feedback drafts stay private until Publish or Return is selected. The teacher writes and remains responsible for every published review." }),
   );
+  const filter = make("select");
+  [
+    ["waiting", teacherText("Waiting for review", "添削待ち")],
+    ["all", teacherText("All submissions", "すべての提出")],
+    ["submitted", teacherText("Newly submitted", "新規提出")],
+    ["in_review", teacherText("Review in progress", "添削中")],
+    ["reviewed", teacherText("Feedback published", "添削公開済み")],
+    ["returned", teacherText("Returned for revision", "修正依頼済み")],
+  ].forEach(([value, label]) => {
+    const option = make("option", { text: label });
+    option.value = value;
+    filter.append(option);
+  });
+  filter.value = state.submissionStatusFilter;
+  filter.setAttribute("aria-label", teacherText("Filter submissions", "提出を絞り込む"));
+  filter.addEventListener("change", () => {
+    state.submissionStatusFilter = filter.value;
+    renderPremium();
+  });
+  section.append(filter);
   if (!submissions.length) {
-    section.append(make("p", { text: "No learner submissions yet." }));
+    section.append(make("p", { text: visibleSubmissions.length
+      ? teacherText("No submissions match this filter.", "この条件に一致する提出はありません。")
+      : teacherText("No learner submissions yet.", "生徒からの提出はまだありません。") }));
     return section;
   }
   const list = make("div", { className: "premium-review-list" });
@@ -2661,10 +2867,7 @@ function premiumSubmissionQueue() {
     const score = make("input"); score.type = "number"; score.min = "0"; score.max = "100"; score.value = feedback?.score ?? ""; score.placeholder = "Score / 100";
     const feedbackEn = make("textarea"); feedbackEn.rows = 4; feedbackEn.value = feedback?.feedback_en || ""; feedbackEn.placeholder = "Feedback in English";
     const feedbackJa = make("textarea"); feedbackJa.rows = 4; feedbackJa.value = feedback?.feedback_ja || ""; feedbackJa.placeholder = "日本語フィードバック";
-    const aiLabel = make("label");
-    const ai = make("input"); ai.type = "checkbox"; ai.checked = Boolean(feedback?.ai_assisted);
-    aiLabel.append(ai, document.createTextNode(" AI-assisted draft (teacher reviewed)"));
-    const values = () => ({ score: score.value, feedbackEn: feedbackEn.value, feedbackJa: feedbackJa.value, aiAssisted: ai.checked });
+    const values = () => ({ score: score.value, feedbackEn: feedbackEn.value, feedbackJa: feedbackJa.value });
     const actions = make("div", { className: "premium-task-actions" });
     const save = makeAction("Save private draft", () => saveSubmissionFeedback(submission, values(), "draft", save));
     const publish = makeAction("Publish feedback", () => {
@@ -2675,7 +2878,7 @@ function premiumSubmissionQueue() {
       if (window.confirm("Return this work so the learner can revise and resubmit it?")) saveSubmissionFeedback(submission, values(), "return", returnWork);
     });
     actions.append(save, publish, returnWork);
-    review.append(score, feedbackEn, feedbackJa, aiLabel, actions);
+    review.append(score, feedbackEn, feedbackJa, actions);
     card.append(review);
     list.append(card);
   });
@@ -2694,14 +2897,154 @@ function renderPremium() {
   elements.panel.replaceChildren(wrap);
 }
 
+function renderAccessCodes() {
+  elements.panel.replaceChildren(renderAccessCodeManager());
+}
+
+function renderSources() {
+  const wrap = make("div", { className: "teacher-list-view" });
+  const heading = make("div", { className: "teacher-panel-heading" });
+  heading.append(
+    make("div", { text: teacherText("Lesson sources", "教材ソース") }),
+    make("p", { text: teacherText(
+      "Check where each lesson came from and whether its source link is available.",
+      "各レッスンの出典と、参照リンクの有無を確認できます。",
+    ) }),
+  );
+  wrap.append(heading);
+  const { table, tbody } = makeTable([
+    teacherText("Lesson", "レッスン"),
+    teacherText("Source", "出典"),
+    teacherText("Link", "リンク"),
+    teacherText("Content version", "教材バージョン"),
+    teacherText("Updated", "更新日"),
+  ]);
+  state.lessons.forEach((lesson) => {
+    const linkCell = make("td");
+    const notionUrl = safeNotionLink(lesson.source_notion_url);
+    if (notionUrl) {
+      const link = make("a", { text: teacherText("Open source ↗", "ソースを開く ↗") });
+      link.href = notionUrl;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      linkCell.append(link);
+    } else {
+      linkCell.textContent = teacherText("No external link", "外部リンクなし");
+    }
+    const row = make("tr");
+    row.append(
+      make("td", { text: lesson.title_en }),
+      make("td", { text: lesson.source_type === "legacy_zip"
+        ? teacherText("Bundled original", "同梱された初期教材")
+        : lesson.source_type === "notion"
+          ? "Notion"
+          : teacherText("Teacher-created", "先生が作成") }),
+      linkCell,
+      make("td", { text: lesson.content_version || 1 }),
+      make("td", { text: formatDate(lesson.updated_at || lesson.lesson_date, true) }),
+    );
+    tbody.append(row);
+  });
+  const scroll = make("div", { className: "table-scroll" });
+  scroll.append(table);
+  wrap.append(scroll);
+  elements.panel.replaceChildren(wrap);
+}
+
+function renderDashboard() {
+  const wrap = make("div", { className: "teacher-list-view" });
+  const now = Date.now();
+  const recentCutoff = now - 30 * 86400000;
+  const recentLearners = state.profiles.filter((profile) => {
+    const createdAt = new Date(profile.created_at || 0).getTime();
+    return Number.isFinite(createdAt) && createdAt >= recentCutoff && createdAt <= now;
+  }).length;
+  const planTiers = [
+    ["free", "Free", "無料"],
+    ["standard", "Standard", "スタンダード"],
+    ["premium", "Premium", "プレミアム"],
+    ["premium_plus", "Premium+", "プレミアムプラス"],
+  ];
+  const planCounts = Object.fromEntries(planTiers.map(([key]) => [key, 0]));
+  state.profiles.forEach((profile) => {
+    const membership = membershipFor(profile.user_id);
+    const startsAt = new Date(membership?.starts_at || 0).getTime();
+    const expiresAt = new Date(membership?.expires_at || 0).getTime();
+    const planKey = membership?.status === "active" && startsAt <= now && expiresAt > now
+      ? planFor(membership.plan_tier).key
+      : "free";
+    planCounts[planKey] += 1;
+  });
+  const waiting = teacherVisibleSubmissions().filter((item) => ["submitted", "in_review"].includes(item.status)).length;
+  const expiringSoon = state.memberships.filter((membership) => {
+    const expiry = new Date(membership.expires_at || 0).getTime();
+    return membership.status === "active" && expiry > now && expiry < now + 14 * 86400000;
+  }).length;
+  const draftCount = state.lessons.filter((lesson) => ["draft", "review"].includes(lesson.status)).length;
+  const overviewHeading = make("div", { className: "teacher-panel-heading" });
+  overviewHeading.append(
+    make("div", { text: teacherText("Learner overview", "生徒の概要") }),
+    make("p", { text: teacherText(
+      "Active memberships by plan; learners without active access count as Free. New learners joined in the last 30 days.",
+      "有効な会員プラン別の人数です。利用中でない生徒は無料に含み、新規生徒は直近30日間の登録数です。",
+    ) }),
+  );
+  const learnerOverview = make("section", { className: "dashboard-shell" });
+  const recentCard = make("article", { className: "dashboard-card" });
+  recentCard.append(
+    make("span", { text: teacherText("New learners (30 days)", "新規生徒（30日間）") }),
+    make("strong", { text: recentLearners }),
+  );
+  learnerOverview.append(recentCard);
+  planTiers.forEach(([key, english, japanese]) => {
+    const card = make("article", { className: "dashboard-card" });
+    card.append(
+      make("span", { text: teacherText(english, japanese) }),
+      make("strong", { text: planCounts[key] }),
+    );
+    learnerOverview.append(card);
+  });
+  const heading = make("div", { className: "teacher-panel-heading" });
+  heading.append(
+    make("div", { text: teacherText("What needs attention", "今必要な作業") }),
+    make("p", { text: teacherText(
+      "Open a card to continue the most common teacher jobs.",
+      "カードを開いて、よく使う先生の作業を続けられます。",
+    ) }),
+  );
+  wrap.append(overviewHeading, learnerOverview, heading);
+  const jobs = make("section", { className: "dashboard-shell" });
+  [
+    ["submissions", waiting, teacherText("Submissions waiting", "添削待ちの提出")],
+    ["lessons", draftCount, teacherText("Drafts to finish", "未完成の下書き")],
+    ["learners", expiringSoon, teacherText("Access ending in 14 days", "14日以内に期限終了")],
+    ["codes", state.accessCodes.filter((code) => accessCodeStatus(code).key === "unused").length, teacherText("Unused access codes", "未使用アクセスコード")],
+  ].forEach(([tab, value, label]) => {
+    const card = make("button", { className: "dashboard-card", type: "button" });
+    card.append(make("span", { text: label }), make("strong", { text: value }));
+    card.addEventListener("click", () => {
+      state.tab = tab;
+      renderActiveTab();
+    });
+    jobs.append(card);
+  });
+  wrap.append(jobs);
+  elements.panel.replaceChildren(wrap);
+}
+
 function renderActiveTab() {
   for (const button of elements.tabs) {
     button.classList.toggle("active", button.dataset.teacherTab === state.tab);
   }
-  if (state.tab === "drafts" || state.tab === "lessons") renderLessons(state.tab);
-  if (state.tab === "students") renderStudents();
-  if (state.tab === "premium") renderPremium();
-  if (state.tab === "activity") renderActivity();
+  if (elements.dashboardMetrics) elements.dashboardMetrics.hidden = state.tab !== "dashboard";
+  if (state.tab === "dashboard") renderDashboard();
+  if (state.tab === "lessons") renderLessons("lessons");
+  if (state.tab === "learners") renderStudents();
+  if (state.tab === "codes") renderAccessCodes();
+  if (state.tab === "submissions") renderPremium();
+  if (state.tab === "sources") renderSources();
+  if (state.tab === "insights") renderActivity();
+  applyTeacherLanguage(elements.panel);
 }
 
 function orderedQuestions() {
@@ -3345,6 +3688,7 @@ function previewLesson(lesson) {
   const url = new URL("/lesson.html", window.location.origin);
   url.searchParams.set("id", lesson.slug);
   url.searchParams.set("preview", "1");
+  url.searchParams.set("previewPlan", elements.previewPlan?.value || "premium_plus");
   window.open(url.href, "_blank", "noopener,noreferrer");
 }
 
@@ -3673,11 +4017,41 @@ function addSyncButton() {
 }
 
 async function initialise() {
+  applyTeacherLanguage();
+  const signOutState = new URLSearchParams(window.location.search).get("signedOut");
+  const signOutMessage = !signOutState
+    ? ""
+    : signOutState === "local"
+      ? teacherText(
+        "The local session was cleared. Remote sign-out could not be confirmed.",
+        "ローカルセッションを消去しました。サーバー側のログアウト確認は完了していません。",
+      )
+      : teacherText("Signed out safely.", "安全にログアウトしました。");
+  if (elements.language) {
+    elements.language.value = teacherLanguage;
+    elements.language.addEventListener("change", () => setTeacherLanguage(elements.language.value));
+  }
   if (!client) {
     showLogin("The secure connection library could not be loaded.");
     return;
   }
-
+  if (elements.previewPlan) {
+    try {
+      const savedPreviewPlan = window.localStorage.getItem(TEACHER_PREVIEW_PLAN_STORAGE_KEY);
+      if (["free", "standard", "premium", "premium_plus"].includes(savedPreviewPlan)) {
+        elements.previewPlan.value = savedPreviewPlan;
+      }
+    } catch {
+      // Free remains the safe default when storage is unavailable.
+    }
+    elements.previewPlan.addEventListener("change", () => {
+      try {
+        window.localStorage.setItem(TEACHER_PREVIEW_PLAN_STORAGE_KEY, elements.previewPlan.value);
+      } catch {
+        // The current selection still works for this page visit.
+      }
+    });
+  }
   addSyncButton();
   if (elements.googleSignIn) {
     void googleStudentAuthAvailable().then((available) => {
@@ -3709,8 +4083,13 @@ async function initialise() {
   });
 
   elements.logout.addEventListener("click", async () => {
-    await signOutTeacher();
-    showLogin("Signed out safely.");
+    elements.logout.disabled = true;
+    const { error } = await signOutTeacher();
+    // Always rebuild the page/client from cleared local storage. This is
+    // important when the SDK sign-out request times out: merely showing the
+    // login panel could leave the old client session alive in memory.
+    const result = error ? "local" : "complete";
+    window.location.replace(`/teacher.html?signedOut=${result}`);
   });
 
   for (const button of elements.tabs) {
@@ -3777,7 +4156,7 @@ async function initialise() {
 
   const session = await getTeacherSession();
   if (!session) {
-    showLogin();
+    showLogin(signOutMessage);
   } else {
     await enterStudio(session);
   }

@@ -245,6 +245,7 @@ const phraseFromCorrectChoice = (question) => {
 
 const JAPANESE_INSTRUCTION_ONLY = /^(?:聞こえた英文をそのまま入力してください|音声を聞いて[^。]*|英語で入力してください|正しい英文を入力してください)[。.]?$/;
 const JAPANESE_MEANING_PREFIX = /^(?:語順を並べましょう|文を組み立てましょう|英語にしましょう|英文を作りましょう)\s*[：:]\s*(.+)$/;
+const JAPANESE_SCRIPT = /[\u3040-\u30ff\u3400-\u9fff]/;
 
 export const normalizeJapaneseMeaning = (value = "") => {
   const text = String(value || "").replace(/\s+/g, " ").trim();
@@ -254,6 +255,50 @@ export const normalizeJapaneseMeaning = (value = "") => {
   const quotedTarget = text.match(/^「(.+?)」(?:に合う英文|を英語|という意味)/);
   if (quotedTarget?.[1]) return quotedTarget[1].trim();
   return text;
+};
+
+export const normalizeCatalogLanguages = ({ en = "", jp = "" } = {}) => {
+  const english = String(en || "").replace(/\s+/g, " ").trim();
+  const japanese = String(jp || "").replace(/\s+/g, " ").trim();
+  if (JAPANESE_SCRIPT.test(english) && /[A-Za-z]/.test(japanese) && !JAPANESE_SCRIPT.test(japanese)) {
+    return { en: japanese, jp: english, swapped: true };
+  }
+  return { en: english, jp: japanese, swapped: false };
+};
+
+export const classifyLibraryEntry = (value = "") => {
+  const english = String(value || "").replace(/\s+/g, " ").trim();
+  const words = english.match(/[A-Za-z]+(?:['’-][A-Za-z]+)*/g) || [];
+  if (words.length <= 1 && !/\s/.test(english)) return "word";
+  const sentencePattern = [
+    /\b(?:have been|went|will go|visit(?:ed)?)\s+to\s+[A-Z][a-z]+/,
+    /\b(?:last|next)\s+(?:week|month|year)\b/i,
+    /^I\s+(?:hope I can|wish I were|would like to|used to|am supposed to)\b/i,
+    /^There\s+(?:is|are|was|were)\b/i,
+    /^Who\s+will\s+win\b/i,
+    /^Yes,?\s+I\s+do[.!]\s+I\s+like\b/i,
+    /^[A-Z][a-z]+\s+is\s+(?:an?|the)\b/,
+  ].some((rule) => rule.test(english));
+  return sentencePattern ? "pattern" : "phrase";
+};
+
+export const sentencePatternFor = (value = "") => {
+  const english = String(value || "").replace(/\s+/g, " ").trim();
+  const templates = [
+    [/^I have been to .+?[.!]?$/i, "I have been to [place]."],
+    [/^I went to .+? last (?:week|month|year)[.!]?$/i, "I went to [place] [past time]."],
+    [/^I hope I can .+? next (?:week|month|year)[.!]?$/i, "I hope I can [verb phrase] [future time]."],
+    [/^I wish I were .+? now[.!]?$/i, "I wish I were [place or situation] now."],
+    [/^I would like to .+?[.!]?$/i, "I would like to [verb phrase]."],
+    [/^I used to .+?[.!]?$/i, "I used to [verb phrase]."],
+    [/^I am supposed to .+?[.!]?$/i, "I am supposed to [verb phrase]."],
+    [/^There are .+?[.!]?$/i, "There are [people or things] [place or action]."],
+    [/^There is .+?[.!]?$/i, "There is [person or thing] [place or action]."],
+    [/^Who will win,? .+? or .+?[?]?$/i, "Who will win, [team A] or [team B]?"],
+    [/^Yes,? I do[.!] I like .+?[.!]?$/i, "Yes, I do. I like [thing]."],
+    [/^[A-Z][a-z]+ is (?:an?|the) .+?[.!]?$/, "[person or thing] is a [description]."],
+  ];
+  return templates.find(([rule]) => rule.test(english))?.[1] || english;
 };
 
 const lessonTranslationMap = (lesson) => {
@@ -285,7 +330,7 @@ const asksForAnError = (question) => {
 const isUsefulPhrase = ({ en = "", jp = "" }) => {
   const english = String(en).trim();
   const japanese = String(jp).trim();
-  if (!english || /^(?:true|false)$/i.test(english)) return false;
+  if (!english || JAPANESE_SCRIPT.test(english) || /^(?:true|false)$/i.test(english)) return false;
   if (/不自然|間違|誤り|文法的に.+必要/.test(japanese)) return false;
   return true;
 };
@@ -326,27 +371,47 @@ export async function buildPhraseCatalog({ audience = "all", includeDrafts = fal
 
   lessons.forEach((lesson) => {
     const translations = lessonTranslationMap(lesson);
+    const addPhrase = (phrase, id, topic = "Everyday English", note = "") => {
+      const normalized = normalizeCatalogLanguages(phrase);
+      const en = normalized.en;
+      const jp = translations.get(normalizeAnswerText(en))
+        || normalizeJapaneseMeaning(normalized.jp);
+      if (!isUsefulPhrase({ en, jp }) || en.length > 180) return;
+      const uniqueKey = normalizeAnswerText(en);
+      if (seen.has(uniqueKey)) return;
+      seen.add(uniqueKey);
+      const libraryKind = classifyLibraryEntry(en);
+      phrases.push({
+        id,
+        en,
+        jp,
+        topic: String(topic || "Everyday English"),
+        note: String(note || ""),
+        lessonId: lesson.id,
+        lessonTitle: lesson.title,
+        lessonDate: lesson.lessonDate,
+        status: lesson.status,
+        audience: lesson.audience,
+        libraryKind,
+        pattern: libraryKind === "pattern" ? sentencePatternFor(en) : "",
+      });
+    };
+    (lesson.phrases || []).forEach((phrase, phraseIndex) => {
+      addPhrase(
+        { en: phrase?.en || phrase?.english, jp: phrase?.jp || phrase?.ja },
+        `${lesson.id}-curated-phrase-${phraseIndex}`,
+        phrase?.topic || lesson.themes?.[0] || "Everyday English",
+        phrase?.note || "",
+      );
+    });
     lesson.questions.forEach((question) => {
       collectQuestionPhrases(question).forEach((phrase, phraseIndex) => {
-        const en = String(phrase.en || "").trim();
-        const jp = translations.get(normalizeAnswerText(en))
-          || normalizeJapaneseMeaning(phrase.jp);
-        if (!isUsefulPhrase({ en, jp }) || en.length > 180) return;
-        const uniqueKey = normalizeAnswerText(en);
-        if (seen.has(uniqueKey)) return;
-        seen.add(uniqueKey);
-        phrases.push({
-          id: `${question.id}-phrase-${phraseIndex}`,
-          en,
-          jp,
-          topic: String(question.topic || question.cat || question.section || "Everyday English"),
-          note: question.explanation.jp || question.explanation.en || "",
-          lessonId: lesson.id,
-          lessonTitle: lesson.title,
-          lessonDate: lesson.lessonDate,
-          status: lesson.status,
-          audience: lesson.audience,
-        });
+        addPhrase(
+          phrase,
+          `${question.id}-phrase-${phraseIndex}`,
+          question.topic || question.cat || question.section,
+          question.explanation.jp || question.explanation.en || "",
+        );
       });
     });
   });

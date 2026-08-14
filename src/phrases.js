@@ -1,11 +1,15 @@
 import { buildPhraseCatalog } from "./data.js";
 import {
+  applyThemePreference,
   getSettings,
   onSettingsChange,
   setStorageUser,
+  safeLocalReturnPath,
   updateSettings,
+  watchSystemTheme,
 } from "./store.js";
 import {
+  speechRecognitionSupported,
   speakText,
   startSpeechPractice,
   stopAudio,
@@ -24,6 +28,7 @@ const LEGACY_ACTIVITY_KEY = "teh_phrase_activity_v1";
 const ACTIVITY_KEY_PREFIX = "teh_phrase_activity_v2";
 const ANONYMOUS_ACTIVITY_KEY = `${ACTIVITY_KEY_PREFIX}:anonymous`;
 const DEFAULT_CATEGORY = "everyday expressions";
+const PHRASE_PAGE_SIZE = 24;
 const CATEGORY_RULES = [
   ["feelings", /feeling|annoy|frustrat|angry|nervous|stress|irritat|mood|hate|interest|prefer|preference|wish|hope/i],
   ["food & daily life", /food|restaurant|takeout|coffee|tea|order|lunch|dinner|breakfast|bath|weather|alcohol|drink|taste/i],
@@ -44,6 +49,16 @@ let activeCategory = "all";
 let activeLibraryKind = "phrase";
 let searchText = "";
 let activeRecognitionId = null;
+let visiblePhraseLimit = PHRASE_PAGE_SIZE;
+
+const routeParams = new URLSearchParams(window.location.search);
+const returnPath = safeLocalReturnPath(routeParams.get("return"), "/");
+
+function currentPhrasePath() {
+  const url = new URL(window.location.href);
+  ["code", "error", "error_code", "error_description"].forEach((key) => url.searchParams.delete(key));
+  return `${url.pathname}${url.search}${url.hash}`;
+}
 
 function element(tag, options = {}, children = []) {
   const node = document.createElement(tag);
@@ -398,11 +413,14 @@ function learningDetailsFor(phrase) {
 
 function categoryLabel(category) {
   const language = settingsLanguage(getSettings());
-  if (category === "all") return uiText(
-    activeLibraryKind === "word" ? "All words" : "All phrases",
-    activeLibraryKind === "word" ? "すべての単語" : "すべてのフレーズ",
-    language,
-  );
+  if (category === "all") {
+    const labels = {
+      word: ["All words", "すべての単語"],
+      pattern: ["All sentence patterns", "すべての文型パターン"],
+      phrase: ["All phrases", "すべてのフレーズ"],
+    }[activeLibraryKind] || ["All phrases", "すべてのフレーズ"];
+    return uiText(labels[0], labels[1], language);
+  }
   if (category === "favorites") return uiText("★ Favorites", "★ お気に入り", language);
   const english = category
     .split(" ")
@@ -449,6 +467,7 @@ function applySettings(settings = getSettings()) {
   const soundToggle = document.querySelector("#soundToggle");
   const voiceSelect = document.querySelector("#voiceSelect");
   const playbackRate = document.querySelector("#playbackRate");
+  const themeToggle = document.querySelector("#themeToggle");
   if (languageToggle) languageToggle.value = language;
   if (soundToggle) {
     soundToggle.textContent = sound
@@ -458,9 +477,18 @@ function applySettings(settings = getSettings()) {
   }
   if (voiceSelect) voiceSelect.value = settings.voice || "us";
   if (playbackRate) playbackRate.value = String(settings.playbackRate || 1);
+  if (themeToggle) themeToggle.value = settings.theme || "system";
+  applyThemePreference(settings.theme);
 }
 
 function bindSettings() {
+  const mobileSettingsToggle = document.querySelector("#mobileSettingsToggle");
+  const settingsControls = document.querySelector("#siteSettingsControls");
+  mobileSettingsToggle?.addEventListener("click", () => {
+    const expanded = mobileSettingsToggle.getAttribute("aria-expanded") === "true";
+    mobileSettingsToggle.setAttribute("aria-expanded", String(!expanded));
+    settingsControls?.classList.toggle("mobile-open", !expanded);
+  });
   document.querySelector("#languageToggle")?.addEventListener("change", (event) => {
     const next = event.currentTarget.value;
     updateAndSyncSettings({
@@ -478,6 +506,9 @@ function bindSettings() {
   document.querySelector("#playbackRate")?.addEventListener("change", (event) => {
     updateAndSyncSettings({ playbackRate: Number(event.currentTarget.value) });
   });
+  document.querySelector("#themeToggle")?.addEventListener("change", (event) => {
+    updateAndSyncSettings({ theme: event.currentTarget.value });
+  });
   onSettingsChange((settings) => {
     applySettings(settings);
     if (catalog.length) {
@@ -486,6 +517,7 @@ function bindSettings() {
     }
   });
   applySettings();
+  watchSystemTheme(() => applyThemePreference(getSettings().theme));
 }
 
 installPlayfulInteractions();
@@ -729,6 +761,8 @@ function createPhraseCard(phrase) {
   const category = categoryFor(phrase);
   const learning = phrase.learning || learningDetailsFor(phrase);
   const language = settingsLanguage(getSettings());
+  const isPattern = phrase.libraryKind === "pattern";
+  const displayEnglish = isPattern && phrase.pattern ? phrase.pattern : phrase.en;
 
   const favorite = element("button", {
     className: `favorite${record.favorite ? " active" : ""}`,
@@ -777,8 +811,19 @@ function createPhraseCard(phrase) {
   });
   const speak = element("button", {
     className: "mic-btn",
-    text: uiText("Speak", "話す", language),
-    attrs: { type: "button", "aria-label": `Practise saying ${phrase.en}` },
+    text: speechRecognitionSupported()
+      ? uiText("Speak", "話す", language)
+      : uiText("Speaking unavailable", "発話認識は利用できません", language),
+    attrs: {
+      type: "button",
+      disabled: speechRecognitionSupported() ? null : "",
+      title: speechRecognitionSupported()
+        ? uiText("Practise with speech recognition", "音声認識で発話練習", language)
+        : uiText("Speech recognition is unavailable in this browser. You can still use the audio buttons.", "このブラウザでは音声認識を利用できません。音声再生は引き続き利用できます。", language),
+      "aria-label": speechRecognitionSupported()
+        ? `Practise saying ${phrase.en}`
+        : uiText(`Speaking practice unavailable for ${phrase.en}`, `${phrase.en}の発話練習はこのブラウザでは利用できません`, language),
+    },
   });
   listenUs.addEventListener("click", () => void listenToPhrase(phrase, "us", listenUs, status));
   listenGb.addEventListener("click", () => void listenToPhrase(phrase, "gb", listenGb, status));
@@ -788,7 +833,12 @@ function createPhraseCard(phrase) {
   const lessonLink = element("a", {
     className: "phrase-source-link",
     attrs: {
-      href: phrase.lessonId ? `/lesson.html?id=${encodeURIComponent(phrase.lessonId)}` : "/",
+      href: phrase.lessonId
+        ? `/lesson.html?${new URLSearchParams({
+            id: phrase.lessonId,
+            return: currentPhrasePath(),
+          }).toString()}`
+        : returnPath,
     },
     text: [phrase.lessonTitle || "English Review", sourceDate].filter(Boolean).join(" · "),
   });
@@ -813,10 +863,16 @@ function createPhraseCard(phrase) {
     element("div", { className: "phrase-card-top" }, [
       element("div", {}, [
         element("span", { className: "lesson-date", text: categoryLabel(category) }),
-        element("h2", { text: phrase.en }),
+        element("h2", { text: displayEnglish }),
       ]),
       favorite,
     ]),
+    isPattern && displayEnglish !== phrase.en
+      ? element("p", {
+          className: "phrase-note",
+          text: uiText(`Example: ${phrase.en}`, `例文：${phrase.en}`, language),
+        })
+      : null,
     element("p", { className: "jp", text: phrase.jp || "" }),
     element("div", {
       className: "phrase-learning",
@@ -872,17 +928,27 @@ function renderPhrases() {
   const grid = document.querySelector("#phraseGrid");
   if (!grid) return;
   const phrases = filteredCatalog();
+  const visiblePhrases = phrases.slice(0, visiblePhraseLimit);
   const results = document.querySelector("#phraseResults");
   if (results) {
-    const noun = activeLibraryKind === "word" ? "word" : "phrase";
+    const noun = activeLibraryKind === "word"
+      ? "word"
+      : activeLibraryKind === "pattern"
+        ? "sentence pattern"
+        : "phrase";
     results.textContent = uiText(
-      `${phrases.length} ${phrases.length === 1 ? noun : `${noun}s`} shown.`,
-      `${phrases.length}${activeLibraryKind === "word" ? "語" : "フレーズ"}を表示しています。`,
+      `${visiblePhrases.length} of ${phrases.length} ${phrases.length === 1 ? noun : `${noun}s`} shown.`,
+      `${phrases.length}${activeLibraryKind === "word" ? "語" : activeLibraryKind === "pattern" ? "文型" : "フレーズ"}中${visiblePhrases.length}件を表示しています。`,
       settingsLanguage(getSettings()),
     );
   }
   grid.replaceChildren();
+  const loadMoreArea = document.querySelector("#phraseLoadMoreArea");
+  const loadMore = document.querySelector("#phraseLoadMore");
+  const loadMoreStatus = document.querySelector("#phraseLoadMoreStatus");
   if (!phrases.length) {
+    if (loadMoreArea) loadMoreArea.hidden = true;
+    if (loadMoreStatus) loadMoreStatus.textContent = "";
     grid.append(element("article", { className: "phrase-card" }, [
       element("h2", {
         text: activeCategory === "favorites"
@@ -903,22 +969,66 @@ function renderPhrases() {
     ]));
     return;
   }
-  phrases.forEach((phrase) => grid.append(createPhraseCard(phrase)));
+  visiblePhrases.forEach((phrase) => grid.append(createPhraseCard(phrase)));
+  const remaining = Math.max(0, phrases.length - visiblePhrases.length);
+  if (loadMoreArea) loadMoreArea.hidden = remaining === 0;
+  if (loadMore) loadMore.textContent = uiText(
+    `Load ${Math.min(PHRASE_PAGE_SIZE, remaining)} more`,
+    `さらに${Math.min(PHRASE_PAGE_SIZE, remaining)}件を表示`,
+    settingsLanguage(getSettings()),
+  );
+  if (loadMoreStatus) loadMoreStatus.textContent = uiText(
+    `Showing ${visiblePhrases.length} of ${phrases.length}.`,
+    `${phrases.length}件中${visiblePhrases.length}件を表示。`,
+    settingsLanguage(getSettings()),
+  );
+}
+
+function resetPhrasePage() {
+  visiblePhraseLimit = PHRASE_PAGE_SIZE;
+}
+
+function bindLoadMore() {
+  document.querySelector("#phraseLoadMore")?.addEventListener("click", () => {
+    const previousCount = Math.min(visiblePhraseLimit, filteredCatalog().length);
+    visiblePhraseLimit += PHRASE_PAGE_SIZE;
+    renderPhrases();
+    document.querySelectorAll("#phraseGrid .phrase-card")[previousCount]?.querySelector(
+      "button, a, input, select, textarea",
+    )?.focus();
+  });
 }
 
 function bindLibraryTabs() {
   document.querySelectorAll("[data-library-kind]").forEach((button) => {
     button.addEventListener("click", () => {
-      activeLibraryKind = button.dataset.libraryKind === "word" ? "word" : "phrase";
+      activeLibraryKind = ["phrase", "word", "pattern"].includes(button.dataset.libraryKind)
+        ? button.dataset.libraryKind
+        : "phrase";
       activeCategory = "all";
+      resetPhrasePage();
       document.querySelectorAll("[data-library-kind]").forEach((tab) => {
         const active = tab === button;
         tab.classList.toggle("active", active);
         tab.setAttribute("aria-selected", String(active));
+        tab.tabIndex = active ? 0 : -1;
       });
       renderFilters();
       renderPhrases();
     });
+  });
+  document.querySelector(".library-tabs[role='tablist']")?.addEventListener("keydown", (event) => {
+    if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+    const tabs = [...event.currentTarget.querySelectorAll("[role='tab']")];
+    const currentIndex = Math.max(0, tabs.indexOf(document.activeElement));
+    const nextIndex = event.key === "Home"
+      ? 0
+      : event.key === "End"
+        ? tabs.length - 1
+        : (currentIndex + (event.key === "ArrowRight" ? 1 : -1) + tabs.length) % tabs.length;
+    event.preventDefault();
+    tabs[nextIndex]?.click();
+    tabs[nextIndex]?.focus();
   });
 }
 
@@ -943,6 +1053,7 @@ function renderFilters() {
     });
     button.addEventListener("click", () => {
       activeCategory = category;
+      resetPhrasePage();
       renderFilters();
       renderPhrases();
     });
@@ -954,11 +1065,15 @@ function bindSearch() {
   const search = document.querySelector("#phraseSearch");
   search?.addEventListener("input", () => {
     searchText = search.value;
+    resetPhrasePage();
     renderPhrases();
   });
 }
 
 async function initialise() {
+  document.querySelectorAll(".phrase-return-link").forEach((link) => {
+    link.href = returnPath;
+  });
   let session = await prepareActivityScope();
   setStorageUser(activeActivityUserId);
   if (!(await syncRemoteSettings(session))) {
@@ -970,18 +1085,20 @@ async function initialise() {
   bindSettings();
   bindSearch();
   bindLibraryTabs();
+  bindLoadMore();
   const phrases = await buildPhraseCatalog();
   catalog = (Array.isArray(phrases) ? phrases : [])
     .filter((phrase) => phrase && phrase.en)
     .filter((phrase) => phrase.status !== "draft" && phrase.lessonStatus !== "draft")
+    // Historical Takiwaki-only material stays protected until its audience is
+    // explicitly migrated into the common learner catalogue.
     .filter((phrase) => phrase.audience !== "takiwaki")
     .filter(isSafeLibraryPhrase)
     .map((phrase) => ({
       ...phrase,
       id: phraseId(phrase),
-      libraryKind: String(phrase.en).trim().split(/\s+/).length <= 3
-        && !/[.?!]/.test(String(phrase.en))
-        ? "word"
+      libraryKind: ["phrase", "word", "pattern"].includes(phrase.libraryKind)
+        ? phrase.libraryKind
         : "phrase",
       learning: learningDetailsFor(phrase),
     }))

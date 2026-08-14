@@ -1,13 +1,15 @@
 import { buildPhraseCatalog, getLessonById, normalizeJapaneseMeaning } from "./data.js";
 import {
+  applyThemePreference,
   escapeHTML,
   getLessonProgress,
   getSettings,
-  normalizeAnswerText,
   saveLessonProgress,
+  safeLocalReturnPath,
   setStorageUser,
   shuffleArray,
   updateSettings,
+  watchSystemTheme,
 } from "./store.js";
 import {
   playAnswerFeedback,
@@ -30,6 +32,13 @@ import { DEEP_LESSON_GUIDES } from "./lesson-guides.js";
 import { celebrate, installPlayfulInteractions } from "./effects.js";
 import { renderPremiumLessonTasks } from "./premium-tasks.js";
 import { planFor } from "./plans.js";
+import {
+  answerExists as answerValueExists,
+  calculateOfficialTotals,
+  gradeQuestionAnswer,
+  isAnswerGradeable,
+  preserveFirstResult,
+} from "./lesson-grading.js";
 
 const $ = (selector) => document.querySelector(selector);
 
@@ -38,8 +47,8 @@ const elements = {
   openLessonSettings: $("#openLessonSettings"),
   lessonSettingsDialog: $("#lessonSettingsDialog"),
   languageToggle: $("#languageToggle"),
+  themeToggle: $("#themeToggle"),
   soundToggle: $("#soundToggle"),
-  vibrationToggle: $("#vibrationToggle"),
   voiceSelect: $("#voiceSelect"),
   playbackRate: $("#playbackRate"),
   autoPronounceChoices: $("#autoPronounceChoices"),
@@ -80,11 +89,10 @@ const params = new URLSearchParams(window.location.search);
 const lessonPathMatch = window.location.pathname.match(/^\/lesson\/([^/]+)\/?$/);
 const lessonId = params.get("id") || decodeURIComponent(lessonPathMatch?.[1] || "");
 const isTeacherPreview = params.get("preview") === "1";
+const legacyReturn = params.get("from") === "takiwaki" ? "/#account" : "/";
 const returnTo = isTeacherPreview
   ? "/teacher.html"
-  : params.get("from") === "takiwaki"
-    ? "/takiwaki.html"
-    : "/";
+  : safeLocalReturnPath(params.get("return"), legacyReturn);
 const uuid = () => (
   globalThis.crypto?.randomUUID?.()
   || `${Date.now()}-${Math.random().toString(36).slice(2)}`
@@ -105,6 +113,7 @@ const state = {
   answers: {},
   official: {},
   retryAttempts: {},
+  retryEditing: new Set(),
   choiceOrders: {},
   feedback: {},
   runChecked: new Set(),
@@ -140,21 +149,11 @@ const showToast = (message) => {
   state.toastTimer = setTimeout(() => elements.toast.classList.remove("show"), 2600);
 };
 
-const vibrationSupported = () => (
-  typeof navigator !== "undefined" && typeof navigator.vibrate === "function"
-);
-
 const provideAnswerFeedback = (correct) => {
   playAnswerFeedback(Boolean(correct));
   if (correct) {
     const question = state.visibleQuestions[state.currentIndex];
     celebrate(elements.feedbackCard, { speaking: question?.format === "speaking" });
-  }
-  if (!state.settings.vibration || !vibrationSupported()) return;
-  try {
-    navigator.vibrate(correct ? [30, 40, 30] : [80, 40, 80]);
-  } catch {
-    // Vibration is optional and may be blocked by the device or browser.
   }
 };
 
@@ -206,16 +205,12 @@ const formatDate = (dateValue) => {
 };
 
 const answerExists = (question, answer = state.answers[question.id]) => {
-  if (answer === false || answer === true) return true;
-  if (answer == null) return false;
-  if (typeof answer === "string") return answer.trim().length > 0;
-  if (Array.isArray(answer)) return answer.length > 0;
-  if (typeof answer === "object") {
-    if (question.format === "speaking") return Boolean(answer.transcript || answer.selfPractised);
-    return Object.values(answer).some((value) => String(value ?? "").trim());
-  }
-  return false;
+  return answerValueExists(question, answer);
 };
+
+const answerReadyForCheck = (question, answer = state.answers[question.id]) => (
+  isAnswerGradeable(question, answer)
+);
 
 const safeProgress = (value, fallback) => (
   value && typeof value === "object" && !Array.isArray(value) ? value : fallback
@@ -269,14 +264,9 @@ const restoreProgress = () => {
     : "all";
 };
 
-const officialTotals = (questions = state.masterQuestions) => questions.reduce((totals, question) => {
-  const result = state.official[question.id];
-  totals.score += Number(result?.score || 0);
-  totals.max += Number(question.maxPoints || 1);
-  totals.checked += result ? 1 : 0;
-  if (result && Number(result.score) < Number(question.maxPoints || 1)) totals.wrong += 1;
-  return totals;
-}, { score: 0, max: 0, checked: 0, wrong: 0 });
+const officialTotals = (questions = state.masterQuestions) => (
+  calculateOfficialTotals(questions, state.official)
+);
 
 const saveLocalState = () => {
   if (!state.lesson || isTeacherPreview || authScopeLocked) return;
@@ -368,22 +358,13 @@ const loadScopedSettings = async () => {
 const renderSettings = () => {
   const language = languageModeFromSettings(state.settings);
   applyLanguageMode(language);
+  applyThemePreference(state.settings.theme);
   elements.languageToggle.value = language;
+  if (elements.themeToggle) elements.themeToggle.value = state.settings.theme || "system";
   elements.soundToggle.textContent = state.settings.sound
     ? uiText("Sound On", "音声オン", language)
     : uiText("Sound Off", "音声オフ", language);
   elements.soundToggle.setAttribute("aria-pressed", String(state.settings.sound));
-  const canVibrate = vibrationSupported();
-  elements.vibrationToggle.textContent = canVibrate
-    ? (state.settings.vibration
-      ? uiText("Vibration On", "振動オン", language)
-      : uiText("Vibration Off", "振動オフ", language))
-    : uiText("Visual feedback", "画面エフェクト", language);
-  elements.vibrationToggle.disabled = !canVibrate;
-  elements.vibrationToggle.setAttribute(
-    "aria-pressed",
-    String(canVibrate && state.settings.vibration),
-  );
   elements.voiceSelect.value = state.settings.voice;
   elements.playbackRate.value = String(state.settings.playbackRate || 1);
   if (elements.autoPronounceChoices) {
@@ -400,7 +381,7 @@ const renderSettings = () => {
     button.classList.toggle("active", active);
     button.setAttribute("aria-pressed", String(active));
   });
-  elements.checkAnswered.disabled = state.settings.checkMode === "instant";
+  updateCheckAnsweredButton();
 };
 
 const questionTypeLabel = (format) => {
@@ -576,6 +557,10 @@ const setAnswer = (question, answer, { render = false } = {}) => {
   }
   state.answers[question.id] = answer;
   delete state.feedback[question.id];
+  if (state.official[question.id]) {
+    state.retryEditing.add(question.id);
+    elements.resultPanel.hidden = true;
+  }
   saveLocalState();
   renderNavigation();
   if (render) renderQuestion();
@@ -594,46 +579,17 @@ const correctAnswerLabel = (question) => {
   return "";
 };
 
-const gradeQuestion = (question, answer = state.answers[question.id]) => {
-  const max = Number(question.maxPoints || 1);
-  let score = 0;
-  if (["mcq", "situation", "dialogue", "listenChoice"].includes(question.format)) {
-    score = String(answer) === String(question.correct) ? 1 : 0;
-  } else if (question.format === "truefalse") {
-    score = answer === Boolean(question.correct) ? 1 : 0;
-  } else if (["typing", "translation", "listenType", "mistake"].includes(question.format)) {
-    const normalized = normalizeAnswerText(answer);
-    score = question.accepted.some((accepted) => normalizeAnswerText(accepted) === normalized) ? 1 : 0;
-  } else if (question.format === "order") {
-    const sentence = Array.isArray(answer)
-      ? answer.map((tokenIndex) => question.words[Number(tokenIndex)]).join(" ")
-      : "";
-    score = normalizeAnswerText(sentence) === normalizeAnswerText(question.correctWords.join(" ")) ? 1 : 0;
-  } else if (question.format === "matching") {
-    score = question.pairs.reduce((total, pair) => (
-      String(answer?.[pair.id] || "") === pair.jp ? total + 1 : total
-    ), 0);
-  } else if (question.format === "sorting") {
-    score = question.sortingItems.reduce((total, item) => (
-      String(answer?.[item.id] || "") === item.category ? total + 1 : total
-    ), 0);
-  } else if (question.format === "grid") {
-    score = String(answer) === String(question.correctCell) ? 1 : 0;
-  } else if (question.format === "speaking") {
-    score = answer?.matched || answer?.selfPractised ? 1 : 0;
-  }
-  return {
-    score,
-    max,
-    correct: score === max,
-    answer: structuredClone(answer),
-    checkedAt: new Date().toISOString(),
-  };
-};
+const gradeQuestion = (question, answer = state.answers[question.id]) => (
+  gradeQuestionAnswer(question, answer)
+);
 
 const checkQuestion = (question, { quiet = false } = {}) => {
-  if (!answerExists(question)) {
-    if (!quiet) showToast("Answer this question first.");
+  if (!answerReadyForCheck(question)) {
+    if (!quiet) {
+      showToast(answerExists(question)
+        ? t("Complete every part before checking.", "すべての項目に答えてから採点してください。")
+        : t("Answer this question first.", "先にこの問題に答えてください。"));
+    }
     return null;
   }
   const previousRunResult = state.runResults[question.id];
@@ -647,17 +603,15 @@ const checkQuestion = (question, { quiet = false } = {}) => {
     return { ...previousRunResult, skipped: true };
   }
   const result = gradeQuestion(question);
-  const firstAttempt = !state.official[question.id];
-  if (firstAttempt) {
-    state.official[question.id] = result;
-  } else {
-    const retries = Array.isArray(state.retryAttempts[question.id])
-      ? state.retryAttempts[question.id]
-      : [];
-    retries.push(result);
-    state.retryAttempts[question.id] = retries.slice(-20);
-  }
+  if (!result) return null;
+  const firstAttempt = preserveFirstResult(
+    state.official,
+    state.retryAttempts,
+    question.id,
+    result,
+  );
   state.feedback[question.id] = { ...result, isRetry: !firstAttempt };
+  state.retryEditing.delete(question.id);
   if (!state.runFirstResults[question.id]) state.runFirstResults[question.id] = result;
   state.runAnswerCounts[question.id] = Number(state.runAnswerCounts[question.id] || 0) + 1;
   state.runChecked.add(question.id);
@@ -695,6 +649,23 @@ const feedbackMessage = (question, result) => {
   return result.correct
     ? t("Correct — well done.", "正解です。よくできました。")
     : t("Not quite. Review the answer and try again.", "もう少しです。答えを確認して、もう一度挑戦しましょう。");
+};
+
+const prepareQuestionRetry = (question) => {
+  const keepEditableText = ["typing", "translation", "listenType", "mistake"].includes(
+    question.format,
+  );
+  if (!keepEditableText) delete state.answers[question.id];
+  state.retryEditing.add(question.id);
+  delete state.feedback[question.id];
+  elements.resultPanel.hidden = true;
+  saveLocalState();
+  renderQuestion();
+  const focusTarget = keepEditableText
+    ? elements.questionCard.querySelector("input, textarea")
+    : elements.questionCard.querySelector("button, select, input, textarea");
+  focusTarget?.focus();
+  if (keepEditableText && typeof focusTarget?.select === "function") focusTarget.select();
 };
 
 const renderTextAudioButton = (text, label = "Listen", language = "en", secondaryText = "") => {
@@ -907,6 +878,12 @@ const renderLessonGuide = async () => {
 };
 
 const renderFeedback = (question) => {
+  if (state.retryEditing.has(question.id)) {
+    elements.feedbackCard.hidden = true;
+    elements.feedbackCard.className = "feedback-card";
+    elements.feedbackCard.textContent = "";
+    return;
+  }
   const result = state.feedback[question.id] || state.official[question.id];
   if (!result) {
     elements.feedbackCard.hidden = true;
@@ -943,9 +920,13 @@ const renderFeedback = (question) => {
         ${renderTextAudioButton(explanationJa, t("Listen in Japanese", "日本語の解説を聞く"), "ja")}
       </div>
     ` : ""}
+    ${!result.correct ? `<button class="secondary-btn" data-retry-question="${escapeHTML(question.id)}" type="button">${escapeHTML(t("Try again", "もう一度挑戦"))}</button>` : ""}
   `;
   elements.feedbackCard.hidden = false;
   attachAudioHandlers(elements.feedbackCard);
+  elements.feedbackCard.querySelector("[data-retry-question]")?.addEventListener("click", () => {
+    prepareQuestionRetry(question);
+  });
 };
 
 const renderAudioPractice = (text, kind = "listen") => `
@@ -956,11 +937,14 @@ const renderAudioPractice = (text, kind = "listen") => `
 `;
 
 const renderChoiceQuestion = (question, selectedAnswer = state.answers[question.id]) => {
+  const hasSelection = selectedAnswer !== undefined
+    && selectedAnswer !== null
+    && String(selectedAnswer) !== "";
   return `
-    <div class="choice-list">
+    <div class="choice-list" role="radiogroup" aria-label="${escapeHTML(t("Answer choices", "回答の選択肢"))}">
       ${choiceOrder(question).map((choice, index) => `
         <div class="choice-audio-row">
-          <button class="choice-option ${String(selectedAnswer) === String(choice.id) ? "selected" : ""}" data-choice="${escapeHTML(choice.id)}" type="button">
+          <button class="choice-option ${String(selectedAnswer) === String(choice.id) ? "selected" : ""}" data-choice="${escapeHTML(choice.id)}" type="button" role="radio" aria-checked="${String(String(selectedAnswer) === String(choice.id))}" tabindex="${String(selectedAnswer) === String(choice.id) || (!hasSelection && index === 0) ? "0" : "-1"}">
             <span class="letter">${String.fromCharCode(65 + index)}</span>
             <span>${escapeHTML(choice.en)}${state.settings.showJapanese && state.settings.showChoiceTranslations && choice.jp ? `<small>${escapeHTML(choice.jp)}</small>` : ""}</span>
           </button>
@@ -1072,9 +1056,9 @@ const renderGridQuestion = (question) => {
     "bottom-left", "bottom-center", "bottom-right",
   ];
   return `
-    <div class="position-grid" aria-label="Position grid">
-      ${cells.map((cell) => `
-        <button class="${selected === cell ? "selected" : ""}" data-grid-cell="${cell}" type="button" aria-label="${cell.replace("-", " ")}"></button>
+    <div class="position-grid" role="radiogroup" aria-label="${escapeHTML(t("Position grid", "位置グリッド"))}">
+      ${cells.map((cell, index) => `
+        <button class="${selected === cell ? "selected" : ""}" data-grid-cell="${cell}" type="button" role="radio" aria-checked="${String(selected === cell)}" aria-label="${cell.replaceAll("-", " ")}" tabindex="${selected === cell || (!selected && index === 0) ? "0" : "-1"}"></button>
       `).join("")}
     </div>
   `;
@@ -1173,6 +1157,37 @@ const recordSpeakingActivity = (question, result, recognitionAvailable) => {
   }).catch(() => {});
 };
 
+const bindRovingRadioGroup = ({ groupSelector, radioSelector, dataKey, columns = 1 }) => {
+  const group = elements.questionCard.querySelector(groupSelector);
+  if (!group) return;
+  group.addEventListener("keydown", (event) => {
+    if (!["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"].includes(event.key)) return;
+    const radios = [...group.querySelectorAll(radioSelector)];
+    const current = event.target.closest(radioSelector);
+    const currentIndex = radios.indexOf(current);
+    if (currentIndex < 0 || !radios.length) return;
+    event.preventDefault();
+    event.stopPropagation();
+    let nextIndex;
+    if (event.key === "Home") nextIndex = 0;
+    else if (event.key === "End") nextIndex = radios.length - 1;
+    else {
+      const direction = ["ArrowRight", "ArrowDown"].includes(event.key) ? 1 : -1;
+      const distance = ["ArrowUp", "ArrowDown"].includes(event.key) ? columns : 1;
+      nextIndex = (currentIndex + (direction * distance) + radios.length) % radios.length;
+    }
+    const target = radios[nextIndex];
+    const value = target.dataset[dataKey];
+    target.click();
+    queueMicrotask(() => {
+      const nextGroup = elements.questionCard.querySelector(groupSelector);
+      [...(nextGroup?.querySelectorAll(radioSelector) || [])]
+        .find((radio) => radio.dataset[dataKey] === value)
+        ?.focus();
+    });
+  });
+};
+
 const attachQuestionHandlers = (question) => {
   attachAudioHandlers();
   elements.questionCard.querySelectorAll("[data-choice]").forEach((button) => {
@@ -1193,6 +1208,11 @@ const attachQuestionHandlers = (question) => {
         }).catch(() => {});
       }
     });
+  });
+  bindRovingRadioGroup({
+    groupSelector: ".choice-list[role='radiogroup']",
+    radioSelector: "[data-choice][role='radio']",
+    dataKey: "choice",
   });
   const typedInput = $("#typedAnswer");
   if (typedInput) {
@@ -1241,6 +1261,12 @@ const attachQuestionHandlers = (question) => {
       setAnswer(question, button.dataset.gridCell, { render: true });
       maybeInstantCheck(question, true);
     });
+  });
+  bindRovingRadioGroup({
+    groupSelector: ".position-grid[role='radiogroup']",
+    radioSelector: "[data-grid-cell][role='radio']",
+    dataKey: "gridCell",
+    columns: 3,
   });
   const speakingButton = $("#speakButton");
   if (speakingButton) {
@@ -1379,8 +1405,10 @@ const renderNavigation = () => {
     ].filter(Boolean).join(" ");
     const status = official
       ? (official.correct ? "correct" : "needs review")
-      : (answerExists(question) ? "answered, not checked" : "unanswered");
-    return `<button class="${classes}" data-question-index="${index}" type="button" aria-label="Question ${index + 1}, ${status}">${index + 1}</button>`;
+      : (answerReadyForCheck(question)
+        ? "answered, not checked"
+        : (answerExists(question) ? "partly answered" : "unanswered"));
+    return `<button class="${classes}" data-question-index="${index}" type="button" ${index === state.currentIndex ? 'aria-current="step"' : ""} aria-label="Question ${index + 1}, ${status}">${index + 1}</button>`;
   }).join("");
   elements.questionNav.querySelectorAll("[data-question-index]").forEach((button) => {
     button.addEventListener("click", () => {
@@ -1389,6 +1417,31 @@ const renderNavigation = () => {
       renderQuestion();
     });
   });
+  updateCheckAnsweredButton();
+};
+
+const pendingAnsweredQuestions = () => state.visibleQuestions.filter((question) => {
+  if (!answerReadyForCheck(question)) return false;
+  const previous = state.runResults[question.id];
+  return !(
+    state.runChecked.has(question.id)
+    && previous
+    && answersEqual(previous.answer, state.answers[question.id])
+  );
+});
+
+const updateCheckAnsweredButton = () => {
+  if (!elements.checkAnswered) return;
+  const count = pendingAnsweredQuestions().length;
+  elements.checkAnswered.textContent = t(
+    `Check ${count} answered`,
+    `回答済み ${count}問を採点`,
+  );
+  elements.checkAnswered.disabled = state.settings.checkMode === "instant" || count === 0;
+  elements.checkAnswered.setAttribute("aria-label", t(
+    `Check ${count} completed answer${count === 1 ? "" : "s"}`,
+    `回答済みの${count}問を採点`,
+  ));
 };
 
 const renderScore = () => {
@@ -1439,7 +1492,7 @@ const renderLockedQuestionTeasers = () => {
       ))}</p>
     </div>
     <div class="locked-question-grid">${cards}</div>
-    <a class="primary-btn" href="/plans">${escapeHTML(t("Compare plans", "プランを見る"))}</a>
+    <a class="primary-btn" href="/plans" target="_blank" rel="noopener">${escapeHTML(t("Compare plans", "プランを見る"))}</a>
   `;
   elements.lockedQuestionTeasers.hidden = false;
 };
@@ -1455,6 +1508,7 @@ const renderAll = () => {
 
 const runIsComplete = () => {
   if (!state.visibleQuestions.length) return false;
+  if (state.visibleQuestions.some((question) => state.retryEditing.has(question.id))) return false;
   if (state.requireRunChecks) {
     return state.visibleQuestions.every((question) => state.runChecked.has(question.id));
   }
@@ -1563,13 +1617,28 @@ const initialiseLesson = async () => {
     elements.lessonSummaryJa.textContent = lesson.summaryJa;
     elements.lessonSummaryJa.hidden = !state.settings.showJapanese;
     if (lesson.locked) {
+      const profileRequired = lesson.lockReason === "profile-required";
+      const lockTitle = profileRequired
+        ? t("Complete your learning profile", "学習プロフィールを完成してください")
+        : t("Unlock this complete lesson", "この完全版レッスンを開放")
+      const lockMessage = profileRequired
+        ? t(
+          "Finish the required profile fields once, then return to this lesson. Your verified sign-in email cannot be edited here.",
+          "必須プロフィール項目を一度入力してから、このレッスンに戻ってください。確認済みのログインメールはここでは変更できません。",
+        )
+        : t(
+          "Sign in and use an access code, or wait for the teacher to approve your membership period.",
+          "ログイン後、アクセスコードを入力するか、先生による利用期間の承認をお待ちください。",
+        );
+      const lockAction = profileRequired
+        ? t("Complete profile", "プロフィールを入力")
+        : t("Open account", "アカウントを開く");
       elements.questionCard.innerHTML = `
         <div class="membership-lock-card">
           <span aria-hidden="true">🔒</span>
-          <h2>Unlock this complete lesson</h2>
-          <p>Sign in and use an access code, or wait for the teacher to approve your membership period.</p>
-          <p class="jp" lang="ja">ログイン後、アクセスコードを入力するか、先生による利用期間の承認をお待ちください。</p>
-          <a class="primary-btn" href="/#account">Open account / アカウントを開く</a>
+          <h2>${escapeHTML(lockTitle)}</h2>
+          <p>${escapeHTML(lockMessage)}</p>
+          <a class="primary-btn" href="/#account">${escapeHTML(lockAction)}</a>
         </div>
       `;
       elements.questionNav.innerHTML = "";
@@ -1581,6 +1650,7 @@ const initialiseLesson = async () => {
       elements.questionTypeFilter.disabled = true;
       elements.shuffleQuestions.disabled = true;
       elements.premiumTasksPanel.hidden = true;
+      renderLockedQuestionTeasers();
       return;
     }
     if (!state.masterQuestions.length) throw new Error("This lesson does not have readable practice questions yet.");
@@ -1662,14 +1732,13 @@ elements.languageToggle.addEventListener("change", () => {
   renderLessonGuide();
   renderQuestion();
 });
+elements.themeToggle?.addEventListener("change", () => {
+  persistSettings({ theme: elements.themeToggle.value });
+});
 elements.soundToggle.addEventListener("click", () => {
   const sound = !state.settings.sound;
   if (!sound) stopAudio();
   persistSettings({ sound });
-});
-elements.vibrationToggle.addEventListener("click", () => {
-  if (!vibrationSupported()) return;
-  persistSettings({ vibration: !state.settings.vibration });
 });
 elements.voiceSelect.addEventListener("change", () => {
   stopAudio();
@@ -1726,25 +1795,38 @@ elements.checkQuestion.addEventListener("click", () => {
   if (question) checkQuestion(question);
 });
 elements.checkAnswered.addEventListener("click", () => {
-  let answered = 0;
+  let partial = 0;
   let checked = 0;
   const checkedResults = [];
   state.visibleQuestions.forEach((question) => {
-    if (answerExists(question)) {
-      answered += 1;
+    if (answerReadyForCheck(question)) {
       const result = checkQuestion(question, { quiet: true });
       if (result && !result.skipped) {
         checked += 1;
         checkedResults.push(result);
       }
+    } else if (answerExists(question)) {
+      partial += 1;
     }
   });
-  if (!answered) showToast("Answer at least one question first.");
-  else if (!checked) showToast("All unchanged answers are already checked.");
+  if (!checked && partial) {
+    showToast(t(
+      "Complete every part of the unfinished answer before checking.",
+      "未完成の回答は、すべての項目に答えてから採点してください。",
+    ));
+  } else if (!checked) {
+    showToast(t(
+      "All completed answers are already checked.",
+      "回答済みの問題はすべて採点済みです。",
+    ));
+  }
   else {
     provideAnswerFeedback(checkedResults.every((result) => result.correct));
     renderQuestion();
-    showToast(`Checked ${checked} answered question${checked === 1 ? "" : "s"}.`);
+    showToast(t(
+      `Checked ${checked} answered question${checked === 1 ? "" : "s"}.`,
+      `回答済みの${checked}問を採点しました。`,
+    ));
   }
 });
 elements.previousQuestion.addEventListener("click", () => {
@@ -1769,11 +1851,12 @@ elements.retryButtons.forEach((button) => {
   });
 });
 window.addEventListener("keydown", (event) => {
-  const tag = document.activeElement?.tagName;
-  if (["INPUT", "SELECT", "TEXTAREA"].includes(tag)) return;
+  if (event.defaultPrevented) return;
+  if (![document.body, document.documentElement].includes(document.activeElement)) return;
   if (event.key === "ArrowLeft") elements.previousQuestion.click();
   if (event.key === "ArrowRight") elements.nextQuestion.click();
 });
 
 installPlayfulInteractions();
+watchSystemTheme(() => applyThemePreference(state.settings.theme));
 initialiseLesson();

@@ -1,10 +1,109 @@
 import { SUPABASE_ANON_KEY, SUPABASE_URL } from "./config.js";
-import { normalizePlanKey, planMeetsRequirement } from "./plans.js";
+import { normalizePlanKey, planFor, planMeetsRequirement } from "./plans.js";
 
 let studentClient;
 let teacherClient;
 const userSettingsWriteQueues = new Map();
 const AUTH_OPERATION_TIMEOUT_MS = 15000;
+const STUDENT_AUTH_STORAGE_KEY = "te-review-hub-student-auth";
+const TEACHER_AUTH_STORAGE_KEY = "te-review-hub-teacher-auth";
+const TEACHER_PREVIEW_PLANS = new Set(["free", "standard", "premium", "premium_plus"]);
+const REVIEW_PROFILE_REQUIRED_FIELDS = Object.freeze([
+  "first_name",
+  "last_name",
+  "age_group",
+  "native_language",
+  "english_level",
+]);
+const PREMIUM_RECORDING_EXTENSIONS = new Set(["webm", "m4a", "ogg", "mp3"]);
+const UUID_SEGMENT_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const OBJECT_ID_PATTERN = /^[A-Za-z0-9-]+$/;
+const teacherPreviewTasksByLesson = new Map();
+let teacherPreviewMutationObserver;
+
+export const reviewProfileIsComplete = (profile) => (
+  Boolean(profile)
+  && REVIEW_PROFILE_REQUIRED_FIELDS.every((field) => String(profile[field] || "").trim())
+);
+
+export function premiumRecordingObjectPath({ userId, taskId, objectId, extension }) {
+  const safeUserId = String(userId || "").trim();
+  const safeTaskId = String(taskId || "").trim();
+  const safeObjectId = String(objectId || "").trim();
+  const safeExtension = String(extension || "").trim().toLowerCase();
+  if (!UUID_SEGMENT_PATTERN.test(safeUserId) || !UUID_SEGMENT_PATTERN.test(safeTaskId)) {
+    throw new Error("A valid learner and speaking task are required for this recording.");
+  }
+  if (!OBJECT_ID_PATTERN.test(safeObjectId)) {
+    throw new Error("The recording object identifier is invalid.");
+  }
+  if (!PREMIUM_RECORDING_EXTENSIONS.has(safeExtension)) {
+    throw new Error("The recording file type is not supported.");
+  }
+  return `${safeUserId}/${safeTaskId}/${safeObjectId}.${safeExtension}`;
+}
+
+const teacherPreviewPlanFromLocation = () => {
+  if (typeof window === "undefined") return null;
+  const params = new URLSearchParams(window.location.search);
+  if (params.get("preview") !== "1") return null;
+  const requested = String(params.get("previewPlan") || "premium_plus").toLowerCase();
+  return TEACHER_PREVIEW_PLANS.has(requested) ? requested : "premium_plus";
+};
+
+const installTeacherPlanPreviewBanner = (planKey, publicationStatus = "published") => {
+  if (typeof document === "undefined") return;
+  const existing = document.querySelector("#teacherPlanPreviewBanner");
+  if (existing) existing.remove();
+  const banner = document.createElement("aside");
+  banner.id = "teacherPlanPreviewBanner";
+  banner.setAttribute("role", "status");
+  banner.setAttribute("aria-live", "polite");
+  banner.style.cssText = [
+    "position:relative",
+    "z-index:20",
+    "max-width:1120px",
+    "margin:18px auto",
+    "padding:14px 18px",
+    "border:2px solid #7c3aed",
+    "border-radius:16px",
+    "background:#f3e8ff",
+    "color:#35105f",
+    "box-shadow:0 10px 28px rgba(76,29,149,.16)",
+    "font:700 15px/1.45 system-ui,sans-serif",
+  ].join(";");
+  const label = planFor(planKey).name;
+  const statusNote = publicationStatus === "published"
+    ? ""
+    : ` · ${String(publicationStatus).toUpperCase()} CONTENT`;
+  banner.append(document.createTextNode(`Teacher preview: ${label} learner${statusNote} · 教師プレビュー（${label}） — `));
+  const note = document.createElement("span");
+  note.style.fontWeight = "500";
+  note.textContent = "This view does not grant or change learner access, progress or submissions. Interactive submission controls are disabled. ";
+  banner.append(note);
+  const back = document.createElement("a");
+  back.href = "/teacher.html";
+  back.textContent = "Return to Teacher Studio";
+  back.style.cssText = "color:inherit;text-decoration:underline;font-weight:800";
+  banner.append(back);
+  const target = document.querySelector(".lesson-banner, #quizMain, main");
+  if (target?.parentNode) target.parentNode.insertBefore(banner, target);
+  else document.body.prepend(banner);
+
+  const disableSubmissionControls = () => {
+    document.querySelectorAll(
+      "#premiumTasksPanel textarea, #premiumTasksPanel .premium-task-actions button, #premiumTasksPanel .premium-recorder button",
+    ).forEach((control) => {
+      control.disabled = true;
+      control.setAttribute("aria-disabled", "true");
+      control.title = "Disabled in teacher plan preview";
+    });
+  };
+  teacherPreviewMutationObserver?.disconnect();
+  disableSubmissionControls();
+  teacherPreviewMutationObserver = new MutationObserver(disableSubmissionControls);
+  teacherPreviewMutationObserver.observe(document.body, { childList: true, subtree: true });
+};
 
 const withOperationTimeout = async (
   operation,
@@ -60,12 +159,12 @@ const createBrowserClient = (storageKey) => {
 };
 
 export function getStudentClient() {
-  if (!studentClient) studentClient = createBrowserClient("te-review-hub-student-auth");
+  if (!studentClient) studentClient = createBrowserClient(STUDENT_AUTH_STORAGE_KEY);
   return studentClient;
 }
 
 export function getTeacherClient() {
-  if (!teacherClient) teacherClient = createBrowserClient("te-review-hub-teacher-auth");
+  if (!teacherClient) teacherClient = createBrowserClient(TEACHER_AUTH_STORAGE_KEY);
   return teacherClient;
 }
 
@@ -278,6 +377,23 @@ export async function hasStudentAccess(scope = "general") {
 }
 
 export async function fetchPremiumLessonTasks(databaseLessonId) {
+  const previewPlan = teacherPreviewPlanFromLocation();
+  if (previewPlan) {
+    const session = await getTeacherSession();
+    const cached = teacherPreviewTasksByLesson.get(String(databaseLessonId || "")) || [];
+    return {
+      plan: previewPlan,
+      // The preview RPC already removed task payloads below Premium. Premium
+      // previews may render cards, but mutating controls remain disabled by the
+      // preview-aware learner component.
+      tasks: planMeetsRequirement(previewPlan, "premium") ? cached : [],
+      submissions: [],
+      feedback: [],
+      signedIn: Boolean(session?.user),
+      teacherPreview: true,
+      error: session?.user ? null : new Error("Teacher sign-in is required for plan preview."),
+    };
+  }
   const client = getStudentClient();
   const session = await getStudentSession();
   if (!client || !session?.user || !databaseLessonId) {
@@ -321,6 +437,9 @@ const nextPremiumAttempt = (submissions, taskId) => (
 );
 
 export async function savePremiumTextSubmission({ taskId, textResponse, submit = false, knownSubmissions = [] }) {
+  if (teacherPreviewPlanFromLocation()) {
+    return { data: null, error: new Error("Submissions are disabled in teacher plan preview.") };
+  }
   const client = getStudentClient();
   const session = await getStudentSession();
   if (!client || !session?.user) return { data: null, error: new Error("Sign in before saving a Premium submission.") };
@@ -343,6 +462,9 @@ export async function savePremiumTextSubmission({ taskId, textResponse, submit =
 }
 
 export async function submitPremiumRecording({ taskId, recording, durationSeconds, knownSubmissions = [] }) {
+  if (teacherPreviewPlanFromLocation()) {
+    return { data: null, error: new Error("Recordings are disabled in teacher plan preview.") };
+  }
   const client = getStudentClient();
   const session = await getStudentSession();
   if (!client || !session?.user) return { data: null, error: new Error("Sign in before submitting a recording.") };
@@ -358,7 +480,17 @@ export async function submitPremiumRecording({ taskId, recording, durationSecond
     "audio/ogg": "ogg",
     "audio/mpeg": "mp3",
   }[contentType] || "webm";
-  const objectName = `${session.user.id}/${taskId}/${globalThis.crypto?.randomUUID?.() || Date.now()}.${extension}`;
+  let objectName;
+  try {
+    objectName = premiumRecordingObjectPath({
+      userId: session.user.id,
+      taskId,
+      objectId: globalThis.crypto?.randomUUID?.() || Date.now(),
+      extension,
+    });
+  } catch (error) {
+    return { data: null, error };
+  }
   const { error: uploadError } = await client.storage.from("review-premium-recordings").upload(objectName, recording, {
     cacheControl: "3600",
     contentType,
@@ -425,7 +557,7 @@ const invokeMembershipAccess = async (client, body) => {
     return { data: payload, error: null };
   } catch (error) {
     const message = error?.name === "AbortError"
-      ? "The code check took too long. Nothing was changed; please try once more."
+      ? "The membership request took too long, so its result could not be confirmed. Refresh and check the current membership or code list before trying again."
       : "The membership service could not be reached. Please check your connection and try again.";
     return { data: null, error: new Error(message) };
   } finally {
@@ -498,6 +630,30 @@ export async function getTeacherLearnerAuthStatus(learnerId) {
   return invokeMembershipAccess(getTeacherClient(), { action: "learner-auth-status", learnerId });
 }
 
+export async function saveTeacherSubmissionReview({
+  submissionId,
+  action,
+  score = null,
+  feedbackEn = null,
+  feedbackJa = null,
+}) {
+  const client = getTeacherClient();
+  const session = await getTeacherSession();
+  if (!client || !session?.user) {
+    return { data: null, error: new Error("Teacher sign-in is required to review a submission.") };
+  }
+  return client.rpc("review_save_submission_review", {
+    target_submission: String(submissionId || ""),
+    review_action: String(action || ""),
+    review_score: score === "" || score === null || score === undefined ? null : Number(score),
+    review_feedback_en: String(feedbackEn || "").trim() || null,
+    review_feedback_ja: String(feedbackJa || "").trim() || null,
+    // Compatibility parameter for the existing database signature. New
+    // Teacher Studio reviews never create AI-assisted feedback.
+    review_ai_assisted: false,
+  });
+}
+
 export async function signInTeacher(email, password) {
   const client = getTeacherClient();
   if (!client) return { data: null, error: new Error("Teacher sign-in is not available right now.") };
@@ -537,14 +693,26 @@ export async function signInTeacherWithGoogle() {
 export async function signOutStudent() {
   const client = getStudentClient();
   if (!client) return { error: null };
-  const result = await client.auth.signOut({ scope: "local" });
+  let result;
+  try {
+    result = await withOperationTimeout(
+      client.auth.signOut({ scope: "local" }),
+      "Student sign-out took too long. The local session was cleared; refresh before signing in again.",
+    );
+  } catch (error) {
+    result = { error };
+  }
   // A stale or expired server session must not leave the browser looking
   // signed in. Supabase keeps this session in the named student storage key.
   try {
-    window.localStorage.removeItem("te-review-hub-student-auth");
+    window.localStorage.removeItem(STUDENT_AUTH_STORAGE_KEY);
   } catch {
     // Storage can be unavailable in strict privacy mode.
   }
+  // The hub performs a hard navigation after this cleanup. Dropping the
+  // reference prevents a timed-out SDK request from leaving an authenticated
+  // in-memory client attached to the visible signed-out page.
+  studentClient = undefined;
   if (result?.error && /session.*missing|auth session/i.test(String(result.error.message || ""))) {
     return { error: null };
   }
@@ -553,7 +721,29 @@ export async function signOutStudent() {
 
 export async function signOutTeacher() {
   const client = getTeacherClient();
-  return client ? client.auth.signOut() : { error: null };
+  if (!client) return { error: null };
+  let result;
+  try {
+    result = await withOperationTimeout(
+      client.auth.signOut({ scope: "local" }),
+      "Teacher sign-out took too long. The local session was cleared; refresh before signing in again.",
+    );
+  } catch (error) {
+    result = { error };
+  }
+  try {
+    window.localStorage.removeItem(TEACHER_AUTH_STORAGE_KEY);
+  } catch {
+    // Storage can be unavailable in strict privacy mode.
+  }
+  // Discard this module's client reference too. The Teacher Studio caller
+  // performs a hard navigation after cleanup so a timed-out SDK call cannot
+  // leave an authenticated in-memory client attached to the visible login UI.
+  teacherClient = undefined;
+  if (result?.error && /session.*missing|auth session/i.test(String(result.error.message || ""))) {
+    return { error: null };
+  }
+  return result;
 }
 
 const resolveLessonRecord = async (client, lessonSlug) => {
@@ -684,12 +874,77 @@ export async function fetchDatabaseLesson(lessonSlug, { preview = false } = {}) 
   const client = preview ? getTeacherClient() : getStudentClient();
   if (!client) return { lesson: null, reason: "client-unavailable" };
   let authenticated = false;
+  let profileIncomplete = false;
   if (preview) {
     const session = await getTeacherSession();
     if (!session?.user) return { lesson: null, reason: "teacher-sign-in-required" };
     authenticated = true;
+
+    const previewPlan = teacherPreviewPlanFromLocation() || "premium_plus";
+    const { data: previewData, error: previewError } = await client.rpc(
+      "review_teacher_preview_lesson",
+      { lesson_slug: slug, preview_plan: previewPlan },
+    );
+    if (previewError) {
+      return { lesson: null, reason: "teacher-preview-query-failed", error: previewError };
+    }
+    const previewLesson = previewData?.lesson;
+    if (!previewLesson?.id) return { lesson: null, reason: "lesson-not-readable" };
+    const content = previewLesson.content
+      && typeof previewLesson.content === "object"
+      && !Array.isArray(previewLesson.content)
+      ? previewLesson.content
+      : {};
+    teacherPreviewTasksByLesson.set(
+      String(previewLesson.id),
+      Array.isArray(previewData?.premium_tasks) ? previewData.premium_tasks : [],
+    );
+    installTeacherPlanPreviewBanner(previewPlan, previewData?.publication_status);
+    return {
+      lesson: {
+        id: previewLesson.slug,
+        databaseLessonId: previewLesson.id,
+        lessonDate: previewLesson.lesson_date,
+        title: previewLesson.title_en,
+        titleJa: previewLesson.title_ja || "",
+        summary: previewLesson.summary_en || "",
+        summaryJa: previewLesson.summary_ja || "",
+        status: previewLesson.status,
+        audience: previewLesson.audience,
+        sourceType: previewLesson.source_type || "database",
+        contentVersion: previewLesson.content_version,
+        themes: Array.isArray(content.themes) ? content.themes : [],
+        phrases: Array.isArray(content.phrases) ? content.phrases : [],
+        categoryLabels: content.categoryLabels && typeof content.categoryLabels === "object"
+          ? content.categoryLabels
+          : {},
+        questions: Array.isArray(previewData?.questions)
+          ? previewData.questions.map(databaseQuestion)
+          : [],
+        lockedQuestions: Array.isArray(previewData?.locked_questions)
+          ? previewData.locked_questions.map((question) => ({
+            id: String(question.id || ""),
+            position: Number(question.position || 0),
+            section: String(question.section || ""),
+            format: String(question.format || "mcq"),
+            requiredPlan: String(question.required_plan || "standard"),
+          }))
+          : [],
+        isPreview: previewLesson.is_preview === true,
+        locked: previewData?.lesson_accessible === false,
+        teacherPreview: true,
+        previewPlan,
+      },
+      reason: null,
+    };
   } else {
     authenticated = Boolean((await getStudentSession())?.user);
+    if (authenticated) {
+      const { data: complete, error: profileGateError } = await client.rpc(
+        "review_profile_is_complete",
+      );
+      profileIncomplete = !profileGateError && complete === false;
+    }
   }
 
   let hasAccess = false;
@@ -769,6 +1024,9 @@ export async function fetchDatabaseLesson(lessonSlug, { preview = false } = {}) 
       })) : [],
       isPreview: lesson.is_preview === true,
       locked: !hasAccess && lesson.is_preview !== true,
+      lockReason: hasAccess
+        ? null
+        : (profileIncomplete ? "profile-required" : "membership-required"),
     },
     reason: null,
   };

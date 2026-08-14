@@ -19,6 +19,14 @@ const clean = (value) => String(value ?? "").replace(/\s+/g, " ").trim();
 const comparable = (value) => clean(value).toLocaleLowerCase("en").replace(/[‘’'“”".,!?;:()]/g, "");
 const unique = (values) => new Set(values).size === values.length;
 const escapeCell = (value) => clean(value).replaceAll("|", "\\|");
+const knownAmbiguousVisualChoices = new Map([
+  ["june-29-extra-visual-1", ["I heard about it yesterday."]],
+  ["june-30-extra-visual-1", ["The noise is annoying."]],
+  ["july-05-extra-visual-3", ["I’m not sure yet."]],
+  ["july-11-draft-visual-3", ["I’m staying at my parents’ house."]],
+  ["july-13-draft-visual-1", ["No one usually calls me at this time."]],
+  ["july-22-draft-visual-3", ["Either is fine."]],
+]);
 const visualTargetByAsset = new Map(manifest.questions.map((entry) => {
   const lesson = drafts.find((candidate) => candidate.id === entry.lessonId);
   const phrases = lesson?.phrases || legacyPhrases[entry.lessonId];
@@ -142,6 +150,48 @@ function validateQuestion(lessonId, question, index) {
     if (manifestEntry && clean(manifestEntry.imageAlt) !== clean(question.imageAlt)) {
       fail(lessonId, id, "question alt text differs from the approved visual brief");
     }
+    const reviewed = manifestEntry?.reviewedGuidance;
+    if (!reviewed) {
+      fail(lessonId, id, "visual has no individually reviewed guidance record");
+    } else {
+      for (const field of ["hintEn", "hintJa", "evidenceEn", "evidenceJa"]) {
+        if (!clean(reviewed[field])) fail(lessonId, id, `reviewed guidance is missing ${field}`);
+      }
+      if (clean(hint.en) !== clean(reviewed.hintEn) || clean(hint.jp) !== clean(reviewed.hintJa)) {
+        fail(lessonId, id, "generated hints differ from the individually reviewed bilingual hints");
+      }
+      if (!clean(explanation.en).includes(clean(reviewed.evidenceEn))) {
+        fail(lessonId, id, "English explanation omits the question-specific visual evidence");
+      }
+      if (!clean(explanation.jp).includes(clean(reviewed.evidenceJa))) {
+        fail(lessonId, id, "Japanese explanation omits the question-specific visual evidence");
+      }
+      const reviewedReasons = Array.isArray(reviewed.reasons) ? reviewed.reasons : [];
+      const distractorChoices = (question.choices || [])
+        .filter((choice) => clean(choice?.id) !== clean(question.correct));
+      if (reviewedReasons.length !== distractorChoices.length || reviewedReasons.length !== 3) {
+        fail(lessonId, id, "visual does not have exactly one reviewed reason for each of its three distractors");
+      }
+      if (!unique(reviewedReasons.map((reason) => clean(reason?.choice)))) {
+        fail(lessonId, id, "reviewed distractor reason choices are duplicated");
+      }
+      for (const distractor of distractorChoices) {
+        const reason = reviewedReasons.find((candidate) => clean(candidate?.choice) === clean(distractor?.en));
+        if (!reason) {
+          fail(lessonId, id, `no reviewed reason is keyed to distractor “${clean(distractor?.en)}”`);
+          continue;
+        }
+        if (!clean(reason.en) || !clean(reason.ja)) {
+          fail(lessonId, id, `reviewed reason for “${clean(distractor?.en)}” is not bilingual`);
+        }
+        if (!clean(explanation.en).includes(clean(reason.en))) {
+          fail(lessonId, id, `English explanation omits the specific conflict for “${clean(distractor?.en)}”`);
+        }
+        if (!clean(explanation.jp).includes(clean(reason.ja))) {
+          fail(lessonId, id, `Japanese explanation omits the specific conflict for “${clean(distractor?.en)}”`);
+        }
+      }
+    }
     const visualTarget = visualTargetByAsset.get(asset);
     const correctChoice = Array.isArray(question.choices)
       ? question.choices.find((choice) => clean(choice?.id) === clean(question.correct))
@@ -157,10 +207,30 @@ function validateQuestion(lessonId, question, index) {
       }
       if (
         !comparable(explanation.en).includes(comparable(visualTarget.phrase.en))
-        || !comparable(explanation.jp).includes(comparable(visualTarget.phrase.jp))
+        || !explanation.jp.includes(clean(visualTarget.phrase.en))
       ) {
-        fail(lessonId, id, "visual explanation does not identify the matching model answer in both languages");
+        fail(lessonId, id, "visual explanation does not identify the matching English model answer in both language fields");
       }
+    }
+    if (hint.en.includes(visualTarget?.phrase?.en || "__missing_target__") || hint.jp.includes(visualTarget?.phrase?.jp || "__missing_target__")) {
+      fail(lessonId, id, "visual hint reveals the model answer verbatim");
+    }
+    const ambiguousChoices = knownAmbiguousVisualChoices.get(id) || [];
+    if (ambiguousChoices.some((text) => question.choices?.some((choice) => comparable(choice?.en) === comparable(text)))) {
+      fail(lessonId, id, "visual retains a known semantically ambiguous distractor");
+    }
+    const distractorChoices = (question.choices || []).filter((choice) => clean(choice?.id) !== clean(question.correct));
+    if (!distractorChoices.every((choice) => explanation.en.includes(clean(choice?.en)) && explanation.jp.includes(clean(choice?.en)))) {
+      fail(lessonId, id, "visual explanation does not discuss every distractor individually in both languages");
+    }
+    if (
+      /does not match the illustrated action or situation/i.test(explanation.en)
+      || explanation.jp.includes("画像に描かれた中心場面とは異なります")
+    ) {
+      fail(lessonId, id, "visual explanation still uses the retired generic distractor rationale");
+    }
+    if (/illustration shows (?:an? |the )[^,.!?]{0,60}\b(?:orders|accepts|asks|chooses|recognizes|hears|selects|looks|faces|leaves|notices|waits|pauses|changes|arrives|buys|discovers|realizes|eats|holds|plans|wishes|spills|pours|splashes|learns|performs)\b/i.test(explanation.en)) {
+      fail(lessonId, id, "English explanation contains the known ‘shows a customer orders’ grammar pattern");
     }
   }
 
@@ -205,6 +275,23 @@ for (const lesson of lessons) {
 if (rows.length !== 616) errors.push(`Expected 616 activities; found ${rows.length}.`);
 if (!unique(rows.map((row) => row.id))) errors.push("Question IDs are not unique across all lessons.");
 if (manifest.questions.length !== 85) errors.push(`Expected 85 visual briefs; found ${manifest.questions.length}.`);
+const manifestLessonCounts = new Map();
+for (const entry of manifest.questions) {
+  manifestLessonCounts.set(entry.lessonId, (manifestLessonCounts.get(entry.lessonId) || 0) + 1);
+}
+if (manifestLessonCounts.size !== 17 || [...manifestLessonCounts.values()].some((count) => count !== 5)) {
+  errors.push("Visual manifest must contain exactly five briefs for each of the 17 lessons.");
+}
+if (!unique(manifest.questions.map((entry) => clean(entry.asset)))) errors.push("Visual manifest asset paths are not unique.");
+if (!unique(manifest.questions.map((entry) => clean(entry.reviewedGuidance?.hintEn)))) {
+  errors.push("Reviewed English visual hints must be question-specific and unique across all 85 visuals.");
+}
+if (!unique(manifest.questions.map((entry) => clean(entry.reviewedGuidance?.hintJa)))) {
+  errors.push("Reviewed Japanese visual hints must be question-specific and unique across all 85 visuals.");
+}
+if (!unique(rows.filter((row) => row.mediaStatus !== "not required").map((row) => row.id))) {
+  errors.push("Visual question IDs are not unique.");
+}
 if (!visualQa.allManifestAssetsChecked || visualQa.manifestAssetCount !== manifest.questions.length) {
   errors.push("Human visual QA record does not cover the current manifest.");
 }
@@ -230,10 +317,14 @@ const report = [
   "",
   "## Corrections made in this audit",
   "",
+  "- Re-inspected all 85 WebP illustrations in lesson contact sheets, with original-resolution follow-up for ambiguous scenes, and compared each asset with its manifest brief and actual question data.",
+  "- Wrote 85 unique English hints and 85 unique Japanese hints item by item. Each hint points to scene-specific evidence without repeating either model answer.",
+  "- Added one bilingual correct-evidence statement and three bilingual, choice-keyed conflict reasons to every visual manifest entry: 85 evidence pairs and 255 distractor-reason pairs in total.",
+  "- Rebuilt all 85 explanations as natural standalone sentences that identify the correct model and explain the concrete visual conflict for every displayed distractor in both languages.",
   `- ${legacyTypingIds.length} legacy typing activities had only a Japanese prompt. Added an explicit English instruction and retained the Japanese target: ${legacyTypingIds.join(", ")}.`,
   `- ${legacyMatchingIds.length} legacy matching activities lacked a learning explanation. Added a bilingual explanation of one-to-one whole-meaning matching: ${legacyMatchingIds.join(", ")}.`,
-  "- Replaced generic generated hints/explanations across all 473 generated activities (132 legacy additions + 341 expanded activities) with format-specific bilingual guidance that states the model answer and why it fits.",
-  `- Corrected ${customVisuals.length} potentially ambiguous visual choice sets by selecting semantically distinct distractors: ${customVisuals.map((item) => `${item.lessonId}-visual-${item.slot}`).join(", ")}.`,
+  "- Replaced generic generated hints/explanations across all 473 generated activities (132 legacy additions + 341 expanded activities) with format-specific bilingual guidance; explanations state the model answer and why it fits, while visual hints guide without revealing it.",
+  `- ${customVisuals.length} visual choice sets now use explicitly selected, semantically distinct distractors: ${customVisuals.map((item) => `${item.lessonId}-visual-${item.slot}`).join(", ")}.`,
   `- Visual corrections and additions documented in scripts/visual-human-qa.json: ${visualQa.findings.map((finding) => `${finding.questionId || finding.questionIds} — ${finding.fix}`).join(" ")}`,
   "- Changed runtime behavior so each new practice run shuffles both question order and choice order automatically; a resumed run retains its saved order.",
   "",

@@ -4,18 +4,26 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="description" content="Useful English phrase library with US and UK audio and speaking practice.">
+  <meta name="theme-color" content="#0b2234">
   <title>English Phrase Library</title>
+  <link rel="manifest" href="/manifest.webmanifest">
+  <script>try{const p=JSON.parse(localStorage.getItem("te-review-hub:theme:v1")||"\"system\"");const d=p==="dark"||(p==="system"&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.dataset.themePreference=["system","light","dark"].includes(p)?p:"system";document.documentElement.dataset.theme=d?"dark":"light";document.documentElement.style.colorScheme=d?"dark":"light"}catch{}</script>
   <link rel="stylesheet" href="/src/styles.css">
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/app-icon-192.png">
 </head>
 <body data-page="phrases">
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header">
-    <a class="brand" href="/"><img class="brand-logo" src="/assets/tahmid-english-club-logo.png" alt="Tahmid English Club logo"><span><strong>Phrase &amp; Vocabulary Library</strong><small>Tahmid English Club · 使える英語</small></span></a>
-    <nav class="header-actions" aria-label="Site settings">
+    <a class="brand phrase-return-link" id="phraseBackLink" href="/"><img class="brand-logo" src="/assets/app-icon-192.png" alt="Tahmid English Club logo" width="50" height="50"><span><strong>Phrase &amp; Vocabulary Library</strong><small>Tahmid English Club · 使える英語</small></span></a>
+    <nav class="header-actions" id="siteSettings" aria-label="Site settings">
+      <button class="quiet-btn mobile-settings-toggle" id="mobileSettingsToggle" type="button" aria-expanded="false" aria-controls="siteSettingsControls" data-ui-en="Settings" data-ui-ja="設定">Settings / 設定</button>
+      <span class="header-settings-controls" id="siteSettingsControls">
       <label class="voice-select"><span data-ui-en="Language" data-ui-ja="表示">Language / 表示</span><select id="languageToggle"><option value="en">English</option><option value="bilingual">English + 日本語</option><option value="ja">日本語UI</option></select></label>
       <button class="quiet-btn" id="soundToggle" type="button" data-ui-en="Sound On" data-ui-ja="音声オン">Sound On / 音声オン</button>
       <label class="voice-select"><span data-ui-en="Speaking accent" data-ui-ja="英語音声">Speaking accent / 英語音声</span><select id="voiceSelect" aria-label="Accent for speaking practice"><option value="us">US · Ava</option><option value="gb">UK · Libby</option></select></label>
       <label class="voice-select"><span data-ui-en="Speed" data-ui-ja="速さ">Speed / 速さ</span><select id="playbackRate"><option value="0.5">0.5×</option><option value="1">1×</option><option value="1.5">1.5×</option></select></label>
+      <label class="voice-select"><span data-ui-en="Theme" data-ui-ja="外観">Theme / 外観</span><select id="themeToggle"><option value="system">System / 端末設定</option><option value="light">Light / ライト</option><option value="dark">Dark / ダーク</option></select></label>
+      </span>
     </nav>
   </header>
   <main class="section shell" id="main">
@@ -24,16 +32,19 @@
       <label class="search-box"><span data-ui-en="Search" data-ui-ja="検索">Search</span><input id="phraseSearch" type="search" data-placeholder-en="Search English or Japanese" data-placeholder-ja="英語または日本語で検索" placeholder="Search English or Japanese"></label>
     </div>
     <div class="library-tabs" role="tablist" aria-label="Library type">
-      <button class="active" data-library-kind="phrase" type="button" data-ui-en="Phrases" data-ui-ja="フレーズ">Phrases / フレーズ</button>
-      <button data-library-kind="word" type="button" data-ui-en="Vocabulary" data-ui-ja="単語">Vocabulary / 単語</button>
+      <button class="active" data-library-kind="phrase" type="button" role="tab" aria-selected="true" aria-controls="phraseGrid" tabindex="0" data-ui-en="Phrases" data-ui-ja="フレーズ">Phrases / フレーズ</button>
+      <button data-library-kind="word" type="button" role="tab" aria-selected="false" aria-controls="phraseGrid" tabindex="-1" data-ui-en="Vocabulary" data-ui-ja="単語">Vocabulary / 単語</button>
+      <button data-library-kind="pattern" type="button" role="tab" aria-selected="false" aria-controls="phraseGrid" tabindex="-1" data-ui-en="Sentence Patterns" data-ui-ja="文型パターン">Sentence Patterns / 文型パターン</button>
     </div>
     <div class="filter-row phrase-filters" id="phraseFilters" role="group" aria-label="Phrase category filters"></div>
     <p class="sr-only" id="phraseResults" role="status" aria-live="polite"></p>
-    <div class="phrase-grid" id="phraseGrid" aria-describedby="phraseResults"></div>
+    <div class="phrase-grid" id="phraseGrid" role="tabpanel" aria-describedby="phraseResults"></div>
+    <div class="phrase-load-more" id="phraseLoadMoreArea" hidden><button class="secondary-btn" id="phraseLoadMore" type="button" data-ui-en="Load more" data-ui-ja="さらに表示">Load more / さらに表示</button><p class="phrase-load-more-status" id="phraseLoadMoreStatus"></p></div>
   </main>
-  <footer class="site-footer"><span>Created by Tahmid Ahmed</span><nav><a href="/" data-ui-en="English Review Hub" data-ui-ja="英語復習ハブ">English Review Hub</a></nav></footer>
+  <footer class="site-footer"><span>Created by Tahmid Ahmed</span><nav><a class="phrase-return-link" href="/" data-ui-en="Back to Review Hub" data-ui-ja="復習ハブに戻る">Back to Review Hub / 復習ハブに戻る</a></nav></footer>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js"></script>
+  <script type="module" src="/src/pwa.js"></script>
   <script type="module" src="/src/phrases.js"></script>
 </body>
 </html>

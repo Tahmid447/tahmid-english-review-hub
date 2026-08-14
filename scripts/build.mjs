@@ -6,12 +6,14 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const dist = path.join(root, "dist");
 const files = [
   "index.html",
-  "takiwaki.html",
   "teacher.html",
   "lesson.html",
   "phrases.html",
   "pricing.html",
   "404.html",
+  "offline.html",
+  "manifest.webmanifest",
+  "sw.js",
 ];
 const publicSourceFiles = [
   "audio.js",
@@ -21,11 +23,13 @@ const publicSourceFiles = [
   "hub.js",
   "i18n.js",
   "lesson.js",
+  "lesson-grading.js",
   "lesson-guides.js",
   "phrases.js",
   "plans.js",
   "pricing.js",
   "premium-tasks.js",
+  "pwa.js",
   "store.js",
   "styles.css",
   "supabase.js",
@@ -76,7 +80,8 @@ if (fs.existsSync(assets)) {
 fs.writeFileSync(
   path.join(dist, "_redirects"),
   [
-    "/takiwaki /takiwaki.html 200",
+    "/takiwaki /?legacy=takiwaki 301!",
+    "/takiwaki.html /?legacy=takiwaki 301!",
     "/teacher /teacher.html 200",
     "/lesson/* /lesson.html?id=:splat 200",
     "/phrases /phrases.html 200",
@@ -92,6 +97,12 @@ fs.writeFileSync(
     "  X-Content-Type-Options: nosniff",
     "  Referrer-Policy: strict-origin-when-cross-origin",
     "  Permissions-Policy: microphone=(self)",
+    "",
+    "/sw.js",
+    "  Cache-Control: no-cache, no-store, must-revalidate",
+    "",
+    "/manifest.webmanifest",
+    "  Cache-Control: public, max-age=3600",
   ].join("\n") + "\n",
 );
 
