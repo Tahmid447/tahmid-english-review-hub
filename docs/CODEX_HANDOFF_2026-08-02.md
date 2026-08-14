@@ -6,27 +6,60 @@ Updated: 2026-08-14 (Asia/Tokyo)
 
 - Repository folder: `/Users/tahmidahmed/Documents/Codex/2026-08-03/codex-handoff-tahmid-english-review-hub/work/tahmid-english-review-hub`
 - Working branch: `upgrade/review-hub-v9-final-product`
+- Exact deployed application commit: `ecf8726a871218d439f69fa780d17d199f378692`
+- Application parent / historical rollout checkpoint: `fcf561d78da6de405d6ca54b78ebfc99df3d3a0a`
+- Current documentation checkpoint: branch HEAD (`git rev-parse HEAD`). This
+  document cannot contain the final hash of the commit that contains itself.
 - Canonical GitHub implementation checkpoint: `c14625d50204227c917ecc01d59322cb63006cee`
 - Published handoff checkpoint: `a87eb5e1aaa9cff079319b68dfed40bdb2b1a408`
-- The status-only documentation commit that contains this update follows the
-  published handoff checkpoint; use `git rev-parse HEAD` for its self-referential
-  final SHA.
 - Production: https://jocular-chaja-86e78d.netlify.app
 - Dedicated v9 preview: https://tahmid-english-review-hub-v9-preview.netlify.app
+- Exact Preview permalink: https://6a7e6b11f28ff70008bff23a--tahmid-english-review-hub-v9-preview.netlify.app
 - Supabase project ref: `ycmybggetemkhorkhfnf`
 
 Do not place OAuth client secrets, passwords, service-role keys, database passwords, or access tokens in this file, Git, screenshots, or chat.
 
 ## Deployment truth
 
-- The dedicated preview is still the older `upgrade/review-hub-v9-premium-platform@aad5749` deployment observed in Netlify. The final-product branch has **not** been deployed there.
-- Production is still the pre-v9 site. The currently available Netlify account could not administer that production project during the audit.
-- Migrations `202608140015_teacher_preview_and_premium_workflows.sql` and `202608140016_visual_question_content_corrections.sql` are local only and are **not live**.
-- The matching updated `membership-access` Edge Function is local only and is **not deployed**.
-- Earlier project records report migrations through `014` and the older matching Edge Function live. That older remote ledger was not independently rechecked during the August 14 final audit.
-- Authenticated preview QA and physical-device QA are pending. No final-product production promotion is authorised yet.
+- Exact application commit `ecf8726a871218d439f69fa780d17d199f378692`
+  is published to the dedicated preview. Its parent is `fcf561d`, the original
+  rollout/restore checkpoint.
+- Netlify deploy `6a7e6b11f28ff70008bff23a` is published. Netlify reported a
+  10-second build/9-second total, 1 new file, 1 changed asset, 12 redirect
+  rules, 6 header rules, and no errors.
+- The production static site is still pre-v9 and was not deployed or otherwise
+  changed during this rollout.
+- Supabase migrations `015` and `016` were manually applied in order, each in a
+  separate SQL Editor transaction, and the matching `membership-access` Edge
+  Function is deployed.
+- The Supabase migration ledger is absent: the project has no
+  `supabase_migrations.schema_migrations` table and the dashboard reports no
+  tracked migrations. The manual applications are verified by live
+  postconditions, not by ledger entries.
+- The preview and production frontends share Supabase project
+  `ycmybggetemkhorkhfnf`; therefore the backend and Edge changes can affect the
+  older production frontend even though its static deployment is untouched.
+- Public browser QA on the exact deploy passed for the recorded routes and
+  interactions. Authenticated/RLS/access-code/submission/logout, microphone,
+  Lighthouse, and physical-device QA remain pending. No final-product
+  production promotion is authorised yet.
 
-## Completed locally on the final-product branch
+### Database restore point and limitation
+
+- The Supabase Free plan did not provide an official project backup in the
+  dashboard.
+- A privacy-safe logical restore schema named
+  `codex_backup_20260814_fcf561d` was created before the migrations.
+- It snapshots 17 lesson rows, 85 visual-question rows, 0 then-current Premium
+  task rows, 25 routine definitions, 3 view definitions, 57 policy definitions,
+  24 trigger definitions, and table/routine privileges.
+- It contains no learner/Auth personal data. All 10 backup tables have RLS
+  enabled, schema usage for `anon`/`authenticated` is revoked, and direct table
+  access is revoked.
+- This is a migration-specific logical restore point, not full-project disaster
+  recovery and not a substitute for an official backup.
+
+## Completed implementation and rollout
 
 ### Learner product
 
@@ -34,6 +67,10 @@ Do not place OAuth client secrets, passwords, service-role keys, database passwo
 - Every new practice run reshuffles questions and applicable choices; a resumed saved run keeps its saved order.
 - All 14 formats now use format-aware answer completeness. **Check N answered** grades only complete answered items, uses a checked-only denominator, and does not lock an incomplete ordering, matching, or sorting response as the first result.
 - An incorrect checked answer offers an immediate bilingual retry while preserving the immutable first result and recording retry improvement separately.
+- Public QA on parent commit `fcf561d` exposed a Retry denominator regression:
+  an initial `0/1` became `0/2` after a correct retry. Application commit
+  `ecf8726` fixed it, and the exact deployed retest remained `0/1` after the
+  correct retry.
 - The shared progress experience uses Asia/Tokyo dates for streak, weekly goal, unique completions, first-attempt accuracy, and retry improvement.
 - The former `/takiwaki` route redirects into the common learner experience; historical audience/access compatibility remains in the data layer rather than maintaining a second learner UI.
 - First-time Google users have a real profile-completion gate with the verified email displayed read-only. Returning complete profiles do not repeat the gate.
@@ -49,7 +86,10 @@ Do not place OAuth client secrets, passwords, service-role keys, database passwo
 - Four WebP illustrations were replaced and rechecked: `july-13-03-rush-back.webp`, `july-19-02-either-day.webp`, `july-22-01-availability.webp`, and `july-27-02-poured-sauce.webp`.
 - One valid July 27 splash illustration was retained while its inaccurate alt text and scene brief were corrected. Six ambiguous distractor sets were also corrected.
 - Exact per-lesson and per-question evidence is in `docs/VISUAL_CONTENT_REAUDIT_2026-08-14.md`, `docs/question-quality-audit.md`, and `scripts/visual-human-qa.json`.
-- Migration `016` carries the reviewed 85-row visual-content correction set for the live database, with an exact update postcondition. It has not been applied.
+- Migration `016` carried the reviewed 85-row visual-content correction set to
+  the live database. Post-application checks found 85 changed rows, all 17
+  lessons at `content_version >= 4`, 85 unique English and 85 unique Japanese
+  hints, zero missing guidance, and zero invalid choice sets.
 
 ### Plans and pricing
 
@@ -66,7 +106,9 @@ Do not place OAuth client secrets, passwords, service-role keys, database passwo
 
 ### Premium and Teacher Studio
 
-- Migration `015` seeds exactly 34 active review tasks: one speaking and one essay task for each of the 17 lessons, with a hard count postcondition.
+- Migration `015` seeded exactly 34 active review tasks: one speaking and one
+  essay task for each of the 17 lessons. Live checks confirmed all 17 pairs and
+  the expected functions, policies, ownership rules, and transactional RPCs.
 - Learner drafts remain private until submission. Speaking recordings remain in the private storage bucket and are referenced by object path only.
 - The local review design uses an atomic teacher review RPC, fresh return/resubmission timestamps, transactional code redemption/reissue, recording ownership/task/quota checks, and teacher-only plan preview.
 - Teacher Studio is organised around seven jobs: **Dashboard, Learners, Access codes, Lessons & content, Submissions, Sources, and Insights**. It also includes an English/Japanese display preference, learner and queue filters, Dashboard plan counts and 30-day new-learner count, honest localized source provenance, non-mutating Free/Standard/Premium/Premium+ preview, and safer sign-out.
@@ -74,7 +116,9 @@ Do not place OAuth client secrets, passwords, service-role keys, database passwo
 
 ## Verification evidence
 
-The final integrated worktree passed these local checks on August 14:
+The final integrated worktree passed these local checks on August 14. After
+the Retry fix, the complete `npm test`, `npm run build`, and
+`npm run verify:visuals` sequence was rerun and passed:
 
 ```sh
 npm run build
@@ -95,45 +139,84 @@ and migration `016` (2 statements). Local Browser QA covered public home,
 pricing, phrase, and lesson flows at 390/430/621/768/900/1024/1440 px,
 including no checked horizontal overflow, light/dark persistence, pricing
 calculations/contact editing, roving radio keys, Retry, and immutable first
-score. `npm run verify:live` and `npm run audit:audio-live` were attempted but
+result storage. The exact `0/1` denominator invariant was subsequently verified
+on deployed commit `ecf8726`, as recorded below. `npm run verify:live` and
+`npm run audit:audio-live` were attempted but
 could not start their live assertions because this sandbox returned DNS
 `ENOTFOUND` for the Supabase host. Those results prove local/static behavior,
 not live Supabase RLS, OAuth, Netlify, microphone, or physical-device behavior.
 See `docs/test-report.md` for dated evidence and remaining gates.
 
-## Required rollout order
+Live rollout verification also confirmed the logical restore point, migration
+`015` and `016` postconditions, the fresh matching Edge Function deployment,
+and Netlify Preview publication of exact application commit `ecf8726`.
 
-1. Review the worktree and create a recoverable database backup/export before any Supabase change.
-2. Run the complete local test/build/visual suite and `git diff --check`; resolve every failure.
-3. Confirm `upgrade/review-hub-v9-final-product` still contains published
-   checkpoint `a87eb5e1` (completed on August 14) before any backend change.
-4. Apply `202608140015_teacher_preview_and_premium_workflows.sql` to the intended Supabase project.
-5. Apply `202608140016_visual_question_content_corrections.sql` only after `015` succeeds.
-6. Deploy the matching `supabase/functions/membership-access` implementation.
-7. Deploy the exact pushed final-product commit to the dedicated v9 preview, not production.
-8. Complete authenticated teacher and Free/Standard/Premium/Premium+ learner QA, including Google first-time/returning flows, email auth, access-code lifecycle, RLS privacy, speaking upload, essay return/resubmission, published feedback, and sign-out/reload.
-9. Complete desktop/tablet/390 px checks plus real iPhone Safari and Android Chrome touch/microphone QA.
-10. Promote to production only after every preview gate passes and the correct production Netlify account is available. Preserve a known-good rollback deploy.
+Public QA on the exact immutable deploy permalink passed for:
+
+- home totals of 17 lessons, 616 activities, and 14 formats;
+- exact monthly/six-month pricing, Dark persistence, and phrase rendering from
+  24 to 30 items;
+- sample-lesson shuffle notice, radio-arrow focus staying on Question 1,
+  question-specific visual hint and bilingual distractor explanation;
+- fixed Retry scoring (`0/1` wrong, then correct retry, official score remains
+  `0/1`), 0.5x setting persistence, and mixed English-to-Japanese controls
+  without a console error;
+- locked June 30 withholding its question payload, the Teacher unauthenticated
+  gate and English/Japanese switch, legacy Taki redirect, replacement WebP
+  delivery, and an empty browser warning/error log.
+
+Google learner and teacher journeys reached Google's official account chooser;
+the Teacher journey carried the correct return target. No account was selected,
+so login, profile completion, and authenticated behavior are still pending.
+
+## Rollout progress and required order
+
+1. **Completed:** run the complete local test/build/visual suite and
+   `git diff --check`.
+2. **Completed with stated limitation:** create the privacy-safe logical restore
+   point because an official Free-plan backup was unavailable.
+3. **Completed:** apply and verify migration `015`, then migration `016`, in
+   separate SQL Editor transactions.
+4. **Completed:** deploy and timestamp-check the matching
+   `membership-access` Edge Function.
+5. **Completed:** publish exact application commit `ecf8726` to the dedicated
+   v9 preview and pass the recorded public browser QA, including the live Retry
+   regression/retest.
+6. **In progress:** complete authenticated teacher plus
+   Free/Standard/Premium/Premium+ learner QA, including Google first-time and
+   returning flows, email auth, access-code lifecycle, RLS privacy, speaking
+   upload, essay return/resubmission, published feedback, and sign-out/reload.
+7. **Pending:** complete desktop/tablet/390 px and real iPhone Safari/Android
+   Chrome touch, microphone, PWA, and offline QA.
+8. Promote to production only after every preview gate passes and the correct
+   production Netlify account is available. Preserve a known-good rollback
+   deploy and prepare forward fixes for database issues.
 
 ## Remaining and blockers
 
-- Final integrated tests/build and local responsive Browser QA are recorded.
-  Deployed Lighthouse/performance profiling remains pending because the final
-  branch is not yet on Preview.
-- Migration `015`, migration `016`, and the matching Edge Function are not live.
-- Preview is still `aad5749`; production is still pre-v9.
+- Final integrated tests/build/visual verification after the Retry fix, backend
+  rollout, exact-commit Preview publication, and recorded public Browser QA are
+  complete.
+- Google redirects reached the official chooser but stopped before account
+  selection; no authenticated success is claimed.
+- Deployed Lighthouse/performance checks remain pending.
 - Authenticated Supabase/RLS/OAuth/access-code/submission QA is pending.
 - Real-device touch, PWA install/update, offline fallback, Safari/Chrome microphone, and upload QA are pending.
 - Production deployment requires access to the Netlify account that owns the existing production site, or a deliberate replacement plan approved only after preview QA.
+- Supabase Free plan has no official backup. The privacy-safe logical restore
+  schema is useful for this migration but is not full disaster recovery and
+  excludes personal/Auth data.
+- Because production and preview share Supabase, any backend correction must be
+  a careful forward fix; a Netlify rollback alone cannot undo it.
 - Human-feedback capacity must be bounded before launch; see the workload note in `docs/PREMIUM_PLANS_AND_SUBMISSIONS.md`.
 
 ## Exact next step
 
-From this repository and branch, confirm the clean published checkpoint.
-Before touching Supabase, take a recoverable backup and verify the remote
-migration ledger/schema through `014`; then apply migration `015`, verify it,
-apply `016`, verify it, and deploy the matching Edge Function. Deploy only the
-exact pushed commit to Preview, then complete authenticated and real-device QA.
+Using exact deploy `6a7e6b11f28ff70008bff23a`, exercise authenticated teacher
+and Free/Standard/Premium/Premium+ learner/RLS/access-code/submission/logout
+flows without entering or recording anyone's password. Then complete
+microphone, Lighthouse, and physical-device QA. Record PASS/FAIL evidence
+before any production deployment.
 
 ## Read first in the next Codex session
 

@@ -2,24 +2,57 @@
 
 Last updated: **August 14, 2026**
 
-## August 14 final-product local verification
+## August 14 final-product rollout verification
 
 Current release status must be read separately from local test results:
 
 - Working branch: `upgrade/review-hub-v9-final-product`.
-- Canonical GitHub implementation checkpoint: `c14625d5`; published handoff
-  checkpoint: `a87eb5e1`.
-- The dedicated v9 preview is still the older `aad5749` deployment. Production
-  is still pre-v9.
+- Exact deployed application commit:
+  `ecf8726a871218d439f69fa780d17d199f378692`; parent/historical rollout
+  checkpoint: `fcf561d78da6de405d6ca54b78ebfc99df3d3a0a`.
+- Current documentation checkpoint is branch HEAD (`git rev-parse HEAD`), because
+  a documentation commit cannot contain its own final hash.
+- The dedicated v9 preview successfully published the application commit as
+  Netlify deploy `6a7e6b11f28ff70008bff23a`. Production static files remain
+  pre-v9 and untouched.
 - Migrations `202608140015_teacher_preview_and_premium_workflows.sql` and
-  `202608140016_visual_question_content_corrections.sql` are not live.
-- The matching updated `membership-access` Edge Function is not deployed.
+  `202608140016_visual_question_content_corrections.sql` are live, and the
+  matching updated `membership-access` Edge Function is deployed.
 - Authenticated Supabase/RLS/OAuth/access-code/submission QA and real-device QA
   are pending. Local/static PASS results below do not prove those live paths.
 
+### Passing live rollout evidence
+
+- Supabase target — VERIFIED: project ref `ycmybggetemkhorkhfnf`.
+- Pre-change restore point — PARTIAL SAFETY: Supabase Free had no official
+  dashboard backup, so privacy-safe schema `codex_backup_20260814_fcf561d` was
+  created. It excludes learner/Auth personal data and has RLS/access revocation;
+  it is not full disaster recovery.
+- Migration `015` — PASS in its own SQL Editor transaction: 34 active tasks,
+  exactly 17 speaking/essay lesson pairs, 34 stable seeds, and the expected
+  profile/preview/review/reissue/redeem functions and privacy/ownership policies.
+- Migration `016` — PASS in a separate SQL Editor transaction: 85 visual rows
+  changed versus the restore snapshot; all 17 lessons have
+  `content_version >= 4`; 85 unique English and 85 unique Japanese hints; zero
+  missing guidance and zero invalid choice sets. The 34 Premium tasks remained.
+- Migration tracking — ABSENT: changes were applied manually; the project has
+  no `supabase_migrations.schema_migrations` table and the dashboard reports no
+  migration records. The postconditions above, not a ledger, are the evidence.
+- `membership-access` — DEPLOYED: the matching source was deployed and the
+  fresh dashboard timestamp plus audited transactional response fields and
+  generic error boundary were observed.
+- Netlify Preview — PASS: exact application commit `ecf8726` published as deploy
+  `6a7e6b11f28ff70008bff23a`; Netlify reported a 10-second build/9-second total,
+  1 new file, 1 changed asset, 12 redirects, 6 header rules, and no errors.
+- Immutable Preview URL — VERIFIED:
+  `https://6a7e6b11f28ff70008bff23a--tahmid-english-review-hub-v9-preview.netlify.app`.
+- Production — NOT DEPLOYED: its static site remains pre-v9. Preview and
+  production share Supabase, so the verified backend changes are nevertheless
+  live for requests from either frontend.
+
 ### Passing local tranche evidence
 
-- `npm test` — PASS after the final visual-content regeneration: content,
+- `npm test` — PASS after the deployed Retry fix: content,
   question-quality, learning-experience, learner-platform, Teacher Studio,
   premium-schema, plan-platform, and v15 workflow suites passed.
 - `npm run build` — PASS in the learner, Teacher/Auth, visual-content, and
@@ -51,8 +84,10 @@ Current release status must be read separately from local test results:
   621/768/900 px learner headers stay compact; desktop layout was visually
   checked at 1,024 and 1,440 px; light/dark persistence, six-month calculations,
   editable/reset/copied plan message, 24-item progressive phrase rendering,
-  roving radio keys, immediate Retry, and immutable first score were exercised.
-  The local browser console log was empty during the final checked route.
+  roving radio keys, and immediate Retry were exercised. The exact first-score
+  denominator invariant was verified later on deployed commit `ecf8726`, as
+  recorded below. The local browser console log was empty during the final
+  checked route.
 - `npm run verify:live` — BLOCKED in this sandbox on August 14: DNS resolution
   for `ycmybggetemkhorkhfnf.supabase.co` returned `ENOTFOUND` before any live
   assertion ran.
@@ -60,10 +95,34 @@ Current release status must be read separately from local test results:
   live request ran. Historical PASS evidence below is retained but does not
   replace a fresh post-deployment run.
 
-The full combined suite was rerun after the learner, content, frontend,
-Teacher/Auth, security, final Dashboard, and documentation tranches were
-integrated. It must be rerun once more only if a source/build/test file changes
-after this record; the intentional commit itself does not invalidate the run.
+The complete `npm test`, `npm run build`, and `npm run verify:visuals` sequence
+was rerun after the Retry correction and passed. It must be rerun only if an
+application source/build/test file changes after this record; a documentation-
+only checkpoint does not invalidate it.
+
+### Exact deployed public Browser QA
+
+- Home — PASS: 17 lessons, 616 activities, and 14 formats displayed.
+- Pricing — PASS: exact monthly and six-month values; Dark preference persisted.
+- Phrase Library — PASS: progressive rendering expanded from 24 to 30 items.
+- Sample lesson — PASS: automatic shuffle notice appeared; radio-arrow input
+  stayed on Question 1; the visual question showed a unique hint and a
+  distractor-specific bilingual explanation.
+- Retry regression — FAIL on `fcf561d`, then FIXED/PASS on `ecf8726`: a wrong
+  first attempt initially displayed `0/1`; the old deploy incorrectly changed
+  it to `0/2` after a correct retry. The exact new deploy retained the official
+  `0/1` score after that retry.
+- Audio controls — PASS for 0.5x setting persistence and the mixed
+  English-to-Japanese control path, with no console error. This was a UI/control
+  check, not a substitute for the pending fresh live-audio command or physical
+  audio QA.
+- Locked June 30 lesson — PASS: no protected question payload was exposed.
+- Teacher public gate — PASS: unauthenticated gate and English/Japanese switch.
+- Routing/assets — PASS: legacy Taki redirect and replacement WebP delivery.
+- Browser log — PASS: no warning or error entries in the checked run.
+- Google learner and teacher starts — PARTIAL: both reached Google's official
+  account chooser and the Teacher return target was correct. No account was
+  selected, so authenticated login/profile/RLS behavior was not tested.
 
 ### Content review evidence
 
@@ -87,7 +146,8 @@ after this record; the intentional commit itself does not invalidate the run.
   network access, plus one final exact-commit test/build/diff check if anything
   changes after this report.
 - Deployed light/dark Lighthouse checks for home, phrases, pricing, and lesson;
-  390 px, 430 px, 768 px, 900 px, desktop, and console/overflow inspection.
+  remaining named-breakpoint and overflow inspection not covered by the exact
+  public run above.
 - Authenticated Google first-time/returning, email signup/login/logout/reload,
   Free/Standard/Premium/Premium+ access, Teacher preview, and full access-code
   lifecycle.
@@ -99,10 +159,10 @@ after this record; the intentional commit itself does not invalidate the run.
 ## August 11 Premium platform preview verification (dated record)
 
 This section is retained as historical evidence from the prior session. It is
-not the current deployment source of truth: the August 14 Netlify audit observed
-the dedicated preview at `aad5749`, not the final-product branch. The reported
-migration `014`/older Edge deployment was not independently re-read from the
-remote migration ledger during the August 14 audit.
+not the current deployment source of truth: the current source is the August 14
+rollout record above for `upgrade/review-hub-v9-final-product@ecf8726`. The
+reported migration `014`/older Edge deployment was not independently re-read
+from a remote migration ledger; the project currently has no such ledger.
 
 - `npm test`: PASS, including the new fixed-price/contact/Premium+ platform
   checks.

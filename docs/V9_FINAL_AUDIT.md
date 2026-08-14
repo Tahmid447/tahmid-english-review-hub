@@ -11,21 +11,54 @@ This document records the state that existed before the final-product work began
 ## Final-product checkpoint status
 
 - Working branch: `upgrade/review-hub-v9-final-product`.
-- Canonical GitHub implementation checkpoint: `c14625d5`; published handoff
-  checkpoint: `a87eb5e1`.
-- The dedicated v9 preview is still the older `aad5749` deployment. Production is still pre-v9.
-- Migrations `202608140015_teacher_preview_and_premium_workflows.sql` and `202608140016_visual_question_content_corrections.sql`, and the matching updated `membership-access` Edge Function, are local only and are not live.
-- Local implementation, the final integrated suite, and public-flow responsive
-  Browser evidence are recorded below. Authenticated/live Supabase behavior,
+- Exact deployed application commit:
+  `ecf8726a871218d439f69fa780d17d199f378692`; its parent and historical
+  rollout checkpoint is `fcf561d78da6de405d6ca54b78ebfc99df3d3a0a`.
+- Current documentation checkpoint is branch HEAD (`git rev-parse HEAD`); a
+  documentation commit cannot contain its own final hash.
+- The dedicated v9 preview is published from exact application commit
+  `ecf8726` as Netlify deploy `6a7e6b11f28ff70008bff23a`. Production static
+  files remain pre-v9.
+- Migrations `202608140015_teacher_preview_and_premium_workflows.sql` and
+  `202608140016_visual_question_content_corrections.sql`, and the matching
+  updated `membership-access` Edge Function, are live.
+- Local implementation, the final integrated suite, live migration
+  postconditions, and Preview publication evidence are recorded below.
+  Authenticated end-to-end Supabase behavior,
   final deployed Lighthouse measurements, and physical-device behavior are not
   represented as verified.
 
 ## Deployment facts observed
 
-- The dedicated v9 preview at `https://tahmid-english-review-hub-v9-preview.netlify.app` was observed in Netlify as published from `upgrade/review-hub-v9-premium-platform@aad5749` on 2026-08-11.
+- The dedicated v9 preview at `https://tahmid-english-review-hub-v9-preview.netlify.app` successfully published `upgrade/review-hub-v9-final-product@ecf8726` as deploy `6a7e6b11f28ff70008bff23a`; Netlify reported a 10-second build/9-second total, 1 new file, 1 changed asset, 12 redirects, 6 header rules, and no errors. Exact permalink: `https://6a7e6b11f28ff70008bff23a--tahmid-english-review-hub-v9-preview.netlify.app`.
 - The public production URL `https://jocular-chaja-86e78d.netlify.app` was fetched directly. It does not contain the four-plan v9 platform files or Premium+ implementation, so v9 is not in production.
 - The currently signed-in Netlify account can administer the dedicated v9 preview, but the production project returned “Page not found” in that account. Production administration therefore remains blocked unless the correct Netlify account is used or the production site is deliberately recreated after all gates pass.
-- Repository documentation says Supabase migrations through `014` and the matching `membership-access` Edge Function are live. This audit has not yet independently proved the remote migration ledger or authenticated RLS behavior, so those items remain live-QA pending rather than being re-labelled as verified.
+- Supabase project `ycmybggetemkhorkhfnf` is on the Free plan and offered no
+  official dashboard backup. Privacy-safe schema
+  `codex_backup_20260814_fcf561d` is a locked-down migration-specific logical
+  restore point; it excludes learner/Auth personal data and is not full
+  disaster recovery.
+- Migration `015` and then `016` were manually applied in separate SQL Editor
+  transactions. Live postconditions verified 34 active Premium tasks (17 exact
+  speaking/essay pairs), expected functions and privacy/ownership policies, 85
+  changed visual rows, all 17 lessons at `content_version >= 4`, 85 unique
+  English/Japanese hints, and no missing guidance/invalid choice sets.
+- The matching `membership-access` Edge Function is deployed and its fresh
+  timestamp was observed. The migration ledger remains absent, so no ledger
+  entry is claimed.
+- Preview and production share this Supabase project. The backend is therefore
+  shared even though production static files were not changed.
+- Public QA on parent `fcf561d` found that a correct Retry incorrectly changed
+  the official score from `0/1` to `0/2`. Commit `ecf8726` fixed the denominator;
+  the exact live retest stayed `0/1`. The complete `npm test`, `npm run build`,
+  and `npm run verify:visuals` sequence passed after the fix.
+- Exact-deploy public QA passed the home inventory, prices and Dark persistence,
+  phrase progressive rendering, shuffle/radio behavior, visual guidance, 0.5x
+  and mixed-language controls, locked payload boundary, Teacher public gate and
+  language switch, Taki redirect, replacement WebP, and clean browser log.
+- Google learner and Teacher starts reached the official account chooser; the
+  Teacher return target was correct. No account was selected, so authenticated
+  behavior remains pending.
 
 ## Baseline verification
 
@@ -75,26 +108,26 @@ These tests are valuable, but several are static source assertions. They do not 
 | Audio defaults and mixed-language speech | Verified by code/static tests; live regression required | Default rate is 1.0, en-US preference/fallback and auto-pronounce controls exist; natural audio and mixed JP/quoted-EN paths were previously verified. | Preserve and repeat live checks after redesign. |
 | Production promotion | Blocked by gates | Production is still pre-v9 and the current Netlify account cannot open its admin project. | Preview first; authenticated and real-device QA; only then obtain correct production access or explicitly recreate/promote. |
 
-## Final-product local implementation delta
+## Final-product implementation and rollout delta
 
-| Area | Local status on August 14 | Evidence or remaining boundary |
+| Area | Status on August 14 | Evidence or remaining boundary |
 |---|---|---|
 | Fixed four-plan prices | Implemented and regression-tested locally | Free ¥0/¥0, Standard ¥3,980/¥20,300, Premium ¥6,980/¥35,600, Premium+ ¥16,800/¥85,700 remain centralised. |
-| Pricing sales journey | Implemented locally | Four cards, 13 comparison rows, exact savings/monthly equivalents, best-for copy, Premium recommendation, trust/FAQ content, and contact-first flow. Hosted final-product QA pending. |
+| Pricing sales journey | Deployed public QA passed | Four cards, 13 comparison rows, exact monthly/six-month values, best-for copy, Premium recommendation, trust/FAQ content, contact-first flow, and Dark persistence were checked on the exact Preview deploy. |
 | Editable contact message | Implemented locally | Editable name/message, dirty-state preservation, copy-current-text, and explicit reset are covered by local plan tests. |
 | Navigation and state | Implemented locally | Safe lesson→plans return, new-tab role change, persistent library filters, and common return handling are present. Browser history/reload QA remains part of preview testing. |
 | First-time Google onboarding | Implemented locally; auth QA pending | Incomplete profiles are gated and verified email is read-only. First-time and returning OAuth flows require the preview backend and real accounts. |
-| Teacher preview as learner | Implemented locally; backend not live | Teacher-only Free/Standard/Premium/Premium+ preview is labelled and non-mutating. It depends on migration `015` and authenticated RLS QA. |
-| Immediate retry | Implemented and regression-tested locally | Incorrect checked answers provide a bilingual immediate retry while the first official result remains immutable. |
+| Teacher preview as learner | Backend live; auth QA pending | Teacher-only Free/Standard/Premium/Premium+ preview is labelled and non-mutating. Migration `015` is live; authenticated RLS behavior remains to be exercised. |
+| Immediate retry | Deployed regression fixed and passed | Public QA found `0/1` becoming `0/2` on parent `fcf561d`; commit `ecf8726` fixes it, and exact-deploy retest preserved official `0/1` after a correct retry. |
 | Check answered / partial grading | Implemented and regression-tested locally | Format-aware completeness, dynamic **Check N answered**, checked-only denominator, and incomplete complex-answer protection cover all 14 formats. |
 | Shuffle | Preserved and regression-tested locally | New runs reshuffle questions and applicable choices; resumed runs retain saved order. |
 | Vibration | Retired locally | The unreliable learner preference and browser vibration calls were removed; local learner regressions assert that they do not return. |
-| Question/content quality | Re-audited locally | All 85 visual questions received individual image/prompt/choice/hint/explanation/alt review. Four WebPs were replaced, one alt/brief corrected, six ambiguous distractor sets corrected, and all 85 now have unique bilingual guidance. Migration `016` is not live. |
-| Premium experience and inventory | Implemented locally; backend not live | Migration `015` seeds one speaking and one essay task for each of 17 lessons, exactly 34 tasks. Submission/RLS/upload workflows require deployment and authenticated QA. |
-| Premium draft privacy and review transaction | Implemented locally; backend not live | Migration `015` hides drafts from teachers and uses atomic review/state transitions. Remote RLS behavior remains unverified. |
+| Question/content quality | Re-audited and migrated | All 85 visual questions received individual image/prompt/choice/hint/explanation/alt review. Four WebPs were replaced, one alt/brief corrected, six ambiguous distractor sets corrected, and all 85 now have unique bilingual guidance. Migration `016` changed all 85 live rows and passed its postconditions. |
+| Premium experience and inventory | Backend inventory live; auth QA pending | Migration `015` seeded exactly one speaking and one essay task for each of 17 lessons (34 active tasks). Submission/RLS/upload workflows still require authenticated QA. |
+| Premium draft privacy and review transaction | Backend policies/RPC live; auth QA pending | Migration `015` installed the draft-privacy policies and atomic review/state transitions. Policy definitions and direct-grant negatives were verified; full role-based browser behavior remains unverified. |
 | Teacher Studio information architecture | Implemented locally | Seven jobs: Dashboard, Learners, Access codes, Lessons & content, Submissions, Sources, Insights; one-language English/Japanese display and filters are included. |
-| Access-code safety | Implemented locally; backend not live | Migration `015` and the updated Edge Function use transactional redemption/reissue and conflict handling. The complete live lifecycle remains pending. |
-| Shared Takiwaki experience | Implemented locally | The old route redirects to the common learner experience while historical audience/access data remains compatible. Hosted redirect/session QA remains pending. |
+| Access-code safety | Backend and Edge live; lifecycle QA pending | Migration `015` and the updated Edge Function use transactional redemption/reissue and conflict handling. The complete authenticated create/redeem/reissue lifecycle remains pending. |
+| Shared Takiwaki experience | Public redirect passed | The old route redirected to the common learner experience on the exact Preview deploy. Authenticated session compatibility remains pending. |
 | Phrase/Vocabulary library | Implemented locally | Progressive rendering, meaningful types, corrected presentation/data issues, favourites, audio, and retained filters are covered by local regressions. |
 | Learner progress | Implemented locally | Asia/Tokyo streak, weekly goal, unique completions, first-attempt accuracy, retry improvement, and restrained milestones derive from real stored progress. |
 | Theme | Implemented locally | Persisted System/Light/Dark is shared across home, phrases, lessons, and pricing. Final deployed contrast/Lighthouse checks remain pending. |
@@ -119,17 +152,21 @@ replaced. All 85 visual questions now have unique, non-answer-revealing
 bilingual hints, a correct-evidence pair, and three exact distractor-conflict
 reason pairs.
 
-## Required deployment sequence
+## Deployment sequence and current position
 
-1. Take a recoverable Supabase backup/export and preserve the current working deployment.
-2. Confirm the recorded passing final integrated test/build/visual suite still
-   matches the exact commit to deploy; rerun it if any file changes.
-3. Apply migration `015`.
-4. Apply migration `016` only after `015` succeeds.
-5. Deploy the matching updated `membership-access` Edge Function.
-6. Deploy the exact pushed final-product commit to the dedicated v9 preview.
-7. Complete authenticated teacher and four-tier learner QA, then real-device QA.
-8. Promote production only after every gate passes and production Netlify access is confirmed.
+1. **Completed with limitation:** created the privacy-safe logical restore point;
+   an official Free-plan backup was unavailable.
+2. **Completed:** confirmed the final integrated test/build/visual suite and
+   exact pushed commit.
+3. **Completed:** applied and verified migration `015`.
+4. **Completed:** applied and verified migration `016` in a separate transaction.
+5. **Completed:** deployed the matching updated `membership-access` Edge Function.
+6. **Completed:** deployed exact application commit `ecf8726` to the dedicated
+   v9 preview and completed the recorded public browser QA.
+7. **In progress:** complete authenticated teacher and four-tier learner/RLS
+   workflow QA; then complete Lighthouse and real-device QA.
+8. Promote production only after every gate passes and production Netlify
+   access is confirmed.
 
 ## Security and data rules for implementation
 
@@ -141,13 +178,16 @@ reason pairs.
 
 ## Final verification still required
 
-- Full integrated test/build/visual/live-security commands on the final commit.
-- Desktop, laptop, tablet, 430px and 390px visual checks with console inspection.
+- Fresh live-security/live-audio commands from a network-enabled environment.
+- Remaining deployed desktop/tablet/430px/390px visual and overflow checks not
+  covered by the exact public run; the checked browser log was clean.
 - Final light/dark Lighthouse checks for home, phrases, pricing and lesson, including 390 px and tablet breakpoints.
 - Authenticated teacher plus Free/Standard/Premium/Premium+ learner checks.
-- Google first-time and returning onboarding; email signup/login/logout/reload.
+- Complete Google first-time/returning onboarding after the already-verified
+  official chooser redirects; email signup/login/logout/reload.
 - Access-code create/edit/reissue/redeem/expired/exhausted/disable/delete and cleanup.
 - Premium essay and microphone flows from submission through return/resubmission/published feedback.
 - Real iPhone Safari and Android Chrome checks, or an explicit user-assisted record if direct device control is unavailable.
-- Migration `015`, then migration `016`, then the matching Edge Function, with backup and preview gates.
-- Preview deployment of the exact final-product commit before any production action.
+- Confirm shared-backend compatibility with the still-pre-v9 production static
+  frontend; use forward fixes rather than assuming a Netlify rollback reverts
+  Supabase.
