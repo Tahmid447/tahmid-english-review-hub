@@ -6,9 +6,9 @@ Updated: 2026-08-14 (Asia/Tokyo)
 
 - Repository folder: `/Users/tahmidahmed/Documents/Codex/2026-08-03/codex-handoff-tahmid-english-review-hub/work/tahmid-english-review-hub`
 - Working branch: `upgrade/review-hub-v9-final-product`
-- Last pushed checkpoint: `830c596`
-- Final local commit: pending; the final-product worktree has passed the integrated
-  local test gate and still needs an intentional commit and push
+- Final implementation checkpoint: `338d09d`
+- Documentation checkpoint: pending while this handoff records the exact
+  implementation commit; confirm the branch's final pushed SHA after push
 - Production: https://jocular-chaja-86e78d.netlify.app
 - Dedicated v9 preview: https://tahmid-english-review-hub-v9-preview.netlify.app
 - Supabase project ref: `ycmybggetemkhorkhfnf`
@@ -103,7 +103,8 @@ See `docs/test-report.md` for dated evidence and remaining gates.
 
 1. Review the worktree and create a recoverable database backup/export before any Supabase change.
 2. Run the complete local test/build/visual suite and `git diff --check`; resolve every failure.
-3. Make one intentional final local commit and push `upgrade/review-hub-v9-final-product`.
+3. Push the committed checkpoints on `upgrade/review-hub-v9-final-product` and
+   record the remote SHA before any backend change.
 4. Apply `202608140015_teacher_preview_and_premium_workflows.sql` to the intended Supabase project.
 5. Apply `202608140016_visual_question_content_corrections.sql` only after `015` succeeds.
 6. Deploy the matching `supabase/functions/membership-access` implementation.
@@ -126,8 +127,8 @@ See `docs/test-report.md` for dated evidence and remaining gates.
 
 ## Exact next step
 
-From this repository and branch, inspect the passing final diff, create the
-intentional final commit, and push `upgrade/review-hub-v9-final-product`.
+From this repository and branch, inspect the clean checkpoint and push
+`upgrade/review-hub-v9-final-product`; then record the exact remote SHA.
 Before touching Supabase, take a recoverable backup and verify the remote
 migration ledger/schema through `014`; then apply migration `015`, verify it,
 apply `016`, verify it, and deploy the matching Edge Function. Deploy only the

@@ -3,9 +3,9 @@
 Private development repository for the Tahmid English Review Hub v9 learner
 platform and Teacher Studio.
 
-Current work is on `upgrade/review-hub-v9-final-product`. The last pushed
-checkpoint is `830c596`; the final integrated local suite passes and the final
-intentional commit/push is pending. The
+Current work is on `upgrade/review-hub-v9-final-product`. The final integrated
+local suite passes and implementation checkpoint `338d09d` is committed; its
+push status must be confirmed after this documentation checkpoint. The
 dedicated v9 preview is still the older `aad5749` deployment, and production is
 still pre-v9. Read `docs/CODEX_HANDOFF_2026-08-02.md` before deployment work.
 

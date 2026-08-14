@@ -7,7 +7,8 @@ Last updated: **August 14, 2026**
 Current release status must be read separately from local test results:
 
 - Working branch: `upgrade/review-hub-v9-final-product`.
-- Last pushed checkpoint: `830c596`; the final integrated local commit is pending.
+- Final integrated implementation checkpoint: `338d09d`; confirm its remote
+  push together with the final documentation checkpoint before rollout.
 - The dedicated v9 preview is still the older `aad5749` deployment. Production
   is still pre-v9.
 - Migrations `202608140015_teacher_preview_and_premium_workflows.sql` and
