@@ -516,6 +516,23 @@ function setLoginStatus(message, isError = false) {
   status.style.color = isError ? "" : "var(--green)";
 }
 
+function setProfileCompletionStatus(message, isError = false) {
+  let status = document.querySelector("#profileCompletionStatus");
+  if (!status) {
+    const form = document.querySelector("#profileCompletionForm");
+    const submit = form?.querySelector('button[type="submit"]');
+    if (!form || !submit) return;
+    status = document.createElement("p");
+    status.id = "profileCompletionStatus";
+    status.className = "form-status";
+    status.setAttribute("role", "status");
+    status.setAttribute("aria-live", "polite");
+    form.insertBefore(status, submit);
+  }
+  status.textContent = message;
+  status.style.color = isError ? "" : "var(--green)";
+}
+
 async function handleLogin(event) {
   event.preventDefault();
   const form = event.currentTarget;
@@ -701,19 +718,27 @@ async function handleProfileCompletion(event) {
     learningGoal: form.querySelector("#profileLearningGoal")?.value.trim() || "",
   };
   if (!form.reportValidity() || Object.entries(values).some(([key, value]) => key !== "learningGoal" && !value)) {
-    setLoginStatus(t("Please complete every required profile field.", "必須プロフィール項目をすべて入力してください。"), true);
+    const message = t("Please complete every required profile field.", "必須プロフィール項目をすべて入力してください。");
+    setLoginStatus(message, true);
+    setProfileCompletionStatus(message, true);
     return;
   }
   const submit = form.querySelector('button[type="submit"]');
   if (submit) submit.disabled = true;
+  setProfileCompletionStatus(t("Saving your profile…", "プロフィールを保存中…"));
   try {
     const result = await ensureStudentProfile(authSession, values);
     if (result?.error) throw result.error;
     currentProfile = result.profile;
-    showToast(t("Your learning profile is ready.", "学習プロフィールを保存しました。"));
+    const success = t("Your learning profile is ready.", "学習プロフィールを保存しました。");
+    setLoginStatus(success);
+    setProfileCompletionStatus(success);
+    showToast(success);
     await refreshProfileCompletion();
   } catch (error) {
-    setLoginStatus(error?.message || t("The profile could not be saved.", "プロフィールを保存できませんでした。"), true);
+    const message = error?.message || t("The profile could not be saved.", "プロフィールを保存できませんでした。");
+    setLoginStatus(message, true);
+    setProfileCompletionStatus(message, true);
   } finally {
     if (submit) submit.disabled = false;
   }

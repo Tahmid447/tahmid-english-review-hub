@@ -304,15 +304,48 @@ export async function signInStudentWithGoogle() {
   }
 }
 
+async function updateStudentProfileRow(client, userId, payload) {
+  // `user_id` is intentionally insert-only. Learners have column-level UPDATE
+  // grants for their editable profile fields, but never for the ownership key.
+  // Sending `user_id` through an UPSERT makes PostgreSQL require UPDATE on that
+  // protected column even when its value is unchanged.
+  const { user_id: _ownerId, ...updates } = payload;
+  return client
+    .from("review_profiles")
+    .update(updates)
+    .eq("user_id", userId)
+    .select("*")
+    .maybeSingle();
+}
+
+export async function persistStudentProfileRow(client, userId, payload, exists) {
+  if (exists) return updateStudentProfileRow(client, userId, payload);
+
+  const inserted = await client
+    .from("review_profiles")
+    .insert(payload)
+    .select("*")
+    .maybeSingle();
+
+  // Initial session delivery and the auth-state callback may race on a brand
+  // new account. If the other request inserted first, safely update the row
+  // that is now owned by this learner instead of surfacing a duplicate error.
+  if (inserted.error?.code === "23505") {
+    return updateStudentProfileRow(client, userId, payload);
+  }
+  return inserted;
+}
+
 export async function ensureStudentProfile(session, values = {}) {
   const client = getStudentClient();
   const user = session?.user;
   if (!client || !user) return { profile: null, error: null };
-  const { data: existingProfile } = await client
+  const { data: existingProfile, error: profileReadError } = await client
     .from("review_profiles")
     .select("*")
     .eq("user_id", user.id)
     .maybeSingle();
+  if (profileReadError) return { profile: null, error: profileReadError };
   const metadata = user.user_metadata || {};
   const fullName = String(metadata.full_name || metadata.name || "").trim();
   const nameParts = fullName.split(/\s+/).filter(Boolean);
@@ -331,11 +364,12 @@ export async function ensureStudentProfile(session, values = {}) {
     learning_goal: values.learningGoal || existingProfile?.learning_goal || metadata.learning_goal || null,
     locale: existingProfile?.locale || "ja",
   };
-  const { data, error } = await client
-    .from("review_profiles")
-    .upsert(payload, { onConflict: "user_id" })
-    .select("*")
-    .maybeSingle();
+  const { data, error } = await persistStudentProfileRow(
+    client,
+    user.id,
+    payload,
+    Boolean(existingProfile),
+  );
   return { profile: data || null, error };
 }
 

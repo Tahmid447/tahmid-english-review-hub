@@ -16,6 +16,7 @@ import {
   sentencePatternFor,
 } from "../src/data.js";
 import { DEFAULT_SETTINGS, resolvedTheme, safeLocalReturnPath } from "../src/store.js";
+import { persistStudentProfileRow } from "../src/supabase.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const question = (format, extra = {}) => ({ id: format, format, maxPoints: 1, ...extra });
@@ -121,6 +122,50 @@ assert.equal(safeLocalReturnPath("/phrases?return=%2F#saved", "/", "https://revi
 assert.equal(safeLocalReturnPath("/teacher.html", "/", "https://review.example"), "/");
 assert.equal(safeLocalReturnPath("/lesson/june-29?filter=listening", "/", "https://review.example"), "/lesson/june-29?filter=listening");
 
+function profileClient(results) {
+  const calls = [];
+  const queue = [...results];
+  const builder = {
+    from(table) { calls.push(["from", table]); return builder; },
+    insert(payload) { calls.push(["insert", payload]); return builder; },
+    update(payload) { calls.push(["update", payload]); return builder; },
+    eq(column, value) { calls.push(["eq", column, value]); return builder; },
+    select(columns) { calls.push(["select", columns]); return builder; },
+    maybeSingle() { calls.push(["maybeSingle"]); return Promise.resolve(queue.shift()); },
+  };
+  return { client: builder, calls };
+}
+
+const profilePayload = {
+  user_id: "11111111-1111-4111-8111-111111111111",
+  first_name: "Test",
+  last_name: "Learner",
+};
+const existingProfileWrite = profileClient([{ data: profilePayload, error: null }]);
+await persistStudentProfileRow(
+  existingProfileWrite.client,
+  profilePayload.user_id,
+  profilePayload,
+  true,
+);
+const existingUpdate = existingProfileWrite.calls.find(([operation]) => operation === "update")?.[1];
+assert.equal(Object.hasOwn(existingUpdate, "user_id"), false,
+  "Existing-profile saves never request UPDATE permission on the protected owner key.");
+assert.equal(existingProfileWrite.calls.some(([operation]) => operation === "insert"), false);
+
+const newProfileWrite = profileClient([{ data: profilePayload, error: null }]);
+await persistStudentProfileRow(newProfileWrite.client, profilePayload.user_id, profilePayload, false);
+assert.deepEqual(newProfileWrite.calls.find(([operation]) => operation === "insert")?.[1], profilePayload,
+  "A new learner profile includes its authenticated ownership key on INSERT.");
+
+const racedProfileWrite = profileClient([
+  { data: null, error: { code: "23505" } },
+  { data: profilePayload, error: null },
+]);
+await persistStudentProfileRow(racedProfileWrite.client, profilePayload.user_id, profilePayload, false);
+assert.equal(racedProfileWrite.calls.filter(([operation]) => operation === "update").length, 1,
+  "A concurrent first-login INSERT race retries as an owner-scoped UPDATE.");
+
 const lessonScript = fs.readFileSync(path.join(root, "src", "lesson.js"), "utf8");
 const lessonPage = fs.readFileSync(path.join(root, "lesson.html"), "utf8");
 const hubScript = fs.readFileSync(path.join(root, "src", "hub.js"), "utf8");
@@ -141,6 +186,8 @@ assert.match(lessonScript, /bindRovingRadioGroup/);
 assert.match(lessonScript, /queueMicrotask/);
 assert.match(homePage, /id="profileGateDialog"/);
 assert.match(hubScript, /isGoogleSession/);
+assert.match(hubScript, /id = "profileCompletionStatus"/);
+assert.match(hubScript, /Saving your profile…/);
 assert.match(supabaseScript, /signOutStudent[\s\S]*?withOperationTimeout/);
 assert.match(supabaseScript, /removeItem\(STUDENT_AUTH_STORAGE_KEY\)/);
 assert.match(supabaseScript, /studentClient = undefined/);
