@@ -54,9 +54,15 @@ export function isAnswerGradeable(question, answer) {
 }
 
 const cloneAnswer = (answer) => {
+  if (answer == null) return answer;
   if (typeof structuredClone === "function") return structuredClone(answer);
   return JSON.parse(JSON.stringify(answer));
 };
+
+const snapshotResult = (result = {}) => ({
+  ...result,
+  answer: cloneAnswer(result.answer),
+});
 
 export function gradeQuestionAnswer(question, answer, checkedAt = new Date().toISOString()) {
   if (!isAnswerGradeable(question, answer)) return null;
@@ -99,35 +105,53 @@ export function gradeQuestionAnswer(question, answer, checkedAt = new Date().toI
 }
 
 export function calculateOfficialTotals(questions = [], official = {}) {
-  return questions.reduce((totals, question) => {
-    const result = official?.[question.id];
-    totals.availableMax += Number(question.maxPoints || 1);
-    if (!result) return totals;
-    totals.score += Number(result.score || 0);
-    totals.max += Number(result.max || question.maxPoints || 1);
-    totals.checked += 1;
-    if (Number(result.score || 0) < Number(result.max || question.maxPoints || 1)) {
-      totals.wrong += 1;
-    }
-    return totals;
-  }, {
+  const totals = {
     score: 0,
     max: 0,
     availableMax: 0,
     checked: 0,
     wrong: 0,
+  };
+  const questionIds = new Set();
+  questions.forEach((question) => {
+    const questionId = String(question?.id ?? "");
+    if (!questionId || questionIds.has(questionId)) return;
+    questionIds.add(questionId);
+    const result = official?.[questionId];
+    const suppliedMax = Number(question.maxPoints);
+    const questionMax = Number.isFinite(suppliedMax) && suppliedMax > 0 ? suppliedMax : 1;
+    totals.availableMax += questionMax;
+    if (!result) return;
+    const suppliedScore = Number(result.score);
+    const score = Number.isFinite(suppliedScore)
+      ? Math.min(questionMax, Math.max(0, suppliedScore))
+      : 0;
+    totals.score += score;
+    // The denominator belongs to the unique checked question, never to the
+    // number of attempts. Use the current question definition instead of a
+    // mutable or stale persisted result.max value.
+    totals.max += questionMax;
+    totals.checked += 1;
+    if (score < questionMax) {
+      totals.wrong += 1;
+    }
   });
+  return totals;
 }
 
 export function preserveFirstResult(official, retryAttempts, questionId, result, limit = 20) {
   const firstAttempt = !official[questionId];
   if (firstAttempt) {
-    official[questionId] = result;
+    // Keep the official first result isolated from the live run result. The
+    // latter is replaced during retries and must never be able to mutate the
+    // score that was first recorded.
+    official[questionId] = snapshotResult(result);
   } else {
     const retries = Array.isArray(retryAttempts[questionId])
       ? retryAttempts[questionId]
       : [];
-    retryAttempts[questionId] = [...retries, result].slice(-Math.max(1, Number(limit || 20)));
+    retryAttempts[questionId] = [...retries, snapshotResult(result)]
+      .slice(-Math.max(1, Number(limit || 20)));
   }
   return firstAttempt;
 }

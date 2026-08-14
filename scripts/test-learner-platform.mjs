@@ -63,8 +63,21 @@ const firstWrong = { score: 0, max: 1, correct: false, answer: "a" };
 const retryCorrect = { score: 1, max: 1, correct: true, answer: "b" };
 assert.equal(preserveFirstResult(official, retries, "mcq", firstWrong), true);
 assert.equal(preserveFirstResult(official, retries, "mcq", retryCorrect), false);
-assert.equal(official.mcq, firstWrong, "Retry never overwrites the official first result.");
+assert.deepEqual(official.mcq, firstWrong, "Retry never overwrites the official first result.");
+assert.notEqual(official.mcq, firstWrong, "The official result is isolated from the mutable run result.");
 assert.deepEqual(retries.mcq, [retryCorrect]);
+assert.deepEqual(calculateOfficialTotals([question("mcq")], official), {
+  score: 0,
+  max: 1,
+  availableMax: 1,
+  checked: 1,
+  wrong: 1,
+}, "A correct retry leaves the displayed first score locked at 0 / 1.");
+
+firstWrong.max = 2;
+retryCorrect.max = 3;
+assert.equal(official.mcq.max, 1, "Later run-result mutation cannot change the first-score denominator.");
+assert.equal(retries.mcq[0].max, 1, "Stored retry history is also a stable snapshot.");
 
 const totals = calculateOfficialTotals(
   [question("mcq"), question("typing"), { ...matchingQuestion, id: "matching" }],
@@ -77,6 +90,18 @@ assert.deepEqual(totals, {
   checked: 2,
   wrong: 2,
 }, "Unanswered questions stay out of the displayed first-score denominator.");
+
+const defensiveTotals = calculateOfficialTotals(
+  [question("mcq"), question("mcq")],
+  { mcq: { score: 0, max: 2, correct: false } },
+);
+assert.deepEqual(defensiveTotals, {
+  score: 0,
+  max: 1,
+  availableMax: 1,
+  checked: 1,
+  wrong: 1,
+}, "A stale max or duplicated question id cannot make a retry increase the denominator.");
 
 assert.deepEqual(normalizeCatalogLanguages({ en: "右上", jp: "top right" }), {
   en: "top right",
