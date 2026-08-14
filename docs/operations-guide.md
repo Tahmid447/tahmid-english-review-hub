@@ -7,9 +7,9 @@ already available on the hosted sites. The working branch is
 `upgrade/review-hub-v9-final-product`; canonical GitHub implementation checkpoint
 `c14625d5` and handoff checkpoint `a87eb5e1` are published. The current
 documentation checkpoint is branch HEAD (`git rev-parse HEAD`); this file cannot
-embed the final hash of the commit that contains itself. Exact
-deployed application commit `ecf8726a871218d439f69fa780d17d199f378692`
-has parent/historical rollout checkpoint `fcf561d`. The application commit is
+embed the final hash of the commit that contains itself. Exact deployed
+application commit is `049b5ff4da6606fcffc461f412f314d253916e13`;
+historical rollout/logical-restore checkpoint remains `fcf561d`. It is
 deployed to the dedicated v9 preview. Production static files remain pre-v9. Migration
 `015`, migration `016`, and the matching updated `membership-access` Edge
 Function are live on shared Supabase project `ycmybggetemkhorkhfnf`.
@@ -21,6 +21,13 @@ collects privacy-conscious profile fields. A first-time Google user must finish
 the required profile fields before paid membership, access-code redemption, or
 direct paid lesson access can proceed. The verified sign-in email is displayed
 read-only. Returning users with a complete profile do not repeat this step.
+
+The first live Google profile save exposed a client-side permission mismatch:
+the old upsert included insert-only `user_id` on update, producing
+`permission denied for table review_profiles`. Do not grant `UPDATE(user_id)`.
+The deployed fix splits insert/update, omits `user_id` from updates, shows modal
+status, avoids the stale automatic race, uses PWA cache v3, and cache-busts the
+query. No migration `017` exists or is needed.
 
 - Prefer Supabase invitation, email confirmation, or password-reset email.
 - Never ask a learner to send a password to the teacher.
@@ -224,6 +231,9 @@ order:
    found a Retry denominator defect; application commit `ecf8726` fixed it and
    passed `npm test`, `npm run build`, and `npm run verify:visuals`, plus the
    exact live Retry retest.
+6. Profile-save commits `d0b244b`, `50656f8`, `a69ab08`, and `049b5ff` fixed
+   payload/status, stale-race, PWA-cache, and query-cache behavior. They added
+   no migration `017` and made no Supabase change.
 
 The project has no `supabase_migrations.schema_migrations` table and the
 dashboard reports no tracked migrations. Do not infer ledger entries or rerun
@@ -253,24 +263,28 @@ For code/design/backend changes:
 2. Commit intentionally and push `upgrade/review-hub-v9-final-product`.
 3. Confirm the recorded Supabase/Edge postconditions and do not blindly replay
    the manually applied migrations.
-4. Confirm Netlify Preview deploy `6a7e6b11f28ff70008bff23a` serves exact
-   application commit `ecf8726` at its immutable permalink:
-   `https://6a7e6b11f28ff70008bff23a--tahmid-english-review-hub-v9-preview.netlify.app`.
+4. Confirm Netlify Preview deploy `6a7e9a1002ab210008522e82` serves exact
+   application commit `049b5ff` at its immutable permalink:
+   `https://6a7e9a1002ab210008522e82--tahmid-english-review-hub-v9-preview.netlify.app`.
 5. Preserve the recorded public QA evidence: home inventory; pricing and Dark
    persistence; phrases 24→30; shuffle/radio behavior; visual guidance; fixed
    Retry score; 0.5x and mixed-language controls; locked payload; Teacher gate
    and language switch; Taki redirect; replacement WebP; clean browser log.
-6. Complete authenticated learner/Teacher, RLS/access-code/submission/logout,
-   desktop/tablet/430 px/390 px, light/dark Lighthouse, console/overflow, and
-   production-like header checks.
-7. Test real iPhone Safari and Android Chrome touch, microphone, PWA, and
+6. Preserve passed Google learner evidence: modal/page save success, gate close,
+   complete reload, Standard through August 2, 2027, all 44 June 30 questions,
+   and safe sign-out/reload/cross-tab lock.
+7. Complete authenticated Teacher and dedicated non-teacher tier/RLS/access-
+   code/submission checks, plus remaining responsive/Lighthouse checks.
+8. Test real iPhone Safari and Android Chrome touch, microphone, PWA, and
    offline behavior.
-8. Promote only after all gates pass and the correct production Netlify account
+9. Promote only after all gates pass and the correct production Netlify account
    is available.
 
-Google learner and Teacher starts have reached Google's official account chooser
-and the Teacher return target was correct. No account was selected; do not mark
-login, profile, RLS, or logout as verified from that partial check.
+Google learner auth/profile/reload/sign-out passes for the scoped identity.
+Premium task cards appeared despite a Standard label, so it seems
+Teacher-elevated and cannot prove Standard-versus-Premium denial. The learner
+is signed out; Teacher auth remains pending. Use dedicated non-teacher tier
+accounts for permission QA.
 
 Keep the previous successful production deploy as a recoverable rollback. A
 Netlify rollback restores website files but does not roll back Supabase schema

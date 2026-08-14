@@ -8,12 +8,12 @@ Current release status must be read separately from local test results:
 
 - Working branch: `upgrade/review-hub-v9-final-product`.
 - Exact deployed application commit:
-  `ecf8726a871218d439f69fa780d17d199f378692`; parent/historical rollout
-  checkpoint: `fcf561d78da6de405d6ca54b78ebfc99df3d3a0a`.
+  `049b5ff4da6606fcffc461f412f314d253916e13`; historical rollout/logical-
+  restore checkpoint: `fcf561d78da6de405d6ca54b78ebfc99df3d3a0a`.
 - Current documentation checkpoint is branch HEAD (`git rev-parse HEAD`), because
   a documentation commit cannot contain its own final hash.
 - The dedicated v9 preview successfully published the application commit as
-  Netlify deploy `6a7e6b11f28ff70008bff23a`. Production static files remain
+  Netlify deploy `6a7e9a1002ab210008522e82`. Production static files remain
   pre-v9 and untouched.
 - Migrations `202608140015_teacher_preview_and_premium_workflows.sql` and
   `202608140016_visual_question_content_corrections.sql` are live, and the
@@ -41,18 +41,17 @@ Current release status must be read separately from local test results:
 - `membership-access` — DEPLOYED: the matching source was deployed and the
   fresh dashboard timestamp plus audited transactional response fields and
   generic error boundary were observed.
-- Netlify Preview — PASS: exact application commit `ecf8726` published as deploy
-  `6a7e6b11f28ff70008bff23a`; Netlify reported a 10-second build/9-second total,
-  1 new file, 1 changed asset, 12 redirects, 6 header rules, and no errors.
+- Netlify Preview — PASS: exact application commit `049b5ff` published as deploy
+  `6a7e9a1002ab210008522e82`.
 - Immutable Preview URL — VERIFIED:
-  `https://6a7e6b11f28ff70008bff23a--tahmid-english-review-hub-v9-preview.netlify.app`.
+  `https://6a7e9a1002ab210008522e82--tahmid-english-review-hub-v9-preview.netlify.app`.
 - Production — NOT DEPLOYED: its static site remains pre-v9. Preview and
   production share Supabase, so the verified backend changes are nevertheless
   live for requests from either frontend.
 
 ### Passing local tranche evidence
 
-- `npm test` — PASS after the deployed Retry fix: content,
+- `npm test` — PASS after the deployed authentication fixes: content,
   question-quality, learning-experience, learner-platform, Teacher Studio,
   premium-schema, plan-platform, and v15 workflow suites passed.
 - `npm run build` — PASS in the learner, Teacher/Auth, visual-content, and
@@ -96,11 +95,10 @@ Current release status must be read separately from local test results:
   replace a fresh post-deployment run.
 
 The complete `npm test`, `npm run build`, and `npm run verify:visuals` sequence
-was rerun after the Retry correction and passed. It must be rerun only if an
-application source/build/test file changes after this record; a documentation-
-only checkpoint does not invalidate it.
+passed after the profile-save fixes. After the final query cache-bust in
+`049b5ff`, the latest full `npm test` and `npm run build` passed again.
 
-### Exact deployed public Browser QA
+### Prior validated public Browser QA (`ecf8726`)
 
 - Home — PASS: 17 lessons, 616 activities, and 14 formats displayed.
 - Pricing — PASS: exact monthly and six-month values; Dark preference persisted.
@@ -120,9 +118,29 @@ only checkpoint does not invalidate it.
 - Teacher public gate — PASS: unauthenticated gate and English/Japanese switch.
 - Routing/assets — PASS: legacy Taki redirect and replacement WebP delivery.
 - Browser log — PASS: no warning or error entries in the checked run.
-- Google learner and teacher starts — PARTIAL: both reached Google's official
-  account chooser and the Teacher return target was correct. No account was
-  selected, so authenticated login/profile/RLS behavior was not tested.
+- Earlier Google starts — PARTIAL: learner and Teacher reached the official
+  chooser and the Teacher return target was correct. Learner auth was later
+  completed below; Teacher auth remains pending.
+
+### Authenticated Google learner profile-save hotfix
+
+- Google sign-in — PASS.
+- First Save profile — REPRODUCIBLE FAIL before the fix:
+  `permission denied for table review_profiles`; the old conflict-update sent
+  insert-only `user_id`.
+- Fix chain — `d0b244b` split insert/update and added modal-local status;
+  `50656f8` avoided the stale automatic race; `a69ab08` bumped PWA cache v3;
+  `049b5ff` cache-busted the query.
+- Database scope — unchanged: no migration `017`, no new grant, and no
+  `UPDATE(user_id)` permission.
+- Live retest — PASS: modal-local and page success appeared, the gate closed,
+  reload stayed complete, Standard showed through August 2, 2027, and all 44
+  June 30 questions were accessible.
+- Safe sign-out — PASS: reload stayed signed out and a second lesson tab locked.
+- Tier-negative limitation — NOT PROVED: Premium task cards appeared while the
+  label said Standard, so the identity likely has Teacher elevation. Dedicated
+  non-teacher tier accounts are required.
+- End state — learner signed out; Teacher auth remains pending.
 
 ### Content review evidence
 
@@ -148,9 +166,9 @@ only checkpoint does not invalidate it.
 - Deployed light/dark Lighthouse checks for home, phrases, pricing, and lesson;
   remaining named-breakpoint and overflow inspection not covered by the exact
   public run above.
-- Authenticated Google first-time/returning, email signup/login/logout/reload,
-  Free/Standard/Premium/Premium+ access, Teacher preview, and full access-code
-  lifecycle.
+- Authenticated Teacher; dedicated non-teacher Free/Standard/Premium/Premium+
+  access negatives/positives; email auth; Teacher preview; and access-code
+  lifecycle. Scoped Google learner profile/reload/sign-out passed above.
 - Draft privacy, real speaking recording/upload/return/resubmission, essay
   review/publication, and RLS-negative checks after migration/function rollout.
 - Real iPhone Safari and Android Chrome touch, microphone, PWA install/update,
@@ -160,7 +178,7 @@ only checkpoint does not invalidate it.
 
 This section is retained as historical evidence from the prior session. It is
 not the current deployment source of truth: the current source is the August 14
-rollout record above for `upgrade/review-hub-v9-final-product@ecf8726`. The
+rollout record above for `upgrade/review-hub-v9-final-product@049b5ff`. The
 reported migration `014`/older Edge deployment was not independently re-read
 from a remote migration ledger; the project currently has no such ledger.
 

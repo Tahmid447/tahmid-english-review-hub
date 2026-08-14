@@ -12,12 +12,12 @@ This document records the state that existed before the final-product work began
 
 - Working branch: `upgrade/review-hub-v9-final-product`.
 - Exact deployed application commit:
-  `ecf8726a871218d439f69fa780d17d199f378692`; its parent and historical
-  rollout checkpoint is `fcf561d78da6de405d6ca54b78ebfc99df3d3a0a`.
+  `049b5ff4da6606fcffc461f412f314d253916e13`; historical rollout/logical-
+  restore checkpoint: `fcf561d78da6de405d6ca54b78ebfc99df3d3a0a`.
 - Current documentation checkpoint is branch HEAD (`git rev-parse HEAD`); a
   documentation commit cannot contain its own final hash.
 - The dedicated v9 preview is published from exact application commit
-  `ecf8726` as Netlify deploy `6a7e6b11f28ff70008bff23a`. Production static
+  `049b5ff` as Netlify deploy `6a7e9a1002ab210008522e82`. Production static
   files remain pre-v9.
 - Migrations `202608140015_teacher_preview_and_premium_workflows.sql` and
   `202608140016_visual_question_content_corrections.sql`, and the matching
@@ -30,7 +30,7 @@ This document records the state that existed before the final-product work began
 
 ## Deployment facts observed
 
-- The dedicated v9 preview at `https://tahmid-english-review-hub-v9-preview.netlify.app` successfully published `upgrade/review-hub-v9-final-product@ecf8726` as deploy `6a7e6b11f28ff70008bff23a`; Netlify reported a 10-second build/9-second total, 1 new file, 1 changed asset, 12 redirects, 6 header rules, and no errors. Exact permalink: `https://6a7e6b11f28ff70008bff23a--tahmid-english-review-hub-v9-preview.netlify.app`.
+- The dedicated v9 preview published `upgrade/review-hub-v9-final-product@049b5ff` as deploy `6a7e9a1002ab210008522e82`. Exact permalink: `https://6a7e9a1002ab210008522e82--tahmid-english-review-hub-v9-preview.netlify.app`.
 - The public production URL `https://jocular-chaja-86e78d.netlify.app` was fetched directly. It does not contain the four-plan v9 platform files or Premium+ implementation, so v9 is not in production.
 - The currently signed-in Netlify account can administer the dedicated v9 preview, but the production project returned “Page not found” in that account. Production administration therefore remains blocked unless the correct Netlify account is used or the production site is deliberately recreated after all gates pass.
 - Supabase project `ycmybggetemkhorkhfnf` is on the Free plan and offered no
@@ -52,13 +52,25 @@ This document records the state that existed before the final-product work began
   the official score from `0/1` to `0/2`. Commit `ecf8726` fixed the denominator;
   the exact live retest stayed `0/1`. The complete `npm test`, `npm run build`,
   and `npm run verify:visuals` sequence passed after the fix.
-- Exact-deploy public QA passed the home inventory, prices and Dark persistence,
+- Prior `ecf8726` public QA passed the home inventory, prices and Dark persistence,
   phrase progressive rendering, shuffle/radio behavior, visual guidance, 0.5x
   and mixed-language controls, locked payload boundary, Teacher public gate and
   language switch, Taki redirect, replacement WebP, and clean browser log.
 - Google learner and Teacher starts reached the official account chooser; the
-  Teacher return target was correct. No account was selected, so authenticated
-  behavior remains pending.
+  Teacher return target was correct. Learner auth was subsequently completed;
+  Teacher auth remains pending.
+- First learner profile save reproducibly failed with
+  `permission denied for table review_profiles`: the old upsert included
+  insert-only `user_id` on update. `d0b244b` split payloads/added modal status,
+  `50656f8` avoided the stale race, `a69ab08` bumped PWA cache v3, and `049b5ff`
+  cache-busted the query. No migration `017` or `UPDATE(user_id)` grant was added.
+- Live retest passed modal/page success, gate close, complete reload, Standard
+  shown through August 2, 2027, all 44 June 30 questions, and safe cross-tab
+  sign-out/lock. Premium task cards also appeared, so the identity seems
+  Teacher-elevated and cannot prove strict Standard-versus-Premium denial.
+- Shared Supabase was unchanged by this hotfix. The full test/build/visual suite
+  passed after the code fixes, and the latest full test/build passed after the
+  final cache-bust.
 
 ## Baseline verification
 
@@ -116,7 +128,7 @@ These tests are valuable, but several are static source assertions. They do not 
 | Pricing sales journey | Deployed public QA passed | Four cards, 13 comparison rows, exact monthly/six-month values, best-for copy, Premium recommendation, trust/FAQ content, contact-first flow, and Dark persistence were checked on the exact Preview deploy. |
 | Editable contact message | Implemented locally | Editable name/message, dirty-state preservation, copy-current-text, and explicit reset are covered by local plan tests. |
 | Navigation and state | Implemented locally | Safe lesson→plans return, new-tab role change, persistent library filters, and common return handling are present. Browser history/reload QA remains part of preview testing. |
-| First-time Google onboarding | Implemented locally; auth QA pending | Incomplete profiles are gated and verified email is read-only. First-time and returning OAuth flows require the preview backend and real accounts. |
+| First-time Google onboarding | Learner live QA passed; scope caveat | Google sign-in, profile save, gate close, reload persistence, observed Standard membership/lesson access, and sign-out passed after the hotfix. Teacher auth and dedicated non-teacher tier negatives remain pending. |
 | Teacher preview as learner | Backend live; auth QA pending | Teacher-only Free/Standard/Premium/Premium+ preview is labelled and non-mutating. Migration `015` is live; authenticated RLS behavior remains to be exercised. |
 | Immediate retry | Deployed regression fixed and passed | Public QA found `0/1` becoming `0/2` on parent `fcf561d`; commit `ecf8726` fixes it, and exact-deploy retest preserved official `0/1` after a correct retry. |
 | Check answered / partial grading | Implemented and regression-tested locally | Format-aware completeness, dynamic **Check N answered**, checked-only denominator, and incomplete complex-answer protection cover all 14 formats. |
@@ -161,10 +173,10 @@ reason pairs.
 3. **Completed:** applied and verified migration `015`.
 4. **Completed:** applied and verified migration `016` in a separate transaction.
 5. **Completed:** deployed the matching updated `membership-access` Edge Function.
-6. **Completed:** deployed exact application commit `ecf8726` to the dedicated
-   v9 preview and completed the recorded public browser QA.
-7. **In progress:** complete authenticated teacher and four-tier learner/RLS
-   workflow QA; then complete Lighthouse and real-device QA.
+6. **Completed:** deployed exact application commit `049b5ff` and completed
+   recorded public plus scoped Google learner QA.
+7. **In progress:** complete authenticated Teacher and dedicated non-teacher
+   four-tier/RLS QA; then Lighthouse and real-device QA.
 8. Promote production only after every gate passes and production Netlify
    access is confirmed.
 
@@ -182,9 +194,11 @@ reason pairs.
 - Remaining deployed desktop/tablet/430px/390px visual and overflow checks not
   covered by the exact public run; the checked browser log was clean.
 - Final light/dark Lighthouse checks for home, phrases, pricing and lesson, including 390 px and tablet breakpoints.
-- Authenticated teacher plus Free/Standard/Premium/Premium+ learner checks.
-- Complete Google first-time/returning onboarding after the already-verified
-  official chooser redirects; email signup/login/logout/reload.
+- Authenticated Teacher plus dedicated non-teacher Free/Standard/Premium/
+  Premium+ negative/positive checks; do not use the elevated learner identity
+  as strict tier-denial evidence.
+- Email auth and remaining returning-Google cases not covered by the successful
+  learner profile/reload/sign-out run.
 - Access-code create/edit/reissue/redeem/expired/exhausted/disable/delete and cleanup.
 - Premium essay and microphone flows from submission through return/resubmission/published feedback.
 - Real iPhone Safari and Android Chrome checks, or an explicit user-assisted record if direct device control is unavailable.

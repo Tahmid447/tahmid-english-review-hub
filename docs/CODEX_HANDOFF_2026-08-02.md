@@ -6,27 +6,24 @@ Updated: 2026-08-14 (Asia/Tokyo)
 
 - Repository folder: `/Users/tahmidahmed/Documents/Codex/2026-08-03/codex-handoff-tahmid-english-review-hub/work/tahmid-english-review-hub`
 - Working branch: `upgrade/review-hub-v9-final-product`
-- Exact deployed application commit: `ecf8726a871218d439f69fa780d17d199f378692`
-- Application parent / historical rollout checkpoint: `fcf561d78da6de405d6ca54b78ebfc99df3d3a0a`
+- Exact deployed application commit: `049b5ff4da6606fcffc461f412f314d253916e13`
+- Historical rollout / logical-restore checkpoint: `fcf561d78da6de405d6ca54b78ebfc99df3d3a0a`
 - Current documentation checkpoint: branch HEAD (`git rev-parse HEAD`). This
   document cannot contain the final hash of the commit that contains itself.
 - Canonical GitHub implementation checkpoint: `c14625d50204227c917ecc01d59322cb63006cee`
 - Published handoff checkpoint: `a87eb5e1aaa9cff079319b68dfed40bdb2b1a408`
 - Production: https://jocular-chaja-86e78d.netlify.app
 - Dedicated v9 preview: https://tahmid-english-review-hub-v9-preview.netlify.app
-- Exact Preview permalink: https://6a7e6b11f28ff70008bff23a--tahmid-english-review-hub-v9-preview.netlify.app
+- Exact Preview permalink: https://6a7e9a1002ab210008522e82--tahmid-english-review-hub-v9-preview.netlify.app
 - Supabase project ref: `ycmybggetemkhorkhfnf`
 
 Do not place OAuth client secrets, passwords, service-role keys, database passwords, or access tokens in this file, Git, screenshots, or chat.
 
 ## Deployment truth
 
-- Exact application commit `ecf8726a871218d439f69fa780d17d199f378692`
-  is published to the dedicated preview. Its parent is `fcf561d`, the original
-  rollout/restore checkpoint.
-- Netlify deploy `6a7e6b11f28ff70008bff23a` is published. Netlify reported a
-  10-second build/9-second total, 1 new file, 1 changed asset, 12 redirect
-  rules, 6 header rules, and no errors.
+- Exact application commit `049b5ff4da6606fcffc461f412f314d253916e13`
+  is published to the dedicated preview as Netlify deploy
+  `6a7e9a1002ab210008522e82`.
 - The production static site is still pre-v9 and was not deployed or otherwise
   changed during this rollout.
 - Supabase migrations `015` and `016` were manually applied in order, each in a
@@ -39,10 +36,12 @@ Do not place OAuth client secrets, passwords, service-role keys, database passwo
 - The preview and production frontends share Supabase project
   `ycmybggetemkhorkhfnf`; therefore the backend and Edge changes can affect the
   older production frontend even though its static deployment is untouched.
-- Public browser QA on the exact deploy passed for the recorded routes and
-  interactions. Authenticated/RLS/access-code/submission/logout, microphone,
-  Lighthouse, and physical-device QA remain pending. No final-product
-  production promotion is authorised yet.
+- Public browser QA and scoped authenticated Google learner sign-in/profile/
+  reload/lesson/sign-out checks passed. Teacher auth, dedicated non-teacher tier
+  negatives, remaining RLS/access-code/submission, microphone, Lighthouse, and
+  physical-device QA remain pending. No production promotion is authorised.
+- This hotfix made no Supabase schema, policy, grant, data, or Edge change.
+  There is no migration `017`; shared Supabase remains at verified `015`/`016`.
 
 ### Database restore point and limitation
 
@@ -74,6 +73,11 @@ Do not place OAuth client secrets, passwords, service-role keys, database passwo
 - The shared progress experience uses Asia/Tokyo dates for streak, weekly goal, unique completions, first-attempt accuracy, and retry improvement.
 - The former `/takiwaki` route redirects into the common learner experience; historical audience/access compatibility remains in the data layer rather than maintaining a second learner UI.
 - First-time Google users have a real profile-completion gate with the verified email displayed read-only. Returning complete profiles do not repeat the gate.
+- First Save profile initially failed with
+  `permission denied for table review_profiles` because the old upsert included
+  insert-only `user_id` on update. The fix chain is `d0b244b` (split payloads and
+  modal status), `50656f8` (avoid stale race), `a69ab08` (PWA cache v3), and
+  `049b5ff` (query cache-bust). `UPDATE(user_id)` remains deliberately ungranted.
 - System, Light, and Dark themes share one persisted preference across the learner, phrase, lesson, and pricing experiences.
 - A public-shell PWA manifest, service worker, install metadata, and offline fallback are present. Protected routes, Supabase/API responses, learner data, answers, recordings, and auth-bearing requests are excluded from caching.
 - The phrase/vocabulary library has progressive rendering, retained filters, pronunciation, favourites, practice activity, and corrected type/presentation behavior.
@@ -116,9 +120,9 @@ Do not place OAuth client secrets, passwords, service-role keys, database passwo
 
 ## Verification evidence
 
-The final integrated worktree passed these local checks on August 14. After
-the Retry fix, the complete `npm test`, `npm run build`, and
-`npm run verify:visuals` sequence was rerun and passed:
+The final integrated worktree passed these local checks on August 14. After the
+profile-save fixes, `npm test`, `npm run build`, and `npm run verify:visuals`
+passed. After the final cache-bust, the latest full test/build also passed:
 
 ```sh
 npm run build
@@ -149,9 +153,9 @@ See `docs/test-report.md` for dated evidence and remaining gates.
 
 Live rollout verification also confirmed the logical restore point, migration
 `015` and `016` postconditions, the fresh matching Edge Function deployment,
-and Netlify Preview publication of exact application commit `ecf8726`.
+and Netlify Preview publication of exact application commit `049b5ff`.
 
-Public QA on the exact immutable deploy permalink passed for:
+Public QA on the earlier validated `ecf8726` deploy passed for:
 
 - home totals of 17 lessons, 616 activities, and 14 formats;
 - exact monthly/six-month pricing, Dark persistence, and phrase rendering from
@@ -165,9 +169,12 @@ Public QA on the exact immutable deploy permalink passed for:
   gate and English/Japanese switch, legacy Taki redirect, replacement WebP
   delivery, and an empty browser warning/error log.
 
-Google learner and teacher journeys reached Google's official account chooser;
-the Teacher journey carried the correct return target. No account was selected,
-so login, profile completion, and authenticated behavior are still pending.
+Authenticated Google learner retest on `049b5ff` passed modal-local and page
+success, gate close, complete-profile reload, Standard membership shown through
+August 2, 2027, access to all 44 June 30 questions, and safe sign-out/reload;
+the second open lesson tab became locked. Premium task cards also appeared, so
+the identity seems teacher-elevated and cannot prove strict Standard-versus-
+Premium denial. Teacher auth remains pending; the learner is signed out.
 
 ## Rollout progress and required order
 
@@ -179,13 +186,11 @@ so login, profile completion, and authenticated behavior are still pending.
    separate SQL Editor transactions.
 4. **Completed:** deploy and timestamp-check the matching
    `membership-access` Edge Function.
-5. **Completed:** publish exact application commit `ecf8726` to the dedicated
-   v9 preview and pass the recorded public browser QA, including the live Retry
-   regression/retest.
-6. **In progress:** complete authenticated teacher plus
-   Free/Standard/Premium/Premium+ learner QA, including Google first-time and
-   returning flows, email auth, access-code lifecycle, RLS privacy, speaking
-   upload, essay return/resubmission, published feedback, and sign-out/reload.
+5. **Completed:** publish exact application commit `049b5ff`, pass public QA,
+   and pass scoped Google learner profile/reload/lesson/sign-out QA.
+6. **In progress:** authenticate Teacher and dedicated non-teacher Free/
+   Standard/Premium/Premium+ accounts; test tier/RLS/access codes, email auth,
+   speaking/essay submissions, and published feedback.
 7. **Pending:** complete desktop/tablet/390 px and real iPhone Safari/Android
    Chrome touch, microphone, PWA, and offline QA.
 8. Promote to production only after every preview gate passes and the correct
@@ -194,13 +199,14 @@ so login, profile completion, and authenticated behavior are still pending.
 
 ## Remaining and blockers
 
-- Final integrated tests/build/visual verification after the Retry fix, backend
-  rollout, exact-commit Preview publication, and recorded public Browser QA are
-  complete.
-- Google redirects reached the official chooser but stopped before account
-  selection; no authenticated success is claimed.
+- Post-hotfix tests/build/visual verification, exact-commit Preview publication,
+  public QA, and scoped authenticated Google learner QA are complete.
+- Strict plan denial is unproved because the identity appeared teacher-elevated;
+  dedicated non-teacher tier accounts are required.
+- Teacher auth remains pending; the learner account is currently signed out.
 - Deployed Lighthouse/performance checks remain pending.
-- Authenticated Supabase/RLS/OAuth/access-code/submission QA is pending.
+- Remaining authenticated Teacher/tier RLS, email-auth, access-code, and
+  submission QA is pending; the scoped Google learner flow above is complete.
 - Real-device touch, PWA install/update, offline fallback, Safari/Chrome microphone, and upload QA are pending.
 - Production deployment requires access to the Netlify account that owns the existing production site, or a deliberate replacement plan approved only after preview QA.
 - Supabase Free plan has no official backup. The privacy-safe logical restore
@@ -212,11 +218,10 @@ so login, profile completion, and authenticated behavior are still pending.
 
 ## Exact next step
 
-Using exact deploy `6a7e6b11f28ff70008bff23a`, exercise authenticated teacher
-and Free/Standard/Premium/Premium+ learner/RLS/access-code/submission/logout
-flows without entering or recording anyone's password. Then complete
-microphone, Lighthouse, and physical-device QA. Record PASS/FAIL evidence
-before any production deployment.
+Using exact deploy `6a7e9a1002ab210008522e82`, authenticate a dedicated Teacher
+and dedicated non-teacher tier accounts, then exercise tier/RLS/access-code/
+submission behavior without recording anyone's password. Complete microphone,
+Lighthouse, and physical-device QA before any production deployment.
 
 ## Read first in the next Codex session
 

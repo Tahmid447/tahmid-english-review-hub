@@ -3,13 +3,13 @@
 Private development repository for the Tahmid English Review Hub v9 learner
 platform and Teacher Studio.
 
-Current work is on `upgrade/review-hub-v9-final-product`. The final integrated
-suite passes after the live Retry correction. The exact deployed application
-commit is `ecf8726a871218d439f69fa780d17d199f378692`, whose parent is the
-historical rollout checkpoint `fcf561d78da6de405d6ca54b78ebfc99df3d3a0a`.
-Public Preview QA passes for the recorded routes and interactions;
-authenticated, Lighthouse, microphone, and physical-device QA remain pending.
-The production static site remains pre-v9. Read
+Current work is on `upgrade/review-hub-v9-final-product`. The exact deployed
+application commit is `049b5ff4da6606fcffc461f412f314d253916e13`;
+`fcf561d78da6de405d6ca54b78ebfc99df3d3a0a` remains the historical rollout and
+logical-restore checkpoint. Authenticated learner Google sign-in, profile
+completion, reload persistence, lesson access, and safe sign-out pass. Teacher
+auth, dedicated non-teacher tier negatives, Lighthouse, microphone, and
+physical-device QA remain pending. The production static site remains pre-v9. Read
 `docs/CODEX_HANDOFF_2026-08-02.md` before further rollout work.
 
 ## Routes
@@ -79,8 +79,9 @@ node scripts/test-plan-platform.mjs
 git diff --check
 ```
 
-After the Retry correction in `ecf8726`, the full `npm test`,
-`npm run build`, and `npm run verify:visuals` sequence passed.
+After the authentication fixes, the full `npm test`, `npm run build`, and
+`npm run verify:visuals` sequence passed. After the final query cache-bust in
+`049b5ff`, the latest full `npm test` and `npm run build` also passed.
 
 `npm run build` regenerates reviewed data and the protected Supabase question
 migration. The public `dist/` allowlist deliberately excludes private authoring
@@ -118,6 +119,11 @@ no tracked migrations; do not infer ledger entries or blindly replay the files.
 Authenticated learner/teacher, access-code, RLS, submission, microphone, and
 real-device QA is still in progress.
 
+The profile-save hotfix required no migration or Edge change: there is no
+migration `017`, and `UPDATE(user_id)` was deliberately not granted. Inserts
+and updates are separate, and update payloads omit insert-only `user_id`.
+Shared Supabase state is otherwise unchanged by the hotfix.
+
 All Review Hub database objects use the `review_` prefix. The browser receives
 only the public anon key; no service-role key or password belongs in this
 repository. Learner passwords remain inside Supabase Auth and are never
@@ -128,32 +134,41 @@ answers, teacher feedback, authenticated API responses, or recordings.
 
 - Dedicated v9 preview:
   `https://tahmid-english-review-hub-v9-preview.netlify.app`
-  — published from `upgrade/review-hub-v9-final-product@ecf8726` as Netlify
-  deploy `6a7e6b11f28ff70008bff23a` (10-second build/9-second total; 1 new
-  file, 1 asset changed, 12 redirects, 6 header rules, and no errors)
+  — published from `upgrade/review-hub-v9-final-product@049b5ff` as Netlify
+  deploy `6a7e9a1002ab210008522e82`
 - Exact immutable Preview permalink:
-  `https://6a7e6b11f28ff70008bff23a--tahmid-english-review-hub-v9-preview.netlify.app`
+  `https://6a7e9a1002ab210008522e82--tahmid-english-review-hub-v9-preview.netlify.app`
 - Production: `https://jocular-chaja-86e78d.netlify.app/`
   — static site remains untouched and pre-v9
 
-Live public QA on the exact permalink checked the 17/616/14 home totals, exact
+Earlier public QA on the validated `ecf8726` deploy checked the 17/616/14 home totals, exact
 monthly and six-month pricing, Dark persistence, phrase expansion from 24 to
 30 items, shuffle notice and radio-arrow behavior, question-specific visual
 guidance, 0.5x persistence, mixed English/Japanese audio controls, locked-lesson
 payload withholding, Teacher unauthenticated gate and language switch, legacy
 Taki redirect, replacement WebP delivery, and an empty browser warning/error
 log. A Retry denominator bug found on `fcf561d` (`0/1` becoming `0/2`) was fixed
-in `ecf8726`; the exact live retest stayed `0/1` after a correct retry. Google
-learner and teacher flows reached the official account chooser, with the correct
-teacher return target, but no account was selected and no authenticated flow is
-claimed complete.
+in `ecf8726`; the exact live retest stayed `0/1` after a correct retry.
+
+Authenticated Google learner QA then reproduced
+`permission denied for table review_profiles`: the old upsert sent insert-only
+`user_id` on update. Commits `d0b244b` (split insert/update and modal status),
+`50656f8` (avoid stale automatic race), `a69ab08` (PWA cache v3), and `049b5ff`
+(query cache-bust) fixed it. Live retest passed modal and page success, gate
+close, complete reload, Standard shown through August 2, 2027, access to all 44
+June 30 questions, and sign-out/reload/cross-tab locking.
+
+Premium task cards appeared despite the Standard label, so this identity seems
+teacher-elevated. Strict Standard-versus-Premium denial is not proved and still
+needs dedicated non-teacher tier accounts. Teacher auth remains pending; the
+learner account is currently signed out.
 
 The preview and production frontends share the same Supabase project, so the
 backend migrations and Edge deployment also affect requests from the older
 production frontend even though its static files were not deployed. Production
-promotion remains blocked until authenticated preview/RLS/access-code/
-submission/logout checks, Lighthouse, microphone, and physical iPhone/Android
-QA pass. Preserve the previous successful Netlify deploy and the limited
+promotion remains blocked until Teacher auth, dedicated tier/RLS/access-code/
+submission checks, Lighthouse, microphone, and physical iPhone/Android QA pass.
+Preserve the previous successful Netlify deploy and the limited
 logical restore point, while recognising that neither is a complete database
 rollback.
 
