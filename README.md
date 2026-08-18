@@ -43,6 +43,8 @@ lesson data are guarded by Supabase Auth and Row Level Security.
 - Teacher Studio organised into Dashboard, Learners, Access codes, Lessons &
   content, Submissions, Sources, and Insights
 - 34 active Premium review tasks: one speaking and one essay per lesson
+- 51 lesson-specific Premium topic choices: three per lesson, shared by its
+  speaking and essay tasks, with topic-specific bilingual guidance
 - human teacher feedback only; no automatic or AI grading
 
 All 85 visual questions were manually and programmatically re-audited across
@@ -75,6 +77,7 @@ npm run audit:audio-live
 node scripts/test-teacher-controls.mjs
 node scripts/test-teacher-workflows-v15.mjs
 node scripts/validate-premium-schema.mjs
+node scripts/test-premium-topics.mjs
 node scripts/test-plan-platform.mjs
 git diff --check
 ```
@@ -113,14 +116,19 @@ The following forward changes are live:
    and its fresh deployment timestamp and audited response/error boundaries
    were observed in the dashboard.
 
+Local migration `202608180017_premium_task_topics.sql` is parser- and
+test-verified but not yet applied. It adds three topic choices per lesson to
+the existing 34 Premium tasks and records the topic selected for each learner
+attempt. Apply it before publishing the matching topic UI.
+
 Both SQL files were applied manually. This project has no
 `supabase_migrations.schema_migrations` ledger, and the dashboard still reports
 no tracked migrations; do not infer ledger entries or blindly replay the files.
 Authenticated learner/teacher, access-code, RLS, submission, microphone, and
 real-device QA is still in progress.
 
-The profile-save hotfix required no migration or Edge change: there is no
-migration `017`, and `UPDATE(user_id)` was deliberately not granted. Inserts
+The profile-save hotfix required no migration or Edge change, and
+`UPDATE(user_id)` was deliberately not granted. Inserts
 and updates are separate, and update payloads omit insert-only `user_id`.
 Shared Supabase state is otherwise unchanged by the hotfix.
 

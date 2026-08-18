@@ -975,12 +975,12 @@ async function refreshDashboard() {
       ),
       fetchOptional(
         "review_premium_tasks",
-        "id,lesson_id,stable_key,task_type,title_en,title_ja,prompt_en,prompt_ja,instructions_en,instructions_ja,required_phrases,required_vocabulary,target_seconds,min_word_count,max_word_count,max_attempts,active,created_at,updated_at",
+        "id,lesson_id,stable_key,task_type,title_en,title_ja,prompt_en,prompt_ja,instructions_en,instructions_ja,required_phrases,required_vocabulary,topics,target_seconds,min_word_count,max_word_count,max_attempts,active,created_at,updated_at",
         { order: { column: "created_at", ascending: false } },
       ),
       fetchOptional(
         "review_task_submissions",
-        "id,task_id,user_id,attempt_number,status,text_response,audio_object_path,transcript,duration_seconds,submitted_at,reviewed_at,created_at,updated_at",
+        "id,task_id,user_id,attempt_number,status,selected_topic_key,text_response,audio_object_path,transcript,duration_seconds,submitted_at,reviewed_at,created_at,updated_at",
         { order: { column: "submitted_at", ascending: false } },
       ),
       fetchOptional(
@@ -3290,7 +3290,15 @@ function premiumTaskList() {
     section.append(make("p", { text: teacherText("No Premium tasks have been created yet.", "Premium課題はまだありません。") }));
     return section;
   }
-  const { table, tbody } = makeTable(["Task", "Lesson", "Type", "Status", "Submissions", "Actions"]);
+  const { table, tbody } = makeTable([
+    teacherText("Task", "課題"),
+    teacherText("Lesson", "レッスン"),
+    teacherText("Type", "種類"),
+    teacherText("Topics", "トピック"),
+    teacherText("Status", "状態"),
+    teacherText("Submissions", "提出数"),
+    teacherText("Actions", "操作"),
+  ]);
   state.premiumTasks.forEach((task) => {
     const submissions = teacherVisibleSubmissions().filter((item) => item.task_id === task.id);
     const hasStoredSubmission = state.taskSubmissions.some((item) => item.task_id === task.id);
@@ -3304,6 +3312,7 @@ function premiumTaskList() {
       make("td", { text: teacherLanguage === "ja" ? task.title_ja || task.title_en : task.title_en }),
       make("td", { text: lessonTitle(task.lesson_id) }),
       make("td", { text: task.task_type === "speaking" ? teacherText("Speaking", "スピーキング") : teacherText("Essay", "英作文") }),
+      make("td", { text: teacherText(`${task.topics?.length || 0} choices`, `${task.topics?.length || 0}件`) }),
       make("td", { text: task.active ? teacherText("Active", "有効") : teacherText("Hidden", "非表示") }),
       make("td", { text: submissions.length }),
       make("td"),
@@ -3362,6 +3371,9 @@ function premiumSubmissionQueue() {
   const list = make("div", { className: "premium-review-list" });
   submissions.forEach((submission) => {
     const task = state.premiumTasks.find((item) => item.id === submission.task_id);
+    const topic = Array.isArray(task?.topics)
+      ? task.topics.find((item) => item.key === submission.selected_topic_key)
+      : null;
     const feedback = state.submissionFeedback.find((item) => item.submission_id === submission.id);
     const card = make("article", { className: "premium-review-card" });
     card.append(
@@ -3372,6 +3384,12 @@ function premiumSubmissionQueue() {
         `${task?.task_type === "speaking" ? "スピーキング" : task?.task_type === "essay" ? "英作文" : "課題"} · ${submission.attempt_number}回目`,
       ) }),
     );
+    if (topic) {
+      card.append(make("p", {
+        className: "premium-submission-topic",
+        text: teacherText(`Chosen topic: ${topic.title_en}`, `選択トピック：${topic.title_ja || topic.title_en}`),
+      }));
+    }
     if (submission.text_response) {
       const response = make("details");
       response.append(make("summary", { text: "Read submitted essay" }), make("p", { className: "premium-response-text", text: submission.text_response }));

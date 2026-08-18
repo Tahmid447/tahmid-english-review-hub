@@ -19,6 +19,10 @@ const premiumPlusSql = await readFile(
 const learnerUi = await readFile(resolve(here, "../src/premium-tasks.js"), "utf8");
 const supabaseClient = await readFile(resolve(here, "../src/supabase.js"), "utf8");
 const teacherUi = await readFile(resolve(here, "../src/teacher.js"), "utf8");
+const topicSql = await readFile(
+  resolve(here, "../supabase/migrations/202608180017_premium_task_topics.sql"),
+  "utf8",
+);
 
 const requiredFragments = [
   "review_plan_catalog",
@@ -71,6 +75,15 @@ for (const fragment of ["audio/mp4\": \"m4a", "audio/ogg\": \"ogg", "audio/mpeg\
 }
 for (const fragment of ["Create a Premium review task", "Publish feedback", "teacher writes and remains responsible", "item.status !== \"draft\""]) {
   if (!teacherUi.includes(fragment)) throw new Error(`Premium teacher UI is missing: ${fragment}`);
+}
+for (const fragment of ["selected_topic_key", "review_validate_submission_topic", "updated_count <> 34", "covered_tasks <> 34"]) {
+  if (!topicSql.includes(fragment)) throw new Error(`Premium topic schema is missing: ${fragment}`);
+}
+for (const fragment of ["Choose your topic", "Recommended phrases:", "Recommended vocabulary:", "selectedTopic()?.key"]) {
+  if (!learnerUi.includes(fragment)) throw new Error(`Premium topic learner UI is missing: ${fragment}`);
+}
+if (!teacherUi.includes("Chosen topic:") || !teacherUi.includes("selected_topic_key")) {
+  throw new Error("Teacher Studio must show the learner's selected Premium topic.");
 }
 if (/AI-assisted draft|ai\.type\s*=\s*"checkbox"/.test(teacherUi)) {
   throw new Error("Teacher Studio must not expose a new AI-feedback workflow.");

@@ -1,6 +1,6 @@
 # Free / Standard / Premium / Premium+ plans and teacher review
 
-Updated: 2026-08-14 (Asia/Tokyo)
+Updated: 2026-08-18 (Asia/Tokyo)
 
 This is the product and operations specification for the four public plans,
 contact-first sales flow, Premium submissions, and human teacher review. Public
@@ -8,11 +8,10 @@ names, prices, comparison rows, and contact destinations have one browser-side
 source of truth in `src/plans.js`; database plan keys and entitlements remain
 in Supabase.
 
-The final-product implementation is local. Migration
-`202608140015_teacher_preview_and_premium_workflows.sql`, migration
-`202608140016_visual_question_content_corrections.sql`, and the matching updated
-`membership-access` Edge Function are **not live**. The v9 preview is still the
-older `aad5749` deployment, and production remains pre-v9.
+Migrations `015` and `016` and the matching `membership-access` Edge Function
+are live in shared Supabase. The additive migration
+`202608180017_premium_task_topics.sql` is complete and verified locally but is
+**not live yet**. The production static site remains pre-v9.
 
 ## Fixed public plans and prices
 
@@ -73,15 +72,18 @@ must never be treated as access control.
 
 ## Task inventory and learner submission workflow
 
-Migration `015` seeds exactly 34 active tasks: one speaking and one essay task
-for every one of the 17 lessons. The migration has a hard 34-row postcondition.
-This seed is local and will not exist in the hosted database until migration
-`015` is applied successfully.
+Migration `015` seeded exactly 34 active tasks: one speaking and one essay task
+for every one of the 17 lessons. The live postcondition has been verified.
+Migration `017` adds the same three authored topic choices to each lesson's two
+tasks, for 51 unique lesson topics and 102 task/topic presentations. It keeps
+task IDs and submission history intact.
 
 ### Speaking
 
 1. The learner opens an active speaking task.
-2. The task shows the topic, target duration, and required phrases/vocabulary.
+2. The learner chooses one of three lesson-specific topics. The task then shows
+   that topic's bilingual prompt, target duration, recommended phrases and
+   vocabulary.
 3. The learner records, listens, and either re-records or submits.
 4. The private object is stored in `review-premium-recordings`; Postgres stores
    only `audio_object_path` and submission metadata.
@@ -92,8 +94,8 @@ This seed is local and will not exist in the hosted database until migration
 
 ### Essay
 
-1. The learner writes against the lesson-specific prompt and visible word
-   range.
+1. The learner chooses one of three lesson-specific topics and writes against
+   its bilingual essay prompt and the visible word range.
 2. A draft remains private to the learner and does not enter the teacher queue.
 3. Final submission validates the word range and becomes read-only during
    review. Essay rows cannot carry an audio object path.
@@ -104,6 +106,12 @@ Submission statuses remain `draft`, `submitted`, `in_review`, `reviewed`, and
 Returning work and resubmitting refreshes the queue timestamps. Review feedback
 and status are changed through one transactional teacher RPC so a partial
 write cannot publish one without the other.
+
+Migration `017` stores the choice as `selected_topic_key`. A draft or returned
+attempt may change topics; a final submission must use one of the task's three
+offered keys, and the choice is locked while the teacher reviews it. Teacher
+Studio displays the chosen title beside the attempt so feedback can address the
+actual prompt.
 
 ## Teacher Studio controls
 
@@ -176,21 +184,22 @@ against actual queue time during a small preview cohort before scaling.
 
 1. Export/back up the current Supabase schema and relevant Review Hub data.
 2. Confirm the final local suite and build pass on the exact commit to deploy.
-3. Apply `202608140015_teacher_preview_and_premium_workflows.sql`.
-4. Apply `202608140016_visual_question_content_corrections.sql` only after
-   migration `015` succeeds.
-5. Deploy the matching updated `membership-access` Edge Function.
-6. Deploy the exact final-product commit to the dedicated v9 preview only.
-7. Test an authorised teacher and Free, Standard, Premium, and Premium+ learner
+3. Confirm live migrations `015` and `016`, all 17 expected lesson slugs, and
+   all 34 stable Premium task seeds.
+4. Apply `202608180017_premium_task_topics.sql` as one transaction and verify
+   its 34-row/51-topic postconditions.
+5. Deploy the exact matching final-product commit to the dedicated v9 preview
+   only.
+6. Test an authorised teacher and Free, Standard, Premium, and Premium+ learner
    accounts, including below-tier payload withholding.
-8. Test access-code create/reissue/redeem conflicts and one real speaking
+7. Test access-code create/reissue/redeem conflicts and one real speaking
    upload/return/resubmission plus one essay feedback publication.
-9. Complete real-phone touch, microphone, PWA install/update, and offline-shell
+8. Complete real-phone touch, microphone, PWA install/update, and offline-shell
    checks.
-10. Promote to production only after every preview gate passes and a known-good
-    rollback point is preserved.
+9. Promote to production only after every preview gate passes and a known-good
+   rollback point is preserved.
 
-Migration `015`, migration `016`, and the updated Edge Function are not live as
-of this document's update. Do not expose the final UI in production before the
-matching backend, authenticated preview QA, and physical-device gate are all
-complete.
+Migration `017` and its matching UI are not live as of this document's update.
+Do not expose the topic UI before its database columns exist, and do not expose
+the final product in Production before authenticated Preview QA and the
+physical-device gate are complete.

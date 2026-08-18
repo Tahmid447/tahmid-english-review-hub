@@ -32,6 +32,14 @@ Do not place OAuth client secrets, passwords, service-role keys, database passwo
   Music. Five low-volume procedural ambiences require an explicit user action,
   default to Calm Focus selected but OFF, persist per learner, and duck during
   natural speech. No external or ambiguously licensed music asset was added.
+- The fourth final-polish checkpoint is complete locally: all 17 lessons have
+  three learner-selectable Premium topics (51 authored topics total). Each
+  choice has bilingual speaking and essay prompts, topic-specific recommended
+  phrases and vocabulary, and a Core/Stretch label. The chosen topic is saved
+  with the learner attempt and shown in Teacher Studio. Migration `017` is
+  additive and locally/parser verified, but is not yet applied to shared
+  Supabase; the matching UI must not be pushed to the auto-deploy branch before
+  the database change is safely applied.
 
 - Exact application commit `049b5ff4da6606fcffc461f412f314d253916e13`
   is published to the dedicated preview as Netlify deploy
@@ -52,8 +60,9 @@ Do not place OAuth client secrets, passwords, service-role keys, database passwo
   reload/lesson/sign-out checks passed. Teacher auth, dedicated non-teacher tier
   negatives, remaining RLS/access-code/submission, microphone, Lighthouse, and
   physical-device QA remain pending. No production promotion is authorised.
-- This hotfix made no Supabase schema, policy, grant, data, or Edge change.
-  There is no migration `017`; shared Supabase remains at verified `015`/`016`.
+- The earlier profile hotfix made no database change. The new local migration
+  `017` adds Premium topic metadata and selected-topic persistence; shared
+  Supabase remains at verified `015`/`016` until that migration is applied.
 
 ### Database restore point and limitation
 
@@ -143,6 +152,12 @@ Do not place OAuth client secrets, passwords, service-role keys, database passwo
 - Migration `015` seeded exactly 34 active review tasks: one speaking and one
   essay task for each of the 17 lessons. Live checks confirmed all 17 pairs and
   the expected functions, policies, ownership rules, and transactional RPCs.
+- Local migration `017` enriches those same 34 tasks without replacing their
+  identities or submission history. It requires exactly 34 updated task rows,
+  three unique topics per task, valid bilingual prompts, 3–6 recommended
+  phrases, and 3–8 vocabulary items. A submission stores
+  `selected_topic_key`; the database requires a valid offered topic at final
+  submission and prevents topic changes while work is under review.
 - Learner drafts remain private until submission. Speaking recordings remain in the private storage bucket and are referenced by object path only.
 - The local review design uses an atomic teacher review RPC, fresh return/resubmission timestamps, transactional code redemption/reissue, recording ownership/task/quota checks, and teacher-only plan preview.
 - Teacher Studio is organised around seven jobs: **Dashboard, Learners, Access codes, Lessons & content, Submissions, Sources, and Insights**. It also includes an English/Japanese display preference, learner and queue filters, Dashboard plan counts and 30-day new-learner count, honest localized source provenance, non-mutating Free/Standard/Premium/Premium+ preview, and safer sign-out.
@@ -188,7 +203,8 @@ git diff --check
 ```
 
 PostgreSQL 18 parser checks also passed for migration `015` (60 statements)
-and migration `016` (2 statements). Local Browser QA covered public home,
+and migration `016` (2 statements). The new local migration `017` also parsed
+successfully (11 statements). Local Browser QA covered public home,
 pricing, phrase, and lesson flows at 390/430/621/768/900/1024/1440 px,
 including no checked horizontal overflow, light/dark persistence, pricing
 calculations/contact editing, roving radio keys, Retry, and immutable first
@@ -237,12 +253,14 @@ Premium denial. Teacher auth remains pending; the learner is signed out.
    `membership-access` Edge Function.
 5. **Completed:** publish exact application commit `049b5ff`, pass public QA,
    and pass scoped Google learner profile/reload/lesson/sign-out QA.
-6. **In progress:** authenticate Teacher and dedicated non-teacher Free/
+6. **Completed locally, not live:** implement and verify migration `017` plus
+   51 Premium topic choices and selected-topic Teacher visibility.
+7. **In progress:** authenticate Teacher and dedicated non-teacher Free/
    Standard/Premium/Premium+ accounts; test tier/RLS/access codes, email auth,
    speaking/essay submissions, and published feedback.
-7. **Pending:** complete desktop/tablet/390 px and real iPhone Safari/Android
+8. **Pending:** complete desktop/tablet/390 px and real iPhone Safari/Android
    Chrome touch, microphone, PWA, and offline QA.
-8. Promote to production only after every preview gate passes and the correct
+9. Promote to production only after every preview gate passes and the correct
    production Netlify account is available. Preserve a known-good rollback
    deploy and prepare forward fixes for database issues.
 
@@ -267,10 +285,12 @@ Premium denial. Teacher auth remains pending; the learner is signed out.
 
 ## Exact next step
 
-Using exact deploy `6a7e9a1002ab210008522e82`, authenticate a dedicated Teacher
-and dedicated non-teacher tier accounts, then exercise tier/RLS/access-code/
-submission behavior without recording anyone's password. Complete microphone,
-Lighthouse, and physical-device QA before any production deployment.
+Create a fresh privacy-safe database restore checkpoint, verify the 17 lesson
+slugs and 34 seeded task rows, and apply migration `017` as one transaction.
+Only after its postconditions pass, push the matching Premium-topic UI so
+Netlify can deploy it to Preview. Then run Teacher and learner topic/submission
+QA before continuing the remaining tier, microphone, Lighthouse and device
+gates. Do not deploy Production.
 
 ## Read first in the next Codex session
 

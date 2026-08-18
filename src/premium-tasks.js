@@ -27,26 +27,107 @@ const taskSubmission = (submissions, taskId) => (
   submissions.find((item) => item.task_id === taskId) || null
 );
 
-const appendRequirements = (card, task) => {
+const topicsForTask = (task) => {
+  if (Array.isArray(task.topics) && task.topics.length) return task.topics;
+  return [{
+    key: "lesson-focus",
+    title_en: task.title_en,
+    title_ja: task.title_ja,
+    description_en: task.prompt_en,
+    description_ja: task.prompt_ja,
+    speaking_prompt_en: task.prompt_en,
+    speaking_prompt_ja: task.prompt_ja,
+    essay_prompt_en: task.prompt_en,
+    essay_prompt_ja: task.prompt_ja,
+    challenge: "Core",
+    phrases: Array.isArray(task.required_phrases) ? task.required_phrases : [],
+    vocabulary: Array.isArray(task.required_vocabulary) ? task.required_vocabulary : [],
+  }];
+};
+
+const requirementItems = (task, selectedTopic) => {
   const items = [];
-  if (Array.isArray(task.required_phrases) && task.required_phrases.length) {
-    items.push({ kind: "phrase", text: `Use: ${task.required_phrases.join(" · ")}` });
+  if (Array.isArray(selectedTopic?.phrases) && selectedTopic.phrases.length) {
+    items.push({ kind: "phrase", text: `Recommended phrases: ${selectedTopic.phrases.join(" · ")}` });
   }
-  if (Array.isArray(task.required_vocabulary) && task.required_vocabulary.length) {
-    items.push({ kind: "vocabulary", text: `Vocabulary: ${task.required_vocabulary.join(" · ")}` });
+  if (Array.isArray(selectedTopic?.vocabulary) && selectedTopic.vocabulary.length) {
+    items.push({ kind: "vocabulary", text: `Recommended vocabulary: ${selectedTopic.vocabulary.join(" · ")}` });
   }
   if (task.task_type === "speaking") items.push({ kind: "length", text: `Target: about ${task.target_seconds} seconds` });
   if (task.task_type === "essay") items.push({ kind: "length", text: `Length: ${task.min_word_count}–${task.max_word_count} words` });
   items.push({ kind: "attempts", text: `Up to ${task.max_attempts} attempts` });
-  const list = make("ul", { className: "premium-requirements" });
-  items.forEach((item) => {
-    const row = make("li", { text: item.text });
-    row.dataset.requirement = item.kind;
-    list.append(row);
+  return items;
+};
+
+const appendTopicExperience = (card, task, submission, showJapanese) => {
+  const topics = topicsForTask(task);
+  const editable = !submission || ["draft", "returned"].includes(submission.status);
+  let selected = topics.find((topic) => topic.key === submission?.selected_topic_key) || topics[0];
+  const section = make("section", { className: "premium-topic-experience" });
+  const chooser = make("div", { className: "premium-topic-choices" });
+  chooser.setAttribute("role", "radiogroup");
+  chooser.setAttribute("aria-label", "Choose a topic / トピックを選ぶ");
+  const brief = make("div", { className: "premium-topic-brief" });
+  const requirementBlock = make("section", { className: "premium-task-checklist" });
+
+  const renderSelected = () => {
+    chooser.querySelectorAll("[data-topic-key]").forEach((button) => {
+      const active = button.dataset.topicKey === selected.key;
+      button.classList.toggle("active", active);
+      button.setAttribute("aria-checked", String(active));
+      button.tabIndex = active ? 0 : -1;
+    });
+    brief.replaceChildren(
+      make("span", { className: "premium-topic-level", text: `${selected.challenge || "Core"} challenge` }),
+      make("h4", { text: selected.title_en }),
+    );
+    if (showJapanese && selected.title_ja) brief.append(make("p", { className: "jp", text: selected.title_ja }));
+    if (selected.description_en) brief.append(make("p", { text: selected.description_en }));
+    if (showJapanese && selected.description_ja) brief.append(make("p", { className: "jp", text: selected.description_ja }));
+    const promptEn = task.task_type === "speaking" ? selected.speaking_prompt_en : selected.essay_prompt_en;
+    const promptJa = task.task_type === "speaking" ? selected.speaking_prompt_ja : selected.essay_prompt_ja;
+    brief.append(make("strong", { className: "premium-topic-prompt", text: promptEn || task.prompt_en }));
+    if (showJapanese && (promptJa || task.prompt_ja)) brief.append(make("p", { className: "jp premium-topic-prompt-ja", text: promptJa || task.prompt_ja }));
+
+    const list = make("ul", { className: "premium-requirements" });
+    requirementItems(task, selected).forEach((item) => {
+      const row = make("li", { text: item.text });
+      row.dataset.requirement = item.kind;
+      list.append(row);
+    });
+    requirementBlock.replaceChildren(make("strong", { text: "Use these ideas / 表現・語彙のヒント" }), list);
+  };
+
+  topics.forEach((topic, index) => {
+    const button = make("button", { text: `${topic.title_en}${showJapanese && topic.title_ja ? ` / ${topic.title_ja}` : ""}` });
+    button.type = "button";
+    button.dataset.topicKey = topic.key;
+    button.setAttribute("role", "radio");
+    button.disabled = !editable;
+    button.addEventListener("click", () => {
+      selected = topic;
+      renderSelected();
+    });
+    button.addEventListener("keydown", (event) => {
+      if (!editable || !["ArrowRight", "ArrowDown", "ArrowLeft", "ArrowUp", "Home", "End"].includes(event.key)) return;
+      event.preventDefault();
+      const buttons = [...chooser.querySelectorAll("[data-topic-key]")];
+      const current = buttons.indexOf(event.currentTarget);
+      const next = event.key === "Home" ? 0
+        : event.key === "End" ? buttons.length - 1
+          : ["ArrowRight", "ArrowDown"].includes(event.key)
+            ? (current + 1) % buttons.length
+            : (current - 1 + buttons.length) % buttons.length;
+      buttons[next]?.click();
+      buttons[next]?.focus();
+    });
+    chooser.append(button);
+    if (index === 0 && !selected) selected = topic;
   });
-  const block = make("section", { className: "premium-task-checklist" });
-  block.append(make("strong", { text: "Before you submit / 提出前のチェック" }), list);
-  card.append(block);
+  section.append(make("h4", { text: "Choose your topic / トピックを選ぶ" }), chooser, brief, requirementBlock);
+  card.append(section);
+  renderSelected();
+  return () => selected;
 };
 
 const appendFeedback = (card, submission, feedbackRows, showJapanese) => {
@@ -66,7 +147,7 @@ const appendFeedback = (card, submission, feedbackRows, showJapanese) => {
   card.append(box);
 };
 
-const appendEssayTask = (card, task, data, context) => {
+const appendEssayTask = (card, task, data, context, selectedTopic) => {
   const submission = taskSubmission(data.submissions, task.id);
   const editable = !submission || ["draft", "returned"].includes(submission.status);
   const response = make("textarea");
@@ -104,6 +185,7 @@ const appendEssayTask = (card, task, data, context) => {
     button.disabled = true;
     const { error } = await savePremiumTextSubmission({
       taskId: task.id,
+      topicKey: selectedTopic()?.key,
       textResponse: response.value,
       submit: finalise,
       knownSubmissions: data.submissions,
@@ -125,7 +207,7 @@ const appendEssayTask = (card, task, data, context) => {
   appendFeedback(card, submission, data.feedback, context.showJapanese);
 };
 
-const appendSpeakingTask = async (card, task, data, context) => {
+const appendSpeakingTask = async (card, task, data, context, selectedTopic) => {
   const submission = taskSubmission(data.submissions, task.id);
   const editable = !submission || ["draft", "returned"].includes(submission.status);
   const recorderPanel = make("div", { className: "premium-recorder" });
@@ -234,6 +316,7 @@ const appendSpeakingTask = async (card, task, data, context) => {
     submit.disabled = true;
     const { error } = await submitPremiumRecording({
       taskId: task.id,
+      topicKey: selectedTopic()?.key,
       recording,
       durationSeconds,
       knownSubmissions: data.submissions,
@@ -330,12 +413,10 @@ export async function renderPremiumLessonTasks({ lesson, container, showJapanese
       make("h3", { text: task.title_en }),
     );
     if (showJapanese && task.title_ja) card.append(make("p", { className: "jp", text: task.title_ja }));
-    card.append(make("p", { text: task.prompt_en }));
-    if (showJapanese && task.prompt_ja) card.append(make("p", { className: "jp", text: task.prompt_ja }));
+    const selectedTopic = appendTopicExperience(card, task, submission, showJapanese);
     if (task.instructions_en) card.append(make("small", { text: task.instructions_en }));
-    appendRequirements(card, task);
-    if (task.task_type === "essay") appendEssayTask(card, task, data, context);
-    else await appendSpeakingTask(card, task, data, context);
+    if (task.task_type === "essay") appendEssayTask(card, task, data, context, selectedTopic);
+    else await appendSpeakingTask(card, task, data, context, selectedTopic);
     list.append(card);
   }
   container.replaceChildren(heading, list);

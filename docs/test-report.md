@@ -2,6 +2,24 @@
 
 Last updated: **August 18, 2026**
 
+## August 18 final-polish checkpoint 4
+
+- Scope: 17 lesson-specific Premium topic sets, three choices per lesson, used
+  by both the speaking and essay task; topic-specific bilingual prompts,
+  recommended phrases and vocabulary; selected-topic persistence and Teacher
+  Studio visibility. Migration `017` is local and is not yet applied.
+- `node scripts/test-premium-topics.mjs` — PASS: 17 lesson sets, 51 topics,
+  three distinct phrase/vocabulary sets per lesson, both submission paths,
+  accessible selector hooks, mobile layout, database validation and Teacher
+  queue display.
+- `node scripts/validate-premium-schema.mjs` — PASS with migration `017`
+  requirements.
+- PostgreSQL 18 parser — PASS: migration `017` parsed as 11 statements.
+- `npm test`, `npm run build`, `npm run verify:visuals`, JavaScript syntax
+  checks and `git diff --check` — PASS after integration.
+- Live browser/RLS/submission QA is intentionally pending until migration `017`
+  is safely applied before the matching auto-deployed Preview UI.
+
 ## August 18 final-polish checkpoint 3
 
 - Scope: separate Voice/SFX/Ambient settings, refined procedural feedback SFX,

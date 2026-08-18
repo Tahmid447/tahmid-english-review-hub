@@ -432,12 +432,23 @@ export async function fetchPremiumLessonTasks(databaseLessonId) {
   if (previewPlan) {
     const session = await getTeacherSession();
     const cached = teacherPreviewTasksByLesson.get(String(databaseLessonId || "")) || [];
+    let previewTasks = cached;
+    if (session?.user && planMeetsRequirement(previewPlan, "premium") && databaseLessonId) {
+      const teacherClient = getTeacherClient();
+      const { data } = await teacherClient
+        .from("review_premium_tasks")
+        .select("id,lesson_id,stable_key,task_type,title_en,title_ja,prompt_en,prompt_ja,instructions_en,instructions_ja,required_phrases,required_vocabulary,topics,target_seconds,min_word_count,max_word_count,max_attempts,active")
+        .eq("lesson_id", databaseLessonId)
+        .eq("active", true)
+        .order("task_type", { ascending: true });
+      if (Array.isArray(data)) previewTasks = data;
+    }
     return {
       plan: previewPlan,
       // The preview RPC already removed task payloads below Premium. Premium
       // previews may render cards, but mutating controls remain disabled by the
       // preview-aware learner component.
-      tasks: planMeetsRequirement(previewPlan, "premium") ? cached : [],
+      tasks: planMeetsRequirement(previewPlan, "premium") ? previewTasks : [],
       submissions: [],
       feedback: [],
       signedIn: Boolean(session?.user),
@@ -456,7 +467,7 @@ export async function fetchPremiumLessonTasks(databaseLessonId) {
   if (!planMeetsRequirement(plan, "premium")) return { plan, tasks: [], submissions: [], feedback: [], signedIn: true, error: null };
   const { data: tasks, error: taskError } = await client
     .from("review_premium_tasks")
-    .select("id,lesson_id,stable_key,task_type,title_en,title_ja,prompt_en,prompt_ja,instructions_en,instructions_ja,required_phrases,required_vocabulary,target_seconds,min_word_count,max_word_count,max_attempts,active")
+    .select("id,lesson_id,stable_key,task_type,title_en,title_ja,prompt_en,prompt_ja,instructions_en,instructions_ja,required_phrases,required_vocabulary,topics,target_seconds,min_word_count,max_word_count,max_attempts,active")
     .eq("lesson_id", databaseLessonId)
     .eq("active", true)
     .order("task_type", { ascending: true });
@@ -465,7 +476,7 @@ export async function fetchPremiumLessonTasks(databaseLessonId) {
   if (!taskIds.length) return { plan, tasks: [], submissions: [], feedback: [], signedIn: true, error: null };
   const { data: submissions, error: submissionError } = await client
     .from("review_task_submissions")
-    .select("id,task_id,user_id,attempt_number,status,text_response,audio_object_path,transcript,duration_seconds,submitted_at,reviewed_at,created_at,updated_at")
+    .select("id,task_id,user_id,attempt_number,status,selected_topic_key,text_response,audio_object_path,transcript,duration_seconds,submitted_at,reviewed_at,created_at,updated_at")
     .in("task_id", taskIds)
     .eq("user_id", session.user.id)
     .order("attempt_number", { ascending: false });
@@ -487,7 +498,7 @@ const nextPremiumAttempt = (submissions, taskId) => (
   Math.max(0, ...submissions.filter((item) => item.task_id === taskId).map((item) => Number(item.attempt_number || 0))) + 1
 );
 
-export async function savePremiumTextSubmission({ taskId, textResponse, submit = false, knownSubmissions = [] }) {
+export async function savePremiumTextSubmission({ taskId, topicKey, textResponse, submit = false, knownSubmissions = [] }) {
   if (teacherPreviewPlanFromLocation()) {
     return { data: null, error: new Error("Submissions are disabled in teacher plan preview.") };
   }
@@ -496,6 +507,7 @@ export async function savePremiumTextSubmission({ taskId, textResponse, submit =
   if (!client || !session?.user) return { data: null, error: new Error("Sign in before saving a Premium submission.") };
   const editable = knownSubmissions.find((item) => item.task_id === taskId && ["draft", "returned"].includes(item.status));
   const payload = {
+    selected_topic_key: String(topicKey || "").trim() || null,
     text_response: String(textResponse || ""),
     status: submit ? "submitted" : "draft",
     submitted_at: submit ? new Date().toISOString() : null,
@@ -512,7 +524,7 @@ export async function savePremiumTextSubmission({ taskId, textResponse, submit =
   }).select("*").single();
 }
 
-export async function submitPremiumRecording({ taskId, recording, durationSeconds, knownSubmissions = [] }) {
+export async function submitPremiumRecording({ taskId, topicKey, recording, durationSeconds, knownSubmissions = [] }) {
   if (teacherPreviewPlanFromLocation()) {
     return { data: null, error: new Error("Recordings are disabled in teacher plan preview.") };
   }
@@ -549,6 +561,7 @@ export async function submitPremiumRecording({ taskId, recording, durationSecond
   });
   if (uploadError) return { data: null, error: uploadError };
   const payload = {
+    selected_topic_key: String(topicKey || "").trim() || null,
     audio_object_path: objectName,
     duration_seconds: Math.max(1, Math.round(Number(durationSeconds || 1))),
     status: "submitted",
