@@ -305,7 +305,7 @@ const customVisuals = manifest.questions.filter((question) => Array.isArray(ques
 const report = [
   "# Question quality audit",
   "",
-  `Generated: ${new Date().toISOString()}`,
+  `Source review date: ${visualQa.checkedAt}`,
   "",
   "## Scope and method",
   "",
@@ -343,7 +343,6 @@ const report = [
   "## Failures",
   "",
   ...(errors.length ? errors.map((error) => `- ${error}`) : ["- None."]),
-  "",
 ];
 
 const output = path.join(root, "docs", "question-quality-audit.md");

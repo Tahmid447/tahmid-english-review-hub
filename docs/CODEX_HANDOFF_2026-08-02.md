@@ -1,6 +1,6 @@
 # Codex Handoff — Tahmid English Review Hub v9
 
-Updated: 2026-08-14 (Asia/Tokyo)
+Updated: 2026-08-18 (Asia/Tokyo)
 
 ## Open this project
 
@@ -20,6 +20,11 @@ Updated: 2026-08-14 (Asia/Tokyo)
 Do not place OAuth client secrets, passwords, service-role keys, database passwords, or access tokens in this file, Git, screenshots, or chat.
 
 ## Deployment truth
+
+- The August 18 final-polish work is proceeding in recoverable phases. The first
+  local checkpoint completes Teacher Studio one-language English/Japanese UI
+  coverage and honest source-link handling. It is tested and committed on the
+  working branch but is not yet the validated Preview release described below.
 
 - Exact application commit `049b5ff4da6606fcffc461f412f314d253916e13`
   is published to the dedicated preview as Netlify deploy
@@ -116,9 +121,28 @@ Do not place OAuth client secrets, passwords, service-role keys, database passwo
 - Learner drafts remain private until submission. Speaking recordings remain in the private storage bucket and are referenced by object path only.
 - The local review design uses an atomic teacher review RPC, fresh return/resubmission timestamps, transactional code redemption/reissue, recording ownership/task/quota checks, and teacher-only plan preview.
 - Teacher Studio is organised around seven jobs: **Dashboard, Learners, Access codes, Lessons & content, Submissions, Sources, and Insights**. It also includes an English/Japanese display preference, learner and queue filters, Dashboard plan counts and 30-day new-learner count, honest localized source provenance, non-mutating Free/Standard/Premium/Premium+ preview, and safer sign-out.
+- The August 18 polish checkpoint extends the selected-language rule through
+  JavaScript-generated table headings, statuses, confirmation dialogs, toasts,
+  placeholders, empty states, learner controls, question management, analytics,
+  access-code management and Premium review controls. English mode renders the
+  Teacher Studio UI in English; Japanese mode renders natural Japanese rather
+  than recurring bilingual slash labels. A dedicated regression suite now
+  covers language persistence, rerendering, private-source exclusion and the
+  explicit `Source link missing / 元資料リンク未登録` fallback.
+- Existing valid Notion URLs remain teacher-only and are allow-listed to Notion
+  HTTPS hosts. Missing URLs are never invented. Private `notion-drafts.json`
+  authoring content remains excluded from the public build.
 - There is no automatic or AI grading. The retained database compatibility field is always written `false`; Tahmid remains responsible for reviewing and publishing feedback.
 
 ## Verification evidence
+
+The August 18 Teacher/i18n/source checkpoint passed `npm test`, `npm run build`,
+`npm run verify:visuals`, the new `node scripts/test-teacher-i18n.mjs`, and
+`git diff --check`. Local Browser QA also switched the logged-out Teacher Studio
+between English and Japanese and confirmed the visible login UI, labels and
+accessible names changed to the selected language. The existing logged-in live
+Teacher session was not logged out; authenticated QA remains for the later
+Preview phase.
 
 The final integrated worktree passed these local checks on August 14. After the
 profile-save fixes, `npm test`, `npm run build`, and `npm run verify:visuals`

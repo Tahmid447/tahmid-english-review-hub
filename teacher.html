@@ -13,7 +13,7 @@
     <a class="brand" href="/teacher"><img class="brand-logo" src="/assets/tahmid-english-club-logo.png" alt="Tahmid English Club logo"><span><strong>Teacher Studio</strong><small data-teacher-en="Tahmid English Club · lesson management" data-teacher-ja="Tahmid English Club · レッスン管理">Tahmid English Club · lesson management</small></span></a>
     <nav class="header-actions">
       <label><span data-teacher-en="Language" data-teacher-ja="表示言語">Language</span>
-        <select id="teacherLanguage" aria-label="Teacher Studio language"><option value="en">English</option><option value="ja">日本語</option></select>
+        <select id="teacherLanguage" aria-label="Teacher Studio language" data-teacher-aria-en="Teacher Studio language" data-teacher-aria-ja="Teacher Studioの表示言語"><option value="en">English</option><option value="ja">日本語</option></select>
       </label>
       <span class="role-badge" data-teacher-en="Teacher only" data-teacher-ja="先生専用">Teacher only</span>
       <button class="quiet-btn" id="teacherLogout" type="button" hidden data-teacher-en="Sign out" data-teacher-ja="ログアウト">Sign out</button>
@@ -23,10 +23,10 @@
     <section class="teacher-login" id="teacherLoginPanel">
       <div><p class="eyebrow" data-teacher-en="Protected access" data-teacher-ja="保護された管理画面">Protected access</p><h1>Teacher Studio</h1><p data-teacher-en="Sign in with an authorised teacher account. Knowing this page address does not grant access." data-teacher-ja="承認済みの先生アカウントでログインしてください。このページのURLを知っているだけではアクセスできません。">Sign in with an authorised teacher account. Knowing this page address does not grant access.</p></div>
       <form id="teacherLoginForm" class="auth-card">
-        <button class="google-btn" id="teacherGoogleSignIn" type="button"><span aria-hidden="true">G</span><span>Continue with Google / Googleで続ける</span></button>
-        <div class="auth-divider"><span>or use email / またはメールアドレス</span></div>
-        <label>Email<input id="teacherEmail" type="email" autocomplete="username" required></label>
-        <label>Password<input id="teacherPassword" type="password" autocomplete="current-password" required></label>
+        <button class="google-btn" id="teacherGoogleSignIn" type="button"><span aria-hidden="true">G</span><span data-teacher-en="Continue with Google" data-teacher-ja="Googleで続ける">Continue with Google</span></button>
+        <div class="auth-divider"><span data-teacher-en="or use email" data-teacher-ja="またはメールアドレス">or use email</span></div>
+        <label><span data-teacher-en="Email" data-teacher-ja="メールアドレス">Email</span><input id="teacherEmail" type="email" autocomplete="username" required></label>
+        <label><span data-teacher-en="Password" data-teacher-ja="パスワード">Password</span><input id="teacherPassword" type="password" autocomplete="current-password" required></label>
         <button class="primary-btn" type="submit" data-teacher-en="Sign in securely" data-teacher-ja="安全にログイン">Sign in securely</button>
         <p class="form-status" id="teacherLoginStatus" role="status"></p>
       </form>
@@ -37,7 +37,7 @@
         <div><p class="eyebrow" data-teacher-en="Review Hub workspace" data-teacher-ja="Review Hub 管理画面">Review Hub workspace</p><h1><span data-teacher-en="Good to see you," data-teacher-ja="こんにちは、">Good to see you,</span> <span id="teacherName">Teacher</span>.</h1><p data-teacher-en="Choose the job you want to do. Learner drafts stay private until they submit them." data-teacher-ja="行いたい作業を選んでください。生徒の下書きは、本人が提出するまで先生にも表示されません。">Choose the job you want to do. Learner drafts stay private until they submit them.</p></div>
         <div>
           <label><span data-teacher-en="Preview lessons as" data-teacher-ja="生徒プランでプレビュー">Preview lessons as</span>
-            <select id="teacherPreviewPlan" aria-label="Preview lessons as learner plan"><option value="free">Free</option><option value="standard">Standard</option><option value="premium">Premium</option><option value="premium_plus">Premium+</option></select>
+            <select id="teacherPreviewPlan" aria-label="Preview lessons as learner plan" data-teacher-aria-en="Preview lessons as learner plan" data-teacher-aria-ja="生徒プラン別にレッスンをプレビュー"><option value="free">Free</option><option value="standard">Standard</option><option value="premium">Premium</option><option value="premium_plus">Premium+</option></select>
           </label>
           <button class="primary-btn" id="newLessonButton" type="button" data-teacher-en="New draft lesson" data-teacher-ja="新しい下書きレッスン">New draft lesson</button>
         </div>
@@ -70,50 +70,50 @@
     </section>
 
     <dialog class="editor-dialog" id="lessonEditor">
-      <form method="dialog"><button class="dialog-close" aria-label="Close">×</button></form>
-      <p class="eyebrow">Draft editor</p>
+      <form method="dialog"><button class="dialog-close" aria-label="Close" data-teacher-aria-en="Close" data-teacher-aria-ja="閉じる">×</button></form>
+      <p class="eyebrow" data-teacher-en="Draft editor" data-teacher-ja="下書き編集">Draft editor</p>
       <h2 id="editorHeading">New lesson</h2>
       <form id="lessonEditorForm" class="editor-form">
         <input id="editorLessonId" type="hidden">
         <ol class="wide lesson-editor-steps" aria-label="Lesson publishing steps">
-          <li><b>1</b><span><strong>Lesson details</strong><small>タイトル・日付・公開先</small></span></li>
-          <li><b>2</b><span><strong>Practice questions</strong><small>最低1問を作成・有効化</small></span></li>
-          <li><b>3</b><span><strong>Preview &amp; publish</strong><small>確認後に公開</small></span></li>
+          <li><b>1</b><span><strong data-teacher-en="Lesson details" data-teacher-ja="レッスン情報">Lesson details</strong><small data-teacher-en="Title, date and audience" data-teacher-ja="タイトル・日付・公開先">Title, date and audience</small></span></li>
+          <li><b>2</b><span><strong data-teacher-en="Practice questions" data-teacher-ja="練習問題">Practice questions</strong><small data-teacher-en="Create and activate at least one" data-teacher-ja="最低1問を作成・有効化">Create and activate at least one</small></span></li>
+          <li><b>3</b><span><strong data-teacher-en="Preview &amp; publish" data-teacher-ja="確認して公開">Preview &amp; publish</strong><small data-teacher-en="Publish after checking the learner view" data-teacher-ja="生徒表示を確認してから公開">Publish after checking the learner view</small></span></li>
         </ol>
-        <label>Lesson title<input id="editorTitle" required></label>
-        <label>Lesson date<input id="editorDate" type="date" required></label>
-        <label>Status / 公開状態<select id="editorStatus"><option value="draft">Draft / 下書き</option><option value="review">Review / 確認中</option><option value="published">Published / 公開</option><option value="archived">Archived / 非表示</option></select></label>
-        <label>Audience / 公開先<select id="editorAudience"><option value="takiwaki">Takiwaki only / 専用</option><option value="general">General / 一般</option><option value="both">Both / 両方</option></select></label>
-        <label class="editor-check-field"><input id="editorIsPreview" type="checkbox"> Free sample / 無料公開（会員登録なしで閲覧可能）</label>
-        <label class="wide">Summary<textarea id="editorSummary" rows="4"></textarea></label>
-        <div class="wide editor-question-callout"><div><strong>Practice questions / 練習問題</strong><p id="editorQuestionSummary">下書きを保存すると、続けて問題を作成できます。</p></div><button class="secondary-btn" id="manageLessonQuestionsButton" type="button">Manage questions / 問題を作る・編集</button></div>
-        <div class="dialog-actions"><button class="secondary-btn" id="previewDraftButton" type="button">Preview / プレビュー</button><button class="primary-btn" id="saveLessonButton" type="submit">Save draft &amp; add questions / 保存して問題作成へ</button></div>
+        <label><span data-teacher-en="Lesson title" data-teacher-ja="レッスン名">Lesson title</span><input id="editorTitle" required></label>
+        <label><span data-teacher-en="Lesson date" data-teacher-ja="レッスン日">Lesson date</span><input id="editorDate" type="date" required></label>
+        <label><span data-teacher-en="Status" data-teacher-ja="公開状態">Status</span><select id="editorStatus"><option value="draft" data-teacher-en="Draft" data-teacher-ja="下書き">Draft</option><option value="review" data-teacher-en="Ready for review" data-teacher-ja="確認待ち">Ready for review</option><option value="published" data-teacher-en="Published" data-teacher-ja="公開中">Published</option><option value="archived" data-teacher-en="Archived" data-teacher-ja="非表示">Archived</option></select></label>
+        <label><span data-teacher-en="Audience" data-teacher-ja="公開先">Audience</span><select id="editorAudience"><option value="takiwaki" data-teacher-en="Takiwaki only" data-teacher-ja="Takiwaki専用">Takiwaki only</option><option value="general" data-teacher-en="General" data-teacher-ja="一般">General</option><option value="both" data-teacher-en="Both" data-teacher-ja="両方">Both</option></select></label>
+        <label class="editor-check-field"><input id="editorIsPreview" type="checkbox"> <span data-teacher-en="Free sample (available without an account)" data-teacher-ja="無料公開（会員登録なしで閲覧可能）">Free sample (available without an account)</span></label>
+        <label class="wide"><span data-teacher-en="Summary" data-teacher-ja="概要">Summary</span><textarea id="editorSummary" rows="4"></textarea></label>
+        <div class="wide editor-question-callout"><div><strong data-teacher-en="Practice questions" data-teacher-ja="練習問題">Practice questions</strong><p id="editorQuestionSummary" data-teacher-en="Save the draft to continue to question creation." data-teacher-ja="下書きを保存すると、続けて問題を作成できます。">Save the draft to continue to question creation.</p></div><button class="secondary-btn" id="manageLessonQuestionsButton" type="button" data-teacher-en="Manage questions" data-teacher-ja="問題を作る・編集">Manage questions</button></div>
+        <div class="dialog-actions"><button class="secondary-btn" id="previewDraftButton" type="button" data-teacher-en="Preview" data-teacher-ja="プレビュー">Preview</button><button class="primary-btn" id="saveLessonButton" type="submit" data-teacher-en="Save draft &amp; add questions" data-teacher-ja="保存して問題作成へ">Save draft &amp; add questions</button></div>
         <p class="form-status" id="editorStatusMessage"></p>
       </form>
     </dialog>
 
     <dialog class="editor-dialog" id="questionManager" style="width:min(1100px,calc(100% - 28px))">
-      <form method="dialog"><button class="dialog-close" aria-label="Close question manager">×</button></form>
-      <p class="eyebrow">Question manager</p>
+      <form method="dialog"><button class="dialog-close" aria-label="Close question manager" data-teacher-aria-en="Close question manager" data-teacher-aria-ja="問題管理を閉じる">×</button></form>
+      <p class="eyebrow" data-teacher-en="Question manager" data-teacher-ja="問題管理">Question manager</p>
       <h2 id="questionManagerHeading">Lesson questions</h2>
       <p id="questionManagerMeta"></p>
       <div class="dialog-actions">
-        <button class="secondary-btn" id="previewQuestionsButton" type="button">Preview active questions</button>
-        <button class="primary-btn" id="newQuestionButton" type="button">Add question</button>
+        <button class="secondary-btn" id="previewQuestionsButton" type="button" data-teacher-en="Preview active questions" data-teacher-ja="有効な問題をプレビュー">Preview active questions</button>
+        <button class="primary-btn" id="newQuestionButton" type="button" data-teacher-en="Add question" data-teacher-ja="問題を追加">Add question</button>
       </div>
       <p class="form-status" id="questionManagerStatus" role="status"></p>
       <section class="teacher-panel" id="questionManagerPanel"></section>
     </dialog>
 
     <dialog class="editor-dialog" id="questionEditor">
-      <form method="dialog"><button class="dialog-close" aria-label="Close question editor">×</button></form>
-      <p class="eyebrow">Question editor</p>
+      <form method="dialog"><button class="dialog-close" aria-label="Close question editor" data-teacher-aria-en="Close question editor" data-teacher-aria-ja="問題編集を閉じる">×</button></form>
+      <p class="eyebrow" data-teacher-en="Question editor" data-teacher-ja="問題編集">Question editor</p>
       <h2 id="questionEditorHeading">Add question</h2>
       <form id="questionEditorForm" class="editor-form">
         <input id="questionRecordId" type="hidden">
-        <label>Stable key<input id="questionStableKey" autocomplete="off" required></label>
-        <label>Section<input id="questionSection" autocomplete="off" placeholder="Use It"></label>
-        <label>Format
+        <label><span data-teacher-en="Stable key" data-teacher-ja="管理キー">Stable key</span><input id="questionStableKey" autocomplete="off" required></label>
+        <label><span data-teacher-en="Section" data-teacher-ja="セクション">Section</span><input id="questionSection" autocomplete="off" placeholder="Use It" data-teacher-placeholder-en="Use It" data-teacher-placeholder-ja="実践"></label>
+        <label><span data-teacher-en="Format" data-teacher-ja="形式">Format</span>
           <select id="questionFormat">
             <option value="mcq">Multiple choice</option>
             <option value="situation">Situation choice</option>
@@ -131,60 +131,60 @@
             <option value="mistake">Correct the mistake</option>
           </select>
         </label>
-        <label>Question access / 問題の公開範囲
+        <label><span data-teacher-en="Question access" data-teacher-ja="問題の公開範囲">Question access</span>
           <select id="questionRequiredPlan">
-            <option value="free">Free / 無料（レッスン閲覧者全員）</option>
-            <option value="standard">Standard / スタンダード以上</option>
-            <option value="premium">Premium / プレミアムのみ</option>
-            <option value="premium_plus">Premium+ / プレミアムプラスのみ</option>
+            <option value="free" data-teacher-en="Free (everyone who can open the lesson)" data-teacher-ja="無料（レッスン閲覧者全員）">Free (everyone who can open the lesson)</option>
+            <option value="standard" data-teacher-en="Standard or above" data-teacher-ja="Standard以上">Standard or above</option>
+            <option value="premium" data-teacher-en="Premium or above" data-teacher-ja="Premium以上">Premium or above</option>
+            <option value="premium_plus" data-teacher-en="Premium+ only" data-teacher-ja="Premium+のみ">Premium+ only</option>
           </select>
         </label>
-        <label>Below-plan display / 対象外の表示
+        <label><span data-teacher-en="Below-plan display" data-teacher-ja="対象外の表示">Below-plan display</span>
           <select id="questionLockedDisplay">
-            <option value="blur">Safe teaser / 内容を隠した案内</option>
-            <option value="hidden">Hidden / 完全非表示</option>
+            <option value="blur" data-teacher-en="Safe teaser" data-teacher-ja="内容を隠した案内">Safe teaser</option>
+            <option value="hidden" data-teacher-en="Hidden" data-teacher-ja="完全非表示">Hidden</option>
           </select>
         </label>
-        <small class="wide question-access-note">Locked questions never send their prompt, choices, hint, explanation or answer to an ineligible learner. / 対象プラン未満の生徒には、問題文・選択肢・ヒント・説明・正解データを送信しません。</small>
-        <label>Prompt — English<input id="questionPromptEn" required></label>
-        <label class="wide">Prompt — Japanese<input id="questionPromptJa"></label>
-        <label>Hint — English<textarea id="questionHintEn" rows="3"></textarea></label>
-        <label>Hint — Japanese<textarea id="questionHintJa" rows="3"></textarea></label>
-        <label>Explanation — English<textarea id="questionExplanationEn" rows="3"></textarea></label>
-        <label>Explanation — Japanese<textarea id="questionExplanationJa" rows="3"></textarea></label>
-        <label class="wide">Listening audio text<input id="questionAudioText" placeholder="The sentence the learner hears"></label>
-        <label>Speaking target — English<input id="questionSpeakText" placeholder="The sentence the learner says"></label>
-        <label>Speaking target — Japanese<input id="questionSpeakJa"></label>
+        <small class="wide question-access-note" data-teacher-en="Locked questions never send their prompt, choices, hint, explanation or answer to an ineligible learner." data-teacher-ja="対象プラン未満の生徒には、問題文・選択肢・ヒント・説明・正解データを送信しません。">Locked questions never send their prompt, choices, hint, explanation or answer to an ineligible learner.</small>
+        <label><span data-teacher-en="Prompt — English" data-teacher-ja="問題文（英語）">Prompt — English</span><input id="questionPromptEn" required></label>
+        <label class="wide"><span data-teacher-en="Prompt — Japanese" data-teacher-ja="問題文（日本語）">Prompt — Japanese</span><input id="questionPromptJa"></label>
+        <label><span data-teacher-en="Hint — English" data-teacher-ja="ヒント（英語）">Hint — English</span><textarea id="questionHintEn" rows="3"></textarea></label>
+        <label><span data-teacher-en="Hint — Japanese" data-teacher-ja="ヒント（日本語）">Hint — Japanese</span><textarea id="questionHintJa" rows="3"></textarea></label>
+        <label><span data-teacher-en="Explanation — English" data-teacher-ja="説明（英語）">Explanation — English</span><textarea id="questionExplanationEn" rows="3"></textarea></label>
+        <label><span data-teacher-en="Explanation — Japanese" data-teacher-ja="説明（日本語）">Explanation — Japanese</span><textarea id="questionExplanationJa" rows="3"></textarea></label>
+        <label class="wide"><span data-teacher-en="Listening audio text" data-teacher-ja="リスニング音声文">Listening audio text</span><input id="questionAudioText" placeholder="The sentence the learner hears" data-teacher-placeholder-en="The sentence the learner hears" data-teacher-placeholder-ja="生徒が聞く英文"></label>
+        <label><span data-teacher-en="Speaking target — English" data-teacher-ja="発話目標（英語）">Speaking target — English</span><input id="questionSpeakText" placeholder="The sentence the learner says" data-teacher-placeholder-en="The sentence the learner says" data-teacher-placeholder-ja="生徒が発話する英文"></label>
+        <label><span data-teacher-en="Speaking target — Japanese" data-teacher-ja="発話目標（日本語）">Speaking target — Japanese</span><input id="questionSpeakJa"></label>
         <section class="wide easy-question-builder" id="easyQuestionBuilder">
-          <div><strong>Easy Answer Builder / かんたん回答設定</strong><p>選択問題・入力問題は、まずここだけ入力すれば作れます。</p></div>
+          <div><strong data-teacher-en="Easy Answer Builder" data-teacher-ja="かんたん回答設定">Easy Answer Builder</strong><p data-teacher-en="For choice and typing questions, complete this section first." data-teacher-ja="選択問題・入力問題は、まずここだけ入力すれば作れます。">For choice and typing questions, complete this section first.</p></div>
           <div class="easy-choice-fields" id="easyChoiceFields">
-            <label>Choice A — English<input id="easyChoiceAEn"></label>
-            <label>Choice A — 日本語<input id="easyChoiceAJa"></label>
-            <label>Choice B — English<input id="easyChoiceBEn"></label>
-            <label>Choice B — 日本語<input id="easyChoiceBJa"></label>
-            <label>Correct answer / 正解<select id="easyCorrectChoice"><option value="a">A</option><option value="b">B</option></select></label>
+            <label><span data-teacher-en="Choice A — English" data-teacher-ja="選択肢A（英語）">Choice A — English</span><input id="easyChoiceAEn"></label>
+            <label><span data-teacher-en="Choice A — Japanese" data-teacher-ja="選択肢A（日本語）">Choice A — Japanese</span><input id="easyChoiceAJa"></label>
+            <label><span data-teacher-en="Choice B — English" data-teacher-ja="選択肢B（英語）">Choice B — English</span><input id="easyChoiceBEn"></label>
+            <label><span data-teacher-en="Choice B — Japanese" data-teacher-ja="選択肢B（日本語）">Choice B — Japanese</span><input id="easyChoiceBJa"></label>
+            <label><span data-teacher-en="Correct answer" data-teacher-ja="正解">Correct answer</span><select id="easyCorrectChoice"><option value="a">A</option><option value="b">B</option></select></label>
           </div>
-          <label id="easyAcceptedField">Accepted answers / 正解として認める英文（1行に1つ）<textarea id="easyAcceptedAnswers" rows="3"></textarea></label>
-          <button class="secondary-btn" id="questionTemplateButton" type="button">Use starter / ひな形を使う</button>
+          <label id="easyAcceptedField"><span data-teacher-en="Accepted answers (one per line)" data-teacher-ja="正解として認める英文（1行に1つ）">Accepted answers (one per line)</span><textarea id="easyAcceptedAnswers" rows="3"></textarea></label>
+          <button class="secondary-btn" id="questionTemplateButton" type="button" data-teacher-en="Use starter" data-teacher-ja="ひな形を使う">Use starter</button>
         </section>
         <details class="wide advanced-question-details">
-          <summary>Advanced format settings / 詳細設定（通常は変更不要）</summary>
-          <label>Answer &amp; format details (JSON)
+          <summary data-teacher-en="Advanced format settings" data-teacher-ja="詳細設定（通常は変更不要）">Advanced format settings</summary>
+          <label><span data-teacher-en="Answer &amp; format details (JSON)" data-teacher-ja="回答・形式の詳細（JSON）">Answer &amp; format details (JSON)</span>
             <textarea id="questionAnswerPayload" rows="12" spellcheck="false" required></textarea>
           </label>
         </details>
         <small class="wide" id="questionAnswerHelp"></small>
         <div class="dialog-actions">
-          <button class="secondary-btn" id="cancelQuestionButton" type="button">Cancel</button>
-          <button class="primary-btn" type="submit">Save question</button>
+          <button class="secondary-btn" id="cancelQuestionButton" type="button" data-teacher-en="Cancel" data-teacher-ja="キャンセル">Cancel</button>
+          <button class="primary-btn" type="submit" data-teacher-en="Save question" data-teacher-ja="問題を保存">Save question</button>
         </div>
         <p class="form-status" id="questionEditorStatus" role="status"></p>
       </form>
     </dialog>
 
     <dialog class="editor-dialog learner-dialog" id="learnerDialog">
-      <form method="dialog"><button class="dialog-close" aria-label="Close learner profile">×</button></form>
-      <p class="eyebrow">Learner profile &amp; controls / 学習者管理</p>
+      <form method="dialog"><button class="dialog-close" aria-label="Close learner profile" data-teacher-aria-en="Close learner profile" data-teacher-aria-ja="生徒プロフィールを閉じる">×</button></form>
+      <p class="eyebrow" data-teacher-en="Learner profile &amp; controls" data-teacher-ja="生徒プロフィール・設定">Learner profile &amp; controls</p>
       <h2 id="learnerDialogHeading">Learner</h2>
       <div id="learnerDialogContent"></div>
     </dialog>

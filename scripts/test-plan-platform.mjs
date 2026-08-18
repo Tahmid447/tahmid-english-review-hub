@@ -112,7 +112,7 @@ for (const fragment of [
 ]) {
   assert.ok(migration.includes(fragment), `Premium+ migration is missing ${fragment}.`);
 }
-assert.match(teacherUi, /Tier & feature override/);
+assert.match(teacherUi, /Plan & feature exceptions/);
 assert.match(teacherUi, /review_learner_plan_overrides/);
 assert.match(teacherUi, /premium_plus/);
 assert.match(membershipFunction, /\["standard", "premium", "premium_plus"\]/);

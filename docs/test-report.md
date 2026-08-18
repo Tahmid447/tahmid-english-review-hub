@@ -1,6 +1,26 @@
 # Test Report / 動作確認レポート
 
-Last updated: **August 14, 2026**
+Last updated: **August 18, 2026**
+
+## August 18 final-polish checkpoint 1
+
+- Scope: Teacher Studio one-language English/Japanese completion and safe lesson
+  source display; no Supabase schema, Edge Function or Production change.
+- `npm test` — PASS, including the new Teacher Studio language/source-safety
+  suite.
+- `npm run build` — PASS; private draft authoring files remained excluded.
+- `npm run verify:visuals` — PASS for all 85 visual assets.
+- `node scripts/test-teacher-i18n.mjs` — PASS for selected-language controls,
+  dynamic confirmation/status coverage, persistence/rerendering, Notion host
+  allow-listing and public-build exclusion.
+- `node scripts/test-teacher-controls.mjs` and
+  `node scripts/test-teacher-workflows-v15.mjs` — PASS after the UI copy/source
+  changes.
+- Local Browser QA — PASS for English-to-Japanese login-screen switching,
+  including visible text and accessible names. Authenticated live Teacher QA is
+  intentionally deferred until the integrated Preview deployment so the
+  existing user session is preserved.
+- `git diff --check` — PASS.
 
 ## August 14 final-product rollout verification
 

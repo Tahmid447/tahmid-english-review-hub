@@ -14,6 +14,7 @@ import {
   updateTeacherAccessCode,
 } from "./supabase.js";
 import { planFor } from "./plans.js";
+import { uiText } from "./i18n.js";
 
 const client = getTeacherClient();
 
@@ -134,9 +135,386 @@ const state = {
 
 const TEACHER_LANGUAGE_STORAGE_KEY = "te-review-hub:teacher-language:v1";
 const TEACHER_PREVIEW_PLAN_STORAGE_KEY = "te-review-hub:teacher-preview-plan:v1";
+const TEACHER_JAPANESE_COPY = Object.freeze({
+  "Access codes": "アクセスコード",
+  "Generate a code after bank-transfer confirmation, or use manual approval below. Set any period from 1 to 730 days (30 = 1 month, 180 = 6 months).": "銀行振込の確認後にアクセスコードを発行できます。利用期間は1〜730日で設定してください（30日＝1か月、180日＝6か月）。",
+  "Plan label (e.g. July 6-month plan)": "プラン名（例：7月・6か月プラン）",
+  "Days": "日数",
+  "Access period in days (1–730). Examples: 30 = one month, 180 = six months.": "利用日数（1〜730日）。例：30日＝1か月、180日＝6か月。",
+  "General": "一般",
+  "Takiwaki only": "Takiwaki専用",
+  "Both": "両方",
+  "Generate secure code": "安全なコードを発行",
+  "Code history — masked for security. “••••1234” is only the last four characters and cannot be used to unlock an account.": "コード履歴（安全のため一部を非表示）。「••••1234」は末尾4文字だけの記録で、ログイン解除には使えません。",
+  "New full code — copy and send this now": "新しい完全コード—今すぐコピーして送ってください",
+  "Copy full code": "完全コードをコピー",
+  "Save changes": "変更を保存",
+  "Reissue": "再発行",
+  "Disable & preserve history": "無効化（履歴は保持）",
+  "Delete unused code": "未使用コードを削除",
+  "Only an enabled code can be reissued. Create a new code instead.": "再発行できるのは有効なコードだけです。新しいコードを作成してください。",
+  "No fixed expiry": "有効期限なし",
+  "No codes have been created yet.": "アクセスコードはまだありません。",
+  "Loading secure dashboard…": "安全な管理画面を読み込んでいます…",
+  "The dashboard could not be loaded.": "管理画面を読み込めませんでした。",
+  "Lesson": "レッスン",
+  "Date": "日付",
+  "Status": "状態",
+  "Audience": "公開先",
+  "Questions": "問題",
+  "Source": "出典",
+  "Actions": "操作",
+  "Edit": "編集",
+  "Preview": "プレビュー",
+  "Archive": "アーカイブ",
+  "Restore": "復元",
+  "Delete permanently": "完全に削除",
+  "Return this lesson to Published": "このレッスンを公開状態へ戻します",
+  "Only possible when no learner history exists": "生徒の学習履歴がない場合のみ実行できます",
+  "Apply the Teacher Controls database update first": "先にTeacher Controlsのデータベース更新を適用してください",
+  "Draft": "下書き",
+  "Ready for review": "確認待ち",
+  "Published": "公開中",
+  "Archived": "非表示",
+  "Learners": "生徒",
+  "Search name or email": "名前・メールで検索",
+  "No student profiles have been created yet.": "生徒プロフィールはまだありません。",
+  "No email recorded": "メール未登録",
+  "Level not set": "レベル未設定",
+  "Age not shared": "年齢区分未設定",
+  "Language not set": "母語未設定",
+  "No learning goal recorded yet.": "学習目標はまだ登録されていません。",
+  "Loading secure account status…": "安全なアカウント情報を読み込んでいます…",
+  "Account status could not be loaded.": "アカウント情報を読み込めませんでした。",
+  "Never": "なし",
+  "Yes": "はい",
+  "No": "いいえ",
+  "Pending": "承認待ち",
+  "Pending approval": "承認待ち",
+  "Active": "有効",
+  "Expired": "期限切れ",
+  "Paused": "一時停止",
+  "Approve / extend": "承認・期間延長",
+  "Pause access": "利用を停止",
+  "Send password-reset email": "パスワード再設定メールを送信",
+  "Recent learning activity": "最近の学習状況",
+  "No learning activity has been recorded yet.": "学習記録はまだありません。",
+  "For security, teachers can never see or retrieve learner passwords. A reset email lets the learner choose a new password privately.": "安全のため、先生が生徒のパスワードを見たり取得したりすることはできません。再設定メールから、生徒本人が新しいパスワードを設定します。",
+  "Select": "選択",
+  "Recommend": "おすすめ設定",
+  "Access exception": "個別の公開設定",
+  "Assignment settings": "課題設定",
+  "Practice": "練習",
+  "Apply to selected": "選択したレッスンに適用",
+  "Save settings": "設定を保存",
+  "Save override": "例外設定を保存",
+  "Clear override": "例外設定を解除",
+  "Publish a lesson before assigning it.": "割り当てる前にレッスンを公開してください。",
+  "Learning insights": "学習分析",
+  "Overview": "概要",
+  "Question mistakes": "間違えた問題",
+  "Weak formats": "苦手な形式",
+  "Listening & dictation": "リスニング・書き取り",
+  "Retry detail": "再挑戦の詳細",
+  "Lesson scores": "レッスン別スコア",
+  "Sessions": "学習回",
+  "Speaking records": "発話記録",
+  "All recorded practice": "すべての発話練習",
+  "Latest accuracy": "最新の正答率",
+  "After any retries": "再挑戦後を含む",
+  "Recovered on retry": "再挑戦で正解",
+  "Listening first accuracy": "リスニング初回正答率",
+  "Phrase repetitions": "フレーズ練習回数",
+  "Unavailable": "利用不可",
+  "Create a Premium review task": "プレミアム添削課題を作成",
+  "Speaking and essay tasks are visible only to Premium learners who can open the selected lesson.": "スピーキング・英作文課題は、選択したレッスンを利用できるPremium生徒だけに表示されます。",
+  "Speaking recording": "スピーキング録音",
+  "Essay": "英作文",
+  "English task title": "英語の課題タイトル",
+  "Japanese title": "日本語タイトル",
+  "English prompt": "英語の課題文",
+  "Japanese prompt": "日本語の課題文",
+  "Extra instructions (English)": "追加指示（英語）",
+  "Extra instructions (Japanese)": "追加指示（日本語）",
+  "Required phrases, comma separated": "推奨フレーズ（カンマ区切り）",
+  "Required vocabulary, comma separated": "推奨単語（カンマ区切り）",
+  "Target seconds": "目標秒数",
+  "Minimum words": "最小語数",
+  "Maximum words": "最大語数",
+  "Attempts": "提出回数",
+  "Create task": "課題を作成",
+  "Premium tasks": "Premium課題",
+  "No Premium tasks have been created yet.": "Premium課題はまだありません。",
+  "Task": "課題",
+  "Type": "種類",
+  "Submissions": "提出数",
+  "Hide": "非表示",
+  "Reopen": "再公開",
+  "Hide (history kept)": "非表示（履歴は保持）",
+  "Delete": "削除",
+  "Hidden": "非表示",
+  "Submission queue": "提出・添削",
+  "Feedback drafts stay private until Publish or Return is selected. The teacher writes and remains responsible for every published review.": "添削の下書きは「公開」または「修正を依頼」を選ぶまで生徒には表示されません。公開する内容は先生が作成し、責任を持って確認します。",
+  "Read submitted essay": "提出された英作文を読む",
+  "Open private recording": "非公開録音を開く",
+  "Score / 100": "スコア／100",
+  "Feedback in English": "英語フィードバック",
+  "Feedback in Japanese": "日本語フィードバック",
+  "Save private draft": "非公開の下書きを保存",
+  "Publish feedback": "添削を公開",
+  "Return for revision": "修正を依頼",
+  "Apply the Premium database migration before using review tasks.": "添削課題を使う前にPremium用データベース更新を適用してください。",
+  "Question manager": "問題管理",
+  "Lesson questions": "レッスン問題",
+  "Preview active questions": "有効な問題をプレビュー",
+  "Add question": "問題を追加",
+  "Question editor": "問題編集",
+  "Edit question": "問題を編集",
+  "Stable key": "管理キー",
+  "Section": "セクション",
+  "Format": "形式",
+  "Multiple choice": "選択問題",
+  "Situation choice": "場面選択",
+  "True / false": "○×問題",
+  "Typing": "入力問題",
+  "Translation": "英訳問題",
+  "Word order": "語順問題",
+  "Matching": "組み合わせ",
+  "Sorting": "分類問題",
+  "Position grid": "位置問題",
+  "Listening choice": "聞き取り選択",
+  "Listening dictation": "聞き取り入力",
+  "Speaking": "スピーキング",
+  "Dialogue": "会話問題",
+  "Correct the mistake": "誤り訂正",
+  "Prompt — English": "問題文（英語）",
+  "Prompt — Japanese": "問題文（日本語）",
+  "Hint — English": "ヒント（英語）",
+  "Hint — Japanese": "ヒント（日本語）",
+  "Explanation — English": "説明（英語）",
+  "Explanation — Japanese": "説明（日本語）",
+  "Listening audio text": "リスニング音声文",
+  "Speaking target — English": "発話目標（英語）",
+  "Speaking target — Japanese": "発話目標（日本語）",
+  "Cancel": "キャンセル",
+  "Save question": "問題を保存",
+  "Draft editor": "下書き編集",
+  "New lesson": "新しいレッスン",
+  "New draft lesson": "新しい下書きレッスン",
+  "Edit lesson": "レッスンを編集",
+  "Lesson title": "レッスン名",
+  "Lesson date": "レッスン日",
+  "Summary": "概要",
+  "Learner": "生徒",
+  "Learner profile & controls": "生徒プロフィール・設定",
+  "Close": "閉じる",
+  "Close question manager": "問題管理を閉じる",
+  "Close question editor": "問題編集を閉じる",
+  "Close learner profile": "生徒プロフィールを閉じる",
+  "Email": "メールアドレス",
+  "Password": "パスワード",
+  "Continue with Google": "Googleで続ける",
+  "or use email": "またはメールアドレス",
+  "Something went wrong. Please try again.": "問題が発生しました。もう一度お試しください。",
+  "Notion note ↗": "Notion元資料 ↗",
+  "All": "すべて",
+  "Drafts": "下書き",
+  "There are no private drafts waiting for review.": "確認待ちの非公開下書きはありません。",
+  "There are no archived lessons.": "アーカイブ中のレッスンはありません。",
+  "There are no published lessons yet.": "公開中のレッスンはまだありません。",
+  "Unknown lesson": "不明なレッスン",
+  "Override expiry must be in the future.": "例外設定の終了日時は未来にしてください。",
+  "The learner feature override could not be saved.": "生徒の個別設定を保存できませんでした。",
+  "Learner plan exception saved. It applies until it expires or is cleared.": "生徒の個別プラン設定を保存しました。期限切れまたは解除まで適用されます。",
+  "Learner override cleared; normal membership rules now apply.": "個別設定を解除しました。通常の会員プラン設定が適用されます。",
+  "Cancelled": "解約済み",
+  "Membership could not be activated.": "会員期間を有効化できませんでした。",
+  "Membership could not be paused.": "会員利用を停止できませんでした。",
+  "Membership paused.": "会員利用を停止しました。",
+  "Full access code copied.": "完全コードをコピーしました。",
+  "Copy failed. Select the full code and copy it manually.": "コピーできませんでした。完全コードを選択して手動でコピーしてください。",
+  "Disabled": "無効",
+  "Used up": "使用上限到達",
+  "Partly used": "一部使用",
+  "Unused": "未使用",
+  "Enter a plan label before saving.": "保存前にプラン名を入力してください。",
+  "The access code could not be updated.": "アクセスコードを更新できませんでした。",
+  "Access code settings updated.": "アクセスコード設定を更新しました。",
+  "The access code could not be reissued.": "アクセスコードを再発行できませんでした。",
+  "New full code created. Copy it now; the old code is disabled.": "新しい完全コードを発行しました。今すぐコピーしてください。以前のコードは無効です。",
+  "The access code could not be removed.": "アクセスコードを削除または無効化できませんでした。",
+  "Used code disabled; redemption history preserved.": "使用済みコードを無効化し、利用履歴は保持しました。",
+  "Unused code deleted.": "未使用コードを削除しました。",
+  "Access code generated.": "アクセスコードを発行しました。",
+  "The access code could not be generated.": "アクセスコードを発行できませんでした。",
+  "The lesson recommendation could not be changed.": "おすすめレッスンを変更できませんでした。",
+  "Lesson added to this learner’s plan.": "この生徒のおすすめにレッスンを追加しました。",
+  "Lesson removed from this learner’s plan.": "この生徒のおすすめからレッスンを外しました。",
+  "The closing date must be later than the opening date.": "公開終了日時は公開開始日時より後にしてください。",
+  "The assignment settings could not be saved.": "課題設定を保存できませんでした。",
+  "Assignment visibility, dates and plan requirement saved.": "課題の表示・期間・必要プランを保存しました。",
+  "Select at least one lesson first.": "先にレッスンを1件以上選択してください。",
+  "The selected lessons could not be updated.": "選択したレッスンを更新できませんでした。",
+  "Apply the Teacher Controls database update before using lesson locks.": "レッスンの個別表示設定を使う前に、Teacher Controlsのデータベース更新を適用してください。",
+  "The learner-specific lesson access could not be changed.": "生徒ごとのレッスン利用設定を変更できませんでした。",
+  "No account email is recorded for this learner.": "この生徒にはアカウント用メールアドレスが登録されていません。",
+  "The password-reset email could not be sent.": "パスワード再設定メールを送信できませんでした。",
+  "Password-reset email sent. Passwords are never visible to the teacher.": "パスワード再設定メールを送信しました。先生にはパスワードは表示されません。",
+  "Follow plan": "プラン設定に従う",
+  "Allow this lesson": "このレッスンを利用可能にする",
+  "Hide this lesson": "このレッスンを非表示にする",
+  "Configure": "設定する",
+  "Create & configure": "作成して設定",
+  "Standard or above": "Standard以上",
+  "Premium or Premium+": "PremiumまたはPremium+",
+  "Premium+ only": "Premium+のみ",
+  "Show assignment": "課題を表示",
+  "Teacher review": "先生の確認あり",
+  "Use membership plan": "会員プランを使用",
+  "Use plan default": "プラン標準を使用",
+  "Enable": "有効にする",
+  "Disable": "無効にする",
+  "Premium visual missions": "Premium画像ミッション",
+  "Speaking submissions": "スピーキング提出",
+  "Essay submissions": "英作文提出",
+  "Live coaching": "個別コーチング",
+  "Monthly progress note": "月次進捗メモ",
+  "Override reason": "例外設定の理由",
+  "Override expiry": "例外設定の終了日時",
+  "Practice sessions": "学習回数",
+  "Premium submissions": "Premium提出数",
+  "Assigned lessons": "割り当てレッスン",
+  "Membership & account safety": "会員期間・アカウント安全管理",
+  "Membership duration in days": "会員利用日数",
+  "Speaking practice": "スピーキング練習",
+  "Recognition available": "音声認識あり",
+  "Great / good": "とても良い／良い",
+  "First-answer accuracy": "初回答の正答率",
+  "Pronunciation practice": "発音練習",
+  "First score": "初回スコア",
+  "Accuracy": "正答率",
+  "Answered": "回答数",
+  "Wrong": "誤答数",
+  "Mode": "方式",
+  "Duration": "所要時間",
+  "Completed": "完了日時",
+  "Instant": "すぐ確認",
+  "Manual": "まとめて確認",
+  "Practice recorded": "練習記録あり",
+  "Choose a lesson and add an English title and prompt.": "レッスンを選び、英語のタイトルと課題文を入力してください。",
+  "The Premium task could not be created.": "Premium課題を作成できませんでした。",
+  "Premium review task created.": "Premium添削課題を作成しました。",
+  "The Premium task could not be updated.": "Premium課題を更新できませんでした。",
+  "Premium task reopened.": "Premium課題を再公開しました。",
+  "Premium task hidden from learners.": "Premium課題を生徒から非表示にしました。",
+  "The unused Premium task could not be deleted.": "未使用のPremium課題を削除できませんでした。",
+  "Unused Premium task deleted.": "未使用のPremium課題を削除しました。",
+  "The private recording could not be opened.": "非公開録音を開けませんでした。",
+  "Add English or Japanese feedback before saving.": "保存前に英語または日本語のフィードバックを入力してください。",
+  "The review could not be saved.": "添削を保存できませんでした。",
+  "Feedback published to the learner.": "生徒へフィードバックを公開しました。",
+  "Submission returned with feedback.": "フィードバックを添えて修正を依頼しました。",
+  "Private feedback draft saved; learner cannot see it yet.": "非公開の添削下書きを保存しました。生徒にはまだ表示されません。",
+  "Question updated.": "問題を更新しました。",
+  "Question added.": "問題を追加しました。",
+  "The question could not be saved.": "問題を保存できませんでした。",
+  "Saving question…": "問題を保存しています…",
+  "Manage questions": "問題を作る・編集",
+  "Save draft & add questions": "保存して問題作成へ",
+  "Publish changes": "変更を公開",
+  "Save changes": "変更を保存",
+  "The lesson could not be archived.": "レッスンをアーカイブできませんでした。",
+  "Lesson archived. Nothing was deleted.": "レッスンをアーカイブしました。問題や学習記録は削除されていません。",
+  "This lesson has no active questions. Restore questions first, then publish it.": "このレッスンには有効な問題がありません。先に問題を復元してから公開してください。",
+  "Lesson restored and published.": "レッスンを復元して公開しました。",
+  "The lesson could not be restored.": "レッスンを復元できませんでした。",
+  "The confirmation did not match. Nothing was deleted.": "確認用の文字が一致しません。何も削除していません。",
+  "The unused lesson was permanently deleted.": "未使用のレッスンを完全に削除しました。",
+  "The lesson could not be saved.": "レッスンを保存できませんでした。",
+  "Draft saved. Add the first practice question now.": "下書きを保存しました。続けて最初の練習問題を作成してください。",
+  "Lesson published.": "レッスンを公開しました。",
+  "Lesson saved privately.": "レッスンを非公開で保存しました。",
+  "The lesson could not be assigned.": "レッスンを割り当てできませんでした。",
+  "Assignment saved.": "割り当てを保存しました。",
+  "Bundled content could not be synced.": "同梱教材を再同期できませんでした。",
+  "The six published lessons and activities are now in sync.": "公開済みの6レッスンとアクティビティを同期しました。",
+  "The secure connection library could not be loaded.": "安全な接続機能を読み込めませんでした。",
+  "Question unavailable": "問題を利用できません",
+  "Untitled question": "タイトル未設定の問題",
+  "Structured response": "構造化された回答",
+  "Still needs work": "引き続き練習が必要",
+  "Changed to incorrect": "再挑戦で不正解に変更",
+  "Stayed correct": "正解を維持",
+  "Not scored": "採点対象外",
+  "That question is no longer available.": "その問題は現在利用できません。",
+  "Question-level mistakes": "問題別の誤答",
+  "First-answer misses identify what needs reteaching; latest accuracy shows whether retries helped.": "初回答の誤答から復習すべき内容を確認し、最新正答率から再挑戦の効果を確認できます。",
+  "No scored question mistakes have been recorded yet.": "採点済み問題の誤答記録はまだありません。",
+  "Question": "問題",
+  "First misses": "初回誤答",
+  "First accuracy": "初回答正答率",
+  "Latest accuracy": "最新正答率",
+  "Recovered": "再挑戦で正解",
+  "Extra tries": "追加挑戦",
+  "Action": "操作",
+  "Listening and dictation breakdown": "リスニング・書き取りの内訳",
+  "Weak activity formats": "苦手な問題形式",
+  "Compare listening recognition with full-sentence dictation.": "聞き取り選択と英文書き取りの結果を比較できます。",
+  "Formats are ordered from the lowest first-answer accuracy upward.": "初回答の正答率が低い形式から順に表示します。",
+  "No listening or dictation answers have been recorded yet.": "リスニング・書き取りの回答記録はまだありません。",
+  "No scored activity-format data is available yet.": "問題形式別の採点データはまだありません。",
+  "Responses": "回答数",
+  "Retry result detail": "再挑戦の結果詳細",
+  "The first response remains the official score; this view shows what changed during retries.": "最初の回答を正式スコアとして保持し、再挑戦で何が変わったかを表示します。",
+  "No within-session retries have been recorded yet.": "同じ学習回での再挑戦記録はまだありません。",
+  "Student": "生徒",
+  "First answer": "初回答",
+  "Latest answer": "最新回答",
+  "Result": "結果",
+  "Points": "得点",
+  "Tries": "挑戦回数",
+  "Last answered": "最終回答",
+  "Lesson-by-lesson scores": "レッスン別スコア",
+  "Weighted score keeps multi-point activities accurate; session average treats every session equally.": "複数点の問題は加重スコアで正確に集計し、学習回平均は各回を同じ重みで計算します。",
+  "No lesson score data has been recorded yet.": "レッスン別スコアはまだ記録されていません。",
+  "Weighted first score": "加重初回スコア",
+  "Average session": "学習回平均",
+  "Latest answer accuracy": "最新回答の正答率",
+  "Wrong answers": "誤答数",
+  "Last practice": "最終学習",
+  "Speaking records are separate from listening and dictation scores.": "スピーキング記録は、リスニング・書き取りのスコアと分けて表示します。",
+  "No speaking practice has been recorded yet.": "スピーキング練習はまだ記録されていません。",
+  "Official first scores remain separate from later retry improvements.": "正式な初回スコアと、その後の再挑戦による改善を分けて表示します。",
+  "No practice sessions have been saved yet.": "学習記録はまだ保存されていません。",
+  "RLS-protected answer records, attempts, speaking, and phrase activity.": "安全に保護された回答・学習回・スピーキング・フレーズ練習の記録です。",
+  "Pronunciation practice": "発音練習",
+  "No questions yet. Add the first question, then preview and publish the lesson.": "問題はまだありません。最初の問題を追加し、プレビュー後にレッスンを公開してください。",
+  "Order": "順番",
+  "Access": "利用条件",
+  "State": "状態",
+  "Mark inactive": "無効にする",
+  "Move up": "上へ移動",
+  "Move down": "下へ移動",
+  "Inactive": "無効",
+  "Loading questions…": "問題を読み込んでいます…",
+  "Loading secure question data…": "安全な問題データを読み込んでいます…",
+  "Question data is unavailable right now.": "現在、問題データを利用できません。",
+  "Saving the new order…": "新しい順番を保存しています…",
+  "Question order saved.": "問題の順番を保存しました。",
+  "Restoring…": "復元しています…",
+  "Updating…": "更新しています…",
+  "Opening Google sign-in…": "Googleログインを開いています…",
+  "Google sign-in is not available right now.": "現在Googleログインを利用できません。",
+  "Signing in…": "ログインしています…",
+  "Sign-in failed.": "ログインできませんでした。",
+  "Save the lesson first; the question builder will open automatically.": "先にレッスンを保存してください。続けて問題作成画面が自動で開きます。",
+  "Save the draft before previewing it.": "プレビュー前に下書きを保存してください。",
+});
 const teacherPairFor = (value) => {
-  const match = String(value || "").match(/^(.*?)\s+\/\s+(.+?[\u3040-\u30ff\u3400-\u9fff].*)$/u);
-  return match ? { en: match[1].trim(), ja: match[2].trim() } : null;
+  const clean = String(value || "").trim();
+  const match = clean.match(/^(.*?)\s+\/\s+(.+?[\u3040-\u30ff\u3400-\u9fff].*)$/u);
+  if (match) return { en: match[1].trim(), ja: match[2].trim() };
+  return TEACHER_JAPANESE_COPY[clean] ? { en: clean, ja: TEACHER_JAPANESE_COPY[clean] } : null;
 };
 const initialTeacherLanguage = () => {
   try {
@@ -150,9 +528,7 @@ const initialTeacherLanguage = () => {
 let teacherLanguage = initialTeacherLanguage();
 const teacherTextPairs = new WeakMap();
 
-const teacherText = (english, japanese) => (
-  teacherLanguage === "ja" ? String(japanese || english || "") : String(english || japanese || "")
-);
+const teacherText = (english, japanese) => uiText(english, japanese, teacherLanguage);
 
 const localizeTeacherText = (value) => {
   const pair = teacherPairFor(value);
@@ -163,6 +539,15 @@ const applyTeacherLanguage = (root = document) => {
   document.documentElement.lang = teacherLanguage === "ja" ? "ja" : "en";
   root.querySelectorAll?.("[data-teacher-en][data-teacher-ja]").forEach((node) => {
     node.textContent = teacherText(node.dataset.teacherEn, node.dataset.teacherJa);
+  });
+  root.querySelectorAll?.("[data-teacher-placeholder-en][data-teacher-placeholder-ja]").forEach((node) => {
+    node.placeholder = teacherText(node.dataset.teacherPlaceholderEn, node.dataset.teacherPlaceholderJa);
+  });
+  root.querySelectorAll?.("[data-teacher-title-en][data-teacher-title-ja]").forEach((node) => {
+    node.title = teacherText(node.dataset.teacherTitleEn, node.dataset.teacherTitleJa);
+  });
+  root.querySelectorAll?.("[data-teacher-aria-en][data-teacher-aria-ja]").forEach((node) => {
+    node.setAttribute("aria-label", teacherText(node.dataset.teacherAriaEn, node.dataset.teacherAriaJa));
   });
   const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
   const textNodes = [];
@@ -197,6 +582,16 @@ const teacherVisibleSubmissions = () => state.taskSubmissions.filter(
   (item) => item.status !== "draft",
 );
 
+function submissionStatusLabel(status) {
+  return {
+    draft: teacherText("Draft", "下書き"),
+    submitted: teacherText("Submitted", "提出済み"),
+    in_review: teacherText("Teacher reviewing", "添削中"),
+    reviewed: teacherText("Feedback ready", "フィードバック公開済み"),
+    returned: teacherText("Returned for revision", "修正依頼済み"),
+  }[status] || status;
+}
+
 function make(tag, options = {}) {
   const node = document.createElement(tag);
   if (options.className) node.className = options.className;
@@ -210,13 +605,20 @@ function make(tag, options = {}) {
     node.textContent = localizeTeacherText(original);
   }
   if (options.type) node.type = options.type;
-  if (options.title) node.title = options.title;
+  if (options.title) {
+    const pair = teacherPairFor(options.title);
+    if (pair) {
+      node.dataset.teacherTitleEn = pair.en;
+      node.dataset.teacherTitleJa = pair.ja;
+    }
+    node.title = localizeTeacherText(options.title);
+  }
   return node;
 }
 
 function showToast(message, kind = "info") {
   if (!elements.toast) return;
-  elements.toast.textContent = message;
+  elements.toast.textContent = localizeTeacherText(message);
   elements.toast.dataset.kind = kind;
   elements.toast.classList.add("show");
   window.clearTimeout(showToast.timer);
@@ -226,31 +628,34 @@ function showToast(message, kind = "info") {
 function readableError(error, fallback) {
   const message = error?.message || "";
   if (/review_|relation .* does not exist/i.test(message)) {
-    return "Review Hub database setup is not complete yet. Run the supplied migration and catalogue seed first.";
+    return teacherText(
+      "Review Hub database setup is not complete yet. Run the supplied migration and catalogue seed first.",
+      "Review Hubのデータベース設定が完了していません。先に必要な更新と初期データを適用してください。",
+    );
   }
   if (/invalid login credentials/i.test(message)) {
-    return "The email or password is not correct.";
+    return teacherText("The email or password is not correct.", "メールアドレスまたはパスワードが正しくありません。");
   }
   if (/row-level security|permission denied/i.test(message)) {
-    return "This account is not authorised for that teacher action.";
+    return teacherText("This account is not authorised for that teacher action.", "この先生アカウントには、この操作の権限がありません。");
   }
   if (/must contain at least one active question/i.test(message)) {
-    return "Add and activate at least one question before publishing this lesson.";
+    return teacherText("Add and activate at least one question before publishing this lesson.", "公開前に、少なくとも1問を作成して有効にしてください。");
   }
   if (/digest\(|gen_random_bytes|pgcrypto/i.test(message)) {
-    return "The secure access-code service needs its database update. No code was created.";
+    return teacherText("The secure access-code service needs its database update. No code was created.", "安全なアクセスコード機能に必要なデータベース更新が未適用です。コードは作成されませんでした。");
   }
   if (/duplicate key|review_questions_lesson_id_stable_key/i.test(message)) {
-    return "That stable key is already used by another question in this lesson.";
+    return teacherText("That stable key is already used by another question in this lesson.", "その管理キーは、このレッスン内の別の問題で使用されています。");
   }
-  return fallback || message || "Something went wrong. Please try again.";
+  return fallback ? localizeTeacherText(fallback) : message || teacherText("Something went wrong. Please try again.", "問題が発生しました。もう一度お試しください。");
 }
 
 function formatDate(value, includeTime = false) {
   if (!value) return "—";
   const date = new Date(value.length === 10 ? `${value}T00:00:00` : value);
   if (Number.isNaN(date.getTime())) return String(value);
-  return new Intl.DateTimeFormat("en-GB", {
+  return new Intl.DateTimeFormat(teacherLanguage === "ja" ? "ja-JP" : "en-GB", {
     year: "numeric",
     month: "short",
     day: "numeric",
@@ -274,18 +679,18 @@ function isoDateTimeValue(value) {
 
 function statusLabel(status) {
   return {
-    draft: "Draft",
-    review: "Ready for review",
-    published: "Published",
-    archived: "Archived",
+    draft: teacherText("Draft", "下書き"),
+    review: teacherText("Ready for review", "確認待ち"),
+    published: teacherText("Published", "公開中"),
+    archived: teacherText("Archived", "非表示"),
   }[status] || status;
 }
 
 function audienceLabel(audience) {
   return {
-    general: "General",
-    takiwaki: "Takiwaki only",
-    both: "Both",
+    general: teacherText("General", "一般"),
+    takiwaki: teacherText("Takiwaki only", "Takiwaki専用"),
+    both: teacherText("Both", "両方"),
   }[audience] || audience;
 }
 
@@ -400,7 +805,7 @@ const MANAGED_QUESTION_PAYLOAD_KEYS = new Set([
 ]);
 
 function formatQuestionLabel(format) {
-  return QUESTION_FORMATS[format]?.label || format;
+  return localizeTeacherText(QUESTION_FORMATS[format]?.label || format);
 }
 
 function bilingualValue(value, japaneseFallback = "") {
@@ -669,19 +1074,19 @@ function safeNotionLink(url) {
 function unavailableLessonSourceLabel(lesson) {
   if (lesson.source_type === "legacy_zip") {
     return teacherText(
-      "Bundled lesson · source link unavailable",
-      "同梱レッスン · ソースリンクなし",
+      "Bundled lesson · Source link missing",
+      "同梱レッスン · 元資料リンク未登録",
     );
   }
   if (lesson.source_type === "notion") {
     return teacherText(
-      "Notion lesson · source link unavailable",
-      "Notionレッスン · ソースリンクなし",
+      "Notion lesson · Source link missing",
+      "Notionレッスン · 元資料リンク未登録",
     );
   }
   return teacherText(
-    "Teacher-created · source link unavailable",
-    "先生作成 · ソースリンクなし",
+    "Teacher-created · Source link missing",
+    "先生作成 · 元資料リンク未登録",
   );
 }
 
@@ -699,13 +1104,14 @@ function lessonRows(lessons) {
   for (const lesson of lessons) {
     const row = make("tr");
     const titleCell = make("td");
-    titleCell.append(make("strong", { text: lesson.title_en }));
-    if (lesson.title_ja) titleCell.append(make("br"), make("small", { text: lesson.title_ja }));
+    titleCell.append(make("strong", {
+      text: teacherLanguage === "ja" ? lesson.title_ja || lesson.title_en : lesson.title_en,
+    }));
 
     const sourceCell = make("td");
     const notionUrl = safeNotionLink(lesson.source_notion_url);
     if (notionUrl) {
-      const link = make("a", { text: "Notion note ↗" });
+      const link = make("a", { text: teacherText("Notion source ↗", "Notion元資料 ↗") });
       link.href = notionUrl;
       link.target = "_blank";
       link.rel = "noopener noreferrer";
@@ -732,7 +1138,10 @@ function lessonRows(lessons) {
       remove.className = "danger-action";
       remove.disabled = !state.teacherControlsReady;
       if (!state.teacherControlsReady) {
-        remove.title = "Apply the Teacher Controls database update first";
+        remove.title = teacherText(
+          "Apply the Teacher Controls database update first",
+          "先にTeacher Controlsのデータベース更新を適用してください",
+        );
       }
       actions.append(remove);
     }
@@ -798,10 +1207,10 @@ function renderLessons(mode) {
   if (!filtered.length) {
     wrap.append(make("p", {
       text: mode === "drafts"
-        ? "There are no private drafts waiting for review."
+        ? teacherText("There are no private drafts waiting for review.", "確認待ちの非公開下書きはありません。")
         : state.lessonListView === "archived"
-          ? "There are no archived lessons."
-          : "There are no published lessons yet.",
+          ? teacherText("There are no archived lessons.", "アーカイブ中のレッスンはありません。")
+          : teacherText("There are no published lessons yet.", "公開中のレッスンはまだありません。"),
     }));
     elements.panel.replaceChildren(wrap);
     return;
@@ -813,13 +1222,15 @@ function renderLessons(mode) {
 }
 
 function lessonTitle(lessonId) {
-  return state.lessons.find((lesson) => lesson.id === lessonId)?.title_en || "Unknown lesson";
+  const lesson = state.lessons.find((item) => item.id === lessonId);
+  return (teacherLanguage === "ja" ? lesson?.title_ja || lesson?.title_en : lesson?.title_en)
+    || teacherText("Unknown lesson", "不明なレッスン");
 }
 
 function profileName(userId) {
   return (
     state.profiles.find((profile) => profile.user_id === userId)?.display_name ||
-    `Student ${userId.slice(0, 6)}`
+    teacherText(`Student ${userId.slice(0, 6)}`, `生徒 ${userId.slice(0, 6)}`)
   );
 }
 
@@ -875,10 +1286,13 @@ async function saveLearnerPlanOverride(profile, values, button) {
 async function loadLearnerAuthStatus(profile, output) {
   const cached = state.learnerAuthStatus[profile.user_id];
   if (cached) {
-    output.textContent = `Account: ${cached.status} · Registered: ${formatDate(cached.createdAt, true)} · Last sign-in: ${cached.lastSignInAt ? formatDate(cached.lastSignInAt, true) : "Never"} · Email confirmed: ${cached.emailConfirmedAt ? "Yes" : "No"}`;
+    output.textContent = teacherText(
+      `Account: ${cached.status} · Registered: ${formatDate(cached.createdAt, true)} · Last sign-in: ${cached.lastSignInAt ? formatDate(cached.lastSignInAt, true) : "Never"} · Email confirmed: ${cached.emailConfirmedAt ? "Yes" : "No"}`,
+      `アカウント：${cached.status} · 登録：${formatDate(cached.createdAt, true)} · 最終ログイン：${cached.lastSignInAt ? formatDate(cached.lastSignInAt, true) : "なし"} · メール確認：${cached.emailConfirmedAt ? "済み" : "未確認"}`,
+    );
     return;
   }
-  output.textContent = "Loading secure account status…";
+  output.textContent = teacherText("Loading secure account status…", "安全なアカウント情報を読み込んでいます…");
   const { data, error } = await getTeacherLearnerAuthStatus(profile.user_id);
   if (error || !data?.account) {
     output.textContent = readableError(error, "Account status could not be loaded.");
@@ -889,16 +1303,16 @@ async function loadLearnerAuthStatus(profile, output) {
 }
 
 function activeMembershipStatus(membership) {
-  if (!membership) return "Pending";
+  if (!membership) return teacherText("Pending", "承認待ち");
   if (membership.status === "active" && new Date(membership.expires_at || 0).getTime() <= Date.now()) {
-    return "Expired";
+    return teacherText("Expired", "期限切れ");
   }
   return {
-    pending: "Pending approval",
-    active: "Active",
-    expired: "Expired",
-    suspended: "Paused",
-    cancelled: "Cancelled",
+    pending: teacherText("Pending approval", "承認待ち"),
+    active: teacherText("Active", "有効"),
+    expired: teacherText("Expired", "期限切れ"),
+    suspended: teacherText("Paused", "一時停止"),
+    cancelled: teacherText("Cancelled", "解約済み"),
   }[membership.status] || membership.status;
 }
 
@@ -913,7 +1327,10 @@ async function activateMembership(profile, days, scope, plan, button) {
       membership_plan: plan,
     });
     if (error) throw error;
-    showToast(`${profileName(profile.user_id)} now has ${duration} days of ${plan} · ${scope} access.`, "success");
+    showToast(teacherText(
+      `${profileName(profile.user_id)} now has ${duration} days of ${plan} · ${audienceLabel(scope)} access.`,
+      `${profileName(profile.user_id)}に${plan}・${audienceLabel(scope)}の利用権を${duration}日間設定しました。`,
+    ), "success");
     await refreshDashboard();
     if (elements.learnerDialog?.open) openLearnerDialog(profile);
   } catch (error) {
@@ -923,7 +1340,10 @@ async function activateMembership(profile, days, scope, plan, button) {
 }
 
 async function pauseMembership(profile, button) {
-  if (!window.confirm(`Pause access for ${profileName(profile.user_id)}?`)) return;
+  if (!window.confirm(teacherText(
+    `Pause access for ${profileName(profile.user_id)}?`,
+    `${profileName(profile.user_id)}の利用を一時停止しますか？`,
+  ))) return;
   button.disabled = true;
   const { error } = await client.from("review_memberships")
     .update({ status: "suspended" })
@@ -964,13 +1384,16 @@ function generatedCodeResult() {
   const copy = makeAction("Copy full code", () => copyText(state.lastGeneratedCode.code));
   copy.className = "primary-btn";
   const code = make("code", { text: state.lastGeneratedCode.code });
-  code.setAttribute("aria-label", "Full newly generated access code");
+  code.setAttribute("aria-label", teacherText("Full newly generated access code", "新しく発行された完全なアクセスコード"));
   const text = make("div");
   text.append(
     make("strong", { text: "New full code — copy and send this now" }),
     code,
     make("p", {
-      text: `${state.lastGeneratedCode.label} · ${state.lastGeneratedCode.durationDays} days · ${audienceLabel(state.lastGeneratedCode.accessScope)} · ${planFor(state.lastGeneratedCode.planTier).name}. For security, the history below shows only the last four characters.`,
+      text: teacherText(
+        `${state.lastGeneratedCode.label} · ${state.lastGeneratedCode.durationDays} days · ${audienceLabel(state.lastGeneratedCode.accessScope)} · ${planFor(state.lastGeneratedCode.planTier).name}. For security, the history below shows only the last four characters.`,
+        `${state.lastGeneratedCode.label} · ${state.lastGeneratedCode.durationDays}日 · ${audienceLabel(state.lastGeneratedCode.accessScope)} · ${planFor(state.lastGeneratedCode.planTier).name}。安全のため、下の履歴には末尾4文字だけを表示します。`,
+      ),
     }),
   );
   output.append(text, copy);
@@ -978,17 +1401,17 @@ function generatedCodeResult() {
 }
 
 function accessCodeStatus(code) {
-  if (!code.enabled) return { key: "disabled", label: "Disabled / 無効" };
+  if (!code.enabled) return { key: "disabled", label: teacherText("Disabled", "無効") };
   if (code.valid_until && new Date(code.valid_until).getTime() <= Date.now()) {
-    return { key: "expired", label: "Expired / 期限切れ" };
+    return { key: "expired", label: teacherText("Expired", "期限切れ") };
   }
   if (Number(code.use_count || 0) >= Number(code.max_uses || 0)) {
-    return { key: "used", label: "Used up / 使用済み" };
+    return { key: "used", label: teacherText("Used up", "使用上限到達") };
   }
   if (Number(code.use_count || 0) > 0) {
-    return { key: "partial", label: "Partly used / 一部使用" };
+    return { key: "partial", label: teacherText("Partly used", "一部使用") };
   }
-  return { key: "unused", label: "Unused / 未使用" };
+  return { key: "unused", label: teacherText("Unused", "未使用") };
 }
 
 function accessCodeEditor(code) {
@@ -999,7 +1422,10 @@ function accessCodeEditor(code) {
   title.append(
     make("strong", { text: code.label }),
     make("small", {
-      text: `••••${code.code_last4} · ${planFor(code.plan_tier).name} · ${code.use_count}/${code.max_uses} uses`,
+      text: teacherText(
+        `••••${code.code_last4} · ${planFor(code.plan_tier).name} · ${code.use_count}/${code.max_uses} uses`,
+        `••••${code.code_last4} · ${planFor(code.plan_tier).name} · ${code.use_count}/${code.max_uses}回使用`,
+      ),
     }),
   );
   summary.append(title, make("b", { className: `code-status code-status-${status.key}`, text: status.label }));
@@ -1008,13 +1434,13 @@ function accessCodeEditor(code) {
   const label = make("input");
   label.value = code.label || "";
   label.maxLength = 100;
-  label.setAttribute("aria-label", "Access code label");
+  label.setAttribute("aria-label", teacherText("Access code label", "アクセスコードのプラン名"));
   const days = make("input");
   days.type = "number";
   days.min = "1";
   days.max = "730";
   days.value = String(code.duration_days || 30);
-  days.setAttribute("aria-label", "Access duration in days");
+  days.setAttribute("aria-label", teacherText("Access duration in days", "利用日数"));
   const scope = make("select");
   [["general", "General"], ["takiwaki", "Takiwaki"], ["both", "Both"]].forEach(([value, textValue]) => {
     const option = make("option", { text: textValue });
@@ -1022,7 +1448,7 @@ function accessCodeEditor(code) {
     scope.append(option);
   });
   scope.value = code.access_scope || "general";
-  scope.setAttribute("aria-label", "Access scope");
+  scope.setAttribute("aria-label", teacherText("Access scope", "公開範囲"));
   const plan = make("select");
   [["standard", "Standard"], ["premium", "Premium"], ["premium_plus", "Premium+"]].forEach(([value, textValue]) => {
     const option = make("option", { text: textValue });
@@ -1030,27 +1456,30 @@ function accessCodeEditor(code) {
     plan.append(option);
   });
   plan.value = code.plan_tier || "standard";
-  plan.setAttribute("aria-label", "Membership plan");
+  plan.setAttribute("aria-label", teacherText("Membership plan", "会員プラン"));
   const uses = make("input");
   uses.type = "number";
   uses.min = String(Math.max(1, Number(code.use_count || 0)));
   uses.max = "1000";
   uses.value = String(code.max_uses || 1);
-  uses.setAttribute("aria-label", "Maximum uses");
+  uses.setAttribute("aria-label", teacherText("Maximum uses", "最大使用回数"));
   const expiry = make("input");
   expiry.type = "datetime-local";
   expiry.value = localDateTimeValue(code.valid_until);
-  expiry.setAttribute("aria-label", "Code expiry; leave blank for no expiry");
+  expiry.setAttribute("aria-label", teacherText("Code expiry; leave blank for no expiry", "コードの有効期限（無期限の場合は空欄）"));
   const enabledLabel = make("label", { className: "code-enabled-field" });
   const enabled = make("input");
   enabled.type = "checkbox";
   enabled.checked = Boolean(code.enabled);
-  enabledLabel.append(enabled, document.createTextNode(" Enabled / 有効"));
+  enabledLabel.append(enabled, document.createTextNode(teacherText(" Enabled", " 有効")));
   fields.append(label, days, scope, plan, uses, expiry, enabledLabel);
 
   const metadata = make("p", {
     className: "code-history-meta",
-    text: `Issued ${formatDate(code.created_at, true)} · Expires ${code.valid_until ? formatDate(code.valid_until, true) : "No fixed expiry"}. The full code is never stored and cannot be displayed again.`,
+    text: teacherText(
+      `Issued ${formatDate(code.created_at, true)} · Expires ${code.valid_until ? formatDate(code.valid_until, true) : "No fixed expiry"}. The full code is never stored and cannot be displayed again.`,
+      `発行：${formatDate(code.created_at, true)} · 有効期限：${code.valid_until ? formatDate(code.valid_until, true) : "なし"}。完全なコードは保存されないため、再表示できません。`,
+    ),
   });
   const actions = make("div", { className: "code-history-actions" });
   const save = makeAction("Save changes", async () => {
@@ -1080,7 +1509,10 @@ function accessCodeEditor(code) {
     await refreshDashboard();
   });
   const reissue = makeAction("Reissue", async () => {
-    if (!window.confirm("Reissue this code? The old code will be disabled and a new full code will be shown once.")) return;
+    if (!window.confirm(teacherText(
+      "Reissue this code? The old code will be disabled and a new full code will be shown once.",
+      "このコードを再発行しますか？古いコードは無効になり、新しい完全コードが一度だけ表示されます。",
+    ))) return;
     reissue.disabled = true;
     const { data, error } = await reissueTeacherAccessCode(code.id);
     if (error || !data?.accessCode) {
@@ -1090,7 +1522,7 @@ function accessCodeEditor(code) {
     }
     state.lastGeneratedCode = {
       code: data.accessCode,
-      label: `${code.label} (reissued)`,
+      label: teacherText(`${code.label} (reissued)`, `${code.label}（再発行）`),
       durationDays: code.duration_days,
       accessScope: code.access_scope,
       planTier: code.plan_tier || "standard",
@@ -1100,12 +1532,12 @@ function accessCodeEditor(code) {
   });
   if (code.enabled === false) {
     reissue.disabled = true;
-    reissue.title = "Only an enabled code can be reissued. Create a new code instead.";
+    reissue.title = teacherText("Only an enabled code can be reissued. Create a new code instead.", "再発行できるのは有効なコードだけです。新しいコードを作成してください。");
   }
   const remove = makeAction(Number(code.use_count || 0) > 0 ? "Disable & preserve history" : "Delete unused code", async () => {
     const prompt = Number(code.use_count || 0) > 0
-      ? "This code has redemption history, so it will be disabled rather than erased. Continue?"
-      : "Permanently delete this unused code? This cannot be undone.";
+      ? teacherText("This code has redemption history, so it will be disabled rather than erased. Continue?", "このコードには利用履歴があるため、削除せず無効化します。続けますか？")
+      : teacherText("Permanently delete this unused code? This cannot be undone.", "この未使用コードを完全に削除しますか？元に戻せません。");
     if (!window.confirm(prompt)) return;
     remove.disabled = true;
     const { data, error } = await deleteTeacherAccessCode(code.id);
@@ -1114,7 +1546,9 @@ function accessCodeEditor(code) {
       remove.disabled = false;
       return;
     }
-    showToast(data?.disposition === "disabled" ? "Used code disabled; redemption history preserved." : "Unused code deleted.", "success");
+    showToast(data?.disposition === "disabled"
+      ? teacherText("Used code disabled; redemption history preserved.", "使用済みコードを無効化し、利用履歴は保持しました。")
+      : teacherText("Unused code deleted.", "未使用コードを削除しました。"), "success");
     await refreshDashboard();
   });
   remove.classList.add("danger-action");
@@ -1133,15 +1567,15 @@ function renderAccessCodeManager() {
   const form = make("form", { className: "code-create-form" });
   const label = make("input");
   label.required = true;
-  label.placeholder = "Plan label (e.g. July 6-month plan)";
+  label.placeholder = teacherText("Plan label (e.g. July 6-month plan)", "プラン名（例：7月・6か月プラン）");
   const days = make("input");
   days.type = "number";
   days.min = "1";
   days.max = "730";
   days.value = "30";
-  days.placeholder = "Days";
-  days.title = "Access period in days (1–730). Examples: 30 = one month, 180 = six months.";
-  days.setAttribute("aria-label", "Access duration in days");
+  days.placeholder = teacherText("Days", "日数");
+  days.title = teacherText("Access period in days (1–730). Examples: 30 = one month, 180 = six months.", "利用日数（1〜730日）。例：30日＝1か月、180日＝6か月。");
+  days.setAttribute("aria-label", teacherText("Access duration in days", "利用日数"));
   const scope = make("select");
   [["general", "General"], ["takiwaki", "Takiwaki"], ["both", "Both"]].forEach(([value, textValue]) => {
     const option = make("option", { text: textValue });
@@ -1154,16 +1588,16 @@ function renderAccessCodeManager() {
     option.value = value;
     plan.append(option);
   });
-  plan.setAttribute("aria-label", "Membership plan");
+  plan.setAttribute("aria-label", teacherText("Membership plan", "会員プラン"));
   const uses = make("input");
   uses.type = "number";
   uses.min = "1";
   uses.max = "1000";
   uses.value = "1";
-  uses.setAttribute("aria-label", "Maximum uses");
+  uses.setAttribute("aria-label", teacherText("Maximum uses", "最大使用回数"));
   const expiry = make("input");
   expiry.type = "datetime-local";
-  expiry.setAttribute("aria-label", "Code expiry; leave blank for no expiry");
+  expiry.setAttribute("aria-label", teacherText("Code expiry; leave blank for no expiry", "コードの有効期限（無期限の場合は空欄）"));
   const create = makeAction("Generate secure code", async () => {
     if (!label.value.trim()) return;
     const durationDays = Math.max(1, Math.min(730, Number(days.value || 30)));
@@ -1334,7 +1768,10 @@ async function applyBulkLessonAction(profile, lessonIds, action, button) {
     button.disabled = false;
     return;
   }
-  showToast(`${lessonIds.length} lesson(s) updated.`, "success");
+  showToast(teacherText(
+    `${lessonIds.length} lesson(s) updated.`,
+    `${lessonIds.length}件のレッスンを更新しました。`,
+  ), "success");
   await refreshDashboard();
   if (elements.learnerDialog?.open) openLearnerDialog(profile);
 }
@@ -1379,10 +1816,10 @@ async function setLessonLock(profile, lesson, accessMode, control) {
   }
   showToast(
     accessMode === "block"
-      ? "This lesson is now locked for the learner."
+      ? teacherText("This lesson is now locked for the learner.", "この生徒には、このレッスンを非表示にしました。")
       : accessMode === "allow"
-        ? "Teacher exception saved: this learner can open the lesson even when their plan would normally lock it."
-        : "Normal membership and plan rules restored.",
+        ? teacherText("Teacher exception saved: this learner can open the lesson even when their plan would normally lock it.", "この生徒がプランに関係なくレッスンを開けるようにしました。")
+        : teacherText("Normal membership and plan rules restored.", "通常の会員プラン設定に戻しました。"),
     "success",
   );
   renderStudents();
@@ -1395,7 +1832,10 @@ async function sendPasswordReset(profile, button) {
     showToast("No account email is recorded for this learner.", "error");
     return;
   }
-  if (!window.confirm(`Send a secure password-reset email to ${email}?`)) return;
+  if (!window.confirm(teacherText(
+    `Send a secure password-reset email to ${email}?`,
+    `${email}へ安全なパスワード再設定メールを送信しますか？`,
+  ))) return;
   button.disabled = true;
   const redirectTo = new URL("/", window.location.origin).href;
   const { error } = await client.auth.resetPasswordForEmail(email, { redirectTo });
@@ -1412,32 +1852,45 @@ function learnerActivity(profile) {
   state.attempts.filter((item) => item.user_id === profile.user_id).forEach((item) => {
     events.push({
       at: item.completed_at,
-      title: `Completed ${lessonTitle(item.lesson_id)}`,
+      title: teacherText(`Completed ${lessonTitle(item.lesson_id)}`, `${lessonTitle(item.lesson_id)}を完了`),
       detail: item.max_score > 0
-        ? `First score ${item.first_score}/${item.max_score} · ${item.wrong_count} wrong`
-        : "Practice recorded",
+        ? teacherText(
+          `First score ${item.first_score}/${item.max_score} · ${item.wrong_count} wrong`,
+          `初回スコア ${item.first_score}/${item.max_score} · 誤答 ${item.wrong_count}件`,
+        )
+        : teacherText("Practice recorded", "練習記録あり"),
     });
   });
   state.speaking.filter((item) => item.user_id === profile.user_id).forEach((item) => {
     events.push({
       at: item.practiced_at,
-      title: `Speaking · ${lessonTitle(item.lesson_id)}`,
-      detail: item.transcript ? `Heard: “${item.transcript}”` : "Speaking practice recorded",
+      title: teacherText(`Speaking · ${lessonTitle(item.lesson_id)}`, `スピーキング · ${lessonTitle(item.lesson_id)}`),
+      detail: item.transcript
+        ? teacherText(`Heard: “${item.transcript}”`, `認識結果：「${item.transcript}」`)
+        : teacherText("Speaking practice recorded", "スピーキング練習を記録"),
     });
   });
   state.assignments.filter((item) => item.student_id === profile.user_id).forEach((item) => {
     events.push({
       at: item.created_at,
-      title: `${item.status === "dismissed" ? "Removed" : "Assigned"} · ${lessonTitle(item.lesson_id)}`,
-      detail: item.status === "completed" ? "Assignment completed" : `Assignment status: ${item.status}`,
+      title: teacherText(
+        `${item.status === "dismissed" ? "Removed" : "Assigned"} · ${lessonTitle(item.lesson_id)}`,
+        `${item.status === "dismissed" ? "割り当て解除" : "割り当て"} · ${lessonTitle(item.lesson_id)}`,
+      ),
+      detail: item.status === "completed"
+        ? teacherText("Assignment completed", "課題完了")
+        : teacherText(`Assignment status: ${item.status}`, `課題の状態：${item.status}`),
     });
   });
   teacherVisibleSubmissions().filter((item) => item.user_id === profile.user_id).forEach((item) => {
     const task = state.premiumTasks.find((candidate) => candidate.id === item.task_id);
     events.push({
       at: item.submitted_at || item.updated_at || item.created_at,
-      title: `Premium ${task?.task_type || "task"} · ${task?.title_en || "Submission"}`,
-      detail: `Submission status: ${item.status}`,
+      title: teacherText(
+        `Premium ${task?.task_type || "task"} · ${task?.title_en || "Submission"}`,
+        `Premium ${task?.task_type === "speaking" ? "スピーキング" : task?.task_type === "essay" ? "英作文" : "課題"} · ${task?.title_ja || task?.title_en || "提出"}`,
+      ),
+      detail: teacherText(`Submission status: ${item.status}`, `提出状態：${item.status}`),
     });
   });
   return events
@@ -1449,15 +1902,21 @@ function learnerActivity(profile) {
 function learnerLessonControls(profile) {
   const section = make("section", { className: "learner-control-section" });
   section.append(
-    make("h3", { text: "Lesson plan & visibility / レッスン割り当て・表示管理" }),
+    make("h3", { text: teacherText("Lesson plan & visibility", "レッスン割り当て・表示管理") }),
     make("p", {
-      text: "Recommendation adds a lesson to the learner’s plan. Assignment settings control when it appears and which plan it needs. “Allow this lesson” or “Hide this lesson” changes visibility only for this learner.",
+      text: teacherText(
+        "Recommendations add lessons to the learner’s plan. Assignment settings control dates and the required plan. Visibility exceptions affect only this learner.",
+        "おすすめへの追加、公開期間、必要プランを設定できます。個別の表示設定は、この生徒だけに適用されます。",
+      ),
     }),
   );
   if (!state.teacherControlsReady) {
     section.append(make("p", {
       className: "control-warning",
-      text: "Lesson locking will become available after the Teacher Controls migration is applied. Assignments already work.",
+      text: teacherText(
+        "Lesson visibility exceptions become available after the Teacher Controls database update. Assignments already work.",
+        "レッスンの個別表示設定は、Teacher Controlsのデータベース更新後に利用できます。割り当て機能は現在も使用できます。",
+      ),
     }));
   }
   const published = state.lessons.filter((lesson) => lesson.status === "published");
@@ -1470,14 +1929,14 @@ function learnerLessonControls(profile) {
   const selectAllLabel = make("label");
   const selectAll = make("input");
   selectAll.type = "checkbox";
-  selectAllLabel.append(selectAll, document.createTextNode(" Select all / 全選択"));
+  selectAllLabel.append(selectAll, document.createTextNode(teacherText(" Select all", " 全選択")));
   const bulkAction = make("select");
   [
-    ["recommend", "Recommend selected"],
-    ["remove", "Remove recommendations"],
-    ["allow", "Allow selected lessons"],
-    ["block", "Hide selected lessons"],
-    ["inherit", "Follow plan for selected"],
+    ["recommend", teacherText("Recommend selected", "選択したレッスンをおすすめに追加")],
+    ["remove", teacherText("Remove recommendations", "選択したおすすめを解除")],
+    ["allow", teacherText("Allow selected lessons", "選択したレッスンを利用可能にする")],
+    ["block", teacherText("Hide selected lessons", "選択したレッスンを非表示にする")],
+    ["inherit", teacherText("Follow plan for selected", "選択したレッスンをプラン設定に戻す")],
   ].forEach(([value, label]) => {
     const option = make("option", { text: label });
     option.value = value;
@@ -1503,7 +1962,10 @@ function learnerLessonControls(profile) {
     const assignment = assignmentFor(profile.user_id, lesson.id);
     const selected = make("input");
     selected.type = "checkbox";
-    selected.setAttribute("aria-label", `Select ${lesson.title_en} for bulk action`);
+    selected.setAttribute("aria-label", teacherText(
+      `Select ${lesson.title_en} for bulk action`,
+      `${lesson.title_ja || lesson.title_en}を一括操作の対象にする`,
+    ));
     selected.addEventListener("change", () => {
       if (selected.checked) selectedLessonIds.add(lesson.id);
       else selectedLessonIds.delete(lesson.id);
@@ -1513,7 +1975,10 @@ function learnerLessonControls(profile) {
     const checkbox = make("input");
     checkbox.type = "checkbox";
     checkbox.checked = Boolean(assignment && assignment.status !== "dismissed");
-    checkbox.setAttribute("aria-label", `Recommend ${lesson.title_en}`);
+    checkbox.setAttribute("aria-label", teacherText(
+      `Recommend ${lesson.title_en}`,
+      `${lesson.title_ja || lesson.title_en}をおすすめにする`,
+    ));
     checkbox.addEventListener("change", () => setLessonAssignment(profile, lesson, checkbox.checked, checkbox));
 
     const visibility = make("select");
@@ -1528,7 +1993,10 @@ function learnerLessonControls(profile) {
     });
     visibility.value = accessOverrideFor(profile.user_id, lesson.id)?.access_mode || "inherit";
     visibility.disabled = !state.teacherControlsReady;
-    visibility.setAttribute("aria-label", `Visibility of ${lesson.title_en}`);
+    visibility.setAttribute("aria-label", teacherText(
+      `Visibility of ${lesson.title_en}`,
+      `${lesson.title_ja || lesson.title_en}の表示設定`,
+    ));
     visibility.addEventListener("change", () => setLessonLock(profile, lesson, visibility.value, visibility));
 
     const assignmentSettings = make("details", { className: "assignment-settings" });
@@ -1537,11 +2005,17 @@ function learnerLessonControls(profile) {
     const opens = make("input");
     opens.type = "datetime-local";
     opens.value = localDateTimeValue(assignment?.opens_at);
-    opens.setAttribute("aria-label", `Open ${lesson.title_en} assignment from`);
+    opens.setAttribute("aria-label", teacherText(
+      `Open ${lesson.title_en} assignment from`,
+      `${lesson.title_ja || lesson.title_en}の公開開始日時`,
+    ));
     const closes = make("input");
     closes.type = "datetime-local";
     closes.value = localDateTimeValue(assignment?.closes_at);
-    closes.setAttribute("aria-label", `Close ${lesson.title_en} assignment at`);
+    closes.setAttribute("aria-label", teacherText(
+      `Close ${lesson.title_en} assignment at`,
+      `${lesson.title_ja || lesson.title_en}の公開終了日時`,
+    ));
     const requiredPlan = make("select");
     [["standard", "Standard or above"], ["premium", "Premium or Premium+"], ["premium_plus", "Premium+ only"]].forEach(([value, label]) => {
       const option = make("option", { text: label });
@@ -1549,17 +2023,20 @@ function learnerLessonControls(profile) {
       requiredPlan.append(option);
     });
     requiredPlan.value = assignment?.required_plan || "standard";
-    requiredPlan.setAttribute("aria-label", `Plan requirement for ${lesson.title_en}`);
+    requiredPlan.setAttribute("aria-label", teacherText(
+      `Plan requirement for ${lesson.title_en}`,
+      `${lesson.title_ja || lesson.title_en}の必要プラン`,
+    ));
     const visibleLabel = make("label");
     const visible = make("input");
     visible.type = "checkbox";
     visible.checked = assignment?.visible_to_student !== false;
-    visibleLabel.append(visible, document.createTextNode(" Show assignment"));
+    visibleLabel.append(visible, document.createTextNode(teacherText(" Show assignment", " 課題を表示")));
     const reviewLabel = make("label");
     const teacherReview = make("input");
     teacherReview.type = "checkbox";
     teacherReview.checked = Boolean(assignment?.teacher_review_required);
-    reviewLabel.append(teacherReview, document.createTextNode(" Teacher review"));
+    reviewLabel.append(teacherReview, document.createTextNode(teacherText(" Teacher review", " 先生の確認あり")));
     const saveSettings = makeAction("Save settings", () => saveLessonAssignmentSettings(profile, lesson, {
       opensAt: opens.value,
       closesAt: closes.value,
@@ -1568,8 +2045,8 @@ function learnerLessonControls(profile) {
       teacherReviewRequired: teacherReview.checked,
     }, saveSettings));
     assignmentFields.append(
-      make("small", { text: "Opens / 公開開始" }), opens,
-      make("small", { text: "Closes / 公開終了" }), closes,
+      make("small", { text: teacherText("Opens", "公開開始") }), opens,
+      make("small", { text: teacherText("Closes", "公開終了") }), closes,
       requiredPlan, visibleLabel, reviewLabel, saveSettings,
     );
     assignmentSettings.append(assignmentFields);
@@ -1587,7 +2064,11 @@ function learnerLessonControls(profile) {
     const selectedCell = make("td");
     selectedCell.append(selected);
     const lessonCell = make("td");
-    lessonCell.append(make("strong", { text: lesson.title_en }), make("br"), make("small", { text: formatDate(lesson.lesson_date) }));
+    lessonCell.append(
+      make("strong", { text: teacherLanguage === "ja" ? lesson.title_ja || lesson.title_en : lesson.title_en }),
+      make("br"),
+      make("small", { text: formatDate(lesson.lesson_date) }),
+    );
     const recommendCell = make("td");
     recommendCell.append(checkbox);
     row.append(
@@ -1596,7 +2077,9 @@ function learnerLessonControls(profile) {
       recommendCell,
       make("td"),
       make("td"),
-      make("td", { text: attempts.length ? `${attempts.length} session(s) · best ${Math.round(best * 100)}%` : "Not practised" }),
+      make("td", { text: attempts.length
+        ? teacherText(`${attempts.length} session(s) · best ${Math.round(best * 100)}%`, `${attempts.length}回 · 最高 ${Math.round(best * 100)}%`)
+        : teacherText("Not practised", "学習記録なし") }),
     );
     row.children[3].append(visibility);
     row.children[4].append(assignmentSettings);
@@ -1612,9 +2095,12 @@ function learnerFeatureControls(profile) {
   const current = planOverrideFor(profile.user_id);
   const section = make("section", { className: "learner-control-section" });
   section.append(
-    make("h3", { text: "Tier & feature override / プラン・機能の例外設定" }),
+    make("h3", { text: teacherText("Plan & feature exceptions", "プラン・機能の例外設定") }),
     make("p", {
-      text: "Use plan default keeps the learner’s normal plan setting. Enable or Disable changes only the selected feature until this exception is cleared or expires.",
+      text: teacherText(
+        "Keep the plan default unless this learner needs a temporary exception. Feature changes apply until cleared or expired.",
+        "通常はプラン標準のままにしてください。一時的な例外が必要な場合だけ変更し、解除または期限切れまで適用されます。",
+      ),
     }),
   );
 
@@ -1630,7 +2116,7 @@ function learnerFeatureControls(profile) {
     plan.append(option);
   });
   plan.value = current?.plan_tier || "";
-  plan.setAttribute("aria-label", "Temporary learner plan override");
+  plan.setAttribute("aria-label", teacherText("Temporary learner plan exception", "生徒の一時的なプラン例外設定"));
 
   const featureFields = {};
   const features = make("div", { className: "learner-feature-flags" });
@@ -1652,7 +2138,7 @@ function learnerFeatureControls(profile) {
     });
     const saved = current?.feature_flags?.[key];
     select.value = typeof saved === "boolean" ? String(saved) : "";
-    select.setAttribute("aria-label", `${label} override`);
+    select.setAttribute("aria-label", teacherText(`${label} exception`, `${localizeTeacherText(label)}の例外設定`));
     featureFields[key] = select;
     wrapper.append(select);
     features.append(wrapper);
@@ -1661,12 +2147,12 @@ function learnerFeatureControls(profile) {
   const reason = make("input");
   reason.maxLength = 500;
   reason.value = current?.reason || "";
-  reason.placeholder = "Reason / 理由（任意）";
-  reason.setAttribute("aria-label", "Override reason");
+  reason.placeholder = teacherText("Reason (optional)", "理由（任意）");
+  reason.setAttribute("aria-label", teacherText("Override reason", "例外設定の理由"));
   const expiry = make("input");
   expiry.type = "datetime-local";
   expiry.value = localDateTimeValue(current?.expires_at);
-  expiry.setAttribute("aria-label", "Override expiry");
+  expiry.setAttribute("aria-label", teacherText("Override expiry", "例外設定の終了日時"));
   const save = makeAction("Save override", () => saveLearnerPlanOverride(profile, {
     planTier: plan.value,
     featureFlags: Object.fromEntries(Object.entries(featureFields).map(([key, select]) => [
@@ -1677,7 +2163,10 @@ function learnerFeatureControls(profile) {
     expiresAt: expiry.value,
   }, save));
   const clear = makeAction("Clear override", () => {
-    if (!current || window.confirm("Clear this learner's tier and feature override?")) {
+    if (!current || window.confirm(teacherText(
+      "Clear this learner's plan and feature exceptions?",
+      "この生徒のプラン・機能の例外設定を解除しますか？",
+    ))) {
       saveLearnerPlanOverride(profile, { planTier: "", featureFlags: {}, reason: "", expiresAt: "" }, clear);
     }
   });
@@ -1704,22 +2193,28 @@ function openLearnerDialog(profile) {
   elements.learnerDialogHeading.textContent = profileName(current.user_id);
 
   const profileCard = make("section", { className: "learner-profile-card" });
-  const authStatus = make("p", { text: "Loading secure account status…" });
+  const authStatus = make("p", { text: teacherText("Loading secure account status…", "安全なアカウント情報を読み込んでいます…") });
   profileCard.append(
-    make("div", { text: current.contact_email || "No email recorded" }),
-    make("p", { text: [current.english_level || "Level not set", current.age_group || "Age not shared", current.native_language || "Language not set"].join(" · ") }),
-    make("p", { text: current.learning_goal ? `Goal: ${current.learning_goal}` : "No learning goal recorded yet." }),
+    make("div", { text: current.contact_email || teacherText("No email recorded", "メール未登録") }),
+    make("p", { text: [
+      current.english_level || teacherText("Level not set", "レベル未設定"),
+      current.age_group || teacherText("Age not shared", "年齢区分未設定"),
+      current.native_language || teacherText("Language not set", "母語未設定"),
+    ].join(" · ") }),
+    make("p", { text: current.learning_goal
+      ? teacherText(`Goal: ${current.learning_goal}`, `学習目標：${current.learning_goal}`)
+      : teacherText("No learning goal recorded yet.", "学習目標はまだ登録されていません。") }),
     authStatus,
   );
   loadLearnerAuthStatus(current, authStatus);
 
   const metrics = make("section", { className: "learner-metrics" });
   [
-    ["Practice sessions", attempts.length],
-    ["Speaking records", speaking.length],
-    ["Premium submissions", premiumSubmissions.length],
-    ["Phrase repetitions", phraseCount],
-    ["Assigned lessons", assigned],
+    [teacherText("Practice sessions", "学習回数"), attempts.length],
+    [teacherText("Speaking records", "発話記録"), speaking.length],
+    [teacherText("Premium submissions", "Premium提出数"), premiumSubmissions.length],
+    [teacherText("Phrase repetitions", "フレーズ練習回数"), phraseCount],
+    [teacherText("Assigned lessons", "割り当てレッスン"), assigned],
   ].forEach(([label, value]) => {
     const card = make("article");
     card.append(make("span", { text: label }), make("strong", { text: value }));
@@ -1728,15 +2223,18 @@ function openLearnerDialog(profile) {
 
   const access = make("section", { className: "learner-control-section" });
   access.append(
-    make("h3", { text: "Membership & account safety / 会員期間・安全管理" }),
-    make("p", { text: `Status: ${activeMembershipStatus(membership)} · Plan: ${planFor(membership?.plan_tier || "free").name} · Scope: ${membership?.access_scope || "general"} · Expires: ${membership?.expires_at ? formatDate(membership.expires_at, true) : "—"}` }),
+    make("h3", { text: teacherText("Membership & account safety", "会員期間・アカウント安全管理") }),
+    make("p", { text: teacherText(
+      `Status: ${activeMembershipStatus(membership)} · Plan: ${planFor(membership?.plan_tier || "free").name} · Scope: ${audienceLabel(membership?.access_scope || "general")} · Expires: ${membership?.expires_at ? formatDate(membership.expires_at, true) : "—"}`,
+      `状態：${activeMembershipStatus(membership)} · プラン：${planFor(membership?.plan_tier || "free").name} · 公開範囲：${audienceLabel(membership?.access_scope || "general")} · 期限：${membership?.expires_at ? formatDate(membership.expires_at, true) : "—"}`,
+    ) }),
   );
   const duration = make("input");
   duration.type = "number";
   duration.min = "1";
   duration.max = "730";
   duration.value = "30";
-  duration.setAttribute("aria-label", "Membership duration in days");
+  duration.setAttribute("aria-label", teacherText("Membership duration in days", "会員利用日数"));
   const scope = make("select");
   [["general", "General"], ["takiwaki", "Takiwaki"], ["both", "Both"]].forEach(([value, label]) => {
     const option = make("option", { text: label });
@@ -1758,14 +2256,17 @@ function openLearnerDialog(profile) {
   controls.append(duration, scope, plan, approve, pause, reset);
   access.append(
     controls,
-    make("small", { text: "For security, teachers can never see or retrieve learner passwords. A reset email lets the learner choose a new password privately." }),
+    make("small", { text: teacherText(
+      "For security, teachers can never see or retrieve learner passwords. A reset email lets the learner choose a new password privately.",
+      "安全のため、先生が生徒のパスワードを見たり取得したりすることはできません。再設定メールから、生徒本人が新しいパスワードを設定します。",
+    ) }),
   );
 
   const timeline = make("section", { className: "learner-control-section" });
-  timeline.append(make("h3", { text: "Recent learning activity / 最近の学習状況" }));
+  timeline.append(make("h3", { text: teacherText("Recent learning activity", "最近の学習状況") }));
   const events = learnerActivity(current);
   if (!events.length) {
-    timeline.append(make("p", { text: "No learning activity has been recorded yet." }));
+    timeline.append(make("p", { text: teacherText("No learning activity has been recorded yet.", "学習記録はまだありません。") }));
   } else {
     const list = make("ol", { className: "learner-timeline" });
     events.forEach((event) => {
@@ -1791,7 +2292,7 @@ function renderStudents() {
   const wrap = make("div", { className: "learner-admin" });
   const heading = make("div", { className: "teacher-panel-heading" });
   heading.append(
-    make("div", { text: "Learners / 学習者" }),
+    make("div", { text: teacherText("Learners", "生徒") }),
     make("p", { text: teacherText(
       "Find a learner, then manage their plan, lesson visibility, password reset and activity.",
       "生徒を検索し、プラン・レッスン表示・パスワード再設定・学習状況を管理します。",
@@ -1800,7 +2301,7 @@ function renderStudents() {
   wrap.append(heading);
 
   if (!state.profiles.length) {
-    wrap.append(make("p", { text: "No student profiles have been created yet." }));
+    wrap.append(make("p", { text: teacherText("No student profiles have been created yet.", "生徒プロフィールはまだありません。") }));
     elements.panel.replaceChildren(wrap);
     return;
   }
@@ -2207,13 +2708,12 @@ function questionMistakesSection(questionStats, { limit } = {}) {
   for (const item of mistakes) {
     const title = questionAnalyticsTitle(item.question);
     const questionCell = make("td");
-    questionCell.append(make("strong", { text: title.en }));
-    if (title.jp) questionCell.append(make("br"), make("small", { text: title.jp }));
+    questionCell.append(make("strong", { text: teacherLanguage === "ja" ? title.jp || title.en : title.en }));
     const action = make("td", { className: "table-actions" });
     if (item.question) {
       action.append(makeAction("Edit", () => editAnalyticsQuestion(item.questionId)));
     } else {
-      action.textContent = "Unavailable";
+      action.textContent = teacherText("Unavailable", "利用不可");
     }
     const row = make("tr");
     row.append(
@@ -2329,7 +2829,7 @@ function retriesSection() {
     row.append(
       make("td", { text: profileName(answer.user_id) }),
       make("td", { text: lessonTitle(answer.lesson_id) }),
-      make("td", { text: title.en }),
+      make("td", { text: teacherLanguage === "ja" ? title.jp || title.en : title.en }),
       make("td", { text: formatQuestionLabel(question?.format || "unknown") }),
       make("td", { text: summarizeAnswerValue(stored.first) }),
       make("td", { text: summarizeAnswerValue(stored.latest) }),
@@ -2410,12 +2910,12 @@ function speakingSection() {
     analyticsMetric(
       "Recognition available",
       formatPercent(recognised, state.speaking.length),
-      `${recognised} recognised sessions`,
+      teacherText(`${recognised} recognised sessions`, `音声認識あり ${recognised}回`),
     ),
     analyticsMetric(
       "Great / good",
       formatPercent(strong, state.speaking.length),
-      `${strong} strong results`,
+      teacherText(`${strong} strong results`, `良好な結果 ${strong}回`),
     ),
   );
   section.append(grid);
@@ -2515,7 +3015,7 @@ function renderActivity() {
     analyticsMetric(
       "First-answer accuracy",
       formatPercent(firstCorrect, firstScored.length),
-      `${firstScored.length} scored answers`,
+      teacherText(`${firstScored.length} scored answers`, `採点済み ${firstScored.length}回答`),
     ),
     analyticsMetric(
       "Latest accuracy",
@@ -2525,12 +3025,12 @@ function renderActivity() {
     analyticsMetric(
       "Recovered on retry",
       formatPercent(recovered, initiallyWrong.length),
-      `${recovered} corrected after a miss`,
+      teacherText(`${recovered} corrected after a miss`, `誤答後に正解 ${recovered}件`),
     ),
     analyticsMetric(
       "Listening first accuracy",
       formatPercent(listeningCorrect, listeningAnswers.length),
-      `${listeningAnswers.length} listening answers`,
+      teacherText(`${listeningAnswers.length} listening answers`, `リスニング回答 ${listeningAnswers.length}件`),
     ),
     analyticsMetric(
       "Speaking records",
@@ -2540,7 +3040,10 @@ function renderActivity() {
     analyticsMetric(
       "Phrase repetitions",
       state.phrases.reduce((sum, item) => sum + Number(item.practice_count || 0), 0),
-      `${state.phrases.filter((item) => item.is_favorite).length} favourites`,
+      teacherText(
+        `${state.phrases.filter((item) => item.is_favorite).length} favourites`,
+        `お気に入り ${state.phrases.filter((item) => item.is_favorite).length}件`,
+      ),
     ),
   );
   wrap.append(metrics);
@@ -2656,11 +3159,17 @@ async function setPremiumTaskActive(task, active, button) {
 async function deletePremiumTask(task, button) {
   const submissions = state.taskSubmissions.filter((item) => item.task_id === task.id);
   if (submissions.length) {
-    if (!window.confirm("This task has learner submissions and cannot be erased safely. Hide it from new submissions instead?")) return;
+    if (!window.confirm(teacherText(
+      "This task has learner submissions and cannot be erased safely. Hide it from new submissions instead?",
+      "この課題には提出履歴があるため、安全に削除できません。新しい提出から非表示にしますか？",
+    ))) return;
     await setPremiumTaskActive(task, false, button);
     return;
   }
-  if (!window.confirm(`Permanently delete the unused task “${task.title_en}”?`)) return;
+  if (!window.confirm(teacherText(
+    `Permanently delete the unused task “${task.title_en}”?`,
+    `未使用の課題「${task.title_ja || task.title_en}」を完全に削除しますか？`,
+  ))) return;
   button.disabled = true;
   const { error } = await client.from("review_premium_tasks").delete().eq("id", task.id);
   if (error) {
@@ -2713,8 +3222,11 @@ async function saveSubmissionFeedback(submission, values, action, button) {
 function premiumTaskBuilder() {
   const section = make("section", { className: "premium-admin-section" });
   section.append(
-    make("h2", { text: "Create a Premium review task / プレミアム課題作成" }),
-    make("p", { text: "Speaking and essay tasks are visible only to Premium learners who can open the selected lesson." }),
+    make("h2", { text: teacherText("Create a Premium review task", "Premium添削課題を作成") }),
+    make("p", { text: teacherText(
+      "Speaking and essay tasks are visible only to Premium learners who can open the selected lesson.",
+      "スピーキング・英作文課題は、選択したレッスンを利用できるPremium生徒だけに表示されます。",
+    ) }),
   );
   const form = make("form", { className: "premium-task-builder" });
   const lesson = make("select");
@@ -2729,18 +3241,18 @@ function premiumTaskBuilder() {
     option.value = value;
     type.append(option);
   });
-  const titleEn = make("input"); titleEn.placeholder = "English task title";
-  const titleJa = make("input"); titleJa.placeholder = "Japanese title / 日本語タイトル";
-  const promptEn = make("textarea"); promptEn.placeholder = "English prompt"; promptEn.rows = 3;
-  const promptJa = make("textarea"); promptJa.placeholder = "Japanese prompt / 日本語課題文"; promptJa.rows = 3;
-  const instructionsEn = make("input"); instructionsEn.placeholder = "Extra instructions (English)";
-  const instructionsJa = make("input"); instructionsJa.placeholder = "追加指示（日本語）";
-  const phrases = make("input"); phrases.placeholder = "Required phrases, comma separated";
-  const vocabulary = make("input"); vocabulary.placeholder = "Required vocabulary, comma separated";
-  const targetSeconds = make("input"); targetSeconds.type = "number"; targetSeconds.min = "30"; targetSeconds.max = "600"; targetSeconds.value = "120"; targetSeconds.placeholder = "Target seconds";
-  const minWords = make("input"); minWords.type = "number"; minWords.min = "10"; minWords.max = "1000"; minWords.value = "80"; minWords.placeholder = "Minimum words";
-  const maxWords = make("input"); maxWords.type = "number"; maxWords.min = "10"; maxWords.max = "2000"; maxWords.value = "180"; maxWords.placeholder = "Maximum words";
-  const maxAttempts = make("input"); maxAttempts.type = "number"; maxAttempts.min = "1"; maxAttempts.max = "20"; maxAttempts.value = "3"; maxAttempts.placeholder = "Attempts";
+  const titleEn = make("input"); titleEn.placeholder = teacherText("English task title", "英語の課題タイトル");
+  const titleJa = make("input"); titleJa.placeholder = teacherText("Japanese title", "日本語タイトル");
+  const promptEn = make("textarea"); promptEn.placeholder = teacherText("English prompt", "英語の課題文"); promptEn.rows = 3;
+  const promptJa = make("textarea"); promptJa.placeholder = teacherText("Japanese prompt", "日本語の課題文"); promptJa.rows = 3;
+  const instructionsEn = make("input"); instructionsEn.placeholder = teacherText("Extra instructions (English)", "追加指示（英語）");
+  const instructionsJa = make("input"); instructionsJa.placeholder = teacherText("Extra instructions (Japanese)", "追加指示（日本語）");
+  const phrases = make("input"); phrases.placeholder = teacherText("Required phrases, comma separated", "推奨フレーズ（カンマ区切り）");
+  const vocabulary = make("input"); vocabulary.placeholder = teacherText("Required vocabulary, comma separated", "推奨単語（カンマ区切り）");
+  const targetSeconds = make("input"); targetSeconds.type = "number"; targetSeconds.min = "30"; targetSeconds.max = "600"; targetSeconds.value = "120"; targetSeconds.placeholder = teacherText("Target seconds", "目標秒数");
+  const minWords = make("input"); minWords.type = "number"; minWords.min = "10"; minWords.max = "1000"; minWords.value = "80"; minWords.placeholder = teacherText("Minimum words", "最小語数");
+  const maxWords = make("input"); maxWords.type = "number"; maxWords.min = "10"; maxWords.max = "2000"; maxWords.value = "180"; maxWords.placeholder = teacherText("Maximum words", "最大語数");
+  const maxAttempts = make("input"); maxAttempts.type = "number"; maxAttempts.min = "1"; maxAttempts.max = "20"; maxAttempts.value = "3"; maxAttempts.placeholder = teacherText("Attempts", "提出回数");
   const create = makeAction("Create task", () => createPremiumTask({
     lessonId: lesson.value,
     taskType: type.value,
@@ -2773,9 +3285,9 @@ function premiumTaskBuilder() {
 
 function premiumTaskList() {
   const section = make("section", { className: "premium-admin-section" });
-  section.append(make("h2", { text: "Premium tasks / 課題一覧" }));
+  section.append(make("h2", { text: teacherText("Premium tasks", "Premium課題") }));
   if (!state.premiumTasks.length) {
-    section.append(make("p", { text: "No Premium tasks have been created yet." }));
+    section.append(make("p", { text: teacherText("No Premium tasks have been created yet.", "Premium課題はまだありません。") }));
     return section;
   }
   const { table, tbody } = makeTable(["Task", "Lesson", "Type", "Status", "Submissions", "Actions"]);
@@ -2789,10 +3301,10 @@ function premiumTaskList() {
     actions.append(toggle, remove);
     const row = make("tr");
     row.append(
-      make("td", { text: task.title_en }),
+      make("td", { text: teacherLanguage === "ja" ? task.title_ja || task.title_en : task.title_en }),
       make("td", { text: lessonTitle(task.lesson_id) }),
-      make("td", { text: task.task_type }),
-      make("td", { text: task.active ? "Active" : "Hidden" }),
+      make("td", { text: task.task_type === "speaking" ? teacherText("Speaking", "スピーキング") : teacherText("Essay", "英作文") }),
+      make("td", { text: task.active ? teacherText("Active", "有効") : teacherText("Hidden", "非表示") }),
       make("td", { text: submissions.length }),
       make("td"),
     );
@@ -2815,8 +3327,11 @@ function premiumSubmissionQueue() {
       ? visibleSubmissions.filter((item) => waitingStatuses.has(item.status))
       : visibleSubmissions.filter((item) => item.status === state.submissionStatusFilter);
   section.append(
-    make("h2", { text: "Submission queue / 提出・添削" }),
-    make("p", { text: "Feedback drafts stay private until Publish or Return is selected. The teacher writes and remains responsible for every published review." }),
+    make("h2", { text: teacherText("Submission queue", "提出・添削") }),
+    make("p", { text: teacherText(
+      "Feedback drafts stay private until Publish or Return is selected. The teacher writes and remains responsible for every published review.",
+      "添削の下書きは「公開」または「修正を依頼」を選ぶまで生徒には表示されません。公開する内容は先生が作成し、責任を持って確認します。",
+    ) }),
   );
   const filter = make("select");
   [
@@ -2850,9 +3365,12 @@ function premiumSubmissionQueue() {
     const feedback = state.submissionFeedback.find((item) => item.submission_id === submission.id);
     const card = make("article", { className: "premium-review-card" });
     card.append(
-      make("span", { text: `${submission.status} · ${formatDate(submission.submitted_at || submission.created_at, true)}` }),
-      make("h3", { text: `${profileName(submission.user_id)} · ${task?.title_en || "Premium task"}` }),
-      make("p", { text: `${task?.task_type || "task"} · attempt ${submission.attempt_number}` }),
+      make("span", { text: `${submissionStatusLabel(submission.status)} · ${formatDate(submission.submitted_at || submission.created_at, true)}` }),
+      make("h3", { text: `${profileName(submission.user_id)} · ${teacherLanguage === "ja" ? task?.title_ja || task?.title_en || "Premium課題" : task?.title_en || "Premium task"}` }),
+      make("p", { text: teacherText(
+        `${task?.task_type || "task"} · attempt ${submission.attempt_number}`,
+        `${task?.task_type === "speaking" ? "スピーキング" : task?.task_type === "essay" ? "英作文" : "課題"} · ${submission.attempt_number}回目`,
+      ) }),
     );
     if (submission.text_response) {
       const response = make("details");
@@ -2864,18 +3382,18 @@ function premiumSubmissionQueue() {
       card.append(play);
     }
     const review = make("div", { className: "premium-feedback-editor" });
-    const score = make("input"); score.type = "number"; score.min = "0"; score.max = "100"; score.value = feedback?.score ?? ""; score.placeholder = "Score / 100";
-    const feedbackEn = make("textarea"); feedbackEn.rows = 4; feedbackEn.value = feedback?.feedback_en || ""; feedbackEn.placeholder = "Feedback in English";
-    const feedbackJa = make("textarea"); feedbackJa.rows = 4; feedbackJa.value = feedback?.feedback_ja || ""; feedbackJa.placeholder = "日本語フィードバック";
+    const score = make("input"); score.type = "number"; score.min = "0"; score.max = "100"; score.value = feedback?.score ?? ""; score.placeholder = teacherText("Score / 100", "スコア／100");
+    const feedbackEn = make("textarea"); feedbackEn.rows = 4; feedbackEn.value = feedback?.feedback_en || ""; feedbackEn.placeholder = teacherText("Feedback in English", "英語フィードバック");
+    const feedbackJa = make("textarea"); feedbackJa.rows = 4; feedbackJa.value = feedback?.feedback_ja || ""; feedbackJa.placeholder = teacherText("Feedback in Japanese", "日本語フィードバック");
     const values = () => ({ score: score.value, feedbackEn: feedbackEn.value, feedbackJa: feedbackJa.value });
     const actions = make("div", { className: "premium-task-actions" });
     const save = makeAction("Save private draft", () => saveSubmissionFeedback(submission, values(), "draft", save));
     const publish = makeAction("Publish feedback", () => {
-      if (window.confirm("Publish this score and feedback to the learner now?")) saveSubmissionFeedback(submission, values(), "publish", publish);
+      if (window.confirm(teacherText("Publish this score and feedback to the learner now?", "このスコアとフィードバックを生徒へ公開しますか？"))) saveSubmissionFeedback(submission, values(), "publish", publish);
     });
     publish.className = "primary-btn";
     const returnWork = makeAction("Return for revision", () => {
-      if (window.confirm("Return this work so the learner can revise and resubmit it?")) saveSubmissionFeedback(submission, values(), "return", returnWork);
+      if (window.confirm(teacherText("Return this work so the learner can revise and resubmit it?", "生徒が修正して再提出できるよう、この課題を差し戻しますか？"))) saveSubmissionFeedback(submission, values(), "return", returnWork);
     });
     actions.append(save, publish, returnWork);
     review.append(score, feedbackEn, feedbackJa, actions);
@@ -2929,11 +3447,11 @@ function renderSources() {
       link.rel = "noopener noreferrer";
       linkCell.append(link);
     } else {
-      linkCell.textContent = teacherText("No external link", "外部リンクなし");
+      linkCell.textContent = teacherText("Source link missing", "元資料リンク未登録");
     }
     const row = make("tr");
     row.append(
-      make("td", { text: lesson.title_en }),
+      make("td", { text: teacherLanguage === "ja" ? lesson.title_ja || lesson.title_en : lesson.title_en }),
       make("td", { text: lesson.source_type === "legacy_zip"
         ? teacherText("Bundled original", "同梱された初期教材")
         : lesson.source_type === "notion"
@@ -3073,7 +3591,10 @@ function questionAccessLabel(question) {
   const key = question.required_plan || "free";
   const plan = planFor(key).name;
   if (key === "free") return plan;
-  return `${plan} or above · ${question.locked_display === "hidden" ? "hidden below plan" : "safe teaser below plan"}`;
+  return teacherText(
+    `${plan} or above · ${question.locked_display === "hidden" ? "hidden below plan" : "safe teaser below plan"}`,
+    `${plan}以上 · ${question.locked_display === "hidden" ? "対象外には非表示" : "対象外には内容を隠した案内"}`,
+  );
 }
 
 function renderQuestionManager() {
@@ -3081,10 +3602,13 @@ function renderQuestionManager() {
   if (!lesson) return;
   const questions = orderedQuestions();
   const active = activeQuestionCount();
-  elements.questionManagerHeading.textContent = lesson.title_en;
-  elements.questionManagerMeta.textContent =
-    `${formatDate(lesson.lesson_date)} · ${statusLabel(lesson.status)} · ` +
-    `${active} active · ${questions.length - active} inactive`;
+  elements.questionManagerHeading.textContent = teacherLanguage === "ja"
+    ? lesson.title_ja || lesson.title_en
+    : lesson.title_en;
+  elements.questionManagerMeta.textContent = teacherText(
+    `${formatDate(lesson.lesson_date)} · ${statusLabel(lesson.status)} · ${active} active · ${questions.length - active} inactive`,
+    `${formatDate(lesson.lesson_date)} · ${statusLabel(lesson.status)} · 有効 ${active}問 · 無効 ${questions.length - active}問`,
+  );
 
   if (!questions.length) {
     elements.questionManagerPanel.replaceChildren(
@@ -3107,7 +3631,9 @@ function renderQuestionManager() {
   questions.forEach((question, index) => {
     const prompt = questionPrompt(question);
     const questionCell = make("td");
-    questionCell.append(make("strong", { text: prompt.en || "Untitled question" }));
+    questionCell.append(make("strong", { text: teacherLanguage === "ja"
+      ? prompt.jp || prompt.en || teacherText("Untitled question", "タイトル未設定の問題")
+      : prompt.en || teacherText("Untitled question", "タイトル未設定の問題") }));
     if (prompt.jp) questionCell.append(make("br"), make("small", { text: prompt.jp }));
     questionCell.append(make("br"), make("small", { text: question.stable_key }));
 
@@ -3118,7 +3644,7 @@ function renderQuestionManager() {
     down.disabled = index === questions.length - 1 || state.questionLoading;
     const edit = makeAction("Edit", () => openQuestionEditor(question));
     const toggle = makeAction(
-      question.active ? "Mark inactive" : "Restore",
+      question.active ? teacherText("Mark inactive", "無効にする") : teacherText("Restore", "復元"),
       () => setQuestionActive(question, !question.active, toggle),
       question.active
         ? "Keep the question for records but remove it from learner practice"
@@ -3128,7 +3654,7 @@ function renderQuestionManager() {
 
     const status = make("span", {
       className: `status-dot${question.active ? " published" : ""}`,
-      text: question.active ? "Active" : "Inactive",
+      text: question.active ? teacherText("Active", "有効") : teacherText("Inactive", "無効"),
     });
     const row = make("tr");
     row.append(
@@ -3150,11 +3676,13 @@ async function loadLessonQuestions(lesson, { open = false } = {}) {
   state.questionLesson = lesson;
   state.questions = [];
   state.questionLoading = true;
-  elements.questionManagerHeading.textContent = lesson.title_en;
+  elements.questionManagerHeading.textContent = teacherLanguage === "ja"
+    ? lesson.title_ja || lesson.title_en
+    : lesson.title_en;
   elements.questionManagerMeta.textContent =
     `${formatDate(lesson.lesson_date)} · ${statusLabel(lesson.status)}`;
-  elements.questionManagerStatus.textContent = "Loading questions…";
-  elements.questionManagerPanel.replaceChildren(make("p", { text: "Loading secure question data…" }));
+  elements.questionManagerStatus.textContent = teacherText("Loading questions…", "問題を読み込んでいます…");
+  elements.questionManagerPanel.replaceChildren(make("p", { text: teacherText("Loading secure question data…", "安全な問題データを読み込んでいます…") }));
   if (open && !elements.questionManager.open) elements.questionManager.showModal();
 
   let data;
@@ -3178,15 +3706,17 @@ async function loadLessonQuestions(lesson, { open = false } = {}) {
       error,
       "The questions could not be loaded.",
     );
-    elements.questionManagerPanel.replaceChildren(
-      make("p", { text: "Question data is unavailable right now." }),
-    );
+    elements.questionManagerPanel.replaceChildren(make("p", {
+      text: teacherText("Question data is unavailable right now.", "現在、問題データを利用できません。"),
+    }));
     return false;
   }
   state.questions = Array.isArray(data) ? data : [];
   syncQuestionCountToLesson();
-  elements.questionManagerStatus.textContent =
-    "Changes are saved securely. Questions are never hard-deleted here.";
+  elements.questionManagerStatus.textContent = teacherText(
+    "Changes are saved securely. Questions are never permanently deleted here.",
+    "変更は安全に保存されます。この画面で問題が完全に削除されることはありません。",
+  );
   renderQuestionManager();
   return true;
 }
@@ -3206,7 +3736,7 @@ async function moveQuestion(question, direction, button) {
   [moved[from], moved[to]] = [moved[to], moved[from]];
   state.questionLoading = true;
   button.disabled = true;
-  elements.questionManagerStatus.textContent = "Saving the new order…";
+  elements.questionManagerStatus.textContent = teacherText("Saving the new order…", "新しい順番を保存しています…");
 
   const updates = moved
     .map((item, position) => ({ item, position }))
@@ -3239,7 +3769,7 @@ async function moveQuestion(question, direction, button) {
 
   state.questions = moved.map((item, position) => ({ ...item, position }));
   state.questionLoading = false;
-  elements.questionManagerStatus.textContent = "Question order saved.";
+  elements.questionManagerStatus.textContent = teacherText("Question order saved.", "問題の順番を保存しました。");
   renderQuestionManager();
 }
 
@@ -3250,14 +3780,18 @@ async function setQuestionActive(question, active, button) {
     state.questionLesson?.status === "published" &&
     activeQuestionCount() === 1
   ) {
-    elements.questionManagerStatus.textContent =
-      "A published lesson must keep at least one active question. Move the lesson back to Draft first.";
+    elements.questionManagerStatus.textContent = teacherText(
+      "A published lesson must keep at least one active question. Move the lesson back to Draft first.",
+      "公開中のレッスンには有効な問題が最低1問必要です。先にレッスンを下書きへ戻してください。",
+    );
     return;
   }
 
   button.disabled = true;
   const label = button.textContent;
-  button.textContent = active ? "Restoring…" : "Updating…";
+  button.textContent = active
+    ? teacherText("Restoring…", "復元しています…")
+    : teacherText("Updating…", "更新しています…");
   let error;
   try {
     ({ error } = await client
@@ -3282,8 +3816,8 @@ async function setQuestionActive(question, active, button) {
     item.id === question.id ? { ...item, active } : item,
   );
   elements.questionManagerStatus.textContent = active
-    ? "Question restored to learner practice."
-    : "Question marked inactive. Its records were kept.";
+    ? teacherText("Question restored to learner practice.", "問題を生徒の練習へ復元しました。")
+    : teacherText("Question marked inactive. Its records were kept.", "問題を無効にしました。これまでの記録は保持されています。");
   renderQuestionManager();
 }
 
@@ -3301,14 +3835,21 @@ function updateQuestionAnswerHelp({ replaceDefault = false } = {}) {
   }
   elements.questionEditor.dataset.answerExample = example;
 
-  const extra =
-    format === "speaking"
-      ? " Use the dedicated speaking target fields; an empty JSON object is valid."
-      : ["listenChoice", "listenType"].includes(format)
-        ? " Add the sentence to the Listening audio text field."
-        : "";
-  elements.questionAnswerHelp.textContent =
-    `${formatQuestionLabel(format)}：上の「かんたん回答設定」を使えます。詳細JSONは通常変更不要です。${extra}`;
+  const extra = format === "speaking"
+    ? teacherText(
+      " Use the dedicated speaking target fields; an empty JSON object is valid.",
+      " 発話目標の専用欄を使用してください。詳細JSONは空のオブジェクトで構いません。",
+    )
+    : ["listenChoice", "listenType"].includes(format)
+      ? teacherText(
+        " Add the sentence to the Listening audio text field.",
+        " リスニング音声文の欄に、読み上げる英文を入力してください。",
+      )
+      : "";
+  elements.questionAnswerHelp.textContent = teacherText(
+    `${formatQuestionLabel(format)}: use Easy Answer Builder above. Advanced JSON normally needs no changes.${extra}`,
+    `${formatQuestionLabel(format)}：上の「かんたん回答設定」を使えます。詳細JSONは通常変更不要です。${extra}`,
+  );
   const choiceFormat = ["mcq", "situation", "dialogue", "listenChoice"].includes(format);
   const acceptedFormat = ["typing", "translation", "listenType", "mistake"].includes(format);
   elements.easyChoiceFields.hidden = !choiceFormat;
@@ -3324,7 +3865,9 @@ function openQuestionEditor(question = null) {
   elements.questionEditorForm.reset();
   elements.questionEditorStatus.textContent = "";
   elements.questionRecordId.value = question?.id || "";
-  elements.questionEditorHeading.textContent = question ? "Edit question" : "Add question";
+  elements.questionEditorHeading.textContent = question
+    ? teacherText("Edit question", "問題を編集")
+    : teacherText("Add question", "問題を追加");
 
   if (!question) {
     elements.questionStableKey.value =
@@ -3586,9 +4129,10 @@ async function saveQuestion(event) {
     );
     if (
       state.questionLesson.status === "published" &&
-      !window.confirm(
+      !window.confirm(teacherText(
         "This lesson is published. Saving this question will update live learner practice now. Continue?",
-      )
+        "このレッスンは公開中です。保存すると生徒の練習内容がすぐに更新されます。続けますか？",
+      ))
     ) {
       return;
     }
@@ -3605,7 +4149,7 @@ async function saveQuestion(event) {
     state.questionSaving = true;
     const submit = elements.questionEditorForm.querySelector("button[type='submit']");
     submit.disabled = true;
-    elements.questionEditorStatus.textContent = "Saving question…";
+    elements.questionEditorStatus.textContent = teacherText("Saving question…", "問題を保存しています…");
     let result;
     if (existing) {
       result = await client
@@ -3660,20 +4204,28 @@ function updateLessonEditorControls(lesson = null) {
   elements.manageLessonQuestions.disabled = !saved;
   elements.preview.disabled = !saved;
   elements.editorQuestionSummary.textContent = saved
-    ? `${count} questions are attached. Open the question manager to add, edit, reorder or activate them. / ${count}問あります。追加・編集・並べ替え・有効化ができます。`
-    : "Save the lesson details first. The question builder will open automatically next. / 先に基本情報を保存すると、続けて問題作成画面が開きます。";
+    ? teacherText(
+      `${count} questions are attached. Open the question manager to add, edit, reorder or activate them.`,
+      `${count}問あります。追加・編集・並べ替え・有効化ができます。`,
+    )
+    : teacherText(
+      "Save the lesson details first. The question builder will open automatically next.",
+      "先に基本情報を保存すると、続けて問題作成画面が開きます。",
+    );
   elements.saveLesson.textContent = !saved
-    ? "Save draft & add questions / 保存して問題作成へ"
+    ? teacherText("Save draft & add questions", "保存して問題作成へ")
     : status === "published"
-      ? "Publish changes / 変更を公開"
-      : "Save changes / 変更を保存";
+      ? teacherText("Publish changes", "変更を公開")
+      : teacherText("Save changes", "変更を保存");
 }
 
 function openEditor(lesson = null) {
   elements.editorForm.reset();
   elements.editorMessage.textContent = "";
   elements.editorId.value = lesson?.id || "";
-  elements.editorHeading.textContent = lesson ? "Edit lesson" : "New draft lesson";
+  elements.editorHeading.textContent = lesson
+    ? teacherText("Edit lesson", "レッスンを編集")
+    : teacherText("New draft lesson", "新しい下書きレッスン");
   elements.editorTitle.value = lesson?.title_en || "";
   elements.editorDate.value = lesson?.lesson_date || new Date().toISOString().slice(0, 10);
   elements.editorStatus.value = lesson?.status || "draft";
@@ -3694,7 +4246,10 @@ function previewLesson(lesson) {
 
 async function archiveLesson(lesson) {
   const confirmed = window.confirm(
-    `Archive “${lesson.title_en}”? It will be hidden, but its content and student records will be kept.`,
+    teacherText(
+      `Archive “${lesson.title_en}”? It will be hidden, but its content and learner records will be kept.`,
+      `「${lesson.title_ja || lesson.title_en}」をアーカイブしますか？非表示になりますが、教材と学習記録は保持されます。`,
+    ),
   );
   if (!confirmed) return;
   const { error } = await client
@@ -3711,7 +4266,10 @@ async function archiveLesson(lesson) {
 
 async function restoreLesson(lesson) {
   const confirmed = window.confirm(
-    `Restore “${lesson.title_en}” to Published? It will become visible to its selected audience again.`,
+    teacherText(
+      `Restore “${lesson.title_en}” to Published? It will become visible to its selected audience again.`,
+      `「${lesson.title_ja || lesson.title_en}」を公開状態へ復元しますか？選択した公開先に再表示されます。`,
+    ),
   );
   if (!confirmed) return;
   try {
@@ -3735,7 +4293,10 @@ async function restoreLesson(lesson) {
 async function permanentlyDeleteLesson(lesson) {
   const expected = `DELETE ${lesson.slug}`;
   const typed = window.prompt(
-    `Permanent deletion cannot be undone. It is only allowed for archived lessons with no learner history.\n\nType exactly: ${expected}`,
+    teacherText(
+      `Permanent deletion cannot be undone. It is allowed only for archived lessons with no learner history.\n\nType exactly: ${expected}`,
+      `完全削除は元に戻せません。学習履歴がないアーカイブ済みレッスンだけが対象です。\n\n次の文字を正確に入力してください：${expected}`,
+    ),
   );
   if (typed === null) return;
   if (typed !== expected) {
@@ -3769,16 +4330,20 @@ async function saveLesson(event) {
   const status = elements.editorStatus.value;
   if (status === "published") {
     if (!id) {
-      elements.editorMessage.textContent =
-        "Save this as a draft first, add at least one question, then publish it.";
+      elements.editorMessage.textContent = teacherText(
+        "Save this as a draft first, add at least one question, then publish it.",
+        "先に下書きで保存し、問題を1問以上追加してから公開してください。",
+      );
       return;
     }
-    elements.editorMessage.textContent = "Checking active questions…";
+    elements.editorMessage.textContent = teacherText("Checking active questions…", "有効な問題を確認しています…");
     try {
       const active = await countActiveQuestionsForLesson(id);
       if (!active) {
-        elements.editorMessage.textContent =
-          "Add and activate at least one question before publishing this lesson.";
+        elements.editorMessage.textContent = teacherText(
+          "Add and activate at least one question before publishing this lesson.",
+          "公開前に、少なくとも1問を作成して有効にしてください。",
+        );
         return;
       }
     } catch (error) {
@@ -3788,7 +4353,10 @@ async function saveLesson(event) {
       );
       return;
     }
-    if (!window.confirm("Publish this lesson to its selected audience now?")) return;
+    if (!window.confirm(teacherText(
+      "Publish this lesson to its selected audience now?",
+      "このレッスンを選択した公開先へ今すぐ公開しますか？",
+    ))) return;
   }
 
   const title = elements.editorTitle.value.trim();
@@ -3803,11 +4371,11 @@ async function saveLesson(event) {
   };
 
   if (!title || !lessonDate) {
-    elements.editorMessage.textContent = "Add a title and lesson date.";
+    elements.editorMessage.textContent = teacherText("Add a title and lesson date.", "レッスン名と日付を入力してください。");
     return;
   }
 
-  elements.editorMessage.textContent = "Saving…";
+  elements.editorMessage.textContent = teacherText("Saving…", "保存しています…");
   let result;
   if (id) {
     result = await client.from("review_lessons").update(payload).eq("id", id);
@@ -3841,7 +4409,7 @@ async function saveLesson(event) {
 
 async function assignLesson(studentId, lessonId, button) {
   button.disabled = true;
-  button.textContent = "Assigning…";
+  button.textContent = teacherText("Assigning…", "割り当てています…");
   const { error } = await client.from("review_assignments").upsert(
     {
       lesson_id: lessonId,
@@ -3852,7 +4420,7 @@ async function assignLesson(studentId, lessonId, button) {
     { onConflict: "lesson_id,student_id" },
   );
   button.disabled = false;
-  button.textContent = "Assign";
+  button.textContent = teacherText("Assign", "割り当て");
   if (error) {
     showToast(readableError(error, "The lesson could not be assigned."), "error");
     return;
@@ -3960,9 +4528,10 @@ async function upsertLessonBundle(lesson, questions, defaults) {
 
 async function syncBundledContent(button) {
   if (state.syncing) return;
-  const confirmed = window.confirm(
-    "Refresh the six published legacy lessons and their 221 activities? Private Notion drafts are installed securely by the database migration and are never included in the public website bundle.",
-  );
+  const confirmed = window.confirm(teacherText(
+    "Refresh the six published bundled lessons and their activities? Private Notion drafts remain outside the public website bundle.",
+    "公開済みの同梱6レッスンとアクティビティを再同期しますか？非公開のNotion下書きは公開サイトへ含まれません。",
+  ));
   if (!confirmed) return;
 
   state.syncing = true;
@@ -3984,7 +4553,10 @@ async function syncBundledContent(button) {
     let completed = 0;
     const total = legacy.length;
     for (const lesson of legacy) {
-      button.textContent = `Syncing ${completed + 1} / ${total}`;
+      button.textContent = teacherText(
+        `Syncing ${completed + 1} / ${total}`,
+        `同期中 ${completed + 1} / ${total}`,
+      );
       await upsertLessonBundle(lesson, [...lesson.questions, ...(additions[lesson.id] || [])], {
         status: "published",
         audience: "both",
@@ -4058,19 +4630,19 @@ async function initialise() {
       elements.googleSignIn.disabled = !available;
     });
     elements.googleSignIn.addEventListener("click", async () => {
-      elements.loginStatus.textContent = "Opening Google sign-in…";
+      elements.loginStatus.textContent = teacherText("Opening Google sign-in…", "Googleログインを開いています…");
       const { data, error } = await signInTeacherWithGoogle();
       if (error) {
         elements.loginStatus.textContent = readableError(error, "Google sign-in is not available right now.");
         return;
       }
       if (data?.url) window.location.assign(data.url);
-      else elements.loginStatus.textContent = "Google sign-in is not available right now.";
+      else elements.loginStatus.textContent = teacherText("Google sign-in is not available right now.", "現在Googleログインを利用できません。");
     });
   }
   elements.loginForm.addEventListener("submit", async (event) => {
     event.preventDefault();
-    elements.loginStatus.textContent = "Signing in…";
+    elements.loginStatus.textContent = teacherText("Signing in…", "ログインしています…");
     const { data, error } = await signInTeacher(
       elements.email.value.trim(),
       elements.password.value,
@@ -4108,7 +4680,10 @@ async function initialise() {
   elements.manageLessonQuestions.addEventListener("click", () => {
     const lesson = state.lessons.find((item) => item.id === elements.editorId.value);
     if (!lesson) {
-      elements.editorMessage.textContent = "Save the lesson first; the question builder will open automatically.";
+      elements.editorMessage.textContent = teacherText(
+        "Save the lesson first; the question builder will open automatically.",
+        "先にレッスンを保存してください。続けて問題作成画面が自動で開きます。",
+      );
       return;
     }
     elements.editor.close();
@@ -4117,14 +4692,16 @@ async function initialise() {
   elements.preview.addEventListener("click", () => {
     const lesson = state.lessons.find((item) => item.id === elements.editorId.value);
     if (lesson) previewLesson(lesson);
-    else elements.editorMessage.textContent = "Save the draft before previewing it.";
+    else elements.editorMessage.textContent = teacherText("Save the draft before previewing it.", "プレビュー前に下書きを保存してください。");
   });
   elements.newQuestion.addEventListener("click", () => openQuestionEditor());
   elements.previewQuestions.addEventListener("click", () => {
     if (!state.questionLesson) return;
     if (!activeQuestionCount()) {
-      elements.questionManagerStatus.textContent =
-        "Activate at least one question before opening the learner preview.";
+      elements.questionManagerStatus.textContent = teacherText(
+        "Activate at least one question before opening the learner preview.",
+        "生徒プレビューを開く前に、問題を1問以上有効にしてください。",
+      );
       return;
     }
     previewLesson(state.questionLesson);
@@ -4145,8 +4722,10 @@ async function initialise() {
     } else if (format === "speaking") {
       elements.questionSpeakText.focus();
     }
-    elements.questionEditorStatus.textContent =
-      "ひな形を入れました。サンプル英文を実際の問題内容に書き換えてください。";
+    elements.questionEditorStatus.textContent = teacherText(
+      "Starter content added. Replace the sample English with the real question content.",
+      "ひな形を入れました。サンプル英文を実際の問題内容に書き換えてください。",
+    );
   });
   elements.questionEditorForm.addEventListener("submit", saveQuestion);
   elements.cancelQuestion.addEventListener("click", () => elements.questionEditor.close());

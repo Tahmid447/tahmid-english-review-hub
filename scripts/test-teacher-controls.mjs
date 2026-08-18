@@ -86,8 +86,10 @@ assert.match(teacher, /Publish feedback/);
 assert.match(teacher, /New learners \(30 days\)/);
 assert.match(teacher, /\["free", "Free", "無料"\][\s\S]*?\["standard", "Standard", "スタンダード"\][\s\S]*?\["premium", "Premium", "プレミアム"\][\s\S]*?\["premium_plus", "Premium\+", "プレミアムプラス"\]/);
 assert.match(teacher, /state\.profiles\.forEach\(\(profile\) => \{[\s\S]*?membershipFor\(profile\.user_id\)[\s\S]*?planCounts\[planKey\] \+= 1/);
-assert.match(teacher, /Bundled lesson · source link unavailable/);
-assert.match(teacher, /Teacher-created · source link unavailable/);
+assert.match(teacher, /Bundled lesson · Source link missing/);
+assert.match(teacher, /Teacher-created · Source link missing/);
+assert.match(teacher, /Source link missing/);
+assert.match(teacher, /元資料リンク未登録/);
 assert.doesNotMatch(teacher, /sourceCell\.textContent = lesson\.source_type === "legacy_zip" \? "Original site" : "Manual"/);
 
 console.log("Teacher controls regression tests passed.");

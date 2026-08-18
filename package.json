@@ -17,7 +17,7 @@
     "verify:visuals": "node scripts/verify-visual-assets.mjs",
     "build": "npm run config:public && npm run extract:legacy && npm run generate:practice && npm run generate:migration && node scripts/build.mjs",
     "preview": "node scripts/serve.mjs dist",
-    "test": "node scripts/validate-content.mjs && node scripts/audit-question-quality.mjs && node scripts/test-learning-experience.mjs && node scripts/test-learner-platform.mjs && node scripts/test-teacher-controls.mjs && node scripts/validate-premium-schema.mjs && node scripts/test-plan-platform.mjs && node scripts/test-teacher-workflows-v15.mjs",
+    "test": "node scripts/validate-content.mjs && node scripts/audit-question-quality.mjs && node scripts/test-learning-experience.mjs && node scripts/test-learner-platform.mjs && node scripts/test-teacher-controls.mjs && node scripts/test-teacher-i18n.mjs && node scripts/validate-premium-schema.mjs && node scripts/test-plan-platform.mjs && node scripts/test-teacher-workflows-v15.mjs",
     "test:learner-platform": "node scripts/test-learner-platform.mjs",
     "verify:live": "node scripts/verify-live-security.mjs"
   }
