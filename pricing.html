@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#0b2234">
   <title>Plans · Tahmid English Review Hub</title>
   <link rel="manifest" href="/manifest.webmanifest">
-  <script>try{const p=JSON.parse(localStorage.getItem("te-review-hub:theme:v1")||"\"system\"");const d=p==="dark"||(p==="system"&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.dataset.themePreference=["system","light","dark"].includes(p)?p:"system";document.documentElement.dataset.theme=d?"dark":"light";document.documentElement.style.colorScheme=d?"dark":"light"}catch{}</script>
+  <script>try{const p=JSON.parse(localStorage.getItem("te-review-hub:theme:v1")||"\"light\"");const c=["system","light","dark"].includes(p)?p:"light";const d=c==="dark"||(c==="system"&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.dataset.themePreference=c;document.documentElement.dataset.theme=d?"dark":"light";document.documentElement.style.colorScheme=d?"dark":"light"}catch{document.documentElement.dataset.themePreference="light";document.documentElement.dataset.theme="light";document.documentElement.style.colorScheme="light"}</script>
   <link rel="stylesheet" href="/src/styles.css">
   <link rel="icon" type="image/png" sizes="192x192" href="/assets/app-icon-192.png">
 </head>
@@ -130,10 +130,7 @@
     <p class="contact-status" id="contactStatus" role="status" aria-live="polite"></p>
   </dialog>
 
-  <footer class="site-footer">
-    <span>Created by Tahmid Ahmed</span>
-    <nav><a href="/" data-ui-en="Return to Review Hub" data-ui-ja="Review Hubへ戻る">Return to Review Hub / Review Hubへ戻る</a><a href="/teacher" target="_blank" rel="noopener noreferrer" data-ui-en="Teacher Studio" data-ui-ja="Teacher Studio">Teacher Studio</a></nav>
-  </footer>
+  <footer class="site-footer premium-footer"><div class="footer-brand"><img src="/assets/app-icon-192.png" alt="" width="44" height="44"><span><strong>Tahmid English Club</strong><small data-ui-en="Personal English review, built by Tahmid Ahmed." data-ui-ja="Tahmid Ahmedが一人ひとりの復習をサポートします。">Personal English review, built by Tahmid Ahmed.</small></span></div><nav aria-label="Footer"><a href="/" data-ui-en="Lessons" data-ui-ja="レッスン">Lessons</a><a href="/phrases" data-ui-en="Library" data-ui-ja="ライブラリ">Library</a><a href="#plansMain" data-ui-en="Plans" data-ui-ja="料金プラン">Plans</a><a href="#contact" data-ui-en="Contact Tahmid" data-ui-ja="Tahmidに相談">Contact Tahmid</a><a href="/teacher" target="_blank" rel="noopener noreferrer" data-ui-en="Teacher Studio" data-ui-ja="先生用画面">Teacher Studio</a></nav><p>© 2026 Tahmid Ahmed</p></footer>
   <script type="module" src="/src/pricing.js"></script>
 </body>
 </html>

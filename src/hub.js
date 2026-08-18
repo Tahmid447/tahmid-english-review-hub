@@ -219,7 +219,7 @@ function applySettings(settings = getSettings()) {
   }
   if (voiceSelect) voiceSelect.value = settings.voice || "us";
   if (playbackRate) playbackRate.value = String(settings.playbackRate || 1);
-  if (themeToggle) themeToggle.value = settings.theme || "system";
+  if (themeToggle) themeToggle.value = settings.theme || "light";
   if (weeklyGoal) weeklyGoal.value = String(settings.weeklyGoal || 3);
   applyThemePreference(settings.theme);
 }
@@ -428,7 +428,6 @@ function createLessonCard(lesson, options = {}) {
     className: `lesson-action${locked ? " locked" : ""}`,
     attrs: { href: locked ? "#account" : lessonHref({ ...lesson, assigned: options.assigned }) },
   }, [
-    locked ? element("span", { text: "🔒", attrs: { "aria-hidden": "true" } }) : null,
     element("span", {
       text: locked
         ? t("Unlock full lesson", "全レッスンを開放")

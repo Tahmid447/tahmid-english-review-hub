@@ -13,10 +13,12 @@ import {
   PLAN_CATALOG,
   PLAN_COMPARISON,
   PLAN_ORDER,
+  PREMIUM_PROMOTION,
   contactMessage,
   formatYen,
   planPrice,
   planSavings,
+  promotionApplies,
 } from "./plans.js";
 
 const elements = {
@@ -81,7 +83,7 @@ function renderPlans() {
     const featured = key === "premium" ? " featured" : key === "premium_plus" ? " premium-plus" : "";
     const savings = planSavings(plan);
     const sixMonthDetails = billing === BILLING_OPTIONS.sixMonths && plan.monthlyYen
-      ? `<div class="plan-saving"><strong>${t(`Save ${formatYen(savings.savedYen)}`, `${formatYen(savings.savedYen)}お得`)}</strong><span>${t(`about ${savings.percent}% · approx. ${formatYen(savings.monthlyEquivalentYen)}/month`, `約${savings.percent}%・月あたり約${formatYen(savings.monthlyEquivalentYen)}`)}</span></div>`
+      ? `<div class="plan-saving"><strong>${t(`Save exactly ${formatYen(savings.savedYen)} (${savings.percent}%)`, `${formatYen(savings.savedYen)}お得（${savings.percent}%割引）`)}</strong><span>${t(`${formatYen(plan.sixMonthsYen)} total · normally ${formatYen(savings.monthlyTotal)} · ${formatYen(savings.monthlyEquivalentYen)}/month equivalent`, `6か月合計${formatYen(plan.sixMonthsYen)}・通常${formatYen(savings.monthlyTotal)}・月額換算${formatYen(savings.monthlyEquivalentYen)}`)}</span></div>`
       : billing === BILLING_OPTIONS.sixMonths
         ? `<div class="plan-saving"><strong>${t("Always free", "ずっと無料")}</strong><span>${t("No payment required", "支払い不要")}</span></div>`
         : "";
@@ -95,6 +97,12 @@ function renderPlans() {
         <div class="plan-best-for"><small>${t("BEST FOR", "こんな方に")}</small><strong>${t(plan.bestFor, plan.bestForJa)}</strong></div>
         <p class="plan-price"><strong>${formatYen(planPrice(plan, billing))}</strong><span>${billingLabel()}</span></p>
         ${sixMonthDetails}
+        ${promotionApplies(plan, billing) ? `<aside class="premium-promotion" aria-label="${t("New Premium applicant offer", "Premium新規申込キャンペーン")}">
+          <span>${t("NEW PREMIUM APPLICANTS", "PREMIUM 新規申込限定")}</span>
+          <strong>${t(`${PREMIUM_PROMOTION.trialDays} days free`, `最初の${PREMIUM_PROMOTION.trialDays}日間無料`)}</strong>
+          <b>${t(`Second month 50% off · ${formatYen(PREMIUM_PROMOTION.secondMonthYen)}`, `2か月目50%オフ・${formatYen(PREMIUM_PROMOTION.secondMonthYen)}`)}</b>
+          <small>${t("Monthly Premium only. Eligibility and activation are confirmed personally by Tahmid; no payment is taken on this page.", "Premium月額プランへの新規申込のみ。対象条件と利用開始はTahmidが個別に確認します。このページでは決済されません。")}</small>
+        </aside>` : ""}
         <ul>${plan.features.map((feature) => `<li><span aria-hidden="true">✓</span>${t(feature.en, feature.ja)}</li>`).join("")}</ul>
         ${key === "free"
           ? `<a class="plan-cta secondary-btn" href="/">${t("Try two lessons free", "2レッスンを無料体験")}</a>`
@@ -140,7 +148,7 @@ function renderComparison() {
 function renderBillingSummary() {
   elements.billingSummary.textContent = billing === BILLING_OPTIONS.sixMonths
     ? t("Six-month prices are totals. Exact yen savings and monthly equivalents are shown on each plan.", "6か月価格は合計額です。各プランに、正確な割引額と月額換算を表示しています。")
-    : t("Choose six months to see the exact saving for every paid plan.", "6か月を選ぶと、各有料プランの正確な割引額を確認できます。 ");
+    : t("New Premium monthly applicants can ask about 30 days free and 50% off the second month. Tahmid confirms eligibility personally.", "Premium月額プランへ新規でお申し込みの方は、30日間無料・2か月目50%オフについてご相談いただけます。対象条件はTahmidが個別に確認します。");
 }
 
 function generatedMessage() {
@@ -192,7 +200,7 @@ async function copyCurrentMessage() {
 function applySettings(settings = getSettings()) {
   applyLanguageMode(languageModeFromSettings(settings));
   elements.language.value = languageModeFromSettings(settings);
-  if (elements.theme) elements.theme.value = settings.theme || "system";
+  if (elements.theme) elements.theme.value = settings.theme || "light";
   applyThemePreference(settings.theme);
   renderPlans();
   renderComparison();

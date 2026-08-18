@@ -16,7 +16,7 @@ export const DEFAULT_SETTINGS = Object.freeze({
   checkMode: "manual",
   shuffleChoices: true,
   hintMode: "auto",
-  theme: "system",
+  theme: "light",
   weeklyGoal: 3,
 });
 
@@ -89,7 +89,7 @@ export function getSettings() {
     : 1;
   const theme = ["system", "light", "dark"].includes(saved?.theme)
     ? saved.theme
-    : "system";
+    : "light";
   const weeklyGoal = [2, 3, 5, 7].includes(Number(saved?.weeklyGoal))
     ? Number(saved.weeklyGoal)
     : 3;
@@ -132,7 +132,7 @@ export function updateSettings(patch = {}) {
   next.shuffleChoices = true;
   next.showChoiceTranslations = Boolean(next.showChoiceTranslations);
   next.hintMode = next.hintMode === "manual" ? "manual" : "auto";
-  next.theme = ["system", "light", "dark"].includes(next.theme) ? next.theme : "system";
+  next.theme = ["system", "light", "dark"].includes(next.theme) ? next.theme : "light";
   next.weeklyGoal = [2, 3, 5, 7].includes(Number(next.weeklyGoal))
     ? Number(next.weeklyGoal)
     : 3;
@@ -143,7 +143,7 @@ export function updateSettings(patch = {}) {
   return next;
 }
 
-export function resolvedTheme(preference = "system", darkSystemPreference) {
+export function resolvedTheme(preference = "light", darkSystemPreference) {
   if (preference === "light" || preference === "dark") return preference;
   const prefersDark = typeof darkSystemPreference === "boolean"
     ? darkSystemPreference
@@ -154,7 +154,7 @@ export function resolvedTheme(preference = "system", darkSystemPreference) {
 export function applyThemePreference(preference = getSettings().theme) {
   const cleanPreference = ["system", "light", "dark"].includes(preference)
     ? preference
-    : "system";
+    : "light";
   const theme = resolvedTheme(cleanPreference);
   if (typeof document !== "undefined") {
     document.documentElement.dataset.themePreference = cleanPreference;

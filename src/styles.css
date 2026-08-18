@@ -1040,6 +1040,141 @@ body {
   .premium-task-builder textarea, .premium-feedback-editor > * { grid-column: 1; }
 }
 
+/* Final product polish · bright studio, premium plans, honest locks ---------- */
+html[data-theme="light"] body {
+  background:
+    radial-gradient(circle at 8% 2%,rgba(47,143,135,.09),transparent 25rem),
+    radial-gradient(circle at 94% 22%,rgba(215,169,73,.09),transparent 28rem),
+    #f7faf8;
+}
+html[data-theme="light"] .site-header {
+  border-color: rgba(21,59,85,.09);
+  background: rgba(255,255,255,.91);
+}
+
+/* Cards retain their badge inside their own stacking context at every width. */
+.plan-grid { padding-top: 56px; }
+.plan-card {
+  isolation: isolate;
+  overflow: visible;
+  padding-top: 32px;
+}
+.plan-card.featured { padding-top: 32px; }
+.plan-badge {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  z-index: 4;
+  max-width: calc(100% - 30px);
+  margin: 0;
+  white-space: nowrap;
+  transform: translate(-50%,-55%);
+}
+.plan-card.premium-plus {
+  border-color: rgba(224,185,99,.72);
+  background: linear-gradient(145deg,#071c2b 0%,#0d3044 58%,#184853 100%);
+  box-shadow: 0 30px 75px -44px rgba(6,23,34,.92);
+}
+.plan-card.premium-plus::before {
+  height: 5px;
+  background: linear-gradient(90deg,#9b6a16,#f4d995,#b78321,#f8e8bd,#9b6a16);
+  background-size: 240% 100%;
+  animation: premium-signature-border 8s linear infinite;
+}
+@keyframes premium-signature-border { to { background-position: 240% 0; } }
+.premium-promotion {
+  margin: 12px 0 2px;
+  padding: 14px;
+  display: grid;
+  gap: 4px;
+  border: 1px solid rgba(27,101,91,.23);
+  border-radius: 14px;
+  color: #123e42;
+  background: linear-gradient(135deg,#e4f4ed,#f7f0dc);
+}
+.premium-promotion > span { color: #7a5510; font-size: .58rem; font-weight: 950; letter-spacing: .11em; }
+.premium-promotion strong { color: #123b55; font-size: 1rem; }
+.premium-promotion b { font-size: .73rem; }
+.premium-promotion small { color: #465b63; font-size: .64rem; line-height: 1.45; }
+.pricing-hero::after { content: none; }
+
+/* Locked content stays legible and honest: no fake blurred preview. */
+.lesson-card-locked {
+  border-color: rgba(21,59,85,.18);
+  background: linear-gradient(145deg,#f7faf8,#edf3f1);
+}
+.lesson-card-locked::after { content: none; }
+.lesson-card-locked::before { width: 6px; height: 100%; background: linear-gradient(var(--navy),var(--teal)); }
+.lesson-card-locked .en,
+.lesson-card-locked .jp,
+.lesson-card-locked .lesson-meta { filter: none; opacity: 1; user-select: auto; }
+.lesson-card-locked .lesson-action.locked { background: linear-gradient(130deg,#153b55,#246c69); }
+.membership-lock-card {
+  justify-items: start;
+  max-width: 720px;
+  padding: clamp(24px,5vw,42px);
+  border-color: rgba(21,59,85,.17);
+  background: linear-gradient(145deg,#fff,#edf5f2);
+  text-align: left;
+}
+.membership-lock-kicker {
+  width: fit-content;
+  height: auto;
+  padding: 6px 9px;
+  border-radius: 6px;
+  color: white;
+  background: var(--navy);
+  box-shadow: none;
+  font-size: .62rem;
+  font-weight: 950;
+  letter-spacing: .13em;
+}
+.locked-question-teasers { border-color: rgba(21,59,85,.17); background: linear-gradient(145deg,#fff,#edf5f2); }
+.locked-question-teaser { border-color: rgba(21,59,85,.13); box-shadow: none; }
+.locked-question-placeholder { filter: none; opacity: 1; transform: none; background: #edf1ef; }
+.locked-question-placeholder::after { content: none; }
+.locked-question-placeholder i { background: #d5dfdc; }
+
+/* A consistent personal footer across learner-facing pages. */
+.site-footer.premium-footer {
+  padding: 26px 4px 18px;
+  display: grid;
+  grid-template-columns: minmax(220px,1fr) auto;
+  gap: 18px 34px;
+  border-color: rgba(21,59,85,.13);
+}
+.footer-brand { display: flex; align-items: center; gap: 11px; }
+.footer-brand img { width: 44px; height: 44px; border-radius: 50%; }
+.footer-brand span { display: grid; gap: 2px; }
+.footer-brand strong { color: var(--navy); font-size: .86rem; }
+.footer-brand small { color: var(--ink-soft); font-size: .67rem; }
+.premium-footer nav { justify-content: flex-end; }
+.premium-footer nav a { color: var(--navy); font-weight: 800; }
+.premium-footer > p { grid-column: 1 / -1; margin: 0; color: var(--ink-soft); font-size: .65rem; }
+
+html[data-theme="dark"] .premium-promotion { color: #f7e3b6; border-color: rgba(224,185,99,.35); background: rgba(224,185,99,.11); }
+html[data-theme="dark"] .premium-promotion strong,
+html[data-theme="dark"] .premium-promotion b { color: #fff4d8; }
+html[data-theme="dark"] .premium-promotion small { color: #dbe8e9; }
+html[data-theme="dark"] .lesson-card-locked,
+html[data-theme="dark"] .membership-lock-card,
+html[data-theme="dark"] .locked-question-teasers { color: var(--ink); border-color: var(--line); background: #102a3c; }
+html[data-theme="dark"] .locked-question-teaser { background: #0a2131; }
+html[data-theme="dark"] .locked-question-placeholder { background: #163348; }
+html[data-theme="dark"] .locked-question-placeholder i { background: #315267; }
+html[data-theme="dark"] .footer-brand strong,
+html[data-theme="dark"] .premium-footer nav a { color: var(--ink); }
+
+@media (max-width: 760px) {
+  .site-footer.premium-footer { grid-template-columns: 1fr; }
+  .premium-footer nav { justify-content: flex-start; }
+  .premium-footer > p { grid-column: 1; }
+  .plan-grid { padding-top: 48px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .plan-card.premium-plus::before { animation: none; }
+}
+
 @media (max-width: 820px) {
   .learner-metrics { grid-template-columns: repeat(2,minmax(0,1fr)); }
   .learner-access-actions { grid-template-columns: 1fr 1fr; }

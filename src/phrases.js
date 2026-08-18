@@ -477,7 +477,7 @@ function applySettings(settings = getSettings()) {
   }
   if (voiceSelect) voiceSelect.value = settings.voice || "us";
   if (playbackRate) playbackRate.value = String(settings.playbackRate || 1);
-  if (themeToggle) themeToggle.value = settings.theme || "system";
+  if (themeToggle) themeToggle.value = settings.theme || "light";
   applyThemePreference(settings.theme);
 }
 

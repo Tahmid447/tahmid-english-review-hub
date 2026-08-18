@@ -17,6 +17,18 @@ export const CONTACT_CHANNELS = Object.freeze({
   }),
 });
 
+export const PREMIUM_PROMOTION = Object.freeze({
+  enabled: true,
+  plan: "premium",
+  billing: BILLING_OPTIONS.monthly,
+  trialDays: 30,
+  secondMonthDiscountPercent: 50,
+  secondMonthYen: 3490,
+  eligibility: "New Premium monthly applicants",
+  eligibilityJa: "Premium月額プランへ新規でお申し込みの方",
+  manualConfirmation: true,
+});
+
 export const PLAN_CATALOG = Object.freeze({
   free: Object.freeze({
     key: "free",
@@ -82,12 +94,12 @@ export const PLAN_CATALOG = Object.freeze({
     nameJa: "プレミアムプラス",
     monthlyYen: 16800,
     sixMonthsYen: 85700,
-    badge: "Live coaching",
-    badgeJa: "ライブ指導付き",
+    badge: "Best value",
+    badgeJa: "充実サポート",
     bestFor: "Learners who want structured self-study and live coaching",
     bestForJa: "自習とライブ個人指導を組み合わせたい方",
-    summary: "Premium plus live coaching three times each month.",
-    summaryJa: "Premiumに月3回のライブ個人レッスンを追加します。",
+    summary: "Premium plus Tahmid's signature live coaching three times each month.",
+    summaryJa: "Premiumに、Tahmidのライブ個人指導を月3回追加します。",
     features: Object.freeze([
       Object.freeze({ en: "Everything in Premium", ja: "Premiumの内容すべて" }),
       Object.freeze({ en: "3 × 50-minute live 1:1 lessons each month", ja: "月3回・各50分のライブ個人レッスン" }),
@@ -210,6 +222,15 @@ export function planSavings(plan) {
   return Object.freeze({ monthlyTotal, savedYen, percent, monthlyEquivalentYen });
 }
 
+export function promotionApplies(plan, billing = BILLING_OPTIONS.monthly) {
+  const selected = typeof plan === "string" ? planFor(plan) : plan;
+  return Boolean(
+    PREMIUM_PROMOTION.enabled
+    && selected?.key === PREMIUM_PROMOTION.plan
+    && billing === PREMIUM_PROMOTION.billing
+  );
+}
+
 export function contactMessage(plan, billing = BILLING_OPTIONS.monthly, language = "bilingual", name = "") {
   const selected = typeof plan === "string" ? planFor(plan) : plan;
   const price = formatYen(planPrice(selected, billing));
@@ -218,8 +239,14 @@ export function contactMessage(plan, billing = BILLING_OPTIONS.monthly, language
   const cleanName = String(name || "").trim();
   const nameEn = cleanName ? ` My name is ${cleanName}.` : "";
   const nameJa = cleanName ? ` ${cleanName}と申します。` : "";
-  const en = `Hi Tahmid, I'm interested in the ${selected.name} plan (${price} / ${periodEn}).${nameEn} Could you tell me the next steps?`;
-  const ja = `Tahmidさん、${selected.name}プラン（${price}／${periodJa}）に興味があります。${nameJa} 次の手続きについて教えていただけますか？`;
+  const promoEn = promotionApplies(selected, billing)
+    ? ` I would also like to ask whether I am eligible for the new-applicant offer: the first 30 days free and the second month 50% off (${formatYen(PREMIUM_PROMOTION.secondMonthYen)}). I understand that Tahmid will confirm eligibility and access personally.`
+    : "";
+  const promoJa = promotionApplies(selected, billing)
+    ? ` 新規申込キャンペーン（最初の30日間無料・2か月目50%オフの${formatYen(PREMIUM_PROMOTION.secondMonthYen)}）の対象になるかも確認したいです。対象条件と利用開始はTahmidさんから個別に確認されることを理解しています。`
+    : "";
+  const en = `Hi Tahmid, I'm interested in the ${selected.name} plan (${price} / ${periodEn}).${nameEn}${promoEn} Could you tell me the next steps?`;
+  const ja = `Tahmidさん、${selected.name}プラン（${price}／${periodJa}）に興味があります。${nameJa}${promoJa} 次の手続きについて教えていただけますか？`;
   if (language === "en") return en;
   if (language === "ja") return ja;
   return `${en}\n\n${ja}`;

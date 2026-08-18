@@ -2,6 +2,22 @@
 
 Last updated: **August 18, 2026**
 
+## August 18 final-polish checkpoint 2
+
+- Scope: learner-facing Light default, pricing/promotion, Premium/Premium+
+  styling, lock presentation, and shared personal footer; no Supabase schema,
+  Edge Function or Production change.
+- `npm test` — PASS, including exact price/savings, promotion eligibility and
+  contact-message assertions.
+- `npm run build` — PASS.
+- `npm run verify:visuals` — PASS for all 85 assets.
+- Local Browser QA at the available desktop viewport — PASS: both Premium
+  badges remained fully visible, the Premium-only 30-day/`¥3,490` offer and
+  personal-confirmation disclaimer rendered, all four cards stayed aligned,
+  and the shared footer rendered. Dedicated 390 px and deployed Dark/Lighthouse
+  checks remain part of integrated Preview QA.
+- `git diff --check` — PASS.
+
 ## August 18 final-polish checkpoint 1
 
 - Scope: Teacher Studio one-language English/Japanese completion and safe lesson

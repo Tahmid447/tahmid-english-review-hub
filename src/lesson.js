@@ -360,7 +360,7 @@ const renderSettings = () => {
   applyLanguageMode(language);
   applyThemePreference(state.settings.theme);
   elements.languageToggle.value = language;
-  if (elements.themeToggle) elements.themeToggle.value = state.settings.theme || "system";
+  if (elements.themeToggle) elements.themeToggle.value = state.settings.theme || "light";
   elements.soundToggle.textContent = state.settings.sound
     ? uiText("Sound On", "音声オン", language)
     : uiText("Sound Off", "音声オフ", language);
@@ -1635,7 +1635,7 @@ const initialiseLesson = async () => {
         : t("Open account", "アカウントを開く");
       elements.questionCard.innerHTML = `
         <div class="membership-lock-card">
-          <span aria-hidden="true">🔒</span>
+          <span class="membership-lock-kicker">${escapeHTML(t("PLAN ACCESS", "プラン限定"))}</span>
           <h2>${escapeHTML(lockTitle)}</h2>
           <p>${escapeHTML(lockMessage)}</p>
           <a class="primary-btn" href="/#account">${escapeHTML(lockAction)}</a>

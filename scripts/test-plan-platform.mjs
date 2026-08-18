@@ -6,19 +6,22 @@ import {
   PLAN_CATALOG,
   PLAN_COMPARISON,
   PLAN_ORDER,
+  PREMIUM_PROMOTION,
   contactMessage,
   planMeetsRequirement,
   planPrice,
   planSavings,
+  promotionApplies,
 } from "../src/plans.js";
 
 const root = new URL("../", import.meta.url);
-const [pricingPage, pricingUi, lessonPage, lessonUi, store, teacherUi, membershipFunction, migration, build] = await Promise.all([
+const [pricingPage, pricingUi, lessonPage, lessonUi, store, styles, teacherUi, membershipFunction, migration, build] = await Promise.all([
   readFile(new URL("pricing.html", root), "utf8"),
   readFile(new URL("src/pricing.js", root), "utf8"),
   readFile(new URL("lesson.html", root), "utf8"),
   readFile(new URL("src/lesson.js", root), "utf8"),
   readFile(new URL("src/store.js", root), "utf8"),
+  readFile(new URL("src/styles.css", root), "utf8"),
   readFile(new URL("src/teacher.js", root), "utf8"),
   readFile(new URL("supabase/functions/membership-access/index.ts", root), "utf8"),
   readFile(new URL("supabase/migrations/202608110014_premium_plus_and_entitlements.sql", root), "utf8"),
@@ -59,11 +62,22 @@ assert.deepEqual(planSavings("premium_plus"), {
   percent: 15,
   monthlyEquivalentYen: 14283,
 });
+assert.equal(PREMIUM_PROMOTION.trialDays, 30);
+assert.equal(PREMIUM_PROMOTION.secondMonthDiscountPercent, 50);
+assert.equal(PREMIUM_PROMOTION.secondMonthYen, 3490);
+assert.equal(PREMIUM_PROMOTION.manualConfirmation, true);
+assert.equal(promotionApplies("premium", BILLING_OPTIONS.monthly), true);
+assert.equal(promotionApplies("premium", BILLING_OPTIONS.sixMonths), false);
+assert.equal(promotionApplies("premium_plus", BILLING_OPTIONS.monthly), false);
 assert.equal(PLAN_COMPARISON.length, 13);
 assert.equal(PLAN_COMPARISON.find((row) => row.label === "Live lesson duration")?.values.premium_plus, "50 minutes");
 assert.match(contactMessage("premium", BILLING_OPTIONS.sixMonths, "en", "Aya"), /Aya/);
 assert.match(contactMessage("premium", BILLING_OPTIONS.sixMonths, "en", "Aya"), /¥35,600/);
 assert.match(contactMessage("premium", BILLING_OPTIONS.sixMonths, "ja", "彩"), /彩/);
+assert.match(contactMessage("premium", BILLING_OPTIONS.monthly, "en"), /30 days free/);
+assert.match(contactMessage("premium", BILLING_OPTIONS.monthly, "en"), /¥3,490/);
+assert.match(contactMessage("premium", BILLING_OPTIONS.monthly, "ja"), /30日間無料/);
+assert.doesNotMatch(contactMessage("standard", BILLING_OPTIONS.monthly, "en"), /30 days free/);
 
 assert.doesNotMatch(`${pricingPage}\n${pricingUi}`, /YOUR_LINE_ID|YOUR_HANDLE|payment (?:complete|successful)/i);
 assert.match(pricingUi, /PLAN_CATALOG/);
@@ -84,6 +98,13 @@ assert.match(pricingUi, /messageDirty/);
 assert.match(pricingUi, /navigator\.clipboard\.writeText\(elements\.message\.value\)/);
 assert.match(pricingUi, /PLAN_COMPARISON/);
 assert.match(pricingUi, /planSavings/);
+assert.match(pricingUi, /premium-promotion/);
+assert.match(pricingUi, /normally.*monthlyTotal/);
+assert.match(store, /theme: "light"/);
+assert.match(styles, /\.plan-badge[\s\S]*position: absolute[\s\S]*transform: translate\(-50%,-55%\)/);
+assert.match(styles, /\.plan-card\.premium-plus::before[\s\S]*premium-signature-border/);
+assert.match(styles, /prefers-reduced-motion[\s\S]*premium-plus::before[\s\S]*animation: none/);
+assert.match(styles, /\.lesson-card-locked \.en,[\s\S]*filter: none/);
 assert.match(build, /"pricing\.html"/);
 assert.match(build, /"plans\.js"/);
 assert.match(build, /"pricing\.js"/);

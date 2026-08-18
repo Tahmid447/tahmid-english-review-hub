@@ -23,8 +23,11 @@ Do not place OAuth client secrets, passwords, service-role keys, database passwo
 
 - The August 18 final-polish work is proceeding in recoverable phases. The first
   local checkpoint completes Teacher Studio one-language English/Japanese UI
-  coverage and honest source-link handling. It is tested and committed on the
-  working branch but is not yet the validated Preview release described below.
+  coverage and honest source-link handling (`8b76baa`). The second checkpoint
+  adds the bright Light default, refined plan/lock/footer system, clipped-badge
+  guard, exact six-month figures, and the honest new-applicant Premium monthly
+  offer. Both checkpoints passed the local suite; integrated Preview QA is
+  still required before either is treated as a release.
 
 - Exact application commit `049b5ff4da6606fcffc461f412f314d253916e13`
   is published to the dedicated preview as Netlify deploy
@@ -84,6 +87,18 @@ Do not place OAuth client secrets, passwords, service-role keys, database passwo
   modal status), `50656f8` (avoid stale race), `a69ab08` (PWA cache v3), and
   `049b5ff` (query cache-bust). `UPDATE(user_id)` remains deliberately ungranted.
 - System, Light, and Dark themes share one persisted preference across the learner, phrase, lesson, and pricing experiences.
+- A fresh installation now starts in Light mode while explicit saved System or
+  Dark choices remain respected. Premium and Premium+ have distinct, restrained
+  visual treatment with reduced-motion support.
+- The Premium monthly enquiry path advertises only the approved new-applicant
+  offer: 30 days free and month two at 50% (`¥3,490`). It explicitly requires
+  Tahmid's personal eligibility/activation confirmation and does not imitate a
+  payment or subscription checkout. Six-month plans are not included.
+- Six-month cards show the total, normal six-month total, exact yen saving,
+  percentage, and monthly equivalent from the central plan catalogue.
+- Locked learning content uses readable, honest plan-access cards without
+  blurred fake question previews; protected payloads remain withheld by the
+  database.
 - A public-shell PWA manifest, service worker, install metadata, and offline fallback are present. Protected routes, Supabase/API responses, learner data, answers, recordings, and auth-bearing requests are excluded from caching.
 - The phrase/vocabulary library has progressive rendering, retained filters, pronunciation, favourites, practice activity, and corrected type/presentation behavior.
 - Responsive, contrast, touch-target, compact-header, lesson-radio keyboard, and pricing accessibility fixes are present locally. Final deployed Lighthouse and real-device confirmation remain pending.
