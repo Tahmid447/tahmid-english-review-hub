@@ -12,7 +12,8 @@ Migrations `015` and `016` and the matching `membership-access` Edge Function
 are live in shared Supabase. The additive migration
 `202608180017_premium_task_topics.sql` is now live after a privacy-safe restore
 checkpoint and a successful transactional application. The matching topic UI
-is not yet verified on Preview. The production static site remains pre-v9.
+is published and verified on Preview deploy `6a8420afed26890008660823`.
+The production static site remains pre-v9.
 
 ## Fixed public plans and prices
 
@@ -200,7 +201,8 @@ against actual queue time during a small preview cohort before scaling.
 9. Promote to production only after every preview gate passes and a known-good
    rollback point is preserved.
 
-Migration `017` is live and its database postconditions pass. The matching UI
-still requires Preview publication and authenticated topic/submission QA. Do
-not expose the final product in Production before those checks and the
-physical-device gate are complete.
+Migration `017` is live and its database postconditions pass. Topic rendering
+and Teacher plan-preview interaction pass; a real non-teacher Premium
+draft/submission and Teacher feedback cycle is still required. Do not expose
+the final product in Production before that check and the physical-device gate
+are complete.

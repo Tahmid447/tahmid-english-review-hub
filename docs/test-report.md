@@ -27,8 +27,23 @@ Last updated: **August 18, 2026**
   34 tasks with three topics, 102 task/topic presentations, 51 unique lesson
   topics, zero invalid topic rows, validation trigger present, and 34 backup
   rows retained.
-- Live UI/RLS/submission QA is pending until application checkpoint `0dda67a`
-  is published to Preview.
+- Live UI/RLS/submission QA was deferred until application checkpoint
+  `0dda67a` reached Preview; the completed UI results and remaining real-
+  submission gate are recorded below.
+- Preview publication — PASS: rollout commit `7899024` published as Netlify
+  deploy `6a8420afed26890008660823`.
+- Live Premium teacher preview — PASS: both essay and speaking cards showed
+  three topics; mouse and ArrowRight changed the selected topic, bilingual
+  prompt, phrase set and vocabulary set together. Mutating submission controls
+  stayed disabled in Teacher preview.
+- Live Teacher Studio — PASS: the preserved authenticated session survived the
+  deploy; all 34 task rows reported three topics; English and Japanese modes
+  both rendered and the setting was restored to Japanese.
+- Access-code CRUD — PARTIAL PASS/PENDING CLEANUP: temporary Standard, Premium
+  and Premium+ codes were created; Standard label/duration/use-limit editing,
+  Premium reissue, one-time complete-code display and copy passed. Four unused
+  QA rows (one disabled pre-reissue row plus three enabled rows) remain pending
+  explicit deletion confirmation. Redemption was not attempted.
 
 ## August 18 final-polish checkpoint 3
 

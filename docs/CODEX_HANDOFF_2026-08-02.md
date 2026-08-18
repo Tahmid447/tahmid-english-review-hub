@@ -6,7 +6,8 @@ Updated: 2026-08-18 (Asia/Tokyo)
 
 - Repository folder: `/Users/tahmidahmed/Documents/Codex/2026-08-03/codex-handoff-tahmid-english-review-hub/work/tahmid-english-review-hub`
 - Working branch: `upgrade/review-hub-v9-final-product`
-- Exact deployed application commit: `049b5ff4da6606fcffc461f412f314d253916e13`
+- Exact live-validated final-polish artifact:
+  `7899024a8c9baee9cdd91b0fe93346a1bcc8427d`
 - Historical rollout / logical-restore checkpoint: `fcf561d78da6de405d6ca54b78ebfc99df3d3a0a`
 - Current documentation checkpoint: branch HEAD (`git rev-parse HEAD`). This
   document cannot contain the final hash of the commit that contains itself.
@@ -14,7 +15,7 @@ Updated: 2026-08-18 (Asia/Tokyo)
 - Published handoff checkpoint: `a87eb5e1aaa9cff079319b68dfed40bdb2b1a408`
 - Production: https://jocular-chaja-86e78d.netlify.app
 - Dedicated v9 preview: https://tahmid-english-review-hub-v9-preview.netlify.app
-- Exact Preview permalink: https://6a7e9a1002ab210008522e82--tahmid-english-review-hub-v9-preview.netlify.app
+- Exact validated Preview permalink: https://6a8420afed26890008660823--tahmid-english-review-hub-v9-preview.netlify.app
 - Supabase project ref: `ycmybggetemkhorkhfnf`
 
 Do not place OAuth client secrets, passwords, service-role keys, database passwords, or access tokens in this file, Git, screenshots, or chat.
@@ -38,12 +39,13 @@ Do not place OAuth client secrets, passwords, service-role keys, database passwo
   phrases and vocabulary, and a Core/Stretch label. The chosen topic is saved
   with the learner attempt and shown in Teacher Studio. Migration `017` was
   applied to shared Supabase after a new privacy-safe restore checkpoint. The
-  matching application checkpoint is `0dda67a`; Preview publication and live
-  topic/submission QA are next.
+  matching application checkpoint is `0dda67a`; rollout record `7899024`
+  published it to Preview and live topic UI QA now passes. Real learner
+  submission/Teacher feedback remains pending.
 
-- Exact application commit `049b5ff4da6606fcffc461f412f314d253916e13`
+- Exact rollout commit `7899024a8c9baee9cdd91b0fe93346a1bcc8427d`
   is published to the dedicated preview as Netlify deploy
-  `6a7e9a1002ab210008522e82`.
+  `6a8420afed26890008660823`.
 - The production static site is still pre-v9 and was not deployed or otherwise
   changed during this rollout.
 - Supabase migrations `015` and `016` were manually applied in order, each in a
@@ -259,11 +261,10 @@ Premium denial. Teacher auth remains pending; the learner is signed out.
    `membership-access` Edge Function.
 5. **Completed:** publish exact application commit `049b5ff`, pass public QA,
    and pass scoped Google learner profile/reload/lesson/sign-out QA.
-6. **Completed backend / UI publication pending:** apply and verify migration
-   `017`, and implement 51 Premium topic choices plus selected-topic Teacher
-   visibility in application checkpoint `0dda67a`.
-7. **In progress:** push the matching UI, wait for the dedicated Preview, then
-   verify topic selection and Teacher visibility before authenticating
+6. **Completed:** apply and verify migration `017`; publish the matching 51
+   topic UI; verify mouse and keyboard topic switching, topic-specific prompts,
+   phrases and vocabulary, and all 34 Teacher task rows showing three topics.
+7. **In progress:** finish temporary access-code cleanup, then authenticate
    dedicated non-teacher Free/
    Standard/Premium/Premium+ accounts; test tier/RLS/access codes, email auth,
    speaking/essay submissions, and published feedback.
@@ -274,6 +275,13 @@ Premium denial. Teacher auth remains pending; the learner is signed out.
    deploy and prepare forward fixes for database issues.
 
 ## Remaining and blockers
+
+- Live access-code CRUD progressed: temporary Standard, Premium and Premium+
+  codes were created; one Standard code was edited; one Premium code was
+  reissued; complete-code one-time display and copy passed. Four unused QA rows
+  remain (including the disabled pre-reissue row). They are clearly labelled
+  `Codex QA 2026-08-18 ...` and must be permanently deleted only after the
+  user's action-time confirmation. No code was redeemed.
 
 - Post-hotfix tests/build/visual verification, exact-commit Preview publication,
   public QA, and scoped authenticated Google learner QA are complete.
@@ -294,12 +302,12 @@ Premium denial. Teacher auth remains pending; the learner is signed out.
 
 ## Exact next step
 
-Push application checkpoint `0dda67a` and its updated handoff to the current
-branch, wait for the dedicated Netlify Preview deployment, and verify the
-three-choice topic UI at desktop/mobile widths. Use the preserved Teacher
-session to confirm the selected topic appears in the review queue, then test
-one safe draft/submit path. Continue tier, microphone, Lighthouse and device
-gates afterward. Do not deploy Production.
+After the user confirms deletion, remove the four unused
+`Codex QA 2026-08-18 ...` access-code rows and verify no such test rows remain.
+Then use a dedicated non-teacher Premium learner for one topic-specific draft
+and submit cycle so Teacher queue topic visibility can be proven without
+changing the real teacher's active membership. Continue tier, microphone,
+Lighthouse and device gates afterward. Do not deploy Production.
 
 ## Read first in the next Codex session
 

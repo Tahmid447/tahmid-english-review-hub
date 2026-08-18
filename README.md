@@ -4,7 +4,9 @@ Private development repository for the Tahmid English Review Hub v9 learner
 platform and Teacher Studio.
 
 Current work is on `upgrade/review-hub-v9-final-product`. The exact deployed
-application commit is `049b5ff4da6606fcffc461f412f314d253916e13`;
+and live-validated final-polish artifact is
+`7899024a8c9baee9cdd91b0fe93346a1bcc8427d` (Netlify deploy
+`6a8420afed26890008660823`);
 `fcf561d78da6de405d6ca54b78ebfc99df3d3a0a` remains the historical rollout and
 logical-restore checkpoint. Authenticated learner Google sign-in, profile
 completion, reload persistence, lesson access, and safe sign-out pass. Teacher
@@ -144,10 +146,10 @@ answers, teacher feedback, authenticated API responses, or recordings.
 
 - Dedicated v9 preview:
   `https://tahmid-english-review-hub-v9-preview.netlify.app`
-  — published from `upgrade/review-hub-v9-final-product@049b5ff` as Netlify
-  deploy `6a7e9a1002ab210008522e82`
-- Exact immutable Preview permalink:
-  `https://6a7e9a1002ab210008522e82--tahmid-english-review-hub-v9-preview.netlify.app`
+  — validated at `upgrade/review-hub-v9-final-product@7899024` as Netlify
+  deploy `6a8420afed26890008660823`
+- Exact validated immutable Preview permalink:
+  `https://6a8420afed26890008660823--tahmid-english-review-hub-v9-preview.netlify.app`
 - Production: `https://jocular-chaja-86e78d.netlify.app/`
   — static site remains untouched and pre-v9
 
