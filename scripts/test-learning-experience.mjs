@@ -44,6 +44,8 @@ assert.equal(
 );
 assert.equal(store.getSettings().playbackRate, 1, "Fresh settings use natural 1.0× playback.");
 assert.equal(store.getSettings().autoPronounceChoices, true, "Choice pronunciation defaults on.");
+assert.equal(store.getSettings().ambientEnabled, false, "Ambient audio never starts by default.");
+assert.equal(store.getSettings().ambientTrack, "calm_focus", "Calm Focus is selected by default.");
 store.saveLessonProgress("june-28", { answeredCount: 4 });
 
 store.setStorageUser("student-a");
@@ -57,8 +59,13 @@ assert.equal(
   true,
   "A signed-in learner never inherits anonymous settings.",
 );
+assert.equal(store.getSettings().voiceEnabled, true);
+assert.equal(store.getSettings().sfxEnabled, true);
 store.saveLessonProgress("june-28", { answeredCount: 1, firstScore: 1 });
-store.updateSettings({ sound: false, hintMode: "manual" });
+store.updateSettings({ sound: false, hintMode: "manual", sfxEnabled: false, ambientEnabled: true, ambientTrack: "night_focus" });
+assert.equal(store.getSettings().voiceEnabled, false);
+assert.equal(store.getSettings().sfxEnabled, false, "The SFX toggle persists independently.");
+assert.equal(store.getSettings().sound, false, "The legacy sound alias follows Voice only.");
 
 store.setStorageUser("student-b");
 assert.equal(
@@ -71,6 +78,10 @@ assert.equal(store.getSettings().hintMode, "auto");
 store.setStorageUser("student-a");
 assert.equal(store.getLessonProgress("june-28")?.answeredCount, 1);
 assert.equal(store.getSettings().hintMode, "manual");
+assert.equal(store.getSettings().ambientEnabled, true);
+assert.equal(store.getSettings().ambientTrack, "night_focus");
+store.updateSettings({ sfxEnabled: true });
+assert.equal(store.getSettings().voiceEnabled, false, "Turning SFX on never changes the Voice preference.");
 assert.equal(Object.hasOwn(store.getSettings(), "vibration"), false);
 
 store.setStorageUser(null);
@@ -79,7 +90,7 @@ assert.equal(
   4,
   "Signing out restores only the anonymous resume scope.",
 );
-store.updateSettings({ sound: true, playbackRate: 0.5 });
+store.updateSettings({ sound: true, sfxEnabled: true, playbackRate: 0.5 });
 assert.equal(store.getSettings().playbackRate, 0.5, "The slow 0.5× voice speed is stored exactly.");
 store.updateSettings({ playbackRate: 1.5 });
 assert.equal(store.getSettings().playbackRate, 1.5, "The fast 1.5× voice speed is stored exactly.");
@@ -218,15 +229,26 @@ assert.match(lessonScript, /orderFor\(`\$\{question\.id\}:choices`, ids, true\)/
 assert.match(lessonScript, /state\.questionOrder = shuffleArray\(state\.questionOrder\)/);
 assert.doesNotMatch(lessonPage, /id="shuffleChoices"/);
 assert.match(lessonPage, /Questions &amp; choices shuffle automatically/);
+assert.match(lessonPage, /id="voiceToggle"/);
+assert.match(lessonPage, /id="sfxToggle"/);
+assert.match(lessonPage, /id="ambientToggle"/);
+assert.match(lessonPage, /id="ambientTrack"/);
+assert.match(lessonPage, /id="ambientVolume"/);
+assert.match(lessonScript, /setAmbientPlayback/);
+assert.match(lessonScript, /syncAmbientFromSettings/);
+assert.match(lessonScript, /playCompletionSound/);
 assert.match(localServer, /"\.webp": "image\/webp"/);
 
 const {
+  AMBIENT_TRACKS,
   normalizePlaybackRate,
+  playInterfaceSound,
   speakText,
   speakingFeedbackForSimilarity,
   speakingFeedbackForTranscript,
   splitSpeechSegments,
 } = await import("../src/audio.js");
+assert.deepEqual(Object.keys(AMBIENT_TRACKS), ["calm_focus", "lofi_study", "quiet_morning", "night_focus", "rainy_desk"]);
 assert.equal(normalizePlaybackRate(0.5), 0.5);
 assert.equal(normalizePlaybackRate("1.5"), 1.5);
 assert.equal(normalizePlaybackRate(0.75), 1);
@@ -284,6 +306,7 @@ const slowVoice = await speakText("Playback rate check.", { language: "en", rate
 assert.equal(slowVoice.played, true);
 assert.equal(slowVoice.rate, 0.5);
 assert.equal(audioInstances.at(-1).playbackRate, 0.5, "The audio element receives the selected slow rate.");
+assert.equal(audioInstances.at(-1).volume, 1, "Voice has its own volume independent of SFX and Ambient.");
 const mixedVoice = await speakText(
   "注文するときは “I’d like pasta, please.” が丁寧で自然です。",
   { language: "ja", voice: "us", rate: 1.5 },
@@ -296,6 +319,7 @@ assert.deepEqual(
   ["ja", "us", "ja"],
   "Mixed explanations request Nanami, Ava, then Nanami in their natural language order.",
 );
+assert.equal(playInterfaceSound("click").reason, "unsupported", "Procedural SFX fails safely without Web Audio.");
 if (originalAudio === undefined) delete globalThis.Audio;
 else globalThis.Audio = originalAudio;
 if (originalFetch === undefined) delete globalThis.fetch;

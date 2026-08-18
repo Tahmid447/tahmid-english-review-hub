@@ -87,14 +87,17 @@
     <h2 id="lessonSettingsHeading" data-ui-en="Settings" data-ui-ja="設定">Settings / 設定</h2>
     <p class="settings-intro" data-ui-en="These preferences apply to every lesson and stay with your signed-in account." data-ui-ja="この設定はすべてのレッスンに適用され、ログイン中のアカウントに保存されます。">These preferences apply to every lesson and stay with your signed-in account. / この設定はすべてのレッスンに適用され、ログイン中のアカウントに保存されます。</p>
     <section class="settings-group" aria-labelledby="audioSettingsHeading">
-      <h3 id="audioSettingsHeading" data-ui-en="Audio & Voice" data-ui-ja="音声・ボイス">Audio &amp; Voice / 音声・ボイス</h3>
+      <h3 id="audioSettingsHeading" data-ui-en="Voice" data-ui-ja="ボイス">Voice / ボイス</h3>
       <div class="settings-grid">
-        <button class="quiet-btn" id="soundToggle" type="button" data-ui-en="Sound On" data-ui-ja="音声オン">Sound On / 音声オン</button>
+        <button class="quiet-btn" id="voiceToggle" type="button" data-ui-en="Voice On" data-ui-ja="ボイス オン">Voice On / ボイス オン</button>
         <label><span data-ui-en="English voice" data-ui-ja="英語音声">English voice / 英語音声</span><select id="voiceSelect"><option value="us">US · Ava</option><option value="gb">UK · Libby</option></select></label>
         <label><span data-ui-en="Playback speed" data-ui-ja="再生速度">Playback speed / 再生速度</span><select id="playbackRate"><option value="0.5">0.5×</option><option value="1">1×</option><option value="1.5">1.5×</option></select></label>
+        <label><span data-ui-en="Voice volume" data-ui-ja="ボイス音量">Voice volume / ボイス音量</span><input id="voiceVolume" type="range" min="0" max="100" step="5" value="100"></label>
         <label class="settings-check"><input id="autoPronounceChoices" type="checkbox"> <span><b data-ui-en="Pronounce selected English choices" data-ui-ja="選んだ英語の選択肢を発音">Pronounce selected English choices / 選んだ英語の選択肢を発音</b><small data-ui-en="On by default; plays once after selection" data-ui-ja="初期設定はオン・選択後に1回だけ再生">On by default; plays once after selection / 初期設定はオン・選択後に1回だけ再生</small></span></label>
       </div>
     </section>
+    <section class="settings-group" aria-labelledby="sfxSettingsHeading"><h3 id="sfxSettingsHeading" data-ui-en="Sound Effects" data-ui-ja="効果音">Sound Effects / 効果音</h3><div class="settings-grid"><button class="quiet-btn" id="sfxToggle" type="button" aria-pressed="true" data-ui-en="SFX On" data-ui-ja="効果音 オン">SFX On / 効果音 オン</button><label><span data-ui-en="SFX volume" data-ui-ja="効果音の音量">SFX volume / 効果音の音量</span><input id="sfxVolume" type="range" min="0" max="100" step="5" value="25"></label></div><p class="settings-note" data-ui-en="Soft click, correct, try-again and completion cues. Voice remains independent." data-ui-ja="クリック・正解・もう一度・完了を控えめな音で知らせます。ボイス設定とは別に管理されます。">Soft click, correct, try-again and completion cues. Voice remains independent.</p></section>
+    <section class="settings-group" aria-labelledby="ambientSettingsHeading"><h3 id="ambientSettingsHeading" data-ui-en="Ambient Music" data-ui-ja="環境音">Ambient Music / 環境音</h3><div class="settings-grid"><button class="quiet-btn" id="ambientToggle" type="button" aria-pressed="false" data-ui-en="Ambient Off" data-ui-ja="環境音 オフ">Ambient Off / 環境音 オフ</button><label><span data-ui-en="Study ambience" data-ui-ja="環境音を選ぶ">Study ambience / 環境音を選ぶ</span><select id="ambientTrack"><option value="calm_focus">Calm Focus / 穏やかな集中</option><option value="lofi_study">Lo-fi Study / ローファイ学習</option><option value="quiet_morning">Quiet Morning / 静かな朝</option><option value="night_focus">Night Focus / 夜の集中</option><option value="rainy_desk">Rainy Desk / 雨の日のデスク</option></select></label><label><span data-ui-en="Ambient volume" data-ui-ja="環境音の音量">Ambient volume / 環境音の音量</span><input id="ambientVolume" type="range" min="0" max="35" step="1" value="12"></label></div><p class="settings-note" data-ui-en="Procedural, vocal-free study ambience. It never starts on page load and automatically softens while speech plays." data-ui-ja="外部音源を使わない、歌声なしの学習用環境音です。ページを開いただけでは再生せず、ボイス再生中は自動で音量を下げます。">Procedural, vocal-free study ambience. It never starts on page load and automatically softens while speech plays.</p></section>
     <section class="settings-group" aria-labelledby="quizSettingsHeading">
       <h3 id="quizSettingsHeading" data-ui-en="Quiz & Practice" data-ui-ja="クイズ・練習">Quiz &amp; Practice / クイズ・練習</h3>
       <div class="segmented" role="group" aria-label="Checking mode">
@@ -118,6 +121,6 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js"></script>
   <script type="module" src="/src/pwa.js"></script>
-  <script type="module" src="/src/lesson.js"></script>
+  <script type="module" src="/src/lesson.js?v=20260818-audio"></script>
 </body>
 </html>

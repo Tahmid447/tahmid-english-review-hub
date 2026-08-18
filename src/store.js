@@ -5,11 +5,26 @@ const PROGRESS_KEY_PREFIX = "te-review-hub:lesson-progress:v2";
 const THEME_BOOT_KEY = "te-review-hub:theme:v1";
 let activeStorageScope = "anonymous";
 
+export const AMBIENT_TRACK_KEYS = Object.freeze([
+  "calm_focus",
+  "lofi_study",
+  "quiet_morning",
+  "night_focus",
+  "rainy_desk",
+]);
+
 export const DEFAULT_SETTINGS = Object.freeze({
   languageMode: "bilingual",
   showJapanese: true,
   showChoiceTranslations: false,
   sound: true,
+  voiceEnabled: true,
+  voiceVolume: 1,
+  sfxEnabled: true,
+  sfxVolume: 0.24,
+  ambientEnabled: false,
+  ambientTrack: "calm_focus",
+  ambientVolume: 0.12,
   voice: "us",
   playbackRate: 1,
   autoPronounceChoices: true,
@@ -93,6 +108,12 @@ export function getSettings() {
   const weeklyGoal = [2, 3, 5, 7].includes(Number(saved?.weeklyGoal))
     ? Number(saved.weeklyGoal)
     : 3;
+  const legacySound = saved?.sound !== false && saved?.soundEnabled !== false;
+  const voiceEnabled = typeof saved?.voiceEnabled === "boolean" ? saved.voiceEnabled : legacySound;
+  const sfxEnabled = typeof saved?.sfxEnabled === "boolean" ? saved.sfxEnabled : legacySound;
+  const clampVolume = (value, fallback) => Number.isFinite(Number(value))
+    ? Math.max(0, Math.min(1, Number(value)))
+    : fallback;
   return {
     ...DEFAULT_SETTINGS,
     ...savedSettings,
@@ -105,7 +126,18 @@ export function getSettings() {
     checkMode: saved?.checkMode === "instant" ? "instant" : "manual",
     showJapanese: languageMode !== "en",
     showChoiceTranslations: saved?.showChoiceTranslations === true,
-    sound: saved?.sound !== false,
+    // `sound` remains a compatibility alias for speech while the visible
+    // controls keep Voice, SFX and Ambient independent.
+    sound: voiceEnabled,
+    voiceEnabled,
+    voiceVolume: clampVolume(saved?.voiceVolume, 1),
+    sfxEnabled,
+    sfxVolume: clampVolume(saved?.sfxVolume, 0.24),
+    ambientEnabled: saved?.ambientEnabled === true,
+    ambientTrack: AMBIENT_TRACK_KEYS.includes(saved?.ambientTrack)
+      ? saved.ambientTrack
+      : "calm_focus",
+    ambientVolume: clampVolume(saved?.ambientVolume, 0.12),
     // Choices are always shuffled for a new practice run. Keep this field for
     // backward-compatible remote settings without allowing an old unchecked
     // preference to disable the learning safeguard.
@@ -118,6 +150,9 @@ export function getSettings() {
 
 export function updateSettings(patch = {}) {
   const next = { ...getSettings(), ...patch };
+  if (Object.hasOwn(patch, "sound") && !Object.hasOwn(patch, "voiceEnabled")) {
+    next.voiceEnabled = patch.sound !== false;
+  }
   next.languageMode = ["en", "bilingual", "ja"].includes(next.languageMode)
     ? next.languageMode
     : (next.showJapanese === false ? "en" : "bilingual");
@@ -128,7 +163,22 @@ export function updateSettings(patch = {}) {
     : 1;
   next.autoPronounceChoices = next.autoPronounceChoices !== false;
   next.checkMode = next.checkMode === "instant" ? "instant" : "manual";
-  next.sound = next.sound !== false;
+  next.voiceEnabled = next.voiceEnabled !== false;
+  next.sound = next.voiceEnabled;
+  next.voiceVolume = Number.isFinite(Number(next.voiceVolume))
+    ? Math.max(0, Math.min(1, Number(next.voiceVolume)))
+    : 1;
+  next.sfxEnabled = next.sfxEnabled !== false;
+  next.sfxVolume = Number.isFinite(Number(next.sfxVolume))
+    ? Math.max(0, Math.min(1, Number(next.sfxVolume)))
+    : 0.24;
+  next.ambientEnabled = next.ambientEnabled === true;
+  next.ambientTrack = AMBIENT_TRACK_KEYS.includes(next.ambientTrack)
+    ? next.ambientTrack
+    : "calm_focus";
+  next.ambientVolume = Number.isFinite(Number(next.ambientVolume))
+    ? Math.max(0, Math.min(1, Number(next.ambientVolume)))
+    : 0.12;
   next.shuffleChoices = true;
   next.showChoiceTranslations = Boolean(next.showChoiceTranslations);
   next.hintMode = next.hintMode === "manual" ? "manual" : "auto";

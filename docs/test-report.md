@@ -2,6 +2,21 @@
 
 Last updated: **August 18, 2026**
 
+## August 18 final-polish checkpoint 3
+
+- Scope: separate Voice/SFX/Ambient settings, refined procedural feedback SFX,
+  five procedural study ambiences, ducking, persistence and PWA audio refresh;
+  no downloaded music, Supabase schema, Edge Function or Production change.
+- Regression coverage — PASS: Ambient defaults OFF with Calm Focus selected,
+  SFX persists without changing Voice, all five track keys exist, speech keeps
+  its separate volume and unsupported Web Audio fails safely.
+- Local Browser QA — PASS: settings dialog opened with Voice ON, SFX ON,
+  Ambient OFF and Calm Focus; switching SFX OFF left Voice ON, then switching
+  Ambient ON left both other preferences unchanged. The temporary settings were
+  restored after the check.
+- Natural US/UK/Japanese live-service checks remain covered by the existing
+  audio audit; the final live audit will be rerun after the integrated Preview.
+
 ## August 18 final-polish checkpoint 2
 
 - Scope: learner-facing Light default, pricing/promotion, Premium/Premium+

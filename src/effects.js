@@ -1,3 +1,5 @@
+import { playInterfaceSound } from "./audio.js?v=20260818-audio";
+
 const reduceMotion = () => window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
 
 export function celebrate(anchor, { speaking = false } = {}) {
@@ -26,10 +28,11 @@ export function celebrate(anchor, { speaking = false } = {}) {
 }
 
 export function installPlayfulInteractions(root = document) {
-  if (reduceMotion()) return;
   root.addEventListener("pointerdown", (event) => {
-    const target = event.target.closest(".primary-btn, .secondary-btn, .lesson-card, .audio-btn");
-    if (!target || event.pointerType === "touch") return;
+    const target = event.target.closest("button:not(:disabled), a.primary-btn, a.secondary-btn, .lesson-card, summary");
+    if (!target) return;
+    playInterfaceSound("click");
+    if (reduceMotion() || event.pointerType === "touch") return;
     for (let index = 0; index < 3; index += 1) {
       const sparkle = document.createElement("i");
       sparkle.className = "click-sparkle";

@@ -19,9 +19,12 @@
       <button class="quiet-btn mobile-settings-toggle" id="mobileSettingsToggle" type="button" aria-expanded="false" aria-controls="siteSettingsControls" data-ui-en="Settings" data-ui-ja="設定">Settings / 設定</button>
       <span class="header-settings-controls" id="siteSettingsControls">
       <label class="voice-select"><span data-ui-en="Language" data-ui-ja="表示">Language / 表示</span><select id="languageToggle"><option value="en">English</option><option value="bilingual">English + 日本語</option><option value="ja">日本語UI</option></select></label>
-      <button class="quiet-btn" id="soundToggle" type="button" data-ui-en="Sound On" data-ui-ja="音声オン">Sound On / 音声オン</button>
+      <button class="quiet-btn" id="voiceToggle" type="button" data-ui-en="Voice On" data-ui-ja="ボイス オン">Voice On / ボイス オン</button>
       <label class="voice-select"><span data-ui-en="Speaking accent" data-ui-ja="英語音声">Speaking accent / 英語音声</span><select id="voiceSelect" aria-label="Accent for speaking practice"><option value="us">US · Ava</option><option value="gb">UK · Libby</option></select></label>
       <label class="voice-select"><span data-ui-en="Speed" data-ui-ja="速さ">Speed / 速さ</span><select id="playbackRate"><option value="0.5">0.5×</option><option value="1">1×</option><option value="1.5">1.5×</option></select></label>
+      <button class="quiet-btn" id="sfxToggle" type="button" aria-pressed="true" data-ui-en="SFX On" data-ui-ja="効果音 オン">SFX On / 効果音 オン</button>
+      <button class="quiet-btn" id="ambientToggle" type="button" aria-pressed="false" data-ui-en="Ambient Off" data-ui-ja="環境音 オフ">Ambient Off / 環境音 オフ</button>
+      <label class="voice-select"><span data-ui-en="Ambience" data-ui-ja="環境音">Ambience / 環境音</span><select id="ambientTrack" aria-label="Study ambience"><option value="calm_focus">Calm Focus</option><option value="lofi_study">Lo-fi Study</option><option value="quiet_morning">Quiet Morning</option><option value="night_focus">Night Focus</option><option value="rainy_desk">Rainy Desk</option></select></label>
       <label class="voice-select"><span data-ui-en="Theme" data-ui-ja="外観">Theme / 外観</span><select id="themeToggle"><option value="system">System / 端末設定</option><option value="light">Light / ライト</option><option value="dark">Dark / ダーク</option></select></label>
       </span>
     </nav>
@@ -45,6 +48,6 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js"></script>
   <script type="module" src="/src/pwa.js"></script>
-  <script type="module" src="/src/phrases.js"></script>
+  <script type="module" src="/src/phrases.js?v=20260818-audio"></script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 import { NATURAL_SPEECH_URL, SUPABASE_ANON_KEY } from "./config.js";
-import { getSettings, normalizeAnswerText } from "./store.js";
+import { AMBIENT_TRACK_KEYS, getSettings, normalizeAnswerText } from "./store.js";
 
 const AUDIO_CACHE_LIMIT = 24;
 const remoteAudioCache = new Map();
@@ -9,6 +9,19 @@ let requestGeneration = 0;
 let activeRecognition = null;
 let activeRecognitionFinish = null;
 let feedbackAudioContext = null;
+let ambientAudioContext = null;
+let ambientMasterGain = null;
+let ambientNodes = [];
+let ambientTrackKey = null;
+let ambientDucked = false;
+
+export const AMBIENT_TRACKS = Object.freeze({
+  calm_focus: Object.freeze({ name: "Calm Focus", nameJa: "穏やかな集中", description: "Warm, slow-moving focus pad", descriptionJa: "ゆっくり広がる、温かな集中用サウンド" }),
+  lofi_study: Object.freeze({ name: "Lo-fi Study", nameJa: "ローファイ学習", description: "Soft texture with a low, steady pulse", descriptionJa: "控えめな質感と、ゆるやかな一定のリズム" }),
+  quiet_morning: Object.freeze({ name: "Quiet Morning", nameJa: "静かな朝", description: "Light, open and gently acoustic", descriptionJa: "明るく軽やかな、朝のようなサウンド" }),
+  night_focus: Object.freeze({ name: "Night Focus", nameJa: "夜の集中", description: "A deeper pad with minimal movement", descriptionJa: "動きを抑えた、深く落ち着くサウンド" }),
+  rainy_desk: Object.freeze({ name: "Rainy Desk", nameJa: "雨の日のデスク", description: "Subtle rain-like texture behind a soft pad", descriptionJa: "柔らかなパッドに、控えめな雨音の質感" }),
+});
 
 const report = (callback, phase, messageEn, messageJa, extra = {}) => {
   if (typeof callback === "function") {
@@ -36,6 +49,7 @@ const cancelPlayingAudio = () => {
     activeAudio.load();
     activeAudio = null;
   }
+  duckAmbient(false);
 };
 
 export function stopAudio() {
@@ -100,6 +114,7 @@ const playBlobSource = (source, onStatus, token, rate = 1, { finalSegment = true
   cancelPlayingAudio();
   const audio = new Audio(source);
   audio.preload = "auto";
+  audio.volume = Math.max(0, Math.min(1, Number(getSettings().voiceVolume ?? 1)));
   const playbackRate = normalizePlaybackRate(rate);
   const applyPlaybackRate = () => {
     audio.defaultPlaybackRate = playbackRate;
@@ -121,6 +136,7 @@ const playBlobSource = (source, onStatus, token, rate = 1, { finalSegment = true
     if (settled) return;
     settled = true;
     if (activeAudio === audio) activeAudio = null;
+    duckAmbient(false);
     reject(error instanceof Error ? error : new Error("The natural audio could not be played."));
   };
   audio.onerror = () => fail(new Error("The natural audio could not be decoded."));
@@ -128,6 +144,7 @@ const playBlobSource = (source, onStatus, token, rate = 1, { finalSegment = true
     if (settled) return;
     settled = true;
     if (activeAudio === audio) activeAudio = null;
+    duckAmbient(false);
     if (finalSegment) {
       report(onStatus, "ready", "Ready to play again.", "もう一度再生できます。", { source: "edge", rate: playbackRate });
     }
@@ -146,6 +163,7 @@ const playBlobSource = (source, onStatus, token, rate = 1, { finalSegment = true
     // Some mobile browsers restore the default rate after metadata loads.
     // Reapplying it immediately before play keeps 0.5× and 1.5× reliable.
     applyPlaybackRate();
+    duckAmbient(true);
     audio.play().catch(fail);
   };
   audio.addEventListener("loadedmetadata", applyPlaybackRate, { once: true });
@@ -168,9 +186,9 @@ export async function speakText(text, { voice, language, rate, onStatus } = {}) 
     report(onStatus, "error", "There is no sentence to play.", "再生する英文がありません。");
     return { played: false, reason: "empty" };
   }
-  if (!settings.sound) {
-    report(onStatus, "error", "Sound is off. Turn it on in the header.", "音声がオフです。ヘッダーでオンにしてください。");
-    return { played: false, reason: "sound-off" };
+  if (!settings.voiceEnabled) {
+    report(onStatus, "error", "Voice is off. Turn it on in audio settings.", "ボイスがオフです。音声設定でオンにしてください。");
+    return { played: false, reason: "voice-off" };
   }
 
   stopAudio();
@@ -266,8 +284,34 @@ export async function speakText(text, { voice, language, rate, onStatus } = {}) 
   return { played: false, reason: "natural-voice-unavailable", rate: playbackRate };
 }
 
-export function playAnswerFeedback(correct) {
-  if (!getSettings().sound) return { played: false, reason: "sound-off" };
+const audioContextConstructor = () => (typeof window !== "undefined"
+  ? (window.AudioContext || window.webkitAudioContext)
+  : null);
+
+const sfxNotes = Object.freeze({
+  click: Object.freeze([
+    Object.freeze({ frequency: 185, offset: 0, duration: 0.055, gain: 0.016, type: "triangle" }),
+    Object.freeze({ frequency: 370, offset: 0.006, duration: 0.045, gain: 0.009, type: "sine" }),
+  ]),
+  correct: Object.freeze([
+    Object.freeze({ frequency: 523.25, offset: 0, duration: 0.19, gain: 0.034, type: "sine" }),
+    Object.freeze({ frequency: 659.25, offset: 0.105, duration: 0.24, gain: 0.035, type: "sine" }),
+    Object.freeze({ frequency: 784, offset: 0.11, duration: 0.22, gain: 0.013, type: "triangle" }),
+  ]),
+  retry: Object.freeze([
+    Object.freeze({ frequency: 293.66, offset: 0, duration: 0.18, gain: 0.022, type: "triangle" }),
+    Object.freeze({ frequency: 329.63, offset: 0.13, duration: 0.22, gain: 0.022, type: "sine" }),
+  ]),
+  completion: Object.freeze([
+    Object.freeze({ frequency: 392, offset: 0, duration: 0.22, gain: 0.026, type: "sine" }),
+    Object.freeze({ frequency: 523.25, offset: 0.12, duration: 0.28, gain: 0.032, type: "sine" }),
+    Object.freeze({ frequency: 659.25, offset: 0.26, duration: 0.34, gain: 0.028, type: "triangle" }),
+  ]),
+});
+
+export function playInterfaceSound(kind = "click") {
+  const settings = getSettings();
+  if (!settings.sfxEnabled) return { played: false, reason: "sfx-off" };
   const AudioContext = typeof window !== "undefined"
     ? (window.AudioContext || window.webkitAudioContext)
     : null;
@@ -279,26 +323,18 @@ export function playAnswerFeedback(correct) {
       feedbackAudioContext.resume().catch(() => {});
     }
     const startAt = feedbackAudioContext.currentTime + 0.01;
-    const notes = correct
-      ? [
-        { frequency: 659, offset: 0, duration: 0.1 },
-        { frequency: 880, offset: 0.1, duration: 0.1 },
-        { frequency: 1318, offset: 0.2, duration: 0.16 },
-      ]
-      : [
-        { frequency: 270, offset: 0, duration: 0.15 },
-        { frequency: 180, offset: 0.14, duration: 0.2 },
-      ];
+    const notes = sfxNotes[kind] || sfxNotes.click;
+    const volume = Math.max(0, Math.min(1, Number(settings.sfxVolume ?? 0.24)));
 
-    notes.forEach(({ frequency, offset, duration }) => {
+    notes.forEach(({ frequency, offset, duration, gain: noteGain, type }) => {
       const oscillator = feedbackAudioContext.createOscillator();
       const gain = feedbackAudioContext.createGain();
       const noteStart = startAt + offset;
       const noteEnd = noteStart + duration;
-      oscillator.type = correct ? "sine" : "triangle";
+      oscillator.type = type;
       oscillator.frequency.setValueAtTime(frequency, noteStart);
       gain.gain.setValueAtTime(0.0001, noteStart);
-      gain.gain.exponentialRampToValueAtTime(correct ? 0.075 : 0.065, noteStart + 0.015);
+      gain.gain.exponentialRampToValueAtTime(Math.max(0.0001, noteGain * volume), noteStart + Math.min(0.018, duration / 4));
       gain.gain.exponentialRampToValueAtTime(0.0001, noteEnd);
       oscillator.connect(gain);
       gain.connect(feedbackAudioContext.destination);
@@ -309,6 +345,139 @@ export function playAnswerFeedback(correct) {
   } catch (error) {
     return { played: false, reason: "unavailable", error };
   }
+}
+
+export const playAnswerFeedback = (correct) => playInterfaceSound(correct ? "correct" : "retry");
+export const playCompletionSound = () => playInterfaceSound("completion");
+
+const stopAmbientNodes = () => {
+  ambientNodes.forEach((node) => {
+    try { node.stop?.(); } catch { /* already stopped */ }
+    try { node.disconnect?.(); } catch { /* already disconnected */ }
+  });
+  ambientNodes = [];
+  ambientTrackKey = null;
+};
+
+const addAmbientTone = (context, destination, frequency, level, waveform = "sine", drift = 0.035) => {
+  const oscillator = context.createOscillator();
+  const gain = context.createGain();
+  const lfo = context.createOscillator();
+  const lfoGain = context.createGain();
+  oscillator.type = waveform;
+  oscillator.frequency.value = frequency;
+  gain.gain.value = level;
+  lfo.type = "sine";
+  lfo.frequency.value = drift;
+  lfoGain.gain.value = level * 0.22;
+  lfo.connect(lfoGain);
+  lfoGain.connect(gain.gain);
+  oscillator.connect(gain);
+  gain.connect(destination);
+  oscillator.start();
+  lfo.start();
+  ambientNodes.push(oscillator, gain, lfo, lfoGain);
+};
+
+const addAmbientTexture = (context, destination, { rain = false } = {}) => {
+  if (!context.createBuffer || !context.createBufferSource || !context.createBiquadFilter) return;
+  const length = Math.max(1, Math.floor(context.sampleRate * 3));
+  const buffer = context.createBuffer(1, length, context.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let index = 0; index < data.length; index += 1) {
+    data[index] = (Math.random() * 2 - 1) * (rain ? 0.7 : 0.3);
+  }
+  const source = context.createBufferSource();
+  const filter = context.createBiquadFilter();
+  const gain = context.createGain();
+  source.buffer = buffer;
+  source.loop = true;
+  filter.type = rain ? "bandpass" : "lowpass";
+  filter.frequency.value = rain ? 1250 : 520;
+  filter.Q.value = rain ? 0.55 : 0.25;
+  gain.gain.value = rain ? 0.016 : 0.006;
+  source.connect(filter);
+  filter.connect(gain);
+  gain.connect(destination);
+  source.start();
+  ambientNodes.push(source, filter, gain);
+};
+
+const buildAmbientGraph = (trackKey) => {
+  const context = ambientAudioContext;
+  if (!context || !ambientMasterGain) return;
+  stopAmbientNodes();
+  const track = AMBIENT_TRACK_KEYS.includes(trackKey) ? trackKey : "calm_focus";
+  const toneSets = {
+    calm_focus: [[110,.038,"sine"],[164.81,.023,"sine"],[220,.012,"triangle"]],
+    lofi_study: [[98,.032,"triangle"],[146.83,.019,"sine"],[196,.009,"triangle"]],
+    quiet_morning: [[130.81,.026,"sine"],[196,.018,"sine"],[261.63,.01,"triangle"]],
+    night_focus: [[73.42,.038,"sine"],[110,.021,"sine"],[146.83,.009,"triangle"]],
+    rainy_desk: [[110,.026,"sine"],[164.81,.015,"sine"]],
+  };
+  toneSets[track].forEach(([frequency, level, waveform], index) => {
+    addAmbientTone(context, ambientMasterGain, frequency, level, waveform, 0.025 + index * 0.012);
+  });
+  if (track === "lofi_study") addAmbientTexture(context, ambientMasterGain);
+  if (track === "rainy_desk") addAmbientTexture(context, ambientMasterGain, { rain: true });
+  ambientTrackKey = track;
+};
+
+const ambientTargetVolume = (settings = getSettings()) => {
+  const volume = Math.max(0, Math.min(0.35, Number(settings.ambientVolume ?? 0.12)));
+  return ambientDucked ? volume * 0.24 : volume;
+};
+
+const setAmbientGain = (settings = getSettings()) => {
+  if (!ambientMasterGain || !ambientAudioContext) return;
+  const target = settings.ambientEnabled ? ambientTargetVolume(settings) : 0.0001;
+  const now = ambientAudioContext.currentTime;
+  ambientMasterGain.gain.cancelScheduledValues?.(now);
+  ambientMasterGain.gain.setTargetAtTime(Math.max(0.0001, target), now, 0.28);
+};
+
+export function duckAmbient(active) {
+  ambientDucked = Boolean(active);
+  setAmbientGain();
+}
+
+export async function setAmbientPlayback(enabled, options = {}) {
+  const settings = { ...getSettings(), ...options, ambientEnabled: Boolean(enabled) };
+  if (!enabled) {
+    setAmbientGain(settings);
+    return { played: false, reason: "ambient-off" };
+  }
+  const AudioContext = audioContextConstructor();
+  if (!AudioContext) return { played: false, reason: "unsupported" };
+  try {
+    ambientAudioContext ||= new AudioContext();
+    ambientMasterGain ||= ambientAudioContext.createGain();
+    if (!ambientMasterGain.__connected) {
+      ambientMasterGain.connect(ambientAudioContext.destination);
+      ambientMasterGain.__connected = true;
+    }
+    if (ambientAudioContext.state === "suspended" && options.userGesture !== false) {
+      await ambientAudioContext.resume();
+    }
+    if (ambientAudioContext.state === "suspended") return { played: false, reason: "gesture-required" };
+    if (ambientTrackKey !== settings.ambientTrack) buildAmbientGraph(settings.ambientTrack);
+    setAmbientGain(settings);
+    return { played: true, track: ambientTrackKey, procedural: true };
+  } catch (error) {
+    return { played: false, reason: "unavailable", error };
+  }
+}
+
+export function syncAmbientFromSettings({ userGesture = false } = {}) {
+  const settings = getSettings();
+  if (!settings.ambientEnabled) {
+    setAmbientGain(settings);
+    return Promise.resolve({ played: false, reason: "ambient-off" });
+  }
+  if (!userGesture && !ambientAudioContext) {
+    return Promise.resolve({ played: false, reason: "gesture-required" });
+  }
+  return setAmbientPlayback(true, { ...settings, userGesture });
 }
 
 const editDistance = (left, right) => {

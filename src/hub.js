@@ -28,6 +28,7 @@ import {
 import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js";
 import { installPlayfulInteractions } from "./effects.js";
 import { planFor } from "./plans.js";
+import { setAmbientPlayback, stopAudio, syncAmbientFromSettings } from "./audio.js?v=20260818-audio";
 
 let publishedLessons = [];
 let visibleLessons = [];
@@ -194,6 +195,7 @@ function t(english, japanese) {
 }
 
 function settingsSound(settings) {
+  if (typeof settings.voiceEnabled === "boolean") return settings.voiceEnabled;
   if (typeof settings.sound === "boolean") return settings.sound;
   if (typeof settings.soundEnabled === "boolean") return settings.soundEnabled;
   return true;
@@ -205,18 +207,34 @@ function applySettings(settings = getSettings()) {
   applyLanguageMode(language);
 
   const languageToggle = document.querySelector("#languageToggle");
-  const soundToggle = document.querySelector("#soundToggle");
+  const voiceToggle = document.querySelector("#voiceToggle");
+  const sfxToggle = document.querySelector("#sfxToggle");
+  const ambientToggle = document.querySelector("#ambientToggle");
+  const ambientTrack = document.querySelector("#ambientTrack");
   const voiceSelect = document.querySelector("#voiceSelect");
   const playbackRate = document.querySelector("#playbackRate");
   const themeToggle = document.querySelector("#themeToggle");
   const weeklyGoal = document.querySelector("#weeklyGoalSelect");
   if (languageToggle) languageToggle.value = language;
-  if (soundToggle) {
-    soundToggle.textContent = sound
-      ? uiText("Sound On", "音声オン", language)
-      : uiText("Sound Off", "音声オフ", language);
-    soundToggle.setAttribute("aria-pressed", String(sound));
+  if (voiceToggle) {
+    voiceToggle.textContent = sound
+      ? uiText("Voice On", "ボイス オン", language)
+      : uiText("Voice Off", "ボイス オフ", language);
+    voiceToggle.setAttribute("aria-pressed", String(sound));
   }
+  if (sfxToggle) {
+    sfxToggle.textContent = settings.sfxEnabled
+      ? uiText("SFX On", "効果音 オン", language)
+      : uiText("SFX Off", "効果音 オフ", language);
+    sfxToggle.setAttribute("aria-pressed", String(settings.sfxEnabled));
+  }
+  if (ambientToggle) {
+    ambientToggle.textContent = settings.ambientEnabled
+      ? uiText("Ambient On", "環境音 オン", language)
+      : uiText("Ambient Off", "環境音 オフ", language);
+    ambientToggle.setAttribute("aria-pressed", String(settings.ambientEnabled));
+  }
+  if (ambientTrack) ambientTrack.value = settings.ambientTrack || "calm_focus";
   if (voiceSelect) voiceSelect.value = settings.voice || "us";
   if (playbackRate) playbackRate.value = String(settings.playbackRate || 1);
   if (themeToggle) themeToggle.value = settings.theme || "light";
@@ -226,7 +244,10 @@ function applySettings(settings = getSettings()) {
 
 function bindSettings() {
   const languageToggle = document.querySelector("#languageToggle");
-  const soundToggle = document.querySelector("#soundToggle");
+  const voiceToggle = document.querySelector("#voiceToggle");
+  const sfxToggle = document.querySelector("#sfxToggle");
+  const ambientToggle = document.querySelector("#ambientToggle");
+  const ambientTrack = document.querySelector("#ambientTrack");
   const voiceSelect = document.querySelector("#voiceSelect");
   const playbackRate = document.querySelector("#playbackRate");
   const themeToggle = document.querySelector("#themeToggle");
@@ -249,9 +270,22 @@ function bindSettings() {
       languageMode: next,
     });
   });
-  soundToggle?.addEventListener("click", () => {
+  voiceToggle?.addEventListener("click", () => {
     const next = !settingsSound(getSettings());
-    updateAndSyncSettings({ sound: next });
+    if (!next) stopAudio();
+    updateAndSyncSettings({ voiceEnabled: next });
+  });
+  sfxToggle?.addEventListener("click", () => {
+    updateAndSyncSettings({ sfxEnabled: !getSettings().sfxEnabled });
+  });
+  ambientToggle?.addEventListener("click", async () => {
+    const next = !getSettings().ambientEnabled;
+    const settings = updateAndSyncSettings({ ambientEnabled: next });
+    await setAmbientPlayback(next, { ...settings, userGesture: true });
+  });
+  ambientTrack?.addEventListener("change", async () => {
+    const settings = updateAndSyncSettings({ ambientTrack: ambientTrack.value });
+    if (settings.ambientEnabled) await setAmbientPlayback(true, { ...settings, userGesture: true });
   });
   voiceSelect?.addEventListener("change", () => {
     updateAndSyncSettings({ voice: voiceSelect.value === "gb" ? "gb" : "us" });
@@ -275,6 +309,7 @@ function bindSettings() {
     }
   });
   applySettings();
+  syncAmbientFromSettings();
   watchSystemTheme(() => applyThemePreference(getSettings().theme));
 }
 

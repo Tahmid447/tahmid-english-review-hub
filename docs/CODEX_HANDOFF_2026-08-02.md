@@ -28,6 +28,10 @@ Do not place OAuth client secrets, passwords, service-role keys, database passwo
   guard, exact six-month figures, and the honest new-applicant Premium monthly
   offer. Both checkpoints passed the local suite; integrated Preview QA is
   still required before either is treated as a release.
+- The third final-polish checkpoint separates Voice, Sound Effects, and Ambient
+  Music. Five low-volume procedural ambiences require an explicit user action,
+  default to Calm Focus selected but OFF, persist per learner, and duck during
+  natural speech. No external or ambiguously licensed music asset was added.
 
 - Exact application commit `049b5ff4da6606fcffc461f412f314d253916e13`
   is published to the dedicated preview as Netlify deploy
@@ -100,6 +104,12 @@ Do not place OAuth client secrets, passwords, service-role keys, database passwo
   blurred fake question previews; protected payloads remain withheld by the
   database.
 - A public-shell PWA manifest, service worker, install metadata, and offline fallback are present. Protected routes, Supabase/API responses, learner data, answers, recordings, and auth-bearing requests are excluded from caching.
+- Voice has its own on/off, volume, accent and playback-speed settings. SFX has
+  an independent on/off and volume control with restrained layered click,
+  correct, try-again and completion cues. Ambient has an independent on/off,
+  track and low-volume control; its five tracks are generated in-browser and
+  have no vocals, download, or third-party licence dependency. PWA public cache
+  v4 plus query-versioned audio modules prevents a stale audio shell.
 - The phrase/vocabulary library has progressive rendering, retained filters, pronunciation, favourites, practice activity, and corrected type/presentation behavior.
 - Responsive, contrast, touch-target, compact-header, lesson-radio keyboard, and pricing accessibility fixes are present locally. Final deployed Lighthouse and real-device confirmation remain pending.
 

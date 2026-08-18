@@ -13,12 +13,15 @@ import {
 } from "./store.js";
 import {
   playAnswerFeedback,
+  playCompletionSound,
+  setAmbientPlayback,
   speakText,
   speechRecognitionSupported,
   startSpeechPractice,
   stopAudio,
   stopSpeechPractice,
-} from "./audio.js";
+  syncAmbientFromSettings,
+} from "./audio.js?v=20260818-audio";
 import {
   getStudentSession,
   loadUserSettings,
@@ -48,7 +51,13 @@ const elements = {
   lessonSettingsDialog: $("#lessonSettingsDialog"),
   languageToggle: $("#languageToggle"),
   themeToggle: $("#themeToggle"),
-  soundToggle: $("#soundToggle"),
+  voiceToggle: $("#voiceToggle"),
+  voiceVolume: $("#voiceVolume"),
+  sfxToggle: $("#sfxToggle"),
+  sfxVolume: $("#sfxVolume"),
+  ambientToggle: $("#ambientToggle"),
+  ambientTrack: $("#ambientTrack"),
+  ambientVolume: $("#ambientVolume"),
   voiceSelect: $("#voiceSelect"),
   playbackRate: $("#playbackRate"),
   autoPronounceChoices: $("#autoPronounceChoices"),
@@ -361,12 +370,24 @@ const renderSettings = () => {
   applyThemePreference(state.settings.theme);
   elements.languageToggle.value = language;
   if (elements.themeToggle) elements.themeToggle.value = state.settings.theme || "light";
-  elements.soundToggle.textContent = state.settings.sound
-    ? uiText("Sound On", "音声オン", language)
-    : uiText("Sound Off", "音声オフ", language);
-  elements.soundToggle.setAttribute("aria-pressed", String(state.settings.sound));
+  elements.voiceToggle.textContent = state.settings.voiceEnabled
+    ? uiText("Voice On", "ボイス オン", language)
+    : uiText("Voice Off", "ボイス オフ", language);
+  elements.voiceToggle.setAttribute("aria-pressed", String(state.settings.voiceEnabled));
+  elements.sfxToggle.textContent = state.settings.sfxEnabled
+    ? uiText("SFX On", "効果音 オン", language)
+    : uiText("SFX Off", "効果音 オフ", language);
+  elements.sfxToggle.setAttribute("aria-pressed", String(state.settings.sfxEnabled));
+  elements.ambientToggle.textContent = state.settings.ambientEnabled
+    ? uiText("Ambient On", "環境音 オン", language)
+    : uiText("Ambient Off", "環境音 オフ", language);
+  elements.ambientToggle.setAttribute("aria-pressed", String(state.settings.ambientEnabled));
   elements.voiceSelect.value = state.settings.voice;
   elements.playbackRate.value = String(state.settings.playbackRate || 1);
+  elements.voiceVolume.value = String(Math.round((state.settings.voiceVolume ?? 1) * 100));
+  elements.sfxVolume.value = String(Math.round((state.settings.sfxVolume ?? 0.24) * 100));
+  elements.ambientTrack.value = state.settings.ambientTrack || "calm_focus";
+  elements.ambientVolume.value = String(Math.round((state.settings.ambientVolume ?? 0.12) * 100));
   if (elements.autoPronounceChoices) {
     elements.autoPronounceChoices.checked = state.settings.autoPronounceChoices !== false;
   }
@@ -1597,7 +1618,9 @@ const maybeCompleteRun = () => {
     `This practice: ${score} / ${max}. Your first official answers stay safely recorded.`,
     `今回の練習：${score} / ${max}。初回答はそのまま安全に記録されています。`,
   );
+  const firstCompletionReveal = elements.resultPanel.hidden;
   elements.resultPanel.hidden = false;
+  if (firstCompletionReveal) playCompletionSound();
   saveCompletedRun().catch(() => {});
 };
 
@@ -1605,6 +1628,7 @@ const initialiseLesson = async () => {
   elements.hubBackLink.href = returnTo;
   try {
     await loadScopedSettings();
+    syncAmbientFromSettings();
     lessonScopeReady = true;
     const lesson = await getLessonById(lessonId, { preview: isTeacherPreview });
     if (!lesson) throw new Error("This lesson could not be found.");
@@ -1735,10 +1759,26 @@ elements.languageToggle.addEventListener("change", () => {
 elements.themeToggle?.addEventListener("change", () => {
   persistSettings({ theme: elements.themeToggle.value });
 });
-elements.soundToggle.addEventListener("click", () => {
-  const sound = !state.settings.sound;
-  if (!sound) stopAudio();
-  persistSettings({ sound });
+elements.voiceToggle.addEventListener("click", () => {
+  const voiceEnabled = !state.settings.voiceEnabled;
+  if (!voiceEnabled) stopAudio();
+  persistSettings({ voiceEnabled });
+});
+elements.voiceVolume.addEventListener("change", () => persistSettings({ voiceVolume: Number(elements.voiceVolume.value) / 100 }));
+elements.sfxToggle.addEventListener("click", () => persistSettings({ sfxEnabled: !state.settings.sfxEnabled }));
+elements.sfxVolume.addEventListener("change", () => persistSettings({ sfxVolume: Number(elements.sfxVolume.value) / 100 }));
+elements.ambientToggle.addEventListener("click", async () => {
+  const ambientEnabled = !state.settings.ambientEnabled;
+  persistSettings({ ambientEnabled });
+  await setAmbientPlayback(ambientEnabled, { ...state.settings, ambientEnabled, userGesture: true });
+});
+elements.ambientTrack.addEventListener("change", async () => {
+  persistSettings({ ambientTrack: elements.ambientTrack.value });
+  if (state.settings.ambientEnabled) await setAmbientPlayback(true, { ...state.settings, userGesture: true });
+});
+elements.ambientVolume.addEventListener("change", async () => {
+  persistSettings({ ambientVolume: Number(elements.ambientVolume.value) / 100 });
+  if (state.settings.ambientEnabled) await setAmbientPlayback(true, { ...state.settings, userGesture: true });
 });
 elements.voiceSelect.addEventListener("change", () => {
   stopAudio();
