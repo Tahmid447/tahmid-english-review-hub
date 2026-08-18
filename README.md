@@ -116,12 +116,14 @@ The following forward changes are live:
    and its fresh deployment timestamp and audited response/error boundaries
    were observed in the dashboard.
 
-Local migration `202608180017_premium_task_topics.sql` is parser- and
-test-verified but not yet applied. It adds three topic choices per lesson to
-the existing 34 Premium tasks and records the topic selected for each learner
-attempt. Apply it before publishing the matching topic UI.
+Migration `202608180017_premium_task_topics.sql` was applied in one SQL Editor
+transaction after a privacy-safe pre-017 task-definition snapshot. Live checks
+found 34/34 tasks with three topics, 102 task/topic presentations, 51 unique
+lesson topics, and zero invalid topic rows. It records the topic selected for
+each learner attempt. The matching UI must still be published and tested on
+Preview.
 
-Both SQL files were applied manually. This project has no
+All three SQL files were applied manually. This project has no
 `supabase_migrations.schema_migrations` ledger, and the dashboard still reports
 no tracked migrations; do not infer ledger entries or blindly replay the files.
 Authenticated learner/teacher, access-code, RLS, submission, microphone, and

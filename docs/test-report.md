@@ -7,7 +7,8 @@ Last updated: **August 18, 2026**
 - Scope: 17 lesson-specific Premium topic sets, three choices per lesson, used
   by both the speaking and essay task; topic-specific bilingual prompts,
   recommended phrases and vocabulary; selected-topic persistence and Teacher
-  Studio visibility. Migration `017` is local and is not yet applied.
+  Studio visibility. Migration `017` is now applied; Preview UI publication is
+  pending.
 - `node scripts/test-premium-topics.mjs` — PASS: 17 lesson sets, 51 topics,
   three distinct phrase/vocabulary sets per lesson, both submission paths,
   accessible selector hooks, mobile layout, database validation and Teacher
@@ -17,8 +18,17 @@ Last updated: **August 18, 2026**
 - PostgreSQL 18 parser — PASS: migration `017` parsed as 11 statements.
 - `npm test`, `npm run build`, `npm run verify:visuals`, JavaScript syntax
   checks and `git diff --check` — PASS after integration.
-- Live browser/RLS/submission QA is intentionally pending until migration `017`
-  is safely applied before the matching auto-deployed Preview UI.
+- Preflight — PASS: 17 expected lessons, 34 stable/active Premium tasks, zero
+  pre-existing `017` columns and the prior restore schema present.
+- Restore checkpoint — PASS: `codex_backup_20260818_pre017` stores exactly 34
+  non-personal Premium task definitions with RLS/access revocation and no
+  learner submission/Auth data.
+- Migration `017` — PASS in one SQL Editor transaction: both columns present,
+  34 tasks with three topics, 102 task/topic presentations, 51 unique lesson
+  topics, zero invalid topic rows, validation trigger present, and 34 backup
+  rows retained.
+- Live UI/RLS/submission QA is pending until application checkpoint `0dda67a`
+  is published to Preview.
 
 ## August 18 final-polish checkpoint 3
 
