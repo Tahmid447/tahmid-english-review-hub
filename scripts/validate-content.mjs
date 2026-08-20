@@ -64,6 +64,15 @@ const expectedLegacyCounts = {
   "july-06": 34,
 };
 
+const expectedLegacyNotionPages = {
+  "june-28": "38cfb48a-4617-808a-9263-fee027cc6af9",
+  "june-29": "38dfb48a-4617-800f-8ce5-c0aa04de07f9",
+  "june-30": "38efb48a-4617-8037-9b2d-d432187ba326",
+  "july-04": "393fb48a-4617-8045-a96c-d91c774320bb",
+  "july-05": "394fb48a-4617-80a1-9710-e0e64f757112",
+  "july-06": "395fb48a-4617-80e2-9060-f3cdccd556ef",
+};
+
 assert(Array.isArray(legacy) && legacy.length === 6, "Six legacy lessons are present.");
 assert(
   unique(legacy.map((lesson) => lesson.id)),
@@ -82,6 +91,15 @@ for (const lesson of legacy) {
   assert(
     lesson.sourceType === "legacy_zip",
     `${lesson.id}: source remains traceable to the preserved legacy ZIP.`,
+  );
+  assert(
+    lesson.sourceNotionPageId === expectedLegacyNotionPages[lesson.id],
+    `${lesson.id}: verified supplemental Notion page ID is preserved.`,
+  );
+  assert(
+    lesson.sourceNotionUrl ===
+      `https://app.notion.com/p/${expectedLegacyNotionPages[lesson.id].replaceAll("-", "")}`,
+    `${lesson.id}: verified supplemental Notion URL is exact and HTTPS.`,
   );
   assert(
     lesson.originalQuestionCount === expected,
@@ -149,6 +167,10 @@ for (const lesson of legacy) {
 
 assert(originalTotal === 143, "Exactly 143 original top-level questions are preserved.");
 assert(unique(originalIds), "All 143 original question IDs are unique.");
+assert(
+  unique(legacy.map((lesson) => lesson.sourceNotionPageId)),
+  "All six verified legacy Notion source page IDs are unique.",
+);
 
 const expectedAdditionFormats = [
   "listenChoice",

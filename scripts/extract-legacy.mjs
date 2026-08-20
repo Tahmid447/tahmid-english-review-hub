@@ -71,6 +71,36 @@ const descriptions = {
   },
 };
 
+// These six pages were individually matched to the preserved lesson content in
+// the connected Notion workspace on 2026-08-20. The ZIP remains the canonical
+// bundled source; these are supplemental teacher-facing provenance links.
+const legacyNotionSources = {
+  "june-28": {
+    pageId: "38cfb48a-4617-808a-9263-fee027cc6af9",
+    url: "https://app.notion.com/p/38cfb48a4617808a9263fee027cc6af9",
+  },
+  "june-29": {
+    pageId: "38dfb48a-4617-800f-8ce5-c0aa04de07f9",
+    url: "https://app.notion.com/p/38dfb48a4617800f8ce5c0aa04de07f9",
+  },
+  "june-30": {
+    pageId: "38efb48a-4617-8037-9b2d-d432187ba326",
+    url: "https://app.notion.com/p/38efb48a461780379b2dd432187ba326",
+  },
+  "july-04": {
+    pageId: "393fb48a-4617-8045-a96c-d91c774320bb",
+    url: "https://app.notion.com/p/393fb48a46178045a96cd91c774320bb",
+  },
+  "july-05": {
+    pageId: "394fb48a-4617-80a1-9710-e0e64f757112",
+    url: "https://app.notion.com/p/394fb48a461780a19710e0e64f757112",
+  },
+  "july-06": {
+    pageId: "395fb48a-4617-80e2-9060-f3cdccd556ef",
+    url: "https://app.notion.com/p/395fb48a461780e29060f3cdccd556ef",
+  },
+};
+
 const questionCorrections = {
   "june-30:q5": {
     explanation: {
@@ -170,6 +200,10 @@ const lessons = directories.map((directory) => {
   const quizData = extractObject(source, "const quizData =");
   const lessonDate = quizData.lessonId;
   const info = descriptions[lessonDate] || {};
+  const notionSource = legacyNotionSources[directory];
+  if (!notionSource) {
+    throw new Error(`Missing verified Notion source for ${directory}`);
+  }
   return {
     id: directory,
     lessonDate,
@@ -181,6 +215,8 @@ const lessons = directories.map((directory) => {
     audience: "both",
     sourceType: "legacy_zip",
     sourcePath: `legacy-site/lessons/${directory}/index.html`,
+    sourceNotionPageId: notionSource.pageId,
+    sourceNotionUrl: notionSource.url,
     contentVersion: 1,
     categoryLabels: quizData.categoryLabels || {},
     originalQuestionCount: quizData.questions.length,
