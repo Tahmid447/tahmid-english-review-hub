@@ -5,7 +5,8 @@ Last updated: **August 20, 2026**
 ## August 20 premium clarity and ambient-audio checkpoint
 
 - Application commit: `3a9eea849a836b86208b4068213d1867e0f0f165`.
-  Preview publication is pending; Production is untouched.
+  It was pushed with handoff commit `1a5dfe6245ee06ed5d7e787fe84f78e69cbdf161`
+  and published as Netlify deploy `6a8644cf609c578ecd08fb4e`. Production is untouched.
 - Scope: unified readable Light/Dark learner surfaces; compact settings through
   tablet/small-desktop widths; redesigned membership locks; contained pricing
   badges; distinct Premium review and Premium+ Coaching illustrations; study
@@ -22,9 +23,9 @@ Last updated: **August 20, 2026**
   (16 nodes), Lo-Fi Study (15), Quiet Morning (16), Night Focus (12), and Rainy
   Desk (15) each played; 5%, 18%, and 35% volume values were reflected and the
   final setting was restored to Calm Focus at 18%.
-- Lighthouse accessibility — PASS: home, phrases, pricing and lesson each
-  scored 100 with zero binary audit failures after correcting inactive billing
-  contrast and visible-label/accessibility-name mismatches.
+- Lighthouse accessibility — PASS locally and on the published Preview: home,
+  phrases, pricing and lesson each scored 100 with zero binary audit failures
+  after correcting inactive billing contrast and visible-label/accessibility-name mismatches.
 - `npm test` — PASS: 17 lessons, 616 activities, 85 visual questions, 14
   formats, 1,369 integrity/security assertions, and all learner/teacher/
   Premium/plan/v15 suites.
@@ -34,13 +35,17 @@ Last updated: **August 20, 2026**
 - Notion source audit — PARTIAL: 11 verified Notion URLs are present; six
   legacy lessons honestly report missing sources. The available Notion browser
   session was not authenticated, so no unverified URL was inserted.
-- Netlify account audit — PASS/PENDING PUBLICATION: current session is
+- Netlify account audit/publication — PASS: current session is
   Tahmid447's team (`tahmidhc245@gmail.com`). It owns
   `tahmid-english-review-hub-preview` and production
   `jocular-chaja-86e78d`, but not the dedicated v9 Preview project. The Preview
-  candidate still points at the old `upgrade/review-hub-v9-playful-jp` branch;
-  it must be switched to `upgrade/review-hub-v9-final-product`. Production must
-  not be deployed.
+  candidate was switched from `upgrade/review-hub-v9-playful-jp` to
+  `upgrade/review-hub-v9-final-product`. Deploy `6a8644cf609c578ecd08fb4e`
+  completed in 14 seconds with no redirect/header/build error. Exact permalink:
+  `https://6a8644cf609c578ecd08fb4e--tahmid-english-review-hub-preview.netlify.app`.
+  Published Browser QA confirmed the new home/lock/pricing designs, Light/Dark,
+  default Ambient ON at 18%, and all five playing Web Audio graphs. Production
+  must not be deployed.
 
 ## August 18 final-polish checkpoint 4
 

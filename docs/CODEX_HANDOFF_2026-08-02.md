@@ -8,8 +8,8 @@ Updated: 2026-08-20 (Asia/Tokyo)
 - Working branch: `upgrade/review-hub-v9-final-product`
 - Exact live-validated final-polish artifact:
   `7899024a8c9baee9cdd91b0fe93346a1bcc8427d`
-- Exact August 20 local application checkpoint (tested; Preview publication
-  pending): `3a9eea849a836b86208b4068213d1867e0f0f165`
+- Exact August 20 application checkpoint:
+  `3a9eea849a836b86208b4068213d1867e0f0f165`
 - Historical rollout / logical-restore checkpoint: `fcf561d78da6de405d6ca54b78ebfc99df3d3a0a`
 - Current documentation checkpoint: branch HEAD (`git rev-parse HEAD`). This
   document cannot contain the final hash of the commit that contains itself.
@@ -18,15 +18,17 @@ Updated: 2026-08-20 (Asia/Tokyo)
 - Production: https://jocular-chaja-86e78d.netlify.app
 - Dedicated v9 preview: https://tahmid-english-review-hub-v9-preview.netlify.app
 - Exact validated Preview permalink: https://6a8420afed26890008660823--tahmid-english-review-hub-v9-preview.netlify.app
-- Current-account Preview candidate: https://tahmid-english-review-hub-preview.netlify.app
+- Current-account Preview: https://tahmid-english-review-hub-preview.netlify.app
+- Exact August 20 Preview permalink: https://6a8644cf609c578ecd08fb4e--tahmid-english-review-hub-preview.netlify.app
 - Supabase project ref: `ycmybggetemkhorkhfnf`
 
 Do not place OAuth client secrets, passwords, service-role keys, database passwords, or access tokens in this file, Git, screenshots, or chat.
 
 ## Deployment truth
 
-- The August 20 premium-clarity/audio checkpoint is complete locally at
-  `3a9eea8`. It is not yet pushed or deployed. It replaces the conflicting
+- The August 20 premium-clarity/audio checkpoint was implemented at `3a9eea8`,
+  pushed with handoff commit `1a5dfe6`, and published to the current-account
+  Preview as Netlify deploy `6a8644cf609c578ecd08fb4e`. It replaces the conflicting
   Light/Dark surface cascade, keeps lesson/dashboard/lock/pricing content
   readable, moves pricing value badges inside their cards, adds distinct
   Premium and Premium+ Coaching visuals, removes the oversized gold locked-card
@@ -34,8 +36,8 @@ Do not place OAuth client secrets, passwords, service-role keys, database passwo
 - Ambient study audio now defaults ON at an 18% background level. Browser
   autoplay policy is handled honestly: the page reports that it is waiting and
   starts on the first pointer/key/touch interaction. All five procedural tracks
-  were exercised in the local browser and reached a playing Web Audio graph;
-  no third-party audio asset was added.
+  were exercised in both the local browser and the published Preview and reached
+  a playing Web Audio graph; no third-party audio asset was added.
 - Four unused `Codex QA 2026-08-18 ...` access-code rows were permanently
   deleted after the user explicitly authorised deletion. Existing non-QA codes
   were not changed.
@@ -43,10 +45,10 @@ Do not place OAuth client secrets, passwords, service-role keys, database passwo
   (`tahmidhc245@gmail.com`). It owns the actual production site
   `jocular-chaja-86e78d` and the older GitHub-connected Preview candidate
   `tahmid-english-review-hub-preview`; it does not have access to the dedicated
-  `tahmid-english-review-hub-v9-preview` project. The candidate still targets
-  the old `upgrade/review-hub-v9-playful-jp` branch and must be deliberately
-  switched to `upgrade/review-hub-v9-final-product` before the next Preview
-  publish. Never deploy `jocular-chaja-86e78d` during this QA phase.
+  `tahmid-english-review-hub-v9-preview` project. The current-account Preview
+  now targets `upgrade/review-hub-v9-final-product`; its first new deploy
+  completed successfully in 14 seconds with 15 uploaded files, 12 redirect
+  rules and 6 header rules. Never deploy `jocular-chaja-86e78d` during this QA phase.
 - Teacher Studio Sources currently contains 11 verified Notion HTTPS links.
   Six older bundled legacy lessons truthfully show `Source link missing /
   元資料リンク未登録`. The available browser session was not signed into Notion,
@@ -302,13 +304,15 @@ Premium denial. Teacher auth remains pending; the learner is signed out.
    phrases and vocabulary, and all 34 Teacher task rows showing three topics.
 7. **Completed:** permanently delete the four unused `Codex QA 2026-08-18 ...`
    access-code rows; verify zero matching rows remain.
-8. **In progress:** publish the August 20 application checkpoint to the
-   current-account Preview candidate only, then authenticate dedicated non-teacher Free/
+8. **Completed:** publish the August 20 application checkpoint to the
+   current-account Preview only and verify the deploy, public content,
+   Light/Dark presentation, all five ambience graphs and Lighthouse accessibility.
+9. **In progress:** authenticate dedicated non-teacher Free/
    Standard/Premium/Premium+ accounts; test tier/RLS/access codes, email auth,
    speaking/essay submissions, and published feedback.
-9. **Pending:** complete desktop/tablet/390 px and real iPhone Safari/Android
+10. **Pending:** complete desktop/tablet/390 px and real iPhone Safari/Android
    Chrome touch, microphone, PWA, and offline QA.
-10. Promote to production only after every preview gate passes and the correct
+11. Promote to production only after every preview gate passes and the correct
    production Netlify account is available. Preserve a known-good rollback
    deploy and prepare forward fixes for database issues.
 
@@ -325,9 +329,9 @@ Premium denial. Teacher auth remains pending; the learner is signed out.
 - Strict plan denial is unproved because the identity appeared teacher-elevated;
   dedicated non-teacher tier accounts are required.
 - Teacher auth remains pending; the learner account is currently signed out.
-- Local August 20 Lighthouse accessibility is 100/100 on home, phrase,
-  pricing, and lesson pages with zero binary failures. Deployed Lighthouse
-  performance/accessibility checks remain pending.
+- Local and deployed August 20 Lighthouse accessibility are 100/100 on home,
+  phrase, pricing, and lesson pages with zero binary failures. Deployed
+  performance measurements remain pending.
 - Remaining authenticated Teacher/tier RLS, email-auth, access-code, and
   submission QA is pending; the scoped Google learner flow above is complete.
 - Real-device touch, PWA install/update, offline fallback, Safari/Chrome microphone, and upload QA are pending.
@@ -341,11 +345,7 @@ Premium denial. Teacher auth remains pending; the learner is signed out.
 
 ## Exact next step
 
-Push application checkpoint `3a9eea8` plus the documentation checkpoint to
-`upgrade/review-hub-v9-final-product`. In the current Tahmid447 Netlify account,
-point only `tahmid-english-review-hub-preview` at that branch, publish Preview,
-and verify the deployed commit before browser QA. Do not touch
-`jocular-chaja-86e78d`. Then use a dedicated non-teacher Premium learner for one topic-specific draft
+Use a dedicated non-teacher Premium learner for one topic-specific draft
 and submit cycle so Teacher queue topic visibility can be proven without
 changing the real teacher's active membership. Continue tier, microphone,
 Lighthouse and device gates afterward. Do not deploy Production.
