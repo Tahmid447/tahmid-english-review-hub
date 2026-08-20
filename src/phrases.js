@@ -16,7 +16,7 @@ import {
   stopAudio,
   stopSpeechPractice,
   syncAmbientFromSettings,
-} from "./audio.js?v=20260818-audio";
+} from "./audio.js?v=20260820-ambient2";
 import {
   getStudentClient,
   getStudentSession,
@@ -471,6 +471,7 @@ function applySettings(settings = getSettings()) {
   const sfxToggle = document.querySelector("#sfxToggle");
   const ambientToggle = document.querySelector("#ambientToggle");
   const ambientTrack = document.querySelector("#ambientTrack");
+  const ambientVolume = document.querySelector("#ambientVolume");
   const voiceSelect = document.querySelector("#voiceSelect");
   const playbackRate = document.querySelector("#playbackRate");
   const themeToggle = document.querySelector("#themeToggle");
@@ -494,6 +495,7 @@ function applySettings(settings = getSettings()) {
     ambientToggle.setAttribute("aria-pressed", String(settings.ambientEnabled));
   }
   if (ambientTrack) ambientTrack.value = settings.ambientTrack || "calm_focus";
+  if (ambientVolume) ambientVolume.value = String(Math.round((settings.ambientVolume ?? 0.18) * 100));
   if (voiceSelect) voiceSelect.value = settings.voice || "us";
   if (playbackRate) playbackRate.value = String(settings.playbackRate || 1);
   if (themeToggle) themeToggle.value = settings.theme || "light";
@@ -530,6 +532,10 @@ function bindSettings() {
   });
   document.querySelector("#ambientTrack")?.addEventListener("change", async (event) => {
     const settings = updateAndSyncSettings({ ambientTrack: event.currentTarget.value });
+    if (settings.ambientEnabled) await setAmbientPlayback(true, { ...settings, userGesture: true });
+  });
+  document.querySelector("#ambientVolume")?.addEventListener("input", async (event) => {
+    const settings = updateAndSyncSettings({ ambientVolume: Number(event.currentTarget.value) / 100 });
     if (settings.ambientEnabled) await setAmbientPlayback(true, { ...settings, userGesture: true });
   });
   document.querySelector("#voiceSelect")?.addEventListener("change", (event) => {
@@ -805,7 +811,7 @@ function createPhraseCard(phrase) {
     attrs: {
       type: "button",
       "aria-pressed": String(Boolean(record.favorite)),
-      "aria-label": `${record.favorite ? "Remove" : "Add"} ${phrase.en} ${record.favorite ? "from" : "to"} favorites`,
+      title: `${record.favorite ? "Remove" : "Add"} ${phrase.en} ${record.favorite ? "from" : "to"} favorites`,
     },
   });
   favorite.addEventListener("click", () => toggleFavorite(id));
@@ -821,7 +827,7 @@ function createPhraseCard(phrase) {
     attrs: {
       type: "button",
       "data-voice": "us",
-      "aria-label": `Play ${phrase.en} with a US accent`,
+      title: `Play ${phrase.en} with a US accent`,
     },
   });
   const listenGb = element("button", {
@@ -830,7 +836,7 @@ function createPhraseCard(phrase) {
     attrs: {
       type: "button",
       "data-voice": "gb",
-      "aria-label": `Play ${phrase.en} with a UK accent`,
+      title: `Play ${phrase.en} with a UK accent`,
     },
   });
   const listenJa = element("button", {
@@ -839,7 +845,7 @@ function createPhraseCard(phrase) {
     attrs: {
       type: "button",
       "data-voice": "ja",
-      "aria-label": `日本語の意味を自然な日本語音声で再生：${phrase.jp}`,
+      title: `日本語の意味を自然な日本語音声で再生：${phrase.jp}`,
     },
   });
   const speak = element("button", {
@@ -853,9 +859,6 @@ function createPhraseCard(phrase) {
       title: speechRecognitionSupported()
         ? uiText("Practise with speech recognition", "音声認識で発話練習", language)
         : uiText("Speech recognition is unavailable in this browser. You can still use the audio buttons.", "このブラウザでは音声認識を利用できません。音声再生は引き続き利用できます。", language),
-      "aria-label": speechRecognitionSupported()
-        ? `Practise saying ${phrase.en}`
-        : uiText(`Speaking practice unavailable for ${phrase.en}`, `${phrase.en}の発話練習はこのブラウザでは利用できません`, language),
     },
   });
   listenUs.addEventListener("click", () => void listenToPhrase(phrase, "us", listenUs, status));

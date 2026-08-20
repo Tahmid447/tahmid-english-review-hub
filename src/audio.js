@@ -14,6 +14,7 @@ let ambientMasterGain = null;
 let ambientNodes = [];
 let ambientTrackKey = null;
 let ambientDucked = false;
+let ambientGestureHandler = null;
 
 export const AMBIENT_TRACKS = Object.freeze({
   calm_focus: Object.freeze({ name: "Calm Focus", nameJa: "穏やかな集中", description: "Warm, slow-moving focus pad", descriptionJa: "ゆっくり広がる、温かな集中用サウンド" }),
@@ -359,7 +360,15 @@ const stopAmbientNodes = () => {
   ambientTrackKey = null;
 };
 
-const addAmbientTone = (context, destination, frequency, level, waveform = "sine", drift = 0.035) => {
+const addAmbientTone = (
+  context,
+  destination,
+  frequency,
+  level,
+  waveform = "sine",
+  drift = 0.035,
+  movement = 0.18,
+) => {
   const oscillator = context.createOscillator();
   const gain = context.createGain();
   const lfo = context.createOscillator();
@@ -369,7 +378,7 @@ const addAmbientTone = (context, destination, frequency, level, waveform = "sine
   gain.gain.value = level;
   lfo.type = "sine";
   lfo.frequency.value = drift;
-  lfoGain.gain.value = level * 0.22;
+  lfoGain.gain.value = level * movement;
   lfo.connect(lfoGain);
   lfoGain.connect(gain.gain);
   oscillator.connect(gain);
@@ -409,14 +418,14 @@ const buildAmbientGraph = (trackKey) => {
   stopAmbientNodes();
   const track = AMBIENT_TRACK_KEYS.includes(trackKey) ? trackKey : "calm_focus";
   const toneSets = {
-    calm_focus: [[110,.038,"sine"],[164.81,.023,"sine"],[220,.012,"triangle"]],
-    lofi_study: [[98,.032,"triangle"],[146.83,.019,"sine"],[196,.009,"triangle"]],
-    quiet_morning: [[130.81,.026,"sine"],[196,.018,"sine"],[261.63,.01,"triangle"]],
-    night_focus: [[73.42,.038,"sine"],[110,.021,"sine"],[146.83,.009,"triangle"]],
-    rainy_desk: [[110,.026,"sine"],[164.81,.015,"sine"]],
+    calm_focus: [[110,.058,"sine",.031,.16],[164.81,.035,"sine",.043,.18],[220,.018,"triangle",.057,.12],[329.63,.008,"sine",.071,.1]],
+    lofi_study: [[98,.052,"triangle",.48,.34],[146.83,.031,"sine",.24,.22],[196,.015,"triangle",.12,.18]],
+    quiet_morning: [[130.81,.042,"sine",.047,.15],[196,.029,"sine",.061,.14],[261.63,.017,"triangle",.079,.12],[392,.006,"sine",.097,.1]],
+    night_focus: [[73.42,.061,"sine",.023,.12],[110,.034,"sine",.033,.14],[146.83,.015,"triangle",.041,.1]],
+    rainy_desk: [[110,.041,"sine",.029,.14],[164.81,.024,"sine",.039,.13],[220,.009,"triangle",.051,.1]],
   };
-  toneSets[track].forEach(([frequency, level, waveform], index) => {
-    addAmbientTone(context, ambientMasterGain, frequency, level, waveform, 0.025 + index * 0.012);
+  toneSets[track].forEach(([frequency, level, waveform, drift, movement]) => {
+    addAmbientTone(context, ambientMasterGain, frequency, level, waveform, drift, movement);
   });
   if (track === "lofi_study") addAmbientTexture(context, ambientMasterGain);
   if (track === "rainy_desk") addAmbientTexture(context, ambientMasterGain, { rain: true });
@@ -424,8 +433,15 @@ const buildAmbientGraph = (trackKey) => {
 };
 
 const ambientTargetVolume = (settings = getSettings()) => {
-  const volume = Math.max(0, Math.min(0.35, Number(settings.ambientVolume ?? 0.12)));
+  const volume = Math.max(0, Math.min(0.4, Number(settings.ambientVolume ?? 0.18)));
   return ambientDucked ? volume * 0.24 : volume;
+};
+
+const publishAmbientState = (state, settings = getSettings()) => {
+  if (typeof document === "undefined") return;
+  document.documentElement.dataset.ambientState = state;
+  document.documentElement.dataset.ambientTrack = ambientTrackKey || settings.ambientTrack || "calm_focus";
+  document.documentElement.dataset.ambientNodeCount = String(ambientNodes.length);
 };
 
 const setAmbientGain = (settings = getSettings()) => {
@@ -444,11 +460,16 @@ export function duckAmbient(active) {
 export async function setAmbientPlayback(enabled, options = {}) {
   const settings = { ...getSettings(), ...options, ambientEnabled: Boolean(enabled) };
   if (!enabled) {
+    disarmAmbientGestureStart();
     setAmbientGain(settings);
+    publishAmbientState("off", settings);
     return { played: false, reason: "ambient-off" };
   }
   const AudioContext = audioContextConstructor();
-  if (!AudioContext) return { played: false, reason: "unsupported" };
+  if (!AudioContext) {
+    publishAmbientState("unsupported", settings);
+    return { played: false, reason: "unsupported" };
+  }
   try {
     ambientAudioContext ||= new AudioContext();
     ambientMasterGain ||= ambientAudioContext.createGain();
@@ -459,22 +480,66 @@ export async function setAmbientPlayback(enabled, options = {}) {
     if (ambientAudioContext.state === "suspended" && options.userGesture !== false) {
       await ambientAudioContext.resume();
     }
-    if (ambientAudioContext.state === "suspended") return { played: false, reason: "gesture-required" };
+    if (ambientAudioContext.state === "suspended") {
+      publishAmbientState("waiting-for-gesture", settings);
+      return { played: false, reason: "gesture-required" };
+    }
     if (ambientTrackKey !== settings.ambientTrack) buildAmbientGraph(settings.ambientTrack);
     setAmbientGain(settings);
+    disarmAmbientGestureStart();
+    publishAmbientState("playing", settings);
     return { played: true, track: ambientTrackKey, procedural: true };
   } catch (error) {
+    publishAmbientState("unavailable", settings);
     return { played: false, reason: "unavailable", error };
   }
+}
+
+function disarmAmbientGestureStart() {
+  if (!ambientGestureHandler || typeof window === "undefined") return;
+  ["pointerdown", "keydown", "touchstart"].forEach((eventName) => {
+    window.removeEventListener(eventName, ambientGestureHandler, true);
+  });
+  ambientGestureHandler = null;
+}
+
+function armAmbientGestureStart() {
+  if (ambientGestureHandler || typeof window === "undefined") return;
+  publishAmbientState("waiting-for-gesture");
+  ambientGestureHandler = async () => {
+    const latest = getSettings();
+    if (!latest.ambientEnabled) {
+      disarmAmbientGestureStart();
+      return;
+    }
+    const result = await setAmbientPlayback(true, { ...latest, userGesture: true });
+    if (result.played) disarmAmbientGestureStart();
+  };
+  ["pointerdown", "keydown", "touchstart"].forEach((eventName) => {
+    window.addEventListener(eventName, ambientGestureHandler, { capture: true, passive: true });
+  });
+}
+
+export function ambientPlaybackStatus() {
+  return Object.freeze({
+    enabled: getSettings().ambientEnabled,
+    contextState: ambientAudioContext?.state || "not-created",
+    track: ambientTrackKey,
+    nodeCount: ambientNodes.length,
+    gain: ambientMasterGain?.gain?.value ?? 0,
+    waitingForGesture: Boolean(ambientGestureHandler),
+  });
 }
 
 export function syncAmbientFromSettings({ userGesture = false } = {}) {
   const settings = getSettings();
   if (!settings.ambientEnabled) {
+    disarmAmbientGestureStart();
     setAmbientGain(settings);
     return Promise.resolve({ played: false, reason: "ambient-off" });
   }
   if (!userGesture && !ambientAudioContext) {
+    armAmbientGestureStart();
     return Promise.resolve({ played: false, reason: "gesture-required" });
   }
   return setAmbientPlayback(true, { ...settings, userGesture });

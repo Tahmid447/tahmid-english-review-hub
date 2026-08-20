@@ -22,9 +22,10 @@ export const DEFAULT_SETTINGS = Object.freeze({
   voiceVolume: 1,
   sfxEnabled: true,
   sfxVolume: 0.24,
-  ambientEnabled: false,
+  ambientPreferenceVersion: 2,
+  ambientEnabled: true,
   ambientTrack: "calm_focus",
-  ambientVolume: 0.12,
+  ambientVolume: 0.18,
   voice: "us",
   playbackRate: 1,
   autoPronounceChoices: true,
@@ -111,6 +112,7 @@ export function getSettings() {
   const legacySound = saved?.sound !== false && saved?.soundEnabled !== false;
   const voiceEnabled = typeof saved?.voiceEnabled === "boolean" ? saved.voiceEnabled : legacySound;
   const sfxEnabled = typeof saved?.sfxEnabled === "boolean" ? saved.sfxEnabled : legacySound;
+  const ambientPreferenceCurrent = Number(saved?.ambientPreferenceVersion) === 2;
   const clampVolume = (value, fallback) => Number.isFinite(Number(value))
     ? Math.max(0, Math.min(1, Number(value)))
     : fallback;
@@ -133,11 +135,16 @@ export function getSettings() {
     voiceVolume: clampVolume(saved?.voiceVolume, 1),
     sfxEnabled,
     sfxVolume: clampVolume(saved?.sfxVolume, 0.24),
-    ambientEnabled: saved?.ambientEnabled === true,
+    ambientPreferenceVersion: 2,
+    ambientEnabled: ambientPreferenceCurrent
+      ? saved?.ambientEnabled !== false
+      : true,
     ambientTrack: AMBIENT_TRACK_KEYS.includes(saved?.ambientTrack)
       ? saved.ambientTrack
       : "calm_focus",
-    ambientVolume: clampVolume(saved?.ambientVolume, 0.12),
+    ambientVolume: ambientPreferenceCurrent
+      ? clampVolume(saved?.ambientVolume, 0.18)
+      : 0.18,
     // Choices are always shuffled for a new practice run. Keep this field for
     // backward-compatible remote settings without allowing an old unchecked
     // preference to disable the learning safeguard.
@@ -172,13 +179,14 @@ export function updateSettings(patch = {}) {
   next.sfxVolume = Number.isFinite(Number(next.sfxVolume))
     ? Math.max(0, Math.min(1, Number(next.sfxVolume)))
     : 0.24;
+  next.ambientPreferenceVersion = 2;
   next.ambientEnabled = next.ambientEnabled === true;
   next.ambientTrack = AMBIENT_TRACK_KEYS.includes(next.ambientTrack)
     ? next.ambientTrack
     : "calm_focus";
   next.ambientVolume = Number.isFinite(Number(next.ambientVolume))
     ? Math.max(0, Math.min(1, Number(next.ambientVolume)))
-    : 0.12;
+    : 0.18;
   next.shuffleChoices = true;
   next.showChoiceTranslations = Boolean(next.showChoiceTranslations);
   next.hintMode = next.hintMode === "manual" ? "manual" : "auto";

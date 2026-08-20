@@ -21,7 +21,7 @@ import {
   stopAudio,
   stopSpeechPractice,
   syncAmbientFromSettings,
-} from "./audio.js?v=20260818-audio";
+} from "./audio.js?v=20260820-ambient2";
 import {
   getStudentSession,
   loadUserSettings,
@@ -387,7 +387,7 @@ const renderSettings = () => {
   elements.voiceVolume.value = String(Math.round((state.settings.voiceVolume ?? 1) * 100));
   elements.sfxVolume.value = String(Math.round((state.settings.sfxVolume ?? 0.24) * 100));
   elements.ambientTrack.value = state.settings.ambientTrack || "calm_focus";
-  elements.ambientVolume.value = String(Math.round((state.settings.ambientVolume ?? 0.12) * 100));
+  elements.ambientVolume.value = String(Math.round((state.settings.ambientVolume ?? 0.18) * 100));
   if (elements.autoPronounceChoices) {
     elements.autoPronounceChoices.checked = state.settings.autoPronounceChoices !== false;
   }
@@ -703,7 +703,6 @@ const renderTextAudioButton = (text, label = "Listen", language = "en", secondar
       data-audio-language="${escapeHTML(language)}"
       ${cleanSecondaryText ? `data-audio-secondary-text="${escapeHTML(cleanSecondaryText)}" data-audio-secondary-language="ja"` : ""}
       type="button"
-      aria-label="${escapeHTML(`${label}: ${cleanText}`)}"
       title="${escapeHTML(label)}"
     ><span class="audio-play-icon" aria-hidden="true">▶</span><span class="audio-button-copy"><b>${escapeHTML(mainLabel)}</b>${subLabel ? `<small lang="ja">${escapeHTML(subLabel)}</small>` : ""}</span></button>
   `;
@@ -1459,10 +1458,7 @@ const updateCheckAnsweredButton = () => {
     `回答済み ${count}問を採点`,
   );
   elements.checkAnswered.disabled = state.settings.checkMode === "instant" || count === 0;
-  elements.checkAnswered.setAttribute("aria-label", t(
-    `Check ${count} completed answer${count === 1 ? "" : "s"}`,
-    `回答済みの${count}問を採点`,
-  ));
+  elements.checkAnswered.removeAttribute("aria-label");
 };
 
 const renderScore = () => {
@@ -1776,7 +1772,7 @@ elements.ambientTrack.addEventListener("change", async () => {
   persistSettings({ ambientTrack: elements.ambientTrack.value });
   if (state.settings.ambientEnabled) await setAmbientPlayback(true, { ...state.settings, userGesture: true });
 });
-elements.ambientVolume.addEventListener("change", async () => {
+elements.ambientVolume.addEventListener("input", async () => {
   persistSettings({ ambientVolume: Number(elements.ambientVolume.value) / 100 });
   if (state.settings.ambientEnabled) await setAmbientPlayback(true, { ...state.settings, userGesture: true });
 });

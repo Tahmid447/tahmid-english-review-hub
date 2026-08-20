@@ -8,7 +8,7 @@
   <title>English Lesson Practice</title>
   <link rel="manifest" href="/manifest.webmanifest">
   <script>try{const p=JSON.parse(localStorage.getItem("te-review-hub:theme:v1")||"\"light\"");const c=["system","light","dark"].includes(p)?p:"light";const d=c==="dark"||(c==="system"&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.dataset.themePreference=c;document.documentElement.dataset.theme=d?"dark":"light";document.documentElement.style.colorScheme=d?"dark":"light"}catch{document.documentElement.dataset.themePreference="light";document.documentElement.dataset.theme="light";document.documentElement.style.colorScheme="light"}</script>
-  <link rel="stylesheet" href="/src/styles.css">
+  <link rel="stylesheet" href="/src/styles.css?v=20260820-premium-clarity3">
   <link rel="icon" type="image/png" sizes="192x192" href="/assets/app-icon-192.png">
 </head>
 <body data-page="lesson">
@@ -97,7 +97,7 @@
       </div>
     </section>
     <section class="settings-group" aria-labelledby="sfxSettingsHeading"><h3 id="sfxSettingsHeading" data-ui-en="Sound Effects" data-ui-ja="効果音">Sound Effects / 効果音</h3><div class="settings-grid"><button class="quiet-btn" id="sfxToggle" type="button" aria-pressed="true" data-ui-en="SFX On" data-ui-ja="効果音 オン">SFX On / 効果音 オン</button><label><span data-ui-en="SFX volume" data-ui-ja="効果音の音量">SFX volume / 効果音の音量</span><input id="sfxVolume" type="range" min="0" max="100" step="5" value="25"></label></div><p class="settings-note" data-ui-en="Soft click, correct, try-again and completion cues. Voice remains independent." data-ui-ja="クリック・正解・もう一度・完了を控えめな音で知らせます。ボイス設定とは別に管理されます。">Soft click, correct, try-again and completion cues. Voice remains independent.</p></section>
-    <section class="settings-group" aria-labelledby="ambientSettingsHeading"><h3 id="ambientSettingsHeading" data-ui-en="Ambient Music" data-ui-ja="環境音">Ambient Music / 環境音</h3><div class="settings-grid"><button class="quiet-btn" id="ambientToggle" type="button" aria-pressed="false" data-ui-en="Ambient Off" data-ui-ja="環境音 オフ">Ambient Off / 環境音 オフ</button><label><span data-ui-en="Study ambience" data-ui-ja="環境音を選ぶ">Study ambience / 環境音を選ぶ</span><select id="ambientTrack"><option value="calm_focus">Calm Focus / 穏やかな集中</option><option value="lofi_study">Lo-fi Study / ローファイ学習</option><option value="quiet_morning">Quiet Morning / 静かな朝</option><option value="night_focus">Night Focus / 夜の集中</option><option value="rainy_desk">Rainy Desk / 雨の日のデスク</option></select></label><label><span data-ui-en="Ambient volume" data-ui-ja="環境音の音量">Ambient volume / 環境音の音量</span><input id="ambientVolume" type="range" min="0" max="35" step="1" value="12"></label></div><p class="settings-note" data-ui-en="Procedural, vocal-free study ambience. It never starts on page load and automatically softens while speech plays." data-ui-ja="外部音源を使わない、歌声なしの学習用環境音です。ページを開いただけでは再生せず、ボイス再生中は自動で音量を下げます。">Procedural, vocal-free study ambience. It never starts on page load and automatically softens while speech plays.</p></section>
+    <section class="settings-group" aria-labelledby="ambientSettingsHeading"><h3 id="ambientSettingsHeading" data-ui-en="Ambient Music" data-ui-ja="環境音">Ambient Music / 環境音</h3><div class="settings-grid"><button class="quiet-btn" id="ambientToggle" type="button" aria-pressed="true" data-ui-en="Ambient On" data-ui-ja="環境音 オン">Ambient On / 環境音 オン</button><label><span data-ui-en="Study ambience" data-ui-ja="環境音を選ぶ">Study ambience / 環境音を選ぶ</span><select id="ambientTrack"><option value="calm_focus">Calm Focus / 穏やかな集中</option><option value="lofi_study">Lo-fi Study / ローファイ学習</option><option value="quiet_morning">Quiet Morning / 静かな朝</option><option value="night_focus">Night Focus / 夜の集中</option><option value="rainy_desk">Rainy Desk / 雨の日のデスク</option></select></label><label><span data-ui-en="Ambient volume" data-ui-ja="環境音の音量">Ambient volume / 環境音の音量</span><input id="ambientVolume" type="range" min="0" max="40" step="1" value="18"></label></div><p class="settings-note" data-ui-en="Vocal-free study ambience is on by default. Browsers allow it to become audible after your first tap or key press; it automatically softens while speech plays." data-ui-ja="歌声なしの学習用環境音は初期設定でオンです。ブラウザの仕様により、最初のタップまたはキー操作後に再生が始まり、ボイス再生中は自動で音量を下げます。">Vocal-free study ambience is on by default. Browsers allow it to become audible after your first tap or key press; it automatically softens while speech plays.</p></section>
     <section class="settings-group" aria-labelledby="quizSettingsHeading">
       <h3 id="quizSettingsHeading" data-ui-en="Quiz & Practice" data-ui-ja="クイズ・練習">Quiz &amp; Practice / クイズ・練習</h3>
       <div class="segmented" role="group" aria-label="Checking mode">
@@ -121,6 +121,6 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js"></script>
   <script type="module" src="/src/pwa.js"></script>
-  <script type="module" src="/src/lesson.js?v=20260818-audio"></script>
+  <script type="module" src="/src/lesson.js?v=20260820-premium-clarity3"></script>
 </body>
 </html>

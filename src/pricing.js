@@ -81,6 +81,15 @@ function renderPlans() {
   elements.grid.innerHTML = PLAN_ORDER.map((key) => {
     const plan = PLAN_CATALOG[key];
     const featured = key === "premium" ? " featured" : key === "premium_plus" ? " premium-plus" : "";
+    const visual = ({
+      free: { mark: "02", label: t("complete previews", "完成版サンプル") },
+      standard: { mark: "14", label: t("practice formats", "練習形式") },
+      premium: { mark: "2×", label: t("human-reviewed tasks per lesson", "各レッスンの個別添削") },
+      premium_plus: { mark: "3×", label: t("live coaching sessions each month", "毎月のライブ個人指導") },
+    })[key];
+    const displayName = key === "premium_plus"
+      ? t("Premium+ Coaching", "Premium+ コーチング")
+      : plan.name;
     const savings = planSavings(plan);
     const sixMonthDetails = billing === BILLING_OPTIONS.sixMonths && plan.monthlyYen
       ? `<div class="plan-saving"><strong>${t(`Save exactly ${formatYen(savings.savedYen)} (${savings.percent}%)`, `${formatYen(savings.savedYen)}お得（${savings.percent}%割引）`)}</strong><span>${t(`${formatYen(plan.sixMonthsYen)} total · normally ${formatYen(savings.monthlyTotal)} · ${formatYen(savings.monthlyEquivalentYen)}/month equivalent`, `6か月合計${formatYen(plan.sixMonthsYen)}・通常${formatYen(savings.monthlyTotal)}・月額換算${formatYen(savings.monthlyEquivalentYen)}`)}</span></div>`
@@ -90,8 +99,14 @@ function renderPlans() {
     return `
       <article class="plan-card${featured}" data-plan="${plan.key}">
         ${plan.badge ? `<span class="plan-badge">${t(plan.badge, plan.badgeJa)}</span>` : ""}
+        <div class="plan-visual" aria-hidden="true">
+          <span class="plan-visual-mark">${visual.mark}</span>
+          <span class="plan-visual-caption">${visual.label}</span>
+          ${key === "premium_plus" ? `<span class="coaching-orbit"><i></i><i></i><i></i></span>` : ""}
+          ${key === "premium" ? `<span class="review-pulse"><i>SPEAK</i><i>WRITE</i></span>` : ""}
+        </div>
         <div class="plan-card-heading">
-          <span class="plan-name">${plan.name}</span>
+          <span class="plan-name">${displayName}</span>
           <p>${t(plan.summary, plan.summaryJa)}</p>
         </div>
         <div class="plan-best-for"><small>${t("BEST FOR", "こんな方に")}</small><strong>${t(plan.bestFor, plan.bestForJa)}</strong></div>

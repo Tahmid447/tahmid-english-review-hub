@@ -44,7 +44,8 @@ assert.equal(
 );
 assert.equal(store.getSettings().playbackRate, 1, "Fresh settings use natural 1.0× playback.");
 assert.equal(store.getSettings().autoPronounceChoices, true, "Choice pronunciation defaults on.");
-assert.equal(store.getSettings().ambientEnabled, false, "Ambient audio never starts by default.");
+assert.equal(store.getSettings().ambientEnabled, true, "Study ambience defaults on for new and migrated learners.");
+assert.equal(store.getSettings().ambientVolume, 0.18, "Default ambience is audible but remains background-level.");
 assert.equal(store.getSettings().ambientTrack, "calm_focus", "Calm Focus is selected by default.");
 store.saveLessonProgress("june-28", { answeredCount: 4 });
 
@@ -224,6 +225,7 @@ else globalThis.CustomEvent = originalCustomEvent;
 
 const lessonScript = fs.readFileSync(path.join(root, "src", "lesson.js"), "utf8");
 const lessonPage = fs.readFileSync(path.join(root, "lesson.html"), "utf8");
+const audioScript = fs.readFileSync(path.join(root, "src", "audio.js"), "utf8");
 const localServer = fs.readFileSync(path.join(root, "scripts", "serve.mjs"), "utf8");
 assert.match(lessonScript, /orderFor\(`\$\{question\.id\}:choices`, ids, true\)/);
 assert.match(lessonScript, /state\.questionOrder = shuffleArray\(state\.questionOrder\)/);
@@ -234,8 +236,15 @@ assert.match(lessonPage, /id="sfxToggle"/);
 assert.match(lessonPage, /id="ambientToggle"/);
 assert.match(lessonPage, /id="ambientTrack"/);
 assert.match(lessonPage, /id="ambientVolume"/);
+assert.match(lessonPage, /first tap or key press/);
 assert.match(lessonScript, /setAmbientPlayback/);
 assert.match(lessonScript, /syncAmbientFromSettings/);
+assert.match(fs.readFileSync(path.join(root, "index.html"), "utf8"), /id="ambientVolume"/);
+assert.match(fs.readFileSync(path.join(root, "phrases.html"), "utf8"), /id="ambientVolume"/);
+assert.match(audioScript, /dataset\.ambientState = state/);
+assert.match(audioScript, /waiting-for-gesture/);
+assert.match(audioScript, /\["pointerdown", "keydown", "touchstart"\]/);
+assert.match(audioScript, /export function ambientPlaybackStatus/);
 assert.match(lessonScript, /playCompletionSound/);
 assert.match(localServer, /"\.webp": "image\/webp"/);
 
@@ -388,6 +397,8 @@ assert.match(lessonScript, /playAnswerFeedback\(Boolean\(correct\)\)/);
 assert.doesNotMatch(lessonScript, /navigator\.vibrate|vibrationToggle/);
 assert.match(lessonScript, /Date\.now\(\) \+ 5000/);
 assert.match(lessonScript, /data-audio-secondary-text/);
+assert.doesNotMatch(lessonScript, /aria-label="\$\{escapeHTML\(`\$\{label\}: \$\{cleanText\}`\)\}"/);
+assert.match(lessonScript, /elements\.checkAnswered\.removeAttribute\("aria-label"\)/);
 assert.match(lessonScript, /result = await play\([\s\S]{0,160}audioSecondaryText/);
 assert.match(lessonScript, /rate: state\.settings\.playbackRate/);
 assert.match(lessonScript, /<details class="guide-card/);

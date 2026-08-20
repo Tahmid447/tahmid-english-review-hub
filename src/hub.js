@@ -28,7 +28,7 @@ import {
 import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js";
 import { installPlayfulInteractions } from "./effects.js";
 import { planFor } from "./plans.js";
-import { setAmbientPlayback, stopAudio, syncAmbientFromSettings } from "./audio.js?v=20260818-audio";
+import { setAmbientPlayback, stopAudio, syncAmbientFromSettings } from "./audio.js?v=20260820-ambient2";
 
 let publishedLessons = [];
 let visibleLessons = [];
@@ -211,6 +211,7 @@ function applySettings(settings = getSettings()) {
   const sfxToggle = document.querySelector("#sfxToggle");
   const ambientToggle = document.querySelector("#ambientToggle");
   const ambientTrack = document.querySelector("#ambientTrack");
+  const ambientVolume = document.querySelector("#ambientVolume");
   const voiceSelect = document.querySelector("#voiceSelect");
   const playbackRate = document.querySelector("#playbackRate");
   const themeToggle = document.querySelector("#themeToggle");
@@ -235,6 +236,7 @@ function applySettings(settings = getSettings()) {
     ambientToggle.setAttribute("aria-pressed", String(settings.ambientEnabled));
   }
   if (ambientTrack) ambientTrack.value = settings.ambientTrack || "calm_focus";
+  if (ambientVolume) ambientVolume.value = String(Math.round((settings.ambientVolume ?? 0.18) * 100));
   if (voiceSelect) voiceSelect.value = settings.voice || "us";
   if (playbackRate) playbackRate.value = String(settings.playbackRate || 1);
   if (themeToggle) themeToggle.value = settings.theme || "light";
@@ -248,6 +250,7 @@ function bindSettings() {
   const sfxToggle = document.querySelector("#sfxToggle");
   const ambientToggle = document.querySelector("#ambientToggle");
   const ambientTrack = document.querySelector("#ambientTrack");
+  const ambientVolume = document.querySelector("#ambientVolume");
   const voiceSelect = document.querySelector("#voiceSelect");
   const playbackRate = document.querySelector("#playbackRate");
   const themeToggle = document.querySelector("#themeToggle");
@@ -285,6 +288,10 @@ function bindSettings() {
   });
   ambientTrack?.addEventListener("change", async () => {
     const settings = updateAndSyncSettings({ ambientTrack: ambientTrack.value });
+    if (settings.ambientEnabled) await setAmbientPlayback(true, { ...settings, userGesture: true });
+  });
+  ambientVolume?.addEventListener("input", async () => {
+    const settings = updateAndSyncSettings({ ambientVolume: Number(ambientVolume.value) / 100 });
     if (settings.ambientEnabled) await setAmbientPlayback(true, { ...settings, userGesture: true });
   });
   voiceSelect?.addEventListener("change", () => {
