@@ -1,6 +1,46 @@
 # Test Report / 動作確認レポート
 
-Last updated: **August 18, 2026**
+Last updated: **August 20, 2026**
+
+## August 20 premium clarity and ambient-audio checkpoint
+
+- Application commit: `3a9eea849a836b86208b4068213d1867e0f0f165`.
+  Preview publication is pending; Production is untouched.
+- Scope: unified readable Light/Dark learner surfaces; compact settings through
+  tablet/small-desktop widths; redesigned membership locks; contained pricing
+  badges; distinct Premium review and Premium+ Coaching illustrations; study
+  ambience default ON, 0–40% volume control, first-interaction autoplay-policy
+  handling, and richer procedural profiles for all five tracks.
+- Access-code cleanup — PASS: four explicitly named `Codex QA 2026-08-18 ...`
+  rows were permanently deleted after user confirmation; zero matching rows
+  remained and non-QA rows were untouched.
+- Local browser visual QA — PASS: home, learner progress, lesson, phrases,
+  locked lessons and pricing were checked in Light and Dark. Compact 793 px
+  home/pricing checks showed readable content and no observed page overflow.
+- Ambient browser QA — PASS: fresh load reported `waiting-for-gesture` with no
+  audio graph; a real pointer interaction changed it to `playing`. Calm Focus
+  (16 nodes), Lo-Fi Study (15), Quiet Morning (16), Night Focus (12), and Rainy
+  Desk (15) each played; 5%, 18%, and 35% volume values were reflected and the
+  final setting was restored to Calm Focus at 18%.
+- Lighthouse accessibility — PASS: home, phrases, pricing and lesson each
+  scored 100 with zero binary audit failures after correcting inactive billing
+  contrast and visible-label/accessibility-name mismatches.
+- `npm test` — PASS: 17 lessons, 616 activities, 85 visual questions, 14
+  formats, 1,369 integrity/security assertions, and all learner/teacher/
+  Premium/plan/v15 suites.
+- `npm run build` — PASS; the static `dist/` build excludes private drafts.
+- `npm run verify:visuals` — PASS for all 85 WebP assets.
+- JavaScript syntax checks and `git diff --check` — PASS.
+- Notion source audit — PARTIAL: 11 verified Notion URLs are present; six
+  legacy lessons honestly report missing sources. The available Notion browser
+  session was not authenticated, so no unverified URL was inserted.
+- Netlify account audit — PASS/PENDING PUBLICATION: current session is
+  Tahmid447's team (`tahmidhc245@gmail.com`). It owns
+  `tahmid-english-review-hub-preview` and production
+  `jocular-chaja-86e78d`, but not the dedicated v9 Preview project. The Preview
+  candidate still points at the old `upgrade/review-hub-v9-playful-jp` branch;
+  it must be switched to `upgrade/review-hub-v9-final-product`. Production must
+  not be deployed.
 
 ## August 18 final-polish checkpoint 4
 
