@@ -10,6 +10,8 @@ Updated: 2026-08-20 (Asia/Tokyo)
   `7899024a8c9baee9cdd91b0fe93346a1bcc8427d`
 - Exact August 20 application checkpoint:
   `3a9eea849a836b86208b4068213d1867e0f0f165`
+- Exact verified-source checkpoint:
+  `3e371a1b80c80ab964f2fe52f20c1618352e82ad`
 - Historical rollout / logical-restore checkpoint: `fcf561d78da6de405d6ca54b78ebfc99df3d3a0a`
 - Current documentation checkpoint: branch HEAD (`git rev-parse HEAD`). This
   document cannot contain the final hash of the commit that contains itself.
@@ -19,7 +21,7 @@ Updated: 2026-08-20 (Asia/Tokyo)
 - Dedicated v9 preview: https://tahmid-english-review-hub-v9-preview.netlify.app
 - Exact validated Preview permalink: https://6a8420afed26890008660823--tahmid-english-review-hub-v9-preview.netlify.app
 - Current-account Preview: https://tahmid-english-review-hub-preview.netlify.app
-- Exact August 20 Preview permalink: https://6a8644cf609c578ecd08fb4e--tahmid-english-review-hub-preview.netlify.app
+- Exact current-account Preview permalink: https://6a86db95cd49160008ff49c7--tahmid-english-review-hub-preview.netlify.app
 - Supabase project ref: `ycmybggetemkhorkhfnf`
 
 Do not place OAuth client secrets, passwords, service-role keys, database passwords, or access tokens in this file, Git, screenshots, or chat.
@@ -49,11 +51,12 @@ Do not place OAuth client secrets, passwords, service-role keys, database passwo
   now targets `upgrade/review-hub-v9-final-product`; its first new deploy
   completed successfully in 14 seconds with 15 uploaded files, 12 redirect
   rules and 6 header rules. Never deploy `jocular-chaja-86e78d` during this QA phase.
-- Teacher Studio Sources currently contains 11 verified Notion HTTPS links.
-  Six older bundled legacy lessons truthfully show `Source link missing /
-  元資料リンク未登録`. The available browser session was not signed into Notion,
-  so no link was guessed or fabricated; those six links remain pending a
-  verifiable Notion source.
+- Teacher Studio Sources now contains 17/17 verified Notion HTTPS links and
+  zero missing-source rows. The six older bundled lessons were individually
+  matched by date and lesson content in the connected Notion workspace; their
+  canonical `legacy_zip` provenance remains unchanged and the Notion pages are
+  recorded as supplemental teacher-facing source links. Migration `018`
+  applied the six exact page IDs/URLs and its six-row postcondition passed.
 
 - The August 18 final-polish work is proceeding in recoverable phases. The first
   local checkpoint completes Teacher Studio one-language English/Japanese UI
@@ -85,10 +88,12 @@ Do not place OAuth client secrets, passwords, service-role keys, database passwo
 - Supabase migrations `015` and `016` were manually applied in order, each in a
   separate SQL Editor transaction, and the matching `membership-access` Edge
   Function is deployed.
-- The Supabase migration ledger is absent: the project has no
-  `supabase_migrations.schema_migrations` table and the dashboard reports no
-  tracked migrations. The manual applications are verified by live
-  postconditions, not by ledger entries.
+- Supabase migrations `001`–`017` were applied outside the migration connector
+  and remain absent from its ledger; their live state is verified by
+  postconditions. Migration `018` was applied through the connected Supabase
+  migration tool and is the sole tracked entry (`20260820104726`,
+  `legacy_notion_source_links`). Do not infer that the earlier schema is absent
+  merely because its historical ledger rows are missing.
 - The preview and production frontends share Supabase project
   `ycmybggetemkhorkhfnf`; therefore the backend and Edge changes can affect the
   older production frontend even though its static deployment is untouched.

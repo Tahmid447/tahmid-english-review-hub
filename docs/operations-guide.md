@@ -263,9 +263,10 @@ For code/design/backend changes:
 2. Commit intentionally and push `upgrade/review-hub-v9-final-product`.
 3. Confirm the recorded Supabase/Edge postconditions and do not blindly replay
    the manually applied migrations.
-4. Confirm Netlify Preview deploy `6a7e9a1002ab210008522e82` serves exact
-   application commit `049b5ff` at its immutable permalink:
-   `https://6a7e9a1002ab210008522e82--tahmid-english-review-hub-v9-preview.netlify.app`.
+4. Confirm the current-account Netlify Preview serves source checkpoint
+   `3e371a1` at its immutable permalink:
+   `https://6a86db95cd49160008ff49c7--tahmid-english-review-hub-preview.netlify.app`.
+   This checkpoint includes 17/17 verified Teacher Studio source links.
 5. Preserve the recorded public QA evidence: home inventory; pricing and Dark
    persistence; phrases 24→30; shuffle/radio behavior; visual guidance; fixed
    Retry score; 0.5x and mixed-language controls; locked payload; Teacher gate

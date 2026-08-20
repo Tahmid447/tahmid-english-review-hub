@@ -150,6 +150,11 @@ answers, teacher feedback, authenticated API responses, or recordings.
   deploy `6a8420afed26890008660823`
 - Exact validated immutable Preview permalink:
   `https://6a8420afed26890008660823--tahmid-english-review-hub-v9-preview.netlify.app`
+- Current-account Preview (premium clarity, ambient audio and 17/17 verified
+  Teacher Studio source links):
+  `https://tahmid-english-review-hub-preview.netlify.app/`
+- Exact current-account Preview deploy:
+  `https://6a86db95cd49160008ff49c7--tahmid-english-review-hub-preview.netlify.app/`
 - Production: `https://jocular-chaja-86e78d.netlify.app/`
   — static site remains untouched and pre-v9
 

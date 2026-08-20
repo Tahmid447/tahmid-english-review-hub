@@ -32,9 +32,12 @@ Last updated: **August 20, 2026**
 - `npm run build` — PASS; the static `dist/` build excludes private drafts.
 - `npm run verify:visuals` — PASS for all 85 WebP assets.
 - JavaScript syntax checks and `git diff --check` — PASS.
-- Notion source audit — PARTIAL: 11 verified Notion URLs are present; six
-  legacy lessons honestly report missing sources. The available Notion browser
-  session was not authenticated, so no unverified URL was inserted.
+- Notion source audit — PASS: the connected workspace was searched and each of
+  the six legacy pages was matched by date and lesson content. Source checkpoint
+  `3e371a1b80c80ab964f2fe52f20c1618352e82ad` preserves `legacy_zip` provenance
+  and adds exact page IDs/URLs. Migration `018` passed PostgreSQL parsing,
+  applied successfully to `ycmybggetemkhorkhfnf`, and its six-row postcondition
+  passed. Live Teacher Studio shows 17 source links and zero missing links.
 - Netlify account audit/publication — PASS: current session is
   Tahmid447's team (`tahmidhc245@gmail.com`). It owns
   `tahmid-english-review-hub-preview` and production
@@ -46,6 +49,13 @@ Last updated: **August 20, 2026**
   Published Browser QA confirmed the new home/lock/pricing designs, Light/Dark,
   default Ambient ON at 18%, and all five playing Web Audio graphs. Production
   must not be deployed.
+- Verified-source Preview publication — PASS: commit `3e371a1` published as
+  Netlify deploy `6a86db95cd49160008ff49c7` in 12 seconds. Immutable URL:
+  `https://6a86db95cd49160008ff49c7--tahmid-english-review-hub-preview.netlify.app`.
+  The production site `jocular-chaja-86e78d` was not deployed.
+- Post-source verification — PASS: `npm test` (1,382 assertions),
+  `npm run build`, `npm run verify:visuals` (85), migration `018` PostgreSQL
+  parser (2 statements), and `git diff --check`.
 
 ## August 18 final-polish checkpoint 4
 
