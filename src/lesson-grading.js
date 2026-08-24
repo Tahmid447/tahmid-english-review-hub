@@ -17,6 +17,46 @@ export const QUESTION_FORMATS = Object.freeze([
   "grid",
 ]);
 
+const quickPracticeFamily = (question) => {
+  const format = String(question?.format || question?.type || "unknown");
+  const section = String(question?.section || "").toLowerCase();
+  if (section.includes("visual")) return "visual";
+  if (["listenChoice", "listenType"].includes(format)) return "listening";
+  if (format === "speaking") return "speaking";
+  if (["typing", "translation", "order"].includes(format)) return "production";
+  if (["matching", "sorting", "grid"].includes(format)) return "interactive";
+  return "understanding";
+};
+
+export function selectQuickPracticeIds(questions, orderedIds = [], limit = 8) {
+  const byId = new Map((Array.isArray(questions) ? questions : []).map((question) => [String(question.id), question]));
+  const preferredOrder = [...new Set([
+    ...(Array.isArray(orderedIds) ? orderedIds : []).map(String),
+    ...byId.keys(),
+  ])];
+  const candidates = preferredOrder.map((id) => byId.get(id)).filter(Boolean);
+  const target = Math.max(1, Math.min(Number(limit) || 8, candidates.length));
+  const selected = [];
+  const selectedIds = new Set();
+  ["understanding", "listening", "speaking", "production", "visual", "interactive"].forEach((family) => {
+    const question = candidates.find((candidate) => (
+      !selectedIds.has(String(candidate.id)) && quickPracticeFamily(candidate) === family
+    ));
+    if (question && selected.length < target) {
+      selected.push(String(question.id));
+      selectedIds.add(String(question.id));
+    }
+  });
+  candidates.forEach((question) => {
+    const id = String(question.id);
+    if (selected.length < target && !selectedIds.has(id)) {
+      selected.push(id);
+      selectedIds.add(id);
+    }
+  });
+  return selected;
+}
+
 const hasText = (value) => String(value ?? "").trim().length > 0;
 
 export function answerExists(question, answer) {

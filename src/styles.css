@@ -2595,14 +2595,6 @@ html[data-theme="dark"] .plan-card.premium-plus {
 .plan-card.premium-plus .plan-visual { border-color: rgba(255,255,255,.15); background: rgba(255,255,255,.075); }
 .plan-card.premium-plus .plan-visual-mark { color: #0a2839; background: linear-gradient(135deg,#f8e6b4,#d5ae5d); }
 .plan-card.premium-plus .plan-visual-caption { color: #d6e5e8; }
-.review-pulse { position: absolute; right: 13px; bottom: 13px; display: flex; gap: 5px; }
-.review-pulse i { padding: 5px 7px; border-radius: 999px; color: #76520e; background: #f5e8c9; font-size: .5rem; font-style: normal; font-weight: 950; letter-spacing: .06em; }
-.coaching-orbit { position: absolute; right: 20px; width: 56px; height: 56px; border: 1px solid rgba(237,204,124,.36); border-radius: 50%; animation: coaching-orbit 9s linear infinite; }
-.coaching-orbit i { position: absolute; width: 9px; height: 9px; border-radius: 50%; background: #efd28d; box-shadow: 0 0 15px rgba(237,204,124,.6); }
-.coaching-orbit i:nth-child(1) { left: 23px; top: -5px; }
-.coaching-orbit i:nth-child(2) { right: -3px; bottom: 7px; }
-.coaching-orbit i:nth-child(3) { left: -3px; bottom: 7px; }
-@keyframes coaching-orbit { to { transform: rotate(360deg); } }
 .plan-card-heading { min-height: 126px; }
 .plan-name { color: var(--learner-navy); font-size: 1.62rem; }
 .plan-card-heading p { color: var(--learner-muted); }
@@ -2687,10 +2679,6 @@ html[data-theme="dark"] .guide-card li { color: var(--learner-muted); }
   .plan-card.featured { padding-top: 68px; }
   .plan-visual { min-height: 88px; }
 }
-@media (prefers-reduced-motion: reduce) {
-  .coaching-orbit { animation: none; }
-}
-
 /* Pricing polish: keep the value badge separate from the illustration and
    bring the plans into view sooner without flattening the editorial hero. */
 .pricing-hero {
@@ -2736,3 +2724,233 @@ html[data-theme="dark"] .plan-card:not(.premium-plus) li > span {
 /* Inactive billing savings must remain legible in both themes. */
 .billing-switch button:not(.active) small { color: #76520e; }
 html[data-theme="dark"] .billing-switch button:not(.active) small { color: #f0cc76; }
+
+/* 2026-08-24 · Premium coaching signature and lesson-length choice ---------- */
+@property --premium-coaching-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+.plan-card.premium-plus,
+html[data-theme="dark"] .plan-card.premium-plus {
+  --premium-coaching-angle: 0deg;
+  border: 2px solid transparent;
+  background:
+    radial-gradient(circle at 88% 6%,rgba(237,204,124,.18),transparent 13rem) padding-box,
+    linear-gradient(145deg,#071e2d 0%,#103a50 62%,#195861 100%) padding-box,
+    conic-gradient(from var(--premium-coaching-angle),#d5ae5d 0 13%,#5db8ad 23%,#d5ae5d 38%,#f5dfaa 55%,#5db8ad 74%,#d5ae5d 100%) border-box;
+  animation: premium-coaching-border 12s linear infinite;
+}
+.plan-card.premium-plus::before { content: none; }
+@keyframes premium-coaching-border { to { --premium-coaching-angle: 360deg; } }
+
+.premium-review-gift,
+.coaching-calendar {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.premium-review-gift b {
+  margin-right: 2px;
+  font-size: 1.42rem;
+  line-height: 1;
+  filter: drop-shadow(0 6px 9px rgba(100,69,11,.2));
+}
+.premium-review-gift i {
+  padding: 5px 7px;
+  border: 1px solid rgba(128,91,19,.2);
+  border-radius: 999px;
+  color: #68480e;
+  background: #fff8e5;
+  font-size: .49rem;
+  font-style: normal;
+  font-weight: 950;
+  letter-spacing: .07em;
+}
+.premium-review-gift > span { color: #8a641e; font-size: .66rem; font-weight: 950; }
+.premium-promotion > span { display: flex; align-items: center; gap: 6px; }
+.premium-promotion-gift { font-size: 1.05rem; line-height: 1; }
+
+.coaching-calendar {
+  min-width: 114px;
+  padding: 8px 9px;
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 5px;
+  border: 1px solid rgba(237,204,124,.28);
+  border-radius: 13px;
+  background: rgba(4,25,38,.42);
+  box-shadow: inset 0 1px rgba(255,255,255,.06);
+}
+.coaching-calendar b {
+  grid-column: 1 / -1;
+  color: #f4da97;
+  font-size: .48rem;
+  letter-spacing: .18em;
+  text-align: center;
+}
+.coaching-calendar i {
+  width: 25px;
+  height: 25px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(237,204,124,.42);
+  border-radius: 50%;
+  color: #ffe7ab;
+  background: rgba(237,204,124,.1);
+  font-size: .49rem;
+  font-style: normal;
+  font-weight: 950;
+  animation: coaching-session-glow 3.6s ease-in-out infinite;
+}
+.coaching-calendar i:nth-of-type(2) { animation-delay: 1.2s; }
+.coaching-calendar i:nth-of-type(3) { animation-delay: 2.4s; }
+@keyframes coaching-session-glow {
+  0%,34%,100% { color: #ffe7ab; background: rgba(237,204,124,.1); box-shadow: none; }
+  12% { color: #082434; background: #f2d489; box-shadow: 0 0 18px rgba(237,204,124,.42); }
+}
+
+.lesson-mode-actions {
+  position: relative;
+  z-index: 2;
+  margin-top: 8px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+}
+.lesson-card:not(.lesson-card-locked) { cursor: default; }
+.lesson-mode-action {
+  min-height: 74px;
+  padding: 11px 12px;
+  display: grid;
+  grid-template-columns: 34px minmax(0,1fr) auto;
+  gap: 9px;
+  align-items: center;
+  border: 1px solid var(--learner-border);
+  border-radius: 14px;
+  color: var(--learner-ink);
+  background: var(--learner-surface-2);
+  text-decoration: none;
+  transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+}
+.lesson-mode-action:hover,
+.lesson-mode-action:focus-visible {
+  transform: translateY(-2px);
+  border-color: #2c8b83;
+  box-shadow: 0 13px 28px -22px rgba(8,48,66,.65);
+}
+.lesson-mode-action.quick { border-color: rgba(29,116,109,.42); background: linear-gradient(145deg,#e3f2ed,#f9f5e9); }
+.lesson-mode-action.full { border-color: rgba(21,59,85,.26); background: #f4f7f6; }
+.lesson-mode-icon {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  color: #fff;
+  background: #1d746d;
+  font-size: 1rem;
+  font-weight: 950;
+}
+.lesson-mode-action.full .lesson-mode-icon { color: #f7df9e; background: #123b55; }
+.lesson-mode-copy { min-width: 0; display: grid; gap: 2px; }
+.lesson-mode-copy strong { color: #123b55; font-size: .72rem; line-height: 1.2; }
+.lesson-mode-copy small { color: #50646e; font-size: .55rem; font-weight: 750; line-height: 1.35; }
+.lesson-mode-arrow { color: #1d746d; font-weight: 950; }
+
+html[data-theme="dark"] .lesson-mode-action.quick {
+  color: #edf8f7;
+  border-color: rgba(103,205,194,.34);
+  background: #153c43;
+}
+html[data-theme="dark"] .lesson-mode-action.full {
+  color: #edf5f7;
+  border-color: rgba(178,209,218,.25);
+  background: #102c3e;
+}
+html[data-theme="dark"] .lesson-mode-copy strong { color: #f4fafb; }
+html[data-theme="dark"] .lesson-mode-copy small { color: #c5d9df; }
+html[data-theme="dark"] .lesson-mode-arrow { color: #a7e1da; }
+
+.practice-entry-note {
+  width: fit-content;
+  margin: 17px 0 0 !important;
+  padding: 7px 11px;
+  border: 1px solid var(--learner-border);
+  border-radius: 999px;
+  color: var(--learner-navy) !important;
+  background: var(--learner-surface-2);
+  font-size: .62rem;
+  font-weight: 950;
+  letter-spacing: .08em;
+}
+.practice-entry-note.quick {
+  color: #174f4a !important;
+  border-color: rgba(29,116,109,.38);
+  background: #def0eb;
+}
+html[data-theme="dark"] .practice-entry-note { color: #eaf4f6 !important; background: #16364a; }
+html[data-theme="dark"] .practice-entry-note.quick { color: #c6f0eb !important; background: #17433f; }
+
+@media (max-width: 520px) {
+  .lesson-mode-actions { grid-template-columns: 1fr; }
+  .lesson-mode-action { min-height: 68px; }
+  .premium-review-gift { right: 9px; }
+  .premium-review-gift b { font-size: 1.15rem; }
+  .coaching-calendar { right: 8px; min-width: 104px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .plan-card.premium-plus,
+  html[data-theme="dark"] .plan-card.premium-plus,
+  .coaching-calendar i { animation: none; }
+}
+
+/* Study-music credits keep the licensing visible without cluttering practice. */
+.compact-page-header { position: relative; }
+.music-credits-shell { display: grid; gap: 24px; }
+.music-license-summary {
+  padding: clamp(22px,4vw,36px);
+  border: 1px solid var(--learner-border);
+  border-radius: 24px;
+  color: var(--learner-ink);
+  background: linear-gradient(145deg,var(--learner-surface),var(--learner-gold-soft));
+  box-shadow: 0 22px 52px -42px rgba(8,31,49,.6);
+}
+.music-license-summary h2 { margin: 8px 0 12px; color: var(--learner-navy); }
+.music-license-summary p:last-child { margin: 0; color: var(--learner-muted); line-height: 1.75; }
+.music-license-summary a,
+.music-credit-grid a { color: #155e58; font-weight: 850; }
+.music-credit-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; }
+.music-credit-grid article {
+  padding: 22px;
+  display: grid;
+  gap: 10px;
+  border: 1px solid var(--learner-border);
+  border-radius: 20px;
+  color: var(--learner-ink);
+  background: var(--learner-surface);
+}
+.music-credit-grid article > span { color: #89621c; font-size: .61rem; font-weight: 950; letter-spacing: .12em; }
+.music-credit-grid h2,
+.music-credit-grid p,
+.music-credit-grid dl { margin: 0; }
+.music-credit-grid h2 { color: var(--learner-navy); }
+.music-credit-grid p { color: var(--learner-muted); line-height: 1.55; }
+.music-credit-grid dl { display: grid; gap: 5px; }
+.music-credit-grid dl div { display: flex; gap: 9px; }
+.music-credit-grid dt { min-width: 45px; color: var(--learner-muted); font-size: .68rem; font-weight: 850; }
+.music-credit-grid dd { margin: 0; color: var(--learner-ink); font-size: .68rem; }
+html[data-theme="dark"] .music-license-summary,
+html[data-theme="dark"] .music-credit-grid article { border-color: var(--learner-border); background: var(--learner-surface); }
+html[data-theme="dark"] .music-license-summary a,
+html[data-theme="dark"] .music-credit-grid a { color: #a8e7df; }
+html[data-theme="dark"] .music-credit-grid article > span { color: #f0cf7f; }
+
+@media (max-width: 680px) {
+  .music-credit-grid { grid-template-columns: 1fr; }
+}

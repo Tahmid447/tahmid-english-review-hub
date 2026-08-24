@@ -102,8 +102,8 @@ function renderPlans() {
         <div class="plan-visual" aria-hidden="true">
           <span class="plan-visual-mark">${visual.mark}</span>
           <span class="plan-visual-caption">${visual.label}</span>
-          ${key === "premium_plus" ? `<span class="coaching-orbit"><i></i><i></i><i></i></span>` : ""}
-          ${key === "premium" ? `<span class="review-pulse"><i>SPEAK</i><i>WRITE</i></span>` : ""}
+          ${key === "premium_plus" ? `<span class="coaching-calendar"><b>LIVE</b><i>01</i><i>02</i><i>03</i></span>` : ""}
+          ${key === "premium" ? `<span class="premium-review-gift"><b>🎁</b><i>SPEAK</i><span>→</span><i>WRITE</i></span>` : ""}
         </div>
         <div class="plan-card-heading">
           <span class="plan-name">${displayName}</span>
@@ -113,7 +113,7 @@ function renderPlans() {
         <p class="plan-price"><strong>${formatYen(planPrice(plan, billing))}</strong><span>${billingLabel()}</span></p>
         ${sixMonthDetails}
         ${promotionApplies(plan, billing) ? `<aside class="premium-promotion" aria-label="${t("New Premium applicant offer", "Premium新規申込キャンペーン")}">
-          <span>${t("NEW PREMIUM APPLICANTS", "PREMIUM 新規申込限定")}</span>
+          <span><b class="premium-promotion-gift" aria-hidden="true">🎁</b>${t("NEW PREMIUM APPLICANTS", "PREMIUM 新規申込限定")}</span>
           <strong>${t(`${PREMIUM_PROMOTION.trialDays} days free`, `最初の${PREMIUM_PROMOTION.trialDays}日間無料`)}</strong>
           <b>${t(`Second month 50% off · ${formatYen(PREMIUM_PROMOTION.secondMonthYen)}`, `2か月目50%オフ・${formatYen(PREMIUM_PROMOTION.secondMonthYen)}`)}</b>
           <small>${t("Monthly Premium only. Eligibility and activation are confirmed personally by Tahmid; no payment is taken on this page.", "Premium月額プランへの新規申込のみ。対象条件と利用開始はTahmidが個別に確認します。このページでは決済されません。")}</small>

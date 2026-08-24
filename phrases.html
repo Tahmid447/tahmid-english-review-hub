@@ -8,7 +8,7 @@
   <title>English Phrase Library</title>
   <link rel="manifest" href="/manifest.webmanifest">
   <script>try{const p=JSON.parse(localStorage.getItem("te-review-hub:theme:v1")||"\"light\"");const c=["system","light","dark"].includes(p)?p:"light";const d=c==="dark"||(c==="system"&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.dataset.themePreference=c;document.documentElement.dataset.theme=d?"dark":"light";document.documentElement.style.colorScheme=d?"dark":"light"}catch{document.documentElement.dataset.themePreference="light";document.documentElement.dataset.theme="light";document.documentElement.style.colorScheme="light"}</script>
-  <link rel="stylesheet" href="/src/styles.css?v=20260820-premium-clarity3">
+  <link rel="stylesheet" href="/src/styles.css?v=20260824-quick-music1">
   <link rel="icon" type="image/png" sizes="192x192" href="/assets/app-icon-192.png">
 </head>
 <body data-page="phrases">
@@ -24,7 +24,7 @@
       <label class="voice-select"><span data-ui-en="Speed" data-ui-ja="速さ">Speed / 速さ</span><select id="playbackRate"><option value="0.5">0.5×</option><option value="1">1×</option><option value="1.5">1.5×</option></select></label>
       <button class="quiet-btn" id="sfxToggle" type="button" aria-pressed="true" data-ui-en="SFX On" data-ui-ja="効果音 オン">SFX On / 効果音 オン</button>
       <button class="quiet-btn" id="ambientToggle" type="button" aria-pressed="true" data-ui-en="Ambient On" data-ui-ja="環境音 オン">Ambient On / 環境音 オン</button>
-      <label class="voice-select"><span data-ui-en="Ambience" data-ui-ja="環境音">Ambience / 環境音</span><select id="ambientTrack" aria-label="Study ambience"><option value="calm_focus">Calm Focus</option><option value="lofi_study">Lo-fi Study</option><option value="quiet_morning">Quiet Morning</option><option value="night_focus">Night Focus</option><option value="rainy_desk">Rainy Desk</option></select></label>
+      <label class="voice-select"><span data-ui-en="Study music" data-ui-ja="学習BGM">Study music / 学習BGM</span><select id="ambientTrack" aria-label="Study music"><option value="calm_focus">Clear Air</option><option value="lofi_study">Study And Relax</option><option value="quiet_morning">Windswept</option><option value="night_focus">Night on the Docks – Piano</option><option value="rainy_desk">Dream Culture</option></select></label>
       <label class="voice-select ambient-volume-control"><span data-ui-en="Ambient level" data-ui-ja="環境音量">Ambient level / 環境音量</span><input id="ambientVolume" type="range" min="0" max="40" step="1" value="18" aria-label="Ambient volume"></label>
       <label class="voice-select"><span data-ui-en="Theme" data-ui-ja="外観">Theme / 外観</span><select id="themeToggle"><option value="system">System / 端末設定</option><option value="light">Light / ライト</option><option value="dark">Dark / ダーク</option></select></label>
       </span>
@@ -45,10 +45,10 @@
     <div class="phrase-grid" id="phraseGrid" role="tabpanel" aria-describedby="phraseResults"></div>
     <div class="phrase-load-more" id="phraseLoadMoreArea" hidden><button class="secondary-btn" id="phraseLoadMore" type="button" data-ui-en="Load more" data-ui-ja="さらに表示">Load more / さらに表示</button><p class="phrase-load-more-status" id="phraseLoadMoreStatus"></p></div>
   </main>
-  <footer class="site-footer premium-footer"><div class="footer-brand"><img src="/assets/app-icon-192.png" alt="" width="44" height="44"><span><strong>Tahmid English Club</strong><small data-ui-en="Personal English review, built by Tahmid Ahmed." data-ui-ja="Tahmid Ahmedが一人ひとりの復習をサポートします。">Personal English review, built by Tahmid Ahmed.</small></span></div><nav aria-label="Footer"><a class="phrase-return-link" href="/" data-ui-en="Lessons" data-ui-ja="レッスン">Lessons</a><a href="/plans" data-ui-en="Plans" data-ui-ja="料金プラン">Plans</a><a href="/plans#contact" data-ui-en="Contact Tahmid" data-ui-ja="Tahmidに相談">Contact Tahmid</a></nav><p>© 2026 Tahmid Ahmed</p></footer>
+  <footer class="site-footer premium-footer"><div class="footer-brand"><img src="/assets/app-icon-192.png" alt="" width="44" height="44"><span><strong>Tahmid English Club</strong><small data-ui-en="Personal English review, built by Tahmid Ahmed." data-ui-ja="Tahmid Ahmedが一人ひとりの復習をサポートします。">Personal English review, built by Tahmid Ahmed.</small></span></div><nav aria-label="Footer"><a class="phrase-return-link" href="/" data-ui-en="Lessons" data-ui-ja="レッスン">Lessons</a><a href="/plans" data-ui-en="Plans" data-ui-ja="料金プラン">Plans</a><a href="/music-credits" data-ui-en="Music credits" data-ui-ja="音楽クレジット">Music credits</a><a href="/plans#contact" data-ui-en="Contact Tahmid" data-ui-ja="Tahmidに相談">Contact Tahmid</a></nav><p>© 2026 Tahmid Ahmed</p></footer>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js"></script>
   <script type="module" src="/src/pwa.js"></script>
-  <script type="module" src="/src/phrases.js?v=20260820-premium-clarity3"></script>
+  <script type="module" src="/src/phrases.js?v=20260824-quick-music1"></script>
 </body>
 </html>

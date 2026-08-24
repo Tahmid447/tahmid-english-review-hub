@@ -15,6 +15,7 @@ const types = {
   ".jpeg": "image/jpeg",
   ".webp": "image/webp",
   ".svg": "image/svg+xml",
+  ".mp3": "audio/mpeg",
 };
 
 http
@@ -28,6 +29,8 @@ http
     }
     if (pathname === "/teacher") pathname = "/teacher.html";
     if (pathname === "/phrases") pathname = "/phrases.html";
+    if (pathname === "/plans") pathname = "/pricing.html";
+    if (pathname === "/music-credits") pathname = "/music-credits.html";
     if (pathname.startsWith("/lesson/")) pathname = "/lesson.html";
     if (pathname.endsWith("/")) pathname += "index.html";
     const file = path.join(root, pathname.replace(/^\/+/, ""));

@@ -10,6 +10,7 @@ const files = [
   "lesson.html",
   "phrases.html",
   "pricing.html",
+  "music-credits.html",
   "404.html",
   "offline.html",
   "manifest.webmanifest",
@@ -86,6 +87,7 @@ fs.writeFileSync(
     "/lesson/* /lesson.html?id=:splat 200",
     "/phrases /phrases.html 200",
     "/plans /pricing.html 200",
+    "/music-credits /music-credits.html 200",
   ].join("\n") + "\n",
 );
 
@@ -103,6 +105,9 @@ fs.writeFileSync(
     "",
     "/manifest.webmanifest",
     "  Cache-Control: public, max-age=3600",
+    "",
+    "/assets/audio/ambient/*",
+    "  Cache-Control: public, max-age=31536000, immutable",
   ].join("\n") + "\n",
 );
 

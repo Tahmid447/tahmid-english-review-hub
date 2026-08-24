@@ -8,7 +8,7 @@
   <title>English Lesson Practice</title>
   <link rel="manifest" href="/manifest.webmanifest">
   <script>try{const p=JSON.parse(localStorage.getItem("te-review-hub:theme:v1")||"\"light\"");const c=["system","light","dark"].includes(p)?p:"light";const d=c==="dark"||(c==="system"&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.dataset.themePreference=c;document.documentElement.dataset.theme=d?"dark":"light";document.documentElement.style.colorScheme=d?"dark":"light"}catch{document.documentElement.dataset.themePreference="light";document.documentElement.dataset.theme="light";document.documentElement.style.colorScheme="light"}</script>
-  <link rel="stylesheet" href="/src/styles.css?v=20260820-premium-clarity3">
+  <link rel="stylesheet" href="/src/styles.css?v=20260824-quick-music1">
   <link rel="icon" type="image/png" sizes="192x192" href="/assets/app-icon-192.png">
 </head>
 <body data-page="lesson">
@@ -30,9 +30,10 @@
         <h1 id="lessonTitle">Loading lesson…</h1>
         <p id="lessonSummary"></p>
         <p class="jp" id="lessonSummaryJa"></p>
+        <p class="practice-entry-note" id="practiceEntryNote">Full Lesson / フルレッスン</p>
       </div>
       <div class="lesson-mode">
-        <label><span data-ui-en="Practice set" data-ui-ja="練習セット">Practice set / 練習セット</span><select id="practiceMode"><option value="all">All questions / 全問題</option><option value="original">Original Review / 元の復習</option><option value="extra">Listen & Speak / 聞く・話す</option><option value="wrong">Mistakes only / 間違いだけ</option><option value="unanswered">Unanswered only / 未回答だけ</option></select></label>
+        <label><span data-ui-en="Practice set" data-ui-ja="練習セット">Practice set / 練習セット</span><select id="practiceMode"><option value="quick">Quick Practice / ショート練習</option><option value="all">All questions / 全問題</option><option value="original">Original Review / 元の復習</option><option value="extra">Listen & Speak / 聞く・話す</option><option value="wrong">Mistakes only / 間違いだけ</option><option value="unanswered">Unanswered only / 未回答だけ</option></select></label>
         <label><span data-ui-en="Question type" data-ui-ja="問題タイプ">Question type / 問題タイプ</span><select id="questionTypeFilter"><option value="all">All types / 全タイプ</option></select></label>
         <button class="secondary-btn" id="shuffleQuestions" type="button" data-ui-en="Shuffle again" data-ui-ja="もう一度シャッフル">Shuffle again / もう一度シャッフル</button>
       </div>
@@ -80,7 +81,7 @@
     <section class="locked-question-teasers" id="lockedQuestionTeasers" hidden aria-live="polite"></section>
     <section class="premium-tasks-panel" id="premiumTasksPanel" hidden aria-live="polite"></section>
   </main>
-  <footer class="site-footer premium-footer"><div class="footer-brand"><img src="/assets/app-icon-192.png" alt="" width="44" height="44"><span><strong>Tahmid English Club</strong><small data-ui-en="Personal English review, built by Tahmid Ahmed." data-ui-ja="Tahmid Ahmedが一人ひとりの復習をサポートします。">Personal English review, built by Tahmid Ahmed.</small></span></div><nav aria-label="Footer"><a id="lessonFooterBackLink" href="/" data-ui-en="Lessons" data-ui-ja="レッスン">Lessons</a><a href="/phrases" data-ui-en="Library" data-ui-ja="ライブラリ">Library</a><a href="/plans" data-ui-en="Plans" data-ui-ja="料金プラン">Plans</a><a href="/plans#contact" data-ui-en="Contact Tahmid" data-ui-ja="Tahmidに相談">Contact Tahmid</a></nav><p>© 2026 Tahmid Ahmed</p></footer>
+  <footer class="site-footer premium-footer"><div class="footer-brand"><img src="/assets/app-icon-192.png" alt="" width="44" height="44"><span><strong>Tahmid English Club</strong><small data-ui-en="Personal English review, built by Tahmid Ahmed." data-ui-ja="Tahmid Ahmedが一人ひとりの復習をサポートします。">Personal English review, built by Tahmid Ahmed.</small></span></div><nav aria-label="Footer"><a id="lessonFooterBackLink" href="/" data-ui-en="Lessons" data-ui-ja="レッスン">Lessons</a><a href="/phrases" data-ui-en="Library" data-ui-ja="ライブラリ">Library</a><a href="/plans" data-ui-en="Plans" data-ui-ja="料金プラン">Plans</a><a href="/music-credits" data-ui-en="Music credits" data-ui-ja="音楽クレジット">Music credits</a><a href="/plans#contact" data-ui-en="Contact Tahmid" data-ui-ja="Tahmidに相談">Contact Tahmid</a></nav><p>© 2026 Tahmid Ahmed</p></footer>
   <dialog class="lesson-settings-dialog" id="lessonSettingsDialog" aria-labelledby="lessonSettingsHeading">
     <form method="dialog"><button class="dialog-close" value="cancel" aria-label="Close settings">×</button></form>
     <p class="eyebrow" data-ui-en="Lesson preferences" data-ui-ja="レッスン設定">Lesson preferences / レッスン設定</p>
@@ -97,7 +98,7 @@
       </div>
     </section>
     <section class="settings-group" aria-labelledby="sfxSettingsHeading"><h3 id="sfxSettingsHeading" data-ui-en="Sound Effects" data-ui-ja="効果音">Sound Effects / 効果音</h3><div class="settings-grid"><button class="quiet-btn" id="sfxToggle" type="button" aria-pressed="true" data-ui-en="SFX On" data-ui-ja="効果音 オン">SFX On / 効果音 オン</button><label><span data-ui-en="SFX volume" data-ui-ja="効果音の音量">SFX volume / 効果音の音量</span><input id="sfxVolume" type="range" min="0" max="100" step="5" value="25"></label></div><p class="settings-note" data-ui-en="Soft click, correct, try-again and completion cues. Voice remains independent." data-ui-ja="クリック・正解・もう一度・完了を控えめな音で知らせます。ボイス設定とは別に管理されます。">Soft click, correct, try-again and completion cues. Voice remains independent.</p></section>
-    <section class="settings-group" aria-labelledby="ambientSettingsHeading"><h3 id="ambientSettingsHeading" data-ui-en="Ambient Music" data-ui-ja="環境音">Ambient Music / 環境音</h3><div class="settings-grid"><button class="quiet-btn" id="ambientToggle" type="button" aria-pressed="true" data-ui-en="Ambient On" data-ui-ja="環境音 オン">Ambient On / 環境音 オン</button><label><span data-ui-en="Study ambience" data-ui-ja="環境音を選ぶ">Study ambience / 環境音を選ぶ</span><select id="ambientTrack"><option value="calm_focus">Calm Focus / 穏やかな集中</option><option value="lofi_study">Lo-fi Study / ローファイ学習</option><option value="quiet_morning">Quiet Morning / 静かな朝</option><option value="night_focus">Night Focus / 夜の集中</option><option value="rainy_desk">Rainy Desk / 雨の日のデスク</option></select></label><label><span data-ui-en="Ambient volume" data-ui-ja="環境音の音量">Ambient volume / 環境音の音量</span><input id="ambientVolume" type="range" min="0" max="40" step="1" value="18"></label></div><p class="settings-note" data-ui-en="Vocal-free study ambience is on by default. Browsers allow it to become audible after your first tap or key press; it automatically softens while speech plays." data-ui-ja="歌声なしの学習用環境音は初期設定でオンです。ブラウザの仕様により、最初のタップまたはキー操作後に再生が始まり、ボイス再生中は自動で音量を下げます。">Vocal-free study ambience is on by default. Browsers allow it to become audible after your first tap or key press; it automatically softens while speech plays.</p></section>
+    <section class="settings-group" aria-labelledby="ambientSettingsHeading"><h3 id="ambientSettingsHeading" data-ui-en="Study Music" data-ui-ja="学習BGM">Study Music / 学習BGM</h3><div class="settings-grid"><button class="quiet-btn" id="ambientToggle" type="button" aria-pressed="true" data-ui-en="Ambient On" data-ui-ja="環境音 オン">Ambient On / 環境音 オン</button><label><span data-ui-en="Music track" data-ui-ja="曲を選ぶ">Music track / 曲を選ぶ</span><select id="ambientTrack"><option value="calm_focus">Clear Air / クリア・エア</option><option value="lofi_study">Study And Relax / スタディ・アンド・リラックス</option><option value="quiet_morning">Windswept / ウィンドスウェプト</option><option value="night_focus">Night on the Docks – Piano / 夜の埠頭・ピアノ</option><option value="rainy_desk">Dream Culture / ドリーム・カルチャー</option></select></label><label><span data-ui-en="Music volume" data-ui-ja="BGM音量">Music volume / BGM音量</span><input id="ambientVolume" type="range" min="0" max="40" step="1" value="18"></label></div><p class="settings-note" data-ui-en="Five real instrumental tracks are on by default. Playback begins after your first tap or key press and softens automatically while speech plays." data-ui-ja="実音源のインストゥルメンタル5曲を選べます。初期設定はオンで、最初のタップまたはキー操作後に再生が始まり、ボイス再生中は自動で音量を下げます。">Five real instrumental tracks are on by default. Playback begins after your first tap or key press and softens automatically while speech plays. <a href="/music-credits" target="_blank" rel="noopener" data-ui-en="Music credits" data-ui-ja="音楽クレジット">Music credits / 音楽クレジット</a></p></section>
     <section class="settings-group" aria-labelledby="quizSettingsHeading">
       <h3 id="quizSettingsHeading" data-ui-en="Quiz & Practice" data-ui-ja="クイズ・練習">Quiz &amp; Practice / クイズ・練習</h3>
       <div class="segmented" role="group" aria-label="Checking mode">
@@ -121,6 +122,6 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js"></script>
   <script type="module" src="/src/pwa.js"></script>
-  <script type="module" src="/src/lesson.js?v=20260820-premium-clarity3"></script>
+  <script type="module" src="/src/lesson.js?v=20260824-quick-music1"></script>
 </body>
 </html>

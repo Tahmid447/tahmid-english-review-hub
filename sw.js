@@ -1,10 +1,11 @@
-const CACHE_NAME = "te-review-public-v7";
+const CACHE_NAME = "te-review-public-v8";
 const OFFLINE_PAGE = "/offline.html";
 const PUBLIC_SHELL = new Set([
   "/",
   "/index.html",
   "/phrases.html",
   "/pricing.html",
+  "/music-credits.html",
   OFFLINE_PAGE,
   "/manifest.webmanifest",
   "/src/styles.css",
@@ -24,7 +25,7 @@ const PUBLIC_SHELL = new Set([
   "/src/data/legacy-additions.json",
   "/assets/app-icon-192.png"
 ]);
-const OFFLINE_NAVIGATION = new Set(["/", "/index.html", "/phrases", "/phrases.html", "/plans", "/pricing.html"]);
+const OFFLINE_NAVIGATION = new Set(["/", "/index.html", "/phrases", "/phrases.html", "/plans", "/pricing.html", "/music-credits", "/music-credits.html"]);
 
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll([...PUBLIC_SHELL])));
@@ -57,6 +58,7 @@ self.addEventListener("fetch", (event) => {
       if (OFFLINE_NAVIGATION.has(url.pathname)) {
         const shell = url.pathname === "/phrases" ? "/phrases.html"
           : url.pathname === "/plans" ? "/pricing.html"
+            : url.pathname === "/music-credits" ? "/music-credits.html"
             : url.pathname;
         const cached = await caches.match(shell);
         if (cached) return cached;

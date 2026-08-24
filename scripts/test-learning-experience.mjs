@@ -237,6 +237,9 @@ assert.match(lessonPage, /id="ambientToggle"/);
 assert.match(lessonPage, /id="ambientTrack"/);
 assert.match(lessonPage, /id="ambientVolume"/);
 assert.match(lessonPage, /first tap or key press/);
+assert.match(lessonPage, /Five real instrumental tracks/);
+assert.match(lessonPage, /Clear Air/);
+assert.match(lessonPage, /Music credits/);
 assert.match(lessonScript, /setAmbientPlayback/);
 assert.match(lessonScript, /syncAmbientFromSettings/);
 assert.match(fs.readFileSync(path.join(root, "index.html"), "utf8"), /id="ambientVolume"/);
@@ -245,13 +248,19 @@ assert.match(audioScript, /dataset\.ambientState = state/);
 assert.match(audioScript, /waiting-for-gesture/);
 assert.match(audioScript, /\["pointerdown", "keydown", "touchstart"\]/);
 assert.match(audioScript, /export function ambientPlaybackStatus/);
+assert.match(audioScript, /assets\/audio\/ambient\/clear-air\.mp3/);
+assert.doesNotMatch(audioScript, /buildAmbientGraph|addAmbientTone|addAmbientTexture/);
 assert.match(lessonScript, /playCompletionSound/);
 assert.match(localServer, /"\.webp": "image\/webp"/);
+assert.match(localServer, /"\.mp3": "audio\/mpeg"/);
 
 const {
   AMBIENT_TRACKS,
+  ambientPlaybackStatus,
+  duckAmbient,
   normalizePlaybackRate,
   playInterfaceSound,
+  setAmbientPlayback,
   speakText,
   speakingFeedbackForSimilarity,
   speakingFeedbackForTranscript,
@@ -286,17 +295,21 @@ globalThis.Audio = class FakeAudio {
   constructor(source) {
     this.source = source;
     this.readyState = 4;
+    this.currentTime = 0;
+    this.duration = 180;
+    this.paused = true;
     this.playbackRate = 1;
     this.defaultPlaybackRate = 1;
     audioInstances.push(this);
   }
 
   addEventListener() {}
-  pause() {}
+  pause() { this.paused = true; }
   removeAttribute() {}
   load() {}
 
   play() {
+    this.paused = false;
     queueMicrotask(() => {
       this.onplaying?.();
       this.onended?.();
@@ -311,6 +324,23 @@ globalThis.fetch = async (_url, options = {}) => {
     blob: async () => new Blob([new Uint8Array(256)], { type: "audio/mpeg" }),
   };
 };
+const ambientResult = await setAmbientPlayback(true, {
+  ambientEnabled: true,
+  ambientTrack: "calm_focus",
+  ambientVolume: 0.18,
+  userGesture: true,
+});
+assert.equal(ambientResult.played, true, "A user gesture starts the real study-music file.");
+assert.equal(ambientResult.source, "/assets/audio/ambient/clear-air.mp3");
+assert.equal(audioInstances.at(-1).source, "/assets/audio/ambient/clear-air.mp3");
+assert.equal(audioInstances.at(-1).loop, true, "Study music loops continuously.");
+assert.equal(audioInstances.at(-1).volume, 0.18);
+duckAmbient(true);
+assert(Math.abs(audioInstances.at(-1).volume - 0.0432) < 0.00001, "Study music softens while speech plays.");
+duckAmbient(false);
+assert.equal(ambientPlaybackStatus().contextState, "playing");
+await setAmbientPlayback(false, { ambientEnabled: false });
+assert.equal(audioInstances.at(-1).paused, true);
 const slowVoice = await speakText("Playback rate check.", { language: "en", rate: 0.5 });
 assert.equal(slowVoice.played, true);
 assert.equal(slowVoice.rate, 0.5);

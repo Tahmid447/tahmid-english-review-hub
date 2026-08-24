@@ -21,7 +21,7 @@ import {
   stopAudio,
   stopSpeechPractice,
   syncAmbientFromSettings,
-} from "./audio.js?v=20260820-ambient2";
+} from "./audio.js?v=20260824-real-music1";
 import {
   getStudentSession,
   loadUserSettings,
@@ -41,6 +41,7 @@ import {
   gradeQuestionAnswer,
   isAnswerGradeable,
   preserveFirstResult,
+  selectQuickPracticeIds,
 } from "./lesson-grading.js";
 
 const $ = (selector) => document.querySelector(selector);
@@ -65,6 +66,7 @@ const elements = {
   lessonTitle: $("#lessonTitle"),
   lessonSummary: $("#lessonSummary"),
   lessonSummaryJa: $("#lessonSummaryJa"),
+  practiceEntryNote: $("#practiceEntryNote"),
   lessonGuideContent: $("#lessonGuideContent"),
   practiceMode: $("#practiceMode"),
   questionTypeFilter: $("#questionTypeFilter"),
@@ -98,6 +100,9 @@ const params = new URLSearchParams(window.location.search);
 const lessonPathMatch = window.location.pathname.match(/^\/lesson\/([^/]+)\/?$/);
 const lessonId = params.get("id") || decodeURIComponent(lessonPathMatch?.[1] || "");
 const isTeacherPreview = params.get("preview") === "1";
+const requestedPractice = ["quick", "full"].includes(params.get("practice"))
+  ? params.get("practice")
+  : "";
 const legacyReturn = params.get("from") === "takiwaki" ? "/#account" : "/";
 const returnTo = isTeacherPreview
   ? "/teacher.html"
@@ -113,6 +118,7 @@ const state = {
   visibleQuestions: [],
   currentIndex: 0,
   practiceMode: "all",
+  quickQuestionIds: [],
   questionTypeFilter: "all",
   settings: getSettings(),
   startedAt: new Date().toISOString(),
@@ -265,9 +271,12 @@ const restoreProgress = () => {
   state.requireRunChecks = saved.requireRunChecks === true;
   state.hasPersistedRunState = hasPersistedRunState;
   state.savedRuns = safeProgress(saved.savedRuns, {});
-  state.practiceMode = ["all", "original", "extra", "wrong", "unanswered"].includes(saved.practiceMode)
+  state.practiceMode = ["quick", "all", "original", "extra", "wrong", "unanswered"].includes(saved.practiceMode)
     ? saved.practiceMode
     : "all";
+  state.quickQuestionIds = Array.isArray(saved.quickQuestionIds)
+    ? [...new Set(saved.quickQuestionIds.map(String))]
+    : [];
   state.questionTypeFilter = typeof saved.questionTypeFilter === "string"
     ? saved.questionTypeFilter
     : "all";
@@ -289,6 +298,7 @@ const saveLocalState = () => {
     runAttemptId: state.runAttemptId,
     runStartedAt: state.runStartedAt,
     practiceMode: state.practiceMode,
+    quickQuestionIds: state.quickQuestionIds,
     questionTypeFilter: state.questionTypeFilter,
     questionOrder: state.questionOrder,
     answers: state.answers,
@@ -450,6 +460,10 @@ const selectQuestionSet = (mode, { questionType = state.questionTypeFilter } = {
     .map((id) => state.masterQuestions.find((question) => question.id === id))
     .filter(Boolean);
   let selected = byOrder;
+  if (mode === "quick") {
+    const quickIds = new Set(state.quickQuestionIds);
+    selected = byOrder.filter((question) => quickIds.has(String(question.id)));
+  }
   if (mode === "original") selected = byOrder.filter((question) => question.isOriginal);
   if (mode === "extra") selected = byOrder.filter((question) => !question.isOriginal);
   if (mode === "wrong") {
@@ -494,11 +508,13 @@ const updateQuestionTypeOptions = () => {
 
 const updatePracticeModeLabels = () => {
   const allCount = selectQuestionSet("all").length;
+  const quick = selectQuestionSet("quick").length;
   const originals = selectQuestionSet("original").length;
   const extras = selectQuestionSet("extra").length;
   const wrong = selectQuestionSet("wrong").length;
   const unanswered = selectQuestionSet("unanswered").length;
   const labels = {
+    quick: t(`Quick Practice (${quick})`, `ショート練習 (${quick}問)`),
     all: t(`All questions (${allCount})`, `全問題 (${allCount})`),
     original: t(`Original Review (${originals})`, `元の復習 (${originals})`),
     extra: t(`Listen & Speak (${extras})`, `聞く・話す (${extras})`),
@@ -508,9 +524,21 @@ const updatePracticeModeLabels = () => {
   [...elements.practiceMode.options].forEach((option) => {
     option.textContent = labels[option.value] || option.textContent;
   });
+  if (elements.practiceEntryNote) {
+    const focusedCount = selectQuestionSet(state.practiceMode).length;
+    elements.practiceEntryNote.textContent = state.practiceMode === "quick"
+      ? t(`QUICK PRACTICE · ${quick} QUESTIONS · ABOUT 5–10 MIN`, `ショート練習・${quick}問・約5〜10分`)
+      : state.practiceMode === "all"
+        ? t(`FULL LESSON · ${allCount} QUESTIONS`, `フルレッスン・全${allCount}問`)
+        : t(`FOCUSED PRACTICE · ${focusedCount} QUESTIONS`, `集中練習・${focusedCount}問`);
+    elements.practiceEntryNote.classList.toggle("quick", state.practiceMode === "quick");
+  }
 };
 
 const setPracticeMode = (mode, { clearCurrentAnswers = false, force = false } = {}) => {
+  if (mode === "quick" && !state.quickQuestionIds.length) {
+    state.quickQuestionIds = selectQuickPracticeIds(state.masterQuestions, state.questionOrder);
+  }
   const availableQuestions = selectQuestionSet(mode);
   if (!availableQuestions.length && !force) {
     showToast(mode === "wrong" ? "No mistakes to practise yet." : "There are no questions in this set yet.");
@@ -524,6 +552,9 @@ const setPracticeMode = (mode, { clearCurrentAnswers = false, force = false } = 
     });
   }
   beginNewRun();
+  if (mode === "quick") {
+    state.quickQuestionIds = selectQuickPracticeIds(state.masterQuestions, state.questionOrder);
+  }
   const nextQuestions = selectQuestionSet(mode);
   state.practiceMode = mode;
   state.visibleQuestions = nextQuestions;
@@ -1695,6 +1726,15 @@ const initialiseLesson = async () => {
       ? resumableOrder
       : shuffleArray(allIds);
     if (!state.hasPersistedRunState) state.choiceOrders = {};
+    state.quickQuestionIds = state.quickQuestionIds.filter((id) => allIdSet.has(id));
+    if (requestedPractice) {
+      beginNewRun();
+      state.questionTypeFilter = "all";
+      state.practiceMode = requestedPractice === "quick" ? "quick" : "all";
+      state.quickQuestionIds = selectQuickPracticeIds(state.masterQuestions, state.questionOrder);
+    } else if (!state.quickQuestionIds.length) {
+      state.quickQuestionIds = selectQuickPracticeIds(state.masterQuestions, state.questionOrder);
+    }
     elements.practiceMode.value = state.practiceMode;
     updateQuestionTypeOptions();
     const selected = selectQuestionSet(state.practiceMode);

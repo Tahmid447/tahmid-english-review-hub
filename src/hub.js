@@ -28,7 +28,7 @@ import {
 import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js";
 import { installPlayfulInteractions } from "./effects.js";
 import { planFor } from "./plans.js";
-import { setAmbientPlayback, stopAudio, syncAmbientFromSettings } from "./audio.js?v=20260820-ambient2";
+import { setAmbientPlayback, stopAudio, syncAmbientFromSettings } from "./audio.js?v=20260824-real-music1";
 
 let publishedLessons = [];
 let visibleLessons = [];
@@ -401,9 +401,10 @@ function currentReturnPath() {
   return `${url.pathname}${url.search}${url.hash}`;
 }
 
-function lessonHref(lesson) {
+function lessonHref(lesson, practice = "") {
   const query = new URLSearchParams({ id: lesson.id });
   if (lesson.assigned) query.set("assigned", "1");
+  if (["quick", "full"].includes(practice)) query.set("practice", practice);
   query.set("return", currentReturnPath());
   return `/lesson.html?${query.toString()}`;
 }
@@ -466,19 +467,45 @@ function createLessonCard(lesson, options = {}) {
     },
   }, element("span"));
   progressBar.firstElementChild.style.width = `${progress.percent}%`;
-  const action = element("a", {
-    className: `lesson-action${locked ? " locked" : ""}`,
-    attrs: { href: locked ? "#account" : lessonHref({ ...lesson, assigned: options.assigned }) },
-  }, [
-    element("span", {
-      text: locked
-        ? t("Unlock full lesson", "全レッスンを開放")
-        : progress.percent && !progress.completed
-        ? t("Continue lesson", "続きから")
-        : t("Start practice", "練習を始める"),
-    }),
-    element("span", { text: "→", attrs: { "aria-hidden": "true" } }),
-  ]);
+  const action = locked
+    ? element("a", {
+      className: "lesson-action locked",
+      attrs: { href: "#account" },
+    }, [
+      element("span", { text: t("Unlock full lesson", "全レッスンを開放") }),
+      element("span", { text: "→", attrs: { "aria-hidden": "true" } }),
+    ])
+    : element("div", {
+      className: "lesson-mode-actions",
+      attrs: { "aria-label": t("Choose practice length", "練習時間を選ぶ") },
+    }, [
+      element("a", {
+        className: "lesson-mode-action quick",
+        attrs: { href: lessonHref({ ...lesson, assigned: options.assigned }, "quick") },
+      }, [
+        element("span", { className: "lesson-mode-icon", text: "⚡", attrs: { "aria-hidden": "true" } }),
+        element("span", { className: "lesson-mode-copy" }, [
+          element("strong", { text: t("Quick Practice", "ショート練習") }),
+          element("small", { text: t("5–10 min · 8 questions", "5〜10分・8問") }),
+        ]),
+        element("span", { className: "lesson-mode-arrow", text: "→", attrs: { "aria-hidden": "true" } }),
+      ]),
+      element("a", {
+        className: "lesson-mode-action full",
+        attrs: { href: lessonHref({ ...lesson, assigned: options.assigned }, "full") },
+      }, [
+        element("span", { className: "lesson-mode-icon", text: "◎", attrs: { "aria-hidden": "true" } }),
+        element("span", { className: "lesson-mode-copy" }, [
+          element("strong", {
+            text: progress.percent && !progress.completed
+              ? t("Continue Full Lesson", "フルレッスンを続ける")
+              : t("Full Lesson", "フルレッスン"),
+          }),
+          element("small", { text: t(`${count} questions · complete practice`, `${count}問・すべて練習`) }),
+        ]),
+        element("span", { className: "lesson-mode-arrow", text: "→", attrs: { "aria-hidden": "true" } }),
+      ]),
+    ]);
 
   const card = element("article", {
     className: `lesson-card${locked ? " lesson-card-locked" : ""}`,
@@ -487,14 +514,13 @@ function createLessonCard(lesson, options = {}) {
       "data-lesson-id": lesson.id,
     },
   }, [top, title, titleJa, summary, summaryJa, meta, progressBar, action]);
-  const destination = locked ? "#account" : lessonHref({ ...lesson, assigned: options.assigned });
-  const openCard = () => {
-    if (locked) document.querySelector("#account")?.scrollIntoView({ behavior: "smooth", block: "start" });
-    else window.location.assign(destination);
-  };
   card.addEventListener("click", (event) => {
     if (event.target.closest("a,button,input,select,textarea")) return;
-    openCard();
+    if (locked) {
+      document.querySelector("#account")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+    card.querySelector(".lesson-mode-action.quick")?.focus();
   });
   return card;
 }

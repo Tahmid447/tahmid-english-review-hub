@@ -16,7 +16,7 @@ import {
   stopAudio,
   stopSpeechPractice,
   syncAmbientFromSettings,
-} from "./audio.js?v=20260820-ambient2";
+} from "./audio.js?v=20260824-real-music1";
 import {
   getStudentClient,
   getStudentSession,

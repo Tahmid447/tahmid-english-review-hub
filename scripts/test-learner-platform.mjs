@@ -9,6 +9,7 @@ import {
   gradeQuestionAnswer,
   isAnswerGradeable,
   preserveFirstResult,
+  selectQuickPracticeIds,
 } from "../src/lesson-grading.js";
 import {
   classifyLibraryEntry,
@@ -48,6 +49,25 @@ for (const [format, [item, answer]] of fixtures) {
   assert.equal(answerExists(item, answer), true, `${format} has an answer.`);
   assert.equal(isAnswerGradeable(item, answer), true, `${format} is complete enough to grade.`);
   assert.equal(gradeQuestionAnswer(item, answer, "2026-08-14T00:00:00.000Z")?.correct, true, `${format} grades correctly.`);
+}
+
+const quickQuestions = [
+  question("mcq", { id: "understand" }),
+  question("listenChoice", { id: "listen" }),
+  question("speaking", { id: "speak" }),
+  question("translation", { id: "write" }),
+  question("mcq", { id: "visual", section: "Visual practice" }),
+  question("matching", { id: "match" }),
+  question("dialogue", { id: "dialogue" }),
+  question("typing", { id: "type" }),
+  question("truefalse", { id: "extra-one" }),
+  question("order", { id: "extra-two" }),
+];
+const quickIds = selectQuickPracticeIds(quickQuestions, quickQuestions.map(({ id }) => id), 8);
+assert.equal(quickIds.length, 8, "Quick Practice contains eight questions for a 5–10 minute run.");
+assert.equal(new Set(quickIds).size, 8, "Quick Practice never repeats a question.");
+for (const requiredId of ["understand", "listen", "speak", "write", "visual", "match"]) {
+  assert(quickIds.includes(requiredId), `Quick Practice keeps the ${requiredId} learning family.`);
 }
 
 const [orderQuestion] = fixtures.get("order");
@@ -224,7 +244,7 @@ assert.match(hubScript, /isGoogleSession/);
 assert.match(hubScript, /id = "profileCompletionStatus"/);
 assert.match(hubScript, /Saving your profile…/);
 assert.match(supabaseScript, /existingProfile && !hasExplicitValues/);
-assert.match(homePage, /src="\/src\/hub\.js\?v=20260820-premium-clarity3"/);
+assert.match(homePage, /src="\/src\/hub\.js\?v=20260824-quick-music1"/);
 assert.match(hubScript, /from "\.\/supabase\.js\?v=20260814-profile-fix"/);
 assert.match(supabaseScript, /signOutStudent[\s\S]*?withOperationTimeout/);
 assert.match(supabaseScript, /removeItem\(STUDENT_AUTH_STORAGE_KEY\)/);
