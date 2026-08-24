@@ -20,13 +20,14 @@ for (const track of tracks) {
   const stats = fs.statSync(localPath);
   assert(stats.size > 1_000_000, `${track.name} must be a complete recording, not a placeholder.`);
   assert(stats.size < 15_000_000, `${track.name} should remain practical for web delivery.`);
-  const header = fs.readFileSync(localPath).subarray(0, 3);
-  const looksLikeMp3 = header.toString("ascii") === "ID3" || (header[0] === 0xff && (header[1] & 0xe0) === 0xe0);
-  assert.equal(looksLikeMp3, true, `${track.name} must have a valid MP3 header.`);
+  const header = fs.readFileSync(localPath).subarray(0, 12);
+  const looksLikeM4a = header.subarray(4, 8).toString("ascii") === "ftyp";
+  assert.equal(path.extname(localPath), ".m4a", `${track.name} must use the web-optimised M4A format.`);
+  assert.equal(looksLikeM4a, true, `${track.name} must have a valid MPEG-4 audio header.`);
   assert(licenseText.includes(path.basename(localPath)), `${track.name} is missing from the repository attribution.`);
   assert(licenseText.includes(track.isrc), `${track.name} is missing its ISRC attribution.`);
 }
 
 console.log("Ambient audio verification passed.");
-console.log("  ✓ 5 complete local MP3 recordings");
+console.log("  ✓ 5 complete, web-optimised local M4A recordings");
 console.log("  ✓ unique assets, official source IDs and CC BY 4.0 attribution");

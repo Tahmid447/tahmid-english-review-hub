@@ -31,11 +31,11 @@ const licensedTrack = (track) => Object.freeze({
 });
 
 export const AMBIENT_TRACKS = Object.freeze({
-  calm_focus: licensedTrack({ name: "Clear Air", nameJa: "クリア・エア", description: "Gentle guitar and piano for calm focus", descriptionJa: "穏やかな集中に合うギターとピアノ", asset: "/assets/audio/ambient/clear-air.mp3", isrc: "USUAN1100626" }),
-  lofi_study: licensedTrack({ name: "Study And Relax", nameJa: "スタディ・アンド・リラックス", description: "Warm, laid-back jazz for steady study", descriptionJa: "落ち着いて学べる、温かなスロージャズ", asset: "/assets/audio/ambient/study-and-relax.mp3", isrc: "USUAN1900030" }),
-  quiet_morning: licensedTrack({ name: "Windswept", nameJa: "ウィンドスウェプト", description: "Peaceful guitar and strings for a fresh start", descriptionJa: "気持ちよく始められるギターとストリングス", asset: "/assets/audio/ambient/windswept.mp3", isrc: "USUAN1100757" }),
-  night_focus: licensedTrack({ name: "Night on the Docks – Piano", nameJa: "夜の埠頭・ピアノ", description: "Smooth piano for quiet evening study", descriptionJa: "夜の静かな学習に合うスムーズなピアノ", asset: "/assets/audio/ambient/night-on-the-docks-piano.mp3", isrc: "USUAN1100135" }),
-  rainy_desk: licensedTrack({ name: "Dream Culture", nameJa: "ドリーム・カルチャー", description: "Dreamlike piano with a light, steady pulse", descriptionJa: "軽いリズムと夢のようなピアノ", asset: "/assets/audio/ambient/dream-culture.mp3", isrc: "USUAN1300046" }),
+  calm_focus: licensedTrack({ name: "Clear Air", nameJa: "クリア・エア", description: "Gentle guitar and piano for calm focus", descriptionJa: "穏やかな集中に合うギターとピアノ", asset: "/assets/audio/ambient/clear-air.m4a", isrc: "USUAN1100626" }),
+  lofi_study: licensedTrack({ name: "Study And Relax", nameJa: "スタディ・アンド・リラックス", description: "Warm, laid-back jazz for steady study", descriptionJa: "落ち着いて学べる、温かなスロージャズ", asset: "/assets/audio/ambient/study-and-relax.m4a", isrc: "USUAN1900030" }),
+  quiet_morning: licensedTrack({ name: "Windswept", nameJa: "ウィンドスウェプト", description: "Peaceful guitar and strings for a fresh start", descriptionJa: "気持ちよく始められるギターとストリングス", asset: "/assets/audio/ambient/windswept.m4a", isrc: "USUAN1100757" }),
+  night_focus: licensedTrack({ name: "Night on the Docks – Piano", nameJa: "夜の埠頭・ピアノ", description: "Smooth piano for quiet evening study", descriptionJa: "夜の静かな学習に合うスムーズなピアノ", asset: "/assets/audio/ambient/night-on-the-docks-piano.m4a", isrc: "USUAN1100135" }),
+  rainy_desk: licensedTrack({ name: "Dream Culture", nameJa: "ドリーム・カルチャー", description: "Dreamlike piano with a light, steady pulse", descriptionJa: "軽いリズムと夢のようなピアノ", asset: "/assets/audio/ambient/dream-culture.m4a", isrc: "USUAN1300046" }),
 });
 
 const report = (callback, phase, messageEn, messageJa, extra = {}) => {

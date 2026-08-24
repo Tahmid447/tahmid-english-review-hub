@@ -248,11 +248,12 @@ assert.match(audioScript, /dataset\.ambientState = state/);
 assert.match(audioScript, /waiting-for-gesture/);
 assert.match(audioScript, /\["pointerdown", "keydown", "touchstart"\]/);
 assert.match(audioScript, /export function ambientPlaybackStatus/);
-assert.match(audioScript, /assets\/audio\/ambient\/clear-air\.mp3/);
+assert.match(audioScript, /assets\/audio\/ambient\/clear-air\.m4a/);
 assert.doesNotMatch(audioScript, /buildAmbientGraph|addAmbientTone|addAmbientTexture/);
 assert.match(lessonScript, /playCompletionSound/);
 assert.match(localServer, /"\.webp": "image\/webp"/);
 assert.match(localServer, /"\.mp3": "audio\/mpeg"/);
+assert.match(localServer, /"\.m4a": "audio\/mp4"/);
 
 const {
   AMBIENT_TRACKS,
@@ -331,8 +332,8 @@ const ambientResult = await setAmbientPlayback(true, {
   userGesture: true,
 });
 assert.equal(ambientResult.played, true, "A user gesture starts the real study-music file.");
-assert.equal(ambientResult.source, "/assets/audio/ambient/clear-air.mp3");
-assert.equal(audioInstances.at(-1).source, "/assets/audio/ambient/clear-air.mp3");
+assert.equal(ambientResult.source, "/assets/audio/ambient/clear-air.m4a");
+assert.equal(audioInstances.at(-1).source, "/assets/audio/ambient/clear-air.m4a");
 assert.equal(audioInstances.at(-1).loop, true, "Study music loops continuously.");
 assert.equal(audioInstances.at(-1).volume, 0.18);
 duckAmbient(true);

@@ -1,4 +1,4 @@
-import { playInterfaceSound } from "./audio.js?v=20260824-real-music1";
+import { playInterfaceSound } from "./audio.js?v=20260824-real-music2";
 
 const reduceMotion = () => window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
 

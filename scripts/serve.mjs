@@ -16,6 +16,7 @@ const types = {
   ".webp": "image/webp",
   ".svg": "image/svg+xml",
   ".mp3": "audio/mpeg",
+  ".m4a": "audio/mp4",
 };
 
 http
