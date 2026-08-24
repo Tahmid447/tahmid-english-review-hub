@@ -77,16 +77,33 @@ function comparisonValue(row, planKey) {
   return `<span>${value}</span>`;
 }
 
+function planVisual(key) {
+  if (key === "premium") {
+    return `<div class="plan-visual plan-visual-premium">
+      <span class="plan-visual-kicker">${t("PERSONAL FEEDBACK", "個別フィードバック")}</span>
+      <div class="premium-review-flow">
+        <span><b aria-hidden="true">●</b><strong>${t("Speaking", "スピーキング")}</strong><small>${t("1 review / lesson", "各レッスン1件")}</small></span>
+        <span><b aria-hidden="true">✦</b><strong>${t("Writing", "英作文")}</strong><small>${t("1 review / lesson", "各レッスン1件")}</small></span>
+      </div>
+    </div>`;
+  }
+  if (key === "premium_plus") {
+    return `<div class="plan-visual plan-visual-coaching">
+      <span class="plan-visual-kicker">${t("LIVE 1:1 COACHING", "ライブ個人指導")}</span>
+      <div class="coaching-value"><strong>3</strong><span>${t("sessions every month", "毎月3回")}</span><b>${t("50 minutes each", "各50分")}</b></div>
+      <div class="coaching-sessions" aria-hidden="true"><i>01</i><span></span><i>02</i><span></span><i>03</i></div>
+    </div>`;
+  }
+  const visual = key === "free"
+    ? { mark: "02", label: t("complete previews", "完成版サンプル") }
+    : { mark: "14", label: t("practice formats", "練習形式") };
+  return `<div class="plan-visual" aria-hidden="true"><span class="plan-visual-mark">${visual.mark}</span><span class="plan-visual-caption">${visual.label}</span></div>`;
+}
+
 function renderPlans() {
   elements.grid.innerHTML = PLAN_ORDER.map((key) => {
     const plan = PLAN_CATALOG[key];
     const featured = key === "premium" ? " featured" : key === "premium_plus" ? " premium-plus" : "";
-    const visual = ({
-      free: { mark: "02", label: t("complete previews", "完成版サンプル") },
-      standard: { mark: "14", label: t("practice formats", "練習形式") },
-      premium: { mark: "2×", label: t("human-reviewed tasks per lesson", "各レッスンの個別添削") },
-      premium_plus: { mark: "3×", label: t("live coaching sessions each month", "毎月のライブ個人指導") },
-    })[key];
     const displayName = key === "premium_plus"
       ? t("Premium+ Coaching", "Premium+ コーチング")
       : plan.name;
@@ -99,12 +116,7 @@ function renderPlans() {
     return `
       <article class="plan-card${featured}" data-plan="${plan.key}">
         ${plan.badge ? `<span class="plan-badge">${t(plan.badge, plan.badgeJa)}</span>` : ""}
-        <div class="plan-visual" aria-hidden="true">
-          <span class="plan-visual-mark">${visual.mark}</span>
-          <span class="plan-visual-caption">${visual.label}</span>
-          ${key === "premium_plus" ? `<span class="coaching-calendar"><b>LIVE</b><i>01</i><i>02</i><i>03</i></span>` : ""}
-          ${key === "premium" ? `<span class="premium-review-gift"><b>🎁</b><i>SPEAK</i><span>→</span><i>WRITE</i></span>` : ""}
-        </div>
+        ${planVisual(key)}
         <div class="plan-card-heading">
           <span class="plan-name">${displayName}</span>
           <p>${t(plan.summary, plan.summaryJa)}</p>
@@ -114,9 +126,12 @@ function renderPlans() {
         ${sixMonthDetails}
         ${promotionApplies(plan, billing) ? `<aside class="premium-promotion" aria-label="${t("New Premium applicant offer", "Premium新規申込キャンペーン")}">
           <span><b class="premium-promotion-gift" aria-hidden="true">🎁</b>${t("NEW PREMIUM APPLICANTS", "PREMIUM 新規申込限定")}</span>
-          <strong>${t(`${PREMIUM_PROMOTION.trialDays} days free`, `最初の${PREMIUM_PROMOTION.trialDays}日間無料`)}</strong>
-          <b>${t(`Second month 50% off · ${formatYen(PREMIUM_PROMOTION.secondMonthYen)}`, `2か月目50%オフ・${formatYen(PREMIUM_PROMOTION.secondMonthYen)}`)}</b>
-          <small>${t("Monthly Premium only. Eligibility and activation are confirmed personally by Tahmid; no payment is taken on this page.", "Premium月額プランへの新規申込のみ。対象条件と利用開始はTahmidが個別に確認します。このページでは決済されません。")}</small>
+          <div class="premium-promotion-steps">
+            <span><small>${t("FIRST 30 DAYS", "最初の30日")}</small><strong>¥0</strong><b>${t("Free", "無料")}</b></span>
+            <i aria-hidden="true">→</i>
+            <span><small>${t("SECOND MONTH", "2か月目")}</small><strong>${formatYen(PREMIUM_PROMOTION.secondMonthYen)}</strong><b>${t("50% off", "50%オフ")}</b></span>
+          </div>
+          <small>${t("Monthly Premium only. Tahmid personally confirms eligibility and activation; no payment is taken on this page.", "Premium月額プランへの新規申込のみ。対象条件と利用開始はTahmidが個別に確認します。このページでは決済されません。")}</small>
         </aside>` : ""}
         <ul>${plan.features.map((feature) => `<li><span aria-hidden="true">✓</span>${t(feature.en, feature.ja)}</li>`).join("")}</ul>
         ${key === "free"

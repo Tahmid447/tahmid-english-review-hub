@@ -511,11 +511,9 @@ export function syncAmbientFromSettings({ userGesture = false } = {}) {
     ambientAudioElement?.pause();
     return Promise.resolve({ played: false, reason: "ambient-off" });
   }
-  ensureAmbientAudio(settings.ambientTrack, settings);
-  if (!userGesture && ambientAudioElement?.paused !== false) {
-    armAmbientGestureStart();
-    return Promise.resolve({ played: false, reason: "gesture-required" });
-  }
+  // Try immediately. Browsers that allow media continuation will resume as
+  // soon as the new page loads; browsers that require a fresh interaction are
+  // handled by setAmbientPlayback's one-time gesture listener.
   return setAmbientPlayback(true, { ...settings, userGesture });
 }
 
@@ -537,34 +535,100 @@ const editDistance = (left, right) => {
   return row[right.length];
 };
 
-const speechComparison = (target, heard) => {
+const alignSpeechWords = (expectedWords, actualWords) => {
+  const rows = expectedWords.length + 1;
+  const columns = actualWords.length + 1;
+  const matrix = Array.from({ length: rows }, () => Array(columns).fill(0));
+  for (let row = 0; row < rows; row += 1) matrix[row][0] = row;
+  for (let column = 0; column < columns; column += 1) matrix[0][column] = column;
+  for (let row = 1; row < rows; row += 1) {
+    for (let column = 1; column < columns; column += 1) {
+      matrix[row][column] = Math.min(
+        matrix[row - 1][column] + 1,
+        matrix[row][column - 1] + 1,
+        matrix[row - 1][column - 1] + (expectedWords[row - 1] === actualWords[column - 1] ? 0 : 1),
+      );
+    }
+  }
+  const operations = [];
+  let row = expectedWords.length;
+  let column = actualWords.length;
+  while (row > 0 || column > 0) {
+    if (
+      row > 0
+      && column > 0
+      && expectedWords[row - 1] === actualWords[column - 1]
+      && matrix[row][column] === matrix[row - 1][column - 1]
+    ) {
+      operations.unshift({ type: "match", expected: expectedWords[row - 1], heard: actualWords[column - 1] });
+      row -= 1;
+      column -= 1;
+    } else if (row > 0 && column > 0 && matrix[row][column] === matrix[row - 1][column - 1] + 1) {
+      operations.unshift({ type: "substitute", expected: expectedWords[row - 1], heard: actualWords[column - 1] });
+      row -= 1;
+      column -= 1;
+    } else if (row > 0 && matrix[row][column] === matrix[row - 1][column] + 1) {
+      operations.unshift({ type: "missing", expected: expectedWords[row - 1], heard: "" });
+      row -= 1;
+    } else {
+      operations.unshift({ type: "unexpected", expected: "", heard: actualWords[column - 1] });
+      column -= 1;
+    }
+  }
+  return operations;
+};
+
+const shortPracticeChunks = (target) => {
+  const words = String(target || "").trim().split(/\s+/).filter(Boolean);
+  if (words.length <= 3) return words.join(" ");
+  const chunks = [];
+  for (let index = 0; index < words.length; index += 3) {
+    chunks.push(words.slice(index, index + 3).join(" "));
+  }
+  return chunks.join(" / ");
+};
+
+export const speechComparison = (target, heard) => {
   const expected = normalizeAnswerText(target);
   const actual = normalizeAnswerText(heard);
-  if (!expected || !actual) return { similarity: 0, missing: [], unexpected: [], exactWords: false };
+  if (!expected || !actual) return {
+    similarity: 0,
+    missing: expected ? expected.split(" ") : [],
+    unexpected: actual ? actual.split(" ") : [],
+    substitutions: [],
+    matchedWords: 0,
+    expectedWordCount: expected ? expected.split(" ").length : 0,
+    heardWordCount: actual ? actual.split(" ").length : 0,
+    exactWords: false,
+    targetText: String(target || "").trim(),
+    heardText: String(heard || "").trim(),
+    practiceChunks: shortPracticeChunks(target),
+  };
   const charMatch = 1 - (editDistance(expected, actual) / Math.max(expected.length, actual.length));
   const expectedWords = expected.split(" ");
-  const remainingWords = actual.split(" ");
-  let matchedWords = 0;
-  expectedWords.forEach((word) => {
-    const matchIndex = remainingWords.indexOf(word);
-    if (matchIndex >= 0) {
-      matchedWords += 1;
-      remainingWords.splice(matchIndex, 1);
-    }
-  });
-  const wordMatch = matchedWords / Math.max(expectedWords.length, actual.split(" ").length);
   const actualWords = actual.split(" ");
-  const missing = expectedWords.filter((word) => !actualWords.includes(word));
-  const unexpected = actualWords.filter((word) => !expectedWords.includes(word));
-  const exactWords = missing.length === 0
-    && unexpected.length === 0
-    && expectedWords.length === actualWords.length;
-  const rawSimilarity = Math.max(0, Math.min(1, charMatch * 0.58 + wordMatch * 0.42));
+  const operations = alignSpeechWords(expectedWords, actualWords);
+  const matchedWords = operations.filter(({ type }) => type === "match").length;
+  const missing = operations.filter(({ type }) => type === "missing").map(({ expected: word }) => word);
+  const unexpected = operations.filter(({ type }) => type === "unexpected").map(({ heard: word }) => word);
+  const substitutions = operations
+    .filter(({ type }) => type === "substitute")
+    .map(({ expected: expectedWord, heard: heardWord }) => ({ expected: expectedWord, heard: heardWord }));
+  const wordMatch = matchedWords / Math.max(expectedWords.length, actualWords.length);
+  const exactWords = expected === actual;
+  const rawSimilarity = Math.max(0, Math.min(1, charMatch * 0.4 + wordMatch * 0.6));
   return {
-    similarity: exactWords ? rawSimilarity : Math.min(rawSimilarity, 0.76),
+    similarity: exactWords ? 1 : Math.min(rawSimilarity, 0.82),
     missing,
     unexpected,
+    substitutions,
+    matchedWords,
+    expectedWordCount: expectedWords.length,
+    heardWordCount: actualWords.length,
     exactWords,
+    targetText: String(target || "").trim(),
+    heardText: String(heard || "").trim(),
+    practiceChunks: shortPracticeChunks(target),
   };
 };
 
@@ -619,15 +683,43 @@ export function speakingFeedbackForSimilarity(similarity, random = Math.random, 
   const score = Number.isFinite(Number(similarity))
     ? Math.max(0, Math.min(1, Number(similarity)))
     : 0;
-  if (comparison && !comparison.exactWords && (comparison.missing.length || comparison.unexpected.length)) {
-    const expectedWord = comparison.missing[0] || "the target word";
-    const heardWord = comparison.unexpected[0] || "a different word";
+  if (comparison && !comparison.exactWords) {
+    const substitutions = comparison.substitutions || [];
+    const missing = comparison.missing || [];
+    const unexpected = comparison.unexpected || [];
+    const matchRatio = comparison.matchedWords / Math.max(1, comparison.expectedWordCount);
+    const differentSentence = comparison.matchedWords === 0
+      || matchRatio < 0.35
+      || (score < 0.42 && substitutions.length + missing.length + unexpected.length >= 3);
+    if (differentSentence) {
+      return {
+        band: "different-sentence",
+        matched: false,
+        similarity: score,
+        messageEn: "That was recognized as a different sentence. Listen once, then copy the target in short parts.",
+        messageJa: "別の文として認識されました。お手本を一度聞き、短く区切って目標文をまねしましょう。",
+        ...comparison,
+      };
+    }
+    if (substitutions.length === 1 && missing.length === 0 && unexpected.length === 0) {
+      const [{ expected: expectedWord, heard: heardWord }] = substitutions;
+      return {
+        band: "word-mismatch",
+        matched: false,
+        similarity: score,
+        messageEn: `Almost there — one word was different. I heard “${heardWord}”; use “${expectedWord}”.`,
+        messageJa: `あと少しです。1語だけ違いました。「${heardWord}」と認識されましたが、「${expectedWord}」と言いましょう。`,
+        ...comparison,
+      };
+    }
+    const differenceCount = substitutions.length + missing.length + unexpected.length;
     return {
-      band: "word-mismatch",
+      band: "sentence-mismatch",
       matched: false,
       similarity: score,
-      messageEn: `Close, but one word changed. Say “${expectedWord}”, not “${heardWord}”.`,
-      messageJa: `惜しいです。ただし単語が違います。「${heardWord}」ではなく「${expectedWord}」と言いましょう。`,
+      messageEn: `${differenceCount} parts need attention. Compare what was heard with the target, then practise the short chunks below.`,
+      messageJa: `${differenceCount}か所を確認しましょう。認識された文と目標文を比べ、下の短い区切りで練習してください。`,
+      ...comparison,
     };
   }
   const band = score >= 0.9 ? "excellent" : score >= 0.68 ? "good" : "keep-going";

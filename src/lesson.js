@@ -690,7 +690,7 @@ const feedbackMessage = (question, result) => {
       : t(`${result.score} of ${result.max} items are in the correct group.`, `${result.max}項目中${result.score}項目が正しいグループです。`);
   }
   if (question.format === "speaking") {
-    const answer = state.answers[question.id];
+    const answer = result?.answer || state.answers[question.id];
     if (answer?.messageEn || answer?.messageJa) {
       return t(answer?.messageEn || "", answer?.messageJa || "");
     }
@@ -701,6 +701,27 @@ const feedbackMessage = (question, result) => {
   return result.correct
     ? t("Correct — well done.", "正解です。よくできました。")
     : t("Not quite. Review the answer and try again.", "もう少しです。答えを確認して、もう一度挑戦しましょう。");
+};
+
+const renderSpeechDiagnostic = (question, result) => {
+  if (question.format !== "speaking") return "";
+  const answer = result?.answer || state.answers[question.id] || {};
+  if (!answer.transcript || answer.selfPractised) return "";
+  const substitutions = Array.isArray(answer.substitutions) ? answer.substitutions : [];
+  const missing = Array.isArray(answer.missing) ? answer.missing : [];
+  const unexpected = Array.isArray(answer.unexpected) ? answer.unexpected : [];
+  const detailRows = [
+    substitutions.length ? `<li><b>${escapeHTML(t("Change", "言い換え"))}</b><span>${substitutions.map(({ heard, expected }) => `“${escapeHTML(heard)}” → “${escapeHTML(expected)}”`).join(", ")}</span></li>` : "",
+    missing.length ? `<li><b>${escapeHTML(t("Missing", "不足"))}</b><span>${escapeHTML(missing.join(", "))}</span></li>` : "",
+    unexpected.length ? `<li><b>${escapeHTML(t("Extra", "余分"))}</b><span>${escapeHTML(unexpected.join(", "))}</span></li>` : "",
+  ].filter(Boolean).join("");
+  return `
+    <section class="speech-diagnostic" aria-label="${escapeHTML(t("Speaking feedback details", "スピーキングの詳しいフィードバック"))}">
+      <div class="speech-diagnostic-compare"><span><small>${escapeHTML(t("I heard", "認識された文"))}</small><strong>${escapeHTML(answer.heardText || answer.transcript)}</strong></span><span><small>${escapeHTML(t("Target", "目標文"))}</small><strong>${escapeHTML(answer.targetText || question.speakText)}</strong></span></div>
+      ${detailRows ? `<ul class="speech-diagnostic-details">${detailRows}</ul>` : ""}
+      <div class="speech-diagnostic-next"><small>${escapeHTML(t("NEXT STEP", "次の練習"))}</small><strong>${escapeHTML(answer.practiceChunks || question.speakText)}</strong><span>${escapeHTML(t("Listen once, then repeat one chunk at a time.", "一度お手本を聞き、区切りごとに繰り返しましょう。"))}</span></div>
+    </section>
+  `;
 };
 
 const prepareQuestionRetry = (question) => {
@@ -953,6 +974,7 @@ const renderFeedback = (question) => {
   elements.feedbackCard.innerHTML = `
     <p><strong>${escapeHTML(feedbackMessage(question, result))}${escapeHTML(scoreText)}</strong></p>
     ${retryNote}
+    ${renderSpeechDiagnostic(question, result)}
     ${!result.correct && correctAnswer ? `
       <div class="feedback-audio-row">
         <p><strong>${escapeHTML(t("Answer:", "答え："))}</strong> ${escapeHTML(correctAnswer)}</p>

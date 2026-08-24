@@ -15,6 +15,7 @@
       <label><span data-teacher-en="Language" data-teacher-ja="表示言語">Language</span>
         <select id="teacherLanguage" aria-label="Teacher Studio language" data-teacher-aria-en="Teacher Studio language" data-teacher-aria-ja="Teacher Studioの表示言語"><option value="en">English</option><option value="ja">日本語</option></select>
       </label>
+      <span data-study-music-controls></span>
       <span class="role-badge" data-teacher-en="Teacher only" data-teacher-ja="先生専用">Teacher only</span>
       <button class="quiet-btn" id="teacherLogout" type="button" hidden data-teacher-en="Sign out" data-teacher-ja="ログアウト">Sign out</button>
     </nav>
@@ -191,6 +192,7 @@
   </main>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js"></script>
-  <script type="module" src="/src/teacher.js"></script>
+  <script type="module" src="/src/teacher.js?v=20260824-cross-page-music1"></script>
+  <script type="module" src="/src/study-music.js?v=20260824-cross-page-music1"></script>
 </body>
 </html>

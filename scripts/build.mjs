@@ -32,6 +32,7 @@ const publicSourceFiles = [
   "premium-tasks.js",
   "pwa.js",
   "store.js",
+  "study-music.js",
   "styles.css",
   "supabase.js",
   "teacher.js",

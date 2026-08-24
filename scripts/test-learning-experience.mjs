@@ -251,6 +251,9 @@ assert.match(audioScript, /export function ambientPlaybackStatus/);
 assert.match(audioScript, /assets\/audio\/ambient\/clear-air\.m4a/);
 assert.doesNotMatch(audioScript, /buildAmbientGraph|addAmbientTone|addAmbientTexture/);
 assert.match(lessonScript, /playCompletionSound/);
+assert.match(lessonScript, /speech-diagnostic-compare/);
+assert.match(lessonScript, /I heard/);
+assert.match(lessonScript, /NEXT STEP/);
 assert.match(localServer, /"\.webp": "image\/webp"/);
 assert.match(localServer, /"\.mp3": "audio\/mpeg"/);
 assert.match(localServer, /"\.m4a": "audio\/mp4"/);
@@ -389,7 +392,26 @@ const changedWordFeedback = speakingFeedbackForTranscript(
 );
 assert.equal(changedWordFeedback.band, "word-mismatch");
 assert.equal(changedWordFeedback.matched, false);
-assert.match(changedWordFeedback.messageEn, /reason.*reasonable/i);
+assert.match(changedWordFeedback.messageEn, /reasonable.*reason/i);
+const differentSentenceFeedback = speakingFeedbackForTranscript(
+  "I haven’t taken a bath yet.",
+  "How are you",
+  () => 0,
+);
+assert.equal(differentSentenceFeedback.band, "different-sentence");
+assert.equal(differentSentenceFeedback.matched, false);
+assert.match(differentSentenceFeedback.messageEn, /different sentence/i);
+assert.doesNotMatch(differentSentenceFeedback.messageEn, /one word/i);
+assert.equal(differentSentenceFeedback.heardText, "How are you");
+assert.equal(differentSentenceFeedback.targetText, "I haven’t taken a bath yet.");
+assert(differentSentenceFeedback.missing.length >= 3);
+const multipleDifferenceFeedback = speakingFeedbackForTranscript(
+  "I haven’t taken a bath yet.",
+  "I have taken shower",
+  () => 0,
+);
+assert.equal(multipleDifferenceFeedback.band, "sentence-mismatch");
+assert.match(multipleDifferenceFeedback.messageEn, /parts need attention/i);
 
 const { DEEP_LESSON_GUIDES } = await import("../src/lesson-guides.js");
 assert.equal(Object.keys(DEEP_LESSON_GUIDES).length, 17, "All 17 lessons have detailed lesson guides.");

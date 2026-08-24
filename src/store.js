@@ -3,6 +3,7 @@ const LEGACY_PROGRESS_KEY = "te-review-hub:lesson-progress:v1";
 const SETTINGS_KEY_PREFIX = "te-review-hub:settings:v2";
 const PROGRESS_KEY_PREFIX = "te-review-hub:lesson-progress:v2";
 const THEME_BOOT_KEY = "te-review-hub:theme:v1";
+const AMBIENT_DEVICE_KEY = "te-review-hub:ambient:v1";
 let activeStorageScope = "anonymous";
 
 export const AMBIENT_TRACK_KEYS = Object.freeze([
@@ -93,6 +94,15 @@ export function getStorageScope() {
 
 export function getSettings() {
   const saved = readScopedJSON(SETTINGS_KEY_PREFIX, LEGACY_SETTINGS_KEY, {});
+  let deviceAmbient = {};
+  if (canUseStorage()) {
+    try {
+      const parsed = JSON.parse(window.localStorage.getItem(AMBIENT_DEVICE_KEY) || "{}");
+      if (parsed && typeof parsed === "object") deviceAmbient = parsed;
+    } catch {
+      deviceAmbient = {};
+    }
+  }
   const savedSettings = saved && typeof saved === "object" ? { ...saved } : {};
   // Retired settings remain harmless in old local/remote JSON, but are never
   // returned or written again.
@@ -136,15 +146,20 @@ export function getSettings() {
     sfxEnabled,
     sfxVolume: clampVolume(saved?.sfxVolume, 0.24),
     ambientPreferenceVersion: 2,
-    ambientEnabled: ambientPreferenceCurrent
-      ? saved?.ambientEnabled !== false
-      : true,
-    ambientTrack: AMBIENT_TRACK_KEYS.includes(saved?.ambientTrack)
-      ? saved.ambientTrack
+    // Study music is a device-level listening preference so it follows the
+    // learner between public, plan, credit and teacher pages even when those
+    // pages do not load a learner session.
+    ambientEnabled: typeof deviceAmbient.enabled === "boolean"
+      ? deviceAmbient.enabled
+      : ambientPreferenceCurrent ? saved?.ambientEnabled !== false : true,
+    ambientTrack: AMBIENT_TRACK_KEYS.includes(deviceAmbient.track)
+      ? deviceAmbient.track
+      : AMBIENT_TRACK_KEYS.includes(saved?.ambientTrack)
+        ? saved.ambientTrack
       : "calm_focus",
-    ambientVolume: ambientPreferenceCurrent
-      ? clampVolume(saved?.ambientVolume, 0.18)
-      : 0.18,
+    ambientVolume: Number.isFinite(Number(deviceAmbient.volume))
+      ? clampVolume(deviceAmbient.volume, 0.18)
+      : ambientPreferenceCurrent ? clampVolume(saved?.ambientVolume, 0.18) : 0.18,
     // Choices are always shuffled for a new practice run. Keep this field for
     // backward-compatible remote settings without allowing an old unchecked
     // preference to disable the learning safeguard.
@@ -197,6 +212,11 @@ export function updateSettings(patch = {}) {
   delete next.vibration;
   writeJSON(scopedKey(SETTINGS_KEY_PREFIX), next);
   writeJSON(THEME_BOOT_KEY, next.theme);
+  writeJSON(AMBIENT_DEVICE_KEY, {
+    enabled: next.ambientEnabled,
+    track: next.ambientTrack,
+    volume: next.ambientVolume,
+  });
   notify("te-review:settings", next);
   return next;
 }

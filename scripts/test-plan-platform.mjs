@@ -15,14 +15,17 @@ import {
 } from "../src/plans.js";
 
 const root = new URL("../", import.meta.url);
-const [pricingPage, pricingUi, lessonPage, lessonUi, store, styles, teacherUi, membershipFunction, migration, build] = await Promise.all([
+const [pricingPage, pricingUi, lessonPage, lessonUi, store, styles, teacherPage, teacherUi, musicCreditsPage, musicUi, membershipFunction, migration, build] = await Promise.all([
   readFile(new URL("pricing.html", root), "utf8"),
   readFile(new URL("src/pricing.js", root), "utf8"),
   readFile(new URL("lesson.html", root), "utf8"),
   readFile(new URL("src/lesson.js", root), "utf8"),
   readFile(new URL("src/store.js", root), "utf8"),
   readFile(new URL("src/styles.css", root), "utf8"),
+  readFile(new URL("teacher.html", root), "utf8"),
   readFile(new URL("src/teacher.js", root), "utf8"),
+  readFile(new URL("music-credits.html", root), "utf8"),
+  readFile(new URL("src/study-music.js", root), "utf8"),
   readFile(new URL("supabase/functions/membership-access/index.ts", root), "utf8"),
   readFile(new URL("supabase/migrations/202608110014_premium_plus_and_entitlements.sql", root), "utf8"),
   readFile(new URL("scripts/build.mjs", root), "utf8"),
@@ -101,6 +104,15 @@ assert.match(pricingUi, /planSavings/);
 assert.match(pricingUi, /premium-promotion/);
 assert.match(pricingUi, /premium-promotion-gift/);
 assert.match(pricingUi, />🎁</);
+assert.match(pricingUi, /premium-promotion-steps/);
+assert.match(pricingUi, /FIRST 30 DAYS/);
+assert.match(pricingUi, /SECOND MONTH/);
+assert.match(pricingUi, /plan-visual-premium/);
+assert.match(pricingUi, /1 review \/ lesson/);
+assert.match(pricingUi, /plan-visual-coaching/);
+assert.match(pricingUi, /sessions every month/);
+assert.match(pricingUi, /50 minutes each/);
+assert.doesNotMatch(pricingUi, /mark: "2×"|mark: "3×"|coaching-calendar|premium-review-gift/);
 assert.match(pricingUi, /normally.*monthlyTotal/);
 assert.match(store, /theme: "light"/);
 assert.match(styles, /2026-08-20 · unified premium clarity layer/);
@@ -109,10 +121,9 @@ assert.match(styles, /max-width: 1399px[\s\S]*\.plan-grid \{ grid-template-colum
 assert.match(pricingUi, /Premium\+ Coaching/);
 assert.doesNotMatch(pricingUi, /coaching-orbit/);
 assert.doesNotMatch(styles, /coaching-orbit|review-pulse/);
-assert.match(pricingUi, /coaching-calendar[\s\S]*LIVE[\s\S]*01[\s\S]*02[\s\S]*03/);
-assert.match(styles, /@property --premium-coaching-angle/);
-assert.match(styles, /premium-coaching-border 12s linear infinite/);
-assert.match(styles, /coaching-session-glow 3\.6s ease-in-out infinite/);
+assert.match(pricingUi, /coaching-sessions[\s\S]*01[\s\S]*02[\s\S]*03/);
+assert.match(styles, /premium-border-light 8s ease-in-out infinite alternate/);
+assert.match(styles, /coaching-session-glow 4\.8s ease-in-out infinite/);
 assert.match(styles, /\.lesson-card-locked::after[\s\S]*height: 150px[\s\S]*background: linear-gradient\(to top,var\(--learner-surface\)/);
 assert.match(styles, /\.plan-card\.premium-plus::before[\s\S]*premium-signature-border/);
 assert.match(styles, /prefers-reduced-motion[\s\S]*premium-plus::before[\s\S]*animation: none/);
@@ -122,6 +133,16 @@ assert.match(styles, /html\[data-theme="dark"\] \.billing-switch button:not\(\.a
 assert.match(build, /"pricing\.html"/);
 assert.match(build, /"plans\.js"/);
 assert.match(build, /"pricing\.js"/);
+assert.match(build, /"study-music\.js"/);
+for (const [pageName, page] of [["pricing", pricingPage], ["teacher", teacherPage], ["music credits", musicCreditsPage]]) {
+  assert.match(page, /data-study-music-controls/, `${pageName} exposes the shared music settings.`);
+  assert.match(page, /src\/study-music\.js/, `${pageName} starts the shared music controller.`);
+}
+assert.match(musicUi, /syncAmbientFromSettings/);
+assert.match(musicUi, /data-study-music-toggle/);
+assert.match(musicUi, /data-study-music-track/);
+assert.match(musicUi, /data-study-music-volume/);
+assert.match(store, /te-review-hub:ambient:v1/);
 
 assert.match(lessonPage, /id="lessonSettingsDialog"/);
 assert.match(lessonPage, /id="questionTypeFilter"/);
