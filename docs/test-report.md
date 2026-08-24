@@ -1,6 +1,42 @@
 # Test Report / 動作確認レポート
 
-Last updated: **August 20, 2026**
+Last updated: **August 24, 2026**
+
+## August 24 Premium, Quick Practice and licensed-music checkpoint
+
+- Application commit: `18571bd82be51986e43621fc5242c2e6386221b6`.
+  Feature parent: `5cd3a53b2f5094e751b1374e7f232b3519a77dfd`.
+- Netlify Preview — PASS: deploy `6a8c2e337479160008093171` published from
+  `upgrade/review-hub-v9-final-product`. Immutable URL:
+  `https://6a8c2e337479160008093171--tahmid-english-review-hub-preview.netlify.app`.
+  Production was not deployed.
+- Premium visual QA — PASS at 1440 px and 390 px in Light/Dark: Premium shows
+  a visible `🎁 SPEAK → WRITE` story and gift-led new-applicant offer; Premium+
+  shows `LIVE 01 02 03`. The former three-dot orbit is absent. The only motion
+  is a slow whole-card border highlight plus restrained session glow, disabled
+  by reduced-motion. Mobile `scrollWidth` equalled the 390 px viewport.
+- Quick Practice — PASS locally and on the exact Preview: lesson cards offer
+  Quick (5–10 minutes, 8 questions) and Full Lesson before entry. The Quick URL
+  loaded with `practice=quick`, selected the Quick set, rendered question
+  buttons 1–8 only, and displayed the exact bilingual duration/count notice.
+- Study Music — PASS: removed procedural Web Audio ambience; Ambient defaults
+  ON at 18%, starts after the first permitted interaction, loops, supports five
+  choices and 0–40% volume, and ducks during voice playback. All five final
+  AAC/M4A recordings reached ready state 4 with progressing current time,
+  finite duration, `paused=false` and no media error locally and on the exact
+  Preview. The web copies total about 15 MB instead of about 39 MB for the
+  initial MP3 downloads.
+- Licensing — PASS: all five tracks are Kevin MacLeod recordings with official
+  ISRC source links and CC BY 4.0 attribution in `/music-credits` and
+  `assets/audio/ambient/LICENSE.md`. Beatles recordings were not used because
+  no authorised reusable recording licence was established.
+- Browser console — PASS: zero error-level messages on the exact Preview during
+  the final Premium/Quick/music checks.
+- `npm test` — PASS: 17 lessons, 616 activities, 85 visuals, 14 formats, 1,382
+  integrity/security assertions, and all learner/teacher/Premium/plan/v15
+  suites.
+- `npm run build`, `npm run verify:visuals`, `npm run verify:audio`, JavaScript
+  syntax checks and `git diff --check` — PASS.
 
 ## August 20 premium clarity and ambient-audio checkpoint
 
@@ -102,6 +138,8 @@ Last updated: **August 20, 2026**
 
 ## August 18 final-polish checkpoint 3
 
+- Historical snapshot, superseded by the licensed-recording August 24
+  checkpoint above.
 - Scope: separate Voice/SFX/Ambient settings, refined procedural feedback SFX,
   five procedural study ambiences, ducking, persistence and PWA audio refresh;
   no downloaded music, Supabase schema, Edge Function or Production change.

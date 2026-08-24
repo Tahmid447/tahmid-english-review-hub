@@ -11,9 +11,18 @@ This document records the state that existed before the final-product work began
 ## Final-product checkpoint status
 
 - Working branch: `upgrade/review-hub-v9-final-product`.
+- Latest checked application commit: `18571bd82be51986e43621fc5242c2e6386221b6`.
+  It is published to the current-account Preview as Netlify deploy
+  `6a8c2e337479160008093171`; exact permalink:
+  `https://6a8c2e337479160008093171--tahmid-english-review-hub-preview.netlify.app`.
+  August 24 verification covers the Premium/Premium+ redesign, 8-question
+  Quick Practice and five licensed, web-optimised Study Music recordings.
+  Production remains pre-v9 and was not deployed.
 - Exact deployed application commit:
   `049b5ff4da6606fcffc461f412f314d253916e13`; historical rollout/logical-
   restore checkpoint: `fcf561d78da6de405d6ca54b78ebfc99df3d3a0a`.
+  This line records the earlier dedicated-v9 Preview artifact, not the latest
+  current-account Preview above.
 - Current documentation checkpoint is branch HEAD (`git rev-parse HEAD`); a
   documentation commit cannot contain its own final hash.
 - The dedicated v9 preview is published from exact application commit

@@ -4,9 +4,9 @@ Private development repository for the Tahmid English Review Hub v9 learner
 platform and Teacher Studio.
 
 Current work is on `upgrade/review-hub-v9-final-product`. The exact deployed
-and live-validated final-polish artifact is
-`7899024a8c9baee9cdd91b0fe93346a1bcc8427d` (Netlify deploy
-`6a8420afed26890008660823`);
+and live-validated August 24 application artifact is
+`18571bd82be51986e43621fc5242c2e6386221b6` (current-account Preview deploy
+`6a8c2e337479160008093171`);
 `fcf561d78da6de405d6ca54b78ebfc99df3d3a0a` remains the historical rollout and
 logical-restore checkpoint. Authenticated learner Google sign-in, profile
 completion, reload persistence, lesson access, and safe sign-out pass. Teacher
@@ -20,6 +20,7 @@ physical-device QA remain pending. The production static site remains pre-v9. Re
 - `/lesson/june-28` — shared lesson player
 - `/phrases` — Phrase & Vocabulary Library
 - `/plans` — Free, Standard, Premium, and Premium+ comparison/contact flow
+- `/music-credits` — CC BY 4.0 study-music attribution and official sources
 - `/takiwaki` — compatibility route that redirects to the shared learner hub
 - `/teacher` — authenticated Teacher Studio
 
@@ -35,10 +36,14 @@ lesson data are guarded by Supabase Auth and Row Level Security.
 - format-aware answer completeness and **Check N answered** partial grading
 - immediate bilingual retry with the first official result preserved
 - fresh-run question/choice shuffle and saved-run order restoration
+- pre-entry Quick Practice (8 balanced questions, about 5–10 minutes) or Full
+  Lesson choice for every accessible lesson
 - Asia/Tokyo streak, weekly goal, unique completions, first accuracy, and retry
   improvement
 - progressive phrase/vocabulary library with retained filters and audio
 - persisted System/Light/Dark theme across home, phrases, lessons, and pricing
+- five complete licensed instrumental Study Music recordings, on by default,
+  with track/volume controls, voice ducking and a public credits page
 - public-shell PWA/offline fallback that excludes protected/authenticated data
 - four-plan pricing, 13-row comparison, editable contact message, and exact
   savings/monthly equivalents
@@ -74,6 +79,7 @@ or Instagram conversation; it does not process payment or claim success.
 npm run build
 npm test
 npm run verify:visuals
+npm run verify:audio
 npm run verify:live
 npm run audit:audio-live
 node scripts/test-teacher-controls.mjs
@@ -154,7 +160,7 @@ answers, teacher feedback, authenticated API responses, or recordings.
   Teacher Studio source links):
   `https://tahmid-english-review-hub-preview.netlify.app/`
 - Exact current-account Preview deploy:
-  `https://6a86db95cd49160008ff49c7--tahmid-english-review-hub-preview.netlify.app/`
+  `https://6a8c2e337479160008093171--tahmid-english-review-hub-preview.netlify.app/`
 - Production: `https://jocular-chaja-86e78d.netlify.app/`
   — static site remains untouched and pre-v9
 

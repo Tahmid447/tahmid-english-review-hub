@@ -1,11 +1,15 @@
 # Codex Handoff — Tahmid English Review Hub v9
 
-Updated: 2026-08-20 (Asia/Tokyo)
+Updated: 2026-08-24 (Asia/Tokyo)
 
 ## Open this project
 
 - Repository folder: `/Users/tahmidahmed/Documents/Codex/2026-08-03/codex-handoff-tahmid-english-review-hub/work/tahmid-english-review-hub`
 - Working branch: `upgrade/review-hub-v9-final-product`
+- Exact August 24 application checkpoint:
+  `18571bd82be51986e43621fc5242c2e6386221b6`
+- Feature checkpoint before audio optimisation:
+  `5cd3a53b2f5094e751b1374e7f232b3519a77dfd`
 - Exact live-validated final-polish artifact:
   `7899024a8c9baee9cdd91b0fe93346a1bcc8427d`
 - Exact August 20 application checkpoint:
@@ -21,12 +25,35 @@ Updated: 2026-08-20 (Asia/Tokyo)
 - Dedicated v9 preview: https://tahmid-english-review-hub-v9-preview.netlify.app
 - Exact validated Preview permalink: https://6a8420afed26890008660823--tahmid-english-review-hub-v9-preview.netlify.app
 - Current-account Preview: https://tahmid-english-review-hub-preview.netlify.app
-- Exact current-account Preview permalink: https://6a86db95cd49160008ff49c7--tahmid-english-review-hub-preview.netlify.app
+- Exact current-account Preview permalink: https://6a8c2e337479160008093171--tahmid-english-review-hub-preview.netlify.app
 - Supabase project ref: `ycmybggetemkhorkhfnf`
 
 Do not place OAuth client secrets, passwords, service-role keys, database passwords, or access tokens in this file, Git, screenshots, or chat.
 
 ## Deployment truth
+
+- The August 24 application checkpoint `18571bd` is published only to the
+  current-account Preview as Netlify deploy `6a8c2e337479160008093171`.
+  Production static files remain untouched and pre-v9.
+- The uploaded Premium design demo was re-audited. Premium now has a visible
+  gift-led `SPEAK → WRITE` review story and promotion gift; Premium+ shows
+  `LIVE 01 02 03`. The old three-dot orbit was removed completely. A slow,
+  reduced-motion-safe highlight now travels around the whole Premium+ card
+  border rather than spinning a decorative object.
+- Every unlocked lesson card now asks the learner to choose **Quick Practice**
+  (8 balanced questions, approximately 5–10 minutes) or **Full Lesson** before
+  entry. The lesson URL, selector, shuffled run and question navigation retain
+  the chosen mode; Browser QA confirmed exactly eight question buttons.
+- Procedural ambient synthesis was removed. Study Music defaults ON at 18% and
+  offers five complete instrumental recordings by Kevin MacLeod under CC BY
+  4.0, with in-product and repository attribution. Web-optimised AAC/M4A copies
+  total about 15 MB instead of the initial 39 MB MP3 set. The final local and
+  immutable Preview checks played all five tracks with progressing current
+  time, finite duration, ready state 4 and no media error. Beatles recordings
+  were not included because no suitable authorised licence was established.
+- The final immutable Preview passed 390 px checks for Premium/Premium+ (gift,
+  LIVE sessions, no orbit, no horizontal overflow), Quick Practice (8
+  questions), all five study tracks, and an empty browser error log.
 
 - The August 20 premium-clarity/audio checkpoint was implemented at `3a9eea8`,
   pushed with handoff commit `1a5dfe6`, and published to the current-account
@@ -35,11 +62,10 @@ Do not place OAuth client secrets, passwords, service-role keys, database passwo
   readable, moves pricing value badges inside their cards, adds distinct
   Premium and Premium+ Coaching visuals, removes the oversized gold locked-card
   ornament, and preserves reduced-motion behavior.
-- Ambient study audio now defaults ON at an 18% background level. Browser
-  autoplay policy is handled honestly: the page reports that it is waiting and
-  starts on the first pointer/key/touch interaction. All five procedural tracks
-  were exercised in both the local browser and the published Preview and reached
-  a playing Web Audio graph; no third-party audio asset was added.
+- Historical August 20 audio note: the initial procedural ambience defaulted
+  ON at 18% and handled autoplay after the first interaction. That generator
+  was fully replaced by the five licensed local recordings documented in the
+  August 24 bullets above; do not restore the procedural tracks.
 - Four unused `Codex QA 2026-08-18 ...` access-code rows were permanently
   deleted after the user explicitly authorised deletion. Existing non-QA codes
   were not changed.
@@ -58,7 +84,8 @@ Do not place OAuth client secrets, passwords, service-role keys, database passwo
   recorded as supplemental teacher-facing source links. Migration `018`
   applied the six exact page IDs/URLs and its six-row postcondition passed.
 
-- The August 18 final-polish work is proceeding in recoverable phases. The first
+- Historical August 18 phase record: the final-polish work proceeded in
+  recoverable phases. The first
   local checkpoint completes Teacher Studio one-language English/Japanese UI
   coverage and honest source-link handling (`8b76baa`). The second checkpoint
   adds the bright Light default, refined plan/lock/footer system, clipped-badge
@@ -69,7 +96,8 @@ Do not place OAuth client secrets, passwords, service-role keys, database passwo
   Music. The August 20 follow-up changes the default to ON with Calm Focus at
   18%, adds a 0–40% learner control, starts after the first browser-permitted
   interaction, persists per learner, and ducks during natural speech. No
-  external or ambiguously licensed music asset was added.
+  external music asset existed at that checkpoint; the licensed August 24
+  replacement above is now authoritative.
 - The fourth final-polish checkpoint is complete locally: all 17 lessons have
   three learner-selectable Premium topics (51 authored topics total). Each
   choice has bilingual speaking and essay prompts, topic-specific recommended
@@ -157,10 +185,15 @@ Do not place OAuth client secrets, passwords, service-role keys, database passwo
 - A public-shell PWA manifest, service worker, install metadata, and offline fallback are present. Protected routes, Supabase/API responses, learner data, answers, recordings, and auth-bearing requests are excluded from caching.
 - Voice has its own on/off, volume, accent and playback-speed settings. SFX has
   an independent on/off and volume control with restrained layered click,
-  correct, try-again and completion cues. Ambient has an independent on/off,
-  track and 0–40% volume control; its five tracks are generated in-browser and
-  have no vocals, download, or third-party licence dependency. PWA public cache
-  v7 plus query-versioned audio modules prevents a stale audio shell.
+  correct, try-again and completion cues. Study Music has an independent
+  on/off, track and 0–40% volume control; its five complete vocal-free local
+  recordings are licensed under CC BY 4.0 and credited at `/music-credits`.
+  PWA public cache v9 plus query-versioned audio modules prevents a stale audio
+  shell. Speech temporarily ducks the music instead of stopping it.
+- Every accessible lesson card offers Quick Practice (8 balanced questions,
+  approximately 5–10 minutes) and Full Lesson. A fresh Quick run includes
+  understanding, listening, speaking, production, visual and interactive
+  families where available, then fills to eight unique questions.
 - The phrase/vocabulary library has progressive rendering, retained filters, pronunciation, favourites, practice activity, and corrected type/presentation behavior.
 - Responsive, contrast, touch-target, compact-header, lesson-radio keyboard,
   and pricing accessibility fixes are present locally. August 20 local
@@ -226,6 +259,25 @@ Do not place OAuth client secrets, passwords, service-role keys, database passwo
 - There is no automatic or AI grading. The retained database compatibility field is always written `false`; Tahmid remains responsible for reviewing and publishing feedback.
 
 ## Verification evidence
+
+The exact August 24 application checkpoint `18571bd` passed:
+
+```sh
+npm test
+npm run build
+npm run verify:visuals
+npm run verify:audio
+git diff --check
+```
+
+This is 17 lessons, 616 activities, 85 visual questions, 14 formats and 1,382
+integrity/security assertions. The audio verifier checks exactly five unique,
+complete M4A recordings, file headers, size bounds, official ISRC source links
+and CC BY 4.0 attribution. Browser QA on the exact immutable Netlify deploy
+confirmed the Premium gift/review mark, the Premium+ LIVE session visual and
+whole-card border animation, no orbit element, 390 px no-overflow, Quick mode
+with eight question buttons, all five audio files actually playing, and zero
+browser errors.
 
 The August 18 Teacher/i18n/source checkpoint passed `npm test`, `npm run build`,
 `npm run verify:visuals`, the new `node scripts/test-teacher-i18n.mjs`, and
@@ -312,16 +364,25 @@ Premium denial. Teacher auth remains pending; the learner is signed out.
 8. **Completed:** publish the August 20 application checkpoint to the
    current-account Preview only and verify the deploy, public content,
    Light/Dark presentation, all five ambience graphs and Lighthouse accessibility.
-9. **In progress:** authenticate dedicated non-teacher Free/
+9. **Completed:** publish August 24 checkpoint `18571bd` to the current-account
+   Preview only; verify the redesigned Premium/Premium+ visuals, 8-question
+   Quick Practice, five licensed/optimised Study Music tracks, 390 px layout
+   and empty browser error log on immutable deploy `6a8c2e337479160008093171`.
+10. **In progress:** authenticate dedicated non-teacher Free/
    Standard/Premium/Premium+ accounts; test tier/RLS/access codes, email auth,
    speaking/essay submissions, and published feedback.
-10. **Pending:** complete desktop/tablet/390 px and real iPhone Safari/Android
+11. **Pending:** complete desktop/tablet/390 px and real iPhone Safari/Android
    Chrome touch, microphone, PWA, and offline QA.
-11. Promote to production only after every preview gate passes and the correct
+12. Promote to production only after every preview gate passes and the correct
    production Netlify account is available. Preserve a known-good rollback
    deploy and prepare forward fixes for database issues.
 
 ## Remaining and blockers
+
+- August 24 Premium, Quick Practice and Study Music work is complete and
+  published to Preview. There is no known code-level blocker in that tranche.
+  The checked public artifact is commit `18571bd`, deploy
+  `6a8c2e337479160008093171`; Production was not deployed.
 
 - Live access-code CRUD progressed: temporary Standard, Premium and Premium+
   codes were created; one Standard code was edited; one Premium code was

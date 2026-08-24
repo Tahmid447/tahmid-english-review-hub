@@ -2,11 +2,31 @@
 
 ## Scope and release boundary
 
-This document separates measurements taken from the older deployed preview
-from optimizations present only in the local final-product worktree. The
-dedicated v9 preview is still `aad5749`; no post-change Lighthouse score is
-claimed here. Final-product deployment, authenticated QA, and physical-device
+August 24 update: the current-account Preview now publishes application commit
+`18571bd` as deploy `6a8c2e337479160008093171`. The historical measurements
+below remain useful baselines; no new full Lighthouse performance score was
+recorded in this tranche. Production remains untouched.
+
+This document originally separated measurements taken from the older deployed
+preview from optimizations that were then local-only. References below to the
+dedicated v9 preview at `aad5749` are historical. The August 24 current-account
+Preview deployment is real, but authenticated tier QA and physical-device
 testing remain pending.
+
+## August 24 study-music delivery update
+
+- The first licensed-audio Preview used five 320 kbps MP3 files totalling about
+  39 MB. Public playback worked, but cold CDN selection could take several
+  seconds for a newly selected track.
+- The final Preview uses web-optimised AAC/M4A copies totalling about 15 MB,
+  while retaining the full 174–223 second recordings and CC BY 4.0 attribution.
+- All five final assets were tested on the immutable deploy: each reached media
+  ready state 4, reported a finite duration, advanced `currentTime`, remained
+  unpaused and returned no media error.
+- Music is not eagerly loaded or service-worker-precached. The selected track
+  begins only after the learner's first permitted interaction; immutable CDN
+  caching benefits later selections/visits without placing all audio in the
+  offline shell.
 
 ## Previously recorded preview baseline
 

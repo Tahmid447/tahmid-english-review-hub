@@ -196,6 +196,25 @@ unique Japanese hints, and no missing guidance or invalid choice sets.
 Never place a Notion integration secret in browser JavaScript. Any future
 automatic import must run server-side and create a draft first.
 
+## 8A. Quick Practice and Study Music
+
+- Keep the lesson-card choice between **Quick Practice** and **Full Lesson**.
+  Quick Practice must remain exactly eight unique questions, approximately
+  5–10 minutes, and should preserve the balanced family selection in
+  `selectQuickPracticeIds`. Do not silently turn Quick into the full set.
+- Study Music defaults ON at 18% but begins only after a browser-permitted user
+  interaction. Voice playback ducks the music; it must not share the voice or
+  SFX volume setting.
+- The five local recordings are CC BY 4.0 and must retain the artist, ISRC,
+  official source and licence attribution in both `/music-credits` and
+  `assets/audio/ambient/LICENSE.md`. Do not add Beatles or other commercial
+  recordings unless the exact recording has a verified licence that permits
+  this public use.
+- Run `npm run verify:audio` after adding, replacing, renaming or recompressing
+  a track. Keep music files out of the service-worker precache; the audio files
+  may use immutable CDN caching because every changed asset receives a new
+  filename or matching module/cache version.
+
 ## 9. PWA, themes, and public caching
 
 The final-product code supports persisted System/Light/Dark themes and a PWA
@@ -263,10 +282,11 @@ For code/design/backend changes:
 2. Commit intentionally and push `upgrade/review-hub-v9-final-product`.
 3. Confirm the recorded Supabase/Edge postconditions and do not blindly replay
    the manually applied migrations.
-4. Confirm the current-account Netlify Preview serves source checkpoint
-   `3e371a1` at its immutable permalink:
-   `https://6a86db95cd49160008ff49c7--tahmid-english-review-hub-preview.netlify.app`.
-   This checkpoint includes 17/17 verified Teacher Studio source links.
+4. Confirm the current-account Netlify Preview serves application checkpoint
+   `18571bd` at its immutable permalink:
+   `https://6a8c2e337479160008093171--tahmid-english-review-hub-preview.netlify.app`.
+   This checkpoint includes 17/17 verified Teacher Studio source links,
+   Premium/Premium+ visual polish, Quick Practice and licensed Study Music.
 5. Preserve the recorded public QA evidence: home inventory; pricing and Dark
    persistence; phrases 24→30; shuffle/radio behavior; visual guidance; fixed
    Retry score; 0.5x and mixed-language controls; locked payload; Teacher gate
