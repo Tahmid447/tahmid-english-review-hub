@@ -1,12 +1,14 @@
 # Codex Handoff — Tahmid English Review Hub v9
 
-Updated: 2026-08-24 (Asia/Tokyo)
+Updated: 2026-08-25 (Asia/Tokyo)
 
 ## Open this project
 
 - Repository folder: `/Users/tahmidahmed/Documents/Codex/2026-08-03/codex-handoff-tahmid-english-review-hub/work/tahmid-english-review-hub`
 - Working branch: `upgrade/review-hub-v9-final-product`
-- Exact August 24 application checkpoint:
+- Exact August 25 application checkpoint:
+  `ae766535442dcd17d2d6976303dafb0423a3edc3`
+- Previous August 24 application checkpoint:
   `18571bd82be51986e43621fc5242c2e6386221b6`
 - Feature checkpoint before audio optimisation:
   `5cd3a53b2f5094e751b1374e7f232b3519a77dfd`
@@ -25,21 +27,28 @@ Updated: 2026-08-24 (Asia/Tokyo)
 - Dedicated v9 preview: https://tahmid-english-review-hub-v9-preview.netlify.app
 - Exact validated Preview permalink: https://6a8420afed26890008660823--tahmid-english-review-hub-v9-preview.netlify.app
 - Current-account Preview: https://tahmid-english-review-hub-preview.netlify.app
-- Exact current-account Preview permalink: https://6a8c2e337479160008093171--tahmid-english-review-hub-preview.netlify.app
+- Exact current-account Preview permalink: https://6a8c62cc2b35130008cdffb1--tahmid-english-review-hub-preview.netlify.app
 - Supabase project ref: `ycmybggetemkhorkhfnf`
 
 Do not place OAuth client secrets, passwords, service-role keys, database passwords, or access tokens in this file, Git, screenshots, or chat.
 
 ## Deployment truth
 
-- The August 24 application checkpoint `18571bd` is published only to the
-  current-account Preview as Netlify deploy `6a8c2e337479160008093171`.
+- The August 25 application checkpoint `ae76653` is published only to the
+  current-account Preview as Netlify deploy `6a8c62cc2b35130008cdffb1`.
   Production static files remain untouched and pre-v9.
-- The uploaded Premium design demo was re-audited. Premium now has a visible
-  gift-led `SPEAK → WRITE` review story and promotion gift; Premium+ shows
-  `LIVE 01 02 03`. The old three-dot orbit was removed completely. A slow,
-  reduced-motion-safe highlight now travels around the whole Premium+ card
-  border rather than spinning a decorative object.
+- The uploaded Premium design demo was re-audited again. The overlapping
+  `2×`/`3×` decorations were removed. Premium now shows two quiet, separate
+  value tiles: one speaking review and one writing review per lesson. The
+  promotion shows `FIRST 30 DAYS ¥0` followed by `SECOND MONTH ¥3,490 · 50%
+  OFF`. Premium+ shows three monthly 50-minute sessions on a stable `01—02—03`
+  line. Motion is restrained and disabled by reduced-motion.
+- Speaking comparison is now transcript-aware. The reproduced target
+  “I haven’t taken a bath yet.” versus recognized “How are you” is classified
+  as a different sentence, not a one-word error. Feedback shows `I heard`,
+  `Target`, change/missing/extra details and short retry chunks; the existing
+  exact one-word correction remains covered by regression tests. This is
+  transcript comparison, not phoneme-level pronunciation scoring.
 - Every unlocked lesson card now asks the learner to choose **Quick Practice**
   (8 balanced questions, approximately 5–10 minutes) or **Full Lesson** before
   entry. The lesson URL, selector, shuffled run and question navigation retain
@@ -51,9 +60,15 @@ Do not place OAuth client secrets, passwords, service-role keys, database passwo
   immutable Preview checks played all five tracks with progressing current
   time, finite duration, ready state 4 and no media error. Beatles recordings
   were not included because no suitable authorised licence was established.
-- The final immutable Preview passed 390 px checks for Premium/Premium+ (gift,
-  LIVE sessions, no orbit, no horizontal overflow), Quick Practice (8
-  questions), all five study tracks, and an empty browser error log.
+- The same device-level music preference and visible five-track/volume controls
+  now follow the learner across Hub, lesson, phrase/vocabulary library, plans,
+  Teacher Studio, music credits, contact flow and the public error page. On the
+  August 25 immutable Preview, both Plans and Teacher Studio played the real
+  local M4A with ready state 4, advancing current time and no media error.
+  Browser autoplay may require one tap; the UI reports that honestly.
+- The final immutable Preview passed 390 px checks for Premium/Premium+ (clear
+  review/session values and no horizontal overflow), all five study tracks,
+  and cross-page Plans/Teacher music playback.
 
 - The August 20 premium-clarity/audio checkpoint was implemented at `3a9eea8`,
   pushed with handoff commit `1a5dfe6`, and published to the current-account
@@ -260,7 +275,7 @@ Do not place OAuth client secrets, passwords, service-role keys, database passwo
 
 ## Verification evidence
 
-The exact August 24 application checkpoint `18571bd` passed:
+The exact August 25 application checkpoint `ae76653` passed:
 
 ```sh
 npm test
@@ -274,10 +289,12 @@ This is 17 lessons, 616 activities, 85 visual questions, 14 formats and 1,382
 integrity/security assertions. The audio verifier checks exactly five unique,
 complete M4A recordings, file headers, size bounds, official ISRC source links
 and CC BY 4.0 attribution. Browser QA on the exact immutable Netlify deploy
-confirmed the Premium gift/review mark, the Premium+ LIVE session visual and
-whole-card border animation, no orbit element, 390 px no-overflow, Quick mode
-with eight question buttons, all five audio files actually playing, and zero
-browser errors.
+confirmed the separate Premium speaking/writing tiles, the explicit ¥0 then
+¥3,490 offer steps, the Premium+ three-session/50-minute story, and 390 px
+no-overflow. Plans and Teacher Studio both displayed the same five-track and
+volume controls and played the real local M4A with advancing current time,
+ready state 4 and no media error. The speaking regression reproducing “How are
+you” against “I haven’t taken a bath yet” also passed as `different-sentence`.
 
 The August 18 Teacher/i18n/source checkpoint passed `npm test`, `npm run build`,
 `npm run verify:visuals`, the new `node scripts/test-teacher-i18n.mjs`, and
@@ -368,21 +385,26 @@ Premium denial. Teacher auth remains pending; the learner is signed out.
    Preview only; verify the redesigned Premium/Premium+ visuals, 8-question
    Quick Practice, five licensed/optimised Study Music tracks, 390 px layout
    and empty browser error log on immutable deploy `6a8c2e337479160008093171`.
-10. **In progress:** authenticate dedicated non-teacher Free/
+10. **Completed:** publish August 25 checkpoint `ae76653` to the current-account
+    Preview only; verify cross-page music controls/real playback, transcript-
+    aware speaking guidance, clearer Premium/Premium+ value cards and 390 px
+    no-overflow on immutable deploy `6a8c62cc2b35130008cdffb1`.
+11. **In progress:** authenticate dedicated non-teacher Free/
    Standard/Premium/Premium+ accounts; test tier/RLS/access codes, email auth,
    speaking/essay submissions, and published feedback.
-11. **Pending:** complete desktop/tablet/390 px and real iPhone Safari/Android
+12. **Pending:** complete desktop/tablet/390 px and real iPhone Safari/Android
    Chrome touch, microphone, PWA, and offline QA.
-12. Promote to production only after every preview gate passes and the correct
+13. Promote to production only after every preview gate passes and the correct
    production Netlify account is available. Preserve a known-good rollback
    deploy and prepare forward fixes for database issues.
 
 ## Remaining and blockers
 
-- August 24 Premium, Quick Practice and Study Music work is complete and
-  published to Preview. There is no known code-level blocker in that tranche.
-  The checked public artifact is commit `18571bd`, deploy
-  `6a8c2e337479160008093171`; Production was not deployed.
+- August 25 cross-page Study Music, transcript-aware speaking feedback and
+  Premium/Premium+ clarity work is complete and published to Preview. There is
+  no known code-level blocker in that tranche. The checked public artifact is
+  commit `ae76653`, deploy `6a8c62cc2b35130008cdffb1`; Production was not
+  deployed.
 
 - Live access-code CRUD progressed: temporary Standard, Premium and Premium+
   codes were created; one Standard code was edited; one Premium code was

@@ -4,9 +4,9 @@ Private development repository for the Tahmid English Review Hub v9 learner
 platform and Teacher Studio.
 
 Current work is on `upgrade/review-hub-v9-final-product`. The exact deployed
-and live-validated August 24 application artifact is
-`18571bd82be51986e43621fc5242c2e6386221b6` (current-account Preview deploy
-`6a8c2e337479160008093171`);
+and live-validated August 25 application artifact is
+`ae766535442dcd17d2d6976303dafb0423a3edc3` (current-account Preview deploy
+`6a8c62cc2b35130008cdffb1`);
 `fcf561d78da6de405d6ca54b78ebfc99df3d3a0a` remains the historical rollout and
 logical-restore checkpoint. Authenticated learner Google sign-in, profile
 completion, reload persistence, lesson access, and safe sign-out pass. Teacher
@@ -43,7 +43,12 @@ lesson data are guarded by Supabase Auth and Row Level Security.
 - progressive phrase/vocabulary library with retained filters and audio
 - persisted System/Light/Dark theme across home, phrases, lessons, and pricing
 - five complete licensed instrumental Study Music recordings, on by default,
-  with track/volume controls, voice ducking and a public credits page
+  with device-wide track/volume controls, voice ducking and a public credits
+  page; controls are present on the Hub, lessons, library, plans, Teacher
+  Studio, music credits, contact flow and public error page
+- transcript-aware speaking guidance that separates a different sentence from
+  a precise one-word change, shows what the browser heard versus the target,
+  and gives missing/extra/change details plus short retry chunks
 - public-shell PWA/offline fallback that excludes protected/authenticated data
 - four-plan pricing, 13-row comparison, editable contact message, and exact
   savings/monthly equivalents
@@ -91,8 +96,9 @@ git diff --check
 ```
 
 After the authentication fixes, the full `npm test`, `npm run build`, and
-`npm run verify:visuals` sequence passed. After the final query cache-bust in
-`049b5ff`, the latest full `npm test` and `npm run build` also passed.
+`npm run verify:visuals` sequence passed. The same full sequence, including the
+five-track audio verifier, passed again for the August 25 application checkpoint
+`ae76653`.
 
 `npm run build` regenerates reviewed data and the protected Supabase question
 migration. The public `dist/` allowlist deliberately excludes private authoring
@@ -156,11 +162,11 @@ answers, teacher feedback, authenticated API responses, or recordings.
   deploy `6a8420afed26890008660823`
 - Exact validated immutable Preview permalink:
   `https://6a8420afed26890008660823--tahmid-english-review-hub-v9-preview.netlify.app`
-- Current-account Preview (premium clarity, ambient audio and 17/17 verified
-  Teacher Studio source links):
+- Current-account Preview (cross-page music, transcript-aware speaking
+  guidance, premium clarity and 17/17 verified Teacher Studio source links):
   `https://tahmid-english-review-hub-preview.netlify.app/`
 - Exact current-account Preview deploy:
-  `https://6a8c2e337479160008093171--tahmid-english-review-hub-preview.netlify.app/`
+  `https://6a8c62cc2b35130008cdffb1--tahmid-english-review-hub-preview.netlify.app/`
 - Production: `https://jocular-chaja-86e78d.netlify.app/`
   — static site remains untouched and pre-v9
 

@@ -205,6 +205,11 @@ automatic import must run server-side and create a draft first.
 - Study Music defaults ON at 18% but begins only after a browser-permitted user
   interaction. Voice playback ducks the music; it must not share the voice or
   SFX volume setting.
+- Music On/Off, track and volume are device-level settings and must follow the
+  learner across Hub, lesson, phrase/vocabulary library, plans, Teacher Studio,
+  music credits, contact flow and the public error page. Pages that cannot
+  autoplay must show `Tap once to start` and resume after an explicit music
+  control action; never pretend that a blocked track is already playing.
 - The five local recordings are CC BY 4.0 and must retain the artist, ISRC,
   official source and licence attribution in both `/music-credits` and
   `assets/audio/ambient/LICENSE.md`. Do not add Beatles or other commercial
@@ -283,10 +288,11 @@ For code/design/backend changes:
 3. Confirm the recorded Supabase/Edge postconditions and do not blindly replay
    the manually applied migrations.
 4. Confirm the current-account Netlify Preview serves application checkpoint
-   `18571bd` at its immutable permalink:
-   `https://6a8c2e337479160008093171--tahmid-english-review-hub-preview.netlify.app`.
+   `ae76653` at its immutable permalink:
+   `https://6a8c62cc2b35130008cdffb1--tahmid-english-review-hub-preview.netlify.app`.
    This checkpoint includes 17/17 verified Teacher Studio source links,
-   Premium/Premium+ visual polish, Quick Practice and licensed Study Music.
+   Quick Practice, licensed cross-page Study Music, transcript-aware speaking
+   feedback and the simplified Premium/Premium+ value cards.
 5. Preserve the recorded public QA evidence: home inventory; pricing and Dark
    persistence; phrases 24→30; shuffle/radio behavior; visual guidance; fixed
    Retry score; 0.5x and mixed-language controls; locked payload; Teacher gate

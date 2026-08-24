@@ -11,12 +11,14 @@ This document records the state that existed before the final-product work began
 ## Final-product checkpoint status
 
 - Working branch: `upgrade/review-hub-v9-final-product`.
-- Latest checked application commit: `18571bd82be51986e43621fc5242c2e6386221b6`.
+- Latest checked application commit: `ae766535442dcd17d2d6976303dafb0423a3edc3`.
   It is published to the current-account Preview as Netlify deploy
-  `6a8c2e337479160008093171`; exact permalink:
-  `https://6a8c2e337479160008093171--tahmid-english-review-hub-preview.netlify.app`.
-  August 24 verification covers the Premium/Premium+ redesign, 8-question
-  Quick Practice and five licensed, web-optimised Study Music recordings.
+  `6a8c62cc2b35130008cdffb1`; exact permalink:
+  `https://6a8c62cc2b35130008cdffb1--tahmid-english-review-hub-preview.netlify.app`.
+  August 25 verification covers device-wide Study Music controls/real playback,
+  transcript-aware speaking correction and the simplified Premium/Premium+
+  value presentation. The August 24 Quick Practice and licensed-track work is
+  retained.
   Production remains pre-v9 and was not deployed.
 - Exact deployed application commit:
   `049b5ff4da6606fcffc461f412f314d253916e13`; historical rollout/logical-

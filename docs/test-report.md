@@ -1,6 +1,37 @@
 # Test Report / 動作確認レポート
 
-Last updated: **August 24, 2026**
+Last updated: **August 25, 2026**
+
+## August 25 cross-page music, speaking and plan-clarity checkpoint
+
+- Application commit: `ae766535442dcd17d2d6976303dafb0423a3edc3`.
+- Netlify Preview — PASS: deploy `6a8c62cc2b35130008cdffb1` published from
+  `upgrade/review-hub-v9-final-product` in 12 seconds (12 uploaded files, four
+  generated pages and eight changed assets). Immutable URL:
+  `https://6a8c62cc2b35130008cdffb1--tahmid-english-review-hub-preview.netlify.app`.
+  Production was not deployed.
+- Cross-page Study Music — PASS locally and on the exact Preview: Plans and
+  Teacher Studio expose Music On/Off, all five named tracks and 0–40% volume.
+  Both routes played `/assets/audio/ambient/clear-air.m4a` with `paused=false`,
+  ready state 4, advancing current time and no media error. The same device
+  preference is shared with Hub, lesson, library, music credits, contact flow
+  and the public error page. A browser that blocks autoplay shows the honest
+  “Tap once to start” state.
+- Speaking comparison — PASS: the reproduced target “I haven’t taken a bath
+  yet.” versus recognized “How are you” returns `different-sentence`, never
+  the one-word message. The result retains the original target/heard text,
+  identifies missing/extra/change words and supplies short retry chunks. A
+  real one-word substitution still receives the precise heard→target message.
+  This validates transcript-level comparison; real microphone recognition and
+  phoneme-level pronunciation scoring remain outside this claim.
+- Premium/Premium+ clarity — PASS at desktop and 390 px: removed the crowded
+  `2×`/`3×` ornaments. Premium shows one speaking and one writing review per
+  lesson plus separate `FIRST 30 DAYS ¥0` and `SECOND MONTH ¥3,490 · 50% OFF`
+  steps. Premium+ shows three sessions per month, 50 minutes each, on a stable
+  `01—02—03` line. Mobile `scrollWidth` equalled its 390 px viewport.
+- `npm test`, `npm run build`, `npm run verify:visuals`, the five-recording
+  audio verifier and `git diff --check` — PASS. The suite covers 17 lessons,
+  616 activities, 85 visuals, 14 formats and 1,382 integrity/security checks.
 
 ## August 24 Premium, Quick Practice and licensed-music checkpoint
 
