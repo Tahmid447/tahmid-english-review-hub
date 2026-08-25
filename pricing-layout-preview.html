@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#0b2234">
+  <title>Pricing layout comparison · Tahmid English Review Hub</title>
+  <script>try{const p=JSON.parse(localStorage.getItem("te-review-hub:theme:v1")||"\"light\"");const c=["system","light","dark"].includes(p)?p:"light";const d=c==="dark"||(c==="system"&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.dataset.themePreference=c;document.documentElement.dataset.theme=d?"dark":"light";document.documentElement.style.colorScheme=d?"dark":"light"}catch{document.documentElement.dataset.themePreference="light";document.documentElement.dataset.theme="light"}</script>
+  <link rel="stylesheet" href="/src/styles.css?v=20260826-experience3">
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/app-icon-192.png">
+</head>
+<body data-page="pricing-layout-preview">
+  <a class="skip-link" href="#layoutPreviewMain">Skip to layout preview</a>
+  <header class="site-header compact-page-header">
+    <a class="brand" href="/plans" aria-label="Back to plans"><img class="brand-logo" src="/assets/app-icon-192.png" alt="Tahmid English Club logo" width="50" height="50"><span><strong>Tahmid English Club</strong><small>Pricing design preview · 料金デザイン比較</small></span></a>
+    <nav class="header-actions" aria-label="Preview settings">
+      <a class="quiet-btn" href="/plans">Back to live plans / 現在の料金ページへ</a>
+      <label class="voice-select"><span>Language / 表示</span><select id="languageToggle"><option value="en">English</option><option value="bilingual">English + 日本語</option><option value="ja">日本語UI</option></select></label>
+      <label class="voice-select"><span>Theme / 外観</span><select id="themeToggle"><option value="system">System / 端末設定</option><option value="light">Light / ライト</option><option value="dark">Dark / ダーク</option></select></label>
+      <span data-study-music-controls></span>
+    </nav>
+  </header>
+
+  <main id="layoutPreviewMain" class="layout-preview-shell shell">
+    <section class="layout-preview-intro">
+      <p class="eyebrow">DESIGN DECISION PREVIEW / デザイン比較</p>
+      <h1 data-ui-en="Choose the plan layout that feels clearest." data-ui-ja="一番分かりやすい料金レイアウトを選べます。">Choose the plan layout that feels clearest. / 一番分かりやすい料金レイアウトを選べます。</h1>
+      <p data-ui-en="This private comparison page does not change the public plan page. Switch between both completed concepts below." data-ui-ja="この比較ページは公開中の料金ページを変更しません。下のボタンで完成した2案を切り替えて確認できます。">This private comparison page does not change the public plan page. / この比較ページは公開中の料金ページを変更しません。</p>
+      <div class="layout-choice" role="group" aria-label="Pricing layout concept">
+        <button class="active" id="layoutFour" type="button" aria-pressed="true"><strong>A · Four-card story</strong><small>4つを横に比較 / 一覧性を優先</small></button>
+        <button id="layoutTwo" type="button" aria-pressed="false"><strong>B · Balanced 2 × 2</strong><small>上2つ・下2つ / 読みやすさを優先</small></button>
+      </div>
+      <p class="layout-choice-status" id="layoutChoiceStatus" role="status" aria-live="polite"></p>
+    </section>
+    <section class="layout-preview-grid layout-four" id="layoutPreviewGrid" aria-label="Plan layout preview"></section>
+  </main>
+
+  <script type="module" src="/src/pricing-layout-preview.js?v=20260826-experience3"></script>
+  <script type="module" src="/src/study-music.js?v=20260826-experience3"></script>
+</body>
+</html>

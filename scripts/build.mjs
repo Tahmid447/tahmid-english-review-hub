@@ -10,6 +10,7 @@ const files = [
   "lesson.html",
   "phrases.html",
   "pricing.html",
+  "pricing-layout-preview.html",
   "music-credits.html",
   "404.html",
   "offline.html",
@@ -29,6 +30,7 @@ const publicSourceFiles = [
   "phrases.js",
   "plans.js",
   "pricing.js",
+  "pricing-layout-preview.js",
   "premium-tasks.js",
   "pwa.js",
   "store.js",
@@ -88,6 +90,7 @@ fs.writeFileSync(
     "/lesson/* /lesson.html?id=:splat 200",
     "/phrases /phrases.html 200",
     "/plans /pricing.html 200",
+    "/pricing-layout-preview /pricing-layout-preview.html 200",
     "/music-credits /music-credits.html 200",
   ].join("\n") + "\n",
 );

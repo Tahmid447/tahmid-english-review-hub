@@ -305,22 +305,25 @@ const audioContextConstructor = () => (typeof window !== "undefined"
 
 const sfxNotes = Object.freeze({
   click: Object.freeze([
-    Object.freeze({ frequency: 185, offset: 0, duration: 0.055, gain: 0.016, type: "triangle" }),
-    Object.freeze({ frequency: 370, offset: 0.006, duration: 0.045, gain: 0.009, type: "sine" }),
+    Object.freeze({ frequency: 440, offset: 0, duration: 0.065, gain: 0.046, type: "sine" }),
+    Object.freeze({ frequency: 659.25, offset: 0.012, duration: 0.06, gain: 0.024, type: "triangle" }),
   ]),
   correct: Object.freeze([
-    Object.freeze({ frequency: 523.25, offset: 0, duration: 0.19, gain: 0.034, type: "sine" }),
-    Object.freeze({ frequency: 659.25, offset: 0.105, duration: 0.24, gain: 0.035, type: "sine" }),
-    Object.freeze({ frequency: 784, offset: 0.11, duration: 0.22, gain: 0.013, type: "triangle" }),
+    Object.freeze({ frequency: 523.25, offset: 0, duration: 0.25, gain: 0.078, type: "sine" }),
+    Object.freeze({ frequency: 659.25, offset: 0.105, duration: 0.3, gain: 0.072, type: "sine" }),
+    Object.freeze({ frequency: 783.99, offset: 0.21, duration: 0.34, gain: 0.066, type: "sine" }),
+    Object.freeze({ frequency: 1046.5, offset: 0.235, duration: 0.31, gain: 0.024, type: "triangle" }),
   ]),
   retry: Object.freeze([
-    Object.freeze({ frequency: 293.66, offset: 0, duration: 0.18, gain: 0.022, type: "triangle" }),
-    Object.freeze({ frequency: 329.63, offset: 0.13, duration: 0.22, gain: 0.022, type: "sine" }),
+    Object.freeze({ frequency: 392, offset: 0, duration: 0.22, gain: 0.058, type: "sine" }),
+    Object.freeze({ frequency: 349.23, offset: 0.12, duration: 0.24, gain: 0.052, type: "triangle" }),
+    Object.freeze({ frequency: 440, offset: 0.25, duration: 0.28, gain: 0.032, type: "sine" }),
   ]),
   completion: Object.freeze([
-    Object.freeze({ frequency: 392, offset: 0, duration: 0.22, gain: 0.026, type: "sine" }),
-    Object.freeze({ frequency: 523.25, offset: 0.12, duration: 0.28, gain: 0.032, type: "sine" }),
-    Object.freeze({ frequency: 659.25, offset: 0.26, duration: 0.34, gain: 0.028, type: "triangle" }),
+    Object.freeze({ frequency: 392, offset: 0, duration: 0.26, gain: 0.062, type: "sine" }),
+    Object.freeze({ frequency: 523.25, offset: 0.12, duration: 0.34, gain: 0.07, type: "sine" }),
+    Object.freeze({ frequency: 659.25, offset: 0.25, duration: 0.4, gain: 0.068, type: "sine" }),
+    Object.freeze({ frequency: 783.99, offset: 0.39, duration: 0.46, gain: 0.052, type: "triangle" }),
   ]),
 });
 
@@ -339,7 +342,7 @@ export function playInterfaceSound(kind = "click") {
     }
     const startAt = feedbackAudioContext.currentTime + 0.01;
     const notes = sfxNotes[kind] || sfxNotes.click;
-    const volume = Math.max(0, Math.min(1, Number(settings.sfxVolume ?? 0.24)));
+    const volume = Math.max(0, Math.min(1, Number(settings.sfxVolume ?? 0.34)));
 
     notes.forEach(({ frequency, offset, duration, gain: noteGain, type }) => {
       const oscillator = feedbackAudioContext.createOscillator();
@@ -356,6 +359,10 @@ export function playInterfaceSound(kind = "click") {
       oscillator.start(noteStart);
       oscillator.stop(noteEnd + 0.01);
     });
+    if (typeof document !== "undefined") {
+      document.documentElement.dataset.sfxLast = kind;
+      document.documentElement.dataset.sfxNoteCount = String(notes.length);
+    }
     return { played: true };
   } catch (error) {
     return { played: false, reason: "unavailable", error };
@@ -414,6 +421,7 @@ const ensureAmbientAudio = (trackKey, settings = getSettings()) => {
   audio.onplaying = () => {
     ambientLastError = "";
     publishAmbientState("playing", settings);
+    updateAmbientStartPrompt({ played: true }, settings);
   };
   audio.onwaiting = () => publishAmbientState("loading", settings);
   audio.onstalled = () => publishAmbientState("loading", settings);
@@ -428,6 +436,35 @@ const ensureAmbientAudio = (trackKey, settings = getSettings()) => {
   return audio;
 };
 
+function ambientStartPrompt() {
+  if (typeof document === "undefined") return null;
+  let prompt = document.querySelector("#musicStartChip,#ambientStartPrompt");
+  if (!prompt) {
+    prompt = document.createElement("button");
+    prompt.id = "ambientStartPrompt";
+    prompt.className = "music-start-chip";
+    prompt.type = "button";
+    prompt.innerHTML = `<span class="music-start-icon" aria-hidden="true">♫</span><span><strong>Begin with music / BGMと一緒に始める</strong><small>One tap enables browser audio / 一度タップして再生</small></span>`;
+    prompt.hidden = true;
+    document.body?.append(prompt);
+  }
+  if (prompt.dataset.ambientBound !== "true") {
+    prompt.dataset.ambientBound = "true";
+    prompt.addEventListener("click", async () => {
+      const latest = getSettings();
+      const result = await setAmbientPlayback(true, { ...latest, userGesture: true });
+      updateAmbientStartPrompt(result, latest);
+    });
+  }
+  return prompt;
+}
+
+function updateAmbientStartPrompt(result, settings = getSettings()) {
+  const prompt = ambientStartPrompt();
+  if (!prompt) return;
+  prompt.hidden = !settings.ambientEnabled || result?.played === true || result?.reason !== "gesture-required";
+}
+
 export async function setAmbientPlayback(enabled, options = {}) {
   const settings = { ...getSettings(), ...options, ambientEnabled: Boolean(enabled) };
   if (!enabled) {
@@ -435,7 +472,9 @@ export async function setAmbientPlayback(enabled, options = {}) {
     setAmbientVolume(settings);
     ambientAudioElement?.pause();
     publishAmbientState("off", settings);
-    return { played: false, reason: "ambient-off" };
+    const result = { played: false, reason: "ambient-off" };
+    updateAmbientStartPrompt(result, settings);
+    return result;
   }
   if (typeof Audio === "undefined") {
     publishAmbientState("unsupported", settings);
@@ -448,16 +487,22 @@ export async function setAmbientPlayback(enabled, options = {}) {
     setAmbientVolume(settings);
     disarmAmbientGestureStart();
     publishAmbientState("playing", settings);
-    return { played: true, track: ambientTrackKey, source: AMBIENT_TRACKS[ambientTrackKey]?.asset };
+    const result = { played: true, track: ambientTrackKey, source: AMBIENT_TRACKS[ambientTrackKey]?.asset };
+    updateAmbientStartPrompt(result, settings);
+    return result;
   } catch (error) {
     if (error?.name === "NotAllowedError") {
       armAmbientGestureStart();
       publishAmbientState("waiting-for-gesture", settings);
-      return { played: false, reason: "gesture-required", error };
+      const result = { played: false, reason: "gesture-required", error };
+      updateAmbientStartPrompt(result, settings);
+      return result;
     }
     ambientLastError = error?.message || String(error);
     publishAmbientState("unavailable", settings);
-    return { played: false, reason: "unavailable", error };
+    const result = { played: false, reason: "unavailable", error };
+    updateAmbientStartPrompt(result, settings);
+    return result;
   }
 }
 
@@ -509,7 +554,9 @@ export function syncAmbientFromSettings({ userGesture = false } = {}) {
     disarmAmbientGestureStart();
     setAmbientVolume(settings);
     ambientAudioElement?.pause();
-    return Promise.resolve({ played: false, reason: "ambient-off" });
+    const result = { played: false, reason: "ambient-off" };
+    updateAmbientStartPrompt(result, settings);
+    return Promise.resolve(result);
   }
   // Try immediately. Browsers that allow media continuation will resume as
   // soon as the new page loads; browsers that require a fresh interaction are

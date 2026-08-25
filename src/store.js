@@ -22,7 +22,7 @@ export const DEFAULT_SETTINGS = Object.freeze({
   voiceEnabled: true,
   voiceVolume: 1,
   sfxEnabled: true,
-  sfxVolume: 0.24,
+  sfxVolume: 0.34,
   ambientPreferenceVersion: 2,
   ambientEnabled: true,
   ambientTrack: "calm_focus",
@@ -144,7 +144,7 @@ export function getSettings() {
     voiceEnabled,
     voiceVolume: clampVolume(saved?.voiceVolume, 1),
     sfxEnabled,
-    sfxVolume: clampVolume(saved?.sfxVolume, 0.24),
+    sfxVolume: clampVolume(saved?.sfxVolume, 0.34),
     ambientPreferenceVersion: 2,
     // Study music is a device-level listening preference so it follows the
     // learner between public, plan, credit and teacher pages even when those
@@ -193,7 +193,7 @@ export function updateSettings(patch = {}) {
   next.sfxEnabled = next.sfxEnabled !== false;
   next.sfxVolume = Number.isFinite(Number(next.sfxVolume))
     ? Math.max(0, Math.min(1, Number(next.sfxVolume)))
-    : 0.24;
+    : 0.34;
   next.ambientPreferenceVersion = 2;
   next.ambientEnabled = next.ambientEnabled === true;
   next.ambientTrack = AMBIENT_TRACK_KEYS.includes(next.ambientTrack)

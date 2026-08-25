@@ -82,8 +82,8 @@ function planVisual(key) {
     return `<div class="plan-visual plan-visual-premium">
       <span class="plan-visual-kicker">${t("PERSONAL FEEDBACK", "個別フィードバック")}</span>
       <div class="premium-review-flow">
-        <span><b aria-hidden="true">●</b><strong>${t("Speaking", "スピーキング")}</strong><small>${t("1 review / lesson", "各レッスン1件")}</small></span>
-        <span><b aria-hidden="true">✦</b><strong>${t("Writing", "英作文")}</strong><small>${t("1 review / lesson", "各レッスン1件")}</small></span>
+        <span><b aria-hidden="true">●</b><strong>${t("Speaking review", "スピーキング添削")}</strong><small>${t("1 personal review in every lesson", "各レッスン1件を個別添削")}</small></span>
+        <span><b aria-hidden="true">✦</b><strong>${t("Writing review", "英作文添削")}</strong><small>${t("1 personal review in every lesson", "各レッスン1件を個別添削")}</small></span>
       </div>
     </div>`;
   }
@@ -95,8 +95,8 @@ function planVisual(key) {
     </div>`;
   }
   const visual = key === "free"
-    ? { mark: "02", label: t("complete previews", "完成版サンプル") }
-    : { mark: "14", label: t("practice formats", "練習形式") };
+    ? { mark: "02", label: t("complete lessons free", "完成版2レッスン無料") }
+    : { mark: "14", label: t("ways to practise", "選べる14種類の練習") };
   return `<div class="plan-visual" aria-hidden="true"><span class="plan-visual-mark">${visual.mark}</span><span class="plan-visual-caption">${visual.label}</span></div>`;
 }
 

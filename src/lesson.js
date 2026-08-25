@@ -21,7 +21,7 @@ import {
   stopAudio,
   stopSpeechPractice,
   syncAmbientFromSettings,
-} from "./audio.js?v=20260824-real-music2";
+} from "./audio.js?v=20260826-experience3";
 import {
   getStudentSession,
   loadUserSettings,
@@ -395,7 +395,7 @@ const renderSettings = () => {
   elements.voiceSelect.value = state.settings.voice;
   elements.playbackRate.value = String(state.settings.playbackRate || 1);
   elements.voiceVolume.value = String(Math.round((state.settings.voiceVolume ?? 1) * 100));
-  elements.sfxVolume.value = String(Math.round((state.settings.sfxVolume ?? 0.24) * 100));
+  elements.sfxVolume.value = String(Math.round((state.settings.sfxVolume ?? 0.34) * 100));
   elements.ambientTrack.value = state.settings.ambientTrack || "calm_focus";
   elements.ambientVolume.value = String(Math.round((state.settings.ambientVolume ?? 0.18) * 100));
   if (elements.autoPronounceChoices) {

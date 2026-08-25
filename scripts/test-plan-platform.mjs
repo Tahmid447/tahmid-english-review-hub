@@ -15,7 +15,7 @@ import {
 } from "../src/plans.js";
 
 const root = new URL("../", import.meta.url);
-const [pricingPage, pricingUi, lessonPage, lessonUi, store, styles, teacherPage, teacherUi, musicCreditsPage, musicUi, membershipFunction, migration, build] = await Promise.all([
+const [pricingPage, pricingUi, lessonPage, lessonUi, store, styles, teacherPage, teacherUi, musicCreditsPage, musicUi, pricingLayoutPage, pricingLayoutUi, membershipFunction, migration, build] = await Promise.all([
   readFile(new URL("pricing.html", root), "utf8"),
   readFile(new URL("src/pricing.js", root), "utf8"),
   readFile(new URL("lesson.html", root), "utf8"),
@@ -26,6 +26,8 @@ const [pricingPage, pricingUi, lessonPage, lessonUi, store, styles, teacherPage,
   readFile(new URL("src/teacher.js", root), "utf8"),
   readFile(new URL("music-credits.html", root), "utf8"),
   readFile(new URL("src/study-music.js", root), "utf8"),
+  readFile(new URL("pricing-layout-preview.html", root), "utf8"),
+  readFile(new URL("src/pricing-layout-preview.js", root), "utf8"),
   readFile(new URL("supabase/functions/membership-access/index.ts", root), "utf8"),
   readFile(new URL("supabase/migrations/202608110014_premium_plus_and_entitlements.sql", root), "utf8"),
   readFile(new URL("scripts/build.mjs", root), "utf8"),
@@ -108,7 +110,9 @@ assert.match(pricingUi, /premium-promotion-steps/);
 assert.match(pricingUi, /FIRST 30 DAYS/);
 assert.match(pricingUi, /SECOND MONTH/);
 assert.match(pricingUi, /plan-visual-premium/);
-assert.match(pricingUi, /1 review \/ lesson/);
+assert.match(pricingUi, /1 personal review in every lesson/);
+assert.match(pricingUi, /ways to practise/);
+assert.match(pricingUi, /選べる14種類の練習/);
 assert.match(pricingUi, /plan-visual-coaching/);
 assert.match(pricingUi, /sessions every month/);
 assert.match(pricingUi, /50 minutes each/);
@@ -131,9 +135,21 @@ assert.match(styles, /\.lesson-card-locked \.en,[\s\S]*filter: none/);
 assert.match(styles, /\.billing-switch button:not\(\.active\) small \{ color: #76520e; \}/);
 assert.match(styles, /html\[data-theme="dark"\] \.billing-switch button:not\(\.active\) small \{ color: #f0cc76; \}/);
 assert.match(build, /"pricing\.html"/);
+assert.match(build, /"pricing-layout-preview\.html"/);
+assert.match(build, /"pricing-layout-preview\.js"/);
+assert.match(build, /\/pricing-layout-preview \/pricing-layout-preview\.html 200/);
 assert.match(build, /"plans\.js"/);
 assert.match(build, /"pricing\.js"/);
 assert.match(build, /"study-music\.js"/);
+assert.match(pricingLayoutPage, /name="robots" content="noindex,nofollow"/);
+assert.match(pricingLayoutPage, /id="layoutFour"/);
+assert.match(pricingLayoutPage, /id="layoutTwo"/);
+assert.match(pricingLayoutPage, /layout-preview-grid layout-four/);
+assert.match(pricingLayoutUi, /layout-\$\{layout\}/);
+assert.match(pricingLayoutUi, /layout = "two"/);
+assert.match(pricingLayoutUi, /Speaking \+ writing feedback/);
+assert.doesNotMatch(pricingPage, /data-ui-en="Music credits"/);
+assert.match(pricingPage, /CC BY 4\.0/);
 for (const [pageName, page] of [["pricing", pricingPage], ["teacher", teacherPage], ["music credits", musicCreditsPage]]) {
   assert.match(page, /data-study-music-controls/, `${pageName} exposes the shared music settings.`);
   assert.match(page, /src\/study-music\.js/, `${pageName} starts the shared music controller.`);

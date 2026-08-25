@@ -3,8 +3,9 @@ import {
   ambientPlaybackStatus,
   setAmbientPlayback,
   syncAmbientFromSettings,
-} from "./audio.js?v=20260824-cross-page-music1";
+} from "./audio.js?v=20260826-experience3";
 import { getSettings, onSettingsChange, updateSettings } from "./store.js";
+import { installPlayfulInteractions } from "./effects.js";
 
 const trackOptions = Object.entries(AMBIENT_TRACKS).map(([key, track]) => (
   `<option value="${key}">${track.name}</option>`
@@ -72,3 +73,4 @@ const roots = [...document.querySelectorAll("[data-study-music-controls]")];
 roots.forEach(bindControls);
 onSettingsChange((settings) => roots.forEach((root) => applyControls(root, settings)));
 void syncAmbientFromSettings().finally(() => roots.forEach((root) => applyControls(root)));
+installPlayfulInteractions();

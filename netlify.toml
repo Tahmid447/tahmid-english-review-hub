@@ -43,6 +43,11 @@
   status = 200
 
 [[redirects]]
+  from = "/pricing-layout-preview"
+  to = "/pricing-layout-preview.html"
+  status = 200
+
+[[redirects]]
   from = "/music-credits"
   to = "/music-credits.html"
   status = 200

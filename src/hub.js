@@ -28,7 +28,7 @@ import {
 import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js";
 import { installPlayfulInteractions } from "./effects.js";
 import { planFor } from "./plans.js";
-import { setAmbientPlayback, stopAudio, syncAmbientFromSettings } from "./audio.js?v=20260824-real-music2";
+import { setAmbientPlayback, stopAudio, syncAmbientFromSettings } from "./audio.js?v=20260826-experience3";
 
 let publishedLessons = [];
 let visibleLessons = [];
@@ -316,7 +316,7 @@ function bindSettings() {
     }
   });
   applySettings();
-  syncAmbientFromSettings();
+  void syncAmbientFromSettings();
   watchSystemTheme(() => applyThemePreference(getSettings().theme));
 }
 

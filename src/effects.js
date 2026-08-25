@@ -1,6 +1,7 @@
-import { playInterfaceSound } from "./audio.js?v=20260824-real-music2";
+import { playInterfaceSound } from "./audio.js?v=20260826-experience3";
 
 const reduceMotion = () => window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+const installedRoots = new WeakSet();
 
 export function celebrate(anchor, { speaking = false } = {}) {
   if (!anchor || reduceMotion()) return;
@@ -28,9 +29,31 @@ export function celebrate(anchor, { speaking = false } = {}) {
 }
 
 export function installPlayfulInteractions(root = document) {
+  if (!root || installedRoots.has(root)) return;
+  installedRoots.add(root);
+
+  const revealItems = [...root.querySelectorAll?.("[data-reveal]") || []];
+  if (revealItems.length && !reduceMotion() && typeof IntersectionObserver === "function") {
+    document.documentElement.classList.add("reveal-ready");
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("revealed");
+        observer.unobserve(entry.target);
+      });
+    }, { rootMargin: "0px 0px -8%", threshold: 0.12 });
+    revealItems.forEach((item, index) => {
+      item.style.setProperty("--reveal-index", String(index % 4));
+      observer.observe(item);
+    });
+  } else {
+    revealItems.forEach((item) => item.classList.add("revealed"));
+  }
+
   root.addEventListener("pointerdown", (event) => {
-    const target = event.target.closest("button:not(:disabled), a.primary-btn, a.secondary-btn, .lesson-card, summary");
+    const target = event.target.closest("button:not(:disabled), a[href], select, summary, [role='button'], .lesson-card");
     if (!target) return;
+    if (target.closest("[data-sfx='off']")) return;
     playInterfaceSound("click");
     if (reduceMotion() || event.pointerType === "touch") return;
     for (let index = 0; index < 3; index += 1) {
@@ -42,5 +65,12 @@ export function installPlayfulInteractions(root = document) {
       document.body.append(sparkle);
       window.setTimeout(() => sparkle.remove(), 700);
     }
+  });
+
+  root.addEventListener("click", (event) => {
+    if (event.detail !== 0) return;
+    const target = event.target.closest("button:not(:disabled), a[href], summary, [role='button']");
+    if (!target || target.closest("[data-sfx='off']")) return;
+    playInterfaceSound("click");
   });
 }

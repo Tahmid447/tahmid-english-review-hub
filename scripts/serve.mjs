@@ -31,6 +31,7 @@ http
     if (pathname === "/teacher") pathname = "/teacher.html";
     if (pathname === "/phrases") pathname = "/phrases.html";
     if (pathname === "/plans") pathname = "/pricing.html";
+    if (pathname === "/pricing-layout-preview") pathname = "/pricing-layout-preview.html";
     if (pathname === "/music-credits") pathname = "/music-credits.html";
     if (pathname.startsWith("/lesson/")) pathname = "/lesson.html";
     if (pathname.endsWith("/")) pathname += "index.html";
