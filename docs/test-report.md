@@ -1,6 +1,43 @@
 # Test Report / 動作確認レポート
 
-Last updated: **August 25, 2026**
+Last updated: **August 26, 2026**
+
+## August 26 entrance, pricing-layout, BGM fallback and SFX checkpoint
+
+- Application commit: `a7002c04785f7a802800ba89083e92737fe4b274`.
+- Netlify Preview — PASS: deploy `6a8e0def46faf70007aa4ef9` published from
+  the exact commit above. Immutable URL:
+  `https://6a8e0def46faf70007aa4ef9--tahmid-english-review-hub-preview.netlify.app/`.
+  Production was not deployed; Supabase schema and Edge Functions were not
+  changed in this checkpoint.
+- Full local verification — PASS: `npm test`, `npm run build`,
+  `npm run verify:visuals`, JavaScript syntax checks and `git diff --check`.
+  This includes 17 lessons, 616 activities, 85 visuals, 14 formats, 1,382
+  integrity/security assertions, all five complete M4A tracks, learner,
+  Teacher, plan and Premium workflow tests.
+- Published mobile layout — PASS at 390 × 844: Hub, Quick lesson and pricing
+  had `scrollWidth === clientWidth === 390`. Premium's speaking/writing review
+  rows were each 280 px wide with no internal overflow. Standard visibly says
+  `14 ways to practise / 選べる14種類の練習`.
+- Quick Practice — PASS on the public Preview: `june-29&practice=quick` showed
+  `1 / 8`, exactly eight question-navigation buttons and the 5–10 minute entry
+  label.
+- Study Music — PASS on the public Preview: the real local audio element
+  reported `playing`, `paused === false` and advancing current time. A fresh
+  browser-blocked start was also exercised locally: the fixed one-tap prompt
+  appeared and playback began after the click. This is an honest autoplay
+  fallback, not a promise that browsers permit unprompted audible playback.
+- Interaction sound — PASS locally in a real browser: the normal click cue
+  reported the new two-note pattern. Static regressions cover distinct
+  correct, retry and completion calls; grading content was not altered.
+- Pricing layout comparison — PASS on the public Preview at 1440 × 900. Layout
+  A rendered four equal 280 px cards; layout B rendered four equal 550 px cards
+  in 2×2; both had no page overflow. The route is `noindex,nofollow`, and its
+  CTAs are deliberately disabled because it is a visual decision page.
+- Browser log — no new error-level message was produced by the August 26
+  version. One stale pre-build module error from the earlier `experience1`
+  cache and Supabase multi-client warnings from navigating one QA tab remain
+  historical test-session noise, not errors from `experience3`.
 
 ## August 25 cross-page music, speaking and plan-clarity checkpoint
 

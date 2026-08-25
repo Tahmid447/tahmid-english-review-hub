@@ -11,10 +11,12 @@ This document records the state that existed before the final-product work began
 ## Final-product checkpoint status
 
 - Working branch: `upgrade/review-hub-v9-final-product`.
-- Latest checked application commit: `ae766535442dcd17d2d6976303dafb0423a3edc3`.
+- Latest checked application commit: `a7002c04785f7a802800ba89083e92737fe4b274`.
   It is published to the current-account Preview as Netlify deploy
-  `6a8c62cc2b35130008cdffb1`; exact permalink:
-  `https://6a8c62cc2b35130008cdffb1--tahmid-english-review-hub-preview.netlify.app`.
+  `6a8e0def46faf70007aa4ef9`; exact permalink:
+  `https://6a8e0def46faf70007aa4ef9--tahmid-english-review-hub-preview.netlify.app`.
+  The exact public artifact passed the August 26 Hub entrance/value-story,
+  BGM, 390 px, Quick 8-question, Premium wrapping and A/B pricing-layout checks.
   August 25 verification covers device-wide Study Music controls/real playback,
   transcript-aware speaking correction and the simplified Premium/Premium+
   value presentation. The August 24 Quick Practice and licensed-track work is
@@ -136,7 +138,7 @@ These tests are valuable, but several are static source assertions. They do not 
 | Area | Status on August 14 | Evidence or remaining boundary |
 |---|---|---|
 | Fixed four-plan prices | Implemented and regression-tested locally | Free ¥0/¥0, Standard ¥3,980/¥20,300, Premium ¥6,980/¥35,600, Premium+ ¥16,800/¥85,700 remain centralised. |
-| Pricing sales journey | Deployed public QA passed | Four cards, 13 comparison rows, exact monthly/six-month values, best-for copy, Premium recommendation, trust/FAQ content, contact-first flow, and Dark persistence were checked on the exact Preview deploy. |
+| Pricing sales journey | Deployed public QA passed; layout choice pending | Four cards, 13 comparison rows, exact monthly/six-month values, best-for copy, Premium recommendation, trust/FAQ content, contact-first flow, and Dark persistence were checked on the exact Preview deploy. August 26 removed the narrow Premium label wrapping and clarified Standard's `14`; a no-index comparison provides both an improved four-card layout and balanced 2×2 layout for the user's final choice. |
 | Editable contact message | Implemented locally | Editable name/message, dirty-state preservation, copy-current-text, and explicit reset are covered by local plan tests. |
 | Navigation and state | Implemented locally | Safe lesson→plans return, new-tab role change, persistent library filters, and common return handling are present. Browser history/reload QA remains part of preview testing. |
 | First-time Google onboarding | Learner live QA passed; scope caveat | Google sign-in, profile save, gate close, reload persistence, observed Standard membership/lesson access, and sign-out passed after the hotfix. Teacher auth and dedicated non-teacher tier negatives remain pending. |
@@ -153,7 +155,7 @@ These tests are valuable, but several are static source assertions. They do not 
 | Shared Takiwaki experience | Public redirect passed | The old route redirected to the common learner experience on the exact Preview deploy. Authenticated session compatibility remains pending. |
 | Phrase/Vocabulary library | Implemented locally | Progressive rendering, meaningful types, corrected presentation/data issues, favourites, audio, and retained filters are covered by local regressions. |
 | Learner progress | Implemented locally | Asia/Tokyo streak, weekly goal, unique completions, first-attempt accuracy, retry improvement, and restrained milestones derive from real stored progress. |
-| Theme | Implemented locally | Persisted System/Light/Dark is shared across home, phrases, lessons, and pricing. Final deployed contrast/Lighthouse checks remain pending. |
+| Theme | Implemented and checked on current Preview | Persisted System/Light/Dark is shared across home, phrases, lessons, pricing and the layout preview. August 26 390 px/1440 px no-overflow checks passed; final deployed contrast/Lighthouse and physical-device checks remain pending. |
 | PWA | Implemented locally | Public static shell and offline fallback only; protected routes, API/auth requests, private learner data, answers, and recordings are excluded. Install/update/offline real-device QA remains pending. |
 | Accessibility/responsive | Implemented locally; deployed measurement pending | Contrast, touch targets, 621–900 px compact header, radio keyboard behavior, lazy QR, and smaller header logo are present. Public flows were checked locally at 390/430/621/768/900/1024/1440 px with no checked page-level overflow, and key Dark/pricing/retry interactions were exercised. Final deployed 390/768 light/dark Lighthouse and physical-device checks are pending. |
 | AI grading | Intentionally absent | There is no automatic or AI grading. The compatibility column is always written `false`; a human teacher reviews and publishes feedback. |

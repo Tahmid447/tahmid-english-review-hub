@@ -1,6 +1,6 @@
 # Operations Guide / 運用ガイド
 
-Updated: 2026-08-14 (Asia/Tokyo)
+Updated: 2026-08-26 (Asia/Tokyo)
 
 This guide distinguishes the final-product code prepared locally from behavior
 already available on the hosted sites. The working branch is
@@ -8,11 +8,12 @@ already available on the hosted sites. The working branch is
 `c14625d5` and handoff checkpoint `a87eb5e1` are published. The current
 documentation checkpoint is branch HEAD (`git rev-parse HEAD`); this file cannot
 embed the final hash of the commit that contains itself. Exact deployed
-application commit is `049b5ff4da6606fcffc461f412f314d253916e13`;
-historical rollout/logical-restore checkpoint remains `fcf561d`. It is
-deployed to the dedicated v9 preview. Production static files remain pre-v9. Migration
-`015`, migration `016`, and the matching updated `membership-access` Edge
-Function are live on shared Supabase project `ycmybggetemkhorkhfnf`.
+application commit is `a7002c04785f7a802800ba89083e92737fe4b274`;
+historical rollout/logical-restore checkpoint remains `fcf561d`. The current
+application commit is deployed to the current-account Preview. Production
+static files remain pre-v9. Migrations `015`–`018` and the matching updated
+`membership-access` Edge Function are live on shared Supabase project
+`ycmybggetemkhorkhfnf`.
 
 ## 1. Learner accounts and profile completion
 
@@ -202,17 +203,18 @@ automatic import must run server-side and create a draft first.
   Quick Practice must remain exactly eight unique questions, approximately
   5–10 minutes, and should preserve the balanced family selection in
   `selectQuickPracticeIds`. Do not silently turn Quick into the full set.
-- Study Music defaults ON at 18% but begins only after a browser-permitted user
-  interaction. Voice playback ducks the music; it must not share the voice or
-  SFX volume setting.
+- Study Music defaults ON at 18%. Try playback immediately, but expect Safari,
+  Chrome and other browsers to block audible autoplay on some visits. When
+  blocked, show the fixed `Begin with music / BGMと一緒に始める` prompt and
+  begin after that one explicit tap. Voice playback ducks the music; BGM must
+  not share the voice or SFX volume setting.
 - Music On/Off, track and volume are device-level settings and must follow the
   learner across Hub, lesson, phrase/vocabulary library, plans, Teacher Studio,
-  music credits, contact flow and the public error page. Pages that cannot
-  autoplay must show `Tap once to start` and resume after an explicit music
-  control action; never pretend that a blocked track is already playing.
+  music licence route, contact flow and the public error page. Never pretend
+  that a blocked track is already playing.
 - The five local recordings are CC BY 4.0 and must retain the artist, ISRC,
-  official source and licence attribution in both `/music-credits` and
-  `assets/audio/ambient/LICENSE.md`. Do not add Beatles or other commercial
+  official source and licence attribution in the quiet footer licence line,
+  `/music-credits`, and `assets/audio/ambient/LICENSE.md`. Do not add Beatles or other commercial
   recordings unless the exact recording has a verified licence that permits
   this public use.
 - Run `npm run verify:audio` after adding, replacing, renaming or recompressing
@@ -288,11 +290,12 @@ For code/design/backend changes:
 3. Confirm the recorded Supabase/Edge postconditions and do not blindly replay
    the manually applied migrations.
 4. Confirm the current-account Netlify Preview serves application checkpoint
-   `ae76653` at its immutable permalink:
-   `https://6a8c62cc2b35130008cdffb1--tahmid-english-review-hub-preview.netlify.app`.
+   `a7002c0` at its immutable permalink:
+   `https://6a8e0def46faf70007aa4ef9--tahmid-english-review-hub-preview.netlify.app`.
    This checkpoint includes 17/17 verified Teacher Studio source links,
-   Quick Practice, licensed cross-page Study Music, transcript-aware speaking
-   feedback and the simplified Premium/Premium+ value cards.
+   Quick Practice, licensed cross-page Study Music with one-tap fallback,
+   transcript-aware speaking feedback, the entrance/value-story polish,
+   clearer Premium rows, and both no-index pricing-layout previews.
 5. Preserve the recorded public QA evidence: home inventory; pricing and Dark
    persistence; phrases 24→30; shuffle/radio behavior; visual guidance; fixed
    Retry score; 0.5x and mixed-language controls; locked payload; Teacher gate
