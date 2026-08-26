@@ -29,6 +29,26 @@ export function applyLanguageMode(mode = "bilingual", root = document) {
   document.body.dataset.language = safeMode;
 
   root.querySelectorAll("[data-ui-en]").forEach((element) => {
+    if (element.hasAttribute("data-ui-lines")) {
+      const english = String(element.dataset.uiEn || "").trim();
+      const japanese = String(element.dataset.uiJa || "").trim();
+      element.replaceChildren();
+      if (safeMode !== "ja" && english) {
+        const line = document.createElement("span");
+        line.className = "ui-line ui-line-en";
+        line.lang = "en";
+        line.textContent = english;
+        element.append(line);
+      }
+      if (safeMode !== "en" && japanese) {
+        const line = document.createElement("span");
+        line.className = "ui-line ui-line-ja";
+        line.lang = "ja";
+        line.textContent = japanese;
+        element.append(line);
+      }
+      return;
+    }
     element.textContent = uiText(
       element.dataset.uiEn,
       element.dataset.uiJa,

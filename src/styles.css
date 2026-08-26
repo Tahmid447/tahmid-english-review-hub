@@ -3504,3 +3504,151 @@ html[data-theme="dark"] .premium-promotion-steps b { color: #b4e7e0; }
   .reveal-ready [data-reveal] { opacity:1; transform:none; }
   .primary-btn,.secondary-btn,.quiet-btn,.lesson-mode-action,.filter-chip,.plan-cta,.lesson-card,.dashboard-card,.phrase-card,.comparison-mobile-card,.value-story-grid article { transition:none; }
 }
+
+/* 2026-08-26 · final readable 2×2 pricing, local practice controls and guide */
+.ui-line,
+.localized-title-line { display: block; min-width: 0; }
+.ui-line + .ui-line,
+.localized-title-line + .localized-title-line { margin-top: .18em; }
+.ui-line-ja,
+.localized-title-ja {
+  font-family: var(--sans);
+  font-size: .68em;
+  font-weight: 800;
+  line-height: 1.35;
+  letter-spacing: .01em;
+}
+
+body[data-page="pricing"] .plan-grid {
+  width: min(1120px,calc(100% - 32px));
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 28px;
+}
+body[data-page="pricing"] .plan-card,
+html[data-theme="dark"] body[data-page="pricing"] .plan-card {
+  min-width: 0;
+  min-height: 650px;
+  padding-inline: clamp(24px,3.2vw,38px);
+}
+body[data-page="pricing"] .plan-card-heading { min-height: 136px; }
+body[data-page="pricing"] .plan-name {
+  display: block;
+  font-size: clamp(1.9rem,3.2vw,3rem);
+  line-height: 1.08;
+  overflow-wrap: normal;
+  word-break: keep-all;
+}
+body[data-page="pricing"] .plan-card-heading p {
+  max-width: 44rem;
+  font-size: clamp(.82rem,1.25vw,.98rem);
+}
+body[data-page="pricing"] .plan-visual { padding: 18px; }
+body[data-page="pricing"] .premium-review-flow { grid-template-columns: repeat(2,minmax(0,1fr)); }
+body[data-page="pricing"] .premium-review-flow strong { font-size: .8rem; }
+body[data-page="pricing"] .premium-review-flow small { font-size: .61rem; }
+body[data-page="pricing"] .coaching-value span { font-size: .86rem; }
+body[data-page="pricing"] .coaching-value b { font-size: .7rem; }
+body[data-page="pricing"] .pricing-selector h2 { line-height: 1.16; }
+body[data-page="pricing"] .pricing-selector .ui-line-ja { font-size: .64em; }
+
+.layout-preview-intro h1 .ui-line-ja {
+  margin-top: .28em;
+  font-size: .55em;
+  line-height: 1.28;
+}
+
+.hero-wordmark { line-height: 1.02; }
+.hero-word-1 { color: #f7fbfc; }
+.hero-word-2 { color: #f0cf7f; }
+.hero-word-3 { color: #92d6cd; }
+.hero-word-4 { color: #f7fbfc; }
+.hero-word {
+  position: relative;
+  text-shadow: 0 18px 44px rgba(4,29,43,.2);
+}
+.hero-word::after {
+  content: "";
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  bottom: -.08em;
+  height: 2px;
+  opacity: .55;
+  background: linear-gradient(90deg,transparent,currentColor,transparent);
+  transform: scaleX(0);
+  animation: hero-line-draw .7s calc(.72s + var(--hero-step,0s)) ease forwards;
+}
+.hero-word-1 { --hero-step: .05s; }
+.hero-word-2 { --hero-step: .2s; }
+.hero-word-3 { --hero-step: .35s; }
+.hero-word-4 { --hero-step: .5s; }
+@keyframes hero-line-draw { to { transform: scaleX(1); } }
+
+.practice-settings-open {
+  min-width: min(260px,100%);
+  display: grid;
+  grid-template-columns: auto minmax(0,1fr);
+  gap: 0 8px;
+  align-items: center;
+  text-align: left;
+  border-color: rgba(29,116,109,.34);
+  background: var(--learner-surface-2);
+}
+.practice-settings-open > small {
+  grid-column: 2;
+  color: var(--learner-muted);
+  font-size: .54rem;
+  line-height: 1.25;
+}
+
+.guide-grid { grid-template-columns: 1fr; gap: 14px; }
+.guide-card { align-self: stretch; }
+.guide-card h3 { line-height: 1.25; }
+.guide-card-coverage { background: linear-gradient(145deg,#edf8f5,#f8f1df) !important; }
+.guide-coverage-intro { margin: 0 0 14px; color: var(--learner-muted); line-height: 1.6; }
+.guide-coverage-list {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 10px;
+}
+.guide-coverage-list > div {
+  min-width: 0;
+  padding: 13px;
+  display: grid;
+  grid-template-columns: 30px minmax(0,1fr);
+  gap: 8px 10px;
+  align-items: start;
+  border: 1px solid var(--learner-border);
+  border-radius: 15px;
+  background: var(--learner-surface);
+}
+.guide-coverage-list > div > b {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  color: #12364a;
+  background: #efd28d;
+  font-size: .57rem;
+}
+.guide-coverage-list > div > span { min-width: 0; line-height: 1.4; }
+.guide-coverage-list > div > span small { display: block; color: var(--learner-muted); }
+.guide-coverage-list .text-audio-btn { grid-column: 2; width: fit-content; min-width: 150px; }
+html[data-theme="dark"] .guide-card-coverage { background: var(--learner-surface) !important; }
+
+@media (max-width: 760px) {
+  body[data-page="pricing"] .plan-grid { width: min(100% - 24px,620px); grid-template-columns: 1fr; gap: 24px; }
+  body[data-page="pricing"] .plan-card,
+  html[data-theme="dark"] body[data-page="pricing"] .plan-card { min-height: 0; }
+  body[data-page="pricing"] .plan-card-heading { min-height: 0; }
+  body[data-page="pricing"] .premium-review-flow { grid-template-columns: 1fr; }
+  .guide-coverage-list { grid-template-columns: 1fr; }
+}
+@media (max-width: 460px) {
+  .hero-wordmark { line-height: 1.08; }
+  .guide-coverage-list .text-audio-btn { min-width: 0; width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-word::after { transform: scaleX(1); animation: none; }
+}

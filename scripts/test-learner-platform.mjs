@@ -244,7 +244,7 @@ assert.match(hubScript, /isGoogleSession/);
 assert.match(hubScript, /id = "profileCompletionStatus"/);
 assert.match(hubScript, /Saving your profile…/);
 assert.match(supabaseScript, /existingProfile && !hasExplicitValues/);
-assert.match(homePage, /src="\/src\/hub\.js\?v=20260826-experience3"/);
+assert.match(homePage, /src="\/src\/hub\.js\?v=20260826-experience4"/);
 assert.match(homePage, /id="musicStartChip"/);
 assert.match(homePage, /Your lesson does not end when the call ends/);
 assert.match(homePage, /eight-question Quick Practice/);

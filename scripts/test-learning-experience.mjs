@@ -422,6 +422,10 @@ assert.equal(Object.keys(DEEP_LESSON_GUIDES).length, 17, "All 17 lessons have de
 assert(Object.values(DEEP_LESSON_GUIDES).every((guide) => guide.points.length >= 3));
 assert(Object.values(DEEP_LESSON_GUIDES).every((guide) => guide.corrections.length >= 2));
 
+const i18nSource = fs.readFileSync(path.join(root, "src/i18n.js"), "utf8");
+assert.match(i18nSource, /data-ui-lines/);
+assert.match(i18nSource, /ui-line-ja/);
+
 const { normalizeJapaneseMeaning } = await import("../src/data.js");
 assert.equal(
   normalizeJapaneseMeaning("語順を並べましょう：彼女が言ったことが聞こえませんでした。"),

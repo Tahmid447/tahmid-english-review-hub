@@ -21,7 +21,7 @@ import {
   stopAudio,
   stopSpeechPractice,
   syncAmbientFromSettings,
-} from "./audio.js?v=20260826-experience3";
+} from "./audio.js?v=20260826-experience4";
 import {
   getStudentSession,
   loadUserSettings,
@@ -49,6 +49,8 @@ const $ = (selector) => document.querySelector(selector);
 const elements = {
   hubBackLink: $("#hubBackLink"),
   openLessonSettings: $("#openLessonSettings"),
+  openPracticeSettings: $("#openPracticeSettings"),
+  practiceSettingsSummary: $("#practiceSettingsSummary"),
   lessonSettingsDialog: $("#lessonSettingsDialog"),
   languageToggle: $("#languageToggle"),
   themeToggle: $("#themeToggle"),
@@ -412,6 +414,13 @@ const renderSettings = () => {
     button.classList.toggle("active", active);
     button.setAttribute("aria-pressed", String(active));
   });
+  if (elements.practiceSettingsSummary) {
+    elements.practiceSettingsSummary.textContent = [
+      state.settings.voice === "gb" ? "UK" : "US",
+      state.settings.checkMode === "instant" ? uiText("Instant", "すぐ採点", language) : uiText("Manual", "手動採点", language),
+      state.settings.ambientEnabled ? uiText("BGM On", "BGMオン", language) : uiText("BGM Off", "BGMオフ", language),
+    ].join(" · ");
+  }
   updateCheckAnsweredButton();
 };
 
@@ -885,7 +894,7 @@ const renderLessonGuide = async () => {
       phrases = [];
     }
   }
-  const cleanPhrases = phrases.slice(0, 12).map((phrase) => ({
+  const cleanPhrases = phrases.map((phrase) => ({
     en: String(phrase.en || phrase.english || ""),
     jp: normalizeJapaneseMeaning(phrase.jp || phrase.ja || phrase.japanese || ""),
     note: String(phrase.note || ""),
@@ -900,6 +909,20 @@ const renderLessonGuide = async () => {
   const examples = [...new Set(state.masterQuestions
     .flatMap((question) => [question.speakText, question.audioText])
     .filter(Boolean))].slice(0, 6);
+  const choiceFor = (question) => (question.choices || []).find((choice) => String(choice.id) === String(question.correct));
+  const coverageItems = state.masterQuestions.flatMap((question) => {
+    if (question.format === "matching") return (question.pairs || []).map((pair) => ({ en: pair.en, jp: pair.jp, section: question.section }));
+    if (question.format === "sorting") return (question.items || []).map((item) => ({ en: Array.isArray(item) ? item[0] : item.en, jp: "", section: question.section }));
+    const choice = choiceFor(question);
+    const en = question.speakText
+      || question.audioText
+      || question.accepted?.[0]
+      || (Array.isArray(question.correctWords) ? question.correctWords.join(" ") : "")
+      || choice?.en
+      || (question.format === "truefalse" ? question.prompt : "");
+    const jp = question.speakJa || choice?.jp || "";
+    return en ? [{ en, jp, section: question.section || question.format }] : [];
+  }).filter((item, index, all) => item.en && all.findIndex((candidate) => candidate.en === item.en) === index);
   const bilingual = (en, jp) => {
     const text = learningText(en, jp, language);
     return `<strong>${escapeHTML(text.primary)}</strong>${text.secondary ? `<small lang="ja">${escapeHTML(text.secondary)}</small>` : ""}`;
@@ -919,7 +942,7 @@ const renderLessonGuide = async () => {
       <div class="guide-example"><strong>${escapeHTML(exampleEn)}</strong>${state.settings.showJapanese ? `<small lang="ja">${escapeHTML(exampleJa)}</small>` : ""}${renderTextAudioButton(exampleEn, uiText("Hear the example", "例文を聞く", language))}</div>
     </article>
   `).join("")}</div>` : `<ul>${keyPoints.slice(0, 8).map(([en, jp]) => `<li>${bilingual(en, jp)}</li>`).join("") || `<li>${escapeHTML(uiText("Useful conversation English", "会話で使える英語", language))}</li>`}</ul>`;
-  const phraseBody = `<div class="guide-phrase-list">${cleanPhrases.slice(0, 8).map((phrase) => `
+  const phraseBody = `<div class="guide-phrase-list">${cleanPhrases.map((phrase) => `
     <div>
       <span>${bilingual(phrase.en, phrase.jp)}</span>
       ${renderTextAudioButton(phrase.en, uiText("Listen", "英語を聞く", language))}
@@ -927,6 +950,11 @@ const renderLessonGuide = async () => {
     </div>
   `).join("") || examples.map((example) => `<div><span><strong>${escapeHTML(example)}</strong></span>${renderTextAudioButton(example, uiText("Listen", "英語を聞く", language))}</div>`).join("")}</div>`;
   const correctionBody = corrections.map((question) => `<p><del>${escapeHTML(question.wrongSentence)}</del><span aria-hidden="true"> → </span><strong>${escapeHTML(question.accepted[0])}</strong></p>`).join("");
+  const coverageBody = `<p class="guide-coverage-intro">${escapeHTML(uiText(
+    `This map covers the model English used across all ${state.masterQuestions.length} questions in this lesson.`,
+    `この一覧は、このレッスン全${state.masterQuestions.length}問で使うお手本英語を確認できます。`,
+    language,
+  ))}</p><div class="guide-coverage-list">${coverageItems.map((item, index) => `<div><b>${String(index + 1).padStart(2, "0")}</b><span>${bilingual(item.en, item.jp)}</span>${renderTextAudioButton(item.en, uiText("Listen", "英語を聞く", language))}</div>`).join("")}</div>`;
   const takeaway = uiText(
     deepGuide?.takeaway?.[0] || "Read one phrase aloud, listen once, then use it in your own sentence.",
     deepGuide?.takeaway?.[1] || "フレーズを声に出し、一度聞いてから、自分の文で使ってみましょう。",
@@ -943,6 +971,7 @@ const renderLessonGuide = async () => {
       ${guideCard("guide-card-themes", uiText("Key points", "重要ポイント", language), keyPointBody, true)}
       ${guideCard("guide-card-phrases", uiText("English you can use", "すぐ使える英語", language), phraseBody)}
       ${corrections.length ? guideCard("guide-card-corrections", uiText("Natural corrections", "自然な言い直し", language), correctionBody) : ""}
+      ${guideCard("guide-card-coverage", uiText(`Practice map · ${state.masterQuestions.length} questions`, `問題対応リスト · 全${state.masterQuestions.length}問`, language), coverageBody)}
       ${guideCard("guide-card-takeaway", uiText("Final takeaway", "最後に覚えること", language), `<p>${escapeHTML(takeaway)}</p>`)}
     </div>
   `;
@@ -1878,6 +1907,9 @@ elements.openLessonSettings?.addEventListener("click", () => {
   } else {
     elements.lessonSettingsDialog?.setAttribute("open", "");
   }
+});
+elements.openPracticeSettings?.addEventListener("click", () => {
+  elements.openLessonSettings?.click();
 });
 elements.shuffleQuestions.addEventListener("click", () => {
   state.questionOrder = shuffleArray(state.questionOrder);

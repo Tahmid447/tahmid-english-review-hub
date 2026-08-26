@@ -55,6 +55,14 @@ const billingLabel = () => billing === BILLING_OPTIONS.sixMonths
   ? t("for 6 months", "6か月分")
   : t("per month", "月額");
 
+function localizedHeading(en, ja) {
+  const current = language();
+  if (current === "en") return `<span class="localized-title-line" lang="en">${en}</span>`;
+  if (current === "ja") return `<span class="localized-title-line localized-title-ja" lang="ja">${ja || en}</span>`;
+  if (!ja || ja === en) return `<span class="localized-title-line" lang="en">${en}</span>`;
+  return `<span class="localized-title-line" lang="en">${en}</span><span class="localized-title-line localized-title-ja" lang="ja">${ja || en}</span>`;
+}
+
 function safeReturnPath() {
   const raw = new URLSearchParams(window.location.search).get("returnTo");
   if (!raw) return "/";
@@ -105,8 +113,8 @@ function renderPlans() {
     const plan = PLAN_CATALOG[key];
     const featured = key === "premium" ? " featured" : key === "premium_plus" ? " premium-plus" : "";
     const displayName = key === "premium_plus"
-      ? t("Premium+ Coaching", "Premium+ コーチング")
-      : plan.name;
+      ? localizedHeading("Premium+ Coaching", "Premium+ コーチング")
+      : localizedHeading(plan.name, plan.name);
     const savings = planSavings(plan);
     const sixMonthDetails = billing === BILLING_OPTIONS.sixMonths && plan.monthlyYen
       ? `<div class="plan-saving"><strong>${t(`Save exactly ${formatYen(savings.savedYen)} (${savings.percent}%)`, `${formatYen(savings.savedYen)}お得（${savings.percent}%割引）`)}</strong><span>${t(`${formatYen(plan.sixMonthsYen)} total · normally ${formatYen(savings.monthlyTotal)} · ${formatYen(savings.monthlyEquivalentYen)}/month equivalent`, `6か月合計${formatYen(plan.sixMonthsYen)}・通常${formatYen(savings.monthlyTotal)}・月額換算${formatYen(savings.monthlyEquivalentYen)}`)}</span></div>`

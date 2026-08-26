@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#0b2234">
   <title>Pricing layout comparison · Tahmid English Review Hub</title>
   <script>try{const p=JSON.parse(localStorage.getItem("te-review-hub:theme:v1")||"\"light\"");const c=["system","light","dark"].includes(p)?p:"light";const d=c==="dark"||(c==="system"&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.dataset.themePreference=c;document.documentElement.dataset.theme=d?"dark":"light";document.documentElement.style.colorScheme=d?"dark":"light"}catch{document.documentElement.dataset.themePreference="light";document.documentElement.dataset.theme="light"}</script>
-  <link rel="stylesheet" href="/src/styles.css?v=20260826-experience3">
+  <link rel="stylesheet" href="/src/styles.css?v=20260826-experience4">
   <link rel="icon" type="image/png" sizes="192x192" href="/assets/app-icon-192.png">
 </head>
 <body data-page="pricing-layout-preview">
@@ -25,18 +25,18 @@
   <main id="layoutPreviewMain" class="layout-preview-shell shell">
     <section class="layout-preview-intro">
       <p class="eyebrow">DESIGN DECISION PREVIEW / デザイン比較</p>
-      <h1 data-ui-en="Choose the plan layout that feels clearest." data-ui-ja="一番分かりやすい料金レイアウトを選べます。">Choose the plan layout that feels clearest. / 一番分かりやすい料金レイアウトを選べます。</h1>
+      <h1 data-ui-lines data-ui-en="Choose the plan layout that feels clearest." data-ui-ja="一番分かりやすい料金レイアウトを選べます。"><span class="ui-line ui-line-en" lang="en">Choose the plan layout that feels clearest.</span><span class="ui-line ui-line-ja" lang="ja">一番分かりやすい料金レイアウトを選べます。</span></h1>
       <p data-ui-en="This private comparison page does not change the public plan page. Switch between both completed concepts below." data-ui-ja="この比較ページは公開中の料金ページを変更しません。下のボタンで完成した2案を切り替えて確認できます。">This private comparison page does not change the public plan page. / この比較ページは公開中の料金ページを変更しません。</p>
       <div class="layout-choice" role="group" aria-label="Pricing layout concept">
-        <button class="active" id="layoutFour" type="button" aria-pressed="true"><strong>A · Four-card story</strong><small>4つを横に比較 / 一覧性を優先</small></button>
-        <button id="layoutTwo" type="button" aria-pressed="false"><strong>B · Balanced 2 × 2</strong><small>上2つ・下2つ / 読みやすさを優先</small></button>
+        <button id="layoutFour" type="button" aria-pressed="false"><strong>A · Four-card story</strong><small>4つを横に比較 / 一覧性を優先</small></button>
+        <button class="active" id="layoutTwo" type="button" aria-pressed="true"><strong>B · Balanced 2 × 2</strong><small>本番採用・上2つ＋下2つ / 読みやすさを優先</small></button>
       </div>
       <p class="layout-choice-status" id="layoutChoiceStatus" role="status" aria-live="polite"></p>
     </section>
-    <section class="layout-preview-grid layout-four" id="layoutPreviewGrid" aria-label="Plan layout preview"></section>
+    <section class="layout-preview-grid layout-two" id="layoutPreviewGrid" aria-label="Plan layout preview"></section>
   </main>
 
-  <script type="module" src="/src/pricing-layout-preview.js?v=20260826-experience3"></script>
-  <script type="module" src="/src/study-music.js?v=20260826-experience3"></script>
+  <script type="module" src="/src/pricing-layout-preview.js?v=20260826-experience4"></script>
+  <script type="module" src="/src/study-music.js?v=20260826-experience4"></script>
 </body>
 </html>

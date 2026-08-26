@@ -1,4 +1,4 @@
-const CACHE_NAME = "te-review-public-v13";
+const CACHE_NAME = "te-review-public-v14";
 const OFFLINE_PAGE = "/offline.html";
 const PUBLIC_SHELL = new Set([
   "/",

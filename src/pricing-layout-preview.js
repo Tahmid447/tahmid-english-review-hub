@@ -12,7 +12,7 @@ const elements = {
   status: document.querySelector("#layoutChoiceStatus"),
 };
 
-let layout = new URLSearchParams(window.location.search).get("layout") === "two" ? "two" : "four";
+let layout = new URLSearchParams(window.location.search).get("layout") === "four" ? "four" : "two";
 const mode = () => languageModeFromSettings(getSettings());
 const t = (en, ja) => uiText(en, ja, mode());
 

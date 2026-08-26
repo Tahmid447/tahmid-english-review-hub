@@ -8,7 +8,7 @@
   <title>English Lesson Practice</title>
   <link rel="manifest" href="/manifest.webmanifest">
   <script>try{const p=JSON.parse(localStorage.getItem("te-review-hub:theme:v1")||"\"light\"");const c=["system","light","dark"].includes(p)?p:"light";const d=c==="dark"||(c==="system"&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.dataset.themePreference=c;document.documentElement.dataset.theme=d?"dark":"light";document.documentElement.style.colorScheme=d?"dark":"light"}catch{document.documentElement.dataset.themePreference="light";document.documentElement.dataset.theme="light";document.documentElement.style.colorScheme="light"}</script>
-  <link rel="stylesheet" href="/src/styles.css?v=20260826-experience3">
+  <link rel="stylesheet" href="/src/styles.css?v=20260826-experience4">
   <link rel="icon" type="image/png" sizes="192x192" href="/assets/app-icon-192.png">
 </head>
 <body data-page="lesson">
@@ -46,6 +46,7 @@
 
     <section class="quiz-toolbar" aria-label="Quiz settings">
       <span class="toggle-label automatic-shuffle" role="status"><span aria-hidden="true">🔀</span> <span data-ui-en="Questions & choices shuffle automatically" data-ui-ja="問題・選択肢は毎回自動シャッフル">Questions &amp; choices shuffle automatically / 問題・選択肢は毎回自動シャッフル</span></span>
+      <button class="quiet-btn practice-settings-open" id="openPracticeSettings" type="button" aria-haspopup="dialog"><span aria-hidden="true">⚙</span> <span data-ui-en="Practice settings" data-ui-ja="問題設定">Practice settings / 問題設定</span><small id="practiceSettingsSummary">US · Manual · BGM On</small></button>
       <button class="quiet-btn" id="checkAnswered" type="button" data-ui-en="Check 0 answered" data-ui-ja="回答済み 0問を採点">Check 0 answered / 回答済み 0問を採点</button>
       <span class="score-pill" id="scorePill">First score / 初回スコア 0 / 0</span>
     </section>
@@ -122,6 +123,6 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js"></script>
   <script type="module" src="/src/pwa.js"></script>
-  <script type="module" src="/src/lesson.js?v=20260826-experience3"></script>
+  <script type="module" src="/src/lesson.js?v=20260826-experience4"></script>
 </body>
 </html>
