@@ -5,8 +5,8 @@ platform and Teacher Studio.
 
 Current work is on `upgrade/review-hub-v9-final-product`. The latest
 live-validated August 26 application artifact is
-`a7002c04785f7a802800ba89083e92737fe4b274` (current-account Preview deploy
-`6a8e0def46faf70007aa4ef9`);
+`8fb49e02184c3569e85fbd7cede2fe9866d16c93` (current-account Preview deploy
+`6a8eee9d22a46700081feb04`);
 `fcf561d78da6de405d6ca54b78ebfc99df3d3a0a` remains the historical rollout and
 logical-restore checkpoint. Authenticated learner Google sign-in, profile
 completion, reload persistence, lesson access, and safe sign-out pass. Teacher
@@ -20,8 +20,8 @@ physical-device QA remain pending. The production static site remains pre-v9. Re
 - `/lesson/june-28` — shared lesson player
 - `/phrases` — Phrase & Vocabulary Library
 - `/plans` — Free, Standard, Premium, and Premium+ comparison/contact flow
-- `/pricing-layout-preview` — private, no-index A/B preview of the four-card
-  and balanced 2×2 pricing layouts; it does not replace `/plans`
+- `/pricing-layout-preview` — private, no-index comparison of the former
+  four-card stack and the adopted balanced 2×2 pricing layout
 - `/music-credits` — CC BY 4.0 study-music attribution and official sources
 - `/takiwaki` — compatibility route that redirects to the shared learner hub
 - `/teacher` — authenticated Teacher Studio
@@ -40,6 +40,11 @@ lesson data are guarded by Supabase Auth and Row Level Security.
 - fresh-run question/choice shuffle and saved-run order restoration
 - pre-entry Quick Practice (8 balanced questions, about 5–10 minutes) or Full
   Lesson choice for every accessible lesson
+- a question-local Practice settings control for voice, selected-choice
+  pronunciation, SFX, Study Music, checking mode, hints, display language and
+  theme
+- expanded bilingual Lesson Guides with a model-answer Practice map covering
+  every one of the 616 activities across all 17 lessons
 - Asia/Tokyo streak, weekly goal, unique completions, first accuracy, and retry
   improvement
 - progressive phrase/vocabulary library with retained filters and audio
@@ -58,7 +63,8 @@ lesson data are guarded by Supabase Auth and Row Level Security.
   and gives missing/extra/change details plus short retry chunks
 - public-shell PWA/offline fallback that excludes protected/authenticated data
 - four-plan pricing, 13-row comparison, editable contact message, and exact
-  savings/monthly equivalents
+  savings/monthly equivalents; the public plan cards use the clearer 2×2
+  hierarchy on desktop and a single column on small screens
 - Teacher Studio organised into Dashboard, Learners, Access codes, Lessons &
   content, Submissions, Sources, and Insights
 - 34 active Premium review tasks: one speaking and one essay per lesson
@@ -104,8 +110,8 @@ git diff --check
 
 After the authentication fixes, the full `npm test`, `npm run build`, and
 `npm run verify:visuals` sequence passed. The same full sequence, including the
-five-track audio verifier, passed again for the August 26 application checkpoint
-`a7002c0`.
+five-track audio verifier and the new 17-lesson/616-question Lesson Guide audit,
+passed again for the August 26 application checkpoint `8fb49e0`.
 
 `npm run build` regenerates reviewed data and the protected Supabase question
 migration. The public `dist/` allowlist deliberately excludes private authoring
@@ -169,11 +175,12 @@ answers, teacher feedback, authenticated API responses, or recordings.
   deploy `6a8420afed26890008660823`
 - Exact validated immutable Preview permalink:
   `https://6a8420afed26890008660823--tahmid-english-review-hub-v9-preview.netlify.app`
-- Current-account Preview (August 26 conversion polish, cross-page music,
-  Quick Practice, improved Premium clarity and both layout previews):
+- Current-account Preview (August 26 final pricing hierarchy, typography,
+  question-local settings, expanded Lesson Guides, conversion polish,
+  cross-page music and Quick Practice):
   `https://tahmid-english-review-hub-preview.netlify.app/`
 - Exact current-account Preview deploy:
-  `https://6a8e0def46faf70007aa4ef9--tahmid-english-review-hub-preview.netlify.app/`
+  `https://6a8eee9d22a46700081feb04--tahmid-english-review-hub-preview.netlify.app/`
 - Production: `https://jocular-chaja-86e78d.netlify.app/`
   — static site remains untouched and pre-v9
 

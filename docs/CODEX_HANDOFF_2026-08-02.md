@@ -6,7 +6,9 @@ Updated: 2026-08-26 (Asia/Tokyo)
 
 - Repository folder: `/Users/tahmidahmed/Documents/Codex/2026-08-03/codex-handoff-tahmid-english-review-hub/work/tahmid-english-review-hub`
 - Working branch: `upgrade/review-hub-v9-final-product`
-- Exact August 26 application checkpoint:
+- Exact August 26 final application checkpoint:
+  `8fb49e02184c3569e85fbd7cede2fe9866d16c93`
+- Previous August 26 entrance/audio checkpoint:
   `a7002c04785f7a802800ba89083e92737fe4b274`
 - Previous August 25 application checkpoint:
   `ae766535442dcd17d2d6976303dafb0423a3edc3`
@@ -29,16 +31,25 @@ Updated: 2026-08-26 (Asia/Tokyo)
 - Dedicated v9 preview: https://tahmid-english-review-hub-v9-preview.netlify.app
 - Exact validated Preview permalink: https://6a8420afed26890008660823--tahmid-english-review-hub-v9-preview.netlify.app
 - Current-account Preview: https://tahmid-english-review-hub-preview.netlify.app
-- Exact current-account Preview permalink: https://6a8e0def46faf70007aa4ef9--tahmid-english-review-hub-preview.netlify.app
+- Exact current-account Preview permalink: https://6a8eee9d22a46700081feb04--tahmid-english-review-hub-preview.netlify.app
 - Supabase project ref: `ycmybggetemkhorkhfnf`
 
 Do not place OAuth client secrets, passwords, service-role keys, database passwords, or access tokens in this file, Git, screenshots, or chat.
 
 ## Deployment truth
 
-- The August 26 application checkpoint `a7002c0` is published only to the
-  current-account Preview as Netlify deploy `6a8e0def46faf70007aa4ef9`.
+- The August 26 final application checkpoint `8fb49e0` is published only to the
+  current-account Preview as Netlify deploy `6a8eee9d22a46700081feb04`.
   Production static files remain untouched and pre-v9.
+- The user selected the balanced layout direction. Public `/plans` now uses a
+  clear 2×2 desktop hierarchy (Free/Standard, then Premium/Premium+) and one
+  column on small screens. The private no-index comparison remains available,
+  defaults to the adopted layout, and labels it as the production choice.
+- English/Japanese display lines now use separate elements instead of relying
+  on slash-delimited wrapping. This fixes collisions in the pricing selector,
+  plan names, and comparison heading. Premium review tiles stay side by side
+  when space permits, and Premium+ keeps its English and Japanese names on
+  independent lines.
 - The learner entrance now reveals `Understand · Hear · Say · Use` word by
   word, adds a real-lesson value story, clearer two-free-lesson CTA, restrained
   scroll/hover/touch motion and a reduced-motion fallback. No customer claim
@@ -73,6 +84,15 @@ Do not place OAuth client secrets, passwords, service-role keys, database passwo
   (8 balanced questions, approximately 5–10 minutes) or **Full Lesson** before
   entry. The lesson URL, selector, shuffled run and question navigation retain
   the chosen mode; Browser QA confirmed exactly eight question buttons.
+- Every lesson now also exposes a question-local **Practice settings** button.
+  It opens the same complete settings dialog for US/UK voice, voice volume and
+  speed, selected-choice pronunciation, SFX and volume, all five Study Music
+  tracks and volume, manual/instant checking, hint behavior, interface
+  language and theme.
+- Lesson Guides now show the full useful-phrase inventory and a bilingual
+  Practice map with one model target for every question. The new audit proves
+  coverage for all 17 lessons and all 616 activities, with no missing model
+  targets across the 14 implemented formats.
 - Procedural ambient synthesis was removed. Study Music defaults ON at 18% and
   offers five complete instrumental recordings by Kevin MacLeod under CC BY
   4.0, with in-product and repository attribution. Web-optimised AAC/M4A copies
@@ -295,7 +315,7 @@ Do not place OAuth client secrets, passwords, service-role keys, database passwo
 
 ## Verification evidence
 
-The exact August 26 application checkpoint `a7002c0` passed:
+The exact August 26 final application checkpoint `8fb49e0` passed:
 
 ```sh
 npm test
@@ -308,15 +328,16 @@ git diff --check
 This is 17 lessons, 616 activities, 85 visual questions, 14 formats and 1,382
 integrity/security assertions. The audio verifier checks exactly five unique,
 complete M4A recordings, file headers, size bounds, official ISRC source links
-and CC BY 4.0 attribution. Browser QA on the exact immutable Netlify deploy
-confirmed the full-width Premium speaking/writing rows, the explicit `14 ways
-to practise` Standard label, the Premium+ three-session/50-minute story, and
-390 px no-overflow. The published Hub showed the new entrance/value sequence;
-Quick Practice loaded exactly 8 questions. Preview layout A rendered four
-equal 280 px cards and layout B rendered a balanced 2×2 set of 550 px cards at
-1440 px. Study Music played the real local M4A with advancing current time,
-ready state 4 and no media error. The speaking regression reproducing “How are
-you” against “I haven’t taken a bath yet” also passed as `different-sentence`.
+and CC BY 4.0 attribution. The integrated suite also ran the new Lesson Guide
+coverage audit across all 17 lessons/616 activities. Browser QA on the exact
+immutable Netlify deploy confirmed the adopted 2×2 public plan grid, readable
+Premium speaking/writing and Premium+ coaching visuals, the local Practice
+settings dialog with every required control, Quick Practice with eight
+questions, and the June 29 Lesson Guide Practice map with all 37 model targets.
+The BGM control changed from Off to On from one explicit Preview interaction.
+Earlier same-day verification confirmed the real local M4A advanced without a
+media error. The speaking regression reproducing “How are you” against “I
+haven’t taken a bath yet” passed as `different-sentence`.
 
 The August 18 Teacher/i18n/source checkpoint passed `npm test`, `npm run build`,
 `npm run verify:visuals`, the new `node scripts/test-teacher-i18n.mjs`, and
@@ -416,26 +437,32 @@ Premium denial. Teacher auth remains pending; the learner is signed out.
     one-tap autoplay fallback, refreshed SFX, exact 8-question Quick mode,
     Premium wrapping fix, explicit Standard `14` label, and both no-index
     pricing-layout previews on immutable deploy `6a8e0def46faf70007aa4ef9`.
-12. **In progress:** authenticate dedicated non-teacher Free/
+12. **Completed:** adopt the balanced 2×2 public plan layout, repair bilingual
+    typography, add question-local settings and full 17-lesson/616-activity
+    Guide coverage, publish application checkpoint `8fb49e0`, and verify the
+    public plan grid, settings dialog and June 29 Guide on immutable deploy
+    `6a8eee9d22a46700081feb04`.
+13. **In progress:** authenticate dedicated non-teacher Free/
    Standard/Premium/Premium+ accounts; test tier/RLS/access codes, email auth,
    speaking/essay submissions, and published feedback.
-13. **Pending:** complete desktop/tablet/390 px and real iPhone Safari/Android
+14. **Pending:** complete desktop/tablet/390 px and real iPhone Safari/Android
    Chrome touch, microphone, PWA, and offline QA.
-14. Promote to production only after every preview gate passes and the correct
+15. Promote to production only after every preview gate passes and the correct
    production Netlify account is available. Preserve a known-good rollback
    deploy and prepare forward fixes for database issues.
 
 ## Remaining and blockers
 
 - August 26 entrance/conversion, cross-page Study Music fallback, SFX,
-  Premium wrapping and layout-comparison work is complete and published to
-  Preview. There is no known code-level blocker in that tranche. The checked
-  public artifact is commit `a7002c0`, deploy `6a8e0def46faf70007aa4ef9`;
+  balanced public pricing, bilingual typography, question-local settings and
+  complete Guide coverage are published to Preview. There is no known
+  code-level blocker in that tranche. The checked public artifact is commit
+  `8fb49e0`, deploy `6a8eee9d22a46700081feb04`;
   Production was not deployed.
-- A customer-facing choice remains: keep layout A (the improved four-card
-  story) or switch `/plans` to layout B (balanced 2×2). Both are finished and
-  reviewable at `/pricing-layout-preview`; no choice is required for technical
-  correctness.
+- The pricing choice is complete: `/plans` uses the balanced 2×2 option because
+  it makes the four alternatives easier to compare without an excessively
+  long vertical sales path. The former stack remains only as a private visual
+  reference in `/pricing-layout-preview`.
 
 - Live access-code CRUD progressed: temporary Standard, Premium and Premium+
   codes were created; one Standard code was edited; one Premium code was

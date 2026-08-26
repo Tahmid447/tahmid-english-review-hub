@@ -11,12 +11,14 @@ This document records the state that existed before the final-product work began
 ## Final-product checkpoint status
 
 - Working branch: `upgrade/review-hub-v9-final-product`.
-- Latest checked application commit: `a7002c04785f7a802800ba89083e92737fe4b274`.
+- Latest checked application commit: `8fb49e02184c3569e85fbd7cede2fe9866d16c93`.
   It is published to the current-account Preview as Netlify deploy
-  `6a8e0def46faf70007aa4ef9`; exact permalink:
-  `https://6a8e0def46faf70007aa4ef9--tahmid-english-review-hub-preview.netlify.app`.
-  The exact public artifact passed the August 26 Hub entrance/value-story,
-  BGM, 390 px, Quick 8-question, Premium wrapping and A/B pricing-layout checks.
+  `6a8eee9d22a46700081feb04`; exact permalink:
+  `https://6a8eee9d22a46700081feb04--tahmid-english-review-hub-preview.netlify.app`.
+  The exact public artifact passed the August 26 adopted 2×2 pricing,
+  bilingual typography, question-local settings and Lesson Guide checks. The
+  earlier same-day artifact passed the Hub entrance/value-story, BGM, 390 px,
+  Quick 8-question, Premium wrapping and A/B pricing-layout checks.
   August 25 verification covers device-wide Study Music controls/real playback,
   transcript-aware speaking correction and the simplified Premium/Premium+
   value presentation. The August 24 Quick Practice and licensed-track work is
@@ -40,6 +42,9 @@ This document records the state that existed before the final-product work began
   Authenticated end-to-end Supabase behavior,
   final deployed Lighthouse measurements, and physical-device behavior are not
   represented as verified.
+- The final integrated suite includes a dedicated Lesson Guide coverage audit:
+  17/17 lessons, 616/616 activity model targets and no format gaps. Public
+  `june-29` exposed all 37 targets in its Practice map.
 
 ## Deployment facts observed
 
@@ -138,7 +143,7 @@ These tests are valuable, but several are static source assertions. They do not 
 | Area | Status on August 14 | Evidence or remaining boundary |
 |---|---|---|
 | Fixed four-plan prices | Implemented and regression-tested locally | Free ¥0/¥0, Standard ¥3,980/¥20,300, Premium ¥6,980/¥35,600, Premium+ ¥16,800/¥85,700 remain centralised. |
-| Pricing sales journey | Deployed public QA passed; layout choice pending | Four cards, 13 comparison rows, exact monthly/six-month values, best-for copy, Premium recommendation, trust/FAQ content, contact-first flow, and Dark persistence were checked on the exact Preview deploy. August 26 removed the narrow Premium label wrapping and clarified Standard's `14`; a no-index comparison provides both an improved four-card layout and balanced 2×2 layout for the user's final choice. |
+| Pricing sales journey | Deployed public QA passed; 2×2 adopted | Four cards, 13 comparison rows, exact monthly/six-month values, best-for copy, Premium recommendation, trust/FAQ content, contact-first flow, and Dark persistence were checked on the exact Preview deploy. The public page now uses the balanced 2×2 desktop hierarchy, one column on small screens, separate English/Japanese lines, and stable Premium/Premium+ value visuals. The private no-index route retains the former stack only for reference. |
 | Editable contact message | Implemented locally | Editable name/message, dirty-state preservation, copy-current-text, and explicit reset are covered by local plan tests. |
 | Navigation and state | Implemented locally | Safe lesson→plans return, new-tab role change, persistent library filters, and common return handling are present. Browser history/reload QA remains part of preview testing. |
 | First-time Google onboarding | Learner live QA passed; scope caveat | Google sign-in, profile save, gate close, reload persistence, observed Standard membership/lesson access, and sign-out passed after the hotfix. Teacher auth and dedicated non-teacher tier negatives remain pending. |
@@ -155,6 +160,7 @@ These tests are valuable, but several are static source assertions. They do not 
 | Shared Takiwaki experience | Public redirect passed | The old route redirected to the common learner experience on the exact Preview deploy. Authenticated session compatibility remains pending. |
 | Phrase/Vocabulary library | Implemented locally | Progressive rendering, meaningful types, corrected presentation/data issues, favourites, audio, and retained filters are covered by local regressions. |
 | Learner progress | Implemented locally | Asia/Tokyo streak, weekly goal, unique completions, first-attempt accuracy, retry improvement, and restrained milestones derive from real stored progress. |
+| Lesson Guide and local settings | Deployed public QA passed | Every lesson exposes question-local access to the complete settings dialog. Full useful phrases and a bilingual Practice map cover all 17 lessons and all 616 activities; the automated coverage audit reports no missing model target, and public `june-29` displayed all 37. |
 | Theme | Implemented and checked on current Preview | Persisted System/Light/Dark is shared across home, phrases, lessons, pricing and the layout preview. August 26 390 px/1440 px no-overflow checks passed; final deployed contrast/Lighthouse and physical-device checks remain pending. |
 | PWA | Implemented locally | Public static shell and offline fallback only; protected routes, API/auth requests, private learner data, answers, and recordings are excluded. Install/update/offline real-device QA remains pending. |
 | Accessibility/responsive | Implemented locally; deployed measurement pending | Contrast, touch targets, 621–900 px compact header, radio keyboard behavior, lazy QR, and smaller header logo are present. Public flows were checked locally at 390/430/621/768/900/1024/1440 px with no checked page-level overflow, and key Dark/pricing/retry interactions were exercised. Final deployed 390/768 light/dark Lighthouse and physical-device checks are pending. |
@@ -188,9 +194,13 @@ reason pairs.
 5. **Completed:** deployed the matching updated `membership-access` Edge Function.
 6. **Completed:** deployed exact application commit `049b5ff` and completed
    recorded public plus scoped Google learner QA.
-7. **In progress:** complete authenticated Teacher and dedicated non-teacher
+7. **Completed:** published final August 26 application commit `8fb49e0` as
+   current-account Preview deploy `6a8eee9d22a46700081feb04`; verified the
+   adopted 2×2 pricing, bilingual typography, local Practice settings and
+   37-question June 29 Guide against the public artifact.
+8. **In progress:** complete authenticated Teacher and dedicated non-teacher
    four-tier/RLS QA; then Lighthouse and real-device QA.
-8. Promote production only after every gate passes and production Netlify
+9. Promote production only after every gate passes and production Netlify
    access is confirmed.
 
 ## Security and data rules for implementation

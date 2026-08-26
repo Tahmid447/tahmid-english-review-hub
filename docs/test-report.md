@@ -2,6 +2,44 @@
 
 Last updated: **August 26, 2026**
 
+## August 26 final pricing, typography, settings and Lesson Guide checkpoint
+
+- Application commit: `8fb49e02184c3569e85fbd7cede2fe9866d16c93`.
+- Netlify Preview — PASS: deploy `6a8eee9d22a46700081feb04` published from
+  that exact commit. Immutable URL:
+  `https://6a8eee9d22a46700081feb04--tahmid-english-review-hub-preview.netlify.app/`.
+  Production was not deployed; Supabase schema and Edge Functions were not
+  changed in this checkpoint.
+- Full verification — PASS: `npm test`, `npm run build`,
+  `npm run verify:visuals` and `git diff --check`. The suite covers 17 lessons,
+  616 activities, 85 visual questions, 14 formats, 1,382 assertions, all five
+  complete Study Music assets, and the new 17-lesson/616-question Lesson Guide
+  model-target audit.
+- Public pricing — PASS: `/plans` renders four cards in the adopted 2×2 desktop
+  hierarchy and keeps Premium's speaking/writing review tiles side by side.
+  Premium+ shows its English and Japanese names on separate lines and retains
+  the three-session/50-minute coaching visual. The private no-index comparison
+  defaults to and labels the adopted layout.
+- Typography — PASS in the exercised public and private pricing views:
+  English/Japanese headings render as separate lines instead of colliding or
+  relying on slash wrapping.
+- Lesson-local settings — PASS on the public Preview: the question-toolbar
+  button opens the complete dialog with voice/volume/speed, selected-choice
+  pronunciation, SFX/volume, five Study Music tracks/volume, checking mode,
+  hint behavior, display language and theme.
+- Lesson Guide — PASS on public `june-29`: the guide opened without the old
+  large section-level blank and exposed `Practice map · 37 questions / 問題対応
+  リスト · 全37問`; automated coverage confirms model targets for all 616
+  questions.
+- Study Music control — PASS on the public Preview: one explicit interaction
+  changed the persisted state from `Ambient Off` to `Ambient On`. Earlier
+  same-day browser/audio verification proved the real local M4A advanced with
+  ready state 4 and no media error. Browser autoplay restrictions still mean a
+  first visit may require the existing one-tap start prompt.
+- Speaking regression — PASS in the integrated suite: target “I haven’t taken
+  a bath yet.” versus transcript “How are you” is `different-sentence`, not a
+  one-word correction. Real microphone/recognition QA remains a device gate.
+
 ## August 26 entrance, pricing-layout, BGM fallback and SFX checkpoint
 
 - Application commit: `a7002c04785f7a802800ba89083e92737fe4b274`.

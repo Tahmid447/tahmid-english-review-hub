@@ -8,7 +8,7 @@ already available on the hosted sites. The working branch is
 `c14625d5` and handoff checkpoint `a87eb5e1` are published. The current
 documentation checkpoint is branch HEAD (`git rev-parse HEAD`); this file cannot
 embed the final hash of the commit that contains itself. Exact deployed
-application commit is `a7002c04785f7a802800ba89083e92737fe4b274`;
+application commit is `8fb49e02184c3569e85fbd7cede2fe9866d16c93`;
 historical rollout/logical-restore checkpoint remains `fcf561d`. The current
 application commit is deployed to the current-account Preview. Production
 static files remain pre-v9. Migrations `015`–`018` and the matching updated
@@ -121,6 +121,12 @@ payment or claim payment success. The learner may add a name, edit the prepared
 message, copy the current text, and reset it deliberately. Confirm payment and
 access separately.
 
+The public plan presentation uses a 2×2 desktop grid: Free and Standard first,
+then Premium and Premium+. It collapses to one column on small screens. Keep
+English and Japanese headings in separate `data-ui-lines` spans; do not return
+to slash-dependent line wrapping. `/pricing-layout-preview` is a private,
+no-index comparison route and defaults to the adopted layout.
+
 Premium promises one reviewed speaking task and one reviewed essay per lesson;
 Premium+ also advertises three 50-minute live 1:1 lessons per month. Before
 launch, set a sustainable active-member/submission cap and booking policy. The
@@ -203,6 +209,15 @@ automatic import must run server-side and create a draft first.
   Quick Practice must remain exactly eight unique questions, approximately
   5–10 minutes, and should preserve the balanced family selection in
   `selectQuickPracticeIds`. Do not silently turn Quick into the full set.
+- Keep the question-local **Practice settings** button in the quiz toolbar. It
+  must open the same complete dialog as the page-header control, including
+  voice, selected-choice pronunciation, SFX, Study Music, checking mode, hint
+  behavior, language and theme. Do not create a second independent settings
+  state.
+- Keep Lesson Guides useful to a learner who did not attend the source lesson:
+  retain all useful phrases and a bilingual model target for every question.
+  Run `node scripts/audit-lesson-guide-coverage.mjs`; it must pass all 17
+  lessons and all 616 activities before publishing content.
 - Study Music defaults ON at 18%. Try playback immediately, but expect Safari,
   Chrome and other browsers to block audible autoplay on some visits. When
   blocked, show the fixed `Begin with music / BGMと一緒に始める` prompt and
@@ -290,12 +305,13 @@ For code/design/backend changes:
 3. Confirm the recorded Supabase/Edge postconditions and do not blindly replay
    the manually applied migrations.
 4. Confirm the current-account Netlify Preview serves application checkpoint
-   `a7002c0` at its immutable permalink:
-   `https://6a8e0def46faf70007aa4ef9--tahmid-english-review-hub-preview.netlify.app`.
+   `8fb49e0` at its immutable permalink:
+   `https://6a8eee9d22a46700081feb04--tahmid-english-review-hub-preview.netlify.app`.
    This checkpoint includes 17/17 verified Teacher Studio source links,
    Quick Practice, licensed cross-page Study Music with one-tap fallback,
    transcript-aware speaking feedback, the entrance/value-story polish,
-   clearer Premium rows, and both no-index pricing-layout previews.
+   the adopted 2×2 pricing layout, bilingual typography, question-local
+   settings and complete Lesson Guide Practice maps.
 5. Preserve the recorded public QA evidence: home inventory; pricing and Dark
    persistence; phrases 24→30; shuffle/radio behavior; visual guidance; fixed
    Retry score; 0.5x and mixed-language controls; locked payload; Teacher gate
