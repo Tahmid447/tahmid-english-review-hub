@@ -1,11 +1,13 @@
 # Codex Handoff — Tahmid English Review Hub v9
 
-Updated: 2026-08-26 (Asia/Tokyo)
+Updated: 2026-08-28 (Asia/Tokyo)
 
 ## Open this project
 
 - Repository folder: `/Users/tahmidahmed/Documents/Codex/2026-08-03/codex-handoff-tahmid-english-review-hub/work/tahmid-english-review-hub`
 - Working branch: `upgrade/review-hub-v9-final-product`
+- Exact August 28 launch-UX application checkpoint:
+  `fbd67fac20823e88ef4010f10e6558f53a99ecd4`
 - Exact August 26 final application checkpoint:
   `8fb49e02184c3569e85fbd7cede2fe9866d16c93`
 - Previous August 26 entrance/audio checkpoint:
@@ -38,6 +40,31 @@ Do not place OAuth client secrets, passwords, service-role keys, database passwo
 
 ## Deployment truth
 
+- The August 28 launch-UX checkpoint `fbd67fa` is locally complete and fully
+  verified, but has not yet been deployed. The user's newly signed-in Netlify
+  account is at the first-project onboarding screen and does not yet have this
+  repository imported. The known-good August 26 Preview remains available;
+  Production is still pre-v9 and untouched.
+- The release workflow is now local-first: finish and verify a coherent batch
+  locally, publish one Preview, pass its public/authenticated gates, and only
+  then publish Production. Do not spend Netlify credits on each small edit.
+- Browser-blocked Study Music now presents one centered, animated invitation
+  for 4.2 seconds and fades out by about five seconds if ignored. A tap starts
+  the selected local track; it never claims that a browser can bypass autoplay
+  policy.
+- `/plans` now keeps its large settings controls behind an explicit Settings
+  button at every desktop width, shows all four current prices and core benefits
+  in a compact first-glance row, and keeps each long feature list behind an
+  accessible `What's included / 含まれる内容` disclosure. The full 2×2 plan
+  cards and complete comparison table remain available below.
+- The in-question Practice settings shortcut no longer duplicates the complete
+  top dialog. It contains only Voice On/Off, US/UK voice, selected-choice
+  pronunciation, manual/instant checking and hint behaviour. The top Settings
+  dialog remains complete with speed/volume, SFX, five Study Music tracks,
+  translations, display language and theme.
+- The release typography uses an explicit editorial system-serif stack for
+  display headings and a highly legible system sans stack for controls/body
+  copy, with balanced headings and Japanese line-breaking/spacing refinements.
 - The August 26 final application checkpoint `8fb49e0` is published only to the
   current-account Preview as Netlify deploy `6a8eee9d22a46700081feb04`.
   Production static files remain untouched and pre-v9.
@@ -85,10 +112,9 @@ Do not place OAuth client secrets, passwords, service-role keys, database passwo
   entry. The lesson URL, selector, shuffled run and question navigation retain
   the chosen mode; Browser QA confirmed exactly eight question buttons.
 - Every lesson now also exposes a question-local **Practice settings** button.
-  It opens the same complete settings dialog for US/UK voice, voice volume and
-  speed, selected-choice pronunciation, SFX and volume, all five Study Music
-  tracks and volume, manual/instant checking, hint behavior, interface
-  language and theme.
+  From August 28 onward it deliberately shows only answer-time controls: Voice
+  On/Off, US/UK voice, selected-choice pronunciation, manual/instant checking
+  and hint behavior. The top Settings button opens the complete preference set.
 - Lesson Guides now show the full useful-phrase inventory and a bilingual
   Practice map with one model target for every question. The new audit proves
   coverage for all 17 lessons and all 616 activities, with no missing model
@@ -442,17 +468,26 @@ Premium denial. Teacher auth remains pending; the learner is signed out.
     Guide coverage, publish application checkpoint `8fb49e0`, and verify the
     public plan grid, settings dialog and June 29 Guide on immutable deploy
     `6a8eee9d22a46700081feb04`.
-13. **In progress:** authenticate dedicated non-teacher Free/
+13. **Completed locally:** implement and verify the August 28 centered/fading
+    music invitation, scan-first pricing, collapsible feature details, compact
+    pricing settings header, typography refinement and focused question-local
+    settings at application checkpoint `fbd67fa`.
+14. **In progress:** import the GitHub repository into the user's new Netlify
+    account, publish this checkpoint to one Preview, and run public/authenticated
+    release gates. The account is signed in but still on first-project onboarding.
+15. **Pending:** authenticate dedicated non-teacher Free/
    Standard/Premium/Premium+ accounts; test tier/RLS/access codes, email auth,
    speaking/essay submissions, and published feedback.
-14. **Pending:** complete desktop/tablet/390 px and real iPhone Safari/Android
+16. **Pending:** complete desktop/tablet/390 px and real iPhone Safari/Android
    Chrome touch, microphone, PWA, and offline QA.
-15. Promote to production only after every preview gate passes and the correct
+17. Promote to production only after every preview gate passes and the correct
    production Netlify account is available. Preserve a known-good rollback
    deploy and prepare forward fixes for database issues.
 
 ## Remaining and blockers
 
+- August 28 code is committed at `fbd67fa` and locally verified. It is not yet
+  on Netlify; the new account does not yet contain an imported project.
 - August 26 entrance/conversion, cross-page Study Music fallback, SFX,
   balanced public pricing, bilingual typography, question-local settings and
   complete Guide coverage are published to Preview. There is no known
@@ -491,10 +526,12 @@ Premium denial. Teacher auth remains pending; the learner is signed out.
 
 ## Exact next step
 
-Use a dedicated non-teacher Premium learner for one topic-specific draft
-and submit cycle so Teacher queue topic visibility can be proven without
-changing the real teacher's active membership. Continue tier, microphone,
-Lighthouse and device gates afterward. Do not deploy Production.
+Push the August 28 application and documentation checkpoints to GitHub, import
+`Tahmid447/tahmid-english-review-hub` into the newly signed-in Netlify account,
+set the deploy branch to `upgrade/review-hub-v9-final-product`, publish one
+Preview, and verify exact commit, pricing, music fallback and learner auth.
+Publish Production only after those gates pass and after confirming whether the
+new site is replacing the old production URL or receiving a new production URL.
 
 ## Read first in the next Codex session
 

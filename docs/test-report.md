@@ -1,6 +1,35 @@
 # Test Report / 動作確認レポート
 
-Last updated: **August 26, 2026**
+Last updated: **August 28, 2026**
+
+## August 28 release UX and local-first checkpoint
+
+- Application commit: `fbd67fac20823e88ef4010f10e6558f53a99ecd4`.
+- Full local verification — PASS: `npm test`, `npm run build`,
+  `npm run verify:visuals` and `git diff --check`. This retains 17 lessons,
+  616 activities, 85 visual questions, 14 formats, 1,382 integrity/security
+  assertions, full 616-question Lesson Guide coverage and five verified local
+  M4A Study Music tracks.
+- Real local Browser QA — PASS: a fresh lesson showed the centered Study Music
+  invitation; it was absent after the 4.2-second hold plus fade. June 29 then
+  loaded all 37 questions and the automatic question/choice shuffle notice.
+- Focused Practice settings — PASS: the question-local dialog showed only
+  Voice On/Off, US/UK voice, selected-choice pronunciation, manual/instant
+  checking and hint behaviour. SFX, Study Music, display language and theme
+  were absent. Reopening from the top Settings button showed the complete set,
+  including speed/volume, SFX, all five tracks, translations, language and theme.
+- Pricing scan/readability — PASS locally: all four plan names, current prices
+  and one core benefit appeared before the full card grid. Free, Standard,
+  Premium and Premium+ kept their full cards; long benefit lists were collapsed
+  behind keyboard-accessible `What's included / 含まれる内容` disclosures.
+  The settings controls were hidden behind the explicit Settings button.
+- Typography — PASS in exercised Home, Plans and Lesson views: display headings
+  use the new editorial system-serif stack, controls/body use the system sans
+  stack, and English/Japanese copy no longer collided in the tested views.
+- Netlify/Production — NOT YET DEPLOYED: the user's new Netlify account is signed
+  in at first-project onboarding but the GitHub repository has not yet been
+  imported. The August 26 Preview is the current remote fallback; Production
+  remains pre-v9 and untouched at this checkpoint.
 
 ## August 26 final pricing, typography, settings and Lesson Guide checkpoint
 
