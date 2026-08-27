@@ -6,6 +6,8 @@ Updated: 2026-08-28 (Asia/Tokyo)
 
 - Repository folder: `/Users/tahmidahmed/Documents/Codex/2026-08-03/codex-handoff-tahmid-english-review-hub/work/tahmid-english-review-hub`
 - Working branch: `upgrade/review-hub-v9-final-product`
+- Exact August 28 public-release application checkpoint:
+  `85ecfbf33c24b077a28cd9235467d32a4a73e8ba`
 - Exact August 28 launch-UX application checkpoint:
   `fbd67fac20823e88ef4010f10e6558f53a99ecd4`
 - Exact August 26 final application checkpoint:
@@ -30,6 +32,9 @@ Updated: 2026-08-28 (Asia/Tokyo)
 - Canonical GitHub implementation checkpoint: `c14625d50204227c917ecc01d59322cb63006cee`
 - Published handoff checkpoint: `a87eb5e1aaa9cff079319b68dfed40bdb2b1a408`
 - Production: https://jocular-chaja-86e78d.netlify.app
+- New-account public release: https://tahmid-english-review-hub-v9-release.netlify.app
+- Exact new-account release deploy: https://6a90b24a2703d100098ffe4b--tahmid-english-review-hub-v9-release.netlify.app
+- New Netlify project/Site ID: `f30d0264-70d0-4234-83ec-c717fa428f99`
 - Dedicated v9 preview: https://tahmid-english-review-hub-v9-preview.netlify.app
 - Exact validated Preview permalink: https://6a8420afed26890008660823--tahmid-english-review-hub-v9-preview.netlify.app
 - Current-account Preview: https://tahmid-english-review-hub-preview.netlify.app
@@ -40,11 +45,20 @@ Do not place OAuth client secrets, passwords, service-role keys, database passwo
 
 ## Deployment truth
 
-- The August 28 launch-UX checkpoint `fbd67fa` is locally complete and fully
-  verified, but has not yet been deployed. The user's newly signed-in Netlify
-  account is at the first-project onboarding screen and does not yet have this
-  repository imported. The known-good August 26 Preview remains available;
-  Production is still pre-v9 and untouched.
+- The August 28 release checkpoint `85ecfbf` is public on the user's new
+  Netlify account at
+  `https://tahmid-english-review-hub-v9-release.netlify.app`. Netlify deploy
+  `6a90b24a2703d100098ffe4b` is published from the exact GitHub branch/commit.
+  The project is public, automatic publishing is on, and the Netlify overlay
+  badge is disabled. Netlify labels this branch deploy as Production for the
+  new project. The legacy production URL
+  `https://jocular-chaja-86e78d.netlify.app` remains untouched in the old
+  account; do not describe it as upgraded.
+- Supabase Auth now allow-lists
+  `https://tahmid-english-review-hub-v9-release.netlify.app/**`. A real Google
+  OAuth retest returned to the new domain, completed the existing learner
+  session, unlocked Quick and Full entry for all 17 lessons, and no longer
+  copied OAuth token fragments into internal return links.
 - The release workflow is now local-first: finish and verify a coherent batch
   locally, publish one Preview, pass its public/authenticated gates, and only
   then publish Production. Do not spend Netlify credits on each small edit.
@@ -472,9 +486,11 @@ Premium denial. Teacher auth remains pending; the learner is signed out.
     music invitation, scan-first pricing, collapsible feature details, compact
     pricing settings header, typography refinement and focused question-local
     settings at application checkpoint `fbd67fa`.
-14. **In progress:** import the GitHub repository into the user's new Netlify
-    account, publish this checkpoint to one Preview, and run public/authenticated
-    release gates. The account is signed in but still on first-project onboarding.
+14. **Completed:** import the GitHub repository into the user's new Netlify
+    account, configure `upgrade/review-hub-v9-final-product`, `npm run build`
+    and `dist`, publish the new public release, add its Supabase Auth redirect,
+    and pass public plus Google-authenticated release gates on exact commit
+    `85ecfbf` / deploy `6a90b24a2703d100098ffe4b`.
 15. **Pending:** authenticate dedicated non-teacher Free/
    Standard/Premium/Premium+ accounts; test tier/RLS/access codes, email auth,
    speaking/essay submissions, and published feedback.
@@ -486,8 +502,10 @@ Premium denial. Teacher auth remains pending; the learner is signed out.
 
 ## Remaining and blockers
 
-- August 28 code is committed at `fbd67fa` and locally verified. It is not yet
-  on Netlify; the new account does not yet contain an imported project.
+- The new-account release is public and verified. The only production naming
+  decision still open is whether customers should adopt the new release URL or
+  whether the legacy `jocular-chaja-86e78d` address must later be migrated from
+  its old Netlify account. No destructive transfer or old-site change was made.
 - August 26 entrance/conversion, cross-page Study Music fallback, SFX,
   balanced public pricing, bilingual typography, question-local settings and
   complete Guide coverage are published to Preview. There is no known
@@ -516,7 +534,10 @@ Premium denial. Teacher auth remains pending; the learner is signed out.
 - Remaining authenticated Teacher/tier RLS, email-auth, access-code, and
   submission QA is pending; the scoped Google learner flow above is complete.
 - Real-device touch, PWA install/update, offline fallback, Safari/Chrome microphone, and upload QA are pending.
-- Production deployment requires access to the Netlify account that owns the existing production site, or a deliberate replacement plan approved only after preview QA.
+- Replacing the legacy production URL still requires access to the Netlify
+  account that owns it, or a deliberate customer-facing URL migration. The new
+  project is already public and Netlify-production; this note concerns only the
+  old address/ownership.
 - Supabase Free plan has no official backup. The privacy-safe logical restore
   schema is useful for this migration but is not full disaster recovery and
   excludes personal/Auth data.
@@ -526,12 +547,13 @@ Premium denial. Teacher auth remains pending; the learner is signed out.
 
 ## Exact next step
 
-Push the August 28 application and documentation checkpoints to GitHub, import
-`Tahmid447/tahmid-english-review-hub` into the newly signed-in Netlify account,
-set the deploy branch to `upgrade/review-hub-v9-final-product`, publish one
-Preview, and verify exact commit, pricing, music fallback and learner auth.
-Publish Production only after those gates pass and after confirming whether the
-new site is replacing the old production URL or receiving a new production URL.
+Use the public new-account release for owner review and decide whether its URL
+becomes the customer-facing production address or whether the old Netlify URL
+must be migrated. After that naming decision, run one physical iPhone Safari
+and Android Chrome pass for touch, microphone permission, PWA/offline update,
+then test dedicated non-teacher Free/Standard/Premium/Premium+ accounts for
+strict tier/RLS denial and submission workflows. Do not redeploy for cosmetic
+micro-edits; keep the local-first, coherent-batch workflow.
 
 ## Read first in the next Codex session
 

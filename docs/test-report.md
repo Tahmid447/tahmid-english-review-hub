@@ -2,6 +2,41 @@
 
 Last updated: **August 28, 2026**
 
+## August 28 new-account public release and OAuth gate
+
+- Application commit: `85ecfbf33c24b077a28cd9235467d32a4a73e8ba`.
+- Netlify public release — PASS: project
+  `tahmid-english-review-hub-v9-release`, Site ID
+  `f30d0264-70d0-4234-83ec-c717fa428f99`, deploy
+  `6a90b24a2703d100098ffe4b`, public URL
+  `https://tahmid-english-review-hub-v9-release.netlify.app`.
+  Netlify shows exact branch `upgrade/review-hub-v9-final-product` at
+  `85ecfbf` as published with automatic publishing on.
+- Full local verification — PASS after the final navigation-safety fix:
+  `npm test`, `npm run build`, `npm run test:learner-platform` and
+  `git diff --check`. The suite remains 17 lessons, 616 activities, 85 visual
+  questions, 14 formats and 1,382 integrity/security assertions.
+- Public Home/Plans/Lesson QA — PASS: 17 lessons and 616 questions; centered
+  BGM invitation visible then absent after five seconds; all four plan prices
+  and compact disclosures; June 29 full mode with 37 questions and automatic
+  shuffle; no Netlify overlay badge.
+- Settings scope — PASS: the question-local dialog contains only Voice On/Off,
+  US/UK voice, selected-choice pronunciation, Manual/Instant checking and hint
+  behavior. The top dialog retains speed/voice volume, SFX/volume, five Study
+  Music tracks/volume, choice translations, display language and theme.
+- Google OAuth — PASS after adding the new public origin to Supabase Auth's
+  redirect allow-list. The real `tahmidhc245@gmail.com` flow returned to the
+  new domain, completed sign-in, and exposed Quick plus Full entry for all 17
+  lessons with zero locked lesson links.
+- OAuth navigation safety — PASS: the final release removes one-time callback
+  query values and access/refresh/provider token fragments from internal
+  `return` links. A regression test covers the sanitizer; the deployed
+  post-login Phrase Library link was `/phrases?return=%2F` and contained no
+  auth token field.
+- Production naming note: Netlify treats this as the new project's public
+  Production deploy. The legacy old-account URL
+  `https://jocular-chaja-86e78d.netlify.app` was intentionally not overwritten.
+
 ## August 28 release UX and local-first checkpoint
 
 - Application commit: `fbd67fac20823e88ef4010f10e6558f53a99ecd4`.
@@ -26,10 +61,8 @@ Last updated: **August 28, 2026**
 - Typography — PASS in exercised Home, Plans and Lesson views: display headings
   use the new editorial system-serif stack, controls/body use the system sans
   stack, and English/Japanese copy no longer collided in the tested views.
-- Netlify/Production — NOT YET DEPLOYED: the user's new Netlify account is signed
-  in at first-project onboarding but the GitHub repository has not yet been
-  imported. The August 26 Preview is the current remote fallback; Production
-  remains pre-v9 and untouched at this checkpoint.
+- Netlify/Production — this dated local checkpoint was subsequently superseded
+  by the public `85ecfbf` release documented immediately above.
 
 ## August 26 final pricing, typography, settings and Lesson Guide checkpoint
 
