@@ -21,7 +21,7 @@ import {
   stopAudio,
   stopSpeechPractice,
   syncAmbientFromSettings,
-} from "./audio.js?v=20260826-experience4";
+} from "./audio.js?v=20260827-release1";
 import {
   getStudentSession,
   loadUserSettings,
@@ -52,6 +52,8 @@ const elements = {
   openPracticeSettings: $("#openPracticeSettings"),
   practiceSettingsSummary: $("#practiceSettingsSummary"),
   lessonSettingsDialog: $("#lessonSettingsDialog"),
+  lessonSettingsHeading: $("#lessonSettingsHeading"),
+  settingsIntro: $(".lesson-settings-dialog .settings-intro"),
   languageToggle: $("#languageToggle"),
   themeToggle: $("#themeToggle"),
   voiceToggle: $("#voiceToggle"),
@@ -380,6 +382,25 @@ const renderSettings = () => {
   const language = languageModeFromSettings(state.settings);
   applyLanguageMode(language);
   applyThemePreference(state.settings.theme);
+  const practiceScope = elements.lessonSettingsDialog?.dataset.settingsScope === "practice";
+  if (elements.lessonSettingsHeading) {
+    elements.lessonSettingsHeading.textContent = practiceScope
+      ? uiText("Practice settings", "問題設定", language)
+      : uiText("All lesson settings", "すべてのレッスン設定", language);
+  }
+  if (elements.settingsIntro) {
+    elements.settingsIntro.textContent = practiceScope
+      ? uiText(
+        "Only the controls you may need while answering are shown here. All sound, music, display and theme controls remain in the top Settings panel.",
+        "解答中によく使う項目だけを表示しています。効果音・学習BGM・表示言語・テーマなどは、画面上部の「設定」で変更できます。",
+        language,
+      )
+      : uiText(
+        "These preferences apply to every lesson and stay with your signed-in account.",
+        "この設定はすべてのレッスンに適用され、ログイン中のアカウントに保存されます。",
+        language,
+      );
+  }
   elements.languageToggle.value = language;
   if (elements.themeToggle) elements.themeToggle.value = state.settings.theme || "light";
   elements.voiceToggle.textContent = state.settings.voiceEnabled
@@ -418,7 +439,7 @@ const renderSettings = () => {
     elements.practiceSettingsSummary.textContent = [
       state.settings.voice === "gb" ? "UK" : "US",
       state.settings.checkMode === "instant" ? uiText("Instant", "すぐ採点", language) : uiText("Manual", "手動採点", language),
-      state.settings.ambientEnabled ? uiText("BGM On", "BGMオン", language) : uiText("BGM Off", "BGMオフ", language),
+      state.settings.hintMode === "manual" ? uiText("Hints open", "ヒント固定", language) : uiText("Hints auto-close", "ヒント自動閉じ", language),
     ].join(" · ");
   }
   updateCheckAnsweredButton();
@@ -1900,16 +1921,22 @@ elements.practiceMode.addEventListener("change", () => setPracticeMode(elements.
 elements.questionTypeFilter?.addEventListener("change", () => {
   setQuestionTypeFilter(elements.questionTypeFilter.value);
 });
-elements.openLessonSettings?.addEventListener("click", () => {
+const openSettings = (scope = "all") => {
+  if (elements.lessonSettingsDialog) {
+    elements.lessonSettingsDialog.dataset.settingsScope = scope === "practice" ? "practice" : "all";
+  }
   renderSettings();
   if (typeof elements.lessonSettingsDialog?.showModal === "function") {
     elements.lessonSettingsDialog.showModal();
   } else {
     elements.lessonSettingsDialog?.setAttribute("open", "");
   }
+};
+elements.openLessonSettings?.addEventListener("click", () => {
+  openSettings("all");
 });
 elements.openPracticeSettings?.addEventListener("click", () => {
-  elements.openLessonSettings?.click();
+  openSettings("practice");
 });
 elements.shuffleQuestions.addEventListener("click", () => {
   state.questionOrder = shuffleArray(state.questionOrder);

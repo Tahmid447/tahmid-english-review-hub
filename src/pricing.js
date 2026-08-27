@@ -26,6 +26,7 @@ const elements = {
   theme: document.querySelector("#themeToggle"),
   mobileSettingsToggle: document.querySelector("#mobileSettingsToggle"),
   settingsControls: document.querySelector("#siteSettingsControls"),
+  quickNav: document.querySelector("#planQuickNav"),
   grid: document.querySelector("#planGrid"),
   monthly: document.querySelector("#billingMonthly"),
   sixMonths: document.querySelector("#billingSixMonths"),
@@ -108,7 +109,28 @@ function planVisual(key) {
   return `<div class="plan-visual" aria-hidden="true"><span class="plan-visual-mark">${visual.mark}</span><span class="plan-visual-caption">${visual.label}</span></div>`;
 }
 
+function renderPlanQuickNav() {
+  if (!elements.quickNav) return;
+  const shortBenefits = {
+    free: ["Two complete lessons", "完成版2レッスン"],
+    standard: ["All 17 lesson reviews", "全17レッスン復習"],
+    premium: ["Personal speaking & writing feedback", "発話・英作文の個別添削"],
+    premium_plus: ["Three live coaching sessions", "月3回のライブ個人指導"],
+  };
+  elements.quickNav.innerHTML = PLAN_ORDER.map((key) => {
+    const plan = PLAN_CATALOG[key];
+    const [benefitEn, benefitJa] = shortBenefits[key];
+    const currentPrice = formatYen(planPrice(plan, billing));
+    return `<a class="plan-quick-link plan-quick-${key}" href="#plan-card-${key}">
+      <span class="plan-quick-name">${key === "premium_plus" ? t("Premium+ Coaching", "Premium+ コーチング") : plan.name}</span>
+      <strong>${currentPrice}</strong>
+      <small>${billingLabel()} · ${t(benefitEn, benefitJa)}</small>
+    </a>`;
+  }).join("");
+}
+
 function renderPlans() {
+  renderPlanQuickNav();
   elements.grid.innerHTML = PLAN_ORDER.map((key) => {
     const plan = PLAN_CATALOG[key];
     const featured = key === "premium" ? " featured" : key === "premium_plus" ? " premium-plus" : "";
@@ -122,7 +144,7 @@ function renderPlans() {
         ? `<div class="plan-saving"><strong>${t("Always free", "ずっと無料")}</strong><span>${t("No payment required", "支払い不要")}</span></div>`
         : "";
     return `
-      <article class="plan-card${featured}" data-plan="${plan.key}">
+      <article class="plan-card${featured}" id="plan-card-${plan.key}" data-plan="${plan.key}">
         ${plan.badge ? `<span class="plan-badge">${t(plan.badge, plan.badgeJa)}</span>` : ""}
         ${planVisual(key)}
         <div class="plan-card-heading">
@@ -141,7 +163,10 @@ function renderPlans() {
           </div>
           <small>${t("Monthly Premium only. Tahmid personally confirms eligibility and activation; no payment is taken on this page.", "Premium月額プランへの新規申込のみ。対象条件と利用開始はTahmidが個別に確認します。このページでは決済されません。")}</small>
         </aside>` : ""}
-        <ul>${plan.features.map((feature) => `<li><span aria-hidden="true">✓</span>${t(feature.en, feature.ja)}</li>`).join("")}</ul>
+        <details class="plan-feature-details">
+          <summary><span>${t("What's included", "含まれる内容")}</span><small>${t(`${plan.features.length} benefits`, `${plan.features.length}項目`)}</small></summary>
+          <ul>${plan.features.map((feature) => `<li><span aria-hidden="true">✓</span>${t(feature.en, feature.ja)}</li>`).join("")}</ul>
+        </details>
         ${key === "free"
           ? `<a class="plan-cta secondary-btn" href="/">${t("Try two lessons free", "2レッスンを無料体験")}</a>`
           : `<button class="plan-cta primary-btn" type="button" data-contact-plan="${plan.key}">${t(`Ask about ${plan.name}`, `${plan.name}について相談`)}</button>`}
@@ -262,6 +287,18 @@ elements.mobileSettingsToggle?.addEventListener("click", () => {
   const expanded = elements.mobileSettingsToggle.getAttribute("aria-expanded") === "true";
   elements.mobileSettingsToggle.setAttribute("aria-expanded", String(!expanded));
   elements.settingsControls?.classList.toggle("mobile-open", !expanded);
+});
+document.addEventListener("keydown", (event) => {
+  if (event.key !== "Escape" || elements.mobileSettingsToggle?.getAttribute("aria-expanded") !== "true") return;
+  elements.mobileSettingsToggle.setAttribute("aria-expanded", "false");
+  elements.settingsControls?.classList.remove("mobile-open");
+  elements.mobileSettingsToggle.focus();
+});
+document.addEventListener("pointerdown", (event) => {
+  if (elements.mobileSettingsToggle?.getAttribute("aria-expanded") !== "true") return;
+  if (event.target.closest(".pricing-header")) return;
+  elements.mobileSettingsToggle.setAttribute("aria-expanded", "false");
+  elements.settingsControls?.classList.remove("mobile-open");
 });
 elements.monthly.addEventListener("click", () => setBilling(BILLING_OPTIONS.monthly));
 elements.sixMonths.addEventListener("click", () => setBilling(BILLING_OPTIONS.sixMonths));

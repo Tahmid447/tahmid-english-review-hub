@@ -8,7 +8,7 @@
   <title>English Lesson Practice</title>
   <link rel="manifest" href="/manifest.webmanifest">
   <script>try{const p=JSON.parse(localStorage.getItem("te-review-hub:theme:v1")||"\"light\"");const c=["system","light","dark"].includes(p)?p:"light";const d=c==="dark"||(c==="system"&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.dataset.themePreference=c;document.documentElement.dataset.theme=d?"dark":"light";document.documentElement.style.colorScheme=d?"dark":"light"}catch{document.documentElement.dataset.themePreference="light";document.documentElement.dataset.theme="light";document.documentElement.style.colorScheme="light"}</script>
-  <link rel="stylesheet" href="/src/styles.css?v=20260826-experience4">
+  <link rel="stylesheet" href="/src/styles.css?v=20260827-release1">
   <link rel="icon" type="image/png" sizes="192x192" href="/assets/app-icon-192.png">
 </head>
 <body data-page="lesson">
@@ -46,7 +46,7 @@
 
     <section class="quiz-toolbar" aria-label="Quiz settings">
       <span class="toggle-label automatic-shuffle" role="status"><span aria-hidden="true">🔀</span> <span data-ui-en="Questions & choices shuffle automatically" data-ui-ja="問題・選択肢は毎回自動シャッフル">Questions &amp; choices shuffle automatically / 問題・選択肢は毎回自動シャッフル</span></span>
-      <button class="quiet-btn practice-settings-open" id="openPracticeSettings" type="button" aria-haspopup="dialog"><span aria-hidden="true">⚙</span> <span data-ui-en="Practice settings" data-ui-ja="問題設定">Practice settings / 問題設定</span><small id="practiceSettingsSummary">US · Manual · BGM On</small></button>
+      <button class="quiet-btn practice-settings-open" id="openPracticeSettings" type="button" aria-haspopup="dialog"><span aria-hidden="true">⚙</span> <span data-ui-en="Practice settings" data-ui-ja="問題設定">Practice settings / 問題設定</span><small id="practiceSettingsSummary">US · Manual · Hints auto-close</small></button>
       <button class="quiet-btn" id="checkAnswered" type="button" data-ui-en="Check 0 answered" data-ui-ja="回答済み 0問を採点">Check 0 answered / 回答済み 0問を採点</button>
       <span class="score-pill" id="scorePill">First score / 初回スコア 0 / 0</span>
     </section>
@@ -88,32 +88,32 @@
     <p class="eyebrow" data-ui-en="Lesson preferences" data-ui-ja="レッスン設定">Lesson preferences / レッスン設定</p>
     <h2 id="lessonSettingsHeading" data-ui-en="Settings" data-ui-ja="設定">Settings / 設定</h2>
     <p class="settings-intro" data-ui-en="These preferences apply to every lesson and stay with your signed-in account." data-ui-ja="この設定はすべてのレッスンに適用され、ログイン中のアカウントに保存されます。">These preferences apply to every lesson and stay with your signed-in account. / この設定はすべてのレッスンに適用され、ログイン中のアカウントに保存されます。</p>
-    <section class="settings-group" aria-labelledby="audioSettingsHeading">
+    <section class="settings-group voice-settings-group" aria-labelledby="audioSettingsHeading">
       <h3 id="audioSettingsHeading" data-ui-en="Voice" data-ui-ja="ボイス">Voice / ボイス</h3>
       <div class="settings-grid">
         <button class="quiet-btn" id="voiceToggle" type="button" data-ui-en="Voice On" data-ui-ja="ボイス オン">Voice On / ボイス オン</button>
         <label><span data-ui-en="English voice" data-ui-ja="英語音声">English voice / 英語音声</span><select id="voiceSelect"><option value="us">US · Ava</option><option value="gb">UK · Libby</option></select></label>
-        <label><span data-ui-en="Playback speed" data-ui-ja="再生速度">Playback speed / 再生速度</span><select id="playbackRate"><option value="0.5">0.5×</option><option value="1">1×</option><option value="1.5">1.5×</option></select></label>
-        <label><span data-ui-en="Voice volume" data-ui-ja="ボイス音量">Voice volume / ボイス音量</span><input id="voiceVolume" type="range" min="0" max="100" step="5" value="100"></label>
+        <label class="settings-global-only"><span data-ui-en="Playback speed" data-ui-ja="再生速度">Playback speed / 再生速度</span><select id="playbackRate"><option value="0.5">0.5×</option><option value="1">1×</option><option value="1.5">1.5×</option></select></label>
+        <label class="settings-global-only"><span data-ui-en="Voice volume" data-ui-ja="ボイス音量">Voice volume / ボイス音量</span><input id="voiceVolume" type="range" min="0" max="100" step="5" value="100"></label>
         <label class="settings-check"><input id="autoPronounceChoices" type="checkbox"> <span><b data-ui-en="Pronounce selected English choices" data-ui-ja="選んだ英語の選択肢を発音">Pronounce selected English choices / 選んだ英語の選択肢を発音</b><small data-ui-en="On by default; plays once after selection" data-ui-ja="初期設定はオン・選択後に1回だけ再生">On by default; plays once after selection / 初期設定はオン・選択後に1回だけ再生</small></span></label>
       </div>
     </section>
-    <section class="settings-group" aria-labelledby="sfxSettingsHeading"><h3 id="sfxSettingsHeading" data-ui-en="Sound Effects" data-ui-ja="効果音">Sound Effects / 効果音</h3><div class="settings-grid"><button class="quiet-btn" id="sfxToggle" type="button" aria-pressed="true" data-ui-en="SFX On" data-ui-ja="効果音 オン">SFX On / 効果音 オン</button><label><span data-ui-en="SFX volume" data-ui-ja="効果音の音量">SFX volume / 効果音の音量</span><input id="sfxVolume" type="range" min="0" max="100" step="5" value="35"></label></div><p class="settings-note" data-ui-en="Warm, distinct click, correct, try-again and completion cues. Voice remains independent." data-ui-ja="クリック・正解・もう一度・完了を、聞き分けやすい心地よい音で知らせます。ボイス設定とは別に管理されます。">Warm, distinct click, correct, try-again and completion cues. Voice remains independent.</p></section>
-    <section class="settings-group" aria-labelledby="ambientSettingsHeading"><h3 id="ambientSettingsHeading" data-ui-en="Study Music" data-ui-ja="学習BGM">Study Music / 学習BGM</h3><div class="settings-grid"><button class="quiet-btn" id="ambientToggle" type="button" aria-pressed="true" data-ui-en="Ambient On" data-ui-ja="環境音 オン">Ambient On / 環境音 オン</button><label><span data-ui-en="Music track" data-ui-ja="曲を選ぶ">Music track / 曲を選ぶ</span><select id="ambientTrack"><option value="calm_focus">Clear Air / クリア・エア</option><option value="lofi_study">Study And Relax / スタディ・アンド・リラックス</option><option value="quiet_morning">Windswept / ウィンドスウェプト</option><option value="night_focus">Night on the Docks – Piano / 夜の埠頭・ピアノ</option><option value="rainy_desk">Dream Culture / ドリーム・カルチャー</option></select></label><label><span data-ui-en="Music volume" data-ui-ja="BGM音量">Music volume / BGM音量</span><input id="ambientVolume" type="range" min="0" max="40" step="1" value="18"></label></div><p class="settings-note" data-ui-en="Five real instrumental tracks are on by default. Playback begins after your first tap or key press and softens automatically while speech plays." data-ui-ja="実音源のインストゥルメンタル5曲を選べます。初期設定はオンで、最初のタップまたはキー操作後に再生が始まり、ボイス再生中は自動で音量を下げます。">Five real instrumental tracks are on by default. Playback begins after your first tap or key press and softens automatically while speech plays.</p></section>
+    <section class="settings-group settings-global-only" aria-labelledby="sfxSettingsHeading"><h3 id="sfxSettingsHeading" data-ui-en="Sound Effects" data-ui-ja="効果音">Sound Effects / 効果音</h3><div class="settings-grid"><button class="quiet-btn" id="sfxToggle" type="button" aria-pressed="true" data-ui-en="SFX On" data-ui-ja="効果音 オン">SFX On / 効果音 オン</button><label><span data-ui-en="SFX volume" data-ui-ja="効果音の音量">SFX volume / 効果音の音量</span><input id="sfxVolume" type="range" min="0" max="100" step="5" value="35"></label></div><p class="settings-note" data-ui-en="Warm, distinct click, correct, try-again and completion cues. Voice remains independent." data-ui-ja="クリック・正解・もう一度・完了を、聞き分けやすい心地よい音で知らせます。ボイス設定とは別に管理されます。">Warm, distinct click, correct, try-again and completion cues. Voice remains independent.</p></section>
+    <section class="settings-group settings-global-only" aria-labelledby="ambientSettingsHeading"><h3 id="ambientSettingsHeading" data-ui-en="Study Music" data-ui-ja="学習BGM">Study Music / 学習BGM</h3><div class="settings-grid"><button class="quiet-btn" id="ambientToggle" type="button" aria-pressed="true" data-ui-en="Ambient On" data-ui-ja="環境音 オン">Ambient On / 環境音 オン</button><label><span data-ui-en="Music track" data-ui-ja="曲を選ぶ">Music track / 曲を選ぶ</span><select id="ambientTrack"><option value="calm_focus">Clear Air / クリア・エア</option><option value="lofi_study">Study And Relax / スタディ・アンド・リラックス</option><option value="quiet_morning">Windswept / ウィンドスウェプト</option><option value="night_focus">Night on the Docks – Piano / 夜の埠頭・ピアノ</option><option value="rainy_desk">Dream Culture / ドリーム・カルチャー</option></select></label><label><span data-ui-en="Music volume" data-ui-ja="BGM音量">Music volume / BGM音量</span><input id="ambientVolume" type="range" min="0" max="40" step="1" value="18"></label></div><p class="settings-note" data-ui-en="Five real instrumental tracks are on by default. Playback begins after your first tap or key press and softens automatically while speech plays." data-ui-ja="実音源のインストゥルメンタル5曲を選べます。初期設定はオンで、最初のタップまたはキー操作後に再生が始まり、ボイス再生中は自動で音量を下げます。">Five real instrumental tracks are on by default. Playback begins after your first tap or key press and softens automatically while speech plays.</p></section>
     <section class="settings-group" aria-labelledby="quizSettingsHeading">
       <h3 id="quizSettingsHeading" data-ui-en="Quiz & Practice" data-ui-ja="クイズ・練習">Quiz &amp; Practice / クイズ・練習</h3>
       <div class="segmented" role="group" aria-label="Checking mode">
         <button class="active" data-check="manual" type="button" data-ui-en="Manual Check" data-ui-ja="自分で確認">Manual Check / 自分で確認</button>
         <button data-check="instant" type="button" data-ui-en="Instant Check" data-ui-ja="すぐ採点">Instant Check / すぐ採点</button>
       </div>
-      <label class="settings-check"><input id="showChoiceTranslations" type="checkbox"> <span><b data-ui-en="Show Japanese under choices" data-ui-ja="選択肢の日本語を表示">Show Japanese under choices / 選択肢の日本語を表示</b><small data-ui-en="Leave off for a harder challenge" data-ui-ja="難しくしたいときはオフ">Leave off for a harder challenge / 難しくしたいときはオフ</small></span></label>
+      <label class="settings-check settings-global-only"><input id="showChoiceTranslations" type="checkbox"> <span><b data-ui-en="Show Japanese under choices" data-ui-ja="選択肢の日本語を表示">Show Japanese under choices / 選択肢の日本語を表示</b><small data-ui-en="Leave off for a harder challenge" data-ui-ja="難しくしたいときはオフ">Leave off for a harder challenge / 難しくしたいときはオフ</small></span></label>
       <div class="segmented hint-mode-toggle" role="group" aria-label="Hint behaviour">
         <button class="active" data-hint-mode="auto" type="button" data-ui-en="Hints auto-close" data-ui-ja="ヒントを自動で閉じる">Hints auto-close / ヒントを自動で閉じる</button>
         <button data-hint-mode="manual" type="button" data-ui-en="Keep hints open" data-ui-ja="ヒントを開いたまま">Keep hints open / ヒントを開いたまま</button>
       </div>
       <p class="settings-note" data-ui-en="Question and choice order always shuffle at the start of a new run." data-ui-ja="新しい練習を始めるたびに、問題と選択肢は必ずシャッフルされます。">Question and choice order always shuffle at the start of a new run. / 新しい練習を始めるたびに、問題と選択肢は必ずシャッフルされます。</p>
     </section>
-    <section class="settings-group" aria-labelledby="displaySettingsHeading">
+    <section class="settings-group settings-global-only" aria-labelledby="displaySettingsHeading">
       <h3 id="displaySettingsHeading" data-ui-en="Display & Language" data-ui-ja="表示・言語">Display &amp; Language / 表示・言語</h3>
       <label><span data-ui-en="Interface language" data-ui-ja="表示言語">Interface language / 表示言語</span><select id="languageToggle"><option value="en">English</option><option value="bilingual">English + 日本語</option><option value="ja">日本語UI</option></select></label>
       <label><span data-ui-en="Appearance" data-ui-ja="外観">Appearance / 外観</span><select id="themeToggle"><option value="system">System / 端末設定</option><option value="light">Light / ライト</option><option value="dark">Dark / ダーク</option></select></label>
@@ -123,6 +123,6 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js"></script>
   <script type="module" src="/src/pwa.js"></script>
-  <script type="module" src="/src/lesson.js?v=20260826-experience4"></script>
+  <script type="module" src="/src/lesson.js?v=20260827-release1"></script>
 </body>
 </html>

@@ -3,7 +3,7 @@ import {
   ambientPlaybackStatus,
   setAmbientPlayback,
   syncAmbientFromSettings,
-} from "./audio.js?v=20260826-experience4";
+} from "./audio.js?v=20260827-release1";
 import { getSettings, onSettingsChange, updateSettings } from "./store.js";
 import { installPlayfulInteractions } from "./effects.js";
 

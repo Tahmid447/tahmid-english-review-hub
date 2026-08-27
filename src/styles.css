@@ -3652,3 +3652,240 @@ html[data-theme="dark"] .guide-card-coverage { background: var(--learner-surface
 @media (prefers-reduced-motion: reduce) {
   .hero-word::after { transform: scaleX(1); animation: none; }
 }
+
+/* 2026-08-27 · release readability, focused practice controls and pricing scan */
+:root {
+  --sans: "Avenir Next", "Hiragino Kaku Gothic ProN", "Yu Gothic UI", "Yu Gothic", "Segoe UI", sans-serif;
+  --serif: "Iowan Old Style", Baskerville, "Hiragino Mincho ProN", "Yu Mincho", Georgia, serif;
+}
+body {
+  line-height: 1.58;
+  text-rendering: optimizeLegibility;
+  font-kerning: normal;
+}
+h1, h2, h3,
+.plan-name,
+.hero-wordmark {
+  text-wrap: balance;
+  letter-spacing: -.025em;
+}
+p, li, small, label, summary, button, a { overflow-wrap: break-word; }
+[lang="ja"], .jp, [data-ui-ja] { font-feature-settings: "palt" 1; line-break: strict; }
+
+/* Autoplay must wait for a browser gesture. Present one calm, central invitation
+   for a few seconds, then leave the lesson unobstructed if it is ignored. */
+.music-start-chip {
+  z-index: 100;
+  left: 50%;
+  right: auto;
+  top: clamp(150px,38vh,430px);
+  bottom: auto;
+  width: min(460px,calc(100vw - 32px));
+  max-width: none;
+  min-height: 92px;
+  padding: 17px 20px;
+  gap: 14px;
+  overflow: hidden;
+  border-color: rgba(246,218,150,.78);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 92% 0,rgba(246,218,150,.2),transparent 10rem),
+    linear-gradient(135deg,#08283c,#17645f);
+  box-shadow: 0 30px 90px -28px rgba(3,21,32,.88),0 0 0 1px rgba(255,255,255,.08) inset;
+  transform: translate(-50%,-50%);
+  animation: music-chip-arrive .72s cubic-bezier(.16,1,.3,1) both;
+}
+.music-start-chip::after {
+  content: "";
+  position: absolute;
+  inset: auto 18px 9px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg,#f1d184,#77c9be);
+  transform-origin: left;
+  animation: music-chip-progress 4.2s linear both;
+}
+.music-start-chip.is-leaving {
+  pointer-events: none;
+  animation: music-chip-leave .65s ease forwards;
+}
+.music-start-icon {
+  flex-basis: 52px;
+  width: 52px;
+  height: 52px;
+  border-radius: 17px;
+  box-shadow: 0 12px 24px -18px #000;
+}
+.music-start-chip strong { font-size: clamp(.78rem,2vw,.94rem); line-height: 1.25; }
+.music-start-chip small { margin-top: 3px; font-size: clamp(.58rem,1.5vw,.69rem); }
+@keyframes music-chip-arrive {
+  from { opacity:0; filter:blur(9px); transform:translate(-50%,calc(-50% + 24px)) scale(.94); }
+  to { opacity:1; filter:blur(0); transform:translate(-50%,-50%) scale(1); }
+}
+@keyframes music-chip-progress { from { transform:scaleX(0); } to { transform:scaleX(1); } }
+@keyframes music-chip-leave {
+  to { opacity:0; filter:blur(8px); transform:translate(-50%,calc(-50% - 18px)) scale(.97); }
+}
+
+/* The top Settings dialog remains complete. The in-question shortcut shows
+   only the choices learners commonly change while answering. */
+.lesson-settings-dialog[data-settings-scope="practice"] { width: min(620px,calc(100% - 24px)); }
+.lesson-settings-dialog[data-settings-scope="practice"] .settings-global-only { display: none !important; }
+.lesson-settings-dialog[data-settings-scope="practice"] .voice-settings-group,
+.lesson-settings-dialog[data-settings-scope="practice"] .settings-group:not(.settings-global-only) {
+  background: var(--learner-surface-2);
+}
+.lesson-settings-dialog[data-settings-scope="practice"] .settings-intro {
+  padding: 11px 13px;
+  border-left: 3px solid var(--learner-teal);
+  border-radius: 0 12px 12px 0;
+  background: var(--learner-surface-2);
+}
+
+/* Pricing settings stay out of the comparison until deliberately opened. */
+body[data-page="pricing"] .pricing-header {
+  min-height: 72px;
+  padding-block: 9px;
+}
+body[data-page="pricing"] .pricing-header .header-actions {
+  width: auto;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+body[data-page="pricing"] .pricing-header .mobile-settings-toggle {
+  width: auto;
+  min-width: 118px;
+  display: inline-flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+body[data-page="pricing"] .pricing-header .mobile-settings-toggle::after { content: "+"; font-size: 1rem; }
+body[data-page="pricing"] .pricing-header .mobile-settings-toggle[aria-expanded="true"]::after { content: "−"; }
+body[data-page="pricing"] .pricing-header .header-settings-controls {
+  width: min(580px,calc(100vw - 24px));
+  max-height: min(76vh,610px);
+  padding: 12px;
+  display: none;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 8px;
+  overflow-y: auto;
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 70;
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 18px;
+  color: #eef7f8;
+  background: #091f31;
+  box-shadow: 0 30px 68px -28px rgba(3,20,31,.92);
+}
+body[data-page="pricing"] .pricing-header .header-settings-controls.mobile-open { display: grid; }
+body[data-page="pricing"] .pricing-header .header-settings-controls > .quiet-btn,
+body[data-page="pricing"] .pricing-header .header-settings-controls > .voice-select,
+body[data-page="pricing"] .pricing-header .header-settings-controls .study-music-toggle,
+body[data-page="pricing"] .pricing-header .header-settings-controls .study-music-track,
+body[data-page="pricing"] .pricing-header .header-settings-controls .study-music-volume,
+body[data-page="pricing"] .pricing-header .header-settings-controls .study-music-status {
+  width: 100%;
+  min-width: 0;
+}
+
+.plan-quick-nav {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: repeat(4,minmax(0,1fr));
+  gap: 9px;
+}
+.plan-quick-link {
+  min-width: 0;
+  min-height: 118px;
+  padding: 16px;
+  display: grid;
+  align-content: center;
+  gap: 3px;
+  border: 1px solid var(--learner-border);
+  border-radius: 18px;
+  color: var(--learner-ink);
+  background: var(--learner-surface);
+  box-shadow: 0 17px 38px -34px rgba(6,35,49,.72);
+  transition: transform .22s ease,border-color .22s ease,box-shadow .22s ease;
+}
+.plan-quick-link:hover {
+  transform: translateY(-3px);
+  border-color: #6eb8af;
+  box-shadow: 0 24px 48px -36px rgba(6,48,55,.8);
+}
+.plan-quick-name { color: var(--learner-teal); font-size: .68rem; font-weight: 900; }
+.plan-quick-link strong { color: var(--learner-navy); font-family: var(--serif); font-size: clamp(1.4rem,2.5vw,2rem); line-height: 1.05; }
+.plan-quick-link small { color: var(--learner-muted); font-size: .58rem; font-weight: 720; line-height: 1.35; }
+.plan-quick-premium { border-color: rgba(196,151,61,.62); background: linear-gradient(145deg,var(--learner-surface),var(--learner-gold-soft)); }
+.plan-quick-premium_plus { border-color: #c8a458; background: linear-gradient(145deg,#08263a,#124b59); }
+.plan-quick-premium_plus .plan-quick-name,
+.plan-quick-premium_plus strong { color: #f4d485; }
+.plan-quick-premium_plus small { color: #d7e5e8; }
+
+body[data-page="pricing"] .plan-grid { padding-top: 28px; align-items: start; }
+body[data-page="pricing"] .plan-card,
+html[data-theme="dark"] body[data-page="pricing"] .plan-card {
+  min-height: 0;
+  scroll-margin-top: 100px;
+}
+body[data-page="pricing"] .plan-card-heading { min-height: 0; }
+body[data-page="pricing"] .plan-name { font-size: clamp(2rem,3.1vw,2.8rem); }
+body[data-page="pricing"] .plan-card-heading p { font-size: clamp(.9rem,1.1vw,1rem); line-height: 1.66; }
+body[data-page="pricing"] .plan-best-for { min-height: 0; }
+body[data-page="pricing"] .plan-best-for strong { font-size: .82rem; line-height: 1.5; }
+body[data-page="pricing"] .plan-price strong { font-size: clamp(2.65rem,4.2vw,3.6rem); }
+.plan-feature-details {
+  margin: 17px 0 20px;
+  border: 1px solid var(--learner-border);
+  border-radius: 15px;
+  background: var(--learner-surface-2);
+  overflow: hidden;
+}
+.plan-feature-details > summary {
+  min-height: 52px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--learner-navy);
+  cursor: pointer;
+  font-size: .77rem;
+  font-weight: 900;
+  list-style: none;
+}
+.plan-feature-details > summary::-webkit-details-marker { display: none; }
+.plan-feature-details > summary::after { content: "+"; font-size: 1.1rem; }
+.plan-feature-details[open] > summary::after { content: "−"; }
+.plan-feature-details > summary small { margin-left: auto; color: var(--learner-muted); font-size: .58rem; }
+.plan-feature-details ul { margin: 0 !important; padding: 4px 14px 17px !important; }
+.premium-plus .plan-feature-details { border-color: rgba(237,204,124,.28); background: rgba(255,255,255,.065); }
+.premium-plus .plan-feature-details > summary { color: #fff4d8; }
+.premium-plus .plan-feature-details > summary small { color: #cbdce1; }
+
+@media (max-width: 900px) {
+  .plan-quick-nav { grid-template-columns: repeat(2,minmax(0,1fr)); }
+}
+@media (max-width: 760px) {
+  body[data-page="pricing"] .pricing-header { flex-direction: row; }
+  body[data-page="pricing"] .pricing-header .brand { min-width: 0; }
+  body[data-page="pricing"] .pricing-header .brand small { display: none; }
+  body[data-page="pricing"] .pricing-header .header-actions { width: auto; }
+  body[data-page="pricing"] .pricing-header .mobile-settings-toggle { min-width: 96px; }
+}
+@media (max-width: 520px) {
+  .music-start-chip { top: 42vh; min-height: 84px; padding: 14px; border-radius: 21px; }
+  .music-start-icon { flex-basis: 46px; width: 46px; height: 46px; }
+  .plan-quick-nav { width: calc(100% - 20px); grid-template-columns: repeat(2,minmax(0,1fr)); gap: 7px; }
+  .plan-quick-link { min-height: 105px; padding: 13px; }
+  body[data-page="pricing"] .pricing-header .brand strong { font-size: .75rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .music-start-chip { animation: none; }
+  .music-start-chip::after { animation: none; transform: scaleX(1); }
+  .music-start-chip.is-leaving { opacity: 0; animation: none; }
+  .plan-quick-link { transition: none; }
+}

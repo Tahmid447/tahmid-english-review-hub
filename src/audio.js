@@ -14,6 +14,10 @@ let ambientTrackKey = null;
 let ambientDucked = false;
 let ambientGestureHandler = null;
 let ambientLastError = "";
+let ambientPromptFadeTimer = null;
+let ambientPromptHideTimer = null;
+const AMBIENT_PROMPT_VISIBLE_MS = 4200;
+const AMBIENT_PROMPT_FADE_MS = 650;
 
 export const AMBIENT_MUSIC_LICENSE = Object.freeze({
   artist: "Kevin MacLeod",
@@ -448,9 +452,13 @@ function ambientStartPrompt() {
     prompt.hidden = true;
     document.body?.append(prompt);
   }
+  prompt.setAttribute("aria-label", "Begin with study music / BGMと一緒に始める");
   if (prompt.dataset.ambientBound !== "true") {
     prompt.dataset.ambientBound = "true";
     prompt.addEventListener("click", async () => {
+      prompt.dataset.ambientDismissed = "true";
+      clearTimeout(ambientPromptFadeTimer);
+      clearTimeout(ambientPromptHideTimer);
       const latest = getSettings();
       const result = await setAmbientPlayback(true, { ...latest, userGesture: true });
       updateAmbientStartPrompt(result, latest);
@@ -462,7 +470,28 @@ function ambientStartPrompt() {
 function updateAmbientStartPrompt(result, settings = getSettings()) {
   const prompt = ambientStartPrompt();
   if (!prompt) return;
-  prompt.hidden = !settings.ambientEnabled || result?.played === true || result?.reason !== "gesture-required";
+  const shouldOffer = settings.ambientEnabled
+    && result?.played !== true
+    && result?.reason === "gesture-required"
+    && prompt.dataset.ambientDismissed !== "true";
+  clearTimeout(ambientPromptFadeTimer);
+  clearTimeout(ambientPromptHideTimer);
+  if (!shouldOffer) {
+    prompt.classList.remove("is-presented", "is-leaving");
+    prompt.hidden = true;
+    return;
+  }
+  prompt.hidden = false;
+  prompt.classList.remove("is-leaving");
+  prompt.classList.add("is-presented");
+  ambientPromptFadeTimer = setTimeout(() => {
+    prompt.classList.add("is-leaving");
+    ambientPromptHideTimer = setTimeout(() => {
+      prompt.hidden = true;
+      prompt.classList.remove("is-presented", "is-leaving");
+      prompt.dataset.ambientDismissed = "true";
+    }, AMBIENT_PROMPT_FADE_MS);
+  }, AMBIENT_PROMPT_VISIBLE_MS);
 }
 
 export async function setAmbientPlayback(enabled, options = {}) {

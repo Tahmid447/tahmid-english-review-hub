@@ -28,7 +28,7 @@ import {
 import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js";
 import { installPlayfulInteractions } from "./effects.js";
 import { planFor } from "./plans.js";
-import { setAmbientPlayback, stopAudio, syncAmbientFromSettings } from "./audio.js?v=20260826-experience4";
+import { setAmbientPlayback, stopAudio, syncAmbientFromSettings } from "./audio.js?v=20260827-release1";
 
 let publishedLessons = [];
 let visibleLessons = [];
