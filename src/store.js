@@ -271,6 +271,28 @@ export function safeLocalReturnPath(value, fallback = "/", origin) {
       /^\/plans\/?$/,
     ].some((pattern) => pattern.test(url.pathname));
     if (!allowedPath) return fallback;
+
+    // Never carry one-time authentication callback data into lesson/library
+    // links. Supabase may briefly expose OAuth tokens in the URL fragment
+    // before the client consumes them; copying that fragment into a `return`
+    // parameter could leak credentials through navigation or request logs.
+    ["account", "code", "error", "error_code", "error_description", "legacy", "signedOut"]
+      .forEach((key) => url.searchParams.delete(key));
+    const hashParams = new URLSearchParams(url.hash.replace(/^#/, ""));
+    const hasAuthFragment = [
+      "access_token",
+      "refresh_token",
+      "provider_token",
+      "provider_refresh_token",
+      "expires_in",
+      "expires_at",
+      "token_type",
+      "type",
+      "error",
+      "error_code",
+      "error_description",
+    ].some((key) => hashParams.has(key));
+    if (hasAuthFragment) url.hash = "";
     return `${url.pathname}${url.search}${url.hash}`;
   } catch {
     return fallback;

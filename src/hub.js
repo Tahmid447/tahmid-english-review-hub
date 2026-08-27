@@ -4,6 +4,7 @@ import {
   getLessonProgress,
   getSettings,
   onSettingsChange,
+  safeLocalReturnPath,
   setStorageUser,
   updateSettings,
   watchSystemTheme,
@@ -394,11 +395,7 @@ function lessonGroups(lesson) {
 }
 
 function currentReturnPath() {
-  const url = new URL(window.location.href);
-  ["account", "code", "error", "error_code", "error_description", "legacy"].forEach(
-    (key) => url.searchParams.delete(key),
-  );
-  return `${url.pathname}${url.search}${url.hash}`;
+  return safeLocalReturnPath(window.location.href, "/");
 }
 
 function lessonHref(lesson, practice = "") {

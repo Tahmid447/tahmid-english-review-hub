@@ -139,6 +139,20 @@ assert.equal(resolvedTheme("system", true), "dark");
 assert.equal(resolvedTheme("system", false), "light");
 assert.equal(safeLocalReturnPath("https://evil.example/path", "/", "https://review.example"), "/");
 assert.equal(safeLocalReturnPath("/phrases?return=%2F#saved", "/", "https://review.example"), "/phrases?return=%2F#saved");
+assert.equal(
+  safeLocalReturnPath(
+    "/?account=google#access_token=secret&refresh_token=private&expires_in=3600&type=bearer",
+    "/",
+    "https://review.example",
+  ),
+  "/",
+  "OAuth callback tokens are never copied into internal return links.",
+);
+assert.equal(
+  safeLocalReturnPath("/phrases?code=one-time#saved", "/", "https://review.example"),
+  "/phrases#saved",
+  "One-time callback query parameters are removed while ordinary anchors remain.",
+);
 assert.equal(safeLocalReturnPath("/teacher.html", "/", "https://review.example"), "/");
 assert.equal(safeLocalReturnPath("/lesson/june-29?filter=listening", "/", "https://review.example"), "/lesson/june-29?filter=listening");
 
@@ -244,7 +258,7 @@ assert.match(hubScript, /isGoogleSession/);
 assert.match(hubScript, /id = "profileCompletionStatus"/);
 assert.match(hubScript, /Saving your profile…/);
 assert.match(supabaseScript, /existingProfile && !hasExplicitValues/);
-assert.match(homePage, /src="\/src\/hub\.js\?v=20260827-release1"/);
+assert.match(homePage, /src="\/src\/hub\.js\?v=20260828-release2"/);
 assert.match(homePage, /id="musicStartChip"/);
 assert.match(homePage, /Your lesson does not end when the call ends/);
 assert.match(homePage, /eight-question Quick Practice/);

@@ -57,9 +57,7 @@ const routeParams = new URLSearchParams(window.location.search);
 const returnPath = safeLocalReturnPath(routeParams.get("return"), "/");
 
 function currentPhrasePath() {
-  const url = new URL(window.location.href);
-  ["code", "error", "error_code", "error_description"].forEach((key) => url.searchParams.delete(key));
-  return `${url.pathname}${url.search}${url.hash}`;
+  return safeLocalReturnPath(window.location.href, "/phrases");
 }
 
 function element(tag, options = {}, children = []) {
