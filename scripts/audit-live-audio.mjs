@@ -13,7 +13,10 @@ const lessons = [
   ...drafts,
 ].sort((left, right) => String(left.lessonDate).localeCompare(String(right.lessonDate)));
 
-if (lessons.length !== 17) throw new Error(`Expected 17 lessons, found ${lessons.length}.`);
+if (!lessons.length) throw new Error("No authored lessons were available for the live audio audit.");
+if (new Set(lessons.map(({ id }) => id)).size !== lessons.length) {
+  throw new Error("Lesson IDs must be unique before running the live audio audit.");
+}
 if (!NATURAL_SPEECH_URL || !SUPABASE_ANON_KEY) throw new Error("Public natural-speech configuration is missing.");
 
 const bilingualPart = (value, language) => {

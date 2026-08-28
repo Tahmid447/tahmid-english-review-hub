@@ -1,5 +1,11 @@
 import { normalizeAnswerText } from "./store.js";
 import { fetchDatabaseLesson, fetchDatabaseLessons } from "./supabase.js";
+import { readHumanText } from "./lesson-guide-targets.js";
+import {
+  compareLessonSourceOrder,
+  sourceSegmentFromLesson,
+  sourceSegmentPartIndex,
+} from "./lesson-source.js";
 
 const DATA_PATHS = Object.freeze({
   lessons: "/src/data/legacy-lessons.json",
@@ -13,24 +19,35 @@ let draftPromise;
 
 const asBilingual = (value, japaneseFallback = "") => {
   if (value && typeof value === "object" && !Array.isArray(value)) {
+    const en = readHumanText(value, "en");
+    const localizedJapanese = readHumanText(value, "jp");
     return {
-      en: String(value.en ?? value.english ?? ""),
-      jp: String(value.jp ?? value.ja ?? value.japanese ?? japaneseFallback),
+      en,
+      jp: localizedJapanese && localizedJapanese !== en
+        ? localizedJapanese
+        : readHumanText(japaneseFallback, "jp"),
     };
   }
-  return { en: String(value ?? ""), jp: String(japaneseFallback ?? "") };
+  return {
+    en: readHumanText(value, "en"),
+    jp: readHumanText(japaneseFallback, "jp"),
+  };
 };
 
 const normalizeChoices = (choices = []) => choices.map((choice, index) => {
   if (choice && typeof choice === "object" && !Array.isArray(choice)) {
+    const localized = asBilingual(
+      choice.en ?? choice.english ?? choice.text ?? choice.label ?? "",
+      choice.jp ?? choice.ja ?? choice.textJa ?? "",
+    );
     return {
       ...choice,
       id: String(choice.id ?? index),
-      en: String(choice.en ?? choice.text ?? choice.label ?? ""),
-      jp: String(choice.jp ?? choice.ja ?? choice.textJa ?? ""),
+      en: localized.en,
+      jp: localized.jp,
     };
   }
-  return { id: String(index), en: String(choice ?? ""), jp: "" };
+  return { id: String(index), en: readHumanText(choice, "en"), jp: "" };
 });
 
 const stableChoiceOrder = (choices, questionId) => {
@@ -64,26 +81,44 @@ export function normalizeQuestion(question, lessonId = "", index = 0) {
   // every time teaches a position pattern instead of English.
   const choices = stableChoiceOrder(normalizeChoices(source.choices), questionId);
   const correctWords = Array.isArray(source.correctWords)
-    ? [...source.correctWords]
+    ? source.correctWords.map((word) => readHumanText(word, "en"))
     : Array.isArray(source.correctOrder)
-      ? source.correctOrder.map((wordIndex) => source.words?.[wordIndex]).filter((word) => word != null)
+      ? source.correctOrder.map((wordIndex) => readHumanText(source.words?.[wordIndex], "en")).filter(Boolean)
       : [];
   const pairs = Array.isArray(source.pairs)
-    ? source.pairs.map((pair, pairIndex) => ({
-        ...pair,
-        id: String(pair.id ?? `${lessonId}-${index}-pair-${pairIndex}`),
-        en: String(pair.en ?? pair.left ?? ""),
-        jp: String(pair.jp ?? pair.ja ?? pair.right ?? ""),
-      }))
+    ? source.pairs.map((pair, pairIndex) => {
+        const localized = asBilingual(
+          pair?.en ?? pair?.english ?? pair?.left ?? pair?.text ?? "",
+          pair?.jp ?? pair?.ja ?? pair?.japanese ?? pair?.right ?? "",
+        );
+        return {
+          ...pair,
+          id: String(pair?.id ?? `${lessonId}-${index}-pair-${pairIndex}`),
+          en: localized.en,
+          jp: localized.jp,
+        };
+      })
     : [];
   const sortingItems = Array.isArray(source.items)
     ? source.items.map((item, itemIndex) => Array.isArray(item)
-      ? { id: `${lessonId}-${index}-sort-${itemIndex}`, text: String(item[0] ?? ""), category: String(item[1] ?? "") }
-      : {
-          id: String(item?.id ?? `${lessonId}-${index}-sort-${itemIndex}`),
-          text: String(item?.text ?? item?.en ?? ""),
-          category: String(item?.category ?? item?.correct ?? ""),
-        })
+      ? {
+          id: `${lessonId}-${index}-sort-${itemIndex}`,
+          text: readHumanText(item[0], "en"),
+          jp: item[0] && typeof item[0] === "object" ? readHumanText(item[0], "jp") : "",
+          category: readHumanText(item[1], "en"),
+        }
+      : (() => {
+          const localized = asBilingual(
+            item?.text ?? item?.en ?? item?.english ?? item?.label ?? "",
+            item?.jp ?? item?.ja ?? item?.japanese ?? item?.textJa ?? "",
+          );
+          return {
+            id: String(item?.id ?? `${lessonId}-${index}-sort-${itemIndex}`),
+            text: localized.en,
+            jp: localized.jp,
+            category: readHumanText(item?.category ?? item?.correct ?? "", "en"),
+          };
+        })())
     : [];
   const suppliedMaxPoints = Number(source.maxPoints ?? source.points);
   const maxPoints = Number.isFinite(suppliedMaxPoints) && suppliedMaxPoints > 0
@@ -104,17 +139,17 @@ export function normalizeQuestion(question, lessonId = "", index = 0) {
     hint,
     explanation,
     choices,
-    accepted: Array.isArray(source.accepted) ? source.accepted.map(String) : [],
-    words: Array.isArray(source.words) ? source.words.map(String) : [],
+    accepted: Array.isArray(source.accepted) ? source.accepted.map((answer) => readHumanText(answer, "en")) : [],
+    words: Array.isArray(source.words) ? source.words.map((word) => readHumanText(word, "en")) : [],
     correctWords,
     pairs,
-    categories: Array.isArray(source.categories) ? source.categories.map(String) : [],
+    categories: Array.isArray(source.categories) ? source.categories.map((category) => readHumanText(category, "en")) : [],
     sortingItems,
     context: asBilingual(source.context || "", source.contextJa || ""),
     situation: asBilingual(source.situationQuote || "", source.situationQuote?.jp || ""),
-    audioText: String(source.audioText ?? ""),
-    speakText: String(source.speakText ?? ""),
-    speakJa: String(source.speakJa ?? ""),
+    audioText: readHumanText(source.audioText, "en"),
+    speakText: readHumanText(source.speakText, "en"),
+    speakJa: readHumanText(source.speakJa, "jp"),
     isOriginal: source.isOriginal !== false,
     section: String(source.section || (source.isOriginal === false ? "Extra Practice" : "Original Review")),
     maxPoints,
@@ -127,6 +162,7 @@ const normalizeLesson = (lesson, additions = []) => {
   const merged = [...originalQuestions, ...(Array.isArray(additions) ? additions : [])];
   const questions = merged.map((question, index) => normalizeQuestion(question, lesson.id, index));
   const originalQuestionCount = questions.filter((question) => question.isOriginal).length;
+  const sourceSegment = sourceSegmentFromLesson(lesson);
   return {
     ...lesson,
     id: String(lesson.id),
@@ -137,6 +173,11 @@ const normalizeLesson = (lesson, additions = []) => {
     summaryJa: String(lesson.summaryJa || ""),
     status: String(lesson.status || "published"),
     audience: String(lesson.audience || "both"),
+    sourceType: String(lesson.sourceType || lesson.source_type || "manual"),
+    sourceNotionPageId: String(lesson.sourceNotionPageId || lesson.source_notion_page_id || ""),
+    sourceNotionUrl: String(lesson.sourceNotionUrl || lesson.source_notion_url || ""),
+    sourceSegment,
+    partIndex: sourceSegmentPartIndex(sourceSegment),
     originalQuestionCount,
     extraQuestionCount: Math.max(0, questions.length - originalQuestionCount),
     questionCount: Math.max(questions.length, Number(lesson.questionCount || 0)),
@@ -161,7 +202,10 @@ async function loadPublishedSource() {
       return lessons
         .map((lesson) => normalizeLesson(lesson, additions?.[lesson.id] || []))
         .filter((lesson) => lesson.status === "published")
-        .sort((left, right) => left.lessonDate.localeCompare(right.lessonDate));
+        .sort((left, right) => (
+          left.lessonDate.localeCompare(right.lessonDate)
+          || compareLessonSourceOrder(left, right)
+        ));
     }).catch((error) => {
       publishedPromise = undefined;
       throw error;
@@ -228,7 +272,10 @@ export async function loadDraftLessons() {
         if (!Array.isArray(drafts)) throw new Error("Draft lesson data has an unexpected format.");
         return drafts
           .map((draft) => normalizeLesson(draft, []))
-          .sort((left, right) => left.lessonDate.localeCompare(right.lessonDate));
+          .sort((left, right) => (
+            left.lessonDate.localeCompare(right.lessonDate)
+            || compareLessonSourceOrder(left, right)
+          ));
       })
       .catch((error) => {
         draftPromise = undefined;

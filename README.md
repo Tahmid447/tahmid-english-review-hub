@@ -3,15 +3,14 @@
 Private development repository for the Tahmid English Review Hub v9 learner
 platform and Teacher Studio.
 
-Current work is on `upgrade/review-hub-v9-final-product`. The latest
-live-validated August 26 application artifact is
-`8fb49e02184c3569e85fbd7cede2fe9866d16c93` (current-account Preview deploy
-`6a8eee9d22a46700081feb04`);
-`fcf561d78da6de405d6ca54b78ebfc99df3d3a0a` remains the historical rollout and
-logical-restore checkpoint. Authenticated learner Google sign-in, profile
-completion, reload persistence, lesson access, and safe sign-out pass. Teacher
-auth, dedicated non-teacher tier negatives, Lighthouse, microphone, and
-physical-device QA remain pending. The production static site remains pre-v9. Read
+Current work is on `upgrade/review-hub-v9-final-product` and the formal site is
+`https://tahmid-english-review-hub.netlify.app/`. The August 28 Notion expansion
+adds 14 publishable lessons from 10 source pages, including deliberate Part 1 /
+Part 2 splits for longer lessons. Database migrations `019`–`023` were applied
+manually in order and their release postconditions passed before the matching
+frontend release. `fcf561d78da6de405d6ca54b78ebfc99df3d3a0a` remains the
+historical rollout and limited logical-restore checkpoint. Read
+`docs/RELEASE_2026-08-28_NOTION_EXPANSION.md` and
 `docs/CODEX_HANDOFF_2026-08-02.md` before further rollout work.
 
 ## Routes
@@ -33,18 +32,18 @@ lesson data are guarded by Supabase Auth and Row Level Security.
 
 ## Local final-product inventory
 
-- 17 lessons, 616 activities, and 14 implemented practice formats
-- 85 illustration-led questions, five per lesson
+- 31 lessons, 1,100 activities, and 14 implemented practice formats
+- 155 illustration-led questions, five per lesson
 - format-aware answer completeness and **Check N answered** partial grading
 - immediate bilingual retry with the first official result preserved
 - fresh-run question/choice shuffle and saved-run order restoration
 - pre-entry Quick Practice (8 balanced questions, about 5–10 minutes) or Full
   Lesson choice for every accessible lesson
-- a question-local Practice settings control for voice, selected-choice
-  pronunciation, SFX, Study Music, checking mode, hints, display language and
-  theme
+- a focused question-local Practice settings control for voice,
+  selected-choice pronunciation, checking mode and hints; SFX, Study Music,
+  display language and theme remain in the complete top Settings panel
 - expanded bilingual Lesson Guides with a model-answer Practice map covering
-  every one of the 616 activities across all 17 lessons
+  every one of the 1,100 activities across all 31 lessons
 - Asia/Tokyo streak, weekly goal, unique completions, first accuracy, and retry
   improvement
 - progressive phrase/vocabulary library with retained filters and audio
@@ -67,17 +66,20 @@ lesson data are guarded by Supabase Auth and Row Level Security.
   hierarchy on desktop and a single column on small screens
 - Teacher Studio organised into Dashboard, Learners, Access codes, Lessons &
   content, Submissions, Sources, and Insights
-- 34 active Premium review tasks: one speaking and one essay per lesson
-- 51 lesson-specific Premium topic choices: three per lesson, shared by its
+- 62 active Premium review tasks: one speaking and one essay per lesson
+- 93 lesson-specific Premium topic choices: three per lesson, shared by its
   speaking and essay tasks, with topic-specific bilingual guidance
 - human teacher feedback only; no automatic or AI grading
 
-All 85 visual questions were manually and programmatically re-audited across
+All 155 visual questions were programmatically re-audited across
 image, prompt, choices, answer, hint, bilingual explanation, and alt text. Four
 WebPs were replaced, one valid image received corrected alt/brief text, six
-ambiguous distractor sets were corrected, and all 85 now have unique,
-non-answer-revealing bilingual guidance. See
-`docs/VISUAL_CONTENT_REAUDIT_2026-08-14.md` for the per-question ledger.
+ambiguous distractor sets were corrected, and all 155 now have unique,
+non-answer-revealing bilingual guidance. The 85 standalone illustrations retain
+their recorded human review; the 70 new storyboard panels have structural and
+asset checks and are not mislabelled as previously human-inspected. See
+`docs/VISUAL_CONTENT_REAUDIT_2026-08-14.md` and
+`docs/question-quality-audit.md` for the separate evidence scopes.
 
 ## Fixed public prices
 
@@ -150,7 +152,30 @@ lesson topics, and zero invalid topic rows. It records the topic selected for
 each learner attempt. The matching UI must still be published and tested on
 Preview.
 
-All three SQL files were applied manually. This project has no
+The August 28 Notion expansion was then applied manually and verified in this
+strict order:
+
+1. `202608280019_lesson_source_segments.sql` — adds segment-aware source
+   identity so one long Notion page can safely become Part 1 and Part 2.
+2. `202608280020_new_notion_lessons_and_questions.sql` — stores 14 lessons and
+   462 questions, exactly 33 questions and 14 formats per lesson.
+3. `202608280021_new_lesson_premium_tasks_topics.sql` — stores 28 Premium tasks
+   and 42 new bilingual lesson topics.
+4. `202608280022_publish_new_notion_lessons.sql` — fails closed unless all
+   provenance, content, format and Premium checks pass, then publishes the 14
+   lessons to both learner audiences.
+5. `202608280023_existing_notion_lesson_format_parity.sql` — brings the prior
+   11 Notion lessons to the same 33-question, 14-format contract by adding the
+   missing typing and labelled-grid activities without changing teacher-managed
+   publication, audience, plan, lock, or active controls.
+
+The live post-check returned 14/14 newly published lessons with 462 questions,
+the prior 11 Notion lessons with 363 questions (33 each and all 14 formats),
+and 31 public lessons with 1,100 questions overall. It also confirmed 28 new
+Premium tasks (14 speaking and 14 essay). This project still has no tracked
+migration ledger; never use a blind `db push`.
+
+All five August 28 SQL files were applied manually. This project has no
 `supabase_migrations.schema_migrations` ledger, and the dashboard still reports
 no tracked migrations; do not infer ledger entries or blindly replay the files.
 Authenticated learner/teacher, access-code, RLS, submission, microphone, and

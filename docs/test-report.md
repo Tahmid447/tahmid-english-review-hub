@@ -2,6 +2,38 @@
 
 Last updated: **August 28, 2026**
 
+## August 28 Notion expansion and final production gate
+
+- Canonical sources — **PASS**: ten read-only Notion pages dated July 30 through
+  August 25 became 14 lessons. July 30, August 10, August 16 and August 17 were
+  split into coherent Part 1 / Part 2 lessons; the archived duplicate was
+  excluded.
+- Content — **PASS**: every new lesson has Quick Practice, Full Lesson, 33
+  questions, all 14 formats, a complete bilingual Lesson Guide, five visual
+  storyboard panels, one speaking review and one essay review.
+- Full local verification — **PASS**: `npm test`, `npm run build`,
+  `npm run verify:visuals` and `git diff --check`. The suite confirms 31
+  lessons, 1,100 activities, 155 visual questions (85 standalone illustrations
+  and 70 storyboard panels), 570 Lesson Guide model targets and 1,542
+  integrity/security assertions.
+- Browser QA — **PASS**: Home, Plans and Full Lesson were checked at desktop
+  and 390×844 mobile sizes in Light and Dark. Pricing uses the adopted 2×2
+  desktop hierarchy without Premium overflow; mobile cards stack safely. The
+  question-local settings contain only voice, selected-choice pronunciation,
+  checking and hints; the top settings retain the full audio/music/display
+  controls.
+- Study Music — **PASS**: the five-second invitation disappears when ignored;
+  one tap produced a ready-state-4, unmuted, advancing M4A audio element.
+- Supabase rollout — **PASS**: forward migrations
+  `019 → 020 → 021 → 022 → 023` succeeded. The live post-query returned 14/14
+  newly published release lessons with 462 questions, the prior 11 Notion
+  lessons with 363 questions (33 each and all 14 formats), 31 public lessons
+  with 1,100 questions overall, and 28 new Premium tasks (14 speaking + 14
+  essay).
+- Physical-device limitation — not claimed as automated: real iPhone/Android
+  touch, microphone permission and PWA install/update remain recommended
+  owner-device follow-up.
+
 ## August 28 formal production launch — final gate
 
 - Formal production — **PASS**:

@@ -7,9 +7,11 @@ import {
   answerExists,
   calculateOfficialTotals,
   gradeQuestionAnswer,
+  gridCellDisplay,
   isAnswerGradeable,
   preserveFirstResult,
   selectQuickPracticeIds,
+  storyboardPanelLayout,
 } from "../src/lesson-grading.js";
 import {
   classifyLibraryEntry,
@@ -56,7 +58,7 @@ const quickQuestions = [
   question("listenChoice", { id: "listen" }),
   question("speaking", { id: "speak" }),
   question("translation", { id: "write" }),
-  question("mcq", { id: "visual", section: "Visual practice" }),
+  question("mcq", { id: "visual", section: "See It", image: "/assets/questions/visual/storyboard.webp", imagePanel: 2 }),
   question("matching", { id: "match" }),
   question("dialogue", { id: "dialogue" }),
   question("typing", { id: "type" }),
@@ -69,6 +71,27 @@ assert.equal(new Set(quickIds).size, 8, "Quick Practice never repeats a question
 for (const requiredId of ["understand", "listen", "speak", "write", "visual", "match"]) {
   assert(quickIds.includes(requiredId), `Quick Practice keeps the ${requiredId} learning family.`);
 }
+
+assert.deepEqual(storyboardPanelLayout(1), { panel: 1, column: 0, row: 0 });
+assert.deepEqual(storyboardPanelLayout(3), { panel: 3, column: 2, row: 0 });
+assert.deepEqual(storyboardPanelLayout(4), { panel: 4, column: 0, row: 1 });
+assert.deepEqual(storyboardPanelLayout(5), { panel: 5, column: 1, row: 1 });
+assert.equal(storyboardPanelLayout(6), null, "The unused sixth storyboard cell is never selectable.");
+assert.deepEqual(
+  gridCellDisplay({ gridCells: { center: "I agree." } }, "center", true),
+  { primary: "I agree.", secondary: "" },
+  "Labelled grids expose their English tile text.",
+);
+assert.deepEqual(
+  gridCellDisplay({ gridCells: { center: { en: "I agree.", jp: "賛成です。" } } }, "center", true),
+  { primary: "I agree.", secondary: "賛成です。" },
+  "Bilingual grid labels keep Japanese as optional supporting text.",
+);
+assert.deepEqual(
+  gridCellDisplay({ correctCell: "center" }, "center", true),
+  { primary: "", secondary: "" },
+  "Legacy position grids remain intentionally unlabelled.",
+);
 
 const [orderQuestion] = fixtures.get("order");
 const [matchingQuestion] = fixtures.get("matching");

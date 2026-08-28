@@ -2,6 +2,12 @@ import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
 import { fileURLToPath } from "node:url";
+import {
+  lessonSourceIdentityKey,
+  sourceSegmentIsValid,
+  validateLessonSourceIdentities,
+} from "../src/lesson-source.js";
+import { loadVisualManifestSources, visualAssetPanelKey } from "./visual-manifest-utils.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const readJson = (relative) =>
@@ -16,13 +22,28 @@ const sha256 = (relative) =>
 const legacy = readJson("src/data/legacy-lessons.json");
 const additions = readJson("src/data/legacy-additions.json");
 const drafts = readJson("src/data/notion-drafts.json");
-const visualManifest = readJson("scripts/visual-question-manifest.json");
+const {
+  entries: visualEntries,
+  storyboardEntries,
+} = loadVisualManifestSources(root);
 const migration = readText("supabase/migrations/202607300001_review_hub.sql");
 const catalogMigration = readText(
   "supabase/migrations/202607300002_review_hub_catalog.sql",
 );
 const questionMigration = readText(
   "supabase/migrations/202607300003_review_hub_questions.sql",
+);
+const sourceSegmentMigration = readText(
+  "supabase/migrations/202608280019_lesson_source_segments.sql",
+);
+const releaseLessonMigration = readText(
+  "supabase/migrations/202608280020_new_notion_lessons_and_questions.sql",
+);
+const releasePremiumMigration = readText(
+  "supabase/migrations/202608280021_new_lesson_premium_tasks_topics.sql",
+);
+const releasePublishMigration = readText(
+  "supabase/migrations/202608280022_publish_new_notion_lessons.sql",
 );
 const buildScript = readText("scripts/build.mjs");
 const phraseScript = readText("src/phrases.js");
@@ -203,26 +224,43 @@ for (const lessonId of Object.keys(expectedLegacyCounts)) {
 }
 assert(additionTotal === 132, "Exactly 132 additive activities are present (22 × 6).");
 
-assert(Array.isArray(drafts) && drafts.length === 11, "Exactly 11 Notion-derived lessons exist.");
+assert(Array.isArray(drafts) && drafts.length >= 11, "The complete Notion-derived lesson set is present.");
 const notionIds = drafts.map((lesson) => lesson.sourceNotionPageId);
 assert(notionIds.every(Boolean), "Every Notion draft keeps its source page ID.");
-assert(unique(notionIds), "Notion source page IDs are unique.");
+assert(
+  drafts.every((lesson) => sourceSegmentIsValid(lesson.sourceSegment || "full")),
+  "Every Notion draft has a valid source segment.",
+);
+let notionSourceIdentitiesAreValid = true;
+try {
+  validateLessonSourceIdentities(drafts);
+} catch {
+  notionSourceIdentitiesAreValid = false;
+}
+assert(
+  notionSourceIdentitiesAreValid && unique(drafts.map(lessonSourceIdentityKey)),
+  "Notion source page IDs may repeat only when their source segments differ.",
+);
 assert(unique(drafts.map((lesson) => lesson.id)), "Notion draft slugs are unique.");
 assert(
-  Array.isArray(visualManifest.questions) && visualManifest.questions.length === 85,
-  "The visual-question manifest contains five briefs for each of 17 lessons.",
+  visualEntries.length === (legacy.length + drafts.length) * 5,
+  "The combined visual manifests contain five briefs for every lesson.",
 );
 assert(
-  unique(visualManifest.questions.map((question) => question.asset)),
-  "Every visual-question asset filename is unique.",
+  unique(visualEntries.map(visualAssetPanelKey)),
+  "Every visual-question asset and panel pair is unique.",
 );
 assert(
-  visualManifest.questions.every((question) =>
+  visualEntries.every((question) =>
     /^\/assets\/questions\/visual\/[a-z0-9-]+\.webp$/.test(question.asset)
     && Boolean(question.imageAlt)
     && Boolean(question.scenePrompt)
   ),
   "Every visual brief has a web-safe asset path, meaningful alt text, and a concrete scene prompt.",
+);
+assert(
+  storyboardEntries.every((question) => [1, 2, 3, 4, 5].includes(Number(question.imagePanel))),
+  "Storyboard visual briefs use only the five visible 3×2 panel positions.",
 );
 
 let draftQuestionTotal = 0;
@@ -250,8 +288,11 @@ for (const lesson of drafts) {
   assert(listeningQuestions.length >= 5, `${lesson.id}: at least five listening activities exist.`);
   assert(speakingQuestions.length >= 5, `${lesson.id}: at least five speaking activities exist.`);
   assert(
-    unique(visualQuestions.map((question) => question.image)),
-    `${lesson.id}: each illustration-led activity uses a distinct visual asset.`,
+    unique(visualQuestions.map((question) => visualAssetPanelKey({
+      asset: question.image,
+      imagePanel: question.imagePanel,
+    }))),
+    `${lesson.id}: each illustration-led activity uses a distinct visual asset/panel pair.`,
   );
   const mistake = lesson.questions.find((question) => question.format === "mistake");
   assert(
@@ -267,7 +308,10 @@ for (const lesson of drafts) {
     `${lesson.id}: dialogue choices are present and distinct.`,
   );
 }
-assert(draftQuestionTotal >= 341, "At least 341 Notion-derived activities are present (31 × 11 minimum)." );
+assert(
+  draftQuestionTotal >= drafts.length * 31,
+  `At least ${drafts.length * 31} Notion-derived activities are present (31 per lesson minimum).`,
+);
 assert(unique(draftQuestionIds), "All Notion draft question IDs are unique.");
 
 const allQuestions = [
@@ -277,7 +321,10 @@ const allQuestions = [
 ];
 const allQuestionIds = allQuestions.map((question) => question.id);
 const allFormats = new Set(allQuestions.map((question) => question.format || question.type));
-assert(allQuestions.length >= 616, "The complete bundle contains at least 616 activities.");
+assert(
+  allQuestions.length === originalTotal + additionTotal + draftQuestionTotal,
+  `The complete bundle contains all ${originalTotal + additionTotal + draftQuestionTotal} source activities.`,
+);
 assert(unique(allQuestionIds), "Question IDs are unique across the complete bundle.");
 assert(allFormats.size >= 9, `The complete bundle has ${allFormats.size} activity formats.`);
 
@@ -304,8 +351,9 @@ assert(
 );
 
 assert(
-  /unique\s*\(\s*source_type\s*,\s*source_notion_page_id\s*\)/i.test(migration),
-  "Database deduplication uses source_type + source_notion_page_id.",
+  /drop constraint if exists review_lessons_source_type_source_notion_page_id_key/i.test(sourceSegmentMigration)
+    && /unique\s*\(\s*source_type\s*,\s*source_notion_page_id\s*,\s*source_segment\s*\)/i.test(sourceSegmentMigration),
+  "Database deduplication uses source type + Notion page ID + source segment.",
 );
 assert(
   /status\s*=\s*'published'[\s\S]{0,180}audience\s+in\s*\(\s*'general'\s*,\s*'both'\s*\)/i.test(
@@ -389,14 +437,45 @@ assert(
   "The catalogue migration keeps all 11 Notion lessons as drafts.",
 );
 assert(
-  (questionMigration.match(/::jsonb/g) || []).length === allQuestions.length,
-  "The protected question migration contains every generated activity payload.",
+  sha256("supabase/migrations/202607300003_review_hub_questions.sql") ===
+    "4e6df65665ef071ebeabaa793903e995dc2a9fb15236eec8edb120775d6b12f3",
+  "The already-applied question migration remains byte-for-byte unchanged.",
 );
 assert(
   /on\s+conflict\s*\(\s*lesson_id\s*,\s*stable_key\s*\)\s+do\s+update/i.test(
     questionMigration,
   ),
   "Question migration is idempotent by lesson and stable question key.",
+);
+const releaseLessonRows = releaseLessonMigration
+  .split("insert into review_release_020_lessons values\n")[1]
+  ?.split(";\n\ndo $source$")[0]
+  ?.match(/^  \('/gm) || [];
+const releaseQuestionRows = releaseLessonMigration
+  .split("insert into review_release_020_questions values\n")[1]
+  ?.split(";\n\ndo $source$")[0]
+  ?.match(/^  \('/gm) || [];
+assert(
+  releaseLessonRows.length === 14 && releaseQuestionRows.length === 462,
+  "Forward migration 020 contains exactly 14 canonical lessons and 462 activities.",
+);
+assert(
+  /on conflict \(source_type, source_notion_page_id, source_segment\) do update/i.test(
+    releaseLessonMigration,
+  ),
+  "Forward migration 020 upserts split lessons by their complete source identity.",
+);
+assert(
+  /seeded_count <> 28/.test(releasePremiumMigration)
+    && /'speaking'::text as task_type/.test(releasePremiumMigration)
+    && /'essay'::text/.test(releasePremiumMigration),
+  "Forward migration 021 provides one speaking and one essay task for every new lesson.",
+);
+assert(
+  /active_question_count <> 462/.test(releasePublishMigration)
+    && /premium_task_count <> 28/.test(releasePublishMigration)
+    && /set status = 'published',[\s\S]*audience = 'both'/.test(releasePublishMigration),
+  "Forward migration 022 publishes only after question and Premium coverage pass.",
 );
 
 assert(

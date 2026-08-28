@@ -7,6 +7,11 @@ The 11 Notion-derived lessons now reserve five illustration-led activities each.
 - 55 unique target filenames
 - five scenes per lesson from `july-07` through `july-27`
 
+The 14 August 28 expansion lessons use
+`scripts/visual-storyboard-manifest.json`: five panels per lesson, or 70 panels.
+Together, the standalone manifest and storyboard manifest cover 155 visual
+questions across all 31 lessons.
+
 The generator intentionally does not invent a generic stock image. Each brief is tied to a real lesson phrase, and each activity asks the learner to select the sentence that matches the pictured action.
 
 ## Production contract
@@ -26,9 +31,14 @@ Every Notion-derived lesson now generates:
 - 5 illustration-led choice activities (`See It`)
 - 6 listening activities (3 listen-and-choose + 3 dictation)
 - 5 speaking activities
-- 15 additional activities across meaning choice, true/false, translation, sentence building, matching, sorting, dialogue, mistake correction, and situation choice
+- 17 additional activities across meaning choice, true/false, translation,
+  full-sentence typing, sentence building, matching, sorting, labelled-grid,
+  dialogue, mistake correction, and situation choice
 
-That produces 31 activities per lesson today. The validator treats 31 as a minimum rather than a permanent ceiling, so a future lesson can contain more activities when its content needs them.
+That produces 33 activities and all 14 formats per Notion-derived lesson in the
+current release. The general validator retains a 31-activity floor rather than
+a permanent ceiling; the release migrations and parity tests enforce the
+reviewed 33-question, 14-format bundle.
 
 ## Review checklist
 

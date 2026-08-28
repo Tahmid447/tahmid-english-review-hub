@@ -12,6 +12,8 @@ let feedbackAudioContext = null;
 let ambientAudioElement = null;
 let ambientTrackKey = null;
 let ambientDucked = false;
+let ambientFeedbackDucked = false;
+let ambientFeedbackDuckTimer = null;
 let ambientGestureHandler = null;
 let ambientLastError = "";
 let ambientPromptFadeTimer = null;
@@ -309,29 +311,57 @@ const audioContextConstructor = () => (typeof window !== "undefined"
 
 const sfxNotes = Object.freeze({
   click: Object.freeze([
-    Object.freeze({ frequency: 440, offset: 0, duration: 0.065, gain: 0.046, type: "sine" }),
-    Object.freeze({ frequency: 659.25, offset: 0.012, duration: 0.06, gain: 0.024, type: "triangle" }),
+    Object.freeze({ frequency: 392, offset: 0, duration: 0.075, gain: 0.084, type: "sine" }),
+    Object.freeze({ frequency: 587.33, offset: 0.008, duration: 0.068, gain: 0.044, type: "triangle" }),
+    Object.freeze({ frequency: 783.99, offset: 0.018, duration: 0.052, gain: 0.022, type: "sine" }),
   ]),
   correct: Object.freeze([
-    Object.freeze({ frequency: 523.25, offset: 0, duration: 0.25, gain: 0.078, type: "sine" }),
-    Object.freeze({ frequency: 659.25, offset: 0.105, duration: 0.3, gain: 0.072, type: "sine" }),
-    Object.freeze({ frequency: 783.99, offset: 0.21, duration: 0.34, gain: 0.066, type: "sine" }),
-    Object.freeze({ frequency: 1046.5, offset: 0.235, duration: 0.31, gain: 0.024, type: "triangle" }),
+    Object.freeze({ frequency: 523.25, offset: 0, duration: 0.28, gain: 0.13, type: "sine" }),
+    Object.freeze({ frequency: 659.25, offset: 0.09, duration: 0.32, gain: 0.112, type: "sine" }),
+    Object.freeze({ frequency: 783.99, offset: 0.18, duration: 0.38, gain: 0.1, type: "sine" }),
+    Object.freeze({ frequency: 1046.5, offset: 0.205, duration: 0.35, gain: 0.044, type: "triangle" }),
+    Object.freeze({ frequency: 1318.51, offset: 0.24, duration: 0.27, gain: 0.022, type: "sine" }),
   ]),
   retry: Object.freeze([
-    Object.freeze({ frequency: 392, offset: 0, duration: 0.22, gain: 0.058, type: "sine" }),
-    Object.freeze({ frequency: 349.23, offset: 0.12, duration: 0.24, gain: 0.052, type: "triangle" }),
-    Object.freeze({ frequency: 440, offset: 0.25, duration: 0.28, gain: 0.032, type: "sine" }),
+    Object.freeze({ frequency: 440, offset: 0, duration: 0.24, gain: 0.096, type: "sine" }),
+    Object.freeze({ frequency: 392, offset: 0.105, duration: 0.26, gain: 0.082, type: "triangle" }),
+    Object.freeze({ frequency: 349.23, offset: 0.2, duration: 0.25, gain: 0.064, type: "sine" }),
+    Object.freeze({ frequency: 523.25, offset: 0.32, duration: 0.26, gain: 0.04, type: "sine" }),
   ]),
   completion: Object.freeze([
-    Object.freeze({ frequency: 392, offset: 0, duration: 0.26, gain: 0.062, type: "sine" }),
-    Object.freeze({ frequency: 523.25, offset: 0.12, duration: 0.34, gain: 0.07, type: "sine" }),
-    Object.freeze({ frequency: 659.25, offset: 0.25, duration: 0.4, gain: 0.068, type: "sine" }),
-    Object.freeze({ frequency: 783.99, offset: 0.39, duration: 0.46, gain: 0.052, type: "triangle" }),
+    Object.freeze({ frequency: 392, offset: 0, duration: 0.3, gain: 0.09, type: "sine" }),
+    Object.freeze({ frequency: 523.25, offset: 0.1, duration: 0.36, gain: 0.112, type: "sine" }),
+    Object.freeze({ frequency: 659.25, offset: 0.22, duration: 0.44, gain: 0.108, type: "sine" }),
+    Object.freeze({ frequency: 783.99, offset: 0.35, duration: 0.52, gain: 0.088, type: "triangle" }),
+    Object.freeze({ frequency: 1046.5, offset: 0.43, duration: 0.45, gain: 0.046, type: "sine" }),
+    Object.freeze({ frequency: 1567.98, offset: 0.48, duration: 0.32, gain: 0.02, type: "sine" }),
   ]),
 });
 
-export function playInterfaceSound(kind = "click") {
+const ANSWER_COACHING = Object.freeze({
+  correct: Object.freeze([
+    Object.freeze({ messageEn: "Great job — that is exactly right.", messageJa: "すばらしいです。正解です。" }),
+    Object.freeze({ messageEn: "Excellent — you caught the key clue.", messageJa: "完璧です。大事なポイントをつかめています。" }),
+    Object.freeze({ messageEn: "Awesome work — keep that rhythm going.", messageJa: "とても良いです。その調子で続けましょう。" }),
+    Object.freeze({ messageEn: "Nicely done — your answer fits perfectly.", messageJa: "よくできました。答えがぴったり合っています。" }),
+  ]),
+  retry: Object.freeze([
+    Object.freeze({ messageEn: "Good try — check the key clue and try once more.", messageJa: "良い挑戦です。大事なヒントを確認して、もう一度やってみましょう。" }),
+    Object.freeze({ messageEn: "Not quite yet — compare your answer with the model.", messageJa: "もう少しです。自分の答えとお手本を比べてみましょう。" }),
+    Object.freeze({ messageEn: "Keep going — listen once, then try again.", messageJa: "その調子です。一度聞いてから、もう一度挑戦しましょう。" }),
+    Object.freeze({ messageEn: "A useful attempt — the explanation below shows the next step.", messageJa: "大切な挑戦です。下の解説で次のポイントを確認しましょう。" }),
+  ]),
+});
+
+export function answerCoachingFeedback(correct, sequence = 0) {
+  const tone = correct ? "correct" : "retry";
+  const choices = ANSWER_COACHING[tone];
+  const numericSequence = Number.isFinite(Number(sequence)) ? Math.trunc(Number(sequence)) : 0;
+  const index = ((numericSequence % choices.length) + choices.length) % choices.length;
+  return { ...choices[index], tone, index };
+}
+
+export async function playInterfaceSound(kind = "click") {
   const settings = getSettings();
   if (!settings.sfxEnabled) return { played: false, reason: "sfx-off" };
   const AudioContext = typeof window !== "undefined"
@@ -342,11 +372,22 @@ export function playInterfaceSound(kind = "click") {
   try {
     feedbackAudioContext ||= new AudioContext();
     if (feedbackAudioContext.state === "suspended") {
-      feedbackAudioContext.resume().catch(() => {});
+      await feedbackAudioContext.resume();
     }
     const startAt = feedbackAudioContext.currentTime + 0.01;
     const notes = sfxNotes[kind] || sfxNotes.click;
     const volume = Math.max(0, Math.min(1, Number(settings.sfxVolume ?? 0.34)));
+    const duration = Math.max(...notes.map((note) => note.offset + note.duration));
+
+    if (kind !== "click") {
+      ambientFeedbackDucked = true;
+      setAmbientVolume(settings);
+      clearTimeout(ambientFeedbackDuckTimer);
+      ambientFeedbackDuckTimer = setTimeout(() => {
+        ambientFeedbackDucked = false;
+        setAmbientVolume();
+      }, Math.ceil((duration + 0.16) * 1000));
+    }
 
     notes.forEach(({ frequency, offset, duration, gain: noteGain, type }) => {
       const oscillator = feedbackAudioContext.createOscillator();
@@ -367,7 +408,7 @@ export function playInterfaceSound(kind = "click") {
       document.documentElement.dataset.sfxLast = kind;
       document.documentElement.dataset.sfxNoteCount = String(notes.length);
     }
-    return { played: true };
+    return { played: true, duration };
   } catch (error) {
     return { played: false, reason: "unavailable", error };
   }
@@ -378,7 +419,7 @@ export const playCompletionSound = () => playInterfaceSound("completion");
 
 const ambientTargetVolume = (settings = getSettings()) => {
   const volume = Math.max(0, Math.min(0.4, Number(settings.ambientVolume ?? 0.18)));
-  return ambientDucked ? volume * 0.24 : volume;
+  return ambientDucked || ambientFeedbackDucked ? volume * 0.24 : volume;
 };
 
 const publishAmbientState = (state, settings = getSettings()) => {

@@ -267,6 +267,7 @@ assert.match(localServer, /"\.m4a": "audio\/mp4"/);
 
 const {
   AMBIENT_TRACKS,
+  answerCoachingFeedback,
   ambientPlaybackStatus,
   duckAmbient,
   normalizePlaybackRate,
@@ -369,11 +370,54 @@ assert.deepEqual(
   ["ja", "us", "ja"],
   "Mixed explanations request Nanami, Ava, then Nanami in their natural language order.",
 );
-assert.equal(playInterfaceSound("click").reason, "unsupported", "Procedural SFX fails safely without Web Audio.");
+assert.equal((await playInterfaceSound("click")).reason, "unsupported", "Procedural SFX fails safely without Web Audio.");
 if (originalAudio === undefined) delete globalThis.Audio;
 else globalThis.Audio = originalAudio;
 if (originalFetch === undefined) delete globalThis.fetch;
 else globalThis.fetch = originalFetch;
+
+const correctCoaching = [0, 1, 2, 3, 4].map((sequence) => answerCoachingFeedback(true, sequence));
+assert.deepEqual(correctCoaching.map(({ index }) => index), [0, 1, 2, 3, 0], "Correct coaching rotates deterministically.");
+assert.equal(new Set(correctCoaching.slice(0, 4).map(({ messageEn }) => messageEn)).size, 4);
+const retryCoaching = [0, 1, 2, 3].map((sequence) => answerCoachingFeedback(false, sequence));
+assert(retryCoaching.every(({ tone, messageJa }) => tone === "retry" && Boolean(messageJa)));
+assert(retryCoaching.every(({ messageEn }) => !/never mind/i.test(messageEn)), "Retry coaching stays constructive.");
+
+let resumedBeforeScheduling = false;
+let scheduledSfxNotes = 0;
+class FakeAudioContext {
+  constructor() {
+    this.state = "suspended";
+    this.currentTime = 1;
+    this.destination = {};
+  }
+  async resume() {
+    await Promise.resolve();
+    this.state = "running";
+    resumedBeforeScheduling = true;
+  }
+  createOscillator() {
+    assert.equal(resumedBeforeScheduling, true, "SFX waits for AudioContext.resume() before scheduling notes.");
+    return {
+      frequency: { setValueAtTime() {} },
+      connect() {},
+      start() { scheduledSfxNotes += 1; },
+      stop() {},
+    };
+  }
+  createGain() {
+    return {
+      gain: { setValueAtTime() {}, exponentialRampToValueAtTime() {} },
+      connect() {},
+    };
+  }
+}
+globalThis.window = { AudioContext: FakeAudioContext };
+const enhancedClick = await playInterfaceSound("click");
+assert.equal(enhancedClick.played, true);
+assert.equal(scheduledSfxNotes, 3, "The click sound uses a clear three-note tactile chime.");
+if (originalWindow === undefined) delete globalThis.window;
+else globalThis.window = originalWindow;
 
 const bands = [
   [0.95, "excellent"],
@@ -421,7 +465,21 @@ assert.equal(multipleDifferenceFeedback.band, "sentence-mismatch");
 assert.match(multipleDifferenceFeedback.messageEn, /parts need attention/i);
 
 const { DEEP_LESSON_GUIDES } = await import("../src/lesson-guides.js");
-assert.equal(Object.keys(DEEP_LESSON_GUIDES).length, 17, "All 17 lessons have detailed lesson guides.");
+const lessonGuideCatalog = [
+  ...JSON.parse(fs.readFileSync(path.join(root, "src/data/legacy-lessons.json"), "utf8")),
+  ...JSON.parse(fs.readFileSync(path.join(root, "src/data/notion-drafts.json"), "utf8")),
+];
+const lessonGuideIds = new Set(lessonGuideCatalog.map(({ id }) => id));
+assert.equal(
+  Object.keys(DEEP_LESSON_GUIDES).length,
+  lessonGuideIds.size,
+  `All ${lessonGuideIds.size} lessons have detailed lesson guides.`,
+);
+assert.deepEqual(
+  new Set(Object.keys(DEEP_LESSON_GUIDES)),
+  lessonGuideIds,
+  "Lesson Guide keys exactly match the complete authored lesson catalog.",
+);
 assert(Object.values(DEEP_LESSON_GUIDES).every((guide) => guide.points.length >= 3));
 assert(Object.values(DEEP_LESSON_GUIDES).every((guide) => guide.corrections.length >= 2));
 
@@ -448,6 +506,8 @@ assert.equal(
 
 const hubScript = fs.readFileSync(path.join(root, "src", "hub.js"), "utf8");
 const phraseScript = fs.readFileSync(path.join(root, "src", "phrases.js"), "utf8");
+const effectsScript = fs.readFileSync(path.join(root, "src", "effects.js"), "utf8");
+const homePage = fs.readFileSync(path.join(root, "index.html"), "utf8");
 const sharedStyles = fs.readFileSync(path.join(root, "src", "styles.css"), "utf8");
 assert.match(lessonScript, /querySelectorAll\("\[data-audio-text\]"\)/);
 assert.match(lessonScript, /Listen to the question/);
@@ -457,7 +517,29 @@ assert.match(lessonScript, /Listen to your sentence/);
 assert.match(lessonScript, /Listen to the original/);
 assert.match(lessonScript, /matching-term/);
 assert.match(lessonScript, /sorting-category-audio/);
-assert.match(lessonScript, /playAnswerFeedback\(Boolean\(correct\)\)/);
+assert.match(lessonScript, /playAnswerFeedback\(Boolean\(result\?\.correct\)\)/);
+assert.match(lessonScript, /answerCoachingFeedback/);
+assert.match(lessonScript, /deferCoachingVoice: true/);
+assert.match(lessonScript, /speechItems\.push\(\{ text: pronunciation[\s\S]{0,280}speechItems\.push\(\{ text: result\.coaching\.messageEn/,
+  "Instant choices speak the selected option before the coaching message.");
+assert.match(lessonScript, /queueFeedbackSpeech\(speechItems\)/);
+assert.match(lessonPage, /id="feedbackCard" role="status" aria-live="polite" aria-atomic="true"/);
+assert.match(effectsScript, /animateAnswerFeedback/);
+assert.match(effectsScript, /renderRetryCue/);
+assert.match(sharedStyles, /\.retry-nudge \{ animation: retry-nudge/);
+assert.match(sharedStyles, /prefers-reduced-motion:[\s\S]*\.retry-nudge/);
+assert.match(homePage, /class="hero-tertiary-link phrase-library-link"/);
+assert.equal((homePage.match(/class="primary-btn feature-link"/g) || []).length, 1,
+  "The hero presents one dominant free-lesson action.");
+assert.match(sharedStyles, /\.site-header,[\s\S]{0,100}max-height: 80px/);
+assert.match(sharedStyles, /\.site-header \.mobile-settings-toggle,[\s\S]{0,180}display: inline-flex !important/);
+assert.match(sharedStyles, /\.site-header \.header-settings-controls,[\s\S]{0,260}display: none !important/);
+for (const [name, source] of [["hub", hubScript], ["phrase library", phraseScript]]) {
+  assert.match(source, /event\.key === "Escape"[\s\S]{0,80}restoreFocus: true/,
+    `${name} settings close with Escape and return focus.`);
+  assert.match(source, /event\.target\.closest\?\.\("\.site-header"\)[\s\S]{0,60}closeSettings\(\)/,
+    `${name} settings close when the learner taps outside.`);
+}
 assert.doesNotMatch(lessonScript, /navigator\.vibrate|vibrationToggle/);
 assert.match(lessonScript, /Date\.now\(\) \+ 5000/);
 assert.match(lessonScript, /data-audio-secondary-text/);

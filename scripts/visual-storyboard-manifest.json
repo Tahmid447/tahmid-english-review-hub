@@ -1,0 +1,790 @@
+{
+  "version": 1,
+  "globalArtDirection": "One polished educational storyboard containing five independent adult-learning scenes in a precise 3-column by 2-row grid. Panels 1–3 fill the top row; panels 4–5 fill the first two cells of the bottom row; the final bottom-right cell is a calm abstract teal-and-gold texture. Warm premium editorial illustration, believable contemporary Japanese settings, diverse adults, expressive but natural body language, crisp panel boundaries, consistent navy-teal-coral-gold palette, no words, no captions, no logos, no watermarks. Every panel must make its target action visually unambiguous at small size.",
+  "storyboards": [
+    {
+      "lessonId": "july-30-part-1",
+      "asset": "/assets/questions/visual/july-30-part-1-storyboard.webp",
+      "panels": [
+        {
+          "phraseIndex": 0,
+          "distractorIndexes": [1, 5, 9],
+          "imageAlt": "A learner happily imagines visiting Malaysia next year.",
+          "scenePrompt": "An adult learner at a desk circles next year on a picture-only calendar and looks hopefully at a Malaysia travel brochure with landmark photographs and a packed-away suitcase.",
+          "hintEn": "Look for a realistic future travel hope, not regret about the past.",
+          "hintJa": "過去の後悔ではなく、実現できそうな未来の旅行への希望を見ましょう。",
+          "evidenceEn": "The future calendar, travel pictures and hopeful expression show a possible visit next year.",
+          "evidenceJa": "未来のカレンダー、旅行写真、希望に満ちた表情が来年の訪問を示しています。"
+        },
+        {
+          "phraseIndex": 2,
+          "distractorIndexes": [0, 6, 11],
+          "imageAlt": "A person at home wishes they were in Malaysia now.",
+          "scenePrompt": "A tired adult sits at home in rainy weather while a vivid thought bubble shows them happily standing beside Malaysian tropical landmarks right now.",
+          "hintEn": "Compare the person’s real location with the place in the thought bubble.",
+          "hintJa": "本人が実際にいる場所と、吹き出しの中で願っている場所を比べましょう。",
+          "evidenceEn": "The person is at home but imagines being in Malaysia at the present moment.",
+          "evidenceJa": "本人は自宅にいますが、今マレーシアにいる自分を想像しています。"
+        },
+        {
+          "phraseIndex": 4,
+          "distractorIndexes": [2, 7, 10],
+          "imageAlt": "An English learner wishes they could speak more confidently.",
+          "scenePrompt": "An adult learner hesitates while speaking English in a small group, then imagines a confident version of themself speaking smoothly with relaxed posture and attentive listeners.",
+          "hintEn": "Notice the contrast between hesitant speech and the confident ability being wished for.",
+          "hintJa": "ためらって話す現実と、願っている自信ある話し方の対比に注目しましょう。",
+          "evidenceEn": "The learner wants a speaking ability they do not yet feel they have.",
+          "evidenceJa": "学習者は、まだ十分に持てていない英語を話す自信を願っています。"
+        },
+        {
+          "phraseIndex": 7,
+          "distractorIndexes": [1, 4, 9],
+          "imageAlt": "A person regrets not calling someone earlier.",
+          "scenePrompt": "An adult looks regretfully at a phone showing an unanswered-call icon and a clock far past the intended time, with an earlier phone-call moment faded in the background.",
+          "hintEn": "The clock and unused phone show a missed action in the past.",
+          "hintJa": "時計と使われなかった電話から、過去にしなかった行動を考えましょう。",
+          "evidenceEn": "The late time and regretful look show that the earlier call was never made.",
+          "evidenceJa": "遅い時刻と後悔した表情が、もっと早い電話をしなかったことを示しています。"
+        },
+        {
+          "phraseIndex": 10,
+          "distractorIndexes": [0, 3, 8],
+          "imageAlt": "A person wishes the hot weather were cooler.",
+          "scenePrompt": "An overheated adult fans themself beneath a blazing sun while imagining a pleasantly cool breeze, light jacket and comfortable shaded park.",
+          "hintEn": "Look for a present weather condition the person wants to be different.",
+          "hintJa": "今の天気について、本人が違ってほしいと願っている状態を見ましょう。",
+          "evidenceEn": "The person is hot now and imagines cooler, more comfortable weather.",
+          "evidenceJa": "本人は今暑がっており、もっと涼しく快適な天気を想像しています。"
+        }
+      ]
+    },
+    {
+      "lessonId": "july-30-part-2",
+      "asset": "/assets/questions/visual/july-30-part-2-storyboard.webp",
+      "panels": [
+        {
+          "phraseIndex": 0,
+          "distractorIndexes": [1, 5, 9],
+          "imageAlt": "A person has already finished breakfast.",
+          "scenePrompt": "Morning kitchen scene: an adult places an empty breakfast plate beside a satisfied check gesture while another person arrives too late to join the meal.",
+          "hintEn": "The empty plate shows the breakfast is already complete.",
+          "hintJa": "空になった皿から、朝食がすでに終わっていることを考えましょう。",
+          "evidenceEn": "The finished plate and satisfied expression show the meal was completed before now.",
+          "evidenceJa": "食べ終わった皿と満足した表情が、朝食がすでに完了したことを示しています。"
+        },
+        {
+          "phraseIndex": 2,
+          "distractorIndexes": [0, 6, 11],
+          "imageAlt": "A person has just arrived home.",
+          "scenePrompt": "An adult has just stepped through their front door, still holding keys and a work bag, while a wall clock and motion lines emphasize the immediate arrival.",
+          "hintEn": "The person is crossing the doorway at this very moment.",
+          "hintJa": "本人がまさに今、玄関を入った瞬間に注目しましょう。",
+          "evidenceEn": "Keys, bag and the just-opened door show a very recent arrival home.",
+          "evidenceJa": "鍵、鞄、開いたばかりの玄関が、たった今の帰宅を示しています。"
+        },
+        {
+          "phraseIndex": 4,
+          "distractorIndexes": [2, 7, 10],
+          "imageAlt": "A host had already eaten when a guest arrived.",
+          "scenePrompt": "A two-step timeline without text: first an adult finishes a meal and clears the plate; afterward a guest rings the doorbell and arrives, while the host points to the empty plate.",
+          "hintEn": "Identify which of the two past actions happened first.",
+          "hintJa": "二つの過去の出来事のうち、どちらが先だったかを見ましょう。",
+          "evidenceEn": "The meal is finished before the guest reaches the door.",
+          "evidenceJa": "客が玄関に着く前に、食事が終わっている時間の流れです。"
+        },
+        {
+          "phraseIndex": 7,
+          "distractorIndexes": [1, 4, 9],
+          "imageAlt": "A person owned a car while living in another town.",
+          "scenePrompt": "A warm faded memory scene shows an adult beside their own car and former home, contrasted with their present-day city apartment and no car.",
+          "hintEn": "This is simple past possession during an earlier period of life.",
+          "hintJa": "以前の生活期間に持っていた物を表す単純過去に注目しましょう。",
+          "evidenceEn": "The memory shows the person possessing a car during the time they lived there.",
+          "evidenceJa": "回想場面で、その場所に住んでいた時に車を所有していたことが分かります。"
+        },
+        {
+          "phraseIndex": 10,
+          "distractorIndexes": [0, 3, 8],
+          "imageAlt": "A woman had already been tired before a meeting started.",
+          "scenePrompt": "A two-step office timeline: a woman looks exhausted at her desk first; later colleagues enter and the meeting begins while she is still tired.",
+          "hintEn": "The tired state begins before the later meeting.",
+          "hintJa": "疲れた状態が、その後の会議より前に始まっていることを見ましょう。",
+          "evidenceEn": "She is visibly tired before colleagues arrive and the meeting starts.",
+          "evidenceJa": "同僚が来て会議が始まる前から、彼女が疲れている様子です。"
+        }
+      ]
+    },
+    {
+      "lessonId": "august-02",
+      "asset": "/assets/questions/visual/august-02-storyboard.webp",
+      "panels": [
+        {
+          "phraseIndex": 0,
+          "distractorIndexes": [1, 5, 9],
+          "imageAlt": "A person politely asks permission before asking someone’s age.",
+          "scenePrompt": "Two adults converse respectfully; one makes a gentle permission-seeking gesture before indicating a birthday cake with numberless candles, while the other appears comfortable and free to decline.",
+          "hintEn": "Look for permission before a personal age question.",
+          "hintJa": "個人的な年齢の質問をする前に、許可を求めている様子を見ましょう。",
+          "evidenceEn": "The careful gesture and birthday cue show a polite request to ask about age.",
+          "evidenceJa": "慎重な仕草と誕生日の手がかりが、年齢を丁寧に尋ねる場面を示しています。"
+        },
+        {
+          "phraseIndex": 2,
+          "distractorIndexes": [0, 6, 11],
+          "imageAlt": "A speaker apologetically checks that a personal question did not offend someone.",
+          "scenePrompt": "After an awkward personal question, one adult gives an apologetic hand-on-heart gesture while the other relaxes and reassures them.",
+          "hintEn": "Notice the speaker’s concern about the other person’s feelings.",
+          "hintJa": "相手の気分を害していないか心配する話し手に注目しましょう。",
+          "evidenceEn": "The apology and concern follow an uncomfortable question.",
+          "evidenceJa": "気まずい質問の後、話し手が謝りながら相手を気づかっています。"
+        },
+        {
+          "phraseIndex": 4,
+          "distractorIndexes": [2, 7, 10],
+          "imageAlt": "Coworkers dig into the details of a project.",
+          "scenePrompt": "Coworkers lean over a project board with charts and magnifying glass icons, carefully examining layers of information together in a constructive meeting.",
+          "hintEn": "The team is examining information deeply, not invading private life.",
+          "hintJa": "私生活を詮索するのではなく、情報を詳しく掘り下げている場面です。",
+          "evidenceEn": "The group is productively studying project details together.",
+          "evidenceJa": "チームが協力してプロジェクトの詳細を深く調べています。"
+        },
+        {
+          "phraseIndex": 7,
+          "distractorIndexes": [1, 4, 9],
+          "imageAlt": "A person identifies someone in a photograph.",
+          "scenePrompt": "An adult studies a group photograph with a magnifying glass and confidently points to one specific person while a companion checks the match.",
+          "hintEn": "One exact person is being identified in the photograph.",
+          "hintJa": "写真の中から一人の人物を特定していることに注目しましょう。",
+          "evidenceEn": "The viewer singles out one precise person in the group photo.",
+          "evidenceJa": "見る人が集合写真の中から特定の一人を指し示しています。"
+        },
+        {
+          "phraseIndex": 10,
+          "distractorIndexes": [0, 3, 8],
+          "imageAlt": "A professional checks a calendar before promising to reply.",
+          "scenePrompt": "At work, an adult receives a meeting request, opens a calendar to check several appointments, then gestures that they will send a reply afterward.",
+          "hintEn": "The person checks availability before giving an answer later.",
+          "hintJa": "予定を確認してから後で返事をする流れを見ましょう。",
+          "evidenceEn": "The calendar check and later-message gesture show a delayed but responsible response.",
+          "evidenceJa": "カレンダー確認と後で連絡する仕草が、確認後の返信を示しています。"
+        }
+      ]
+    },
+    {
+      "lessonId": "august-03",
+      "asset": "/assets/questions/visual/august-03-storyboard.webp",
+      "panels": [
+        {
+          "phraseIndex": 0,
+          "distractorIndexes": [1, 5, 9],
+          "imageAlt": "A person has not taken a bath yet today.",
+          "scenePrompt": "Late evening at home: an adult still in daytime clothes looks toward a prepared bathtub and clock, indicating the bath remains to be taken today.",
+          "hintEn": "The day is still continuing and the bath remains unfinished.",
+          "hintJa": "今日はまだ続いており、入浴が未完了であることを見ましょう。",
+          "evidenceEn": "The ready bath and late clock show an action that has not happened yet today.",
+          "evidenceJa": "準備された浴槽と遅い時計が、今日まだ入浴していないことを示しています。"
+        },
+        {
+          "phraseIndex": 2,
+          "distractorIndexes": [0, 6, 11],
+          "imageAlt": "Someone asks whether a friend has showered yet.",
+          "scenePrompt": "One housemate points toward a shower and makes a questioning gesture; the other, still in outdoor clothes, considers whether they have showered.",
+          "hintEn": "This is a question about whether the shower is complete by now.",
+          "hintJa": "今の時点までにシャワーが済んだかを尋ねる場面です。",
+          "evidenceEn": "The shower cue and questioning gesture ask about completion up to the present.",
+          "evidenceJa": "シャワーの手がかりと質問の仕草が、今までの完了を尋ねています。"
+        },
+        {
+          "phraseIndex": 4,
+          "distractorIndexes": [2, 7, 10],
+          "imageAlt": "A person tried a new food yesterday.",
+          "scenePrompt": "A simple yesterday memory panel shows an adult tasting an unfamiliar dish at a restaurant, then marking the completed day on a picture calendar.",
+          "hintEn": "The tasting happened on a finished day in the past.",
+          "hintJa": "試食が、すでに終わった過去の日に起きたことを見ましょう。",
+          "evidenceEn": "The completed calendar day places the food experience clearly in yesterday.",
+          "evidenceJa": "終わった日のカレンダーが、食べた経験を昨日の出来事として示しています。"
+        },
+        {
+          "phraseIndex": 7,
+          "distractorIndexes": [1, 4, 9],
+          "imageAlt": "A complex flavor is more popular with adults than children.",
+          "scenePrompt": "At a tasting counter, several adults appreciate a complex dark dessert while children prefer a simpler sweet option; everyone reacts naturally without stereotypes.",
+          "hintEn": "Compare which age group chooses the more complex flavor.",
+          "hintJa": "より複雑な味を選んでいる年齢層を比べましょう。",
+          "evidenceEn": "Adults choose and enjoy the complex flavor more than the children do.",
+          "evidenceJa": "子どもより大人の方が複雑な味を選び、楽しんでいます。"
+        },
+        {
+          "phraseIndex": 10,
+          "distractorIndexes": [0, 3, 8],
+          "imageAlt": "A woman had left before another person arrived.",
+          "scenePrompt": "A two-step timeline: first a woman leaves through a door with her bag; afterward another person arrives at the now-empty room and sees her empty chair.",
+          "hintEn": "One past action is already complete before the later arrival.",
+          "hintJa": "後の到着より前に、別の過去の行動が完了していることを見ましょう。",
+          "evidenceEn": "She exits first, and the other person reaches the empty room afterward.",
+          "evidenceJa": "彼女が先に退出し、その後で別の人が空の部屋に到着しています。"
+        }
+      ]
+    },
+    {
+      "lessonId": "august-09",
+      "asset": "/assets/questions/visual/august-09-storyboard.webp",
+      "panels": [
+        {
+          "phraseIndex": 0,
+          "distractorIndexes": [1, 5, 9],
+          "imageAlt": "A moviegoer quietly sheds one tear.",
+          "scenePrompt": "In a cinema, an adult watches an emotional film and a single tear rolls down one cheek while they remain composed.",
+          "hintEn": "Look for one quiet tear rather than sudden intense crying.",
+          "hintJa": "突然激しく泣くのではなく、静かに一筋の涙を流す様子を見ましょう。",
+          "evidenceEn": "Exactly one tear is visible during the emotional movie.",
+          "evidenceJa": "感動的な映画の途中で、一筋だけ涙が見えています。"
+        },
+        {
+          "phraseIndex": 2,
+          "distractorIndexes": [0, 6, 11],
+          "imageAlt": "A moving story brings tears to a listener’s eyes.",
+          "scenePrompt": "A friend tells a heartfelt story; the listener’s eyes well up with tears and they press a hand to their heart without fully crying.",
+          "hintEn": "The emotion makes tears gather in the listener’s eyes.",
+          "hintJa": "感動によって、聞き手の目に涙がこみ上げている様子です。",
+          "evidenceEn": "The listener’s watery eyes and moved expression are caused by the story.",
+          "evidenceJa": "話を聞いた人の潤んだ目と感動した表情が見えます。"
+        },
+        {
+          "phraseIndex": 4,
+          "distractorIndexes": [2, 7, 10],
+          "imageAlt": "A café customer orders two cups of coffee.",
+          "scenePrompt": "At a café counter, a customer clearly holds up two fingers while the server places exactly two coffee cups on a tray.",
+          "hintEn": "Count the individual servings being ordered.",
+          "hintJa": "注文されている飲み物の杯数を数えましょう。",
+          "evidenceEn": "Two fingers and two separate cups show an order for two coffees.",
+          "evidenceJa": "二本の指と二つのカップが、コーヒー2杯の注文を示しています。"
+        },
+        {
+          "phraseIndex": 7,
+          "distractorIndexes": [1, 4, 9],
+          "imageAlt": "A host offers one slice of cake.",
+          "scenePrompt": "At a tea table, a host lifts one neat slice from a larger cake and politely offers that single piece to a guest.",
+          "hintEn": "Notice the portion cut from the whole cake.",
+          "hintJa": "ホールケーキから切り分けられた一切れに注目しましょう。",
+          "evidenceEn": "One slice is being offered as a piece of the larger cake.",
+          "evidenceJa": "大きなケーキから切った一切れを客に勧めています。"
+        },
+        {
+          "phraseIndex": 10,
+          "distractorIndexes": [0, 3, 8],
+          "imageAlt": "Someone deliberately pours water into a glass.",
+          "scenePrompt": "A person steadily tilts a pitcher and deliberately pours a clean stream of water into a waiting glass without spilling.",
+          "hintEn": "The liquid is being controlled and directed into a container.",
+          "hintJa": "液体が意図的に、容器へ狙って注がれていることを見ましょう。",
+          "evidenceEn": "The controlled stream goes directly from the pitcher into the glass.",
+          "evidenceJa": "水差しからコップへ、制御された水の流れが直接注がれています。"
+        }
+      ]
+    },
+    {
+      "lessonId": "august-10-part-1",
+      "asset": "/assets/questions/visual/august-10-part-1-storyboard.webp",
+      "panels": [
+        {
+          "phraseIndex": 0,
+          "distractorIndexes": [1, 5, 9],
+          "imageAlt": "Someone puts milk into a refrigerator.",
+          "scenePrompt": "In a home kitchen, an adult places a milk carton onto a refrigerator shelf while the freezer compartment is visibly separate above.",
+          "hintEn": "Watch which cold-storage compartment receives the milk.",
+          "hintJa": "牛乳をどちらの冷蔵設備へ入れているかを見ましょう。",
+          "evidenceEn": "The milk goes onto the refrigerator shelf, not into the freezer.",
+          "evidenceJa": "牛乳は冷凍庫ではなく、冷蔵庫の棚へ入れられています。"
+        },
+        {
+          "phraseIndex": 2,
+          "distractorIndexes": [0, 6, 11],
+          "imageAlt": "A refrigerator has stopped working.",
+          "scenePrompt": "A worried adult checks a silent refrigerator with a dark interior light and melting chilled food while holding a repair phone.",
+          "hintEn": "The appliance is malfunctioning, not simply empty.",
+          "hintJa": "冷蔵庫が空なのではなく、故障して動いていない様子を見ましょう。",
+          "evidenceEn": "The dark appliance and warming food show that the refrigerator is not operating.",
+          "evidenceJa": "暗い庫内と温まり始めた食品が、冷蔵庫の停止を示しています。"
+        },
+        {
+          "phraseIndex": 4,
+          "distractorIndexes": [2, 7, 10],
+          "imageAlt": "A person misses the sound of a doorbell.",
+          "scenePrompt": "A visitor presses a glowing doorbell outside while the resident indoors wears headphones and remains unaware of the sound.",
+          "hintEn": "The bell rang, but the person never noticed it.",
+          "hintJa": "ベルは鳴りましたが、家の人がその音に気づかなかった場面です。",
+          "evidenceEn": "Headphones prevent the resident from hearing the visitor’s doorbell.",
+          "evidenceJa": "ヘッドホンのため、住人は訪問者のドアベルを聞いていません。"
+        },
+        {
+          "phraseIndex": 7,
+          "distractorIndexes": [1, 4, 9],
+          "imageAlt": "An online call repeatedly cuts out.",
+          "scenePrompt": "During a video call, the other speaker freezes into broken pixel fragments several times while the listener looks frustrated at an unstable connection icon without text.",
+          "hintEn": "The connection disappears and returns repeatedly.",
+          "hintJa": "接続が何度も途切れて戻る様子に注目しましょう。",
+          "evidenceEn": "Repeated frozen fragments show a connection that keeps cutting out.",
+          "evidenceJa": "繰り返す映像の途切れが、回線が何度も切れていることを示しています。"
+        },
+        {
+          "phraseIndex": 10,
+          "distractorIndexes": [0, 3, 8],
+          "imageAlt": "A caller reconnects before calling back.",
+          "scenePrompt": "A caller ends a broken video call, resets the router connection, then points to a phone callback icon as the next clear step.",
+          "hintEn": "The person fixes the connection first and will call again afterward.",
+          "hintJa": "先に接続を直し、その後でもう一度電話する流れです。",
+          "evidenceEn": "Resetting the connection followed by the callback gesture shows the two-step plan.",
+          "evidenceJa": "接続の再設定と折り返しの仕草が、二段階の予定を示しています。"
+        }
+      ]
+    },
+    {
+      "lessonId": "august-10-part-2",
+      "asset": "/assets/questions/visual/august-10-part-2-storyboard.webp",
+      "panels": [
+        {
+          "phraseIndex": 0,
+          "distractorIndexes": [1, 5, 9],
+          "imageAlt": "A customer finds a cup of coffee too strong.",
+          "scenePrompt": "At a café, an adult tastes a very dark coffee, reacts to its intensity, and gently pushes the cup away while choosing a lighter cup instead.",
+          "hintEn": "The coffee’s intensity is stronger than the drinker prefers.",
+          "hintJa": "飲む人の好みよりコーヒーの味が強いことに注目しましょう。",
+          "evidenceEn": "The dark brew and intense reaction show coffee that is too strong for the customer.",
+          "evidenceJa": "濃い色のコーヒーと強い反応が、本人には濃すぎることを示しています。"
+        },
+        {
+          "phraseIndex": 2,
+          "distractorIndexes": [0, 6, 11],
+          "imageAlt": "A coffee drinker notices a slightly bitter taste.",
+          "scenePrompt": "An adult tastes black coffee and makes a small, thoughtful bitter expression while a tiny unsweetened cocoa-bean cue appears nearby.",
+          "hintEn": "The reaction shows mild bitterness, not sweetness or smoothness.",
+          "hintJa": "甘さや滑らかさではなく、少しの苦味への反応を見ましょう。",
+          "evidenceEn": "The careful tasting expression indicates a modest bitter flavor.",
+          "evidenceJa": "慎重に味わう表情が、少し苦い風味を示しています。"
+        },
+        {
+          "phraseIndex": 4,
+          "distractorIndexes": [2, 7, 10],
+          "imageAlt": "A person chooses a bold coffee for the morning.",
+          "scenePrompt": "At sunrise, an adult confidently chooses a dark robust coffee beside a lighter option, then looks energized for the day.",
+          "hintEn": "Morning energy is linked to the stronger, more assertive flavor.",
+          "hintJa": "朝の元気と、より力強い風味の選択を結びつけましょう。",
+          "evidenceEn": "The person deliberately selects the robust cup in the morning.",
+          "evidenceJa": "本人が朝に、力強い味のカップを意図的に選んでいます。"
+        },
+        {
+          "phraseIndex": 7,
+          "distractorIndexes": [1, 4, 9],
+          "imageAlt": "A traveler prepares for a first trip to the Philippines.",
+          "scenePrompt": "An excited traveler holds a new passport and points to the Philippines on a picture map, with a first-time celebratory gesture and an untouched suitcase tag.",
+          "hintEn": "The traveler is preparing for a destination they have never visited before.",
+          "hintJa": "これまで訪れたことのない目的地へ初めて向かう準備を見ましょう。",
+          "evidenceEn": "The new-trip cues and excitement show an upcoming first visit to the Philippines.",
+          "evidenceJa": "新しい旅の手がかりと喜ぶ姿が、フィリピンへの初訪問を示しています。"
+        },
+        {
+          "phraseIndex": 10,
+          "distractorIndexes": [0, 3, 8],
+          "imageAlt": "A traveler compares several flight prices.",
+          "scenePrompt": "At a laptop, a traveler compares three flight cards represented by airplane icons and different price-bar heights, carefully weighing the choices before booking.",
+          "hintEn": "The decision is not finished because several flight prices are still being compared.",
+          "hintJa": "複数の航空券価格をまだ比較しており、決定が終わっていないことを見ましょう。",
+          "evidenceEn": "Several unselected flight options remain open while the traveler compares prices.",
+          "evidenceJa": "複数の未選択の航空便を開いたまま、旅行者が価格を比べています。"
+        }
+      ]
+    },
+    {
+      "lessonId": "august-16-part-1",
+      "asset": "/assets/questions/visual/august-16-part-1-storyboard.webp",
+      "panels": [
+        {
+          "phraseIndex": 0,
+          "distractorIndexes": [1, 5, 9],
+          "imageAlt": "Someone uses another person’s computer without asking.",
+          "scenePrompt": "An office worker returns and looks surprised to find a colleague using their personal computer without permission; the colleague avoided asking first.",
+          "hintEn": "The owner is surprised because permission was never requested.",
+          "hintJa": "許可を求められていなかったため、持ち主が驚いている場面です。",
+          "evidenceEn": "The colleague is already using the owner’s computer despite never asking.",
+          "evidenceJa": "同僚は持ち主に尋ねないまま、そのパソコンを使っています。"
+        },
+        {
+          "phraseIndex": 2,
+          "distractorIndexes": [0, 6, 11],
+          "imageAlt": "A guest takes someone else’s food without permission.",
+          "scenePrompt": "At a shared table, a guest casually reaches across and takes food from another person’s clearly separate plate while the owner looks displeased.",
+          "hintEn": "The problem is taking another person’s food as if it were freely available.",
+          "hintJa": "他人の食べ物を自由に取ってよい物のように扱っている点を見ましょう。",
+          "evidenceEn": "The guest takes food from the owner’s plate without being invited.",
+          "evidenceJa": "客が勧められていないのに、持ち主の皿から食べ物を取っています。"
+        },
+        {
+          "phraseIndex": 4,
+          "distractorIndexes": [2, 7, 10],
+          "imageAlt": "A housemate asks someone to wash the dishes.",
+          "scenePrompt": "In a kitchen with a sink full of used plates, one housemate politely gestures toward the dishes while asking the other for help.",
+          "hintEn": "The requested household task involves the used plates in the sink.",
+          "hintJa": "頼まれている家事が、流しの使用済み食器に関係していることを見ましょう。",
+          "evidenceEn": "The speaker points directly to dishes waiting to be washed.",
+          "evidenceJa": "話し手が洗う必要のある食器を直接指しています。"
+        },
+        {
+          "phraseIndex": 7,
+          "distractorIndexes": [1, 4, 9],
+          "imageAlt": "A commuter catches the last train.",
+          "scenePrompt": "At night, a commuter hurries onto the final train just as the doors begin to close, then exhales with relief inside.",
+          "hintEn": "The traveler reaches the final train just in time.",
+          "hintJa": "最後の電車にぎりぎり間に合って乗る様子を見ましょう。",
+          "evidenceEn": "The commuter boards the last train before its doors close.",
+          "evidenceJa": "通勤客はドアが閉まる前に終電へ乗り込んでいます。"
+        },
+        {
+          "phraseIndex": 10,
+          "distractorIndexes": [0, 3, 8],
+          "imageAlt": "A person confirms receiving a message.",
+          "scenePrompt": "An adult sees a new message on a phone, nods in understanding, and gives a clear acknowledgment gesture to the sender nearby.",
+          "hintEn": "The message has been received and understood.",
+          "hintJa": "メッセージを受け取り、内容も理解した反応に注目しましょう。",
+          "evidenceEn": "The visible message and confirming nod show successful receipt and understanding.",
+          "evidenceJa": "表示されたメッセージと確認のうなずきが、受信と理解を示しています。"
+        }
+      ]
+    },
+    {
+      "lessonId": "august-16-part-2",
+      "asset": "/assets/questions/visual/august-16-part-2-storyboard.webp",
+      "panels": [
+        {
+          "phraseIndex": 0,
+          "distractorIndexes": [1, 5, 9],
+          "imageAlt": "A person notices a small weight gain.",
+          "scenePrompt": "An adult checks a bathroom scale and notices a small upward change, responding calmly while adjusting a slightly tighter waistband.",
+          "hintEn": "The scale shows a modest increase, not an effort to reduce weight.",
+          "hintJa": "減量の努力ではなく、体重が少し増えた結果を見ましょう。",
+          "evidenceEn": "The scale and tighter fit show that a little weight has been gained.",
+          "evidenceJa": "体重計と少しきつい服が、わずかな体重増加を示しています。"
+        },
+        {
+          "phraseIndex": 2,
+          "distractorIndexes": [0, 6, 11],
+          "imageAlt": "A small company grows quickly.",
+          "scenePrompt": "A once-small team expands into a busy office with more colleagues, customers and rising progress bars represented only by shapes and arrows.",
+          "hintEn": "Look for expansion of the business rather than a personal weight change.",
+          "hintJa": "個人の体重変化ではなく、事業が拡大している様子を見ましょう。",
+          "evidenceEn": "More staff, customers and upward movement show rapid company growth.",
+          "evidenceJa": "増えた従業員と顧客、上向きの動きが会社の急成長を示しています。"
+        },
+        {
+          "phraseIndex": 4,
+          "distractorIndexes": [2, 7, 10],
+          "imageAlt": "A team reduces its budget.",
+          "scenePrompt": "In a planning meeting, a team removes several optional expense cards from a budget board and lowers the total bar, keeping only essentials.",
+          "hintEn": "Expenses are being removed so the total becomes smaller.",
+          "hintJa": "支出項目を外し、合計を小さくしていることに注目しましょう。",
+          "evidenceEn": "The team cuts optional costs and visibly lowers the budget total.",
+          "evidenceJa": "チームが不要な費用を削り、予算総額を下げています。"
+        },
+        {
+          "phraseIndex": 7,
+          "distractorIndexes": [1, 4, 9],
+          "imageAlt": "A learner is satisfied with a successful result.",
+          "scenePrompt": "An adult learner reviews a completed project with a high success indicator, smiles with calm satisfaction and gives a contented nod.",
+          "hintEn": "The person’s feeling comes from a result they are pleased with.",
+          "hintJa": "良い結果に対して本人が満足している気持ちを見ましょう。",
+          "evidenceEn": "The completed result and pleased expression show satisfaction.",
+          "evidenceJa": "完成した成果と満足した表情が、結果への満足を示しています。"
+        },
+        {
+          "phraseIndex": 10,
+          "distractorIndexes": [0, 3, 8],
+          "imageAlt": "Heavy rain falls at night.",
+          "scenePrompt": "At night, dense rain pours over a street, umbrellas bend and large puddles form while residents watch safely from indoors.",
+          "hintEn": "The image shows the noun phrase for a large amount of rain last night.",
+          "hintJa": "昨夜の大量の雨を、名詞を中心に表す場面です。",
+          "evidenceEn": "The night setting and intense rainfall clearly show heavy rain last night.",
+          "evidenceJa": "夜の場面と激しい降雨が、昨夜の大雨をはっきり示しています。"
+        }
+      ]
+    },
+    {
+      "lessonId": "august-17-part-1",
+      "asset": "/assets/questions/visual/august-17-part-1-storyboard.webp",
+      "panels": [
+        {
+          "phraseIndex": 0,
+          "distractorIndexes": [1, 5, 9],
+          "imageAlt": "A person has had a headache since morning.",
+          "scenePrompt": "A timeline from sunrise to afternoon shows the same adult holding their head with a persistent headache continuously from morning until now.",
+          "hintEn": "The discomfort begins in the morning and continues to the present.",
+          "hintJa": "不調が朝に始まり、今まで続いていることを見ましょう。",
+          "evidenceEn": "The repeated person across the timeline shows a headache continuing since morning.",
+          "evidenceJa": "時間の流れの中で同じ人が頭を押さえ続け、朝からの継続を示しています。"
+        },
+        {
+          "phraseIndex": 2,
+          "distractorIndexes": [0, 6, 11],
+          "imageAlt": "A doctor asks how long a headache has lasted.",
+          "scenePrompt": "A doctor gently points from a headache symbol to a long timeline while asking a patient about duration; the patient considers when it began.",
+          "hintEn": "The question is about duration, not the pain’s location.",
+          "hintJa": "痛む場所ではなく、続いている時間を尋ねています。",
+          "evidenceEn": "The doctor’s timeline gesture asks how long the headache has continued.",
+          "evidenceJa": "医師が時間の線を示し、頭痛の継続期間を尋ねています。"
+        },
+        {
+          "phraseIndex": 4,
+          "distractorIndexes": [2, 7, 10],
+          "imageAlt": "A learner has been studying for two hours.",
+          "scenePrompt": "A learner remains at a desk while an analog clock advances through a clear two-hour span, with study materials steadily accumulating.",
+          "hintEn": "The duration is a two-hour period, not a starting clock time.",
+          "hintJa": "開始時刻ではなく、2時間という期間に注目しましょう。",
+          "evidenceEn": "The advancing clock and continuous study show a two-hour duration.",
+          "evidenceJa": "進む時計と続く勉強が、2時間の継続を示しています。"
+        },
+        {
+          "phraseIndex": 7,
+          "distractorIndexes": [1, 4, 9],
+          "imageAlt": "Friends discuss what to have for lunch.",
+          "scenePrompt": "Near lunchtime, one friend asks a question while gesturing toward several meal options; the other considers what they plan to eat.",
+          "hintEn": "The conversation is about today’s planned lunch choice.",
+          "hintJa": "今日の昼食に何を食べる予定かを尋ねる会話です。",
+          "evidenceEn": "Meal options and the questioning gesture show a lunch-plan question.",
+          "evidenceJa": "食事の選択肢と質問の仕草が、昼食予定を尋ねています。"
+        },
+        {
+          "phraseIndex": 10,
+          "distractorIndexes": [0, 3, 8],
+          "imageAlt": "A person is comfortable waking up early.",
+          "scenePrompt": "At dawn, an adult wakes before the alarm, stretches comfortably and begins a calm morning routine with no struggle.",
+          "hintEn": "Early waking is now familiar and comfortable, not a former habit that ended.",
+          "hintJa": "早起きは今では慣れたことで、終わった昔の習慣ではありません。",
+          "evidenceEn": "The relaxed dawn routine shows the person is accustomed to waking early.",
+          "evidenceJa": "落ち着いた早朝の習慣が、早起きに慣れていることを示しています。"
+        }
+      ]
+    },
+    {
+      "lessonId": "august-17-part-2",
+      "asset": "/assets/questions/visual/august-17-part-2-storyboard.webp",
+      "panels": [
+        {
+          "phraseIndex": 0,
+          "distractorIndexes": [1, 5, 9],
+          "imageAlt": "A woman wears a sleeveless shirt.",
+          "scenePrompt": "In warm weather, a woman wears a tasteful shirt with clearly no sleeves while choosing between it and a long-sleeved garment.",
+          "hintEn": "Focus on the garment’s missing sleeves.",
+          "hintJa": "服に袖がないことに注目しましょう。",
+          "evidenceEn": "The shirt leaves both shoulders and arms uncovered because it has no sleeves.",
+          "evidenceJa": "シャツに袖がなく、肩と腕が出ています。"
+        },
+        {
+          "phraseIndex": 2,
+          "distractorIndexes": [0, 6, 11],
+          "imageAlt": "Someone asks who owns an unidentified item.",
+          "scenePrompt": "An adult holds up an unclaimed umbrella in a group and makes a questioning gesture toward everyone, with no noun label needed.",
+          "hintEn": "The object is visible, so the speaker asks only about its owner.",
+          "hintJa": "物は見えているので、その持ち主だけを尋ねています。",
+          "evidenceEn": "The person displays the unclaimed item and asks the group who it belongs to.",
+          "evidenceJa": "持ち主不明の物を掲げ、誰のものか皆に尋ねています。"
+        },
+        {
+          "phraseIndex": 4,
+          "distractorIndexes": [2, 7, 10],
+          "imageAlt": "An entire room becomes silent.",
+          "scenePrompt": "Every person across a full meeting room suddenly stops talking at once; the entire space is visibly still and silent.",
+          "hintEn": "The silence covers the whole room and everyone in it.",
+          "hintJa": "静けさが部屋全体と全員に広がっていることを見ましょう。",
+          "evidenceEn": "No one anywhere in the room is speaking, so the whole room is silent.",
+          "evidenceJa": "部屋のどこでも誰も話しておらず、空間全体が静かです。"
+        },
+        {
+          "phraseIndex": 7,
+          "distractorIndexes": [1, 4, 9],
+          "imageAlt": "A joke receives no reaction from an audience.",
+          "scenePrompt": "A speaker finishes a joke with an expectant smile, but the small audience remains blank and silent, creating an awkward pause.",
+          "hintEn": "The attempted joke gets no laugh or positive response.",
+          "hintJa": "冗談を言ったのに、笑いや良い反応が全くないことを見ましょう。",
+          "evidenceEn": "The silent audience and awkward speaker show that the joke failed to land.",
+          "evidenceJa": "無反応の観客と気まずい話し手が、冗談が受けなかったことを示しています。"
+        },
+        {
+          "phraseIndex": 10,
+          "distractorIndexes": [0, 3, 8],
+          "imageAlt": "Dark clouds suggest that it may rain later.",
+          "scenePrompt": "An adult looks at gathering dark clouds on the horizon and carries an umbrella as a precaution, while the ground is still dry now.",
+          "hintEn": "Rain is only a future possibility; it has not started yet.",
+          "hintJa": "雨はまだ始まっておらず、これからの可能性だけが示されています。",
+          "evidenceEn": "Dry ground and approaching clouds show possible rain later.",
+          "evidenceJa": "乾いた地面と近づく雲が、後で雨になる可能性を示しています。"
+        }
+      ]
+    },
+    {
+      "lessonId": "august-23",
+      "asset": "/assets/questions/visual/august-23-storyboard.webp",
+      "panels": [
+        {
+          "phraseIndex": 0,
+          "distractorIndexes": [1, 5, 9],
+          "imageAlt": "Coworkers thank each other after a full day of work.",
+          "scenePrompt": "At the end of a workday, coworkers pack up and exchange warm appreciative nods after completing a demanding project together.",
+          "hintEn": "This is broad appreciation at the end of today’s work.",
+          "hintJa": "今日一日の仕事を終えた時の、全体的なねぎらいに注目しましょう。",
+          "evidenceEn": "The completed work and end-of-day farewell show appreciation for today’s effort.",
+          "evidenceJa": "完了した仕事と退勤前の挨拶が、今日の努力へのねぎらいを示しています。"
+        },
+        {
+          "phraseIndex": 2,
+          "distractorIndexes": [0, 6, 11],
+          "imageAlt": "A coworker wishes another person a good evening when leaving.",
+          "scenePrompt": "Two coworkers leave an office after sunset; one waves warmly while the other heads home for the evening.",
+          "hintEn": "The farewell happens in the evening after work.",
+          "hintJa": "仕事の後、夕方に交わす別れの挨拶を見ましょう。",
+          "evidenceEn": "Sunset and the friendly goodbye indicate a wish for a good evening.",
+          "evidenceJa": "夕日と親しい別れの仕草が、よい夜を願う挨拶を示しています。"
+        },
+        {
+          "phraseIndex": 4,
+          "distractorIndexes": [2, 7, 10],
+          "imageAlt": "Someone asks when a future event will start.",
+          "scenePrompt": "An adult points to an upcoming one-time event card with a clock icon and asks an organizer for its start time.",
+          "hintEn": "The question concerns the start time of one future event.",
+          "hintJa": "未来に一度行われるイベントの開始時刻を尋ねています。",
+          "evidenceEn": "The upcoming event and clock gesture ask when it will begin.",
+          "evidenceJa": "これからのイベントと時計の仕草が、開始時刻を尋ねています。"
+        },
+        {
+          "phraseIndex": 7,
+          "distractorIndexes": [1, 4, 9],
+          "imageAlt": "Coworkers realize there has been a misunderstanding.",
+          "scenePrompt": "Two coworkers compare mismatched versions of a plan, then calmly recognize the crossed communication and begin aligning the documents.",
+          "hintEn": "The problem is a shared misunderstanding, expressed as a noun.",
+          "hintJa": "問題は共有された行き違いで、名詞として表されています。",
+          "evidenceEn": "The mismatched plans show confusion between the coworkers.",
+          "evidenceJa": "食い違う計画書が、同僚の間の混乱・行き違いを示しています。"
+        },
+        {
+          "phraseIndex": 10,
+          "distractorIndexes": [0, 3, 8],
+          "imageAlt": "A business deal feels suspicious.",
+          "scenePrompt": "An adult studies an unusually attractive deal offered by a shadowy seller, notices several inconsistent warning signs, and reacts with skeptical concern.",
+          "hintEn": "The informal reaction is that the deal seems untrustworthy.",
+          "hintJa": "その取引が信用できず、うさんくさく感じられる反応です。",
+          "evidenceEn": "Contradictory warning signs make the deal look clearly untrustworthy.",
+          "evidenceJa": "矛盾する警告の手がかりが、取引のうさんくささを示しています。"
+        }
+      ]
+    },
+    {
+      "lessonId": "august-24",
+      "asset": "/assets/questions/visual/august-24-storyboard.webp",
+      "panels": [
+        {
+          "phraseIndex": 0,
+          "distractorIndexes": [1, 5, 9],
+          "imageAlt": "A plate of Japanese-style gyoza dumplings.",
+          "scenePrompt": "A close, appetizing view of Japanese pan-fried gyoza with pleated wrappers and browned bottoms, shown beside other world dumplings for clear category context.",
+          "hintEn": "Identify the pleated Japanese dumplings with crisp browned bottoms.",
+          "hintJa": "ひだのある皮と香ばしく焼けた底を持つ日本式ダンプリングを見つけましょう。",
+          "evidenceEn": "The pleated, pan-fried dumplings are recognizable as Japanese-style gyoza.",
+          "evidenceJa": "ひだがあり焼かれたダンプリングが、日本式の餃子として分かります。"
+        },
+        {
+          "phraseIndex": 2,
+          "distractorIndexes": [0, 6, 11],
+          "imageAlt": "Dumplings are filled with pork.",
+          "scenePrompt": "A cook folds dumpling wrappers around a visible bowl of pork filling, with one cut-open finished dumpling clearly showing the filling inside.",
+          "hintEn": "Look inside the dumpling to identify its filling.",
+          "hintJa": "ダンプリングの中を見て、何が詰められているか確認しましょう。",
+          "evidenceEn": "The cut-open dumpling and preparation bowl clearly show pork filling.",
+          "evidenceJa": "切ったダンプリングと調理中のボウルが、豚肉の具をはっきり示しています。"
+        },
+        {
+          "phraseIndex": 4,
+          "distractorIndexes": [2, 7, 10],
+          "imageAlt": "Two people both enjoy gyoza.",
+          "scenePrompt": "Two friends at the same table each happily choose and eat gyoza, with matching approval gestures showing the preference belongs to both people.",
+          "hintEn": "Both members of the pair share the same preference.",
+          "hintJa": "二人とも同じ食べ物を好きだと示していることを見ましょう。",
+          "evidenceEn": "Each of the two people chooses gyoza and reacts positively.",
+          "evidenceJa": "二人がそれぞれ餃子を選び、好意的に反応しています。"
+        },
+        {
+          "phraseIndex": 7,
+          "distractorIndexes": [1, 4, 9],
+          "imageAlt": "Clues show that a man must not be at home.",
+          "scenePrompt": "A visitor stands outside a dark empty home, sees the owner’s car absent and messages unanswered, then concludes thoughtfully that the person is probably away; no prohibition symbols.",
+          "hintEn": "This is a logical conclusion about absence, not a rule forbidding an action.",
+          "hintJa": "行動を禁止する規則ではなく、不在だという論理的な推測です。",
+          "evidenceEn": "The empty dark house and absent car support the conclusion that he is not home.",
+          "evidenceJa": "暗く空の家と車がないことから、彼は家にいないと推測できます。"
+        },
+        {
+          "phraseIndex": 10,
+          "distractorIndexes": [0, 3, 8],
+          "imageAlt": "A customer politely asks where a restaurant is.",
+          "scenePrompt": "A visitor politely asks a local for help while showing a restaurant picture on a phone; the local points to its location on a simple map without labels.",
+          "hintEn": "The speaker uses a polite indirect question to ask for the restaurant’s location.",
+          "hintJa": "レストランの場所を、丁寧な間接疑問で尋ねる場面です。",
+          "evidenceEn": "The restaurant picture, map and polite request show a question about where it is.",
+          "evidenceJa": "レストラン写真、地図、丁寧な依頼が、その場所を尋ねていることを示しています。"
+        }
+      ]
+    },
+    {
+      "lessonId": "august-25",
+      "asset": "/assets/questions/visual/august-25-storyboard.webp",
+      "panels": [
+        {
+          "phraseIndex": 0,
+          "distractorIndexes": [1, 5, 9],
+          "imageAlt": "A family member announces that they are home.",
+          "scenePrompt": "A person opens their own front door, steps inside with keys and calls cheerfully toward family members waiting in the home.",
+          "hintEn": "The speaker has arrived at their own home.",
+          "hintJa": "話し手が自分の家に到着して、中へ声をかけています。",
+          "evidenceEn": "The person enters their home and announces the arrival to family.",
+          "evidenceJa": "本人が自宅へ入り、家族に帰宅を知らせています。"
+        },
+        {
+          "phraseIndex": 2,
+          "distractorIndexes": [0, 6, 11],
+          "imageAlt": "A family warmly welcomes someone home.",
+          "scenePrompt": "Family members greet a returning person at the home entrance with warm smiles and open arms after the person comes inside.",
+          "hintEn": "The people inside are greeting someone who has returned home.",
+          "hintJa": "家の中の人が、帰宅した人を迎えている場面です。",
+          "evidenceEn": "The family welcomes the returning person at the home doorway.",
+          "evidenceJa": "家族が玄関で、帰ってきた人を温かく迎えています。"
+        },
+        {
+          "phraseIndex": 4,
+          "distractorIndexes": [2, 7, 10],
+          "imageAlt": "A person announces that they are leaving.",
+          "scenePrompt": "At the front door, an adult puts on shoes, picks up a bag and gives a cheerful departing wave to someone inside.",
+          "hintEn": "The speaker is leaving now, not arriving or already traveling.",
+          "hintJa": "到着ではなく、今まさに出発する人の一言を考えましょう。",
+          "evidenceEn": "Shoes, bag and the wave at the door show immediate departure.",
+          "evidenceJa": "靴、鞄、玄関での手振りが、今からの出発を示しています。"
+        },
+        {
+          "phraseIndex": 7,
+          "distractorIndexes": [1, 4, 9],
+          "imageAlt": "Someone wishes a departing person a good day.",
+          "scenePrompt": "In bright morning light, one person waves from the doorway and warmly sends off another adult who is leaving for the day.",
+          "hintEn": "This is a friendly daytime send-off.",
+          "hintJa": "日中に出かける人へ送る、親しい挨拶です。",
+          "evidenceEn": "Morning light and the warm farewell show a wish for a good day.",
+          "evidenceJa": "朝の光と温かい見送りが、よい一日を願う挨拶を示しています。"
+        },
+        {
+          "phraseIndex": 10,
+          "distractorIndexes": [0, 3, 8],
+          "imageAlt": "A person slowly pours tea into a cup.",
+          "scenePrompt": "A steady hand slowly tilts a teapot so a controlled stream of tea enters a cup cleanly, emphasizing deliberate pouring and careful pace.",
+          "hintEn": "Focus on the controlled liquid action and its slow speed.",
+          "hintJa": "液体を意図的に注ぐ動作と、ゆっくりした速さに注目しましょう。",
+          "evidenceEn": "The teapot sends a slow controlled stream directly into the cup.",
+          "evidenceJa": "ティーポットからカップへ、ゆっくり制御された流れでお茶を注いでいます。"
+        }
+      ]
+    }
+  ]
+}

@@ -19,14 +19,48 @@ export const QUESTION_FORMATS = Object.freeze([
 
 const quickPracticeFamily = (question) => {
   const format = String(question?.format || question?.type || "unknown");
-  const section = String(question?.section || "").toLowerCase();
-  if (section.includes("visual")) return "visual";
+  const section = String(question?.section || "").trim().toLowerCase();
+  if (
+    section.includes("visual")
+    || section === "see it"
+    || Boolean(question?.image)
+    || Boolean(question?.imagePanel)
+  ) return "visual";
   if (["listenChoice", "listenType"].includes(format)) return "listening";
   if (format === "speaking") return "speaking";
   if (["typing", "translation", "order"].includes(format)) return "production";
   if (["matching", "sorting", "grid"].includes(format)) return "interactive";
   return "understanding";
 };
+
+const STORYBOARD_PANELS = Object.freeze({
+  1: Object.freeze({ column: 0, row: 0 }),
+  2: Object.freeze({ column: 1, row: 0 }),
+  3: Object.freeze({ column: 2, row: 0 }),
+  4: Object.freeze({ column: 0, row: 1 }),
+  5: Object.freeze({ column: 1, row: 1 }),
+});
+
+export function storyboardPanelLayout(imagePanel) {
+  const panel = Number(imagePanel);
+  const position = Number.isInteger(panel) ? STORYBOARD_PANELS[panel] : null;
+  return position ? { panel, ...position } : null;
+}
+
+export function gridCellDisplay(question, cell, showJapanese = false) {
+  const value = question?.gridCells && typeof question.gridCells === "object"
+    ? question.gridCells[cell]
+    : null;
+  if (value && typeof value === "object") {
+    const english = String(value.en || value.english || "").trim();
+    const japanese = String(value.jp || value.ja || value.japanese || "").trim();
+    return {
+      primary: english || japanese,
+      secondary: showJapanese && english && japanese ? japanese : "",
+    };
+  }
+  return { primary: String(value || "").trim(), secondary: "" };
+}
 
 export function selectQuickPracticeIds(questions, orderedIds = [], limit = 8) {
   const byId = new Map((Array.isArray(questions) ? questions : []).map((question) => [String(question.id), question]));

@@ -12,6 +12,7 @@ import {
   watchSystemTheme,
 } from "./store.js";
 import {
+  answerCoachingFeedback,
   playAnswerFeedback,
   playCompletionSound,
   setAmbientPlayback,
@@ -32,16 +33,19 @@ import {
 } from "./supabase.js";
 import { applyLanguageMode, languageModeFromSettings, learningText, uiText } from "./i18n.js";
 import { DEEP_LESSON_GUIDES } from "./lesson-guides.js";
-import { celebrate, installPlayfulInteractions } from "./effects.js";
+import { buildPracticeMapTargets } from "./lesson-guide-targets.js";
+import { animateAnswerFeedback, installPlayfulInteractions } from "./effects.js";
 import { renderPremiumLessonTasks } from "./premium-tasks.js";
 import { planFor } from "./plans.js";
 import {
   answerExists as answerValueExists,
   calculateOfficialTotals,
   gradeQuestionAnswer,
+  gridCellDisplay,
   isAnswerGradeable,
   preserveFirstResult,
   selectQuickPracticeIds,
+  storyboardPanelLayout,
 } from "./lesson-grading.js";
 
 const $ = (selector) => document.querySelector(selector);
@@ -143,6 +147,7 @@ const state = {
   hasPersistedRunState: false,
   savedRuns: {},
   savingRuns: new Set(),
+  coachingTurns: { correct: 0, retry: 0 },
   toastTimer: null,
 };
 
@@ -153,6 +158,7 @@ let hintQuestionId = "";
 let activeStudentUserId = null;
 let lessonScopeReady = false;
 let authScopeLocked = false;
+let feedbackSpeechGeneration = 0;
 
 const textFor = (bilingual, language = "en") => {
   if (bilingual && typeof bilingual === "object") return String(bilingual[language] || "");
@@ -168,11 +174,39 @@ const showToast = (message) => {
   state.toastTimer = setTimeout(() => elements.toast.classList.remove("show"), 2600);
 };
 
-const provideAnswerFeedback = (correct) => {
-  playAnswerFeedback(Boolean(correct));
-  if (correct) {
-    const question = state.visibleQuestions[state.currentIndex];
-    celebrate(elements.feedbackCard, { speaking: question?.format === "speaking" });
+const queueFeedbackSpeech = (items = []) => {
+  const speechItems = items.filter((item) => String(item?.text || "").trim());
+  if (!speechItems.length) return;
+  const generation = ++feedbackSpeechGeneration;
+  stopAudio();
+  void (async () => {
+    for (const item of speechItems) {
+      if (generation !== feedbackSpeechGeneration) return;
+      await speakText(item.text, {
+        voice: state.settings.voice,
+        language: item.language || "en",
+        rate: state.settings.playbackRate,
+      });
+    }
+  })();
+};
+
+const nextAnswerCoaching = (correct) => {
+  const tone = correct ? "correct" : "retry";
+  const coaching = answerCoachingFeedback(correct, state.coachingTurns[tone]);
+  state.coachingTurns[tone] += 1;
+  return coaching;
+};
+
+const provideAnswerFeedback = (result, { speakCoach = true } = {}) => {
+  void playAnswerFeedback(Boolean(result?.correct));
+  const question = state.visibleQuestions[state.currentIndex];
+  animateAnswerFeedback(elements.feedbackCard, {
+    correct: Boolean(result?.correct),
+    speaking: question?.format === "speaking",
+  });
+  if (speakCoach && result?.coaching?.messageEn) {
+    queueFeedbackSpeech([{ text: result.coaching.messageEn, language: "en" }]);
   }
 };
 
@@ -665,7 +699,7 @@ const gradeQuestion = (question, answer = state.answers[question.id]) => (
   gradeQuestionAnswer(question, answer)
 );
 
-const checkQuestion = (question, { quiet = false } = {}) => {
+const checkQuestion = (question, { quiet = false, deferCoachingVoice = false } = {}) => {
   if (!answerReadyForCheck(question)) {
     if (!quiet) {
       showToast(answerExists(question)
@@ -692,20 +726,22 @@ const checkQuestion = (question, { quiet = false } = {}) => {
     question.id,
     result,
   );
-  state.feedback[question.id] = { ...result, isRetry: !firstAttempt };
+  const coaching = question.format === "speaking" ? null : nextAnswerCoaching(result.correct);
+  const feedbackResult = { ...result, isRetry: !firstAttempt, coaching };
+  state.feedback[question.id] = feedbackResult;
   state.retryEditing.delete(question.id);
   if (!state.runFirstResults[question.id]) state.runFirstResults[question.id] = result;
   state.runAnswerCounts[question.id] = Number(state.runAnswerCounts[question.id] || 0) + 1;
   state.runChecked.add(question.id);
-  state.runResults[question.id] = result;
+  state.runResults[question.id] = feedbackResult;
   saveLocalState();
   updatePracticeModeLabels();
   renderScore();
   renderNavigation();
   if (state.visibleQuestions[state.currentIndex]?.id === question.id) renderFeedback(question);
-  if (!quiet) provideAnswerFeedback(result.correct);
+  if (!quiet) provideAnswerFeedback(feedbackResult, { speakCoach: !deferCoachingVoice });
   maybeCompleteRun();
-  return result;
+  return feedbackResult;
 };
 
 const feedbackMessage = (question, result) => {
@@ -930,20 +966,7 @@ const renderLessonGuide = async () => {
   const examples = [...new Set(state.masterQuestions
     .flatMap((question) => [question.speakText, question.audioText])
     .filter(Boolean))].slice(0, 6);
-  const choiceFor = (question) => (question.choices || []).find((choice) => String(choice.id) === String(question.correct));
-  const coverageItems = state.masterQuestions.flatMap((question) => {
-    if (question.format === "matching") return (question.pairs || []).map((pair) => ({ en: pair.en, jp: pair.jp, section: question.section }));
-    if (question.format === "sorting") return (question.items || []).map((item) => ({ en: Array.isArray(item) ? item[0] : item.en, jp: "", section: question.section }));
-    const choice = choiceFor(question);
-    const en = question.speakText
-      || question.audioText
-      || question.accepted?.[0]
-      || (Array.isArray(question.correctWords) ? question.correctWords.join(" ") : "")
-      || choice?.en
-      || (question.format === "truefalse" ? question.prompt : "");
-    const jp = question.speakJa || choice?.jp || "";
-    return en ? [{ en, jp, section: question.section || question.format }] : [];
-  }).filter((item, index, all) => item.en && all.findIndex((candidate) => candidate.en === item.en) === index);
+  const coverageItems = buildPracticeMapTargets(state.masterQuestions);
   const bilingual = (en, jp) => {
     const text = learningText(en, jp, language);
     return `<strong>${escapeHTML(text.primary)}</strong>${text.secondary ? `<small lang="ja">${escapeHTML(text.secondary)}</small>` : ""}`;
@@ -1020,8 +1043,12 @@ const renderFeedback = (question) => {
     ? `<p><strong>${escapeHTML(t("Retry:", "再挑戦："))}</strong> ${escapeHTML(t("Your first score is safely locked. This result is practice only.", "初回スコアは保存済みです。今回は練習として記録されます。"))}</p>`
     : `<p><strong>${escapeHTML(t("First answer recorded.", "初回答を記録しました。"))}</strong> ${escapeHTML(t("Future tries will not change this official score.", "この後の再挑戦で初回スコアは変わりません。"))}</p>`;
   const scoreText = result.max > 1 ? ` (${result.score} / ${result.max})` : "";
+  const coachingText = result.coaching
+    ? t(result.coaching.messageEn, result.coaching.messageJa)
+    : "";
   elements.feedbackCard.className = `feedback-card ${result.correct ? "correct" : "wrong"}`;
   elements.feedbackCard.innerHTML = `
+    ${coachingText ? `<p class="answer-coach"><span class="answer-coach-icon" aria-hidden="true"><span>${result.correct ? "✓" : "↻"}</span></span><strong>${escapeHTML(coachingText)}</strong></p>` : ""}
     <p><strong>${escapeHTML(feedbackMessage(question, result))}${escapeHTML(scoreText)}</strong></p>
     ${retryNote}
     ${renderSpeechDiagnostic(question, result)}
@@ -1178,11 +1205,21 @@ const renderGridQuestion = (question) => {
     "middle-left", "center", "middle-right",
     "bottom-left", "bottom-center", "bottom-right",
   ];
+  const labelFor = (cell) => gridCellDisplay(question, cell, state.settings.showJapanese);
+  const hasLabels = cells.some((cell) => labelFor(cell).primary);
   return `
-    <div class="position-grid" role="radiogroup" aria-label="${escapeHTML(t("Position grid", "位置グリッド"))}">
-      ${cells.map((cell, index) => `
-        <button class="${selected === cell ? "selected" : ""}" data-grid-cell="${cell}" type="button" role="radio" aria-checked="${String(selected === cell)}" aria-label="${cell.replaceAll("-", " ")}" tabindex="${selected === cell || (!selected && index === 0) ? "0" : "-1"}"></button>
-      `).join("")}
+    <div class="position-grid${hasLabels ? " has-labels" : ""}" role="radiogroup" aria-label="${escapeHTML(t(hasLabels ? "Sentence grid" : "Position grid", hasLabels ? "英文グリッド" : "位置グリッド"))}">
+      ${cells.map((cell, index) => {
+        const label = labelFor(cell);
+        const accessibleLabel = label.primary
+          ? `${cell.replaceAll("-", " ")}: ${label.primary}${label.secondary ? ` / ${label.secondary}` : ""}`
+          : cell.replaceAll("-", " ");
+        return `
+        <button class="${selected === cell ? "selected" : ""}${label.primary ? " has-label" : ""}" data-grid-cell="${cell}" type="button" role="radio" aria-checked="${String(selected === cell)}" aria-label="${escapeHTML(accessibleLabel)}" tabindex="${selected === cell || (!selected && index === 0) ? "0" : "-1"}">
+          ${label.primary ? `<span class="grid-cell-label">${escapeHTML(label.primary)}</span>${label.secondary ? `<small lang="ja">${escapeHTML(label.secondary)}</small>` : ""}` : ""}
+        </button>
+      `;
+      }).join("")}
     </div>
   `;
 };
@@ -1264,8 +1301,9 @@ const attachAudioHandlers = (root = elements.questionCard) => {
   });
 };
 
-const maybeInstantCheck = (question, complete) => {
-  if (state.settings.checkMode === "instant" && complete) checkQuestion(question);
+const maybeInstantCheck = (question, complete, options = {}) => {
+  if (state.settings.checkMode === "instant" && complete) return checkQuestion(question, options);
+  return null;
 };
 
 const recordSpeakingActivity = (question, result, recognitionAvailable) => {
@@ -1322,14 +1360,15 @@ const attachQuestionHandlers = (question) => {
         ? (value ? "True" : "False")
         : question.choices?.find((choice) => String(choice.id) === String(value))?.en;
       setAnswer(question, value, { render: true });
-      maybeInstantCheck(question, true);
+      const result = maybeInstantCheck(question, true, { deferCoachingVoice: true });
+      const speechItems = [];
       if (state.settings.autoPronounceChoices !== false && state.settings.sound && pronunciation) {
-        speakText(pronunciation, {
-          voice: state.settings.voice,
-          language: "en",
-          rate: state.settings.playbackRate,
-        }).catch(() => {});
+        speechItems.push({ text: pronunciation, language: "en" });
       }
+      if (result?.coaching?.messageEn && !result.skipped) {
+        speechItems.push({ text: result.coaching.messageEn, language: "en" });
+      }
+      queueFeedbackSpeech(speechItems);
     });
   });
   bindRovingRadioGroup({
@@ -1460,6 +1499,17 @@ const renderQuestion = () => {
   const promptEn = textFor(question.prompt, "en");
   const promptJa = textFor(question.prompt, "jp");
   const promptAudio = bilingualPromptAudio(promptEn, promptJa);
+  const imageAlt = question.imageAlt || promptEn;
+  const storyboardPanel = storyboardPanelLayout(question.imagePanel);
+  const illustration = question.image
+    ? storyboardPanel
+      ? `<figure class="question-illustration is-storyboard">
+          <div class="storyboard-panel-window" role="img" aria-label="${escapeHTML(imageAlt)}" style="--storyboard-x:${storyboardPanel.column * -100}%;--storyboard-y:${storyboardPanel.row * -100}%">
+            <img src="${escapeHTML(question.image)}" alt="" aria-hidden="true" loading="eager">
+          </div>
+        </figure>`
+      : `<figure class="question-illustration"><img src="${escapeHTML(question.image)}" alt="${escapeHTML(imageAlt)}" loading="eager"></figure>`
+    : "";
   const audio = ["listenChoice", "listenType"].includes(question.format)
     ? renderAudioPractice(question.audioText)
     : "";
@@ -1473,7 +1523,7 @@ const renderQuestion = () => {
     </div>
   ` : "";
   elements.questionCard.innerHTML = `
-    ${question.image ? `<figure class="question-illustration"><img src="${escapeHTML(question.image)}" alt="${escapeHTML(question.imageAlt || promptEn)}" loading="eager"></figure>` : ""}
+    ${illustration}
     ${renderContextBox(situationEn, "", t("Listen to the situation", "場面を聞く"))}
     ${renderContextBox(contextEn, contextJa, t("Listen to the context", "文脈を聞く"))}
     <div class="prompt-heading-row">
@@ -1719,7 +1769,7 @@ const maybeCompleteRun = () => {
   );
   const firstCompletionReveal = elements.resultPanel.hidden;
   elements.resultPanel.hidden = false;
-  if (firstCompletionReveal) playCompletionSound();
+  if (firstCompletionReveal) void playCompletionSound();
   saveCompletedRun().catch(() => {});
 };
 

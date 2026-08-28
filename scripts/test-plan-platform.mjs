@@ -92,6 +92,10 @@ assert.match(pricingPage, /line-qr\.jpeg/);
 assert.match(pricingPage, /line-qr\.jpeg[^>]*loading="lazy"[^>]*decoding="async"/);
 assert.match(pricingPage, /id="themeToggle"/);
 assert.match(pricingPage, /id="mobileSettingsToggle"/);
+assert.match(pricingUi, /event\.key !== "Escape"[\s\S]{0,400}mobileSettingsToggle\.focus\(\)/,
+  "Plan settings close with Escape and return focus.");
+assert.match(pricingUi, /document\.addEventListener\("pointerdown"[\s\S]{0,260}classList\.remove\("mobile-open"\)/,
+  "Plan settings close when the learner taps outside.");
 assert.match(pricingPage, /id="planQuickNav"/);
 assert.match(pricingPage, /te-review-hub:theme:v1/);
 assert.match(pricingUi, /applyThemePreference/);
@@ -181,7 +185,8 @@ assert.match(lessonUi, /openSettings\("practice"\)/);
 assert.match(styles, /lesson-settings-dialog\[data-settings-scope="practice"\][\s\S]*?\.settings-global-only \{ display: none !important; \}/);
 assert.match(lessonUi, /guide-card-coverage/);
 assert.match(lessonUi, /This map covers the model English used across all/);
-assert.match(lessonUi, /speakText\(pronunciation/);
+assert.match(lessonUi, /speechItems\.push\(\{ text: pronunciation/);
+assert.match(lessonUi, /queueFeedbackSpeech\(speechItems\)/);
 assert.match(lessonUi, /bindRovingRadioGroup/);
 assert.match(lessonUi, /event\.stopPropagation\(\)/);
 assert.match(lessonUi, /\[document\.body, document\.documentElement\]\.includes\(document\.activeElement\)/);

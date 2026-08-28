@@ -15,6 +15,12 @@ import {
 } from "./supabase.js";
 import { planFor } from "./plans.js";
 import { uiText } from "./i18n.js";
+import { readHumanText } from "./lesson-guide-targets.js";
+import {
+  sourceSegmentFromLesson,
+  sourceSegmentIsValid,
+  sourceSegmentPartIndex,
+} from "./lesson-source.js";
 
 const client = getTeacherClient();
 
@@ -810,12 +816,19 @@ function formatQuestionLabel(format) {
 
 function bilingualValue(value, japaneseFallback = "") {
   if (value && typeof value === "object" && !Array.isArray(value)) {
+    const en = readHumanText(value, "en");
+    const localizedJapanese = readHumanText(value, "jp");
     return {
-      en: String(value.en ?? value.english ?? ""),
-      jp: String(value.jp ?? value.ja ?? value.japanese ?? japaneseFallback),
+      en,
+      jp: localizedJapanese && localizedJapanese !== en
+        ? localizedJapanese
+        : readHumanText(japaneseFallback, "jp"),
     };
   }
-  return { en: String(value ?? ""), jp: String(japaneseFallback ?? "") };
+  return {
+    en: readHumanText(value, "en"),
+    jp: readHumanText(japaneseFallback, "jp"),
+  };
 }
 
 function questionPayloadDetails(payload = {}) {
@@ -3930,13 +3943,15 @@ function openQuestionEditor(question = null) {
   elements.questionHintJa.value = hint.jp;
   elements.questionExplanationEn.value = explanation.en;
   elements.questionExplanationJa.value = explanation.jp;
-  elements.questionAudioText.value = String(payload.audioText || "");
-  elements.questionSpeakText.value = String(payload.speakText || "");
-  elements.questionSpeakJa.value = String(payload.speakJa || "");
-  elements.easyChoiceAEn.value = String(payload.choices?.[0]?.en || "");
-  elements.easyChoiceAJa.value = String(payload.choices?.[0]?.jp || "");
-  elements.easyChoiceBEn.value = String(payload.choices?.[1]?.en || "");
-  elements.easyChoiceBJa.value = String(payload.choices?.[1]?.jp || "");
+  elements.questionAudioText.value = readHumanText(payload.audioText, "en");
+  elements.questionSpeakText.value = readHumanText(payload.speakText, "en");
+  elements.questionSpeakJa.value = readHumanText(payload.speakJa, "jp");
+  const firstChoice = bilingualValue(payload.choices?.[0]?.en ?? payload.choices?.[0]?.text ?? "", payload.choices?.[0]?.jp || "");
+  const secondChoice = bilingualValue(payload.choices?.[1]?.en ?? payload.choices?.[1]?.text ?? "", payload.choices?.[1]?.jp || "");
+  elements.easyChoiceAEn.value = firstChoice.en;
+  elements.easyChoiceAJa.value = firstChoice.jp;
+  elements.easyChoiceBEn.value = secondChoice.en;
+  elements.easyChoiceBJa.value = secondChoice.jp;
   elements.easyCorrectChoice.value = ["a", "b"].includes(String(payload.correct))
     ? String(payload.correct)
     : "a";
@@ -4034,7 +4049,7 @@ function validateQuestionDetails(format, details, fields) {
     (!Array.isArray(details.pairs) ||
       !details.pairs.length ||
       details.pairs.some(
-        (pair) => !String(pair?.en || "").trim() || !String(pair?.jp || "").trim(),
+        (pair) => !readHumanText(pair?.en ?? pair?.left, "en") || !readHumanText(pair?.jp ?? pair?.right, "jp"),
       ))
   ) {
     throw new Error("Matching JSON needs one or more English/Japanese pairs.");
@@ -4046,11 +4061,11 @@ function validateQuestionDetails(format, details, fields) {
     if (!Array.isArray(details.items) || !details.items.length) {
       throw new Error("Sorting JSON needs at least one item.");
     }
-    const categories = new Set(details.categories.map(String));
+    const categories = new Set(details.categories.map((category) => readHumanText(category, "en")));
     const invalidItem = details.items.find((item) => {
       const text = Array.isArray(item) ? item[0] : item?.text ?? item?.en;
       const category = Array.isArray(item) ? item[1] : item?.category ?? item?.correct;
-      return !String(text || "").trim() || !categories.has(String(category ?? ""));
+      return !readHumanText(text, "en") || !categories.has(readHumanText(category, "en"));
     });
     if (invalidItem) {
       throw new Error("Every sorting item needs text and one of the listed categories.");
@@ -4403,7 +4418,7 @@ async function saveLesson(event) {
     payload.created_by = state.session.user.id;
     result = await client.from("review_lessons")
       .insert(payload)
-      .select("id,slug,lesson_date,title_en,title_ja,summary_en,summary_ja,status,audience,source_type,source_notion_url,content_version,content,is_preview")
+      .select("id,slug,lesson_date,title_en,title_ja,summary_en,summary_ja,status,audience,source_type,source_notion_url,source_segment,content_version,content,is_preview")
       .single();
   }
 
@@ -4449,6 +4464,14 @@ async function assignLesson(studentId, lessonId, button) {
 
 function bundledLessonRow(lesson, status, audience, sourceType) {
   const isLegacy = sourceType === "legacy_zip";
+  const rawSourceSegment = lesson.sourceSegment ?? lesson.source_segment ?? "full";
+  if (!sourceSegmentIsValid(rawSourceSegment)) {
+    throw new Error(`${lesson.id || "Lesson"}: source segment must use letters, numbers and hyphens (80 characters maximum).`);
+  }
+  if (sourceType === "notion" && !String(lesson.sourceNotionPageId || "").trim()) {
+    throw new Error(`${lesson.id || "Lesson"}: a Notion source page ID is required.`);
+  }
+  const sourceSegment = sourceSegmentFromLesson(lesson);
   return {
     slug: lesson.id,
     lesson_date: lesson.lessonDate,
@@ -4461,9 +4484,12 @@ function bundledLessonRow(lesson, status, audience, sourceType) {
     source_type: sourceType,
     source_notion_page_id: lesson.sourceNotionPageId || null,
     source_notion_url: lesson.sourceNotionUrl || null,
+    source_segment: sourceSegment,
     content_version: lesson.contentVersion || 1,
     content: {
       bundled: true,
+      sourceSegment,
+      partIndex: sourceSegmentPartIndex(sourceSegment),
       themes: lesson.themes || [],
       phrases: lesson.phrases || [],
       categoryLabels: lesson.categoryLabels || {},
@@ -4491,6 +4517,7 @@ async function upsertLessonBundle(lesson, questions, defaults) {
       .select("id, status, audience")
       .eq("source_type", "notion")
       .eq("source_notion_page_id", row.source_notion_page_id)
+      .eq("source_segment", row.source_segment)
       .maybeSingle();
     if (lookup.error) throw lookup.error;
     existing = lookup.data;
@@ -4518,7 +4545,14 @@ async function upsertLessonBundle(lesson, questions, defaults) {
     if (update.error) throw update.error;
     lessonRecord = update.data;
   } else {
-    const insert = await client.from("review_lessons").insert(row).select("id").single();
+    const onConflict = row.source_type === "notion"
+      ? "source_type,source_notion_page_id,source_segment"
+      : "slug";
+    const insert = await client
+      .from("review_lessons")
+      .upsert(row, { onConflict })
+      .select("id")
+      .single();
     if (insert.error) throw insert.error;
     lessonRecord = insert.data;
   }

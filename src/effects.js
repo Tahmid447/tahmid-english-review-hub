@@ -3,29 +3,67 @@ import { playInterfaceSound } from "./audio.js?v=20260827-release1";
 const reduceMotion = () => window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
 const installedRoots = new WeakSet();
 
-export function celebrate(anchor, { speaking = false } = {}) {
-  if (!anchor || reduceMotion()) return;
-  anchor.classList.remove("success-pop");
-  void anchor.offsetWidth;
-  anchor.classList.add("success-pop");
+const feedbackOrigin = (anchor) => {
+  const rect = anchor.getBoundingClientRect();
+  return {
+    left: rect.left + rect.width / 2,
+    top: Math.max(24, rect.top + Math.min(rect.height / 2, 90)),
+  };
+};
 
+const renderCorrectBurst = (anchor, speaking) => {
   const burst = document.createElement("div");
   burst.className = `celebration-burst${speaking ? " speaking-burst" : ""}`;
   burst.setAttribute("aria-hidden", "true");
-  const rect = anchor.getBoundingClientRect();
-  burst.style.left = `${rect.left + rect.width / 2}px`;
-  burst.style.top = `${Math.max(24, rect.top + Math.min(rect.height / 2, 90))}px`;
-  const symbols = speaking ? ["✨", "🎙️", "⭐", "💫", "👏"] : ["✨", "★", "●", "✦", "◆"];
-  for (let index = 0; index < 14; index += 1) {
+  const origin = feedbackOrigin(anchor);
+  burst.style.left = `${origin.left}px`;
+  burst.style.top = `${origin.top}px`;
+  const symbols = speaking ? ["✨", "🎙️", "⭐", "💫", "👏"] : ["✨", "★", "✦", "●", "◆"];
+  for (let index = 0; index < 12; index += 1) {
     const spark = document.createElement("span");
     spark.textContent = symbols[index % symbols.length];
-    spark.style.setProperty("--angle", `${(360 / 14) * index}deg`);
-    spark.style.setProperty("--distance", `${58 + (index % 4) * 17}px`);
+    spark.style.setProperty("--angle", `${(360 / 12) * index}deg`);
+    spark.style.setProperty("--distance", `${54 + (index % 4) * 15}px`);
     spark.style.setProperty("--delay", `${(index % 3) * 35}ms`);
     burst.append(spark);
   }
   document.body.append(burst);
   window.setTimeout(() => burst.remove(), 1100);
+};
+
+const renderRetryCue = (anchor) => {
+  const cue = document.createElement("div");
+  cue.className = "retry-cue";
+  cue.setAttribute("aria-hidden", "true");
+  const origin = feedbackOrigin(anchor);
+  cue.style.left = `${origin.left}px`;
+  cue.style.top = `${origin.top}px`;
+  for (let index = 0; index < 6; index += 1) {
+    const dot = document.createElement("span");
+    dot.style.setProperty("--angle", `${(360 / 6) * index}deg`);
+    dot.style.setProperty("--distance", `${32 + (index % 2) * 10}px`);
+    dot.style.setProperty("--delay", `${index * 24}ms`);
+    cue.append(dot);
+  }
+  document.body.append(cue);
+  window.setTimeout(() => cue.remove(), 850);
+};
+
+export function animateAnswerFeedback(anchor, { correct = true, speaking = false } = {}) {
+  if (!anchor || reduceMotion()) return;
+  anchor.classList.remove("success-pop", "retry-nudge");
+  void anchor.offsetWidth;
+  if (correct) {
+    anchor.classList.add("success-pop");
+    renderCorrectBurst(anchor, speaking);
+  } else {
+    anchor.classList.add("retry-nudge");
+    renderRetryCue(anchor);
+  }
+}
+
+export function celebrate(anchor, { speaking = false } = {}) {
+  animateAnswerFeedback(anchor, { correct: true, speaking });
 }
 
 export function installPlayfulInteractions(root = document) {
@@ -54,7 +92,7 @@ export function installPlayfulInteractions(root = document) {
     const target = event.target.closest("button:not(:disabled), a[href], select, summary, [role='button'], .lesson-card");
     if (!target) return;
     if (target.closest("[data-sfx='off']")) return;
-    playInterfaceSound("click");
+    void playInterfaceSound("click");
     if (reduceMotion() || event.pointerType === "touch") return;
     for (let index = 0; index < 3; index += 1) {
       const sparkle = document.createElement("i");
@@ -71,6 +109,6 @@ export function installPlayfulInteractions(root = document) {
     if (event.detail !== 0) return;
     const target = event.target.closest("button:not(:disabled), a[href], summary, [role='button']");
     if (!target || target.closest("[data-sfx='off']")) return;
-    playInterfaceSound("click");
+    void playInterfaceSound("click");
   });
 }

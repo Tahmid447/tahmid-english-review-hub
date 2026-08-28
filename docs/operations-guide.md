@@ -1,17 +1,15 @@
 # Operations Guide / 運用ガイド
 
-Updated: 2026-08-26 (Asia/Tokyo)
+Updated: 2026-08-28 (Asia/Tokyo)
 
-This guide distinguishes the final-product code prepared locally from behavior
-already available on the hosted sites. The working branch is
-`upgrade/review-hub-v9-final-product`; canonical GitHub implementation checkpoint
-`c14625d5` and handoff checkpoint `a87eb5e1` are published. The current
-documentation checkpoint is branch HEAD (`git rev-parse HEAD`); this file cannot
-embed the final hash of the commit that contains itself. Exact deployed
-application commit is `8fb49e02184c3569e85fbd7cede2fe9866d16c93`;
-historical rollout/logical-restore checkpoint remains `fcf561d`. The current
-application commit is deployed to the current-account Preview. Production
-static files remain pre-v9. Migrations `015`–`018` and the matching updated
+This guide distinguishes repository state, manually applied database changes
+and deployed behavior. The working branch is
+`upgrade/review-hub-v9-final-product`; the formal site is
+`https://tahmid-english-review-hub.netlify.app/`. The current documentation
+checkpoint is branch HEAD (`git rev-parse HEAD`); this file cannot embed the
+final hash of the commit that contains itself. Historical rollout/logical-
+restore checkpoint `fcf561d` remains limited and must not be treated as a full
+database backup. Migrations `015`–`023` and the matching updated
 `membership-access` Edge Function are live on shared Supabase project
 `ycmybggetemkhorkhfnf`.
 
@@ -28,7 +26,8 @@ the old upsert included insert-only `user_id` on update, producing
 `permission denied for table review_profiles`. Do not grant `UPDATE(user_id)`.
 The deployed fix splits insert/update, omits `user_id` from updates, shows modal
 status, avoids the stale automatic race, uses PWA cache v3, and cache-busts the
-query. No migration `017` exists or is needed.
+query. That application fix required no database migration; later numbered
+migrations serve separate Premium-topic and lesson-expansion releases.
 
 - Prefer Supabase invitation, email confirmation, or password-reset email.
 - Never ask a learner to send a password to the teacher.
@@ -194,7 +193,9 @@ unique Japanese hints, and no missing guidance or invalid choice sets.
 
 1. Read the source page from `📘 Lessons (Takiwaki)` without editing it.
 2. Record its exact Notion page ID and URL.
-3. Check whether `(source_type, source_notion_page_id)` already exists.
+3. Check whether `(source_type, source_notion_page_id, source_segment)` already
+   exists. Different segments may intentionally represent Part 1 and Part 2 of
+   the same source page.
 4. Prepare varied activities as a private draft.
 5. Insert/upsert through a trusted server-side import or forward migration.
 6. Review every learner-visible field in Teacher Studio.
@@ -216,8 +217,8 @@ automatic import must run server-side and create a draft first.
   state.
 - Keep Lesson Guides useful to a learner who did not attend the source lesson:
   retain all useful phrases and a bilingual model target for every question.
-  Run `node scripts/audit-lesson-guide-coverage.mjs`; it must pass all 17
-  lessons and all 616 activities before publishing content.
+  Run `node scripts/audit-lesson-guide-coverage.mjs`; it must pass all 31
+  lessons and all 1,100 activities before publishing content.
 - Study Music defaults ON at 18%. Try playback immediately, but expect Safari,
   Chrome and other browsers to block audible autoplay on some visits. When
   blocked, show the fixed `Begin with music / BGMと一緒に始める` prompt and
@@ -275,10 +276,23 @@ order:
 6. Profile-save commits `d0b244b`, `50656f8`, `a69ab08`, and `049b5ff` fixed
    payload/status, stale-race, PWA-cache, and query-cache behavior. They added
    no migration `017` and made no Supabase change.
+7. `202608180017_premium_task_topics.sql` added the first 17 lessons' Premium
+   topic choices and passed its 34-task/51-topic postconditions.
+8. Apply the August 28 lesson expansion strictly as
+   `019 → 020 → 021 → 022 → 023`.
+   Migration `019` adds `source_segment`; `020` stores 14 lessons and 462
+   questions; `021` stores 28 Premium tasks and 42 new topics; `022` publishes
+   only after every provenance, question, format and Premium precondition
+   passes; `023` adds typing and labelled-grid parity to the prior 11 Notion
+   lessons without changing teacher-managed controls. Live verification
+   returned 14 newly published lessons with 462 questions, the prior 11 Notion
+   lessons with 363 questions (33 each and all 14 formats), 31 public lessons
+   with 1,100 questions overall, and 14 speaking plus 14 essay tasks for the
+   new lessons.
 
 The project has no `supabase_migrations.schema_migrations` table and the
 dashboard reports no tracked migrations. Do not infer ledger entries or rerun
-`015`/`016` merely to create history. Record future manual applications and
+`015`–`023` merely to create history. Record future manual applications and
 their postconditions explicitly. Anonymous, learner, and teacher negative and
 positive RLS/browser checks remain in progress.
 
@@ -293,7 +307,7 @@ After rollout, confirm:
 - teacher preview is authorised, plan-scoped, labelled, and non-mutating;
 - code redemption/reissue is transactional under concurrent requests;
 - incomplete profiles remain Free/locked until required fields are saved;
-- all 17 lessons have exactly one active speaking and one active essay task.
+- all 31 lessons have exactly one active speaking and one active essay task.
 
 ## 11. Preview gate, production promotion, and rollback
 

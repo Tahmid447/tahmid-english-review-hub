@@ -259,10 +259,24 @@ function bindSettings() {
   const mobileSettingsToggle = document.querySelector("#mobileSettingsToggle");
   const settingsControls = document.querySelector("#siteSettingsControls");
 
+  const closeSettings = ({ restoreFocus = false } = {}) => {
+    if (mobileSettingsToggle?.getAttribute("aria-expanded") !== "true") return;
+    mobileSettingsToggle.setAttribute("aria-expanded", "false");
+    settingsControls?.classList.remove("mobile-open");
+    if (restoreFocus) mobileSettingsToggle.focus();
+  };
+
   mobileSettingsToggle?.addEventListener("click", () => {
     const expanded = mobileSettingsToggle.getAttribute("aria-expanded") === "true";
     mobileSettingsToggle.setAttribute("aria-expanded", String(!expanded));
     settingsControls?.classList.toggle("mobile-open", !expanded);
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closeSettings({ restoreFocus: true });
+  });
+  document.addEventListener("pointerdown", (event) => {
+    if (event.target.closest?.(".site-header")) return;
+    closeSettings();
   });
 
   languageToggle?.addEventListener("change", () => {

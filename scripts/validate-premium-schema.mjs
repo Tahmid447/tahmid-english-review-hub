@@ -23,6 +23,10 @@ const topicSql = await readFile(
   resolve(here, "../supabase/migrations/202608180017_premium_task_topics.sql"),
   "utf8",
 );
+const newLessonTopicSql = await readFile(
+  resolve(here, "../supabase/migrations/202608280021_new_lesson_premium_tasks_topics.sql"),
+  "utf8",
+);
 
 const requiredFragments = [
   "review_plan_catalog",
@@ -78,6 +82,24 @@ for (const fragment of ["Create a Premium review task", "Publish feedback", "tea
 }
 for (const fragment of ["selected_topic_key", "review_validate_submission_topic", "updated_count <> 34", "covered_tasks <> 34"]) {
   if (!topicSql.includes(fragment)) throw new Error(`Premium topic schema is missing: ${fragment}`);
+}
+for (const fragment of [
+  "Requires migration 020",
+  "lesson_count <> 14",
+  "active_teacher_count < 1",
+  "on conflict (lesson_id, stable_key) do update set",
+  "topics = excluded.topics",
+  "-premium-speaking-v1",
+  "-premium-essay-v1",
+  "seeded_count <> 28",
+  "speaking_count <> 14",
+  "essay_count <> 14",
+  "topic_count <> 84",
+]) {
+  if (!newLessonTopicSql.includes(fragment)) throw new Error(`New-lesson Premium topic schema is missing: ${fragment}`);
+}
+if (!newLessonTopicSql.includes("'speaking'::text as task_type") || !newLessonTopicSql.includes("'essay'::text")) {
+  throw new Error("New-lesson Premium tasks must use the supported speaking and essay task types.");
 }
 for (const fragment of ["Choose your topic", "Recommended phrases:", "Recommended vocabulary:", "selectedTopic()?.key"]) {
   if (!learnerUi.includes(fragment)) throw new Error(`Premium topic learner UI is missing: ${fragment}`);

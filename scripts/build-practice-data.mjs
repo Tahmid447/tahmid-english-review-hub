@@ -2,17 +2,69 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { legacyAdditions, notionDraftCurriculum } from "../src/data/curriculum.js";
+import { validateLessonSourceIdentities } from "../src/lesson-source.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const dataRoot = path.join(root, "src", "data");
+validateLessonSourceIdentities(notionDraftCurriculum.map((lesson) => ({
+  ...lesson,
+  sourceType: "notion",
+})));
 const visualManifest = JSON.parse(
   fs.readFileSync(path.join(root, "scripts", "visual-question-manifest.json"), "utf8"),
 );
+const storyboardManifestPath = path.join(root, "scripts", "visual-storyboard-manifest.json");
+const storyboardManifest = fs.existsSync(storyboardManifestPath)
+  ? JSON.parse(fs.readFileSync(storyboardManifestPath, "utf8"))
+  : { storyboards: [] };
+const draftLessonById = new Map(notionDraftCurriculum.map((lesson) => [lesson.id, lesson]));
 const visualQuestionsByLesson = new Map();
 for (const visual of visualManifest.questions || []) {
   const lessonQuestions = visualQuestionsByLesson.get(visual.lessonId) || [];
   lessonQuestions.push(visual);
   visualQuestionsByLesson.set(visual.lessonId, lessonQuestions);
+}
+for (const storyboard of storyboardManifest.storyboards || []) {
+  const lesson = draftLessonById.get(storyboard.lessonId);
+  if (!lesson) throw new Error(`Storyboard references unknown lesson ${storyboard.lessonId}.`);
+  if (!Array.isArray(storyboard.panels) || storyboard.panels.length !== 5) {
+    throw new Error(`${storyboard.lessonId} storyboard needs exactly five reviewed panels.`);
+  }
+  const lessonQuestions = visualQuestionsByLesson.get(storyboard.lessonId) || [];
+  storyboard.panels.forEach((panel, panelIndex) => {
+    const distractorIndexes = panel.distractorIndexes || [];
+    if (distractorIndexes.length !== 3) {
+      throw new Error(`${storyboard.lessonId} storyboard panel ${panelIndex + 1} needs three distractors.`);
+    }
+    lessonQuestions.push({
+      lessonId: storyboard.lessonId,
+      slot: panelIndex + 1,
+      phraseIndex: panel.phraseIndex,
+      distractorIndexes,
+      asset: storyboard.asset,
+      imagePanel: panelIndex + 1,
+      imageAlt: panel.imageAlt,
+      scenePrompt: panel.scenePrompt,
+      reviewedGuidance: {
+        hintEn: panel.hintEn,
+        hintJa: panel.hintJa,
+        evidenceEn: panel.evidenceEn,
+        evidenceJa: panel.evidenceJa,
+        reasons: distractorIndexes.map((phraseIndex) => {
+          const distractor = lesson.phrases[phraseIndex];
+          if (!distractor) {
+            throw new Error(`${storyboard.lessonId} storyboard panel ${panelIndex + 1} has an invalid distractor.`);
+          }
+          return {
+            choice: distractor.en,
+            en: `that sentence means “${distractor.jp},” which is different from the visible action and context`,
+            ja: `その英文は「${distractor.jp}」という意味で、絵に見える動作・状況とは異なります`,
+          };
+        }),
+      },
+    });
+  });
+  visualQuestionsByLesson.set(storyboard.lessonId, lessonQuestions);
 }
 
 const choice = (phrases, correctIndex, field = "en") => {
@@ -462,6 +514,16 @@ function makeDraftQuestions(lesson) {
     });
   });
 
+  const recallTarget = get(11);
+  result.push({
+    ...base(`${lesson.id}-draft-typing`, "typing", "Build It", recallTarget),
+    prompt: `Type the complete English sentence from memory: ${recallTarget.jp}`,
+    promptJa: `日本語を見て、英文を最後まで入力してください：${recallTarget.jp}`,
+    accepted: [recallTarget.en],
+    explanation: `A complete model answer is “${recallTarget.en}”. Check the key ${recallTarget.topic} expression and every short grammar word.`,
+    explanationJa: `完全な答えは「${recallTarget.en}」です。${recallTarget.topic}の中心表現と短い文法語まで確認しましょう。`,
+  });
+
   [8, 9].forEach((index, offset) => {
     const target = get(index);
     result.push({
@@ -496,6 +558,22 @@ function makeDraftQuestions(lesson) {
       .map(({ en, topic }) => [en, topic]),
     explanation: `Sort by the purpose of the complete phrase. The available topics are ${categories.join(", ")}.`,
     explanationJa: `英文全体の目的で分類します。今回の分類は「${categories.join("・")}」です。`,
+  });
+
+  const gridPositions = [
+    "top-left", "top-center", "top-right",
+    "middle-left", "center", "middle-right",
+    "bottom-left", "bottom-center", "bottom-right",
+  ];
+  const gridTarget = get(4);
+  result.push({
+    ...base(`${lesson.id}-draft-grid`, "grid", "Build It", gridTarget),
+    prompt: `Select the tile that means: ${gridTarget.jp}`,
+    promptJa: `「${gridTarget.jp}」を表す英文のタイルを選んでください。`,
+    correctCell: "center",
+    gridCells: Object.fromEntries(gridPositions.map((position, index) => [position, get(index).en])),
+    explanation: `The center tile, “${gridTarget.en}”, means “${gridTarget.jp}”. Read every complete phrase before choosing its position.`,
+    explanationJa: `中央の「${gridTarget.en}」が「${gridTarget.jp}」を表します。位置だけでなく、各英文の意味を最後まで読んで選びましょう。`,
   });
 
   [0, 3, 6].forEach((index, offset) => {
@@ -602,6 +680,7 @@ function makeDraftQuestions(lesson) {
         choices,
         correct: "a",
         image: visual.asset,
+        imagePanel: visual.imagePanel || null,
         imageAlt: visual.imageAlt,
         visualAssetId: `${lesson.id}-${String(visual.slot).padStart(2, "0")}`,
         hint: visualHint(visual),

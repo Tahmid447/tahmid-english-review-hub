@@ -2,14 +2,23 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { legacyAdditions as legacyPhrases } from "../src/data/curriculum.js";
+import { loadVisualManifestSources, visualAssetPanelKey } from "./visual-manifest-utils.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const readJson = (relative) => JSON.parse(fs.readFileSync(path.join(root, relative), "utf8"));
 const legacy = readJson("src/data/legacy-lessons.json");
 const additions = readJson("src/data/legacy-additions.json");
 const drafts = readJson("src/data/notion-drafts.json");
-const manifest = readJson("scripts/visual-question-manifest.json");
 const visualQa = readJson("scripts/visual-human-qa.json");
+const lessonById = new Map([
+  ...drafts.map((lesson) => [lesson.id, lesson]),
+  ...Object.entries(legacyPhrases).map(([id, phrases]) => [id, { id, phrases }]),
+]);
+const {
+  entries: visualEntries,
+  standaloneEntries,
+  storyboardEntries,
+} = loadVisualManifestSources(root, { lessonById });
 
 const errors = [];
 const rows = [];
@@ -27,10 +36,10 @@ const knownAmbiguousVisualChoices = new Map([
   ["july-13-draft-visual-1", ["No one usually calls me at this time."]],
   ["july-22-draft-visual-3", ["Either is fine."]],
 ]);
-const visualTargetByAsset = new Map(manifest.questions.map((entry) => {
-  const lesson = drafts.find((candidate) => candidate.id === entry.lessonId);
-  const phrases = lesson?.phrases || legacyPhrases[entry.lessonId];
-  return [entry.asset, {
+const manifestEntryByKey = new Map(visualEntries.map((entry) => [visualAssetPanelKey(entry), entry]));
+const visualTargetByKey = new Map(visualEntries.map((entry) => {
+  const phrases = lessonById.get(entry.lessonId)?.phrases || [];
+  return [visualAssetPanelKey(entry), {
     lessonId: entry.lessonId,
     phrase: phrases?.[entry.phraseIndex] || null,
   }];
@@ -141,9 +150,12 @@ function validateQuestion(lessonId, question, index) {
 
   let mediaStatus = "not required";
   if (question.image) {
-    mediaStatus = "manifest + file + human QA";
+    const visualKey = visualAssetPanelKey({ asset: question.image, imagePanel: question.imagePanel ?? null });
+    const manifestEntry = manifestEntryByKey.get(visualKey);
+    mediaStatus = manifestEntry?.visualSource === "storyboard"
+      ? "storyboard manifest + file"
+      : "manifest + file + prior human QA";
     const asset = clean(question.image);
-    const manifestEntry = manifest.questions.find((entry) => entry.asset === asset);
     if (!manifestEntry) fail(lessonId, id, "visual is not present in the manifest");
     if (!fs.existsSync(path.join(root, asset.replace(/^\//, "")))) fail(lessonId, id, "visual asset file is missing");
     if (!clean(question.imageAlt)) fail(lessonId, id, "visual has no alt text");
@@ -192,7 +204,7 @@ function validateQuestion(lessonId, question, index) {
         }
       }
     }
-    const visualTarget = visualTargetByAsset.get(asset);
+    const visualTarget = visualTargetByKey.get(visualKey);
     const correctChoice = Array.isArray(question.choices)
       ? question.choices.find((choice) => clean(choice?.id) === clean(question.correct))
       : null;
@@ -252,7 +264,6 @@ const lessons = [
   ...drafts,
 ];
 
-if (lessons.length !== 17) errors.push(`Expected 17 lessons; found ${lessons.length}.`);
 const lessonIds = lessons.map((lesson) => clean(lesson.id));
 if (!unique(lessonIds)) errors.push("Lesson IDs are not unique.");
 
@@ -272,35 +283,39 @@ for (const lesson of lessons) {
   });
 }
 
-if (rows.length !== 616) errors.push(`Expected 616 activities; found ${rows.length}.`);
+const expectedActivityCount = lessons.reduce((sum, lesson) => sum + lesson.questions.length, 0);
+if (rows.length !== expectedActivityCount) {
+  errors.push(`Expected ${expectedActivityCount} activities from the lesson inventory; audited ${rows.length}.`);
+}
 if (!unique(rows.map((row) => row.id))) errors.push("Question IDs are not unique across all lessons.");
-if (manifest.questions.length !== 85) errors.push(`Expected 85 visual briefs; found ${manifest.questions.length}.`);
 const manifestLessonCounts = new Map();
-for (const entry of manifest.questions) {
+for (const entry of visualEntries) {
   manifestLessonCounts.set(entry.lessonId, (manifestLessonCounts.get(entry.lessonId) || 0) + 1);
 }
-if (manifestLessonCounts.size !== 17 || [...manifestLessonCounts.values()].some((count) => count !== 5)) {
-  errors.push("Visual manifest must contain exactly five briefs for each of the 17 lessons.");
+if (manifestLessonCounts.size !== lessons.length || [...manifestLessonCounts.values()].some((count) => count !== 5)) {
+  errors.push(`Combined visual manifests must contain exactly five briefs for each of the ${lessons.length} lessons.`);
 }
-if (!unique(manifest.questions.map((entry) => clean(entry.asset)))) errors.push("Visual manifest asset paths are not unique.");
-if (!unique(manifest.questions.map((entry) => clean(entry.reviewedGuidance?.hintEn)))) {
-  errors.push("Reviewed English visual hints must be question-specific and unique across all 85 visuals.");
+if (!unique(visualEntries.map(visualAssetPanelKey))) errors.push("Visual manifest asset/panel pairs are not unique.");
+if (!unique(visualEntries.map((entry) => clean(entry.reviewedGuidance?.hintEn)))) {
+  errors.push(`Reviewed English visual hints must be question-specific and unique across all ${visualEntries.length} visuals.`);
 }
-if (!unique(manifest.questions.map((entry) => clean(entry.reviewedGuidance?.hintJa)))) {
-  errors.push("Reviewed Japanese visual hints must be question-specific and unique across all 85 visuals.");
+if (!unique(visualEntries.map((entry) => clean(entry.reviewedGuidance?.hintJa)))) {
+  errors.push(`Reviewed Japanese visual hints must be question-specific and unique across all ${visualEntries.length} visuals.`);
 }
 if (!unique(rows.filter((row) => row.mediaStatus !== "not required").map((row) => row.id))) {
   errors.push("Visual question IDs are not unique.");
 }
-if (!visualQa.allManifestAssetsChecked || visualQa.manifestAssetCount !== manifest.questions.length) {
-  errors.push("Human visual QA record does not cover the current manifest.");
+if (!visualQa.allManifestAssetsChecked || visualQa.manifestAssetCount !== standaloneEntries.length) {
+  errors.push("The prior human visual QA record does not cover the complete standalone-image manifest.");
 }
 
 const legacyTypingIds = rows.filter((row) => row.format === "typing").map((row) => row.id);
 const legacyMatchingIds = legacy.flatMap((lesson) => lesson.questions)
   .filter((question) => (question.format || question.type) === "matching")
   .map((question) => question.id);
-const customVisuals = manifest.questions.filter((question) => Array.isArray(question.distractorIndexes));
+const customVisuals = visualEntries.filter((question) => Array.isArray(question.distractorIndexes));
+const generatedActivityCount = Object.values(additions).flat().length
+  + drafts.reduce((sum, lesson) => sum + lesson.questions.length, 0);
 
 const report = [
   "# Question quality audit",
@@ -312,18 +327,18 @@ const report = [
   `- Audited all ${lessons.length} lessons and ${rows.length} activities one by one with format-specific integrity checks.`,
   "- Every activity was checked for bilingual prompt, hint, and explanation; answer completeness; unique choice text; exactly one keyed choice where applicable; and required audio/speaking/order/matching/sorting fields.",
   "- Every visual activity was also checked that its keyed English/Japanese answer equals the lesson phrase selected by the manifest and that both explanations explicitly identify that model answer.",
-  `- Audited all ${manifest.questions.length} visual questions against the manifest and file inventory; the visual QA record confirms human inspection of every WebP scene.`,
+  `- Audited all ${visualEntries.length} visual questions against the combined standalone/storyboard manifests and file inventory. The prior QA record covers ${standaloneEntries.length} standalone scenes; this report does not mislabel the ${storyboardEntries.length} new storyboard panels as previously human-inspected.`,
   "- This report distinguishes programmatic whole-corpus checks from the human image review; it does not label an unchecked item as complete.",
   "",
   "## Corrections made in this audit",
   "",
-  "- Re-inspected all 85 WebP illustrations in lesson contact sheets, with original-resolution follow-up for ambiguous scenes, and compared each asset with its manifest brief and actual question data.",
-  "- Wrote 85 unique English hints and 85 unique Japanese hints item by item. Each hint points to scene-specific evidence without repeating either model answer.",
-  "- Added one bilingual correct-evidence statement and three bilingual, choice-keyed conflict reasons to every visual manifest entry: 85 evidence pairs and 255 distractor-reason pairs in total.",
-  "- Rebuilt all 85 explanations as natural standalone sentences that identify the correct model and explain the concrete visual conflict for every displayed distractor in both languages.",
+  `- Preserved the prior original-resolution human review of ${standaloneEntries.length} standalone WebP illustrations and added structural, asset, target, panel, hint and explanation checks for ${storyboardEntries.length} storyboard panels.`,
+  `- Checked ${visualEntries.length} unique English hints and ${visualEntries.length} unique Japanese hints. Each hint points to scene-specific evidence without repeating either model answer.`,
+  `- Checked one bilingual correct-evidence statement and three bilingual, choice-keyed conflict reasons for every visual: ${visualEntries.length} evidence pairs and ${visualEntries.length * 3} distractor-reason pairs in total.`,
+  `- Checked all ${visualEntries.length} explanations as natural standalone sentences that identify the correct model and explain the concrete visual conflict for every displayed distractor in both languages.`,
   `- ${legacyTypingIds.length} legacy typing activities had only a Japanese prompt. Added an explicit English instruction and retained the Japanese target: ${legacyTypingIds.join(", ")}.`,
   `- ${legacyMatchingIds.length} legacy matching activities lacked a learning explanation. Added a bilingual explanation of one-to-one whole-meaning matching: ${legacyMatchingIds.join(", ")}.`,
-  "- Replaced generic generated hints/explanations across all 473 generated activities (132 legacy additions + 341 expanded activities) with format-specific bilingual guidance; explanations state the model answer and why it fits, while visual hints guide without revealing it.",
+  `- Audited format-specific bilingual guidance across all ${generatedActivityCount} generated activities; explanations state the model answer and why it fits, while visual hints guide without revealing it.`,
   `- ${customVisuals.length} visual choice sets now use explicitly selected, semantically distinct distractors: ${customVisuals.map((item) => `${item.lessonId}-visual-${item.slot}`).join(", ")}.`,
   `- Visual corrections and additions documented in scripts/visual-human-qa.json: ${visualQa.findings.map((finding) => `${finding.questionId || finding.questionIds} — ${finding.fix}`).join(" ")}`,
   "- Changed runtime behavior so each new practice run shuffles both question order and choice order automatically; a resumed run retains its saved order.",
@@ -354,6 +369,6 @@ if (errors.length) {
   errors.forEach((error) => console.error(`  - ${error}`));
   process.exitCode = 1;
 } else {
-  console.log(`Question quality audit passed: ${lessons.length} lessons, ${rows.length} activities, ${manifest.questions.length} visuals.`);
+  console.log(`Question quality audit passed: ${lessons.length} lessons, ${rows.length} activities, ${visualEntries.length} visual panels.`);
   console.log(`Wrote ${path.relative(root, output)}.`);
 }

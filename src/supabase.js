@@ -1,5 +1,10 @@
 import { SUPABASE_ANON_KEY, SUPABASE_URL } from "./config.js";
 import { normalizePlanKey, planFor, planMeetsRequirement } from "./plans.js";
+import {
+  compareLessonSourceOrder,
+  sourceSegmentFromLesson,
+  sourceSegmentPartIndex,
+} from "./lesson-source.js";
 
 let studentClient;
 let teacherClient;
@@ -847,9 +852,10 @@ export async function fetchDatabaseLessons({ audience = "general" } = {}) {
   if (audience !== "takiwaki") {
     const { data, error } = await client
       .from("review_public_lessons")
-      .select("id,slug,lesson_date,title_en,title_ja,summary_en,summary_ja,status,audience,content_version,content,is_preview,question_count")
+      .select("id,slug,lesson_date,title_en,title_ja,summary_en,summary_ja,status,audience,content_version,content,is_preview,question_count,source_segment")
       .eq("status", "published")
-      .order("lesson_date", { ascending: true });
+      .order("lesson_date", { ascending: true })
+      .order("slug", { ascending: true });
     if (error) return { lessons: null, reason: "lesson-query-failed", error };
     publicRows = data || [];
     if (publicRows.length) {
@@ -868,9 +874,10 @@ export async function fetchDatabaseLessons({ audience = "general" } = {}) {
   if (authenticated) {
     let query = client
       .from("review_lessons")
-      .select("id,slug,lesson_date,title_en,title_ja,summary_en,summary_ja,status,audience,content_version,content,is_preview")
+      .select("id,slug,lesson_date,title_en,title_ja,summary_en,summary_ja,status,audience,source_type,source_notion_page_id,source_notion_url,source_segment,content_version,content,is_preview")
       .eq("status", "published")
-      .order("lesson_date", { ascending: true });
+      .order("lesson_date", { ascending: true })
+      .order("slug", { ascending: true });
     if (audience === "takiwaki") query = query.in("audience", ["takiwaki", "both"]);
     if (audience === "general") query = query.in("audience", ["general", "both"]);
     const result = await query;
@@ -900,33 +907,43 @@ export async function fetchDatabaseLessons({ audience = "general" } = {}) {
     questionsByLesson.set(question.lesson_id, current);
   });
 
+  const lessons = lessonRows.map((lesson) => {
+    const accessible = privateById.get(lesson.id) || null;
+    const source = accessible || lesson;
+    const content = source.content && typeof source.content === "object" && !Array.isArray(source.content)
+      ? source.content
+      : {};
+    const sourceSegment = sourceSegmentFromLesson(source);
+    return {
+      id: source.slug,
+      databaseLessonId: source.id,
+      lessonDate: source.lesson_date,
+      title: source.title_en,
+      titleJa: source.title_ja || "",
+      summary: source.summary_en || "",
+      summaryJa: source.summary_ja || "",
+      status: source.status,
+      audience: source.audience,
+      sourceType: source.source_type || "database",
+      sourceNotionPageId: source.source_notion_page_id || "",
+      sourceNotionUrl: source.source_notion_url || "",
+      sourceSegment,
+      partIndex: sourceSegmentPartIndex(sourceSegment),
+      contentVersion: source.content_version,
+      themes: Array.isArray(content.themes) ? content.themes : [],
+      phrases: Array.isArray(content.phrases) ? content.phrases : [],
+      notes: content.notes && typeof content.notes === "object" ? content.notes : {},
+      questions: questionsByLesson.get(source.id) || [],
+      isPreview: source.is_preview === true,
+      locked: !accessible && source.is_preview !== true,
+      questionCount: Number(lesson.question_count || questionsByLesson.get(source.id)?.length || 0),
+    };
+  }).sort((left, right) => (
+    left.lessonDate.localeCompare(right.lessonDate)
+    || compareLessonSourceOrder(left, right)
+  ));
   return {
-    lessons: lessonRows.map((lesson) => {
-      const accessible = privateById.get(lesson.id) || null;
-      const source = accessible || lesson;
-      const content = source.content && typeof source.content === "object" && !Array.isArray(source.content)
-        ? source.content
-        : {};
-      return {
-        id: source.slug,
-        databaseLessonId: source.id,
-        lessonDate: source.lesson_date,
-        title: source.title_en,
-        titleJa: source.title_ja || "",
-        summary: source.summary_en || "",
-        summaryJa: source.summary_ja || "",
-        status: source.status,
-        audience: source.audience,
-        contentVersion: source.content_version,
-        themes: Array.isArray(content.themes) ? content.themes : [],
-        phrases: Array.isArray(content.phrases) ? content.phrases : [],
-        notes: content.notes && typeof content.notes === "object" ? content.notes : {},
-        questions: questionsByLesson.get(source.id) || [],
-        isPreview: source.is_preview === true,
-        locked: !accessible && source.is_preview !== true,
-        questionCount: Number(lesson.question_count || questionsByLesson.get(source.id)?.length || 0),
-      };
-    }),
+    lessons,
     reason: null,
   };
 }
@@ -959,6 +976,7 @@ export async function fetchDatabaseLesson(lessonSlug, { preview = false } = {}) 
       && !Array.isArray(previewLesson.content)
       ? previewLesson.content
       : {};
+    const sourceSegment = sourceSegmentFromLesson(previewLesson);
     teacherPreviewTasksByLesson.set(
       String(previewLesson.id),
       Array.isArray(previewData?.premium_tasks) ? previewData.premium_tasks : [],
@@ -976,6 +994,10 @@ export async function fetchDatabaseLesson(lessonSlug, { preview = false } = {}) 
         status: previewLesson.status,
         audience: previewLesson.audience,
         sourceType: previewLesson.source_type || "database",
+        sourceNotionPageId: previewLesson.source_notion_page_id || "",
+        sourceNotionUrl: previewLesson.source_notion_url || "",
+        sourceSegment,
+        partIndex: sourceSegmentPartIndex(sourceSegment),
         contentVersion: previewLesson.content_version,
         themes: Array.isArray(content.themes) ? content.themes : [],
         phrases: Array.isArray(content.phrases) ? content.phrases : [],
@@ -1016,7 +1038,7 @@ export async function fetchDatabaseLesson(lessonSlug, { preview = false } = {}) 
   if (preview || authenticated) {
     const { data, error } = await client
       .from("review_lessons")
-      .select("id,slug,lesson_date,title_en,title_ja,summary_en,summary_ja,status,audience,source_type,content_version,content,is_preview")
+      .select("id,slug,lesson_date,title_en,title_ja,summary_en,summary_ja,status,audience,source_type,source_notion_page_id,source_notion_url,source_segment,content_version,content,is_preview")
       .eq("slug", slug)
       .maybeSingle();
     if (error && preview) return { lesson: null, reason: "lesson-query-failed", error };
@@ -1028,7 +1050,7 @@ export async function fetchDatabaseLesson(lessonSlug, { preview = false } = {}) 
   if (!lesson && !preview) {
     const { data, error } = await client
       .from("review_public_lessons")
-      .select("id,slug,lesson_date,title_en,title_ja,summary_en,summary_ja,status,audience,content_version,content,is_preview")
+      .select("id,slug,lesson_date,title_en,title_ja,summary_en,summary_ja,status,audience,content_version,content,is_preview,source_segment")
       .eq("slug", slug)
       .maybeSingle();
     if (error) return { lesson: null, reason: "lesson-query-failed", error };
@@ -1060,6 +1082,7 @@ export async function fetchDatabaseLesson(lessonSlug, { preview = false } = {}) 
   const content = lesson.content && typeof lesson.content === "object" && !Array.isArray(lesson.content)
     ? lesson.content
     : {};
+  const sourceSegment = sourceSegmentFromLesson(lesson);
   return {
     lesson: {
       id: lesson.slug,
@@ -1072,6 +1095,10 @@ export async function fetchDatabaseLesson(lessonSlug, { preview = false } = {}) 
       status: lesson.status,
       audience: lesson.audience,
       sourceType: lesson.source_type || "database",
+      sourceNotionPageId: lesson.source_notion_page_id || "",
+      sourceNotionUrl: lesson.source_notion_url || "",
+      sourceSegment,
+      partIndex: sourceSegmentPartIndex(sourceSegment),
       contentVersion: lesson.content_version,
       themes: Array.isArray(content.themes) ? content.themes : [],
       phrases: Array.isArray(content.phrases) ? content.phrases : [],
