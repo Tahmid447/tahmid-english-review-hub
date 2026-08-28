@@ -8,8 +8,8 @@ import {
   setStorageUser,
   updateSettings,
   watchSystemTheme,
-} from "./store.js?v=20260828-release3";
-import { loadPublishedLessons } from "./data.js?v=20260828-release3";
+} from "./store.js?v=20260828-release4";
+import { loadPublishedLessons } from "./data.js?v=20260828-release4";
 import {
   getStudentClient,
   getStudentMembership,
@@ -25,11 +25,11 @@ import {
   signInStudentWithGoogle,
   signUpStudent,
   signOutStudent,
-} from "./supabase.js?v=20260828-release3";
-import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js?v=20260828-release3";
-import { installPlayfulInteractions } from "./effects.js?v=20260828-release3";
-import { planFor } from "./plans.js?v=20260828-release3";
-import { setAmbientPlayback, stopAudio, syncAmbientFromSettings } from "./audio.js?v=20260828-release3";
+} from "./supabase.js?v=20260828-release4";
+import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js?v=20260828-release4";
+import { installPlayfulInteractions } from "./effects.js?v=20260828-release4";
+import { planFor } from "./plans.js?v=20260828-release4";
+import { setAmbientPlayback, stopAudio, syncAmbientFromSettings } from "./audio.js?v=20260828-release4";
 
 let publishedLessons = [];
 let visibleLessons = [];
@@ -429,7 +429,10 @@ function syncNavigationContext() {
 
 function createLessonCard(lesson, options = {}) {
   const progress = progressSummary(lesson);
-  const count = Number(lesson.questions?.length || lesson.questionCount || 0);
+  const count = Math.max(
+    Number(lesson.questions?.length || 0),
+    Number(lesson.questionCount || 0),
+  );
   const groups = lessonGroups(lesson);
   const locked = lesson.locked === true;
   const statusText = locked
@@ -1426,9 +1429,11 @@ async function renderLearnerProgress() {
         ...(bundled || {}),
         ...lesson,
         questions: bundled?.questions?.length ? bundled.questions : lesson.questions,
-        questionCount: bundled?.questions?.length
-          ? bundled.questions.length
-          : lesson.questionCount,
+        questionCount: Math.max(
+          Number(bundled?.questions?.length || 0),
+          Number(bundled?.questionCount || 0),
+          Number(lesson.questionCount || 0),
+        ),
       });
     });
   assigned.forEach((lesson) => merged.set(lesson.id, {
@@ -1459,7 +1464,10 @@ async function reloadLessons() {
   const publishedCount = document.querySelector("#publishedCount");
   const questionCount = document.querySelector("#questionCount");
   const totalQuestions = publishedLessons.reduce(
-    (sum, lesson) => sum + Number(lesson.questions?.length || lesson.questionCount || 0),
+    (sum, lesson) => sum + Math.max(
+      Number(lesson.questions?.length || 0),
+      Number(lesson.questionCount || 0),
+    ),
     0,
   );
   if (publishedCount) publishedCount.textContent = String(publishedLessons.length);

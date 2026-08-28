@@ -69,5 +69,12 @@ A clean-origin local check loaded the June 28 Quick Practice at question 1 of 8
 without JavaScript errors or `[object Object]` output. Production acceptance
 requires the same fresh lesson-page check after the hotfix reaches Published.
 
+The production catalog now exceeds Supabase's 1,000-row response ceiling. A
+follow-up pagination guard reads the complete question inventory in stable
+`lesson_id`, `position`, `id` order, so the Home summary and lesson cards report
+all 1,100 authored questions rather than a truncated 1,000.
+The final public graph for that follow-up is `20260828-release4` with service
+worker cache `te-review-public-v18`.
+
 Real iPhone/Android touch, microphone permission and PWA installation remain
 owner-device follow-up checks; they are not claimed as automated verification.

@@ -12,15 +12,15 @@ import {
   signInTeacherWithGoogle,
   signOutTeacher,
   updateTeacherAccessCode,
-} from "./supabase.js?v=20260828-release3";
-import { planFor } from "./plans.js?v=20260828-release3";
-import { uiText } from "./i18n.js?v=20260828-release3";
-import { readHumanText } from "./lesson-guide-targets.js?v=20260828-release3";
+} from "./supabase.js?v=20260828-release4";
+import { planFor } from "./plans.js?v=20260828-release4";
+import { uiText } from "./i18n.js?v=20260828-release4";
+import { readHumanText } from "./lesson-guide-targets.js?v=20260828-release4";
 import {
   sourceSegmentFromLesson,
   sourceSegmentIsValid,
   sourceSegmentPartIndex,
-} from "./lesson-source.js?v=20260828-release3";
+} from "./lesson-source.js?v=20260828-release4";
 
 const client = getTeacherClient();
 

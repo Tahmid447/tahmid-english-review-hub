@@ -3,8 +3,8 @@ import {
   getPremiumRecordingUrl,
   savePremiumTextSubmission,
   submitPremiumRecording,
-} from "./supabase.js?v=20260828-release3";
-import { planMeetsRequirement } from "./plans.js?v=20260828-release3";
+} from "./supabase.js?v=20260828-release4";
+import { planMeetsRequirement } from "./plans.js?v=20260828-release4";
 
 const make = (tag, options = {}) => {
   const node = document.createElement(tag);

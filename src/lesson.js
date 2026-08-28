@@ -1,4 +1,4 @@
-import { buildPhraseCatalog, getLessonById, normalizeJapaneseMeaning } from "./data.js?v=20260828-release3";
+import { buildPhraseCatalog, getLessonById, normalizeJapaneseMeaning } from "./data.js?v=20260828-release4";
 import {
   applyThemePreference,
   escapeHTML,
@@ -10,7 +10,7 @@ import {
   shuffleArray,
   updateSettings,
   watchSystemTheme,
-} from "./store.js?v=20260828-release3";
+} from "./store.js?v=20260828-release4";
 import {
   answerCoachingFeedback,
   playAnswerFeedback,
@@ -22,7 +22,7 @@ import {
   stopAudio,
   stopSpeechPractice,
   syncAmbientFromSettings,
-} from "./audio.js?v=20260828-release3";
+} from "./audio.js?v=20260828-release4";
 import {
   getStudentSession,
   loadUserSettings,
@@ -30,13 +30,13 @@ import {
   saveAttempt,
   saveSpeakingActivity,
   saveUserSettings,
-} from "./supabase.js?v=20260828-release3";
-import { applyLanguageMode, languageModeFromSettings, learningText, uiText } from "./i18n.js?v=20260828-release3";
-import { DEEP_LESSON_GUIDES } from "./lesson-guides.js?v=20260828-release3";
-import { buildPracticeMapTargets } from "./lesson-guide-targets.js?v=20260828-release3";
-import { animateAnswerFeedback, installPlayfulInteractions } from "./effects.js?v=20260828-release3";
-import { renderPremiumLessonTasks } from "./premium-tasks.js?v=20260828-release3";
-import { planFor } from "./plans.js?v=20260828-release3";
+} from "./supabase.js?v=20260828-release4";
+import { applyLanguageMode, languageModeFromSettings, learningText, uiText } from "./i18n.js?v=20260828-release4";
+import { DEEP_LESSON_GUIDES } from "./lesson-guides.js?v=20260828-release4";
+import { buildPracticeMapTargets } from "./lesson-guide-targets.js?v=20260828-release4";
+import { animateAnswerFeedback, installPlayfulInteractions } from "./effects.js?v=20260828-release4";
+import { renderPremiumLessonTasks } from "./premium-tasks.js?v=20260828-release4";
+import { planFor } from "./plans.js?v=20260828-release4";
 import {
   answerExists as answerValueExists,
   calculateOfficialTotals,
@@ -46,7 +46,7 @@ import {
   preserveFirstResult,
   selectQuickPracticeIds,
   storyboardPanelLayout,
-} from "./lesson-grading.js?v=20260828-release3";
+} from "./lesson-grading.js?v=20260828-release4";
 
 const $ = (selector) => document.querySelector(selector);
 

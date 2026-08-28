@@ -1,10 +1,10 @@
-import { SUPABASE_ANON_KEY, SUPABASE_URL } from "./config.js?v=20260828-release3";
-import { normalizePlanKey, planFor, planMeetsRequirement } from "./plans.js?v=20260828-release3";
+import { SUPABASE_ANON_KEY, SUPABASE_URL } from "./config.js?v=20260828-release4";
+import { normalizePlanKey, planFor, planMeetsRequirement } from "./plans.js?v=20260828-release4";
 import {
   compareLessonSourceOrder,
   sourceSegmentFromLesson,
   sourceSegmentPartIndex,
-} from "./lesson-source.js?v=20260828-release3";
+} from "./lesson-source.js?v=20260828-release4";
 
 let studentClient;
 let teacherClient;
@@ -843,6 +843,22 @@ const databaseQuestion = (row = {}) => {
   };
 };
 
+const QUERY_PAGE_SIZE = 1000;
+
+const fetchAllQueryRows = async (createQuery) => {
+  const rows = [];
+  for (let offset = 0; ; offset += QUERY_PAGE_SIZE) {
+    const result = await createQuery().range(
+      offset,
+      offset + QUERY_PAGE_SIZE - 1,
+    );
+    if (result.error) return { data: null, error: result.error };
+    const page = Array.isArray(result.data) ? result.data : [];
+    rows.push(...page);
+    if (page.length < QUERY_PAGE_SIZE) return { data: rows, error: null };
+  }
+};
+
 export async function fetchDatabaseLessons({ audience = "general" } = {}) {
   const client = getStudentClient();
   if (!client) return { lessons: null, reason: "client-unavailable" };
@@ -859,11 +875,13 @@ export async function fetchDatabaseLessons({ audience = "general" } = {}) {
     if (error) return { lessons: null, reason: "lesson-query-failed", error };
     publicRows = data || [];
     if (publicRows.length) {
-      const result = await client
+      const result = await fetchAllQueryRows(() => client
         .from("review_public_questions")
         .select("id,lesson_id,stable_key,position,section,format,payload,is_original,points,required_plan,locked_display")
         .in("lesson_id", publicRows.map((lesson) => lesson.id))
-        .order("position", { ascending: true });
+        .order("lesson_id", { ascending: true })
+        .order("position", { ascending: true })
+        .order("id", { ascending: true }));
       if (result.error) return { lessons: null, reason: "question-query-failed", error: result.error };
       publicQuestions = result.data || [];
     }
@@ -883,12 +901,14 @@ export async function fetchDatabaseLessons({ audience = "general" } = {}) {
     const result = await query;
     if (!result.error) privateRows = result.data || [];
     if (privateRows.length) {
-      const questionResult = await client
+      const questionResult = await fetchAllQueryRows(() => client
         .from("review_questions")
         .select("id,lesson_id,stable_key,position,section,format,payload,is_original,points,required_plan,locked_display")
         .in("lesson_id", privateRows.map((lesson) => lesson.id))
         .eq("active", true)
-        .order("position", { ascending: true });
+        .order("lesson_id", { ascending: true })
+        .order("position", { ascending: true })
+        .order("id", { ascending: true }));
       if (questionResult.error) return { lessons: null, reason: "question-query-failed", error: questionResult.error };
       privateQuestions = questionResult.data || [];
     }

@@ -1,7 +1,7 @@
-import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js?v=20260828-release3";
-import { applyThemePreference, getSettings, onSettingsChange, updateSettings, watchSystemTheme } from "./store.js?v=20260828-release3";
-import { formatYen, PLAN_CATALOG, PLAN_ORDER, PREMIUM_PROMOTION } from "./plans.js?v=20260828-release3";
-import { installPlayfulInteractions } from "./effects.js?v=20260828-release3";
+import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js?v=20260828-release4";
+import { applyThemePreference, getSettings, onSettingsChange, updateSettings, watchSystemTheme } from "./store.js?v=20260828-release4";
+import { formatYen, PLAN_CATALOG, PLAN_ORDER, PREMIUM_PROMOTION } from "./plans.js?v=20260828-release4";
+import { installPlayfulInteractions } from "./effects.js?v=20260828-release4";
 
 const elements = {
   language: document.querySelector("#languageToggle"),

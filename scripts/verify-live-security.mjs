@@ -20,10 +20,13 @@ async function readRows(resource, column) {
   return { resource, status: response.status, rows };
 }
 
-const publicLessons = await readRows("review_public_lessons", "id,is_preview");
+const publicLessons = await readRows(
+  "review_public_lessons",
+  "id,is_preview,audience,status,question_count",
+);
 const publicQuestions = await readRows(
   "review_public_questions",
-  "id,required_plan,locked_display",
+  "id,lesson_id,required_plan,locked_display",
 );
 const questionTeasers = await readRows(
   "review_question_teasers",
@@ -41,11 +44,11 @@ const protectedResources = [
   ["review_speaking_activity", "id"],
   ["review_phrase_activity", "id"],
   ["review_user_settings", "user_id"],
-  ["review_memberships", "id"],
+  ["review_memberships", "user_id"],
   ["review_access_codes", "id"],
-  ["review_access_code_redemptions", "id"],
-  ["review_lesson_access_overrides", "id"],
-  ["review_learner_plan_overrides", "id"],
+  ["review_access_code_redemptions", "code_id"],
+  ["review_lesson_access_overrides", "lesson_id"],
+  ["review_learner_plan_overrides", "user_id"],
   ["review_premium_tasks", "id"],
   ["review_task_submissions", "id"],
   ["review_submission_feedback", "id"],
@@ -56,12 +59,30 @@ const protectedResults = await Promise.all(
 );
 
 const failures = [];
-if (publicLessons.status !== 200 || publicLessons.rows?.length !== 17) {
+if (publicLessons.status !== 200 || publicLessons.rows?.length !== 31) {
   failures.push(
-    `Expected 17 public lessons; received status ${publicLessons.status} and ${
+    `Expected 31 public lessons; received status ${publicLessons.status} and ${
       Array.isArray(publicLessons.rows) ? publicLessons.rows.length : "no"
     } rows.`,
   );
+}
+const publicQuestionCount = Array.isArray(publicLessons.rows)
+  ? publicLessons.rows.reduce((sum, lesson) => sum + Number(lesson.question_count || 0), 0)
+  : 0;
+if (publicQuestionCount !== 1100) {
+  failures.push(`Expected 1,100 authored questions in public lesson metadata; received ${publicQuestionCount}.`);
+}
+if (
+  Array.isArray(publicLessons.rows)
+  && publicLessons.rows.some((lesson) => lesson.status !== "published" || lesson.audience !== "both")
+) {
+  failures.push("Every public catalog lesson must be published for both audiences.");
+}
+const publicLessonIds = Array.isArray(publicLessons.rows)
+  ? publicLessons.rows.map((lesson) => lesson.id)
+  : [];
+if (new Set(publicLessonIds).size !== publicLessonIds.length) {
+  failures.push("The public lesson catalog returned duplicate lesson IDs.");
 }
 const previewLessonCount = Array.isArray(publicLessons.rows)
   ? publicLessons.rows.filter((lesson) => lesson.is_preview === true).length
@@ -82,12 +103,31 @@ if (
 ) {
   failures.push("The anonymous full-payload question view returned a non-Free question.");
 }
-if (questionTeasers.status !== 200 || questionTeasers.rows?.length !== 0) {
+const previewLessonIds = new Set(
+  Array.isArray(publicLessons.rows)
+    ? publicLessons.rows.filter((lesson) => lesson.is_preview === true).map((lesson) => lesson.id)
+    : [],
+);
+if (
+  Array.isArray(publicQuestions.rows)
+  && publicQuestions.rows.some((question) => !previewLessonIds.has(question.lesson_id))
+) {
+  failures.push("The anonymous full-payload question view returned a non-preview lesson question.");
+}
+const allowedTeaserPlans = new Set(["standard", "premium", "premium_plus"]);
+if (questionTeasers.status !== 200) {
   failures.push(
-    `Expected no plan-locked teaser rows before teacher configuration; received status ${questionTeasers.status} and ${
-      Array.isArray(questionTeasers.rows) ? questionTeasers.rows.length : "no"
-    } rows.`,
+    `Expected a readable payload-free question teaser view; received status ${questionTeasers.status}.`,
   );
+}
+if (
+  Array.isArray(questionTeasers.rows)
+  && questionTeasers.rows.some((question) => (
+    !publicLessonIds.includes(question.lesson_id)
+    || !allowedTeaserPlans.has(question.required_plan)
+  ))
+) {
+  failures.push("The question teaser view returned an invalid lesson reference or plan tier.");
 }
 const expectedPublicPlanKeys = ["free", "premium", "premium_plus", "standard"];
 const publicPlanKeys = Array.isArray(publicPlans.rows)
@@ -97,6 +137,7 @@ if (
   publicPlans.status !== 200
   || publicPlanKeys.length !== expectedPublicPlanKeys.length
   || publicPlanKeys.some((key, index) => key !== expectedPublicPlanKeys[index])
+  || publicPlans.rows.some((plan) => plan.active !== true)
 ) {
   failures.push(
     `Expected public Free, Standard, Premium and Premium+ descriptions; received status ${publicPlans.status} and keys ${
@@ -105,9 +146,9 @@ if (
   );
 }
 for (const result of protectedResults) {
-  if (result.status < 400) {
+  if (result.status !== 401) {
     failures.push(
-      `${result.resource} unexpectedly returned status ${result.status} to an anonymous client.`,
+      `${result.resource} returned status ${result.status}; expected an anonymous 401 denial.`,
     );
   }
 }
@@ -118,10 +159,12 @@ if (failures.length) {
   process.exitCode = 1;
 } else {
   console.log("Live Supabase security verification passed.");
-  console.log("  ✓ 17 published public lessons");
+  console.log("  ✓ 31 published public lessons with 1,100 authored questions");
   console.log("  ✓ exactly 2 free preview lessons");
-  console.log("  ✓ 80 anonymous preview activities; expanded member activities remain protected");
-  console.log("  ✓ anonymous full payloads are Free-only; safe teaser view currently has 0 configured rows");
+  console.log("  ✓ 80 anonymous preview activities; non-preview payloads are absent from the anonymous view");
+  console.log(
+    `  ✓ anonymous full payloads are Free-only; safe teaser view has ${questionTeasers.rows.length} configured rows`,
+  );
   console.log("  ✓ public Free, Standard, Premium and Premium+ plan descriptions");
   console.log(
     `  ✓ ${protectedResults.length} personal/base resources reject anonymous reads`,

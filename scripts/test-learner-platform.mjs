@@ -282,13 +282,27 @@ assert.match(hubScript, /isGoogleSession/);
 assert.match(hubScript, /id = "profileCompletionStatus"/);
 assert.match(hubScript, /Saving your profile…/);
 assert.match(supabaseScript, /existingProfile && !hasExplicitValues/);
-assert.match(homePage, /src="\/src\/hub\.js\?v=20260828-release3"/);
-assert.match(lessonPage, /src="\/src\/lesson\.js\?v=20260828-release3"/);
+assert.match(supabaseScript, /const fetchAllQueryRows = async/);
+assert.equal(
+  (supabaseScript.match(/fetchAllQueryRows\(/g) || []).length,
+  2,
+  "Both whole-library question queries stay paginated.",
+);
+assert.match(supabaseScript, /\.range\([\s\S]*?offset \+ QUERY_PAGE_SIZE - 1/);
+assert.equal(
+  (supabaseScript.match(/\.order\("lesson_id"[\s\S]{0,120}\.order\("position"[\s\S]{0,120}\.order\("id"/g) || []).length,
+  2,
+  "Both paginated queries use a stable lesson, position and row-ID order.",
+);
+assert.match(homePage, /id="publishedCount">31</);
+assert.match(homePage, /id="questionCount">1100</);
+assert.match(homePage, /src="\/src\/hub\.js\?v=20260828-release4"/);
+assert.match(lessonPage, /src="\/src\/lesson\.js\?v=20260828-release4"/);
 assert.match(homePage, /id="musicStartChip"/);
 assert.match(homePage, /Your lesson does not end when the call ends/);
 assert.match(homePage, /eight-question Quick Practice/);
-assert.match(hubScript, /from "\.\/supabase\.js\?v=20260828-release3"/);
-assert.match(lessonScript, /from "\.\/effects\.js\?v=20260828-release3"/);
+assert.match(hubScript, /from "\.\/supabase\.js\?v=20260828-release4"/);
+assert.match(lessonScript, /from "\.\/effects\.js\?v=20260828-release4"/);
 assert.match(supabaseScript, /signOutStudent[\s\S]*?withOperationTimeout/);
 assert.match(supabaseScript, /removeItem\(STUDENT_AUTH_STORAGE_KEY\)/);
 assert.match(supabaseScript, /studentClient = undefined/);
@@ -315,7 +329,7 @@ assert.doesNotMatch(phraseScript, /"aria-label": `Play \$\{phrase\.en\}/);
 assert.doesNotMatch(phraseScript, /"aria-label": `Practise saying/);
 assert.match(phrasePage, /id="phraseLoadMore"/);
 assert.match(serviceWorker, /request\.headers\.has\("authorization"\)/);
-assert.match(serviceWorker, /CACHE_NAME = "te-review-public-v17"/);
+assert.match(serviceWorker, /CACHE_NAME = "te-review-public-v18"/);
 assert.match(serviceWorker, /event\.respondWith\(fetch\(request\)[\s\S]*?\.catch\(\(\) => caches\.match\(request\)\)\)/,
   "Public shell assets refresh from the network and use cache only as an offline fallback.");
 assert.doesNotMatch(serviceWorker, /supabase\.co|\/auth\/v1|\/rest\/v1|\/functions\/v1|\/storage\/v1/);

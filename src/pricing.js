@@ -1,12 +1,12 @@
-import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js?v=20260828-release3";
+import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js?v=20260828-release4";
 import {
   applyThemePreference,
   getSettings,
   onSettingsChange,
   updateSettings,
   watchSystemTheme,
-} from "./store.js?v=20260828-release3";
-import "./pwa.js?v=20260828-release3";
+} from "./store.js?v=20260828-release4";
+import "./pwa.js?v=20260828-release4";
 import {
   BILLING_OPTIONS,
   CONTACT_CHANNELS,
@@ -19,7 +19,7 @@ import {
   planPrice,
   planSavings,
   promotionApplies,
-} from "./plans.js?v=20260828-release3";
+} from "./plans.js?v=20260828-release4";
 
 const elements = {
   language: document.querySelector("#languageToggle"),
@@ -113,7 +113,7 @@ function renderPlanQuickNav() {
   if (!elements.quickNav) return;
   const shortBenefits = {
     free: ["Two complete lessons", "完成版2レッスン"],
-    standard: ["All 17 lesson reviews", "全17レッスン復習"],
+    standard: ["All 31 lesson reviews", "全31レッスン復習"],
     premium: ["Personal speaking & writing feedback", "発話・英作文の個別添削"],
     premium_plus: ["Three live coaching sessions", "月3回のライブ個人指導"],
   };
