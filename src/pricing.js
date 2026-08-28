@@ -1,12 +1,12 @@
-import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js";
+import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js?v=20260828-release3";
 import {
   applyThemePreference,
   getSettings,
   onSettingsChange,
   updateSettings,
   watchSystemTheme,
-} from "./store.js";
-import "./pwa.js";
+} from "./store.js?v=20260828-release3";
+import "./pwa.js?v=20260828-release3";
 import {
   BILLING_OPTIONS,
   CONTACT_CHANNELS,
@@ -19,7 +19,7 @@ import {
   planPrice,
   planSavings,
   promotionApplies,
-} from "./plans.js";
+} from "./plans.js?v=20260828-release3";
 
 const elements = {
   language: document.querySelector("#languageToggle"),

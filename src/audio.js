@@ -1,5 +1,5 @@
-import { NATURAL_SPEECH_URL, SUPABASE_ANON_KEY } from "./config.js";
-import { AMBIENT_TRACK_KEYS, getSettings, normalizeAnswerText } from "./store.js";
+import { NATURAL_SPEECH_URL, SUPABASE_ANON_KEY } from "./config.js?v=20260828-release3";
+import { AMBIENT_TRACK_KEYS, getSettings, normalizeAnswerText } from "./store.js?v=20260828-release3";
 
 const AUDIO_CACHE_LIMIT = 24;
 const remoteAudioCache = new Map();

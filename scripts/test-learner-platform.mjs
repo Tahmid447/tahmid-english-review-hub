@@ -266,6 +266,7 @@ const homePage = fs.readFileSync(path.join(root, "index.html"), "utf8");
 const phraseScript = fs.readFileSync(path.join(root, "src", "phrases.js"), "utf8");
 const phrasePage = fs.readFileSync(path.join(root, "phrases.html"), "utf8");
 const serviceWorker = fs.readFileSync(path.join(root, "sw.js"), "utf8");
+const pwaScript = fs.readFileSync(path.join(root, "src", "pwa.js"), "utf8");
 const buildScript = fs.readFileSync(path.join(root, "scripts", "build.mjs"), "utf8");
 const netlify = fs.readFileSync(path.join(root, "netlify.toml"), "utf8");
 
@@ -281,11 +282,13 @@ assert.match(hubScript, /isGoogleSession/);
 assert.match(hubScript, /id = "profileCompletionStatus"/);
 assert.match(hubScript, /Saving your profile…/);
 assert.match(supabaseScript, /existingProfile && !hasExplicitValues/);
-assert.match(homePage, /src="\/src\/hub\.js\?v=20260828-release2"/);
+assert.match(homePage, /src="\/src\/hub\.js\?v=20260828-release3"/);
+assert.match(lessonPage, /src="\/src\/lesson\.js\?v=20260828-release3"/);
 assert.match(homePage, /id="musicStartChip"/);
 assert.match(homePage, /Your lesson does not end when the call ends/);
 assert.match(homePage, /eight-question Quick Practice/);
-assert.match(hubScript, /from "\.\/supabase\.js\?v=20260814-profile-fix"/);
+assert.match(hubScript, /from "\.\/supabase\.js\?v=20260828-release3"/);
+assert.match(lessonScript, /from "\.\/effects\.js\?v=20260828-release3"/);
 assert.match(supabaseScript, /signOutStudent[\s\S]*?withOperationTimeout/);
 assert.match(supabaseScript, /removeItem\(STUDENT_AUTH_STORAGE_KEY\)/);
 assert.match(supabaseScript, /studentClient = undefined/);
@@ -312,6 +315,10 @@ assert.doesNotMatch(phraseScript, /"aria-label": `Play \$\{phrase\.en\}/);
 assert.doesNotMatch(phraseScript, /"aria-label": `Practise saying/);
 assert.match(phrasePage, /id="phraseLoadMore"/);
 assert.match(serviceWorker, /request\.headers\.has\("authorization"\)/);
+assert.match(serviceWorker, /CACHE_NAME = "te-review-public-v17"/);
+assert.match(serviceWorker, /event\.respondWith\(fetch\(request\)[\s\S]*?\.catch\(\(\) => caches\.match\(request\)\)\)/,
+  "Public shell assets refresh from the network and use cache only as an offline fallback.");
 assert.doesNotMatch(serviceWorker, /supabase\.co|\/auth\/v1|\/rest\/v1|\/functions\/v1|\/storage\/v1/);
+assert.match(pwaScript, /updateViaCache: "none"/);
 
 console.log("Learner platform regression tests passed (14 formats, retry, navigation, profile gate, theme and PWA).");

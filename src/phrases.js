@@ -1,4 +1,4 @@
-import { buildPhraseCatalog } from "./data.js";
+import { buildPhraseCatalog } from "./data.js?v=20260828-release3";
 import {
   applyThemePreference,
   getSettings,
@@ -7,7 +7,7 @@ import {
   safeLocalReturnPath,
   updateSettings,
   watchSystemTheme,
-} from "./store.js";
+} from "./store.js?v=20260828-release3";
 import {
   speechRecognitionSupported,
   setAmbientPlayback,
@@ -16,15 +16,15 @@ import {
   stopAudio,
   stopSpeechPractice,
   syncAmbientFromSettings,
-} from "./audio.js?v=20260827-release1";
+} from "./audio.js?v=20260828-release3";
 import {
   getStudentClient,
   getStudentSession,
   loadUserSettings,
   saveUserSettings,
-} from "./supabase.js";
-import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js";
-import { celebrate, installPlayfulInteractions } from "./effects.js";
+} from "./supabase.js?v=20260828-release3";
+import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js?v=20260828-release3";
+import { celebrate, installPlayfulInteractions } from "./effects.js?v=20260828-release3";
 
 const LEGACY_ACTIVITY_KEY = "teh_phrase_activity_v1";
 const ACTIVITY_KEY_PREFIX = "teh_phrase_activity_v2";

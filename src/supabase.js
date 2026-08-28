@@ -1,10 +1,10 @@
-import { SUPABASE_ANON_KEY, SUPABASE_URL } from "./config.js";
-import { normalizePlanKey, planFor, planMeetsRequirement } from "./plans.js";
+import { SUPABASE_ANON_KEY, SUPABASE_URL } from "./config.js?v=20260828-release3";
+import { normalizePlanKey, planFor, planMeetsRequirement } from "./plans.js?v=20260828-release3";
 import {
   compareLessonSourceOrder,
   sourceSegmentFromLesson,
   sourceSegmentPartIndex,
-} from "./lesson-source.js";
+} from "./lesson-source.js?v=20260828-release3";
 
 let studentClient;
 let teacherClient;

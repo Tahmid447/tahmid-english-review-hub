@@ -1,7 +1,7 @@
 # August 28, 2026 Notion lesson expansion release
 
 This release converts 10 canonical Notion lesson pages dated July 30 through
-August 25 into 14 public Review Hub lessons. Long source pages are split into
+August 25 into 14 published Review Hub lessons. Long source pages are split into
 Part 1 and Part 2 by learning objective. No source page was edited.
 
 ## Release inventory
@@ -33,7 +33,8 @@ Live verification after step 5 returned:
 - 462 questions across the new 14 lessons, exactly 33 per lesson
 - 363 questions across the prior 11 Notion lessons, exactly 33 per lesson
 - exactly 14 distinct formats in every Notion-derived lesson
-- 31 public lessons and 1,100 public questions overall
+- 31 published database lessons and 1,100 authored questions across all
+  audiences
 - 28 Premium tasks: 14 speaking and 14 essay
 
 ## Quality gates
@@ -50,6 +51,23 @@ desktop and 390×844 mobile sizes. It also confirmed the adopted 2×2 pricing
 layout, compact sticky header, focused question-local settings, complete top
 settings, the five-second BGM invitation and real playback of the selected M4A
 track.
+
+## Production cache hardening
+
+The initial application release commit
+`b0dc5e095acba9ac86f698c9298eb2ca2acb4890` was published by Netlify as
+deploy `6a9194c4eb00b70008c5490a`. Production QA found that the existing service
+worker could mix a new entry module with an older cached dependency, preventing
+lesson pages from loading.
+
+The follow-up hotfix versions the complete public module graph with
+`20260828-release3`, bumps the public cache to `te-review-public-v17`, changes
+public shell requests to network-first with cached offline fallback, and
+registers the service worker with `updateViaCache: "none"`.
+
+A clean-origin local check loaded the June 28 Quick Practice at question 1 of 8
+without JavaScript errors or `[object Object]` output. Production acceptance
+requires the same fresh lesson-page check after the hotfix reaches Published.
 
 Real iPhone/Android touch, microphone permission and PWA installation remain
 owner-device follow-up checks; they are not claimed as automated verification.

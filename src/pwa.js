@@ -15,7 +15,7 @@ if (
   && (window.isSecureContext || ["localhost", "127.0.0.1"].includes(window.location.hostname))
 ) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/sw.js", { scope: "/" }).catch(() => {
+    navigator.serviceWorker.register("/sw.js", { scope: "/", updateViaCache: "none" }).catch(() => {
       // Installation is an enhancement; the live site stays fully usable.
     });
   }, { once: true });

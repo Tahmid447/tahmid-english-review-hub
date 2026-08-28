@@ -1,4 +1,4 @@
-const CACHE_NAME = "te-review-public-v16";
+const CACHE_NAME = "te-review-public-v17";
 const OFFLINE_PAGE = "/offline.html";
 const PUBLIC_SHELL = new Set([
   "/",
@@ -70,11 +70,11 @@ self.addEventListener("fetch", (event) => {
   }
 
   if (!isPublicStaticRequest(request, url)) return;
-  event.respondWith(caches.match(request).then((cached) => cached || fetch(request).then((response) => {
+  event.respondWith(fetch(request).then((response) => {
     if (response.ok && response.type === "basic") {
       const copy = response.clone();
       caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
     }
     return response;
-  })));
+  }).catch(() => caches.match(request)));
 });
