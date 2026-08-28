@@ -181,7 +181,9 @@ answers, teacher feedback, authenticated API responses, or recordings.
   `https://tahmid-english-review-hub-preview.netlify.app/`
 - Exact current-account Preview deploy:
   `https://6a8eee9d22a46700081feb04--tahmid-english-review-hub-preview.netlify.app/`
-- Production: `https://jocular-chaja-86e78d.netlify.app/`
+- Production: `https://tahmid-english-review-hub.netlify.app/`
+- Legacy production (old Netlify account, retained during transition):
+  `https://jocular-chaja-86e78d.netlify.app/`
   — static site remains untouched and pre-v9
 
 Earlier public QA on the validated `ecf8726` deploy checked the 17/616/14 home totals, exact

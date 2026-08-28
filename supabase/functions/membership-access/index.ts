@@ -2,6 +2,8 @@ import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 
 const allowedOrigins = new Set([
+  "https://tahmid-english-review-hub.netlify.app",
+  "https://tahmid-english-review-hub-v9-release.netlify.app",
   "https://jocular-chaja-86e78d.netlify.app",
   "https://tahmid-english-review-hub-preview.netlify.app",
   "https://tahmid-english-review-hub-v9-preview.netlify.app",
@@ -14,7 +16,7 @@ const corsHeaders = (request: Request) => {
   return {
     "Access-Control-Allow-Origin": allowedOrigins.has(origin)
       ? origin
-      : "https://jocular-chaja-86e78d.netlify.app",
+      : "https://tahmid-english-review-hub.netlify.app",
     "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
     Vary: "Origin",

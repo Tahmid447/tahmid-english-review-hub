@@ -156,13 +156,17 @@ max_indexes = 5
 enabled = true
 # The base URL of your website. Used as an allow-list for redirects and for constructing URLs used
 # in emails.
-site_url = "https://jocular-chaja-86e78d.netlify.app"
+site_url = "https://tahmid-english-review-hub.netlify.app"
 # The public URL that Auth serves on. Defaults to the API external URL with `/auth/v1` appended.
 # external_url = ""
 # A list of *exact* URLs that auth providers are permitted to redirect to post authentication.
 additional_redirect_urls = [
   "https://jocular-chaja-86e78d.netlify.app/",
   "https://jocular-chaja-86e78d.netlify.app/takiwaki",
+  "https://tahmid-english-review-hub.netlify.app/",
+  "https://tahmid-english-review-hub.netlify.app/takiwaki",
+  "https://tahmid-english-review-hub-v9-release.netlify.app/",
+  "https://tahmid-english-review-hub-v9-release.netlify.app/takiwaki",
   "https://tahmid-english-review-hub-preview.netlify.app/",
   "https://tahmid-english-review-hub-preview.netlify.app/takiwaki",
   "http://127.0.0.1:4173/",
