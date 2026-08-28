@@ -6,6 +6,12 @@ Updated: 2026-08-28 (Asia/Tokyo)
 
 - Repository folder: `/Users/tahmidahmed/Documents/Codex/2026-08-03/codex-handoff-tahmid-english-review-hub/work/tahmid-english-review-hub`
 - Working branch: `upgrade/review-hub-v9-final-product`
+- Exact August 28 customer-facing production checkpoint:
+  `cff3973c08471c6364c6cd2db2a0312f7767ca1b`
+- Formal production: https://tahmid-english-review-hub.netlify.app
+- Exact formal-production deploy:
+  https://6a917696755e5800088ef0e8--tahmid-english-review-hub.netlify.app
+- Formal-production Netlify deploy ID: `6a917696755e5800088ef0e8`
 - Exact August 28 public-release application checkpoint:
   `85ecfbf33c24b077a28cd9235467d32a4a73e8ba`
 - Exact August 28 launch-UX application checkpoint:
@@ -31,8 +37,10 @@ Updated: 2026-08-28 (Asia/Tokyo)
   document cannot contain the final hash of the commit that contains itself.
 - Canonical GitHub implementation checkpoint: `c14625d50204227c917ecc01d59322cb63006cee`
 - Published handoff checkpoint: `a87eb5e1aaa9cff079319b68dfed40bdb2b1a408`
-- Production: https://jocular-chaja-86e78d.netlify.app
-- New-account public release: https://tahmid-english-review-hub-v9-release.netlify.app
+- Legacy old-account production (pre-v9; untouched):
+  https://jocular-chaja-86e78d.netlify.app
+- Transitional new-account release name (renamed into formal production):
+  `tahmid-english-review-hub-v9-release`
 - Exact new-account release deploy: https://6a90b24a2703d100098ffe4b--tahmid-english-review-hub-v9-release.netlify.app
 - New Netlify project/Site ID: `f30d0264-70d0-4234-83ec-c717fa428f99`
 - Dedicated v9 preview: https://tahmid-english-review-hub-v9-preview.netlify.app
@@ -45,20 +53,28 @@ Do not place OAuth client secrets, passwords, service-role keys, database passwo
 
 ## Deployment truth
 
-- The August 28 release checkpoint `85ecfbf` is public on the user's new
-  Netlify account at
-  `https://tahmid-english-review-hub-v9-release.netlify.app`. Netlify deploy
-  `6a90b24a2703d100098ffe4b` is published from the exact GitHub branch/commit.
-  The project is public, automatic publishing is on, and the Netlify overlay
-  badge is disabled. Netlify labels this branch deploy as Production for the
-  new project. The legacy production URL
-  `https://jocular-chaja-86e78d.netlify.app` remains untouched in the old
-  account; do not describe it as upgraded.
-- Supabase Auth now allow-lists
-  `https://tahmid-english-review-hub-v9-release.netlify.app/**`. A real Google
-  OAuth retest returned to the new domain, completed the existing learner
-  session, unlocked Quick and Full entry for all 17 lessons, and no longer
-  copied OAuth token fragments into internal return links.
+- The formal customer-facing production is
+  `https://tahmid-english-review-hub.netlify.app`. Netlify project
+  `tahmid-english-review-hub` (Site ID
+  `f30d0264-70d0-4234-83ec-c717fa428f99`) publishes branch
+  `upgrade/review-hub-v9-final-product` automatically. Exact application
+  commit `cff3973c08471c6364c6cd2db2a0312f7767ca1b` is published as deploy
+  `6a917696755e5800088ef0e8`. The overlay badge is disabled. The legacy
+  old-account URL `https://jocular-chaja-86e78d.netlify.app` remains untouched
+  and pre-v9; do not describe it as upgraded.
+- Supabase Auth's Site URL is the formal production domain and its redirect
+  allow-list includes `https://tahmid-english-review-hub.netlify.app/**`.
+  The transitional Release redirect is retained for safety. A real Google
+  OAuth retest returned to the formal domain, completed the existing learner
+  session, unlocked Quick and Full entry for all 17 lessons, and did not copy
+  OAuth token fragments into internal return links.
+- The deployed `membership-access` Edge Function is ACTIVE at version 6,
+  update SHA
+  `c549064c5cb6fa30bbe30c45c600bd24e3769dc51ca1b9ff5c6177e9cc66ab00`.
+  Its live OPTIONS response returns the exact formal production origin.
+- The PWA manifest is HTTP 200 with
+  `application/manifest+json; charset=UTF-8`; the Service Worker, 192px icon,
+  512px icon, home, plans and lesson routes are all HTTP 200 on production.
 - The release workflow is now local-first: finish and verify a coherent batch
   locally, publish one Preview, pass its public/authenticated gates, and only
   then publish Production. Do not spend Netlify credits on each small edit.
@@ -81,7 +97,8 @@ Do not place OAuth client secrets, passwords, service-role keys, database passwo
   copy, with balanced headings and Japanese line-breaking/spacing refinements.
 - The August 26 final application checkpoint `8fb49e0` is published only to the
   current-account Preview as Netlify deploy `6a8eee9d22a46700081feb04`.
-  Production static files remain untouched and pre-v9.
+  At that dated checkpoint the then-production static files were still pre-v9;
+  this was superseded by the formal August 28 production launch above.
 - The user selected the balanced layout direction. Public `/plans` now uses a
   clear 2×2 desktop hierarchy (Free/Standard, then Premium/Premium+) and one
   column on small screens. The private no-index comparison remains available,
@@ -206,8 +223,9 @@ Do not place OAuth client secrets, passwords, service-role keys, database passwo
 - Exact rollout commit `7899024a8c9baee9cdd91b0fe93346a1bcc8427d`
   is published to the dedicated preview as Netlify deploy
   `6a8420afed26890008660823`.
-- The production static site is still pre-v9 and was not deployed or otherwise
-  changed during this rollout.
+- At that historical rollout checkpoint, the old production static site was
+  still pre-v9 and unchanged. The formal August 28 production launch above now
+  supersedes that dated status.
 - Supabase migrations `015` and `016` were manually applied in order, each in a
   separate SQL Editor transaction, and the matching `membership-access` Edge
   Function is deployed.
@@ -220,10 +238,12 @@ Do not place OAuth client secrets, passwords, service-role keys, database passwo
 - The preview and production frontends share Supabase project
   `ycmybggetemkhorkhfnf`; therefore the backend and Edge changes can affect the
   older production frontend even though its static deployment is untouched.
-- Public browser QA and scoped authenticated Google learner sign-in/profile/
-  reload/lesson/sign-out checks passed. Teacher auth, dedicated non-teacher tier
-  negatives, remaining RLS/access-code/submission, microphone, Lighthouse, and
-  physical-device QA remain pending. No production promotion is authorised.
+- That Preview checkpoint passed public browser and scoped authenticated Google
+  learner sign-in/profile/reload/lesson/sign-out checks. The later formal launch
+  also passed owner Teacher authentication. Dedicated non-teacher tier
+  negatives, remaining RLS/access-code/submission, microphone and physical-
+  device QA remain operational follow-ups; formal production promotion is now
+  complete.
 - The earlier profile hotfix made no database change. Migration `017` now adds
   Premium topic metadata and selected-topic persistence in shared Supabase.
   It did not change Edge Functions, authentication, plan prices or existing
@@ -355,6 +375,23 @@ Do not place OAuth client secrets, passwords, service-role keys, database passwo
 
 ## Verification evidence
 
+The exact formal-production application checkpoint `cff3973` passed:
+
+```sh
+npm test
+npm run build
+git diff --check
+```
+
+Final live checks also passed for Home, Plans, June 29 Full Lesson, the focused
+and complete settings dialogs, real Google learner OAuth, 17 Quick plus 17 Full
+member links, token-safe internal navigation, protected owner Teacher Studio,
+formal-origin CORS, Service Worker, parsed PWA manifest and both manifest icons.
+Netlify published deploy `6a917696755e5800088ef0e8`; Supabase
+`membership-access` is ACTIVE at version 6. See the top of
+`docs/test-report.md` for the exact evidence and the explicit physical-device/
+dedicated-tier limitations.
+
 The exact August 26 final application checkpoint `8fb49e0` passed:
 
 ```sh
@@ -442,7 +479,9 @@ success, gate close, complete-profile reload, Standard membership shown through
 August 2, 2027, access to all 44 June 30 questions, and safe sign-out/reload;
 the second open lesson tab became locked. Premium task cards also appeared, so
 the identity seems teacher-elevated and cannot prove strict Standard-versus-
-Premium denial. Teacher auth remains pending; the learner is signed out.
+Premium denial. At that dated checkpoint Teacher auth was pending and the
+learner was signed out. The final formal-production gate later passed owner
+Teacher authentication and intentionally left that account signed in.
 
 ## Rollout progress and required order
 
@@ -491,27 +530,37 @@ Premium denial. Teacher auth remains pending; the learner is signed out.
     and `dist`, publish the new public release, add its Supabase Auth redirect,
     and pass public plus Google-authenticated release gates on exact commit
     `85ecfbf` / deploy `6a90b24a2703d100098ffe4b`.
-15. **Pending:** authenticate dedicated non-teacher Free/
-   Standard/Premium/Premium+ accounts; test tier/RLS/access codes, email auth,
-   speaking/essay submissions, and published feedback.
-16. **Pending:** complete desktop/tablet/390 px and real iPhone Safari/Android
-   Chrome touch, microphone, PWA, and offline QA.
-17. Promote to production only after every preview gate passes and the correct
-   production Netlify account is available. Preserve a known-good rollback
-   deploy and prepare forward fixes for database issues.
+15. **Completed:** adopt the formal customer-facing name
+   `tahmid-english-review-hub`, update Open Graph/public configuration,
+   Supabase Auth Site URL and redirect allow-list, deploy `membership-access`
+   version 6, publish exact commit `cff3973` as Netlify deploy
+   `6a917696755e5800088ef0e8`, and pass the final public/authenticated/PWA/CORS
+   checks on `https://tahmid-english-review-hub.netlify.app`.
+16. **Pending operational QA (not a launch blocker):** authenticate dedicated
+   non-teacher Free/Standard/Premium/Premium+ accounts; test strict tier/RLS
+   denial, email auth, access-code redemption, speaking/essay submissions and
+   published feedback.
+17. **Pending physical-device QA (not reproducible in this session):** one real
+   iPhone Safari and Android Chrome pass for touch, microphone permission, PWA
+   install/update and offline fallback.
+18. **Next content phase:** receive the user's new-lesson source/instructions,
+   add the lesson locally as one coherent batch, run the full content/guide/
+   visual/build suite, review locally, then publish one verified production
+   deploy instead of spending Netlify credits on every small edit.
 
 ## Remaining and blockers
 
-- The new-account release is public and verified. The only production naming
-  decision still open is whether customers should adopt the new release URL or
-  whether the legacy `jocular-chaja-86e78d` address must later be migrated from
-  its old Netlify account. No destructive transfer or old-site change was made.
-- August 26 entrance/conversion, cross-page Study Music fallback, SFX,
-  balanced public pricing, bilingual typography, question-local settings and
-  complete Guide coverage are published to Preview. There is no known
-  code-level blocker in that tranche. The checked public artifact is commit
-  `8fb49e0`, deploy `6a8eee9d22a46700081feb04`;
-  Production was not deployed.
+- Formal production is public and verified at
+  `https://tahmid-english-review-hub.netlify.app`. The production naming
+  decision is complete. The old `jocular-chaja-86e78d` site is intentionally
+  left untouched as a legacy pre-v9 site; migrating that old address is not
+  required for the new formal production URL.
+- There is no known code, deployment, Supabase Auth, Edge Function, content,
+  settings, plan or PWA-header blocker for the current 17-lesson launch.
+- Final Browser QA passed the Home, four-plan pricing page, June 29 full lesson
+  (37 questions), focused Practice settings, complete top Settings, real Google
+  learner OAuth, all 17 Quick/Full member links, token-safe internal return
+  links and protected Teacher Studio dashboard (17 published, 0 drafts).
 - The pricing choice is complete: `/plans` uses the balanced 2×2 option because
   it makes the four alternatives easier to compare without an excessively
   long vertical sales path. The former stack remains only as a private visual
@@ -523,21 +572,22 @@ Premium denial. Teacher auth remains pending; the learner is signed out.
   rows were then permanently deleted with user authorisation and zero matching
   rows remained. No QA code was redeemed.
 
-- Post-hotfix tests/build/visual verification, exact-commit Preview publication,
-  public QA, and scoped authenticated Google learner QA are complete.
+- Post-hotfix tests/build/visual verification, exact-commit production
+  publication, public QA, authenticated Google learner QA and Teacher Studio
+  authentication are complete.
 - Strict plan denial is unproved because the identity appeared teacher-elevated;
   dedicated non-teacher tier accounts are required.
-- Teacher auth remains pending; the learner account is currently signed out.
+- The owner/teacher account is currently signed in on formal production so the
+  user can continue reviewing the live site.
 - Local and deployed August 20 Lighthouse accessibility are 100/100 on home,
   phrase, pricing, and lesson pages with zero binary failures. Deployed
   performance measurements remain pending.
 - Remaining authenticated Teacher/tier RLS, email-auth, access-code, and
   submission QA is pending; the scoped Google learner flow above is complete.
 - Real-device touch, PWA install/update, offline fallback, Safari/Chrome microphone, and upload QA are pending.
-- Replacing the legacy production URL still requires access to the Netlify
-  account that owns it, or a deliberate customer-facing URL migration. The new
-  project is already public and Netlify-production; this note concerns only the
-  old address/ownership.
+- The old Netlify URL remains owned by its old account and was not modified.
+  The new formal URL is the customer-facing production, so no old-account
+  action is needed before adding new lessons.
 - Supabase Free plan has no official backup. The privacy-safe logical restore
   schema is useful for this migration but is not full disaster recovery and
   excludes personal/Auth data.
@@ -547,13 +597,14 @@ Premium denial. Teacher auth remains pending; the learner is signed out.
 
 ## Exact next step
 
-Use the public new-account release for owner review and decide whether its URL
-becomes the customer-facing production address or whether the old Netlify URL
-must be migrated. After that naming decision, run one physical iPhone Safari
-and Android Chrome pass for touch, microphone permission, PWA/offline update,
-then test dedicated non-teacher Free/Standard/Premium/Premium+ accounts for
-strict tier/RLS denial and submission workflows. Do not redeploy for cosmetic
-micro-edits; keep the local-first, coherent-batch workflow.
+Wait for the user's new-lesson upload/source instructions. Start from production
+commit `cff3973c08471c6364c6cd2db2a0312f7767ca1b`, import and audit the next
+lesson locally, preserve its source/provenance, generate all required practice
+and Lesson Guide coverage, run `npm test`, `npm run build`,
+`npm run verify:visuals` and `git diff --check`, then show a local preview. Only
+after that coherent batch is accepted should the branch be pushed for one
+Netlify production deploy. Physical-device and dedicated-tier QA remain useful
+follow-up checks, but they do not block the now-public current release.
 
 ## Read first in the next Codex session
 

@@ -2,6 +2,61 @@
 
 Last updated: **August 28, 2026**
 
+## August 28 formal production launch — final gate
+
+- Formal production — **PASS**:
+  `https://tahmid-english-review-hub.netlify.app/`.
+  Netlify project `tahmid-english-review-hub`, Site ID
+  `f30d0264-70d0-4234-83ec-c717fa428f99`, branch
+  `upgrade/review-hub-v9-final-product`, application commit
+  `cff3973c08471c6364c6cd2db2a0312f7767ca1b`, deploy
+  `6a917696755e5800088ef0e8`. Netlify shows this exact commit as Published with
+  automatic publishing on. The legacy old-account production URL was not
+  modified.
+- Full local verification after the final Netlify-header fix — **PASS**:
+  `npm test`, `npm run build` and `git diff --check`. The suite confirms 17
+  lessons, 616 activities, 85 visual questions, 14 formats, 1,382 integrity/
+  security assertions, full 616-question Lesson Guide coverage, learner,
+  Teacher, Premium, plans and v15 workflows.
+- Home — **PASS**: formal URL, final Open Graph URL/image, 17 lessons, 616
+  questions, 14 formats and three voices. The centered BGM invitation was gone
+  after five seconds when ignored. Netlify's overlay badge was absent.
+- Plans — **PASS**: Free ¥0, Standard ¥3,980, Premium ¥6,980 and Premium+
+  ¥16,800 were all visible with their scan-first summary, complete cards,
+  accessible `What's included` disclosures, new-Premium offer and comparison
+  table.
+- Lesson/settings — **PASS**: June 29 Full Lesson loaded all 37 questions and
+  the automatic question/choice shuffle notice. The question-local settings
+  contained only Voice On/Off, US/UK, selected-choice pronunciation, Manual/
+  Instant and hint behaviour. The top dialog additionally contained speed,
+  voice/SFX/BGM volume, five Study Music tracks, translation, language and
+  theme controls.
+- Google OAuth/member access — **PASS**: the real
+  `tahmidhc245@gmail.com` chooser flow returned to
+  `https://tahmid-english-review-hub.netlify.app/?account=google#`. The signed-in
+  page exposed exactly 17 Quick and 17 Full links with zero unlock links. The
+  Phrase Library href remained `/phrases?return=%2F` and contained no OAuth
+  token or callback field.
+- Teacher Studio — **PASS**: protected Google sign-in returned to the formal
+  domain and showed the authorised owner dashboard with one learner, 17
+  published lessons and zero drafts. No learner, access-code or content state
+  was mutated during this read-only gate.
+- Supabase Auth/Edge — **PASS**: live Auth Site URL and redirect allow-list
+  include the formal domain. `membership-access` is ACTIVE at version 6 with
+  update SHA
+  `c549064c5cb6fa30bbe30c45c600bd24e3769dc51ca1b9ff5c6177e9cc66ab00`.
+  A live OPTIONS request returned HTTP 200 and the exact
+  `access-control-allow-origin` for formal production.
+- PWA/static delivery — **PASS**: Home, Plans, short lesson route, manifest and
+  Service Worker returned HTTP 200. The final manifest is served as
+  `application/manifest+json; charset=UTF-8`, parses with standalone display,
+  and references reachable 192px and 512px PNG icons.
+- Physical-device limitation — not claimed as automated: real iPhone/Android
+  touch, microphone permission, PWA installation/update and offline-mode checks
+  remain recommended owner-device follow-up. Dedicated non-teacher tier/RLS
+  negative tests also remain operational QA; neither is a known blocker in the
+  current application or deployment.
+
 ## August 28 new-account public release and OAuth gate
 
 - Application commit: `85ecfbf33c24b077a28cd9235467d32a4a73e8ba`.
