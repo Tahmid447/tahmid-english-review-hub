@@ -23,7 +23,23 @@ const payloads = [...migration.matchAll(
 if (payloads.length !== 2) {
   throw new Error("The curriculum seed must contain one level payload and one item payload.");
 }
-const [levels, items] = payloads;
+const [levels, baselineItems] = payloads;
+const goals = JSON.parse(fs.readFileSync(path.join(root, "curriculum", "level-goals.json"), "utf8"));
+const items = ["words", "phrases", "phonics"].flatMap((category) => {
+  const source = JSON.parse(fs.readFileSync(path.join(root, "curriculum", `${category}.json`), "utf8"));
+  return source.levels.flatMap((level) => level.items.map((item) => {
+    const baseline = baselineItems.find((row) => row.id === item.id);
+    const content = { ...item };
+    delete content.id; delete content.level; delete content.icon; delete content.tags;
+    if (category === "words") { content.topic = content.category; delete content.category; }
+    return { ...baseline, title_en: item.word || item.phrase || item.phonicsTarget,
+      title_ja: item.japanese || item.japaneseHint, icon: item.icon || "", tags: item.tags || [], content };
+  }));
+});
+for (const level of levels) {
+  const goal = goals.levels.find((goal) => goal.level === level.level)?.[level.category];
+  if (goal) { level.description_en = goal.en; level.description_ja = goal.ja; }
+}
 if (levels.length !== 96 || items.length !== 480) {
   throw new Error(`The demo requires 96 levels and 480 items; found ${levels.length} and ${items.length}.`);
 }

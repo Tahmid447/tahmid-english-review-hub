@@ -1,0 +1,1223 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-09-05T16:26:39.255Z",
+  "scope": "Actual Codex in-app browser UI on local production-build demo at http://127.0.0.1:4174; Full curriculum persona. Saved demo progress was not reset.",
+  "method": "Clicked every Words and Phrases level button, scrolled to load lazy images, read complete/naturalWidth/naturalHeight/src/alt from DOM, selected English and Japanese UI through the visible language control. Read-only DOM inspection only; no browser evaluation mutations. Viewport was not changed by this audit.",
+  "summary": {
+    "levels": 64,
+    "words": 320,
+    "phrases": 128,
+    "totalImages": 448,
+    "brokenImages": 0,
+    "missingImages": 0,
+    "withinLevelDuplicateSources": 0,
+    "englishAlts": 448,
+    "japaneseAlts": 448,
+    "sameSourcesAcrossLanguageModes": true,
+    "allAltsChangedToJapanese": true,
+    "allPass": true
+  },
+  "rows": [
+    {
+      "category": "words",
+      "level": 1,
+      "expectedImageCount": 10,
+      "imageCount": 10,
+      "loadedCount": 10,
+      "distinctImageSources": 10,
+      "englishAltCount": 10,
+      "japaneseAltCount": 10,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "words",
+      "level": 2,
+      "expectedImageCount": 10,
+      "imageCount": 10,
+      "loadedCount": 10,
+      "distinctImageSources": 10,
+      "englishAltCount": 10,
+      "japaneseAltCount": 10,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "words",
+      "level": 3,
+      "expectedImageCount": 10,
+      "imageCount": 10,
+      "loadedCount": 10,
+      "distinctImageSources": 10,
+      "englishAltCount": 10,
+      "japaneseAltCount": 10,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "words",
+      "level": 4,
+      "expectedImageCount": 10,
+      "imageCount": 10,
+      "loadedCount": 10,
+      "distinctImageSources": 10,
+      "englishAltCount": 10,
+      "japaneseAltCount": 10,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "words",
+      "level": 5,
+      "expectedImageCount": 10,
+      "imageCount": 10,
+      "loadedCount": 10,
+      "distinctImageSources": 10,
+      "englishAltCount": 10,
+      "japaneseAltCount": 10,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "words",
+      "level": 6,
+      "expectedImageCount": 10,
+      "imageCount": 10,
+      "loadedCount": 10,
+      "distinctImageSources": 10,
+      "englishAltCount": 10,
+      "japaneseAltCount": 10,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "words",
+      "level": 7,
+      "expectedImageCount": 10,
+      "imageCount": 10,
+      "loadedCount": 10,
+      "distinctImageSources": 10,
+      "englishAltCount": 10,
+      "japaneseAltCount": 10,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "words",
+      "level": 8,
+      "expectedImageCount": 10,
+      "imageCount": 10,
+      "loadedCount": 10,
+      "distinctImageSources": 10,
+      "englishAltCount": 10,
+      "japaneseAltCount": 10,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "words",
+      "level": 9,
+      "expectedImageCount": 10,
+      "imageCount": 10,
+      "loadedCount": 10,
+      "distinctImageSources": 10,
+      "englishAltCount": 10,
+      "japaneseAltCount": 10,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "words",
+      "level": 10,
+      "expectedImageCount": 10,
+      "imageCount": 10,
+      "loadedCount": 10,
+      "distinctImageSources": 10,
+      "englishAltCount": 10,
+      "japaneseAltCount": 10,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "words",
+      "level": 11,
+      "expectedImageCount": 10,
+      "imageCount": 10,
+      "loadedCount": 10,
+      "distinctImageSources": 10,
+      "englishAltCount": 10,
+      "japaneseAltCount": 10,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "words",
+      "level": 12,
+      "expectedImageCount": 10,
+      "imageCount": 10,
+      "loadedCount": 10,
+      "distinctImageSources": 10,
+      "englishAltCount": 10,
+      "japaneseAltCount": 10,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "words",
+      "level": 13,
+      "expectedImageCount": 10,
+      "imageCount": 10,
+      "loadedCount": 10,
+      "distinctImageSources": 10,
+      "englishAltCount": 10,
+      "japaneseAltCount": 10,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "words",
+      "level": 14,
+      "expectedImageCount": 10,
+      "imageCount": 10,
+      "loadedCount": 10,
+      "distinctImageSources": 10,
+      "englishAltCount": 10,
+      "japaneseAltCount": 10,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "words",
+      "level": 15,
+      "expectedImageCount": 10,
+      "imageCount": 10,
+      "loadedCount": 10,
+      "distinctImageSources": 10,
+      "englishAltCount": 10,
+      "japaneseAltCount": 10,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "words",
+      "level": 16,
+      "expectedImageCount": 10,
+      "imageCount": 10,
+      "loadedCount": 10,
+      "distinctImageSources": 10,
+      "englishAltCount": 10,
+      "japaneseAltCount": 10,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "words",
+      "level": 17,
+      "expectedImageCount": 10,
+      "imageCount": 10,
+      "loadedCount": 10,
+      "distinctImageSources": 10,
+      "englishAltCount": 10,
+      "japaneseAltCount": 10,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "words",
+      "level": 18,
+      "expectedImageCount": 10,
+      "imageCount": 10,
+      "loadedCount": 10,
+      "distinctImageSources": 10,
+      "englishAltCount": 10,
+      "japaneseAltCount": 10,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "words",
+      "level": 19,
+      "expectedImageCount": 10,
+      "imageCount": 10,
+      "loadedCount": 10,
+      "distinctImageSources": 10,
+      "englishAltCount": 10,
+      "japaneseAltCount": 10,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "words",
+      "level": 20,
+      "expectedImageCount": 10,
+      "imageCount": 10,
+      "loadedCount": 10,
+      "distinctImageSources": 10,
+      "englishAltCount": 10,
+      "japaneseAltCount": 10,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "words",
+      "level": 21,
+      "expectedImageCount": 10,
+      "imageCount": 10,
+      "loadedCount": 10,
+      "distinctImageSources": 10,
+      "englishAltCount": 10,
+      "japaneseAltCount": 10,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "words",
+      "level": 22,
+      "expectedImageCount": 10,
+      "imageCount": 10,
+      "loadedCount": 10,
+      "distinctImageSources": 10,
+      "englishAltCount": 10,
+      "japaneseAltCount": 10,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "words",
+      "level": 23,
+      "expectedImageCount": 10,
+      "imageCount": 10,
+      "loadedCount": 10,
+      "distinctImageSources": 10,
+      "englishAltCount": 10,
+      "japaneseAltCount": 10,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "words",
+      "level": 24,
+      "expectedImageCount": 10,
+      "imageCount": 10,
+      "loadedCount": 10,
+      "distinctImageSources": 10,
+      "englishAltCount": 10,
+      "japaneseAltCount": 10,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "words",
+      "level": 25,
+      "expectedImageCount": 10,
+      "imageCount": 10,
+      "loadedCount": 10,
+      "distinctImageSources": 10,
+      "englishAltCount": 10,
+      "japaneseAltCount": 10,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "words",
+      "level": 26,
+      "expectedImageCount": 10,
+      "imageCount": 10,
+      "loadedCount": 10,
+      "distinctImageSources": 10,
+      "englishAltCount": 10,
+      "japaneseAltCount": 10,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "words",
+      "level": 27,
+      "expectedImageCount": 10,
+      "imageCount": 10,
+      "loadedCount": 10,
+      "distinctImageSources": 10,
+      "englishAltCount": 10,
+      "japaneseAltCount": 10,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "words",
+      "level": 28,
+      "expectedImageCount": 10,
+      "imageCount": 10,
+      "loadedCount": 10,
+      "distinctImageSources": 10,
+      "englishAltCount": 10,
+      "japaneseAltCount": 10,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "words",
+      "level": 29,
+      "expectedImageCount": 10,
+      "imageCount": 10,
+      "loadedCount": 10,
+      "distinctImageSources": 10,
+      "englishAltCount": 10,
+      "japaneseAltCount": 10,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "words",
+      "level": 30,
+      "expectedImageCount": 10,
+      "imageCount": 10,
+      "loadedCount": 10,
+      "distinctImageSources": 10,
+      "englishAltCount": 10,
+      "japaneseAltCount": 10,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "words",
+      "level": 31,
+      "expectedImageCount": 10,
+      "imageCount": 10,
+      "loadedCount": 10,
+      "distinctImageSources": 10,
+      "englishAltCount": 10,
+      "japaneseAltCount": 10,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "words",
+      "level": 32,
+      "expectedImageCount": 10,
+      "imageCount": 10,
+      "loadedCount": 10,
+      "distinctImageSources": 10,
+      "englishAltCount": 10,
+      "japaneseAltCount": 10,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "phrases",
+      "level": 1,
+      "expectedImageCount": 4,
+      "imageCount": 4,
+      "loadedCount": 4,
+      "distinctImageSources": 4,
+      "englishAltCount": 4,
+      "japaneseAltCount": 4,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "phrases",
+      "level": 2,
+      "expectedImageCount": 4,
+      "imageCount": 4,
+      "loadedCount": 4,
+      "distinctImageSources": 4,
+      "englishAltCount": 4,
+      "japaneseAltCount": 4,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "phrases",
+      "level": 3,
+      "expectedImageCount": 4,
+      "imageCount": 4,
+      "loadedCount": 4,
+      "distinctImageSources": 4,
+      "englishAltCount": 4,
+      "japaneseAltCount": 4,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "phrases",
+      "level": 4,
+      "expectedImageCount": 4,
+      "imageCount": 4,
+      "loadedCount": 4,
+      "distinctImageSources": 4,
+      "englishAltCount": 4,
+      "japaneseAltCount": 4,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "phrases",
+      "level": 5,
+      "expectedImageCount": 4,
+      "imageCount": 4,
+      "loadedCount": 4,
+      "distinctImageSources": 4,
+      "englishAltCount": 4,
+      "japaneseAltCount": 4,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "phrases",
+      "level": 6,
+      "expectedImageCount": 4,
+      "imageCount": 4,
+      "loadedCount": 4,
+      "distinctImageSources": 4,
+      "englishAltCount": 4,
+      "japaneseAltCount": 4,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "phrases",
+      "level": 7,
+      "expectedImageCount": 4,
+      "imageCount": 4,
+      "loadedCount": 4,
+      "distinctImageSources": 4,
+      "englishAltCount": 4,
+      "japaneseAltCount": 4,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "phrases",
+      "level": 8,
+      "expectedImageCount": 4,
+      "imageCount": 4,
+      "loadedCount": 4,
+      "distinctImageSources": 4,
+      "englishAltCount": 4,
+      "japaneseAltCount": 4,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "phrases",
+      "level": 9,
+      "expectedImageCount": 4,
+      "imageCount": 4,
+      "loadedCount": 4,
+      "distinctImageSources": 4,
+      "englishAltCount": 4,
+      "japaneseAltCount": 4,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "phrases",
+      "level": 10,
+      "expectedImageCount": 4,
+      "imageCount": 4,
+      "loadedCount": 4,
+      "distinctImageSources": 4,
+      "englishAltCount": 4,
+      "japaneseAltCount": 4,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "phrases",
+      "level": 11,
+      "expectedImageCount": 4,
+      "imageCount": 4,
+      "loadedCount": 4,
+      "distinctImageSources": 4,
+      "englishAltCount": 4,
+      "japaneseAltCount": 4,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "phrases",
+      "level": 12,
+      "expectedImageCount": 4,
+      "imageCount": 4,
+      "loadedCount": 4,
+      "distinctImageSources": 4,
+      "englishAltCount": 4,
+      "japaneseAltCount": 4,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "phrases",
+      "level": 13,
+      "expectedImageCount": 4,
+      "imageCount": 4,
+      "loadedCount": 4,
+      "distinctImageSources": 4,
+      "englishAltCount": 4,
+      "japaneseAltCount": 4,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "phrases",
+      "level": 14,
+      "expectedImageCount": 4,
+      "imageCount": 4,
+      "loadedCount": 4,
+      "distinctImageSources": 4,
+      "englishAltCount": 4,
+      "japaneseAltCount": 4,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "phrases",
+      "level": 15,
+      "expectedImageCount": 4,
+      "imageCount": 4,
+      "loadedCount": 4,
+      "distinctImageSources": 4,
+      "englishAltCount": 4,
+      "japaneseAltCount": 4,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "phrases",
+      "level": 16,
+      "expectedImageCount": 4,
+      "imageCount": 4,
+      "loadedCount": 4,
+      "distinctImageSources": 4,
+      "englishAltCount": 4,
+      "japaneseAltCount": 4,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "phrases",
+      "level": 17,
+      "expectedImageCount": 4,
+      "imageCount": 4,
+      "loadedCount": 4,
+      "distinctImageSources": 4,
+      "englishAltCount": 4,
+      "japaneseAltCount": 4,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "phrases",
+      "level": 18,
+      "expectedImageCount": 4,
+      "imageCount": 4,
+      "loadedCount": 4,
+      "distinctImageSources": 4,
+      "englishAltCount": 4,
+      "japaneseAltCount": 4,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "phrases",
+      "level": 19,
+      "expectedImageCount": 4,
+      "imageCount": 4,
+      "loadedCount": 4,
+      "distinctImageSources": 4,
+      "englishAltCount": 4,
+      "japaneseAltCount": 4,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "phrases",
+      "level": 20,
+      "expectedImageCount": 4,
+      "imageCount": 4,
+      "loadedCount": 4,
+      "distinctImageSources": 4,
+      "englishAltCount": 4,
+      "japaneseAltCount": 4,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "phrases",
+      "level": 21,
+      "expectedImageCount": 4,
+      "imageCount": 4,
+      "loadedCount": 4,
+      "distinctImageSources": 4,
+      "englishAltCount": 4,
+      "japaneseAltCount": 4,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "phrases",
+      "level": 22,
+      "expectedImageCount": 4,
+      "imageCount": 4,
+      "loadedCount": 4,
+      "distinctImageSources": 4,
+      "englishAltCount": 4,
+      "japaneseAltCount": 4,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "phrases",
+      "level": 23,
+      "expectedImageCount": 4,
+      "imageCount": 4,
+      "loadedCount": 4,
+      "distinctImageSources": 4,
+      "englishAltCount": 4,
+      "japaneseAltCount": 4,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "phrases",
+      "level": 24,
+      "expectedImageCount": 4,
+      "imageCount": 4,
+      "loadedCount": 4,
+      "distinctImageSources": 4,
+      "englishAltCount": 4,
+      "japaneseAltCount": 4,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "phrases",
+      "level": 25,
+      "expectedImageCount": 4,
+      "imageCount": 4,
+      "loadedCount": 4,
+      "distinctImageSources": 4,
+      "englishAltCount": 4,
+      "japaneseAltCount": 4,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "phrases",
+      "level": 26,
+      "expectedImageCount": 4,
+      "imageCount": 4,
+      "loadedCount": 4,
+      "distinctImageSources": 4,
+      "englishAltCount": 4,
+      "japaneseAltCount": 4,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "phrases",
+      "level": 27,
+      "expectedImageCount": 4,
+      "imageCount": 4,
+      "loadedCount": 4,
+      "distinctImageSources": 4,
+      "englishAltCount": 4,
+      "japaneseAltCount": 4,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "phrases",
+      "level": 28,
+      "expectedImageCount": 4,
+      "imageCount": 4,
+      "loadedCount": 4,
+      "distinctImageSources": 4,
+      "englishAltCount": 4,
+      "japaneseAltCount": 4,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "phrases",
+      "level": 29,
+      "expectedImageCount": 4,
+      "imageCount": 4,
+      "loadedCount": 4,
+      "distinctImageSources": 4,
+      "englishAltCount": 4,
+      "japaneseAltCount": 4,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "phrases",
+      "level": 30,
+      "expectedImageCount": 4,
+      "imageCount": 4,
+      "loadedCount": 4,
+      "distinctImageSources": 4,
+      "englishAltCount": 4,
+      "japaneseAltCount": 4,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "phrases",
+      "level": 31,
+      "expectedImageCount": 4,
+      "imageCount": 4,
+      "loadedCount": 4,
+      "distinctImageSources": 4,
+      "englishAltCount": 4,
+      "japaneseAltCount": 4,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    },
+    {
+      "category": "phrases",
+      "level": 32,
+      "expectedImageCount": 4,
+      "imageCount": 4,
+      "loadedCount": 4,
+      "distinctImageSources": 4,
+      "englishAltCount": 4,
+      "japaneseAltCount": 4,
+      "languageModes": [
+        "en",
+        "ja"
+      ],
+      "sameImageIds": true,
+      "sameImageSources": true,
+      "changedAlts": true,
+      "broken": []
+    }
+  ],
+  "visualSamples": [
+    {
+      "category": "words",
+      "levels": [
+        1,
+        8,
+        13,
+        16,
+        21,
+        24,
+        32
+      ],
+      "notes": [
+        "Level 1: chair, bag and door are visually distinct concrete objects.",
+        "Level 8: run, walk and jump use different body poses and motion cues.",
+        "Level 13: skirt, shoes and socks are identifiable clothing illustrations.",
+        "Level 16: ask, answer and explain show question, answer and teaching cues.",
+        "Level 21: neighbor, guest and host use houses, welcome and hospitality scenes.",
+        "Level 24: device, screen and charger use distinct technology illustrations.",
+        "Level 32: clarify, emphasize and persuade use ordered steps, highlighted text and conversational cues."
+      ]
+    },
+    {
+      "category": "phrases",
+      "levels": [
+        1,
+        8,
+        16,
+        23,
+        24,
+        25,
+        32
+      ],
+      "notes": [
+        "Level 1: greeting, meeting and hunger have separate classroom and food scenes.",
+        "Level 8: station, distance and opposite-side location use direction and spatial cues.",
+        "Level 16: device problems and misunderstanding use fault and correction cues.",
+        "Level 23: surprise, misunderstanding and laughing use distinct conversational scenes.",
+        "Level 24: consistency, progress and stepwise goals use calendar, achievement and stairs.",
+        "Level 25: different viewpoint, incomplete evidence and alternative cause use travel, puzzle and plant-care comparisons.",
+        "Level 32: symptom versus cause, uncertain view and beneficiaries have separate diagrammatic scenes."
+      ]
+    }
+  ],
+  "limitations": [
+    "Load and alt checks cover every image; visual meaning review is a documented sample, not subjective validation of all 448 illustrations.",
+    "This is the local demo using the compiled assets and real page UI, not production account authorization or production data validation."
+  ],
+  "resolvedInterruption": "The initial QA tab hit ERR_CONNECTION_REFUSED while the local demo server was stopped. After the parent restarted port 4174, a fresh QA tab loaded normally and the complete audit passed. This was not counted as an asset defect."
+}

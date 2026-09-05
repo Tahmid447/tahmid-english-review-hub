@@ -63,6 +63,8 @@ const protectedResources = [
   ["review_teacher_students", "student_id"],
   ["review_student_hub_settings", "student_id"],
   ["review_student_curriculum_access", "student_id"],
+  ["review_student_learning_packs", "id"],
+  ["review_student_learning_pack_items", "pack_id"],
   ["review_curriculum_progress", "student_id"],
   ["review_curriculum_favorites", "student_id"],
   ["review_announcements", "id"],

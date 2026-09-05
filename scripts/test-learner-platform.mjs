@@ -309,13 +309,13 @@ assert.equal(
 );
 assert.match(homePage, /id="publishedCount">31</);
 assert.match(homePage, /id="questionCount">1100</);
-assert.match(homePage, /src="\/src\/hub\.js\?v=20260905-release5"/);
-assert.match(lessonPage, /src="\/src\/lesson\.js\?v=20260905-release5"/);
+assert.match(homePage, /src="\/src\/hub\.js\?v=20260906-studio1"/);
+assert.match(lessonPage, /src="\/src\/lesson\.js\?v=20260906-studio1"/);
 assert.match(homePage, /id="musicStartChip"/);
 assert.match(homePage, /Your lesson does not end when the call ends/);
 assert.match(homePage, /eight-question Quick Practice/);
-assert.match(hubScript, /from "\.\/supabase\.js\?v=20260905-release5"/);
-assert.match(lessonScript, /from "\.\/effects\.js\?v=20260905-release5"/);
+assert.match(hubScript, /from "\.\/supabase\.js\?v=20260906-studio1"/);
+assert.match(lessonScript, /from "\.\/effects\.js\?v=20260906-studio1"/);
 assert.match(supabaseScript, /signOutStudent[\s\S]*?withOperationTimeout/);
 assert.match(supabaseScript, /removeItem\(STUDENT_AUTH_STORAGE_KEY\)/);
 assert.match(supabaseScript, /studentClient = undefined/);
@@ -346,7 +346,7 @@ assert.doesNotMatch(phraseScript, /"aria-label": `Play \$\{phrase\.en\}/);
 assert.doesNotMatch(phraseScript, /"aria-label": `Practise saying/);
 assert.match(phrasePage, /id="phraseLoadMore"/);
 assert.match(serviceWorker, /request\.headers\.has\("authorization"\)/);
-assert.match(serviceWorker, /CACHE_NAME = "te-review-public-v22"/);
+assert.match(serviceWorker, /CACHE_NAME = "te-review-public-v23"/);
 assert.match(serviceWorker, /event\.respondWith\(fetch\(request\)[\s\S]*?\.catch\(\(\) => caches\.match\(request, \{ ignoreSearch: true \}\)\)\)/,
   "Public shell assets refresh from the network and use cache only as an offline fallback.");
 assert.doesNotMatch(serviceWorker, /supabase\.co|\/auth\/v1|\/rest\/v1|\/functions\/v1|\/storage\/v1/);

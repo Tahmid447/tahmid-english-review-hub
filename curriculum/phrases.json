@@ -15,7 +15,21 @@
           "commonMistake": "I Ren. ではなく、be動詞を入れて I'm Ren. と言います。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["greeting", "introduction", "beginner"]
+          "tags": [
+            "greeting",
+            "introduction",
+            "beginner"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-303c0f3f087ef275.svg",
+            "kind": "scene",
+            "altEn": "A learner waves hello and writes Ren on a name card.",
+            "altJa": "初めての英語クラブ。初めて会った人に名前を伝える場面。",
+            "sceneEn": "First day at the club",
+            "sceneJa": "初めての英語クラブ"
+          }
         },
         {
           "id": "phrase-l01-02",
@@ -28,7 +42,21 @@
           "commonMistake": "初対面では Nice to see you. より Nice to meet you. が自然です。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["greeting", "introduction", "polite"]
+          "tags": [
+            "greeting",
+            "introduction",
+            "polite"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-aa845e4008a33bc9.svg",
+            "kind": "scene",
+            "altEn": "Two people shake hands beside a school bag as they meet for the first time.",
+            "altJa": "新しいクラスメートと対面。初対面のあいさつをする場面。",
+            "sceneEn": "Meeting a new classmate",
+            "sceneJa": "新しいクラスメートと対面"
+          }
         },
         {
           "id": "phrase-l01-03",
@@ -41,7 +69,21 @@
           "commonMistake": "I hungry. ではなく、I'm hungry. と言います。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["feelings", "food", "beginner"]
+          "tags": [
+            "feelings",
+            "food",
+            "beginner"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-49c53969d38eb1be.svg",
+            "kind": "sequence",
+            "altEn": "A hungry learner looks forward to a sandwich on an empty plate.",
+            "altJa": "昼食前。食べたい気持ちを伝える場面。",
+            "sceneEn": "Before lunch",
+            "sceneJa": "昼食前"
+          }
         },
         {
           "id": "phrase-l01-04",
@@ -54,7 +96,21 @@
           "commonMistake": "Thank. だけで終わらず、Thank you. と言います。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["thanks", "manners", "beginner"]
+          "tags": [
+            "thanks",
+            "manners",
+            "beginner"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-5000e80775f7868d.svg",
+            "kind": "scene",
+            "altEn": "One person gives a wrapped present and the recipient smiles appreciatively.",
+            "altJa": "プレゼントを受け取って。何かをしてもらった場面。",
+            "sceneEn": "Receiving a thoughtful gift",
+            "sceneJa": "プレゼントを受け取って"
+          }
         }
       ]
     },
@@ -72,7 +128,21 @@
           "commonMistake": "Can I trying? ではなく、Can I のあとには try の原形を使います。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["permission", "classroom", "action"]
+          "tags": [
+            "permission",
+            "classroom",
+            "action"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-87ffb9cbd115dfc1.svg",
+            "kind": "scene",
+            "altEn": "A learner asks for a turn with a shape puzzle before beginning.",
+            "altJa": "新しいゲームに挑戦。活動やゲームに挑戦したい場面。",
+            "sceneEn": "Trying a new game",
+            "sceneJa": "新しいゲームに挑戦"
+          }
         },
         {
           "id": "phrase-l02-02",
@@ -82,10 +152,24 @@
           "situation": "一人では難しくて助けが必要なとき",
           "naturalUsage": "困っていることをはっきり、丁寧に伝えられます。",
           "exampleDialogue": "A: Please help me. B: Sure. What do you need?",
-          "commonMistake": "Help me please. も通じますが、Please help me. は初級者にも使いやすい形です。",
+          "commonMistake": "Please help me. と Help me, please. はどちらも自然です。困っていることを穏やかな声で伝えましょう。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["help", "request", "classroom"]
+          "tags": [
+            "help",
+            "request",
+            "classroom"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-c08f90e83f3deda4.svg",
+            "kind": "scene",
+            "altEn": "A person carrying a stack of books asks for help reaching the bookcase.",
+            "altJa": "荷物を一緒に運ぶ。一人では難しくて助けが必要な場面。",
+            "sceneEn": "Carrying something together",
+            "sceneJa": "荷物を一緒に運ぶ"
+          }
         },
         {
           "id": "phrase-l02-03",
@@ -98,7 +182,21 @@
           "commonMistake": "I no know. ではなく、don't を使って I don't know. と言います。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["classroom", "knowledge", "beginner"]
+          "tags": [
+            "classroom",
+            "knowledge",
+            "beginner"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-d7c288d80de84edb.svg",
+            "kind": "scene",
+            "altEn": "A learner pauses over an unfamiliar worksheet question with a puzzled expression.",
+            "altJa": "分からない質問。答えや情報が分からない場面。",
+            "sceneEn": "An unfamiliar question",
+            "sceneJa": "分からない質問"
+          }
         },
         {
           "id": "phrase-l02-04",
@@ -111,7 +209,21 @@
           "commonMistake": "Once more time とは言わず、One more time と言います。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["clarification", "classroom", "listening"]
+          "tags": [
+            "clarification",
+            "classroom",
+            "listening"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-218fb7cf46bcf94c.svg",
+            "kind": "sequence",
+            "altEn": "A spoken instruction is heard, rewound, and repeated more slowly.",
+            "altJa": "口頭の説明を練習。聞き取れなかった内容を繰り返してほしい場面。",
+            "sceneEn": "Practising a spoken instruction",
+            "sceneJa": "口頭の説明を練習"
+          }
         }
       ]
     },
@@ -126,10 +238,24 @@
           "situation": "いくつかの中から好みを伝えるとき",
           "naturalUsage": "物を指しながら this one と言うと自然です。",
           "exampleDialogue": "A: Which bag do you like? B: I like this one.",
-          "commonMistake": "I like this it. のように one と it を重ねません。",
+          "commonMistake": "this one は一つの物を指します。I like this one it. のように one と it を重ねません。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["preference", "choice", "daily-life"]
+          "tags": [
+            "preference",
+            "choice",
+            "daily-life"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-a7c90678ff1a5782.svg",
+            "kind": "contrast",
+            "altEn": "Two different fruit snacks are compared and one is marked as the preferred choice.",
+            "altJa": "おやつを選ぶ。いくつかの中から好みを伝える場面。",
+            "sceneEn": "Choosing a snack",
+            "sceneJa": "おやつを選ぶ"
+          }
         },
         {
           "id": "phrase-l03-02",
@@ -142,7 +268,21 @@
           "commonMistake": "my favorite のあとに名詞がなくても、話題が明らかなら自然です。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["preference", "favorite", "conversation"]
+          "tags": [
+            "preference",
+            "favorite",
+            "conversation"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-855c7b1e4f02bbf1.svg",
+            "kind": "scene",
+            "altEn": "A football and a favourite marker show the activity someone most enjoys playing.",
+            "altJa": "大好きな遊び。特に好きなものを伝える場面。",
+            "sceneEn": "A favourite activity",
+            "sceneJa": "大好きな遊び"
+          }
         },
         {
           "id": "phrase-l03-03",
@@ -155,7 +295,21 @@
           "commonMistake": "not very much は好きな程度が低いという意味で、語順を崩さないようにします。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["preference", "softening", "food"]
+          "tags": [
+            "preference",
+            "softening",
+            "food"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-bccc4ef1ef3c780a.svg",
+            "kind": "contrast",
+            "altEn": "A diner tries olives, looks uncertain, and considers a different plate of food.",
+            "altJa": "食べ物の好みをやわらかく伝える。好みではないことをやわらかく伝える場面。",
+            "sceneEn": "A gentle food preference",
+            "sceneJa": "食べ物の好みをやわらかく伝える"
+          }
         },
         {
           "id": "phrase-l03-04",
@@ -168,7 +322,21 @@
           "commonMistake": "Which do you want one? ではなく、Which one をひとまとまりで使います。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["choice", "question", "shopping"]
+          "tags": [
+            "choice",
+            "question",
+            "shopping"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-605b1f0ad6e739ec.svg",
+            "kind": "contrast",
+            "altEn": "Two different tops are offered while the customer is invited to choose.",
+            "altJa": "二つの選択肢を差し出す。相手に選んでもらう場面。",
+            "sceneEn": "Offering two choices",
+            "sceneJa": "二つの選択肢を差し出す"
+          }
         }
       ]
     },
@@ -186,7 +354,21 @@
           "commonMistake": "日本語の兄・弟の区別が必要なら older brother / younger brother を使います。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["family", "introduction", "people"]
+          "tags": [
+            "family",
+            "introduction",
+            "people"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-399485f076a1113c.svg",
+            "kind": "scene",
+            "altEn": "A learner introduces their brother to a visitor at home.",
+            "altJa": "家族を紹介。家族を人に紹介する場面。",
+            "sceneEn": "Introducing family",
+            "sceneJa": "家族を紹介"
+          }
         },
         {
           "id": "phrase-l04-02",
@@ -199,7 +381,21 @@
           "commonMistake": "I came home. は帰宅した事実の説明で、玄関での一言には I'm home! が自然です。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["home", "family", "greeting"]
+          "tags": [
+            "home",
+            "family",
+            "greeting"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-111ec67a8472ecb3.svg",
+            "kind": "sequence",
+            "altEn": "A returning learner comes through the front door and calls a greeting.",
+            "altJa": "帰宅したところ。家に帰ってきたことを知らせる場面。",
+            "sceneEn": "Arriving home",
+            "sceneJa": "帰宅したところ"
+          }
         },
         {
           "id": "phrase-l04-03",
@@ -212,7 +408,21 @@
           "commonMistake": "Where my backpack? ではなく、Where's を入れます。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["home", "location", "belongings"]
+          "tags": [
+            "home",
+            "location",
+            "belongings"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-3d454b243b19cdf0.svg",
+            "kind": "scene",
+            "altEn": "A school bag is being searched for around a chair at home.",
+            "altJa": "通学バッグを探す。持ち物が見つからない場面。",
+            "sceneEn": "Looking for a school bag",
+            "sceneJa": "通学バッグを探す"
+          }
         },
         {
           "id": "phrase-l04-04",
@@ -225,7 +435,21 @@
           "commonMistake": "Let's のあとには cleaning ではなく clean の原形を使います。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["home", "suggestion", "chores"]
+          "tags": [
+            "home",
+            "suggestion",
+            "chores"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-8080f98d2e398b5d.svg",
+            "kind": "sequence",
+            "altEn": "Scattered play materials are tidied away so a shared room becomes clear.",
+            "altJa": "部屋を一緒に片づける。一緒に片づけを始める場面。",
+            "sceneEn": "Tidying a shared room",
+            "sceneJa": "部屋を一緒に片づける"
+          }
         }
       ]
     },
@@ -243,7 +467,21 @@
           "commonMistake": "What time it is? ではなく、疑問文では is it の順にします。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["time", "question", "daily-routine"]
+          "tags": [
+            "time",
+            "question",
+            "daily-routine"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-e4fc1bc854f87927.svg",
+            "kind": "scene",
+            "altEn": "A learner checks a wall clock before class begins.",
+            "altJa": "時刻を確認。現在の時刻を知りたい場面。",
+            "sceneEn": "Checking the time",
+            "sceneJa": "時刻を確認"
+          }
         },
         {
           "id": "phrase-l05-02",
@@ -256,7 +494,21 @@
           "commonMistake": "I'm preparing. も可能ですが、身支度には getting ready が自然です。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["routine", "present-progressive", "home"]
+          "tags": [
+            "routine",
+            "present-progressive",
+            "home"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-ef429f6ec77b4613.svg",
+            "kind": "sequence",
+            "altEn": "A learner gets dressed, prepares a school bag, and is nearly ready to go.",
+            "altJa": "出発の準備。出発などの準備中だと伝える場面。",
+            "sceneEn": "Getting ready to leave",
+            "sceneJa": "出発の準備"
+          }
         },
         {
           "id": "phrase-l05-03",
@@ -269,7 +521,21 @@
           "commonMistake": "walk school ではなく、行き先の前に to を入れます。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["routine", "frequency", "school"]
+          "tags": [
+            "routine",
+            "frequency",
+            "school"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-4414c96a403b79fd.svg",
+            "kind": "sequence",
+            "altEn": "A child walks from home to school on their usual daily route.",
+            "altJa": "いつもの通学。普段の通学方法を話す場面。",
+            "sceneEn": "A usual school journey",
+            "sceneJa": "いつもの通学"
+          }
         },
         {
           "id": "phrase-l05-04",
@@ -282,7 +548,21 @@
           "commonMistake": "See you next tomorrow. とは言わず、tomorrow だけを使います。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["farewell", "time", "school"]
+          "tags": [
+            "farewell",
+            "time",
+            "school"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-779f4b41b1e34435.svg",
+            "kind": "sequence",
+            "altEn": "Classmates wave as one leaves and mark that they will meet tomorrow.",
+            "altJa": "また翌日に会う別れ際。翌日にまた会う相手と別れる場面。",
+            "sceneEn": "Leaving until the next day",
+            "sceneJa": "また翌日に会う別れ際"
+          }
         }
       ]
     },
@@ -297,10 +577,24 @@
           "situation": "飲み物をお願いするとき",
           "naturalUsage": "家庭、学校、レストランで使える丁寧で基本的な頼み方です。",
           "exampleDialogue": "A: Can I have some water? B: Of course.",
-          "commonMistake": "Can I have a water? より、量を表す some water が基本です。",
+          "commonMistake": "基本は some water です。店で a water と言うと、水を一杯・一本注文する意味で自然に使えます。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["food", "request", "restaurant"]
+          "tags": [
+            "food",
+            "request",
+            "restaurant"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-19c8f8e78f80464f.svg",
+            "kind": "scene",
+            "altEn": "A diner asks the server for a glass of water.",
+            "altJa": "飲み物をお願い。飲み物をお願いする場面。",
+            "sceneEn": "Asking for a drink",
+            "sceneJa": "飲み物をお願い"
+          }
         },
         {
           "id": "phrase-l06-02",
@@ -313,7 +607,21 @@
           "commonMistake": "I'm smelling good. だと自分がよい匂いという意味になりやすいです。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["food", "reaction", "senses"]
+          "tags": [
+            "food",
+            "reaction",
+            "senses"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-f91949896cfb421d.svg",
+            "kind": "scene",
+            "altEn": "A steaming bowl of soup has an inviting aroma that someone notices.",
+            "altJa": "料理のいい香り。料理の香りをほめる場面。",
+            "sceneEn": "A delicious smell",
+            "sceneJa": "料理のいい香り"
+          }
         },
         {
           "id": "phrase-l06-03",
@@ -326,7 +634,21 @@
           "commonMistake": "My stomach is full. も意味は通じますが、会話では I'm full. が自然です。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["food", "feelings", "meal"]
+          "tags": [
+            "food",
+            "feelings",
+            "meal"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-0bd3ab8913f59f42.svg",
+            "kind": "sequence",
+            "altEn": "A diner finishes their meal and indicates that they have eaten enough.",
+            "altJa": "食事を十分に食べて。十分に食べたことを伝える場面。",
+            "sceneEn": "After a satisfying meal",
+            "sceneJa": "食事を十分に食べて"
+          }
         },
         {
           "id": "phrase-l06-04",
@@ -339,7 +661,21 @@
           "commonMistake": "no cheese だけでも通じますが、文にすると丁寧です。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["restaurant", "request", "food"]
+          "tags": [
+            "restaurant",
+            "request",
+            "food"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-2e9abbe344aed624.svg",
+            "kind": "contrast",
+            "altEn": "A burger order is contrasted with the cheese ingredient that should be left out.",
+            "altJa": "料理の材料を変更。料理から食材を抜いてほしい場面。",
+            "sceneEn": "Changing a food order",
+            "sceneJa": "料理の材料を変更"
+          }
         }
       ]
     },
@@ -357,7 +693,21 @@
           "commonMistake": "How many is this? は数を尋ねる表現で、値段には How much を使います。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["shopping", "price", "question"]
+          "tags": [
+            "shopping",
+            "price",
+            "question"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-fd5d9dd42a599c2f.svg",
+            "kind": "scene",
+            "altEn": "A customer points to a shirt and asks how much money it costs.",
+            "altJa": "値段を尋ねる。店で商品の値段を尋ねる場面。",
+            "sceneEn": "Checking the price",
+            "sceneJa": "値段を尋ねる"
+          }
         },
         {
           "id": "phrase-l07-02",
@@ -370,7 +720,21 @@
           "commonMistake": "Do you have blue this? ではなく、this in blue の順にします。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["shopping", "color", "request"]
+          "tags": [
+            "shopping",
+            "color",
+            "request"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-26358b7e408aeeb9.svg",
+            "kind": "contrast",
+            "altEn": "A shopper compares the same shirt design in a warm colour and in blue.",
+            "altJa": "欲しい色を探す。同じ商品の別の色を探す場面。",
+            "sceneEn": "Finding the right colour",
+            "sceneJa": "欲しい色を探す"
+          }
         },
         {
           "id": "phrase-l07-03",
@@ -383,7 +747,21 @@
           "commonMistake": "代名詞 it は try と on の間に置き、try on it とは通常言いません。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["shopping", "clothes", "permission"]
+          "tags": [
+            "shopping",
+            "clothes",
+            "permission"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-382c64606ed95abc.svg",
+            "kind": "sequence",
+            "altEn": "A shopper selects a dress, tries it on, and checks the fit in a mirror.",
+            "altJa": "試着する前。服や靴を試着したい場面。",
+            "sceneEn": "Using the fitting room",
+            "sceneJa": "試着する前"
+          }
         },
         {
           "id": "phrase-l07-04",
@@ -396,7 +774,21 @@
           "commonMistake": "I'll buy it. も正しいですが、接客場面では I'll take it. がとても自然です。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["shopping", "decision", "purchase"]
+          "tags": [
+            "shopping",
+            "decision",
+            "purchase"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-6c24c5aaa00ca5e7.svg",
+            "kind": "sequence",
+            "altEn": "A customer chooses an item in the shop and gets a bank card ready to pay.",
+            "altJa": "購入を決める。店で買う商品を決めた場面。",
+            "sceneEn": "Deciding what to buy",
+            "sceneJa": "購入を決める"
+          }
         }
       ]
     },
@@ -411,10 +803,24 @@
           "situation": "道順を尋ねるとき",
           "naturalUsage": "How do I get to ...? は目的地までの行き方を尋ねる定番表現です。",
           "exampleDialogue": "A: How do I get to the station? B: Go straight for two blocks.",
-          "commonMistake": "How can I go the station? ではなく、get to the station が自然です。",
+          "commonMistake": "get to the station と、行き先の前に to を入れます。How can I get to the station? も自然です。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["directions", "travel", "question"]
+          "tags": [
+            "directions",
+            "travel",
+            "question"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-e06b3791b1c72c6a.svg",
+            "kind": "scene",
+            "altEn": "A traveller asks which road leads to the train station.",
+            "altJa": "駅への道を尋ねる。道順を尋ねる場面。",
+            "sceneEn": "Finding the station",
+            "sceneJa": "駅への道を尋ねる"
+          }
         },
         {
           "id": "phrase-l08-02",
@@ -427,7 +833,21 @@
           "commonMistake": "far away here ではなく、far from here と言います。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["directions", "distance", "travel"]
+          "tags": [
+            "directions",
+            "distance",
+            "travel"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-ad8270ea68946e4f.svg",
+            "kind": "sequence",
+            "altEn": "A traveller checks how near a destination is before walking there.",
+            "altJa": "歩く距離を確認。目的地までの距離感を確認する場面。",
+            "sceneEn": "Checking the walking distance",
+            "sceneJa": "歩く距離を確認"
+          }
         },
         {
           "id": "phrase-l08-03",
@@ -440,7 +860,21 @@
           "commonMistake": "across the park では公園を横切る意味になるため、向かい側は across from です。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["location", "directions", "prepositions"]
+          "tags": [
+            "location",
+            "directions",
+            "prepositions"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-a600808773e7f5e0.svg",
+            "kind": "contrast",
+            "altEn": "A shop and a park tree sit on opposite sides of the road.",
+            "altJa": "建物の位置を説明。建物や場所の位置を説明する場面。",
+            "sceneEn": "Describing a location",
+            "sceneJa": "建物の位置を説明"
+          }
         },
         {
           "id": "phrase-l08-04",
@@ -453,7 +887,21 @@
           "commonMistake": "We're lose. ではなく、状態を表す形容詞 lost を使います。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["directions", "problem", "travel"]
+          "tags": [
+            "directions",
+            "problem",
+            "travel"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-24d049986b8e7127.svg",
+            "kind": "scene",
+            "altEn": "Travellers look confused at a road junction after losing their way.",
+            "altJa": "道に迷ったところ。正しい道から外れたと思う場面。",
+            "sceneEn": "A wrong turn",
+            "sceneJa": "道に迷ったところ"
+          }
         }
       ]
     },
@@ -471,7 +919,21 @@
           "commonMistake": "It looks rain. ではなく、名詞 rain の前に like を入れます。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["weather", "prediction", "daily-life"]
+          "tags": [
+            "weather",
+            "prediction",
+            "daily-life"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-1312fa126263acac.svg",
+            "kind": "sequence",
+            "altEn": "Dark clouds suggest approaching rain and someone gets a raincoat ready.",
+            "altJa": "空模様を確認。空模様を見て雨を予想する場面。",
+            "sceneEn": "Watching the sky",
+            "sceneJa": "空模様を確認"
+          }
         },
         {
           "id": "phrase-l09-02",
@@ -484,7 +946,21 @@
           "commonMistake": "this weekend の前に on は通常つけません。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["plans", "weekend", "question"]
+          "tags": [
+            "plans",
+            "weekend",
+            "question"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-39aa21bd2be762e3.svg",
+            "kind": "scene",
+            "altEn": "Friends look at their weekend calendar and consider a game of badminton.",
+            "altJa": "週末の予定を相談。近い週末の予定を尋ねる場面。",
+            "sceneEn": "Making weekend plans",
+            "sceneJa": "週末の予定を相談"
+          }
         },
         {
           "id": "phrase-l09-03",
@@ -497,7 +973,21 @@
           "commonMistake": "stay in inside のように前置詞を重ねません。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["weather", "suggestion", "plans"]
+          "tags": [
+            "weather",
+            "suggestion",
+            "plans"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-6da44e7fdd3cd9f5.svg",
+            "kind": "contrast",
+            "altEn": "Rain falls outside while friends choose to play cards indoors.",
+            "altJa": "雨の日に屋内で過ごす。天気が悪く屋内で過ごす提案をする場面。",
+            "sceneEn": "A rainy day indoors",
+            "sceneJa": "雨の日に屋内で過ごす"
+          }
         },
         {
           "id": "phrase-l09-04",
@@ -510,7 +1000,21 @@
           "commonMistake": "The weather became clear. も文法的ですが、会話では cleared up が自然です。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["weather", "change", "phrasal-verb"]
+          "tags": [
+            "weather",
+            "change",
+            "phrasal-verb"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-b5f52b2240715c2c.svg",
+            "kind": "sequence",
+            "altEn": "A rainy sky becomes cloudy and then clears to sunshine.",
+            "altJa": "雨上がり。雨や曇りのあとに空が晴れた場面。",
+            "sceneEn": "After the rain",
+            "sceneJa": "雨上がり"
+          }
         }
       ]
     },
@@ -528,7 +1032,21 @@
           "commonMistake": "I don't feel good. も会話では使われますが、well は体調を明確に表します。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["health", "feelings", "problem"]
+          "tags": [
+            "health",
+            "feelings",
+            "problem"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-8932f1aa4f286714.svg",
+            "kind": "scene",
+            "altEn": "Someone with a headache closes their eyes to rest with medicine nearby.",
+            "altJa": "体調が悪いとき。体調が悪いことを伝える場面。",
+            "sceneEn": "Feeling unwell",
+            "sceneJa": "体調が悪いとき"
+          }
         },
         {
           "id": "phrase-l10-02",
@@ -541,7 +1059,21 @@
           "commonMistake": "I hurt my throat. は自分でのどを傷つけたという意味になります。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["health", "symptoms", "body"]
+          "tags": [
+            "health",
+            "symptoms",
+            "body"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-d4a77eb92db98447.svg",
+            "kind": "scene",
+            "altEn": "A person with a cold points out their sore throat and reaches for a warm drink.",
+            "altJa": "のどの症状を伝える。のどの痛みを説明する場面。",
+            "sceneEn": "Describing a sore throat",
+            "sceneJa": "のどの症状を伝える"
+          }
         },
         {
           "id": "phrase-l10-03",
@@ -554,7 +1086,21 @@
           "commonMistake": "take rest より take a break が自然な組み合わせです。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["health", "rest", "request"]
+          "tags": [
+            "health",
+            "rest",
+            "request"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-ef208645d6ca5755.svg",
+            "kind": "sequence",
+            "altEn": "Someone stops working at a computer to take a short drink break.",
+            "altJa": "作業の途中で休む。疲れて少し休みたい場面。",
+            "sceneEn": "Taking a work break",
+            "sceneJa": "作業の途中で休む"
+          }
         },
         {
           "id": "phrase-l10-04",
@@ -564,10 +1110,24 @@
           "situation": "体調を崩した人の回復具合を尋ねるとき",
           "naturalUsage": "相手を気づかう、やさしく自然な質問です。",
           "exampleDialogue": "A: Are you feeling better? B: Yes, a little. Thanks.",
-          "commonMistake": "Do you feel better? も正しいですが、回復中の様子には Are you feeling better? が自然です。",
+          "commonMistake": "Are you feeling better? と Do you feel better? はどちらも回復を気づかう自然な質問です。better は good / well の比較級です。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["health", "care", "question"]
+          "tags": [
+            "health",
+            "care",
+            "question"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-834ad7d19c17669d.svg",
+            "kind": "contrast",
+            "altEn": "An earlier headache is contrasted with feeling healthy again as a friend checks in.",
+            "altJa": "回復したか気づかう。体調を崩した人の回復具合を尋ねる場面。",
+            "sceneEn": "Checking on recovery",
+            "sceneJa": "回復したか気づかう"
+          }
         }
       ]
     },
@@ -585,7 +1145,21 @@
           "commonMistake": "join with us ではなく、join us と直接つなげます。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["invitation", "friends", "activities"]
+          "tags": [
+            "invitation",
+            "friends",
+            "activities"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-af00680f7d1d907e.svg",
+            "kind": "scene",
+            "altEn": "A group playing basketball invites another person to join the game.",
+            "altJa": "遊びに友達を誘う。友達を活動に誘う場面。",
+            "sceneEn": "Inviting someone to play",
+            "sceneJa": "遊びに友達を誘う"
+          }
         },
         {
           "id": "phrase-l11-02",
@@ -598,7 +1172,21 @@
           "commonMistake": "That sounds funny. は「おかしく聞こえる」という意味になることがあります。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["reaction", "invitation", "positive"]
+          "tags": [
+            "reaction",
+            "invitation",
+            "positive"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-1d5c17c45061953c.svg",
+            "kind": "scene",
+            "altEn": "A suggested visit to a theme park receives an enthusiastic response.",
+            "altJa": "楽しそうな提案を聞く。相手の提案や予定に興味を示す場面。",
+            "sceneEn": "Responding to an invitation",
+            "sceneJa": "楽しそうな提案を聞く"
+          }
         },
         {
           "id": "phrase-l11-03",
@@ -608,10 +1196,24 @@
           "situation": "誘いをやわらかく断るとき",
           "naturalUsage": "今は参加できないことを角を立てずに伝えます。",
           "exampleDialogue": "A: Can you come to the game? B: I can't today. Maybe next time.",
-          "commonMistake": "Next time maybe. より Maybe next time. の語順が自然です。",
+          "commonMistake": "Maybe next time. は確約ではありません。本当に次の予定を立てたいなら、別の日を提案しましょう。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["declining", "invitation", "softening"]
+          "tags": [
+            "declining",
+            "invitation",
+            "softening"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-50ab87c345d06127.svg",
+            "kind": "contrast",
+            "altEn": "Someone is busy this weekend and suggests meeting another time.",
+            "altJa": "今日は見送る誘い。誘いをやわらかく断る場面。",
+            "sceneEn": "Declining for today",
+            "sceneJa": "今日は見送る誘い"
+          }
         },
         {
           "id": "phrase-l11-04",
@@ -624,7 +1226,21 @@
           "commonMistake": "I'm interesting in drawing. ではなく、interested in または into を使います。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["hobbies", "interest", "conversation"]
+          "tags": [
+            "hobbies",
+            "interest",
+            "conversation"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-96be87753c752a62.svg",
+            "kind": "scene",
+            "altEn": "A keen artist fills paper and a colouring book with drawings.",
+            "altJa": "お絵かきに夢中。今熱中している趣味を話す場面。",
+            "sceneEn": "A drawing hobby",
+            "sceneJa": "お絵かきに夢中"
+          }
         }
       ]
     },
@@ -642,7 +1258,21 @@
           "commonMistake": "Which page we are? ではなく、What page are we on? が自然です。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["school", "classroom", "clarification"]
+          "tags": [
+            "school",
+            "classroom",
+            "clarification"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-41ea2cdc1a7c31ec.svg",
+            "kind": "scene",
+            "altEn": "A learner looks through a workbook to find the page the class is using.",
+            "altJa": "授業のページを確認。授業で開くページを確認する場面。",
+            "sceneEn": "Finding the class page",
+            "sceneJa": "授業のページを確認"
+          }
         },
         {
           "id": "phrase-l12-02",
@@ -650,12 +1280,26 @@
           "phrase": "Can we work together?",
           "japanese": "一緒に取り組んでもいい？",
           "situation": "ペアやグループで作業したいとき",
-          "naturalUsage": "クラスメートを共同作業に誘う簡潔な表現です。",
+          "naturalUsage": "先生には一緒に作業してよいかを尋ねられます。友達には協力を提案する形にもなります。",
           "exampleDialogue": "A: Can we work together? B: Yes, let's be partners.",
-          "commonMistake": "work together with us のように不要な語を足さず、二人ならこの形で十分です。",
+          "commonMistake": "Can we work together? では work の原形を使います。working を続けません。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["school", "teamwork", "request"]
+          "tags": [
+            "school",
+            "teamwork",
+            "request"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-6ad1de1973a7832e.svg",
+            "kind": "scene",
+            "altEn": "Two learners bring a worksheet to a shared work area to solve it together.",
+            "altJa": "ペアで課題に取り組む。ペアやグループで作業したい場面。",
+            "sceneEn": "Working as a pair",
+            "sceneJa": "ペアで課題に取り組む"
+          }
         },
         {
           "id": "phrase-l12-03",
@@ -665,10 +1309,24 @@
           "situation": "必要な持ち物を家に忘れたとき",
           "naturalUsage": "忘れた物が今も家にある場合は left ... at home が自然です。",
           "exampleDialogue": "A: Where's your notebook? B: I left my notebook at home.",
-          "commonMistake": "I forgot my notebook at home. より left my notebook at home が自然です。",
+          "commonMistake": "I left my notebook at home. は置いてきた場所を伝えます。I forgot my notebook. は持参し忘れたことに焦点を当てます。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["school", "mistake", "belongings"]
+          "tags": [
+            "school",
+            "mistake",
+            "belongings"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-03147b6d713b601f.svg",
+            "kind": "contrast",
+            "altEn": "A notebook remains at home while a learner discovers it is absent from their school bag.",
+            "altJa": "ノートを忘れて登校。必要な持ち物を家に忘れた場面。",
+            "sceneEn": "A forgotten notebook",
+            "sceneJa": "ノートを忘れて登校"
+          }
         },
         {
           "id": "phrase-l12-04",
@@ -681,7 +1339,21 @@
           "commonMistake": "Fight! は日本語の「ファイト」の意味では通常使いません。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["school", "encouragement", "test"]
+          "tags": [
+            "school",
+            "encouragement",
+            "test"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-6d95b8eaaa5b13c8.svg",
+            "kind": "scene",
+            "altEn": "A friend offers encouragement and crosses their fingers before a test.",
+            "altJa": "テスト前に応援。テスト前の相手を応援する場面。",
+            "sceneEn": "Encouraging a test taker",
+            "sceneJa": "テスト前に応援"
+          }
         }
       ]
     },
@@ -699,7 +1371,21 @@
           "commonMistake": "I've never tried that ago. のように現在完了と ago を一緒に使いません。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["experience", "present-perfect", "conversation"]
+          "tags": [
+            "experience",
+            "present-perfect",
+            "conversation"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-372fc2cd3c87bb42.svg",
+            "kind": "scene",
+            "altEn": "Someone picks up a paint box and starts painting for the first time.",
+            "altJa": "初めての体験。初めての体験だと伝える場面。",
+            "sceneEn": "A first attempt",
+            "sceneJa": "初めての体験"
+          }
         },
         {
           "id": "phrase-l13-02",
@@ -712,7 +1398,21 @@
           "commonMistake": "better than I expected it のように末尾へ it を足しません。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["experience", "comparison", "reaction"]
+          "tags": [
+            "experience",
+            "comparison",
+            "reaction"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-fd649dacf8fc5e63.svg",
+            "kind": "contrast",
+            "altEn": "An uncertain diner tries a meal and is pleasantly surprised by how good it is.",
+            "altJa": "予想以上によかった食事。体験が予想以上によかった場面。",
+            "sceneEn": "An unexpectedly good meal",
+            "sceneJa": "予想以上によかった食事"
+          }
         },
         {
           "id": "phrase-l13-03",
@@ -725,7 +1425,21 @@
           "commonMistake": "I was a great time. ではなく、have a great time を過去形にします。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["experience", "past", "positive"]
+          "tags": [
+            "experience",
+            "past",
+            "positive"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-8b16f5ff5dce278a.svg",
+            "kind": "scene",
+            "altEn": "A smiling guest remembers a celebration with a birthday cake.",
+            "altJa": "楽しかった会を振り返る。イベントや訪問の感想を伝える場面。",
+            "sceneEn": "Remembering a great celebration",
+            "sceneJa": "楽しかった会を振り返る"
+          }
         },
         {
           "id": "phrase-l13-04",
@@ -738,7 +1452,21 @@
           "commonMistake": "How was it going? は進行中の様子を尋ねる意味になり、結果を聞く形とは異なります。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["experience", "follow-up", "question"]
+          "tags": [
+            "experience",
+            "follow-up",
+            "question"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-9fed7d87a214954a.svg",
+            "kind": "sequence",
+            "altEn": "After a test is finished, a friend asks how it went.",
+            "altJa": "終わった出来事の感想を聞く。相手が終えた出来事の結果や様子を尋ねる場面。",
+            "sceneEn": "Asking about a result",
+            "sceneJa": "終わった出来事の感想を聞く"
+          }
         }
       ]
     },
@@ -756,7 +1484,21 @@
           "commonMistake": "Do you free? ではなく、形容詞 free の前に be動詞を使います。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["plans", "availability", "friends"]
+          "tags": [
+            "plans",
+            "availability",
+            "friends"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-4ab1c2bb57cf2566.svg",
+            "kind": "sequence",
+            "altEn": "Friends check the time after school and discuss playing badminton.",
+            "altJa": "放課後の空き時間を確認。相手の予定が空いているか確認する場面。",
+            "sceneEn": "Checking after-school availability",
+            "sceneJa": "放課後の空き時間を確認"
+          }
         },
         {
           "id": "phrase-l14-02",
@@ -764,12 +1506,26 @@
           "phrase": "I'm planning to leave early.",
           "japanese": "早めに出る予定です。",
           "situation": "自分が考えている予定を共有するとき",
-          "naturalUsage": "確定に近い個人的な計画を plan to で伝えます。",
+          "naturalUsage": "plan to で今考えている計画を伝えます。予定が確定しているとは限りません。",
           "exampleDialogue": "A: Will traffic be busy? B: Maybe, so I'm planning to leave early.",
           "commonMistake": "I'm planning leave ではなく、planning to leave とします。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["plans", "future", "time"]
+          "tags": [
+            "plans",
+            "future",
+            "time"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-705aa57444f93ba3.svg",
+            "kind": "sequence",
+            "altEn": "A traveller packs a suitcase and plans to leave before the usual time.",
+            "altJa": "早めの出発を計画。自分が考えている予定を共有する場面。",
+            "sceneEn": "Planning an early departure",
+            "sceneJa": "早めの出発を計画"
+          }
         },
         {
           "id": "phrase-l14-03",
@@ -782,7 +1538,21 @@
           "commonMistake": "Is Saturday working for you? より、日程確認には Does Saturday work for you? が自然です。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["scheduling", "plans", "question"]
+          "tags": [
+            "scheduling",
+            "plans",
+            "question"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-59681503896f7ce0.svg",
+            "kind": "scene",
+            "altEn": "Two people check their calendars and see whether Saturday suits both of them.",
+            "altJa": "会う日を調整。会う日程を調整する場面。",
+            "sceneEn": "Choosing a meeting day",
+            "sceneJa": "会う日を調整"
+          }
         },
         {
           "id": "phrase-l14-04",
@@ -795,7 +1565,21 @@
           "commonMistake": "I'll tell you if I know. より、let you know が自然な定型表現です。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["plans", "follow-up", "promise"]
+          "tags": [
+            "plans",
+            "follow-up",
+            "promise"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-50099640d8f39216.svg",
+            "kind": "sequence",
+            "altEn": "Someone considers a plan and promises to send a reply tonight.",
+            "altJa": "夜までに返事を約束。すぐに決められず、あとで返事をする場面。",
+            "sceneEn": "Promising a later reply",
+            "sceneJa": "夜までに返事を約束"
+          }
         }
       ]
     },
@@ -813,7 +1597,21 @@
           "commonMistake": "I want check in. ではなく、want to または丁寧な I'd like to を使います。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["travel", "hotel", "request"]
+          "tags": [
+            "travel",
+            "hotel",
+            "request"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-762a6b73d7a17972.svg",
+            "kind": "scene",
+            "altEn": "A traveller arrives with a suitcase and passport and receives a room key.",
+            "altJa": "ホテルに到着。ホテルのフロントで到着手続きをする場面。",
+            "sceneEn": "Arriving for a hotel stay",
+            "sceneJa": "ホテルに到着"
+          }
         },
         {
           "id": "phrase-l15-02",
@@ -826,7 +1624,21 @@
           "commonMistake": "Where platform does it leave? ではなく、Which platform ... from? とします。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["travel", "train", "directions"]
+          "tags": [
+            "travel",
+            "train",
+            "directions"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-62b1efd4580b12cf.svg",
+            "kind": "scene",
+            "altEn": "A traveller asks which platform their train leaves from and is directed to platform three.",
+            "altJa": "出発ホームを確認。電車の出発ホームを確認する場面。",
+            "sceneEn": "Checking a train departure",
+            "sceneJa": "出発ホームを確認"
+          }
         },
         {
           "id": "phrase-l15-03",
@@ -839,20 +1651,48 @@
           "commonMistake": "Is anyone sitting? だけではどの席か曖昧なため、この定型表現が便利です。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["travel", "seat", "polite"]
+          "tags": [
+            "travel",
+            "seat",
+            "polite"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-49399e197210e059.svg",
+            "kind": "scene",
+            "altEn": "A diner notices a bag near a chair and checks whether the seat is already taken.",
+            "altJa": "座る前に確認。席を使ってよいか確認する場面。",
+            "sceneEn": "Checking before sitting",
+            "sceneJa": "座る前に確認"
+          }
         },
         {
           "id": "phrase-l15-04",
           "level": 15,
           "phrase": "Could you recommend somewhere nearby?",
           "japanese": "近くのおすすめの場所を教えていただけますか？",
-          "situation": "近所の店や観光地を教えてもらうとき",
-          "naturalUsage": "somewhere nearby で場所の種類を限定せずおすすめを尋ねられます。",
-          "exampleDialogue": "A: Could you recommend somewhere nearby? B: There's a nice café around the corner.",
+          "situation": "食事をする場所など、目的を伝えてから近くのおすすめを聞くとき",
+          "naturalUsage": "食事・買い物などの目的を先に共有すると、somewhere nearby がどんな場所を指すか伝わります。",
+          "exampleDialogue": "A: We're looking for lunch. Could you recommend somewhere nearby? B: There's a nice café around the corner.",
           "commonMistake": "recommend me somewhere より、recommend somewhere to me またはこの形が自然です。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["travel", "recommendation", "local"]
+          "tags": [
+            "travel",
+            "recommendation",
+            "local"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-8f6ed2a4a8881002.svg",
+            "kind": "scene",
+            "altEn": "A visitor asks someone local to recommend a nearby place to eat.",
+            "altJa": "近くのおすすめを聞く。食事をする場所など、目的を伝えてから近くのおすすめを聞く場面。",
+            "sceneEn": "Asking for a nearby recommendation",
+            "sceneJa": "近くのおすすめを聞く"
+          }
         }
       ]
     },
@@ -870,7 +1710,21 @@
           "commonMistake": "Something is wrong. より控えめに言いたいときは seems to be を使います。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["problem", "uncertainty", "technology"]
+          "tags": [
+            "problem",
+            "uncertainty",
+            "technology"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-f02f025476e8c9e4.svg",
+            "kind": "scene",
+            "altEn": "An unexpected warning on a computer screen makes its user concerned.",
+            "altJa": "異変に気づく。原因は不明だが正常ではないと伝える場面。",
+            "sceneEn": "Noticing a problem",
+            "sceneJa": "異変に気づく"
+          }
         },
         {
           "id": "phrase-l16-02",
@@ -883,7 +1737,21 @@
           "commonMistake": "I can't make this working. ではなく、get this to work と言います。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["problem", "technology", "help"]
+          "tags": [
+            "problem",
+            "technology",
+            "help"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-b4d8609873a16bf0.svg",
+            "kind": "sequence",
+            "altEn": "Someone presses a computer button but gets no response and checks its plug.",
+            "altJa": "機械がうまく動かない。機械やアプリがうまく動かない場面。",
+            "sceneEn": "A device that will not work",
+            "sceneJa": "機械がうまく動かない"
+          }
         },
         {
           "id": "phrase-l16-03",
@@ -896,7 +1764,21 @@
           "commonMistake": "I might misunderstand. だとこれから誤解する可能性にも聞こえるため、過去は may have misunderstood です。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["misunderstanding", "polite", "problem"]
+          "tags": [
+            "misunderstanding",
+            "polite",
+            "problem"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-b395246114a40e2e.svg",
+            "kind": "contrast",
+            "altEn": "Someone realises they understood a calendar date incorrectly and revises their understanding.",
+            "altJa": "聞き間違いに気づく。説明の理解が違っていた可能性を認める場面。",
+            "sceneEn": "Correcting a misunderstanding",
+            "sceneJa": "聞き間違いに気づく"
+          }
         },
         {
           "id": "phrase-l16-04",
@@ -909,7 +1791,21 @@
           "commonMistake": "look it ではなく、look at it または take a look と言います。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["help", "request", "problem"]
+          "tags": [
+            "help",
+            "request",
+            "problem"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-7a713537cd3aa042.svg",
+            "kind": "scene",
+            "altEn": "A person shows a draft on paper and asks someone to look it over.",
+            "altJa": "作業内容を見てもらう。問題や作業内容を確認してほしい場面。",
+            "sceneEn": "Asking someone to inspect work",
+            "sceneJa": "作業内容を見てもらう"
+          }
         }
       ]
     },
@@ -919,15 +1815,29 @@
         {
           "id": "phrase-l17-01",
           "level": 17,
-          "phrase": "In my opinion, it's worth trying.",
-          "japanese": "私の意見では、試す価値があります。",
+          "phrase": "I think it's worth a try.",
+          "japanese": "試してみる価値はあると思います。",
           "situation": "自分の考えを明確に述べるとき",
-          "naturalUsage": "意見であることを示してから、worth + 動名詞で価値を伝えます。",
-          "exampleDialogue": "A: Should we use the new app? B: In my opinion, it's worth trying.",
-          "commonMistake": "worth to try ではなく、worth trying とします。",
+          "naturalUsage": "I think で意見をやわらかく伝えます。worth a try は、結果は分からなくても試す価値があるという自然な会話表現です。",
+          "exampleDialogue": "A: Should we use the new app? B: I think it's worth a try.",
+          "commonMistake": "worth a try と worth trying はどちらも自然です。worth to try とは言いません。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["opinion", "recommendation", "discussion"]
+          "tags": [
+            "opinion",
+            "recommendation",
+            "discussion"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-efd2ab83d954c3c5.svg",
+            "kind": "sequence",
+            "altEn": "An idea is tested by building a small model to see whether it works.",
+            "altJa": "小さく試してみる提案。自分の考えを明確に述べる場面。",
+            "sceneEn": "Considering a practical experiment",
+            "sceneJa": "小さく試してみる提案"
+          }
         },
         {
           "id": "phrase-l17-02",
@@ -940,7 +1850,21 @@
           "commonMistake": "I know what you mean. も使えますが、議論では I see ... が理解の変化を自然に示します。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["understanding", "opinion", "discussion"]
+          "tags": [
+            "understanding",
+            "opinion",
+            "discussion"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-5bcf973994a6e720.svg",
+            "kind": "scene",
+            "altEn": "A listener follows a road explanation and understands where to turn right.",
+            "altJa": "道順の説明に納得。相手の考えを理解したと示す場面。",
+            "sceneEn": "Understanding a route explanation",
+            "sceneJa": "道順の説明に納得"
+          }
         },
         {
           "id": "phrase-l17-03",
@@ -953,7 +1877,21 @@
           "commonMistake": "I agree you. ではなく、agree with you と言います。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["agreement", "opinion", "emphasis"]
+          "tags": [
+            "agreement",
+            "opinion",
+            "emphasis"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-e4e7fba7488035de.svg",
+            "kind": "scene",
+            "altEn": "Two colleagues compare their views and recognise that they agree.",
+            "altJa": "共通の意見に賛成。相手の意見に強く賛成する場面。",
+            "sceneEn": "Agreeing on a shared choice",
+            "sceneJa": "共通の意見に賛成"
+          }
         },
         {
           "id": "phrase-l17-04",
@@ -966,7 +1904,21 @@
           "commonMistake": "I'm not convincing. は自分に説得力がないという意味になるため、convinced を使います。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["disagreement", "opinion", "softening"]
+          "tags": [
+            "disagreement",
+            "opinion",
+            "softening"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-186e2bca2b774a6f.svg",
+            "kind": "contrast",
+            "altEn": "A colleague reviews a written proposal but still has questions about the evidence.",
+            "altJa": "まだ判断を保留。説明を聞いても判断が変わっていない場面。",
+            "sceneEn": "Still considering the evidence",
+            "sceneJa": "まだ判断を保留"
+          }
         }
       ]
     },
@@ -984,7 +1936,21 @@
           "commonMistake": "Why we don't start ...? ではなく、Why don't we start ...? の語順です。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["suggestion", "teamwork", "planning"]
+          "tags": [
+            "suggestion",
+            "teamwork",
+            "planning"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-66e75d7d05d5228e.svg",
+            "kind": "sequence",
+            "altEn": "A team starts with one easy puzzle piece before tackling the whole puzzle.",
+            "altJa": "簡単な作業から始める。作業の進め方を提案する場面。",
+            "sceneEn": "Beginning with an easy step",
+            "sceneJa": "簡単な作業から始める"
+          }
         },
         {
           "id": "phrase-l18-02",
@@ -997,7 +1963,21 @@
           "commonMistake": "give another day it ではなく、give it another day の順にします。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["suggestion", "decision", "time"]
+          "tags": [
+            "suggestion",
+            "decision",
+            "time"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-20382067e6a58fad.svg",
+            "kind": "sequence",
+            "altEn": "Someone checking a plant suggests waiting one more day before deciding what to do.",
+            "altJa": "判断をもう一日待つ。決定を急がず待つ案を出す場面。",
+            "sceneEn": "Allowing more time",
+            "sceneJa": "判断をもう一日待つ"
+          }
         },
         {
           "id": "phrase-l18-03",
@@ -1010,7 +1990,21 @@
           "commonMistake": "代名詞 it は think と over の間に置きます。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["decision", "reflection", "phrasal-verb"]
+          "tags": [
+            "decision",
+            "reflection",
+            "phrasal-verb"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-1a443f2738644006.svg",
+            "kind": "scene",
+            "altEn": "A person gives a written proposal careful thought instead of deciding immediately.",
+            "altJa": "結論の前によく考える。結論を出す前に検討する時間を取りたい場面。",
+            "sceneEn": "Considering a decision carefully",
+            "sceneJa": "結論の前によく考える"
+          }
         },
         {
           "id": "phrase-l18-04",
@@ -1023,7 +2017,21 @@
           "commonMistake": "That seems the best option. も可能ですが、会話では seems like が自然です。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["decision", "opinion", "choice"]
+          "tags": [
+            "decision",
+            "opinion",
+            "choice"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-94e5673236642546.svg",
+            "kind": "contrast",
+            "altEn": "Several purchase options are compared against a budget and the best is selected.",
+            "altJa": "比較して最善案を選ぶ。比較したあとで有力な案を示す場面。",
+            "sceneEn": "Selecting the best of several options",
+            "sceneJa": "比較して最善案を選ぶ"
+          }
         }
       ]
     },
@@ -1041,7 +2049,21 @@
           "commonMistake": "Say again は繰り返し、say that another way は言い換えを求めます。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["clarification", "listening", "conversation-repair"]
+          "tags": [
+            "clarification",
+            "listening",
+            "conversation-repair"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-732a2d54124a3c1d.svg",
+            "kind": "contrast",
+            "altEn": "A learner asks a speaker to explain the same idea again using an example.",
+            "altJa": "別の説明をお願い。同じ説明を別の表現で聞きたい場面。",
+            "sceneEn": "Requesting a different explanation",
+            "sceneJa": "別の説明をお願い"
+          }
         },
         {
           "id": "phrase-l19-02",
@@ -1054,7 +2076,21 @@
           "commonMistake": "What do you mean exactly? も自然ですが、語調によっては強く聞こえる点に注意します。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["clarification", "meaning", "question"]
+          "tags": [
+            "clarification",
+            "meaning",
+            "question"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-bf40ba1d080b3c9b.svg",
+            "kind": "scene",
+            "altEn": "Two colleagues look closely at one sentence in a document to clarify its meaning.",
+            "altJa": "意味を具体的に確認。相手の意図をより正確に確認する場面。",
+            "sceneEn": "Clarifying an exact meaning",
+            "sceneJa": "意味を具体的に確認"
+          }
         },
         {
           "id": "phrase-l19-03",
@@ -1063,11 +2099,25 @@
           "japanese": "理解できているか確認させてください。",
           "situation": "聞いた内容を自分の言葉で確認する前",
           "naturalUsage": "大事な情報の認識違いを防ぐ、丁寧な会話のつなぎです。",
-          "exampleDialogue": "A: Send the draft by noon. B: Let me make sure I understood. You need it before lunch, right?",
+          "exampleDialogue": "A: Send the draft by noon. B: Let me make sure I understood. You need it by twelve, right?",
           "commonMistake": "make sure のあとには内容を表す節を続けます。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["clarification", "confirmation", "listening"]
+          "tags": [
+            "clarification",
+            "confirmation",
+            "listening"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-9eb40c5c88429440.svg",
+            "kind": "sequence",
+            "altEn": "A listener checks their notes and restates what they understood.",
+            "altJa": "理解した内容を確認。聞いた内容を自分の言葉で確認する前の場面。",
+            "sceneEn": "Checking understanding aloud",
+            "sceneJa": "理解した内容を確認"
+          }
         },
         {
           "id": "phrase-l19-04",
@@ -1080,7 +2130,21 @@
           "commonMistake": "I couldn't hear the last part. も正しいですが、didn't catch は聞き返しでよく使われます。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["clarification", "listening", "conversation-repair"]
+          "tags": [
+            "clarification",
+            "listening",
+            "conversation-repair"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-69c07f9ea42f6702.svg",
+            "kind": "sequence",
+            "altEn": "A learner requests that only the missed end of an explanation be repeated.",
+            "altJa": "聞き逃した最後を確認。発言の終わりだけ聞こえなかった場面。",
+            "sceneEn": "Recovering the missed ending",
+            "sceneJa": "聞き逃した最後を確認"
+          }
         }
       ]
     },
@@ -1098,7 +2162,21 @@
           "commonMistake": "until Friday は金曜まで継続する意味で、締切には by Friday を使います。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["work", "follow-up", "deadline"]
+          "tags": [
+            "work",
+            "follow-up",
+            "deadline"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-e16dedae022eac41.svg",
+            "kind": "sequence",
+            "altEn": "A colleague marks Friday on the calendar and prepares to send a considered reply by then.",
+            "altJa": "返事の期限を約束。確認後の返答期限を伝える場面。",
+            "sceneEn": "Giving a reply deadline",
+            "sceneJa": "返事の期限を約束"
+          }
         },
         {
           "id": "phrase-l20-02",
@@ -1111,7 +2189,21 @@
           "commonMistake": "move the meeting at three ではなく、変更先には to three を使います。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["work", "scheduling", "request"]
+          "tags": [
+            "work",
+            "scheduling",
+            "request"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-f1f11d0c2058422a.svg",
+            "kind": "contrast",
+            "altEn": "A meeting time is moved from its original clock slot to three o'clock.",
+            "altJa": "会議時刻を変更。予定時刻の変更を相談する場面。",
+            "sceneEn": "Moving a meeting time",
+            "sceneJa": "会議時刻を変更"
+          }
         },
         {
           "id": "phrase-l20-03",
@@ -1121,10 +2213,24 @@
           "situation": "到着や作業が遅れていると連絡するとき",
           "naturalUsage": "late と断定する前でも、予定より遅れ気味なら使えます。",
           "exampleDialogue": "A: Are you almost here? B: I'm running a little behind.",
-          "commonMistake": "I'm running late は明確な遅刻、running behind は予定からの遅れを広く表します。",
+          "commonMistake": "running late も running behind も、予定より遅れているときに使えます。状況が不明なら behind schedule と補えます。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["work", "delay", "scheduling"]
+          "tags": [
+            "work",
+            "delay",
+            "scheduling"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-b47d55c1bf64d938.svg",
+            "kind": "scene",
+            "altEn": "A traveller delayed by a missed bus phones ahead to explain they are running late.",
+            "altJa": "遅れを連絡。到着や作業が遅れていると連絡する場面。",
+            "sceneEn": "Reporting a delay",
+            "sceneJa": "遅れを連絡"
+          }
         },
         {
           "id": "phrase-l20-04",
@@ -1134,10 +2240,24 @@
           "situation": "チームで担当を決めるとき",
           "naturalUsage": "作業量の偏りを避けたいときの建設的な提案です。",
           "exampleDialogue": "A: There are eight sections. B: Let's divide the work evenly.",
-          "commonMistake": "divide the work equally も可能ですが、人ごとの量には evenly が自然です。",
+          "commonMistake": "evenly と equally は、どちらも作業量を均等に分ける意味で使えます。divide のあとに the work を置きます。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["teamwork", "work", "planning"]
+          "tags": [
+            "teamwork",
+            "work",
+            "planning"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-8cfe11dd0e712d1d.svg",
+            "kind": "scene",
+            "altEn": "A team divides a set of worksheets into equal portions of work.",
+            "altJa": "チームの仕事を公平に分担。チームで担当を決める場面。",
+            "sceneEn": "Sharing a team task fairly",
+            "sceneJa": "チームの仕事を公平に分担"
+          }
         }
       ]
     },
@@ -1155,7 +2275,21 @@
           "commonMistake": "I hope I don't interrupt. より、今まさに声をかけている場面では I'm not interrupting が自然です。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["politeness", "social", "softening"]
+          "tags": [
+            "politeness",
+            "social",
+            "softening"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-bf4778086f57da0b.svg",
+            "kind": "scene",
+            "altEn": "A visitor knocks before asking a question of someone busy at a computer.",
+            "altJa": "忙しそうな人に声をかける。忙しそうな人に声をかける場面。",
+            "sceneEn": "Approaching someone busy",
+            "sceneJa": "忙しそうな人に声をかける"
+          }
         },
         {
           "id": "phrase-l21-02",
@@ -1168,7 +2302,21 @@
           "commonMistake": "Don't hurry. は命令の響きが出ることがあり、No rush. のほうが柔らかいです。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["reassurance", "social", "patience"]
+          "tags": [
+            "reassurance",
+            "social",
+            "patience"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-b6d8917024450798.svg",
+            "kind": "scene",
+            "altEn": "One person calmly waits while another finishes getting ready.",
+            "altJa": "相手を急がせず待つ。相手を急がせたくないと伝える場面。",
+            "sceneEn": "Letting someone take their time",
+            "sceneJa": "相手を急がせず待つ"
+          }
         },
         {
           "id": "phrase-l21-03",
@@ -1181,7 +2329,21 @@
           "commonMistake": "You are thoughtful to ask. より It was thoughtful of you to ask. が自然な構文です。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["thanks", "kindness", "social"]
+          "tags": [
+            "thanks",
+            "kindness",
+            "social"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-6ab79b45c6056690.svg",
+            "kind": "scene",
+            "altEn": "A caring phone call makes someone feel remembered and appreciated.",
+            "altJa": "気づかいに感謝。相手の心づかいに感謝する場面。",
+            "sceneEn": "Appreciating a caring question",
+            "sceneJa": "気づかいに感謝"
+          }
         },
         {
           "id": "phrase-l21-04",
@@ -1194,7 +2356,21 @@
           "commonMistake": "leave you outside は物理的に外へ残す意味で、仲間外れは leave you out です。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["apology", "social", "relationships"]
+          "tags": [
+            "apology",
+            "social",
+            "relationships"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-1cfc0862e576f332.svg",
+            "kind": "contrast",
+            "altEn": "A friend who was accidentally left out is invited back into the group with an apology.",
+            "altJa": "誘い忘れを説明。相手を意図せず誘いや話から外してしまった場面。",
+            "sceneEn": "Repairing an accidental exclusion",
+            "sceneJa": "誘い忘れを説明"
+          }
         }
       ]
     },
@@ -1212,7 +2388,21 @@
           "commonMistake": "I'm afraid of this isn't ... とはせず、I'm afraid のあとに文を続けます。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["service", "complaint", "restaurant"]
+          "tags": [
+            "service",
+            "complaint",
+            "restaurant"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-45001e242e6b1841.svg",
+            "kind": "contrast",
+            "altEn": "The meal a diner ordered is contrasted with a different dish that arrived.",
+            "altJa": "注文と違う料理が届く。店で注文と違う品が届いた場面。",
+            "sceneEn": "Receiving the wrong order",
+            "sceneJa": "注文と違う料理が届く"
+          }
         },
         {
           "id": "phrase-l22-02",
@@ -1225,7 +2415,21 @@
           "commonMistake": "exchange to another one ではなく、exchange this for another one と言えます。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["service", "exchange", "polite-request"]
+          "tags": [
+            "service",
+            "exchange",
+            "polite-request"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-52d1ab51038c934e.svg",
+            "kind": "sequence",
+            "altEn": "A customer returns clothes that are too small and requests a larger size.",
+            "altJa": "買った商品を交換。購入品の交換を丁寧に依頼する場面。",
+            "sceneEn": "Exchanging a purchase",
+            "sceneJa": "買った商品を交換"
+          }
         },
         {
           "id": "phrase-l22-03",
@@ -1238,7 +2442,21 @@
           "commonMistake": "There has an extra charge. ではなく、存在は There is / seems to be で表します。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["service", "billing", "complaint"]
+          "tags": [
+            "service",
+            "billing",
+            "complaint"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-f190848c784c8cb9.svg",
+            "kind": "scene",
+            "altEn": "A customer notices an additional amount on a bill and asks the shop to check it.",
+            "altJa": "請求の追加料金を確認。請求額に心当たりのない料金がある場面。",
+            "sceneEn": "Questioning an extra charge",
+            "sceneJa": "請求の追加料金を確認"
+          }
         },
         {
           "id": "phrase-l22-04",
@@ -1251,7 +2469,21 @@
           "commonMistake": "Thank you to sort ... ではなく、Thank you for sorting ... とします。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["service", "thanks", "resolution"]
+          "tags": [
+            "service",
+            "thanks",
+            "resolution"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-3c5d6fc0c373cbae.svg",
+            "kind": "sequence",
+            "altEn": "A shop corrects a problem and the customer responds with an appreciative smile.",
+            "altJa": "問題解決に感謝。店員や担当者が問題を解決してくれた場面。",
+            "sceneEn": "Thanking someone for a fix",
+            "sceneJa": "問題解決に感謝"
+          }
         }
       ]
     },
@@ -1269,7 +2501,21 @@
           "commonMistake": "You can't believe ... より、これから話す内容には You won't believe ... が自然です。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["storytelling", "surprise", "narrative"]
+          "tags": [
+            "storytelling",
+            "surprise",
+            "narrative"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-fcf241d07fa935f2.svg",
+            "kind": "sequence",
+            "altEn": "A storyteller builds suspense before revealing a surprising celebration.",
+            "altJa": "驚く出来事を話す。驚く展開の前に聞き手の興味を引く場面。",
+            "sceneEn": "Telling a surprising story",
+            "sceneJa": "驚く出来事を話す"
+          }
         },
         {
           "id": "phrase-l23-02",
@@ -1282,7 +2528,21 @@
           "commonMistake": "It was turned out ... と受け身にせず、It turned out ... とします。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["storytelling", "outcome", "phrasal-verb"]
+          "tags": [
+            "storytelling",
+            "outcome",
+            "phrasal-verb"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-ff800188e39b72ce.svg",
+            "kind": "sequence",
+            "altEn": "Two people discuss what happened and discover that they had understood it differently.",
+            "altJa": "誤解だったと説明。出来事の意外な結末を説明する場面。",
+            "sceneEn": "Explaining an eventual misunderstanding",
+            "sceneJa": "誤解だったと説明"
+          }
         },
         {
           "id": "phrase-l23-03",
@@ -1295,7 +2555,21 @@
           "commonMistake": "stop to laugh は別の行動を止めて笑う意味なので、stop laughing を使います。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["storytelling", "emotion", "reaction"]
+          "tags": [
+            "storytelling",
+            "emotion",
+            "reaction"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-849b7f6bf72266bd.svg",
+            "kind": "scene",
+            "altEn": "A viewer recalls a funny television scene and cannot stop laughing.",
+            "altJa": "おもしろかった出来事。とてもおもしろかった出来事を振り返る場面。",
+            "sceneEn": "Remembering a funny moment",
+            "sceneJa": "おもしろかった出来事"
+          }
         },
         {
           "id": "phrase-l23-04",
@@ -1308,7 +2582,21 @@
           "commonMistake": "That must be stressful. は現在の状況、過去の体験には must have been を使います。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["empathy", "storytelling", "past-deduction"]
+          "tags": [
+            "empathy",
+            "storytelling",
+            "past-deduction"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-7e9b162b3f7d89b1.svg",
+            "kind": "scene",
+            "altEn": "A listener offers care as a worried friend describes a difficult day.",
+            "altJa": "大変な体験に共感。相手のつらい体験に共感する場面。",
+            "sceneEn": "Responding with empathy",
+            "sceneJa": "大変な体験に共感"
+          }
         }
       ]
     },
@@ -1326,7 +2614,21 @@
           "commonMistake": "work to being ではなく、work on being とします。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["goals", "habits", "self-improvement"]
+          "tags": [
+            "goals",
+            "habits",
+            "self-improvement"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-3ae698f8f9aa57e7.svg",
+            "kind": "sequence",
+            "altEn": "A learner uses a calendar to maintain a little workbook practice every day.",
+            "altJa": "毎日続ける学習習慣。改善したい習慣や目標を話す場面。",
+            "sceneEn": "Building a steady learning habit",
+            "sceneJa": "毎日続ける学習習慣"
+          }
         },
         {
           "id": "phrase-l24-02",
@@ -1339,7 +2641,21 @@
           "commonMistake": "make a progress とは言わず、不可算名詞として make progress と言います。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["progress", "reflection", "present-perfect"]
+          "tags": [
+            "progress",
+            "reflection",
+            "present-perfect"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-6536fc55b1a00ff2.svg",
+            "kind": "contrast",
+            "altEn": "A learner compares an early worksheet with a recent achievement and notices their growth.",
+            "altJa": "自分の成長に気づく。自分の成長に気づいた場面。",
+            "sceneEn": "Noticing personal progress",
+            "sceneJa": "自分の成長に気づく"
+          }
         },
         {
           "id": "phrase-l24-03",
@@ -1349,10 +2665,24 @@
           "situation": "大きな目標へ焦らず着実に進むとき",
           "naturalUsage": "難しい課題に無理なく取り組む姿勢を表す決まり表現です。",
           "exampleDialogue": "A: Isn't the course difficult? B: It is, but I'm taking it one step at a time.",
-          "commonMistake": "step by step も使えますが、この文では one step at a time が自然です。",
+          "commonMistake": "one step at a time は一度に一歩ずつ進める意味です。take it step by step も自然な表現です。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["goals", "progress", "mindset"]
+          "tags": [
+            "goals",
+            "progress",
+            "mindset"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-debf3591676b737d.svg",
+            "kind": "sequence",
+            "altEn": "A learner takes a series of small steps towards a certificate marking their learning goal.",
+            "altJa": "大きな目標へ一歩ずつ。大きな目標へ焦らず着実に進む場面。",
+            "sceneEn": "Approaching a large goal gradually",
+            "sceneJa": "大きな目標へ一歩ずつ"
+          }
         },
         {
           "id": "phrase-l24-04",
@@ -1365,7 +2695,21 @@
           "commonMistake": "What do you want improve? ではなく、want to improve または would like to improve とします。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["goals", "learning", "question"]
+          "tags": [
+            "goals",
+            "learning",
+            "question"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-4817ff48b92d1a27.svg",
+            "kind": "scene",
+            "altEn": "A teacher and learner compare reading and speaking as possible next goals.",
+            "altJa": "次の学習目標を相談。次の学習目標を一緒に考える場面。",
+            "sceneEn": "Choosing a next learning goal",
+            "sceneJa": "次の学習目標を相談"
+          }
         }
       ]
     },
@@ -1383,7 +2727,21 @@
           "commonMistake": "I have a different opinion than you. より、この形は人ではなく見方の違いに焦点を当てます。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["disagreement", "diplomacy", "discussion"]
+          "tags": [
+            "disagreement",
+            "diplomacy",
+            "discussion"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-56f1e082d8004819.svg",
+            "kind": "contrast",
+            "altEn": "One traveller listens respectfully to a suggestion to take the bus but prefers walking.",
+            "altJa": "移動方法について違う意見。相手を尊重しながら異なる意見を述べる場面。",
+            "sceneEn": "Different ways to travel",
+            "sceneJa": "移動方法について違う意見"
+          }
         },
         {
           "id": "phrase-l25-02",
@@ -1396,7 +2754,21 @@
           "commonMistake": "whole picture は文字どおりの写真ではなく、状況全体という比喩です。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["disagreement", "perspective", "softening"]
+          "tags": [
+            "disagreement",
+            "perspective",
+            "softening"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-faf17a21074e0132.svg",
+            "kind": "contrast",
+            "altEn": "A single puzzle piece is contrasted with the full picture that includes more information.",
+            "altJa": "一部だけで判断しない。議論に不足している視点があると示す場面。",
+            "sceneEn": "Looking beyond one piece of evidence",
+            "sceneJa": "一部だけで判断しない"
+          }
         },
         {
           "id": "phrase-l25-03",
@@ -1409,7 +2781,21 @@
           "commonMistake": "Is there can be ... とはせず、Could there be ... の語順にします。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["discussion", "alternative", "critical-thinking"]
+          "tags": [
+            "discussion",
+            "alternative",
+            "critical-thinking"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-0b01add2d704af19.svg",
+            "kind": "contrast",
+            "altEn": "A wilting plant prompts two possible explanations involving water and sunlight.",
+            "altJa": "別の原因を考える。結論に対する別の可能性を提案する場面。",
+            "sceneEn": "Suggesting another cause",
+            "sceneJa": "別の原因を考える"
+          }
         },
         {
           "id": "phrase-l25-04",
@@ -1417,12 +2803,26 @@
           "phrase": "Let's agree to disagree on that.",
           "japanese": "その点は意見の違いを認め合いましょう。",
           "situation": "意見の一致が難しく、友好的に議論を終えるとき",
-          "naturalUsage": "互いの立場を変えずに、対立を長引かせないための表現です。",
+          "naturalUsage": "好みなど、結論を一つにする必要がない話題で使います。共同の決定が必要な場面では、次の解決策も話し合いましょう。",
           "exampleDialogue": "A: I still prefer the original design. B: Fair enough. Let's agree to disagree on that.",
           "commonMistake": "これは相手に同意する表現ではなく、意見の不一致を受け入れる表現です。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["disagreement", "resolution", "diplomacy"]
+          "tags": [
+            "disagreement",
+            "resolution",
+            "diplomacy"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-233e3451032e42f3.svg",
+            "kind": "scene",
+            "altEn": "People with different views finish their discussion with a respectful handshake.",
+            "altJa": "意見の違いを認め合う。意見の一致が難しく、友好的に議論を終える場面。",
+            "sceneEn": "Ending a disagreement amicably",
+            "sceneJa": "意見の違いを認め合う"
+          }
         }
       ]
     },
@@ -1440,7 +2840,21 @@
           "commonMistake": "walk through you ではなく、walk you through ... の順にします。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["presentation", "explanation", "professional"]
+          "tags": [
+            "presentation",
+            "explanation",
+            "professional"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-bcbd0cdc4c3f1d0c.svg",
+            "kind": "sequence",
+            "altEn": "A presenter uses ordered index cards to explain a main idea step by step.",
+            "altJa": "中心の考えを順に説明。発表や説明を始める場面。",
+            "sceneEn": "Explaining an idea in order",
+            "sceneJa": "中心の考えを順に説明"
+          }
         },
         {
           "id": "phrase-l26-02",
@@ -1453,7 +2867,21 @@
           "commonMistake": "takeaway はここでは持ち帰り料理ではなく、学ぶべき要点という意味です。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["presentation", "summary", "key-point"]
+          "tags": [
+            "presentation",
+            "summary",
+            "key-point"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-b1c4d9c9c22e7dfb.svg",
+            "kind": "sequence",
+            "altEn": "Small pieces added one at a time produce a complete result.",
+            "altJa": "小さな変化の積み重ね。発表の要点をまとめる場面。",
+            "sceneEn": "Summarising cumulative change",
+            "sceneJa": "小さな変化の積み重ね"
+          }
         },
         {
           "id": "phrase-l26-03",
@@ -1466,7 +2894,21 @@
           "commonMistake": "build up that idea より、考えを発展させる場合は build on that idea です。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["discussion", "collaboration", "idea"]
+          "tags": [
+            "discussion",
+            "collaboration",
+            "idea"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-9aa4799679307d44.svg",
+            "kind": "sequence",
+            "altEn": "An existing idea is expanded by adding another contribution and building further.",
+            "altJa": "相手の案を発展。他の人の発言につなげて意見を加える場面。",
+            "sceneEn": "Developing someone else's idea",
+            "sceneJa": "相手の案を発展"
+          }
         },
         {
           "id": "phrase-l26-04",
@@ -1479,7 +2921,21 @@
           "commonMistake": "another perspective は追加の一つ、different perspective は異なる視点を強調します。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["discussion", "facilitation", "perspective"]
+          "tags": [
+            "discussion",
+            "facilitation",
+            "perspective"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-4ba6dc0669d0d3aa.svg",
+            "kind": "scene",
+            "altEn": "A group discussion invites someone to share a different way of looking at the issue.",
+            "altJa": "別の視点を募る。議論で多様な意見を募る場面。",
+            "sceneEn": "Inviting different perspectives",
+            "sceneJa": "別の視点を募る"
+          }
         }
       ]
     },
@@ -1497,7 +2953,21 @@
           "commonMistake": "compromise は常に悪い妥協ではなく、双方が譲る合意も表します。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["negotiation", "compromise", "question"]
+          "tags": [
+            "negotiation",
+            "compromise",
+            "question"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-5dc6357a4ba2edfc.svg",
+            "kind": "contrast",
+            "altEn": "Two people consider their needs and agree to a fair division.",
+            "altJa": "公平な折り合いを探す。双方が受け入れられる解決策を探す場面。",
+            "sceneEn": "Finding a fair middle ground",
+            "sceneJa": "公平な折り合いを探す"
+          }
         },
         {
           "id": "phrase-l27-02",
@@ -1510,7 +2980,21 @@
           "commonMistake": "flexible for the timing より、条件については flexible on が自然です。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["negotiation", "flexibility", "scheduling"]
+          "tags": [
+            "negotiation",
+            "flexibility",
+            "scheduling"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-2be4bf2185f712b6.svg",
+            "kind": "scene",
+            "altEn": "A colleague is willing to move calendar dates or times to make an arrangement work.",
+            "altJa": "日程を柔軟に調整。交渉で譲れる条件を示す場面。",
+            "sceneEn": "Being flexible about timing",
+            "sceneJa": "日程を柔軟に調整"
+          }
         },
         {
           "id": "phrase-l27-03",
@@ -1518,12 +3002,26 @@
           "phrase": "That works for me, provided we keep the scope small.",
           "japanese": "範囲を小さく保つのであれば、私はそれで大丈夫です。",
           "situation": "条件付きで提案に同意するとき",
-          "naturalUsage": "provided ... で、合意に必要な条件を明確に示します。",
+          "naturalUsage": "provided (that) ... は条件付きの合意を示す、少し改まった表現です。日常会話なら as long as ... も自然です。",
           "exampleDialogue": "A: Can we test the idea this month? B: That works for me, provided we keep the scope small.",
           "commonMistake": "provided はここでは「提供された」ではなく、if と同じ条件の意味です。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["negotiation", "condition", "agreement"]
+          "tags": [
+            "negotiation",
+            "condition",
+            "agreement"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-9ca8ed4ccef5c72e.svg",
+            "kind": "contrast",
+            "altEn": "A proposal is accepted on the condition that the work covers one worksheet rather than the whole book.",
+            "altJa": "取り組む範囲を決める。条件付きで提案に同意する場面。",
+            "sceneEn": "Agreeing on a manageable task",
+            "sceneJa": "取り組む範囲を決める"
+          }
         },
         {
           "id": "phrase-l27-04",
@@ -1536,7 +3034,21 @@
           "commonMistake": "close to agree ではなく、close to an agreement と名詞を使います。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["negotiation", "progress", "agreement"]
+          "tags": [
+            "negotiation",
+            "progress",
+            "agreement"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-2882038088bde280.svg",
+            "kind": "sequence",
+            "altEn": "Colleagues discuss possible calendar dates and move closer to an agreement they can shake hands on.",
+            "altJa": "日程の合意に近づく。交渉が前進したことを確認する場面。",
+            "sceneEn": "Reaching a scheduling agreement",
+            "sceneJa": "日程の合意に近づく"
+          }
         }
       ]
     },
@@ -1554,7 +3066,21 @@
           "commonMistake": "get the hang of it は「ぶら下がる」ではなく「コツをつかむ」という慣用表現です。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["idiom", "learning", "progress"]
+          "tags": [
+            "idiom",
+            "learning",
+            "progress"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-83dda2f0ec4f9151.svg",
+            "kind": "sequence",
+            "altEn": "A beginner practises brush control and gradually becomes more comfortable with painting.",
+            "altJa": "新しい技能のコツを練習。新しい技能にまだ慣れていない場面。",
+            "sceneEn": "Learning the feel of a new skill",
+            "sceneJa": "新しい技能のコツを練習"
+          }
         },
         {
           "id": "phrase-l28-02",
@@ -1567,7 +3093,21 @@
           "commonMistake": "実際に何かを day と呼ぶ意味ではありません。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["idiom", "work", "ending"]
+          "tags": [
+            "idiom",
+            "work",
+            "ending"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-0dd54ffa55267a60.svg",
+            "kind": "sequence",
+            "altEn": "Colleagues finish the day's work and leave the office.",
+            "altJa": "その日の仕事を終える。その日の作業を終える場面。",
+            "sceneEn": "Finishing the day's work",
+            "sceneJa": "その日の仕事を終える"
+          }
         },
         {
           "id": "phrase-l28-03",
@@ -1580,7 +3120,21 @@
           "commonMistake": "remember in mind のように同じ意味を重ねず、keep in mind とします。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["idiom", "idea", "consideration"]
+          "tags": [
+            "idiom",
+            "idea",
+            "consideration"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-df3dc3759e1ab440.svg",
+            "kind": "sequence",
+            "altEn": "Someone writes a useful idea in a notepad to remember it for later.",
+            "altJa": "後で使える案を記録。今すぐ採用しなくても後で役立つ意見を評価する場面。",
+            "sceneEn": "Saving an idea for later",
+            "sceneJa": "後で使える案を記録"
+          }
         },
         {
           "id": "phrase-l28-04",
@@ -1590,10 +3144,24 @@
           "situation": "お互いの理解や方針が一致したとき",
           "naturalUsage": "話し合いのあとに共通理解を確認する慣用表現です。",
           "exampleDialogue": "A: So the first draft is due Tuesday. B: Right, we're on the same page now.",
-          "commonMistake": "実際に同じページを開いている意味だけではなく、認識の一致にも使います。",
+          "commonMistake": "意味は「共通の理解がある」です。We are in the same page. ではなく on the same page と言います。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["idiom", "agreement", "teamwork"]
+          "tags": [
+            "idiom",
+            "agreement",
+            "teamwork"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-29df9969a3f47667.svg",
+            "kind": "scene",
+            "altEn": "Colleagues discuss the same plan and confirm a shared understanding.",
+            "altJa": "認識が一致する。お互いの理解や方針が一致した場面。",
+            "sceneEn": "Reaching a shared understanding",
+            "sceneJa": "認識が一致する"
+          }
         }
       ]
     },
@@ -1611,7 +3179,21 @@
           "commonMistake": "in a loop ではなく、定型表現は in the loop です。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["professional", "update", "idiom"]
+          "tags": [
+            "professional",
+            "update",
+            "idiom"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-a92fa960dc761b94.svg",
+            "kind": "sequence",
+            "altEn": "A changed deadline on the calendar is shared in a message to the team.",
+            "altJa": "締切変更を共有。関係者へ最新情報を簡潔に伝える場面。",
+            "sceneEn": "Sharing a deadline change",
+            "sceneJa": "締切変更を共有"
+          }
         },
         {
           "id": "phrase-l29-02",
@@ -1624,7 +3206,21 @@
           "commonMistake": "clarify me とは言わず、clarify what ... または clarify something for me とします。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["professional", "clarification", "responsibility"]
+          "tags": [
+            "professional",
+            "clarification",
+            "responsibility"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-8a030e6f93d63c14.svg",
+            "kind": "scene",
+            "altEn": "A team member asks which part of a worksheet task they are responsible for.",
+            "altJa": "依頼された役割を確認。自分の役割や依頼内容が曖昧な場面。",
+            "sceneEn": "Clarifying a personal responsibility",
+            "sceneJa": "依頼された役割を確認"
+          }
         },
         {
           "id": "phrase-l29-03",
@@ -1637,7 +3233,21 @@
           "commonMistake": "handle は他動詞なので handle with this ではなく handle this とします。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["professional", "ownership", "deadline"]
+          "tags": [
+            "professional",
+            "ownership",
+            "deadline"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-52918f75782fa5ed.svg",
+            "kind": "sequence",
+            "altEn": "A colleague takes ownership of a document task and commits to finishing it today.",
+            "altJa": "今日中の対応を引き受ける。問題への対応を引き受ける場面。",
+            "sceneEn": "Taking responsibility for today's task",
+            "sceneJa": "今日中の対応を引き受ける"
+          }
         },
         {
           "id": "phrase-l29-04",
@@ -1650,7 +3260,21 @@
           "commonMistake": "appreciate の直後は to bring ではなく、you bringing の形にします。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["professional", "thanks", "feedback"]
+          "tags": [
+            "professional",
+            "thanks",
+            "feedback"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-0fce85cb6dad0082.svg",
+            "kind": "scene",
+            "altEn": "Someone points out a missed warning and their colleague thanks them for the alert.",
+            "altJa": "見落としの指摘に感謝。問題や見落としを知らせてもらった場面。",
+            "sceneEn": "Appreciating a useful alert",
+            "sceneJa": "見落としの指摘に感謝"
+          }
         }
       ]
     },
@@ -1661,14 +3285,28 @@
           "id": "phrase-l30-01",
           "level": 30,
           "phrase": "Looking back, I would have approached it differently.",
-          "japanese": "振り返ると、今なら別のやり方で取り組むと思います。",
+          "japanese": "振り返ると、別のやり方で取り組めばよかったと思います。",
           "situation": "過去の判断から学んだことを話すとき",
           "naturalUsage": "looking back で現在からの振り返りを示し、仮定法で別の可能性を述べます。",
-          "exampleDialogue": "A: Would you run the project the same way again? B: Looking back, I would have approached it differently.",
+          "exampleDialogue": "A: Now that you've seen the results, would you have made the same choices? B: Looking back, I would have approached it differently.",
           "commonMistake": "過去の反実仮想には would approach ではなく would have approached を使います。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["reflection", "hypothetical", "learning"]
+          "tags": [
+            "reflection",
+            "hypothetical",
+            "learning"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-78f86d9a2a6f7abe.svg",
+            "kind": "contrast",
+            "altEn": "A person reflects on yesterday's approach and considers how they would change it now.",
+            "altJa": "過去の進め方を振り返る。過去の判断から学んだことを話す場面。",
+            "sceneEn": "Reflecting on a past approach",
+            "sceneJa": "過去の進め方を振り返る"
+          }
         },
         {
           "id": "phrase-l30-02",
@@ -1681,7 +3319,21 @@
           "commonMistake": "changed my thinking way ではなく、changed how I think と言います。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["reflection", "values", "experience"]
+          "tags": [
+            "reflection",
+            "values",
+            "experience"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-af7ecbfbbeff3204.svg",
+            "kind": "contrast",
+            "altEn": "An individual prize is contrasted with the satisfaction of shared growth and teamwork.",
+            "altJa": "成功の意味を考え直す。経験による価値観の変化を説明する場面。",
+            "sceneEn": "Reconsidering the meaning of success",
+            "sceneJa": "成功の意味を考え直す"
+          }
         },
         {
           "id": "phrase-l30-03",
@@ -1694,7 +3346,21 @@
           "commonMistake": "not always は「いつもではない」であり、「決してない」という意味ではありません。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["abstract", "nuance", "discussion"]
+          "tags": [
+            "abstract",
+            "nuance",
+            "discussion"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-29e19d6a31bdbe01.svg",
+            "kind": "contrast",
+            "altEn": "A planned road could improve travel but affect green space, leaving a resident with a difficult decision.",
+            "altJa": "地域の難しい選択。複雑で単純に判断できない問題を話す場面。",
+            "sceneEn": "Weighing a neighbourhood decision",
+            "sceneJa": "地域の難しい選択"
+          }
         },
         {
           "id": "phrase-l30-04",
@@ -1707,7 +3373,21 @@
           "commonMistake": "What is most important is ... も正しいですが、matters most はより会話的です。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["reflection", "values", "response"]
+          "tags": [
+            "reflection",
+            "values",
+            "response"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-407a3724b4dc76d2.svg",
+            "kind": "sequence",
+            "altEn": "After a spill, people respond by helping to clean up instead of blaming each other.",
+            "altJa": "困難にどう対応するか。困難への姿勢を重視すると伝える場面。",
+            "sceneEn": "Choosing a response to difficulty",
+            "sceneJa": "困難にどう対応するか"
+          }
         }
       ]
     },
@@ -1725,7 +3405,21 @@
           "commonMistake": "both side ではなく、複数形の both sides とします。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["nuance", "debate", "perspective"]
+          "tags": [
+            "nuance",
+            "debate",
+            "perspective"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-794d170fb758385f.svg",
+            "kind": "contrast",
+            "altEn": "A group considers both faster journeys on a new road and the need to protect a nearby park.",
+            "altJa": "新しい道路について議論。対立する二つの意見にそれぞれ理由がある場面。",
+            "sceneEn": "Debating a new road",
+            "sceneJa": "新しい道路について議論"
+          }
         },
         {
           "id": "phrase-l31-02",
@@ -1738,7 +3432,21 @@
           "commonMistake": "to some extent も自然です。to an extent はやや簡潔な形です。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["nuance", "partial-agreement", "discussion"]
+          "tags": [
+            "nuance",
+            "partial-agreement",
+            "discussion"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-2c65cfab80d45850.svg",
+            "kind": "contrast",
+            "altEn": "A learner agrees that workbook practice helps, while qualifying that it explains only part of progress.",
+            "altJa": "学習に役立つことを相談。相手の主張を部分的に認める場面。",
+            "sceneEn": "Discussing what helps learning",
+            "sceneJa": "学習に役立つことを相談"
+          }
         },
         {
           "id": "phrase-l31-03",
@@ -1751,7 +3459,21 @@
           "commonMistake": "subtle は単に difficult ではなく、見分けにくい細かな違いや複雑さを含みます。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["nuance", "analysis", "complexity"]
+          "tags": [
+            "nuance",
+            "analysis",
+            "complexity"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-15e9393a7d80c51c.svg",
+            "kind": "sequence",
+            "altEn": "A tree seen at first glance is examined more closely to reveal the roots beneath it.",
+            "altJa": "微妙な問題を詳しく見る。表面的な理解では不十分だと指摘する場面。",
+            "sceneEn": "Looking more closely at a subtle issue",
+            "sceneJa": "微妙な問題を詳しく見る"
+          }
         },
         {
           "id": "phrase-l31-04",
@@ -1764,7 +3486,21 @@
           "commonMistake": "far は物理的距離ではなく、意見をどこまで強く述べるかの比喩です。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["nuance", "disagreement", "diplomacy"]
+          "tags": [
+            "nuance",
+            "disagreement",
+            "diplomacy"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-14395a7c62461fb3.svg",
+            "kind": "contrast",
+            "altEn": "An exaggerated claim of being the best is qualified by showing a first painting and further practice.",
+            "altJa": "強すぎる評価をやわらげる。相手の結論が強すぎるとやわらかく反論する場面。",
+            "sceneEn": "Responding to an exaggerated claim",
+            "sceneJa": "強すぎる評価をやわらげる"
+          }
         }
       ]
     },
@@ -1779,10 +3515,24 @@
           "situation": "複雑な考えを言い換えて核心を示すとき",
           "naturalUsage": "To put it another way で、前の説明を別の角度から明確にします。",
           "exampleDialogue": "A: Why isn't the quick fix enough? B: To put it another way, we're treating the symptom, not the cause.",
-          "commonMistake": "put it in another way も通じますが、定型表現は put it another way です。",
+          "commonMistake": "To put it another way は言い換えの合図です。put の目的語 it を落とさず、put it another way とまとめて使います。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["advanced", "rephrasing", "analysis"]
+          "tags": [
+            "advanced",
+            "rephrasing",
+            "analysis"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-2048ca1a81919c69.svg",
+            "kind": "contrast",
+            "altEn": "Visible damage on a plant is distinguished from the roots where its cause may lie.",
+            "altJa": "症状と原因を区別。複雑な考えを言い換えて核心を示す場面。",
+            "sceneEn": "Distinguishing symptoms and causes",
+            "sceneJa": "症状と原因を区別"
+          }
         },
         {
           "id": "phrase-l32-02",
@@ -1790,12 +3540,26 @@
           "phrase": "I don't have a firm view on that yet.",
           "japanese": "それについては、まだはっきりした意見がありません。",
           "situation": "情報不足で立場を決めていないとき",
-          "naturalUsage": "無知ではなく、判断を保留していることを落ち着いて伝えます。",
+          "naturalUsage": "yet を添えて、今は判断を保留しているが、今後考えがまとまる可能性を示します。",
           "exampleDialogue": "A: Do you support the proposed change? B: I don't have a firm view on that yet.",
-          "commonMistake": "I have no opinion. は関心がないようにも響くため、この表現はより慎重です。",
+          "commonMistake": "I have no opinion. も正しい表現です。この文の firm view は「考えが固まった意見」を表します。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["advanced", "uncertainty", "opinion"]
+          "tags": [
+            "advanced",
+            "uncertainty",
+            "opinion"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-967a3d751fb2fc09.svg",
+            "kind": "scene",
+            "altEn": "A person reviews information and keeps their view open while questions remain.",
+            "altJa": "まだ立場を決めない。情報不足で立場を決めていない場面。",
+            "sceneEn": "Keeping an open position",
+            "sceneJa": "まだ立場を決めない"
+          }
         },
         {
           "id": "phrase-l32-03",
@@ -1808,7 +3572,21 @@
           "commonMistake": "rise a question ではなく、他動詞 raise a question を使います。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["advanced", "critical-thinking", "discussion"]
+          "tags": [
+            "advanced",
+            "critical-thinking",
+            "discussion"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-fd08c7986f04aef5.svg",
+            "kind": "scene",
+            "altEn": "A group considers who receives the benefits of a proposal and how they are shared.",
+            "altJa": "誰の利益になるか考える。個別の話題からより大きな論点へ広げる場面。",
+            "sceneEn": "Asking who benefits",
+            "sceneJa": "誰の利益になるか考える"
+          }
         },
         {
           "id": "phrase-l32-04",
@@ -1821,7 +3599,21 @@
           "commonMistake": "rethink about the assumptions ではなく、rethink the assumptions と直接目的語を取ります。",
           "audioUSVoice": "Ava",
           "audioUKVoice": "Libby",
-          "tags": ["advanced", "strategy", "reflection"]
+          "tags": [
+            "advanced",
+            "strategy",
+            "reflection"
+          ],
+          "imageType": "licensed-illustration",
+          "icon": "",
+          "visual": {
+            "src": "/assets/curriculum/phrases-a2c32899793f65c0.svg",
+            "kind": "sequence",
+            "altEn": "A team examines the foundations of its plan and reconsiders the assumptions behind it.",
+            "altJa": "計画の前提を見直す。計画の土台となる考えに疑問を投げかける場面。",
+            "sceneEn": "Revisiting a plan's assumptions",
+            "sceneJa": "計画の前提を見直す"
+          }
         }
       ]
     }

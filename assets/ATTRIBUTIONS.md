@@ -1,19 +1,15 @@
-# Learning illustration provenance
+# Curriculum illustration credits
 
-## Tahmid English Curriculum visuals
+Words and Phrases use individually selected **Mulberry Symbols**, originally drawn by Garry Paxton and maintained by Steve Lee, with teaching compositions by Tahmid English Club. All 448 output files, exact original URLs, authors, licences, modifications and SHA-256 hashes are recorded individually in [curriculum-attributions.json](curriculum-attributions.json).
 
-- **Files:** `src/curriculum-visuals.js` and `src/curriculum-visuals.css`
-- **Creator:** Tahmid English Review Hub project
-- **Source:** Original artwork generated locally from the project's curriculum metadata
-- **Licence:** Project-owned source code and artwork; no third-party illustration licence is required
-- **Original URL:** Not applicable
-- **Format:** Deterministic inline SVG assembled with DOM APIs
-- **Coverage:** Words, Phrases and Phonics, Levels 1–32 (480 learning items)
+The independent source is [mulberrysymbols/mulberry-symbols](https://github.com/mulberrysymbols/mulberry-symbols/tree/9cbab9f400c5de44e2bc58839cca07294aadb086), pinned at commit `9cbab9f400c5de44e2bc58839cca07294aadb086`. Its [actual LICENSE](https://github.com/mulberrysymbols/mulberry-symbols/blob/9cbab9f400c5de44e2bc58839cca07294aadb086/LICENSE.txt) specifies **Creative Commons Attribution-ShareAlike 4.0 International**. A copy is included in [licenses/mulberry-CC-BY-SA-4.0.txt](licenses/mulberry-CC-BY-SA-4.0.txt).
 
-The illustration system uses only original geometric paths, shapes, colour tokens and short typographic labels. It does not download, hotlink, trace or bundle artwork from Global Crown or any other curriculum provider. It does not use third-party icon sets, stock illustrations, web fonts or remote image URLs.
+Adapted illustrations are shared under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). Credit the creators and Tahmid English Club, link the licence, identify changes, and distribute adapted illustrations under the same licence. No endorsement is implied. These terms apply to the adapted illustration files, not automatically to unrelated site material.
 
-Emoji may still appear as small navigation or status symbols elsewhere in the interface. The main visual on every curriculum card is the original SVG system described above.
+Modifications include selection, cropping where indicated, scaling, scenes and sequences, backgrounds, labels, teaching cues, metadata sanitisation and SVG identifier namespacing. No artwork was taken from Global Crown and no AI image generation was used.
 
-## Other repository assets
+Ten original colour and shape drawings contain no third-party artwork and are dedicated under [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/). The 32 Phonics diagrams in `src/phonics-visuals.js` are original Tahmid English Club illustrations of mouth placement, sound contrasts, stress and linking.
 
-This file documents the structured-learning illustration system only. Existing ambient audio has separate licence information in `assets/audio/ambient/LICENSE.md`; existing project-owned logos and earlier lesson visuals retain their existing provenance records.
+To reproduce Words/Phrases assets, obtain the pinned Mulberry source and run `MULBERRY_SOURCE=/path/to/EN node scripts/build-curriculum-art.mjs`. Curated maps and teaching cues are in the public project source under `scripts/`.
+
+Students can access credits from `/illustration-credits.html`. Music has separate credits in `assets/audio/ambient/LICENSE.md` and `/music-credits`. Natural-speech software and corresponding source are documented in `docs/source-notices/README.md`.

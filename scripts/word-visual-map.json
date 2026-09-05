@@ -1,0 +1,3234 @@
+{
+  "word-l01-book": {
+    "assets": [
+      "work_book.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of book.",
+    "altJa": "本のイラスト。"
+  },
+  "word-l01-pen": {
+    "assets": [
+      "pen.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of pen.",
+    "altJa": "ペンのイラスト。"
+  },
+  "word-l01-desk": {
+    "assets": [
+      "desk.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of desk.",
+    "altJa": "机のイラスト。"
+  },
+  "word-l01-chair": {
+    "assets": [
+      "chair.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of chair.",
+    "altJa": "椅子のイラスト。"
+  },
+  "word-l01-bag": {
+    "assets": [
+      "school_bag.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of bag.",
+    "altJa": "かばんのイラスト。"
+  },
+  "word-l01-door": {
+    "assets": [
+      "door_2.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of door.",
+    "altJa": "ドアのイラスト。"
+  },
+  "word-l01-window": {
+    "assets": [
+      "window.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of window.",
+    "altJa": "窓のイラスト。"
+  },
+  "word-l01-teacher": {
+    "assets": [
+      "teacher_2a.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of teacher.",
+    "altJa": "先生のイラスト。",
+    "background": "classroom"
+  },
+  "word-l01-student": {
+    "assets": [
+      "study_,_to.svg"
+    ],
+    "layout": "single",
+    "altEn": "A student studying at a desk with a book.",
+    "altJa": "机で本を使って勉強している生徒。",
+    "background": "classroom"
+  },
+  "word-l01-lesson": {
+    "assets": [
+      "teacher_1b.svg",
+      "study_,_to.svg",
+      "class_room.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A teacher and a student learning together in a classroom.",
+    "altJa": "教室で先生と生徒が一緒に学んでいます。",
+    "background": "classroom"
+  },
+  "word-l02-red": {
+    "assets": [],
+    "layout": "single",
+    "altEn": "An illustration of red.",
+    "altJa": "赤いのイラスト。",
+    "diagram": "red"
+  },
+  "word-l02-blue": {
+    "assets": [],
+    "layout": "single",
+    "altEn": "An illustration of blue.",
+    "altJa": "青いのイラスト。",
+    "diagram": "blue"
+  },
+  "word-l02-yellow": {
+    "assets": [],
+    "layout": "single",
+    "altEn": "An illustration of yellow.",
+    "altJa": "黄色いのイラスト。",
+    "diagram": "yellow"
+  },
+  "word-l02-green": {
+    "assets": [],
+    "layout": "single",
+    "altEn": "An illustration of green.",
+    "altJa": "緑ののイラスト。",
+    "diagram": "green"
+  },
+  "word-l02-black": {
+    "assets": [],
+    "layout": "single",
+    "altEn": "An illustration of black.",
+    "altJa": "黒いのイラスト。",
+    "diagram": "black"
+  },
+  "word-l02-white": {
+    "assets": [],
+    "layout": "single",
+    "altEn": "An illustration of white.",
+    "altJa": "白いのイラスト。",
+    "diagram": "white"
+  },
+  "word-l02-circle": {
+    "assets": [],
+    "layout": "single",
+    "altEn": "An illustration of circle.",
+    "altJa": "円・丸のイラスト。",
+    "diagram": "circle"
+  },
+  "word-l02-square": {
+    "assets": [],
+    "layout": "single",
+    "altEn": "An illustration of square.",
+    "altJa": "正方形のイラスト。",
+    "diagram": "square"
+  },
+  "word-l02-star": {
+    "assets": [],
+    "layout": "single",
+    "altEn": "An illustration of star.",
+    "altJa": "星のイラスト。",
+    "diagram": "star"
+  },
+  "word-l02-line": {
+    "assets": [],
+    "layout": "single",
+    "altEn": "An illustration of line.",
+    "altJa": "線のイラスト。",
+    "diagram": "line"
+  },
+  "word-l03-mother": {
+    "assets": [
+      "mum_parent.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of mother.",
+    "altJa": "母・お母さんのイラスト。"
+  },
+  "word-l03-father": {
+    "assets": [
+      "dad_parent.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of father.",
+    "altJa": "父・お父さんのイラスト。"
+  },
+  "word-l03-sister": {
+    "assets": [
+      "sister.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of sister.",
+    "altJa": "姉・妹のイラスト。"
+  },
+  "word-l03-brother": {
+    "assets": [
+      "brother.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of brother.",
+    "altJa": "兄・弟のイラスト。"
+  },
+  "word-l03-grandmother": {
+    "assets": [
+      "grandmother.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of grandmother.",
+    "altJa": "祖母・おばあさんのイラスト。"
+  },
+  "word-l03-grandfather": {
+    "assets": [
+      "grandfather.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of grandfather.",
+    "altJa": "祖父・おじいさんのイラスト。"
+  },
+  "word-l03-baby": {
+    "assets": [
+      "baby.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of baby.",
+    "altJa": "赤ちゃんのイラスト。"
+  },
+  "word-l03-friend": {
+    "assets": [
+      "hold_hands_,_to.svg"
+    ],
+    "layout": "single",
+    "altEn": "Two friends holding hands.",
+    "altJa": "友達同士が手をつないでいます。"
+  },
+  "word-l03-boy": {
+    "assets": [
+      "brother.svg"
+    ],
+    "layout": "single",
+    "altEn": "A portrait of a boy.",
+    "altJa": "男の子の顔。",
+    "detailEn": "A boy",
+    "detailJa": "男の子",
+    "crop": {
+      "x": 0.52,
+      "y": 0.26,
+      "width": 0.43,
+      "height": 0.44
+    }
+  },
+  "word-l03-girl": {
+    "assets": [
+      "sister.svg"
+    ],
+    "layout": "single",
+    "altEn": "A portrait of a girl.",
+    "altJa": "女の子の顔。",
+    "detailEn": "A girl",
+    "detailJa": "女の子",
+    "crop": {
+      "x": 0.52,
+      "y": 0.26,
+      "width": 0.43,
+      "height": 0.44
+    }
+  },
+  "word-l04-head": {
+    "assets": [
+      "head.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of head.",
+    "altJa": "頭のイラスト。"
+  },
+  "word-l04-face": {
+    "assets": [
+      "face_neutral_3.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of face.",
+    "altJa": "顔のイラスト。"
+  },
+  "word-l04-eye": {
+    "assets": [
+      "eye.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of eye.",
+    "altJa": "目のイラスト。"
+  },
+  "word-l04-ear": {
+    "assets": [
+      "ear.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of ear.",
+    "altJa": "耳のイラスト。"
+  },
+  "word-l04-mouth": {
+    "assets": [
+      "mouth.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of mouth.",
+    "altJa": "口のイラスト。"
+  },
+  "word-l04-hand": {
+    "assets": [
+      "right_hand.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of hand.",
+    "altJa": "手のイラスト。"
+  },
+  "word-l04-foot": {
+    "assets": [
+      "foot.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of foot.",
+    "altJa": "足・足首から下のイラスト。"
+  },
+  "word-l04-arm": {
+    "assets": [
+      "arm.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of arm.",
+    "altJa": "腕のイラスト。"
+  },
+  "word-l04-leg": {
+    "assets": [
+      "leg.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of leg.",
+    "altJa": "脚のイラスト。"
+  },
+  "word-l04-nose": {
+    "assets": [
+      "head.svg"
+    ],
+    "layout": "single",
+    "altEn": "The nose is highlighted on a face seen from the side.",
+    "altJa": "横顔の鼻を丸で示しています。",
+    "highlight": {
+      "x": 0.78,
+      "y": 0.49,
+      "r": 0.1
+    }
+  },
+  "word-l05-rice": {
+    "assets": [
+      "rice.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of rice.",
+    "altJa": "ご飯・米のイラスト。"
+  },
+  "word-l05-bread": {
+    "assets": [
+      "bread.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of bread.",
+    "altJa": "パンのイラスト。"
+  },
+  "word-l05-egg": {
+    "assets": [
+      "egg.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of egg.",
+    "altJa": "卵のイラスト。"
+  },
+  "word-l05-milk": {
+    "assets": [
+      "milk_carton.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of milk.",
+    "altJa": "牛乳のイラスト。"
+  },
+  "word-l05-water": {
+    "assets": [
+      "water.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of water.",
+    "altJa": "水のイラスト。"
+  },
+  "word-l05-apple": {
+    "assets": [
+      "apple.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of apple.",
+    "altJa": "りんごのイラスト。"
+  },
+  "word-l05-banana": {
+    "assets": [
+      "banana.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of banana.",
+    "altJa": "バナナのイラスト。"
+  },
+  "word-l05-chicken": {
+    "assets": [
+      "chicken.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of chicken.",
+    "altJa": "鶏肉のイラスト。"
+  },
+  "word-l05-fish": {
+    "assets": [
+      "fish.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of fish.",
+    "altJa": "魚のイラスト。"
+  },
+  "word-l05-soup": {
+    "assets": [
+      "soup.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of soup.",
+    "altJa": "スープのイラスト。"
+  },
+  "word-l06-house": {
+    "assets": [
+      "house.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of house.",
+    "altJa": "家・住宅のイラスト。"
+  },
+  "word-l06-room": {
+    "assets": [
+      "inside_room.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of room.",
+    "altJa": "部屋のイラスト。"
+  },
+  "word-l06-kitchen": {
+    "assets": [
+      "cooker.svg",
+      "sink_2.svg",
+      "fridge.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A room with a cooker, sink, and fridge for preparing food.",
+    "altJa": "コンロ・流し・冷蔵庫がある台所。",
+    "background": "home"
+  },
+  "word-l06-bathroom": {
+    "assets": [
+      "bath.svg",
+      "toilet.svg",
+      "sink.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A bathroom with a bath, toilet, and washbasin.",
+    "altJa": "浴槽・トイレ・洗面台がある浴室。",
+    "background": "home"
+  },
+  "word-l06-bedroom": {
+    "assets": [
+      "single_bed.svg",
+      "lamp.svg",
+      "window.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A bed and a bedside lamp in a room with a window.",
+    "altJa": "窓のある寝室にベッドとランプがあります。",
+    "background": "home"
+  },
+  "word-l06-bed": {
+    "assets": [
+      "single_bed.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of bed.",
+    "altJa": "ベッドのイラスト。"
+  },
+  "word-l06-table": {
+    "assets": [
+      "table.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of table.",
+    "altJa": "テーブルのイラスト。"
+  },
+  "word-l06-lamp": {
+    "assets": [
+      "lamp.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of lamp.",
+    "altJa": "ランプのイラスト。"
+  },
+  "word-l06-key": {
+    "assets": [
+      "key_1.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of key.",
+    "altJa": "鍵のイラスト。"
+  },
+  "word-l06-clock": {
+    "assets": [
+      "clock.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of clock.",
+    "altJa": "時計のイラスト。"
+  },
+  "word-l07-dog": {
+    "assets": [
+      "dog.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of dog.",
+    "altJa": "犬のイラスト。"
+  },
+  "word-l07-cat": {
+    "assets": [
+      "cat.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of cat.",
+    "altJa": "猫のイラスト。"
+  },
+  "word-l07-bird": {
+    "assets": [
+      "bird.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of bird.",
+    "altJa": "鳥のイラスト。"
+  },
+  "word-l07-rabbit": {
+    "assets": [
+      "rabbit.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of rabbit.",
+    "altJa": "うさぎのイラスト。"
+  },
+  "word-l07-horse": {
+    "assets": [
+      "horse.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of horse.",
+    "altJa": "馬のイラスト。"
+  },
+  "word-l07-cow": {
+    "assets": [
+      "cow.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of cow.",
+    "altJa": "牛のイラスト。"
+  },
+  "word-l07-sheep": {
+    "assets": [
+      "sheep.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of sheep.",
+    "altJa": "羊のイラスト。"
+  },
+  "word-l07-pig": {
+    "assets": [
+      "piglet.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of pig.",
+    "altJa": "豚のイラスト。"
+  },
+  "word-l07-lion": {
+    "assets": [
+      "lion.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of lion.",
+    "altJa": "ライオンのイラスト。"
+  },
+  "word-l07-elephant": {
+    "assets": [
+      "elephant.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of elephant.",
+    "altJa": "象のイラスト。"
+  },
+  "word-l08-run": {
+    "assets": [
+      "run_,_to.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of run.",
+    "altJa": "走るのイラスト。"
+  },
+  "word-l08-walk": {
+    "assets": [
+      "walk_,_to.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of walk.",
+    "altJa": "歩くのイラスト。"
+  },
+  "word-l08-jump": {
+    "assets": [
+      "jump_,_to.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of jump.",
+    "altJa": "跳ぶのイラスト。"
+  },
+  "word-l08-sit": {
+    "assets": [
+      "sit_,_to.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of sit.",
+    "altJa": "座るのイラスト。"
+  },
+  "word-l08-stand": {
+    "assets": [
+      "stand_,_to.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of stand.",
+    "altJa": "立つのイラスト。"
+  },
+  "word-l08-open": {
+    "assets": [
+      "open_door_1_,_to.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of open.",
+    "altJa": "開けるのイラスト。"
+  },
+  "word-l08-close": {
+    "assets": [
+      "close_door_,_to.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of close.",
+    "altJa": "閉めるのイラスト。"
+  },
+  "word-l08-read": {
+    "assets": [
+      "read_book_,_to.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of read.",
+    "altJa": "読むのイラスト。"
+  },
+  "word-l08-write": {
+    "assets": [
+      "write_,_to.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of write.",
+    "altJa": "書くのイラスト。"
+  },
+  "word-l08-listen": {
+    "assets": [
+      "hear_,_to.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of listen.",
+    "altJa": "聞く・耳を傾けるのイラスト。"
+  },
+  "word-l09-happy": {
+    "assets": [
+      "happy_lady.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of happy.",
+    "altJa": "うれしい・幸せなのイラスト。"
+  },
+  "word-l09-sad": {
+    "assets": [
+      "sad_man.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of sad.",
+    "altJa": "悲しいのイラスト。"
+  },
+  "word-l09-tired": {
+    "assets": [
+      "yawn_,_to.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of tired.",
+    "altJa": "疲れたのイラスト。"
+  },
+  "word-l09-angry": {
+    "assets": [
+      "angry_man.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of angry.",
+    "altJa": "怒っているのイラスト。"
+  },
+  "word-l09-scared": {
+    "assets": [
+      "afraid_lady.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of scared.",
+    "altJa": "怖がっているのイラスト。"
+  },
+  "word-l09-excited": {
+    "assets": [
+      "excited_man.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of excited.",
+    "altJa": "わくわくしたのイラスト。"
+  },
+  "word-l09-hungry": {
+    "assets": [
+      "hungry.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of hungry.",
+    "altJa": "お腹が空いたのイラスト。"
+  },
+  "word-l09-thirsty": {
+    "assets": [
+      "thirsty.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of thirsty.",
+    "altJa": "喉が渇いたのイラスト。"
+  },
+  "word-l09-sick": {
+    "assets": [
+      "headache.svg",
+      "thermometer.svg"
+    ],
+    "layout": "scene",
+    "altEn": "An unwell person with a headache and a thermometer.",
+    "altJa": "頭が痛く、体温を測っている具合の悪い人。"
+  },
+  "word-l09-fine": {
+    "assets": [
+      "healthy.svg",
+      "good.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A person feeling well gives a positive sign.",
+    "altJa": "元気な人が大丈夫という合図をしています。"
+  },
+  "word-l10-sunny": {
+    "assets": [
+      "sun.svg",
+      "tree.svg"
+    ],
+    "layout": "scene",
+    "altEn": "Sunlight shines on a tree outdoors.",
+    "altJa": "屋外の木に太陽の光が当たっています。",
+    "diagram": "sunny",
+    "background": "park"
+  },
+  "word-l10-rainy": {
+    "assets": [
+      "rain.svg",
+      "umbrella.svg"
+    ],
+    "layout": "scene",
+    "altEn": "Rain falls on an open umbrella.",
+    "altJa": "開いた傘に雨が降っています。"
+  },
+  "word-l10-cloudy": {
+    "assets": [
+      "cloudy.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of cloudy.",
+    "altJa": "曇ったのイラスト。"
+  },
+  "word-l10-windy": {
+    "assets": [
+      "tree.svg",
+      "scarf.svg"
+    ],
+    "layout": "scene",
+    "altEn": "Wind bends a tree and blows a scarf sideways.",
+    "altJa": "風で木が傾き、マフラーが横になびいています。",
+    "diagram": "windy",
+    "background": "park"
+  },
+  "word-l10-hot": {
+    "assets": [
+      "hot_person.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of hot.",
+    "altJa": "暑い・熱いのイラスト。"
+  },
+  "word-l10-cold": {
+    "assets": [
+      "snow.svg",
+      "coat.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A person needs a warm coat in falling snow.",
+    "altJa": "雪の中で暖かいコートが必要な寒さ。",
+    "diagram": "cold",
+    "background": "park"
+  },
+  "word-l10-sky": {
+    "assets": [
+      "cloudy.svg",
+      "bird.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A bird flies high among clouds, with the open sky highlighted.",
+    "altJa": "雲の間を鳥が飛び、広い空が示されています。",
+    "diagram": "sky",
+    "background": "park"
+  },
+  "word-l10-sun": {
+    "assets": [
+      "sun.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of sun.",
+    "altJa": "太陽のイラスト。"
+  },
+  "word-l10-moon": {
+    "assets": [
+      "Moon.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of moon.",
+    "altJa": "月のイラスト。"
+  },
+  "word-l10-snow": {
+    "assets": [
+      "snow.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of snow.",
+    "altJa": "雪のイラスト。"
+  },
+  "word-l11-morning": {
+    "assets": [
+      "morning.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of morning.",
+    "altJa": "朝のイラスト。"
+  },
+  "word-l11-afternoon": {
+    "assets": [
+      "afternoon.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of afternoon.",
+    "altJa": "午後のイラスト。"
+  },
+  "word-l11-night": {
+    "assets": [
+      "night.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of night.",
+    "altJa": "夜のイラスト。"
+  },
+  "word-l11-today": {
+    "assets": [
+      "today.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of today.",
+    "altJa": "今日のイラスト。"
+  },
+  "word-l11-tomorrow": {
+    "assets": [
+      "tomorrow.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of tomorrow.",
+    "altJa": "明日のイラスト。"
+  },
+  "word-l11-yesterday": {
+    "assets": [
+      "yesterday.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of yesterday.",
+    "altJa": "昨日のイラスト。"
+  },
+  "word-l11-busy": {
+    "assets": [
+      "busy.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of busy.",
+    "altJa": "忙しいのイラスト。"
+  },
+  "word-l11-evening": {
+    "assets": [
+      "sun.svg",
+      "house.svg"
+    ],
+    "layout": "scene",
+    "altEn": "The sun is low behind a house as daylight fades.",
+    "altJa": "家の向こうに太陽が沈み、夕方になっています。",
+    "diagram": "evening",
+    "background": "park"
+  },
+  "word-l11-early": {
+    "assets": [
+      "clock.svg",
+      "get_on_bus_,_to.svg"
+    ],
+    "layout": "contrast",
+    "altEn": "A passenger arrives at 8:50 for a bus leaving at 9:00.",
+    "altJa": "9時発のバスに8時50分に着く人。",
+    "labels": [
+      "8:50",
+      "9:00"
+    ],
+    "diagram": "early"
+  },
+  "word-l11-late": {
+    "assets": [
+      "clock.svg",
+      "miss_bus_,_to.svg"
+    ],
+    "layout": "contrast",
+    "altEn": "A passenger arrives at 9:10 after the bus left at 9:00.",
+    "altJa": "9時発のバスに9時10分に着き、乗り遅れた人。",
+    "labels": [
+      "9:00",
+      "9:10"
+    ],
+    "diagram": "late"
+  },
+  "word-l12-school": {
+    "assets": [
+      "school_1.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of school.",
+    "altJa": "学校のイラスト。"
+  },
+  "word-l12-park": {
+    "assets": [
+      "tree.svg",
+      "bench.svg",
+      "grass.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A green public park with a tree, grass, and a bench.",
+    "altJa": "木と芝生、ベンチがある公園。",
+    "background": "park"
+  },
+  "word-l12-station": {
+    "assets": [
+      "train.svg",
+      "clock.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A train beside a station sign and departure clock.",
+    "altJa": "駅の看板と時計のそばに電車が停まっています。",
+    "diagram": "station",
+    "background": "street"
+  },
+  "word-l12-store": {
+    "assets": [
+      "shop_2.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of store.",
+    "altJa": "店のイラスト。"
+  },
+  "word-l12-hospital": {
+    "assets": [
+      "surgery_health_centre.svg",
+      "doctor_1b.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A medical building with a doctor welcoming patients.",
+    "altJa": "医療の建物で医師が患者を迎えています。"
+  },
+  "word-l12-library": {
+    "assets": [
+      "bookcase.svg",
+      "read_book_,_to.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A reader sits beside shelves of books in a quiet library.",
+    "altJa": "本棚のそばで読書をしている図書館の場面。"
+  },
+  "word-l12-restaurant": {
+    "assets": [
+      "wait_table_,_to.svg",
+      "dining_table.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A waiter serves a meal at a dining table.",
+    "altJa": "食卓で店員が料理を出しているレストランの場面。"
+  },
+  "word-l12-bank": {
+    "assets": [
+      "bank.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of bank.",
+    "altJa": "銀行のイラスト。"
+  },
+  "word-l12-post-office": {
+    "assets": [
+      "post_letter_,_to.svg",
+      "post_person_2a.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A postal worker helps a customer send a letter.",
+    "altJa": "郵便局の職員が手紙を送る人を手伝っています。"
+  },
+  "word-l12-playground": {
+    "assets": [
+      "slide.svg",
+      "swing_,_to.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A playground with a slide and someone on a swing.",
+    "altJa": "すべり台とブランコのある遊び場。"
+  },
+  "word-l13-shirt": {
+    "assets": [
+      "shirt.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of shirt.",
+    "altJa": "シャツのイラスト。"
+  },
+  "word-l13-pants": {
+    "assets": [
+      "trousers.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of pants.",
+    "altJa": "ズボンのイラスト。"
+  },
+  "word-l13-dress": {
+    "assets": [
+      "dress.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of dress.",
+    "altJa": "ワンピース・ドレスのイラスト。"
+  },
+  "word-l13-skirt": {
+    "assets": [
+      "skirt.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of skirt.",
+    "altJa": "スカートのイラスト。"
+  },
+  "word-l13-shoes": {
+    "assets": [
+      "trainers.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of shoes.",
+    "altJa": "靴のイラスト。"
+  },
+  "word-l13-socks": {
+    "assets": [
+      "socks.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of socks.",
+    "altJa": "靴下のイラスト。"
+  },
+  "word-l13-hat": {
+    "assets": [
+      "hat_-_mans.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of hat.",
+    "altJa": "帽子のイラスト。"
+  },
+  "word-l13-coat": {
+    "assets": [
+      "coat.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of coat.",
+    "altJa": "コート・上着のイラスト。"
+  },
+  "word-l13-gloves": {
+    "assets": [
+      "gloves.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of gloves.",
+    "altJa": "手袋のイラスト。"
+  },
+  "word-l13-umbrella": {
+    "assets": [
+      "umbrella.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of umbrella.",
+    "altJa": "傘のイラスト。"
+  },
+  "word-l14-car": {
+    "assets": [
+      "car_2.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of car.",
+    "altJa": "車のイラスト。"
+  },
+  "word-l14-bus": {
+    "assets": [
+      "bus_single_decker.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of bus.",
+    "altJa": "バスのイラスト。"
+  },
+  "word-l14-train": {
+    "assets": [
+      "train.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of train.",
+    "altJa": "電車のイラスト。"
+  },
+  "word-l14-bicycle": {
+    "assets": [
+      "bicycle.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of bicycle.",
+    "altJa": "自転車のイラスト。"
+  },
+  "word-l14-airplane": {
+    "assets": [
+      "aeroplane.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of airplane.",
+    "altJa": "飛行機のイラスト。"
+  },
+  "word-l14-taxi": {
+    "assets": [
+      "taxi.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of taxi.",
+    "altJa": "タクシーのイラスト。"
+  },
+  "word-l14-boat": {
+    "assets": [
+      "boat.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of boat.",
+    "altJa": "ボートのイラスト。"
+  },
+  "word-l14-ticket": {
+    "assets": [
+      "train.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A train ticket with an origin, destination, and departure time.",
+    "altJa": "出発地・目的地・時刻が書かれた電車の切符。",
+    "diagram": "ticket"
+  },
+  "word-l14-map": {
+    "assets": [
+      "house.svg",
+      "school.svg",
+      "tree.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A map shows roads linking a house, school, and park.",
+    "altJa": "家・学校・公園を道路で結ぶ地図。",
+    "diagram": "map"
+  },
+  "word-l14-trip": {
+    "assets": [
+      "pack_suitcase_,_to.svg",
+      "train.svg",
+      "house.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "Someone packs a suitcase, travels by train, and arrives at a new place.",
+    "altJa": "荷造りをして電車に乗り、旅行先に着く流れ。",
+    "labels": [
+      "Pack",
+      "Travel",
+      "Explore"
+    ]
+  },
+  "word-l15-clean": {
+    "assets": [
+      "wipe_table_,_to.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of clean.",
+    "altJa": "掃除する・清潔なのイラスト。"
+  },
+  "word-l15-wash": {
+    "assets": [
+      "wash_hands_,_to.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of wash.",
+    "altJa": "洗うのイラスト。"
+  },
+  "word-l15-cook": {
+    "assets": [
+      "cook_,_to.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of cook.",
+    "altJa": "料理するのイラスト。"
+  },
+  "word-l15-carry": {
+    "assets": [
+      "carry_,_to.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of carry.",
+    "altJa": "運ぶ・持ち歩くのイラスト。"
+  },
+  "word-l15-return": {
+    "assets": [
+      "return_book_,_to.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of return.",
+    "altJa": "返す・戻るのイラスト。"
+  },
+  "word-l15-pack": {
+    "assets": [
+      "pack_suitcase_,_to.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of pack.",
+    "altJa": "荷造りするのイラスト。"
+  },
+  "word-l15-sweep": {
+    "assets": [
+      "broom.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A broom sweeps loose dirt into a small pile.",
+    "altJa": "ほうきで床のごみを一か所に掃き集めています。",
+    "diagram": "sweep"
+  },
+  "word-l15-fix": {
+    "assets": [
+      "wrench.svg",
+      "screwdriver.svg",
+      "car.svg"
+    ],
+    "layout": "scene",
+    "altEn": "Tools repair a loose part of a car.",
+    "altJa": "工具を使って車の緩んだ部分を直しています。",
+    "labels": [
+      "Repair"
+    ],
+    "diagram": "fix"
+  },
+  "word-l15-borrow": {
+    "assets": [
+      "work_book.svg",
+      "return_book_,_to.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "A book is lent for a short time and then returned.",
+    "altJa": "本をしばらく借りてから返す流れ。",
+    "labels": [
+      "Use for now",
+      "Give back"
+    ],
+    "diagram": "borrow"
+  },
+  "word-l15-choose": {
+    "assets": [
+      "point_,_to.svg",
+      "apple.svg",
+      "banana.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A person points to one fruit from two available choices.",
+    "altJa": "りんごとバナナの中から一つを指して選ぶ人。",
+    "diagram": "choose"
+  },
+  "word-l16-ask": {
+    "assets": [
+      "ask_,_to.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of ask.",
+    "altJa": "尋ねる・頼むのイラスト。"
+  },
+  "word-l16-answer": {
+    "assets": [
+      "answer.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of answer.",
+    "altJa": "答える・答えのイラスト。"
+  },
+  "word-l16-explain": {
+    "assets": [
+      "teacher_1a.svg",
+      "jigsaw_puzzle.svg",
+      "study_,_to.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A teacher shows how puzzle pieces fit while a learner follows.",
+    "altJa": "先生がパズルの仕組みを説明し、生徒が聞いています。",
+    "diagram": "explain",
+    "background": "classroom"
+  },
+  "word-l16-repeat": {
+    "assets": [
+      "talk_1_,_to.svg",
+      "hear_,_to.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "A speaker says the same short message twice to a listener.",
+    "altJa": "話し手が聞き手に同じ短い言葉を二度伝えます。",
+    "labels": [
+      "Hello",
+      "Hello"
+    ],
+    "diagram": "repeat"
+  },
+  "word-l16-speak": {
+    "assets": [
+      "talk_2_,_to.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of speak.",
+    "altJa": "話すのイラスト。"
+  },
+  "word-l16-whisper": {
+    "assets": [
+      "whisper_,_to.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of whisper.",
+    "altJa": "ささやくのイラスト。"
+  },
+  "word-l16-shout": {
+    "assets": [
+      "shout_,_to.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of shout.",
+    "altJa": "叫ぶのイラスト。"
+  },
+  "word-l16-call": {
+    "assets": [
+      "telephone_mobile_2_,_to.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of call.",
+    "altJa": "電話する・呼ぶのイラスト。"
+  },
+  "word-l16-message": {
+    "assets": [
+      "text_mobile_message_,_to.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of message.",
+    "altJa": "メッセージを送る・伝言のイラスト。"
+  },
+  "word-l16-invite": {
+    "assets": [
+      "party_celebration.svg",
+      "visitor_1a.svg",
+      "email_send_,_to.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A party invitation is sent to a friend, inviting them to join.",
+    "altJa": "パーティーに来てほしい友達へ招待状を送っています。",
+    "labels": [
+      "Come join us"
+    ]
+  },
+  "word-l17-homework": {
+    "assets": [
+      "house.svg",
+      "worksheet.svg",
+      "write_,_to.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A learner works on a worksheet at home after class.",
+    "altJa": "授業後に家でプリントの課題をしている生徒。",
+    "background": "home"
+  },
+  "word-l17-question": {
+    "assets": [
+      "ask_,_to.svg",
+      "paper.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A learner points to a question mark on a worksheet.",
+    "altJa": "生徒がプリントの疑問点を尋ねています。",
+    "diagram": "question"
+  },
+  "word-l17-notebook": {
+    "assets": [
+      "notebook.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of notebook.",
+    "altJa": "ノートのイラスト。"
+  },
+  "word-l17-dictionary": {
+    "assets": [
+      "dictionary.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of dictionary.",
+    "altJa": "辞書のイラスト。"
+  },
+  "word-l17-subject": {
+    "assets": [
+      "maths_class.svg",
+      "science_class.svg",
+      "english_class.svg"
+    ],
+    "layout": "contrast",
+    "altEn": "Mathematics, science, and English are different school subjects.",
+    "altJa": "算数・理科・英語という異なる科目。",
+    "labels": [
+      "Maths",
+      "Science",
+      "English"
+    ],
+    "background": "classroom"
+  },
+  "word-l17-grade": {
+    "assets": [
+      "worksheet.svg",
+      "correct.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A marked worksheet shows a score of eight out of ten.",
+    "altJa": "採点済みのプリントに10点中8点の成績が示されています。",
+    "diagram": "grade"
+  },
+  "word-l17-test": {
+    "assets": [
+      "test.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of test.",
+    "altJa": "テスト・試験のイラスト。",
+    "background": "classroom"
+  },
+  "word-l17-practice": {
+    "assets": [
+      "write_,_to.svg",
+      "write_,_to.svg",
+      "correct.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "A learner tries writing more than once and gets better.",
+    "altJa": "繰り返し書く練習をして、できるようになっていく生徒。",
+    "labels": [
+      "Try",
+      "Try again",
+      "Better"
+    ],
+    "diagram": "practice"
+  },
+  "word-l17-remember": {
+    "assets": [
+      "think_,_to.svg",
+      "key_1.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A person recalls their key in a thought bubble.",
+    "altJa": "人が頭の中で鍵を思い出しています。",
+    "diagram": "remember"
+  },
+  "word-l17-improve": {
+    "assets": [
+      "graph_column.svg",
+      "read_book_,_to.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "Regular reading accompanies a steadily rising progress chart.",
+    "altJa": "読書を続け、上達のグラフが少しずつ上がっています。",
+    "labels": [
+      "Before",
+      "Better"
+    ],
+    "diagram": "improve"
+  },
+  "word-l18-office": {
+    "assets": [
+      "office_block.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of office.",
+    "altJa": "オフィス・事務所のイラスト。",
+    "background": "office"
+  },
+  "word-l18-meeting": {
+    "assets": [
+      "group_work.svg",
+      "calendar.svg"
+    ],
+    "layout": "scene",
+    "altEn": "People gather around shared work at an agreed time.",
+    "altJa": "予定した時刻に集まり、相談している人たち。",
+    "background": "office"
+  },
+  "word-l18-schedule": {
+    "assets": [
+      "calendar.svg",
+      "clock.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A weekly calendar contains several appointments with times.",
+    "altJa": "週間カレンダーに時刻付きの予定が並んでいます。",
+    "diagram": "schedule",
+    "background": "office"
+  },
+  "word-l18-customer": {
+    "assets": [
+      "shop.svg",
+      "money.svg",
+      "visitor_1b.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A person pays for something in a shop.",
+    "altJa": "店で商品にお金を払っているお客さん。"
+  },
+  "word-l18-manager": {
+    "assets": [
+      "show_me_,_to.svg",
+      "group_work.svg"
+    ],
+    "layout": "scene",
+    "altEn": "One person coordinates the work of a small team.",
+    "altJa": "一人がチームの仕事をまとめ、担当を伝えています。",
+    "diagram": "manager",
+    "background": "office"
+  },
+  "word-l18-project": {
+    "assets": [
+      "build_,_to.svg",
+      "jigsaw_puzzle.svg",
+      "calendar_month.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "A team turns separate tasks into a finished result over several days.",
+    "altJa": "何日かかけて作業を組み合わせ、一つの成果を完成させます。",
+    "labels": [
+      "Plan",
+      "Build",
+      "Finish"
+    ],
+    "background": "office"
+  },
+  "word-l18-report": {
+    "assets": [
+      "graph_column.svg",
+      "paper.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A document combines written findings with a chart.",
+    "altJa": "文章とグラフで調べた結果をまとめた報告書。",
+    "diagram": "report",
+    "background": "office"
+  },
+  "word-l18-deadline": {
+    "assets": [
+      "calendar.svg",
+      "clock.svg",
+      "worksheet.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A task must be handed in by Friday at three.",
+    "altJa": "金曜日の3時までに提出する必要がある課題。",
+    "labels": [
+      "Friday",
+      "3:00"
+    ],
+    "diagram": "deadline",
+    "background": "office"
+  },
+  "word-l18-colleague": {
+    "assets": [
+      "work_,_to.svg",
+      "work_2_,_to.svg"
+    ],
+    "layout": "scene",
+    "altEn": "Two people doing work alongside each other.",
+    "altJa": "一緒の職場で働く二人。",
+    "background": "office"
+  },
+  "word-l18-break": {
+    "assets": [
+      "take_a_work_break_,_to.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of break.",
+    "altJa": "休憩・壊すのイラスト。"
+  },
+  "word-l19-doctor": {
+    "assets": [
+      "doctor_2b.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of doctor.",
+    "altJa": "医師のイラスト。"
+  },
+  "word-l19-medicine": {
+    "assets": [
+      "medicine.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of medicine.",
+    "altJa": "薬のイラスト。"
+  },
+  "word-l19-fever": {
+    "assets": [
+      "thermometer.svg",
+      "hot_person.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A person feels hot and a thermometer shows a raised temperature.",
+    "altJa": "体が熱く、体温計に高い体温が表示されています。",
+    "labels": [
+      "38.5 °C"
+    ],
+    "diagram": "fever"
+  },
+  "word-l19-cough": {
+    "assets": [
+      "talk_1_,_to.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A person covers their mouth while coughing.",
+    "altJa": "口を覆いながらせきをしている人。",
+    "diagram": "cough"
+  },
+  "word-l19-headache": {
+    "assets": [
+      "headache.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of headache.",
+    "altJa": "頭痛のイラスト。"
+  },
+  "word-l19-rest": {
+    "assets": [
+      "rest_,_to.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of rest.",
+    "altJa": "休む・休息のイラスト。"
+  },
+  "word-l19-healthy": {
+    "assets": [
+      "healthy.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of healthy.",
+    "altJa": "健康なのイラスト。"
+  },
+  "word-l19-exercise": {
+    "assets": [
+      "exercise_,_to.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of exercise.",
+    "altJa": "運動・練習するのイラスト。"
+  },
+  "word-l19-pain": {
+    "assets": [
+      "arm.svg"
+    ],
+    "layout": "single",
+    "altEn": "A red pulse highlights a sore part of an arm.",
+    "altJa": "腕の痛い部分が赤いしるしで示されています。",
+    "diagram": "pain",
+    "highlight": {
+      "x": 0.55,
+      "y": 0.5,
+      "r": 0.18
+    }
+  },
+  "word-l19-appointment": {
+    "assets": [
+      "calendar.svg",
+      "doctor_1a.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A calendar marks an agreed time to see a doctor.",
+    "altJa": "カレンダーに医師と会う予約時刻が入っています。",
+    "labels": [
+      "Monday",
+      "10:30"
+    ],
+    "diagram": "appointment"
+  },
+  "word-l20-price": {
+    "assets": [
+      "coat.svg"
+    ],
+    "layout": "single",
+    "altEn": "A price tag on a coat shows the amount the shop asks for.",
+    "altJa": "コートの値札に店が提示した値段が書かれています。",
+    "labels": [
+      "¥3,000"
+    ],
+    "diagram": "price"
+  },
+  "word-l20-cost": {
+    "assets": [
+      "shop.svg",
+      "money.svg",
+      "post_van.svg"
+    ],
+    "layout": "scene",
+    "altEn": "The cost combines the item price and a delivery charge.",
+    "altJa": "商品の代金と配送料を合わせた費用。",
+    "labels": [
+      "¥1,000",
+      "+ ¥200",
+      "¥1,200"
+    ],
+    "diagram": "cost"
+  },
+  "word-l20-cash": {
+    "assets": [
+      "money.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of cash.",
+    "altJa": "現金のイラスト。"
+  },
+  "word-l20-change": {
+    "assets": [
+      "money.svg",
+      "shop.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "A buyer pays ¥1,000 for a ¥700 item and receives ¥300 back.",
+    "altJa": "700円の商品に1,000円を払い、300円のおつりを受け取ります。",
+    "labels": [
+      "¥1,000",
+      "¥700",
+      "¥300 back"
+    ],
+    "diagram": "change"
+  },
+  "word-l20-receipt": {
+    "assets": [
+      "paper.svg",
+      "shop.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A receipt lists a purchased item, its price, and the total paid.",
+    "altJa": "購入品と値段、支払合計が書かれたレシート。",
+    "diagram": "receipt"
+  },
+  "word-l20-discount": {
+    "assets": [
+      "shirt.svg"
+    ],
+    "layout": "contrast",
+    "altEn": "The price of the same shirt falls from ¥2,000 to ¥1,500.",
+    "altJa": "同じシャツの値段が2,000円から1,500円に下がります。",
+    "labels": [
+      "¥2,000",
+      "¥1,500"
+    ],
+    "diagram": "discount"
+  },
+  "word-l20-size": {
+    "assets": [
+      "clothes_small.svg",
+      "clothes_extra_large.svg"
+    ],
+    "layout": "contrast",
+    "altEn": "Small and large versions of the same clothing item.",
+    "altJa": "同じ服の小さいサイズと大きいサイズ。",
+    "labels": [
+      "S",
+      "XL"
+    ]
+  },
+  "word-l20-cheap": {
+    "assets": [
+      "school_bag.svg"
+    ],
+    "layout": "single",
+    "altEn": "A bag has a low price tag.",
+    "altJa": "かばんに安い値札がついています。",
+    "labels": [
+      "¥500"
+    ],
+    "diagram": "cheap"
+  },
+  "word-l20-expensive": {
+    "assets": [
+      "coat.svg",
+      "money.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A coat has a high price that requires much more money.",
+    "altJa": "コートに高い値札がつき、たくさんのお金が必要です。",
+    "labels": [
+      "¥30,000"
+    ],
+    "diagram": "expensive"
+  },
+  "word-l20-order": {
+    "assets": [
+      "talk_2_,_to.svg",
+      "wait_table_,_to.svg",
+      "soup.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A customer asks a waiter for a bowl of soup.",
+    "altJa": "お客さんが店員にスープを注文しています。",
+    "labels": [
+      "Soup, please"
+    ]
+  },
+  "word-l21-neighbor": {
+    "assets": [
+      "house.svg",
+      "house.svg",
+      "meet_,_to.svg"
+    ],
+    "layout": "scene",
+    "altEn": "People greet each other from two neighbouring houses.",
+    "altJa": "隣り合う家の住人があいさつしています。",
+    "diagram": "neighbor",
+    "background": "street"
+  },
+  "word-l21-guest": {
+    "assets": [
+      "visitor_1a.svg",
+      "front_door.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A visitor waits at someone else’s front door.",
+    "altJa": "招かれた人が訪問先の玄関に立っています。",
+    "background": "home"
+  },
+  "word-l21-host": {
+    "assets": [
+      "serve_,_to.svg",
+      "visitor_1b.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A host welcomes a visitor and offers food.",
+    "altJa": "迎える側の人が訪問客に食事を出しています。",
+    "background": "home"
+  },
+  "word-l21-partner": {
+    "assets": [
+      "show_me_,_to.svg"
+    ],
+    "layout": "single",
+    "altEn": "Two learning partners work on a page together.",
+    "altJa": "二人の学習相手が一緒に課題に取り組んでいます。",
+    "background": "classroom"
+  },
+  "word-l21-team": {
+    "assets": [
+      "group_work.svg",
+      "jigsaw_puzzle.svg"
+    ],
+    "layout": "scene",
+    "altEn": "Several people combine their work to complete one shared puzzle.",
+    "altJa": "何人かが協力して一つのパズルを完成させます。"
+  },
+  "word-l21-promise": {
+    "assets": [
+      "shake_hands_,_to.svg",
+      "calendar.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A handshake and a marked date show a commitment to a future action.",
+    "altJa": "握手と予定の日付で、これからすることを約束しています。",
+    "diagram": "promise"
+  },
+  "word-l21-trust": {
+    "assets": [
+      "eyes_closed.svg",
+      "help_,_to.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A person lets a helper guide them while their eyes are closed.",
+    "altJa": "目を閉じた人が、信頼する相手の案内に身を任せています。",
+    "diagram": "trust"
+  },
+  "word-l21-support": {
+    "assets": [
+      "help_,_to.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of support.",
+    "altJa": "支援・支えるのイラスト。"
+  },
+  "word-l21-respect": {
+    "assets": [
+      "hear_,_to.svg",
+      "talk_3_,_to.svg"
+    ],
+    "layout": "scene",
+    "altEn": "One person listens attentively while another gives an opinion.",
+    "altJa": "相手の意見を大切にして、注意深く聞いている人。",
+    "diagram": "respect"
+  },
+  "word-l21-advice": {
+    "assets": [
+      "talk_4_,_to.svg",
+      "signpost_1.svg"
+    ],
+    "layout": "scene",
+    "altEn": "Someone points out a helpful route to a person deciding where to go.",
+    "altJa": "行き方に迷う人へ、役立つ道を示して助言しています。",
+    "diagram": "advice"
+  },
+  "word-l22-available": {
+    "assets": [
+      "sit_,_to.svg",
+      "chair.svg"
+    ],
+    "layout": "contrast",
+    "altEn": "One chair is occupied while the other is free to use.",
+    "altJa": "一方の椅子は使用中、もう一方は空いています。",
+    "labels": [
+      "Taken",
+      "Free"
+    ],
+    "diagram": "available"
+  },
+  "word-l22-convenient": {
+    "assets": [
+      "house.svg",
+      "train.svg",
+      "walk_,_to.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A station is a short easy walk from home.",
+    "altJa": "家から駅まで歩いてすぐで便利な場面。",
+    "labels": [
+      "2 min"
+    ],
+    "diagram": "convenient",
+    "background": "street"
+  },
+  "word-l22-possible": {
+    "assets": [
+      "jigsaw_puzzle_piece.svg",
+      "jigsaw_puzzle.svg"
+    ],
+    "layout": "scene",
+    "altEn": "The last puzzle piece fits the gap, showing that the task can be done.",
+    "altJa": "最後のピースが空所に合い、完成できることを示しています。",
+    "diagram": "possible"
+  },
+  "word-l22-necessary": {
+    "assets": [
+      "key_1.svg",
+      "front_door.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A locked door cannot be opened until the matching key is used.",
+    "altJa": "閉じたドアを開けるために鍵が必要です。",
+    "diagram": "necessary"
+  },
+  "word-l22-certain": {
+    "assets": [
+      "correct_thought.svg",
+      "key_1.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A person clearly remembers locking the door and is sure about it.",
+    "altJa": "ドアに鍵をかけたことをはっきり覚え、確信しています。",
+    "diagram": "certain"
+  },
+  "word-l22-familiar": {
+    "assets": [
+      "music.svg",
+      "think_,_to.svg"
+    ],
+    "layout": "scene",
+    "altEn": "Hearing a tune brings back a clear memory of the same tune.",
+    "altJa": "聞いた曲が記憶とつながり、聞き覚えがあると感じています。",
+    "diagram": "familiar"
+  },
+  "word-l22-polite": {
+    "assets": [
+      "open_door_,_to.svg",
+      "visitor_1a.svg"
+    ],
+    "layout": "scene",
+    "altEn": "Someone opens the door for a visitor and lets them go first.",
+    "altJa": "訪問客のためにドアを開け、先にどうぞと案内します。",
+    "diagram": "polite",
+    "labels": [
+      "After you"
+    ]
+  },
+  "word-l22-honest": {
+    "assets": [
+      "broken.svg",
+      "point_,_to.svg",
+      "talk_1_,_to.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A person admits that they broke the object rather than hiding it.",
+    "altJa": "物を壊したことを隠さず、自分だと伝える人。",
+    "labels": [
+      "It was me"
+    ],
+    "diagram": "honest"
+  },
+  "word-l22-patient": {
+    "assets": [
+      "wait_,_to.svg",
+      "serene_lady.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A person waits calmly without rushing anyone.",
+    "altJa": "相手を急がせず、落ち着いて待っている人。"
+  },
+  "word-l22-careful": {
+    "assets": [
+      "carry_,_to.svg",
+      "drink_hot.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A person slowly carries a hot drink, watching not to spill it.",
+    "altJa": "こぼさないように熱い飲み物を慎重に運んでいます。",
+    "diagram": "careful"
+  },
+  "word-l23-arrive": {
+    "assets": [
+      "plane_landing.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of arrive.",
+    "altJa": "到着するのイラスト。"
+  },
+  "word-l23-leave": {
+    "assets": [
+      "plane_take_off.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of leave.",
+    "altJa": "出発する・置いていくのイラスト。"
+  },
+  "word-l23-miss": {
+    "assets": [
+      "miss_bus_,_to.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of miss.",
+    "altJa": "逃す・恋しく思うのイラスト。"
+  },
+  "word-l23-catch": {
+    "assets": [
+      "run_,_to.svg",
+      "get_on_bus_,_to.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "A person runs to a bus and gets on before it leaves.",
+    "altJa": "バスへ走り、出発前に乗れた人。",
+    "labels": [
+      "Hurry",
+      "On time"
+    ]
+  },
+  "word-l23-cancel": {
+    "assets": [
+      "calendar.svg",
+      "no_class.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A scheduled class is crossed out and will not happen.",
+    "altJa": "予定していた授業に取り消しの印がついています。",
+    "diagram": "cancel"
+  },
+  "word-l23-delay": {
+    "assets": [
+      "train.svg",
+      "clock.svg"
+    ],
+    "layout": "contrast",
+    "altEn": "A train’s departure moves from 9:00 to 9:30.",
+    "altJa": "電車の出発が9時から9時30分へ遅れています。",
+    "labels": [
+      "9:00",
+      "9:30"
+    ],
+    "diagram": "delay"
+  },
+  "word-l23-reserve": {
+    "assets": [
+      "dining_table.svg",
+      "calendar.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A table is set aside for two people at a chosen time.",
+    "altJa": "決めた時刻に二人で使えるよう、席を予約しています。",
+    "labels": [
+      "2 people",
+      "7:00"
+    ],
+    "diagram": "reserve"
+  },
+  "word-l23-confirm": {
+    "assets": [
+      "calendar.svg",
+      "correct.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A person checks an appointment’s date and time and confirms it is right.",
+    "altJa": "予約の日付と時刻を確かめ、正しいと確認します。",
+    "diagram": "confirm"
+  },
+  "word-l23-prepare": {
+    "assets": [
+      "pack_suitcase_,_to.svg",
+      "ready.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "Packing needed items makes someone ready to leave.",
+    "altJa": "必要な物を用意し、出発の準備が整います。",
+    "labels": [
+      "Get ready",
+      "Ready"
+    ]
+  },
+  "word-l23-deliver": {
+    "assets": [
+      "deliver_2_,_to.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of deliver.",
+    "altJa": "配達する・伝えるのイラスト。"
+  },
+  "word-l24-device": {
+    "assets": [
+      "laptop.svg",
+      "mobile_phone.svg"
+    ],
+    "layout": "contrast",
+    "altEn": "A laptop and a mobile phone are two kinds of electronic device.",
+    "altJa": "ノートパソコンと携帯電話という電子機器。"
+  },
+  "word-l24-screen": {
+    "assets": [
+      "computer_monitor.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of screen.",
+    "altJa": "画面のイラスト。"
+  },
+  "word-l24-charger": {
+    "assets": [
+      "charger_electric.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of charger.",
+    "altJa": "充電器のイラスト。"
+  },
+  "word-l24-battery": {
+    "assets": [
+      "battery_1.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of battery.",
+    "altJa": "電池・バッテリーのイラスト。"
+  },
+  "word-l24-password": {
+    "assets": [
+      "computer_keyboard.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A sign-in box hides typed password characters behind dots.",
+    "altJa": "ログイン画面で、入力したパスワードが点で隠れています。",
+    "diagram": "password"
+  },
+  "word-l24-account": {
+    "assets": [
+      "computer_monitor.svg",
+      "study_,_to.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A personal learning profile has its own name and saved work.",
+    "altJa": "自分の名前と学習内容がある個人用アカウント。",
+    "diagram": "account"
+  },
+  "word-l24-update": {
+    "assets": [
+      "computer_programme.svg",
+      "download.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "An installed app changes from an old version to a newer version.",
+    "altJa": "入っているアプリを新しいバージョンに更新します。",
+    "labels": [
+      "Version 1",
+      "Version 2"
+    ],
+    "diagram": "update"
+  },
+  "word-l24-download": {
+    "assets": [
+      "download.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of download.",
+    "altJa": "ダウンロードするのイラスト。"
+  },
+  "word-l24-upload": {
+    "assets": [
+      "laptop.svg",
+      "photographs.svg",
+      "networked_computers.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "A photo moves from a laptop to an online service.",
+    "altJa": "写真をパソコンからオンラインへ送っています。",
+    "labels": [
+      "My device",
+      "Online"
+    ],
+    "diagram": "upload"
+  },
+  "word-l24-connect": {
+    "assets": [
+      "computer_cable.svg",
+      "laptop.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A cable is plugged into a laptop to connect the devices.",
+    "altJa": "ケーブルをパソコンにつなぎ、機器を接続しています。",
+    "diagram": "connect"
+  },
+  "word-l25-recycle": {
+    "assets": [
+      "recycling_bins.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of recycle.",
+    "altJa": "リサイクルするのイラスト。"
+  },
+  "word-l25-waste": {
+    "assets": [
+      "put_out_rubbish_,_to.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of waste.",
+    "altJa": "廃棄物・無駄にするのイラスト。"
+  },
+  "word-l25-energy": {
+    "assets": [
+      "energy_monitor.svg",
+      "lightbulb.svg"
+    ],
+    "layout": "scene",
+    "altEn": "An energy meter shows electricity being used to light a bulb.",
+    "altJa": "照明が電気を使い、使用量がメーターに表示されています。"
+  },
+  "word-l25-pollution": {
+    "assets": [
+      "chimney.svg",
+      "car.svg",
+      "cloudy.svg"
+    ],
+    "layout": "scene",
+    "altEn": "Smoke from a chimney and exhaust from a car make the air dirty.",
+    "altJa": "煙突と車から煙が出て、空気が汚れています。",
+    "diagram": "pollution"
+  },
+  "word-l25-climate": {
+    "assets": [
+      "globe.svg",
+      "calendar_month.svg",
+      "thermometer_2.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A globe, many calendar years, and temperatures show weather patterns over a long time.",
+    "altJa": "地球と長い年月、気温で長期的な気候を示しています。",
+    "labels": [
+      "Many years"
+    ],
+    "diagram": "climate"
+  },
+  "word-l25-protect": {
+    "assets": [
+      "protect_,_to.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of protect.",
+    "altJa": "守るのイラスト。"
+  },
+  "word-l25-reduce": {
+    "assets": [
+      "water.svg",
+      "water.svg"
+    ],
+    "layout": "contrast",
+    "altEn": "Less water is used after a change in daily habits.",
+    "altJa": "習慣を変えた後、水の使用量が少なくなっています。",
+    "labels": [
+      "Before",
+      "Less"
+    ],
+    "diagram": "reduce"
+  },
+  "word-l25-reuse": {
+    "assets": [
+      "jar.svg",
+      "pencil.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "An empty food jar becomes a useful pencil holder.",
+    "altJa": "空き瓶を捨てずに鉛筆入れとして使い直しています。",
+    "labels": [
+      "Empty jar",
+      "Pencil holder"
+    ],
+    "diagram": "reuse"
+  },
+  "word-l25-resource": {
+    "assets": [
+      "water.svg",
+      "tree.svg",
+      "sun.svg"
+    ],
+    "layout": "scene",
+    "altEn": "Water, trees, and sunlight are resources people can use.",
+    "altJa": "水・木・日光という、人が利用できる資源。"
+  },
+  "word-l25-sustainable": {
+    "assets": [
+      "tree.svg",
+      "plant_,_to.svg",
+      "grow_2_,_to.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "New trees are planted and grow so a resource can continue into the future.",
+    "altJa": "木を植えて育て、将来も資源を使えるようにしています。",
+    "labels": [
+      "Use wisely",
+      "Replant",
+      "Future"
+    ]
+  },
+  "word-l26-confident": {
+    "assets": [
+      "ready_2.svg",
+      "talk_2_,_to.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A prepared speaker stands ready to present without hesitation.",
+    "altJa": "準備した話し手が、自信を持って発表しようとしています。"
+  },
+  "word-l26-nervous": {
+    "assets": [
+      "worried_man.svg",
+      "microphone.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A worried person is about to speak into a microphone.",
+    "altJa": "マイクの前で、これから話すことに緊張している人。"
+  },
+  "word-l26-proud": {
+    "assets": [
+      "happy_lady.svg",
+      "certificate.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A person happily holds a certificate they worked to earn.",
+    "altJa": "努力して得た賞状を持ち、誇らしく感じている人。"
+  },
+  "word-l26-disappointed": {
+    "assets": [
+      "sad_man.svg",
+      "medal.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A person hoped to win a medal but is sad when it does not happen.",
+    "altJa": "メダルを期待していたのに得られず、がっかりしている人。",
+    "diagram": "disappointed"
+  },
+  "word-l26-grateful": {
+    "assets": [
+      "help_,_to.svg",
+      "happy_man.svg"
+    ],
+    "layout": "scene",
+    "altEn": "Someone receives help and smiles warmly at the helper.",
+    "altJa": "助けてもらった人が相手に感謝してほほえんでいます。",
+    "labels": [
+      "Thank you"
+    ]
+  },
+  "word-l26-curious": {
+    "assets": [
+      "look_,_to.svg",
+      "jigsaw_puzzle_piece.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A person leans in to examine an unfamiliar puzzle piece.",
+    "altJa": "知らないパズルのピースを興味深く観察している人。",
+    "diagram": "curious"
+  },
+  "word-l26-embarrassed": {
+    "assets": [
+      "surprised_lady.svg",
+      "spill_,_to.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A person blushes after accidentally spilling a drink in front of others.",
+    "altJa": "人前で飲み物をこぼし、頬を赤くして気まずそうな人。",
+    "diagram": "embarrassed"
+  },
+  "word-l26-relieved": {
+    "assets": [
+      "worried_lady.svg",
+      "find_,_to.svg",
+      "serene_lady.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "Worry about something missing changes to calm after it is found.",
+    "altJa": "なくし物を心配していた人が、見つけてほっとします。",
+    "labels": [
+      "Worried",
+      "Found",
+      "At ease"
+    ]
+  },
+  "word-l26-frustrated": {
+    "assets": [
+      "computer_monitor.svg",
+      "angry_man.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A person is annoyed because a slow computer will not finish a task.",
+    "altJa": "パソコンが遅く作業が進まないため、もどかしく感じている人。",
+    "diagram": "frustrated"
+  },
+  "word-l26-calm": {
+    "assets": [
+      "serene_man.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of calm.",
+    "altJa": "落ち着いたのイラスト。"
+  },
+  "word-l27-compare": {
+    "assets": [
+      "apple.svg",
+      "apple.svg"
+    ],
+    "layout": "contrast",
+    "altEn": "Two apples are placed side by side to examine size and colour.",
+    "altJa": "二つのりんごを並べ、大きさや色を比べています。",
+    "labels": [
+      "A",
+      "B"
+    ],
+    "diagram": "compare"
+  },
+  "word-l27-contrast": {
+    "assets": [
+      "sun.svg",
+      "rain.svg"
+    ],
+    "layout": "contrast",
+    "altEn": "A bright sunny day and a rainy day highlight a clear difference.",
+    "altJa": "晴れた日と雨の日を並べ、違いをはっきり示しています。",
+    "labels": [
+      "Sunny",
+      "Rainy"
+    ]
+  },
+  "word-l27-describe": {
+    "assets": [
+      "talk_3_,_to.svg",
+      "apple.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A speaker points to an apple and describes its visible features.",
+    "altJa": "りんごを指し、見た目の特徴を説明する人。",
+    "labels": [
+      "Round",
+      "Red"
+    ],
+    "diagram": "describe"
+  },
+  "word-l27-summarize": {
+    "assets": [
+      "paper.svg",
+      "paper.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "A long page is condensed to three short key points.",
+    "altJa": "長い文章を、三つの短い要点にまとめています。",
+    "labels": [
+      "Details",
+      "Key points"
+    ],
+    "diagram": "summarize"
+  },
+  "word-l27-analyze": {
+    "assets": [
+      "graph_column.svg",
+      "pie_chart.svg",
+      "think_,_to.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A person examines parts of a chart to understand the pattern behind it.",
+    "altJa": "グラフを部分ごとに調べ、傾向の理由を考えている人。",
+    "diagram": "analyze"
+  },
+  "word-l27-evidence": {
+    "assets": [
+      "photographs.svg",
+      "foot.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A photograph of a footprint provides evidence of what happened.",
+    "altJa": "足跡の写真が、何が起きたかを示す証拠になっています。",
+    "diagram": "evidence"
+  },
+  "word-l27-reason": {
+    "assets": [
+      "rain.svg",
+      "umbrella.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "Rain explains why a person takes an umbrella.",
+    "altJa": "雨が降っていることが、傘を持つ理由になっています。",
+    "labels": [
+      "Because",
+      "So"
+    ]
+  },
+  "word-l27-result": {
+    "assets": [
+      "plant_,_to.svg",
+      "grow_2_,_to.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "A planted seed grows into a plant, showing the result of the action.",
+    "altJa": "種を植えた結果、植物が育っています。",
+    "labels": [
+      "Action",
+      "Result"
+    ]
+  },
+  "word-l27-method": {
+    "assets": [
+      "fold_clothes_,_to.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "A numbered method shows how to fold a shirt.",
+    "altJa": "シャツをたたむ方法を番号付きの手順で示しています。",
+    "labels": [
+      "1",
+      "2",
+      "3"
+    ],
+    "diagram": "method"
+  },
+  "word-l27-opinion": {
+    "assets": [
+      "think_,_to.svg",
+      "apple.svg",
+      "banana.svg"
+    ],
+    "layout": "scene",
+    "altEn": "Different people think different fruits are best.",
+    "altJa": "人によって、どちらの果物がよいか考えが違います。",
+    "diagram": "opinion"
+  },
+  "word-l28-proposal": {
+    "assets": [
+      "paper.svg",
+      "talk_4_,_to.svg",
+      "group_work.svg"
+    ],
+    "layout": "scene",
+    "altEn": "One person presents a written plan for a group to consider.",
+    "altJa": "一人が案を書いた紙を示し、グループに提案しています。",
+    "diagram": "proposal"
+  },
+  "word-l28-budget": {
+    "assets": [
+      "money.svg",
+      "pie_chart.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A fixed amount of money is divided between planned expenses.",
+    "altJa": "決まった金額を、予定した費用に分けた予算。",
+    "diagram": "budget",
+    "background": "office"
+  },
+  "word-l28-priority": {
+    "assets": [
+      "paper.svg",
+      "star.svg"
+    ],
+    "layout": "scene",
+    "altEn": "The most important task is placed above the others and marked with a star.",
+    "altJa": "一番大切な作業をリストの先頭に置き、星で示しています。",
+    "labels": [
+      "First"
+    ],
+    "diagram": "priority"
+  },
+  "word-l28-strategy": {
+    "assets": [
+      "jigsaw_puzzle.svg",
+      "signpost_1.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A planned route connects a starting point to a goal while avoiding an obstacle.",
+    "altJa": "障害を避けながら目標に向かう道筋を計画しています。",
+    "diagram": "strategy"
+  },
+  "word-l28-progress": {
+    "assets": [
+      "jigsaw_puzzle.svg",
+      "jigsaw_puzzle.svg",
+      "jigsaw_puzzle.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "More parts of a shared task are complete at each stage.",
+    "altJa": "段階が進むごとに、作業の完成した部分が増えています。",
+    "labels": [
+      "25%",
+      "50%",
+      "75%"
+    ],
+    "diagram": "progress"
+  },
+  "word-l28-feedback": {
+    "assets": [
+      "worksheet.svg",
+      "talk_3_,_to.svg",
+      "correct.svg"
+    ],
+    "layout": "scene",
+    "altEn": "Someone gives specific comments on a learner’s work to help improve it.",
+    "altJa": "課題のよい点と直す点を具体的に伝えています。",
+    "diagram": "feedback",
+    "background": "office"
+  },
+  "word-l28-negotiate": {
+    "assets": [
+      "money.svg",
+      "calendar.svg",
+      "shake_hands_,_to.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "People discuss price and timing before reaching an agreement.",
+    "altJa": "値段と日程について話し合い、合意を目指しています。",
+    "labels": [
+      "Price",
+      "Timing",
+      "Agreement"
+    ]
+  },
+  "word-l28-approve": {
+    "assets": [
+      "paper.svg",
+      "correct.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A decision maker marks a submitted plan as approved.",
+    "altJa": "提出された計画に、承認のしるしがついています。",
+    "diagram": "approve"
+  },
+  "word-l28-revise": {
+    "assets": [
+      "write_,_to.svg",
+      "paper.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "A writer changes and improves a draft with visible edits.",
+    "altJa": "下書きの文章を書き直して改善しています。",
+    "labels": [
+      "Draft",
+      "Revised"
+    ],
+    "diagram": "revise"
+  },
+  "word-l28-launch": {
+    "assets": [
+      "computer_programme.svg",
+      "celebrate_1_,_to.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A completed app becomes available to people for the first time.",
+    "altJa": "完成したアプリを初めて公開し、使えるようにします。",
+    "labels": [
+      "Now live"
+    ],
+    "diagram": "launch"
+  },
+  "word-l29-luggage": {
+    "assets": [
+      "suitcase_1.svg",
+      "holdall.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A suitcase and a travel bag are grouped together as luggage.",
+    "altJa": "旅行用のスーツケースとかばんをまとめた荷物。"
+  },
+  "word-l29-passport": {
+    "assets": [
+      "passport.svg"
+    ],
+    "layout": "single",
+    "altEn": "An illustration of passport.",
+    "altJa": "パスポートのイラスト。"
+  },
+  "word-l29-customs": {
+    "assets": [
+      "suitcase_2.svg",
+      "passport.svg",
+      "paper.svg"
+    ],
+    "layout": "scene",
+    "altEn": "At a border inspection desk, a traveller declares the contents of their luggage.",
+    "altJa": "国境の検査窓口で、旅行者が荷物の中身を申告しています。",
+    "diagram": "customs"
+  },
+  "word-l29-destination": {
+    "assets": [
+      "signpost_1.svg",
+      "house.svg",
+      "train.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A route ends at a highlighted place where the traveller wants to go.",
+    "altJa": "移動ルートの終わりに、行きたい目的地が示されています。",
+    "diagram": "destination"
+  },
+  "word-l29-accommodation": {
+    "assets": [
+      "house.svg",
+      "single_bed.svg",
+      "key_1.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A place to stay has a room, bed, and a guest key.",
+    "altJa": "泊まる場所に、部屋とベッド、宿泊用の鍵があります。"
+  },
+  "word-l29-reservation": {
+    "assets": [
+      "calendar.svg",
+      "single_bed.svg",
+      "correct.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A hotel room is booked for specific dates and the booking is confirmed.",
+    "altJa": "決まった日付で客室を予約し、予約内容を確認しています。",
+    "diagram": "reservation"
+  },
+  "word-l29-departure": {
+    "assets": [
+      "plane_take_off.svg",
+      "clock.svg"
+    ],
+    "layout": "scene",
+    "altEn": "An aircraft leaves at the time shown on a departure board.",
+    "altJa": "出発案内に表示された時刻に、飛行機が出発します。",
+    "diagram": "departure",
+    "background": "street"
+  },
+  "word-l29-arrival": {
+    "assets": [
+      "plane_landing.svg",
+      "visitor_1a.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A flight lands and a traveller reaches the arrivals area.",
+    "altJa": "飛行機が着陸し、旅行者が到着エリアに着きます。",
+    "diagram": "arrival",
+    "background": "street"
+  },
+  "word-l29-platform": {
+    "assets": [
+      "train.svg",
+      "stand_,_to.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A passenger waits on the raised platform beside train doors.",
+    "altJa": "乗客が電車のドアの横にあるホームで待っています。",
+    "diagram": "platform",
+    "background": "street"
+  },
+  "word-l29-transfer": {
+    "assets": [
+      "aeroplane.svg",
+      "bus.svg",
+      "aeroplane.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "A shuttle bus takes a traveller between two airports for a connecting flight.",
+    "altJa": "乗り継ぎ便のために、バスで空港間を移動しています。",
+    "labels": [
+      "Airport A",
+      "Shuttle",
+      "Airport B"
+    ]
+  },
+  "word-l30-manage": {
+    "assets": [
+      "busy.svg",
+      "correct.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "A busy person completes a difficult task before time runs out.",
+    "altJa": "忙しい人が、なんとか時間内に難しい作業を終えています。",
+    "labels": [
+      "Difficult",
+      "Done"
+    ],
+    "diagram": "manage"
+  },
+  "word-l30-avoid": {
+    "assets": [
+      "walk_,_to.svg",
+      "spill_,_to.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A person changes direction to stay clear of a puddle.",
+    "altJa": "水たまりを避けて、進む方向を変えて歩く人。",
+    "diagram": "avoid"
+  },
+  "word-l30-afford": {
+    "assets": [
+      "money.svg",
+      "bicycle.svg"
+    ],
+    "layout": "contrast",
+    "altEn": "Money saved is enough to pay the bicycle’s price.",
+    "altJa": "貯めたお金が自転車の値段に足り、購入できる状態。",
+    "labels": [
+      "¥20,000 saved",
+      "¥18,000"
+    ],
+    "diagram": "afford"
+  },
+  "word-l30-recommend": {
+    "assets": [
+      "talk_4_,_to.svg",
+      "bookcase.svg",
+      "good.svg"
+    ],
+    "layout": "scene",
+    "altEn": "Someone points out one book as a good choice for a reader.",
+    "altJa": "読者に合う一冊の本を、よい選択として勧めています。",
+    "diagram": "recommend"
+  },
+  "word-l30-suggest": {
+    "assets": [
+      "think_,_to.svg",
+      "group_work.svg",
+      "lightbulb.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A person offers a new idea for the group to consider.",
+    "altJa": "グループに考えてもらうため、新しい案を出す人。",
+    "diagram": "suggest"
+  },
+  "word-l30-prefer": {
+    "assets": [
+      "tea.svg",
+      "coffee.svg",
+      "point_,_to.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A person chooses tea over coffee when both are offered.",
+    "altJa": "紅茶とコーヒーの両方がある中で、紅茶を好んで選びます。",
+    "diagram": "prefer"
+  },
+  "word-l30-depend": {
+    "assets": [
+      "rain.svg",
+      "sun.svg",
+      "football.svg"
+    ],
+    "layout": "contrast",
+    "altEn": "Whether an outdoor game goes ahead changes with the weather.",
+    "altJa": "屋外の試合ができるかは、雨か晴れかによって変わります。",
+    "labels": [
+      "Rain: wait",
+      "Sun: play"
+    ],
+    "diagram": "depend"
+  },
+  "word-l30-notice": {
+    "assets": [
+      "look_,_to.svg",
+      "mistake_no_wrong.svg",
+      "paper.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A person spots one small error on an otherwise correct page.",
+    "altJa": "正しそうな紙の中に、一つの小さな間違いを見つける人。",
+    "diagram": "notice"
+  },
+  "word-l30-realize": {
+    "assets": [
+      "confused_man.svg",
+      "calendar.svg",
+      "correct_thought.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "Confusion changes to understanding when a person sees they had the wrong date.",
+    "altJa": "日付を取り違えていたと分かり、混乱が理解に変わる人。",
+    "labels": [
+      "Confused",
+      "Check",
+      "Now I see"
+    ]
+  },
+  "word-l30-handle": {
+    "assets": [
+      "telephone_mobile_,_to.svg",
+      "paper.svg",
+      "correct.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "A person takes a complaint, works through it, and sorts it out.",
+    "altJa": "苦情を聞き、内容を確認して対処する人。",
+    "labels": [
+      "Listen",
+      "Act",
+      "Sorted"
+    ]
+  },
+  "word-l31-efficient": {
+    "assets": [
+      "clock.svg",
+      "worksheet.svg",
+      "clock.svg"
+    ],
+    "layout": "contrast",
+    "altEn": "The same finished work takes less time with a better process.",
+    "altJa": "同じ作業を、改善したやり方で短い時間に終えます。",
+    "labels": [
+      "60 min",
+      "20 min"
+    ],
+    "diagram": "efficient"
+  },
+  "word-l31-flexible": {
+    "assets": [
+      "calendar.svg",
+      "calendar.svg"
+    ],
+    "layout": "contrast",
+    "altEn": "An appointment can move between two available times.",
+    "altJa": "予約の時刻を、都合に合わせて柔軟に動かせます。",
+    "labels": [
+      "Tuesday",
+      "Thursday"
+    ],
+    "diagram": "flexible"
+  },
+  "word-l31-reliable": {
+    "assets": [
+      "bus.svg",
+      "clock.svg",
+      "correct.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A bus arrives at its scheduled time on several consecutive days.",
+    "altJa": "バスが何日も続けて予定どおりに来て、信頼できることを示します。",
+    "labels": [
+      "Mon",
+      "Tue",
+      "Wed"
+    ],
+    "diagram": "reliable"
+  },
+  "word-l31-appropriate": {
+    "assets": [
+      "rain.svg",
+      "raincoat.svg",
+      "sunglasses.svg"
+    ],
+    "layout": "contrast",
+    "altEn": "A raincoat suits rainy weather better than sunglasses.",
+    "altJa": "雨の日に、サングラスよりレインコートが状況に合っています。",
+    "labels": [
+      "Fits the situation",
+      "Does not fit"
+    ],
+    "diagram": "appropriate"
+  },
+  "word-l31-significant": {
+    "assets": [
+      "graph_column.svg",
+      "graph_column.svg"
+    ],
+    "layout": "contrast",
+    "altEn": "A chart shows a large meaningful improvement rather than a tiny change.",
+    "altJa": "グラフに、小さな変化ではなく大きな改善が表れています。",
+    "labels": [
+      "Before",
+      "Much better"
+    ],
+    "diagram": "significant"
+  },
+  "word-l31-specific": {
+    "assets": [
+      "apple.svg",
+      "apple.svg",
+      "apple.svg"
+    ],
+    "layout": "scene",
+    "altEn": "One exact apple is selected from several similar apples.",
+    "altJa": "似たりんごが並ぶ中から、特定の一つを指し示しています。",
+    "labels": [
+      "This one"
+    ],
+    "diagram": "specific"
+  },
+  "word-l31-temporary": {
+    "assets": [
+      "calendar.svg",
+      "house.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A sign lasts for a short marked period and is then removed.",
+    "altJa": "決まった短い期間だけ掲示され、その後は外される案内。",
+    "labels": [
+      "This week only"
+    ],
+    "diagram": "temporary"
+  },
+  "word-l31-permanent": {
+    "assets": [
+      "write_,_to.svg",
+      "paper.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A permanent ink mark remains after an attempt to erase it.",
+    "altJa": "消そうとしても紙に残る、消えないインクの印。",
+    "diagram": "permanent"
+  },
+  "word-l31-likely": {
+    "assets": [
+      "rain.svg",
+      "umbrella.svg"
+    ],
+    "layout": "scene",
+    "altEn": "Most of the forecast shows rain, so a person prepares an umbrella.",
+    "altJa": "予報の大部分が雨なので、降りそうだと考えて傘を用意します。",
+    "labels": [
+      "80%"
+    ],
+    "diagram": "likely"
+  },
+  "word-l31-unlikely": {
+    "assets": [
+      "snow.svg",
+      "sun.svg"
+    ],
+    "layout": "contrast",
+    "altEn": "A hot summer day makes snowfall very improbable.",
+    "altJa": "暑い夏の日なので、雪が降る可能性はとても低い場面。",
+    "labels": [
+      "5%"
+    ],
+    "diagram": "unlikely"
+  },
+  "word-l32-clarify": {
+    "assets": [
+      "confused_lady.svg",
+      "paper.svg",
+      "correct_thought.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "A confusing instruction becomes a clear three-step instruction that a listener understands.",
+    "altJa": "曖昧な指示が三つの明確な手順になり、聞き手が理解します。",
+    "labels": [
+      "Unclear",
+      "Clear steps",
+      "Understood"
+    ],
+    "diagram": "clarify"
+  },
+  "word-l32-emphasize": {
+    "assets": [
+      "paper.svg",
+      "point_,_to.svg"
+    ],
+    "layout": "scene",
+    "altEn": "One important point is highlighted and underlined while someone points to it.",
+    "altJa": "大切な一文に下線と強調の印を付けて示しています。",
+    "labels": [
+      "Key point"
+    ],
+    "diagram": "emphasize"
+  },
+  "word-l32-persuade": {
+    "assets": [
+      "talk_4_,_to.svg",
+      "confused_man.svg",
+      "nod_,_to.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "A listener changes from unsure to agreeing after hearing reasons.",
+    "altJa": "理由を聞いた相手が、迷いから賛成へ考えを変えます。",
+    "labels": [
+      "Reasons",
+      "Unsure",
+      "Agrees"
+    ]
+  },
+  "word-l32-acknowledge": {
+    "assets": [
+      "receive_email_,_to.svg",
+      "nod_,_to.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "A person receives a message and signals that they have received and understood it.",
+    "altJa": "メッセージを受け取り、確かに受け止めたと相手へ示します。",
+    "labels": [
+      "Received",
+      "I understand"
+    ]
+  },
+  "word-l32-respond": {
+    "assets": [
+      "receive_email_,_to.svg",
+      "email_send_,_to.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "An incoming message is followed by a reply going back to the sender.",
+    "altJa": "届いたメッセージに対して、送り主へ返事を出しています。",
+    "labels": [
+      "Message",
+      "Reply"
+    ]
+  },
+  "word-l32-contribute": {
+    "assets": [
+      "jigsaw_puzzle_piece.svg",
+      "group_work.svg",
+      "jigsaw_puzzle.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "Each person adds one piece to a shared result.",
+    "altJa": "一人ひとりが一つずつ加え、共同の成果に貢献します。",
+    "labels": [
+      "My part",
+      "Our work",
+      "Together"
+    ],
+    "diagram": "contribute"
+  },
+  "word-l32-collaborate": {
+    "assets": [
+      "group_work.svg",
+      "build_,_to.svg"
+    ],
+    "layout": "scene",
+    "altEn": "People work together on different parts of one shared creation.",
+    "altJa": "一つの制作物に向けて、役割を分けながら協力する人たち。",
+    "diagram": "collaborate",
+    "background": "office"
+  },
+  "word-l32-resolve": {
+    "assets": [
+      "jigsaw_puzzle_piece.svg",
+      "jigsaw_puzzle.svg",
+      "shake_hands_,_to.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "A missing solution is found and people reach a settled agreement.",
+    "altJa": "解決に必要なものが見つかり、互いに納得して合意します。",
+    "labels": [
+      "Problem",
+      "Solution",
+      "Settled"
+    ]
+  },
+  "word-l32-reflect": {
+    "assets": [
+      "photographs.svg",
+      "think_,_to.svg",
+      "notebook.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "A person looks back at a past experience and writes down what they learned.",
+    "altJa": "過去の体験を振り返り、学んだことを書き留めています。",
+    "labels": [
+      "Experience",
+      "Think back",
+      "Learn"
+    ]
+  },
+  "word-l32-adapt": {
+    "assets": [
+      "spoon.svg",
+      "spoon_adapted.svg",
+      "eat_1_,_to.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "A spoon is changed to suit a learner’s needs, making it easier to use.",
+    "altJa": "使う人に合うようスプーンを調整し、使いやすくしています。",
+    "labels": [
+      "Original",
+      "Adjusted",
+      "Works for me"
+    ]
+  }
+}

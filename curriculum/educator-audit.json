@@ -1,0 +1,5569 @@
+{
+  "title": "Tahmid English Curriculum Level 1–32: educator audit",
+  "reviewedOn": "2026-09-06",
+  "baselineCommit": "8537cb53129e6c5743b19d977332bb5c6b9cf152",
+  "reviewScope": "All 480 learning items, including English, Japanese, examples/dialogues, usage and pronunciation guidance. Image metadata is tracked separately in the asset attribution ledger.",
+  "criteria": [
+    "Everyday usefulness and frequency within topic",
+    "Grammar burden and level progression",
+    "Natural English and register",
+    "Japanese meaning and false friends",
+    "Collocations and learner mistakes",
+    "US/UK pronunciation and variation",
+    "Unique learning purpose and meaningful recycling",
+    "Stable IDs and existing progress/access preservation"
+  ],
+  "counts": {
+    "words": {
+      "reviewed": 320,
+      "revised": 99,
+      "retained": 221
+    },
+    "phrases": {
+      "reviewed": 128,
+      "revised": 21,
+      "retained": 107
+    },
+    "phonics": {
+      "reviewed": 32,
+      "revised": 32,
+      "retained": 0
+    }
+  },
+  "items": [
+    {
+      "id": "word-l01-book",
+      "category": "words",
+      "level": 1,
+      "title": "book",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "This book is new.",
+          "after": "This is my book."
+        },
+        "exampleJapanese": {
+          "before": "この本は新しいです。",
+          "after": "これは私の本です。"
+        }
+      }
+    },
+    {
+      "id": "word-l01-pen",
+      "category": "words",
+      "level": 1,
+      "title": "pen",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "May I use your pen?",
+          "after": "I have a pen."
+        },
+        "exampleJapanese": {
+          "before": "あなたのペンを使ってもいいですか。",
+          "after": "私はペンを持っています。"
+        }
+      }
+    },
+    {
+      "id": "word-l01-desk",
+      "category": "words",
+      "level": 1,
+      "title": "desk",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "My desk is by the window.",
+          "after": "This is my desk."
+        },
+        "exampleJapanese": {
+          "before": "私の机は窓のそばです。",
+          "after": "これは私の机です。"
+        }
+      }
+    },
+    {
+      "id": "word-l01-chair",
+      "category": "words",
+      "level": 1,
+      "title": "chair",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "Please sit on this chair.",
+          "after": "Sit on the chair, please."
+        },
+        "exampleJapanese": {
+          "before": "この椅子に座ってください。",
+          "after": "椅子に座ってください。"
+        }
+      }
+    },
+    {
+      "id": "word-l01-bag",
+      "category": "words",
+      "level": 1,
+      "title": "bag",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "My bag is under the desk.",
+          "after": "This is my bag."
+        },
+        "exampleJapanese": {
+          "before": "私のかばんは机の下です。",
+          "after": "これは私のかばんです。"
+        }
+      }
+    },
+    {
+      "id": "word-l01-door",
+      "category": "words",
+      "level": 1,
+      "title": "door",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l01-window",
+      "category": "words",
+      "level": 1,
+      "title": "window",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l01-teacher",
+      "category": "words",
+      "level": 1,
+      "title": "teacher",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "Our teacher is kind.",
+          "after": "This is my teacher."
+        },
+        "exampleJapanese": {
+          "before": "私たちの先生は親切です。",
+          "after": "こちらは私の先生です。"
+        }
+      }
+    },
+    {
+      "id": "word-l01-student",
+      "category": "words",
+      "level": 1,
+      "title": "student",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "Every student has a notebook.",
+          "after": "I'm a student."
+        },
+        "exampleJapanese": {
+          "before": "生徒はみんなノートを持っています。",
+          "after": "私は生徒です。"
+        }
+      }
+    },
+    {
+      "id": "word-l01-lesson",
+      "category": "words",
+      "level": 1,
+      "title": "lesson",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "The lesson starts at ten.",
+          "after": "The lesson starts now."
+        },
+        "exampleJapanese": {
+          "before": "授業は10時に始まります。",
+          "after": "今からレッスンが始まります。"
+        }
+      }
+    },
+    {
+      "id": "word-l02-red",
+      "category": "words",
+      "level": 2,
+      "title": "red",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l02-blue",
+      "category": "words",
+      "level": 2,
+      "title": "blue",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l02-yellow",
+      "category": "words",
+      "level": 2,
+      "title": "yellow",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l02-green",
+      "category": "words",
+      "level": 2,
+      "title": "green",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "We saw a green bird.",
+          "after": "The bag is green."
+        },
+        "exampleJapanese": {
+          "before": "私たちは緑の鳥を見ました。",
+          "after": "かばんは緑色です。"
+        }
+      }
+    },
+    {
+      "id": "word-l02-black",
+      "category": "words",
+      "level": 2,
+      "title": "black",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "He wears a black hat.",
+          "after": "This is a black pen."
+        },
+        "exampleJapanese": {
+          "before": "彼は黒い帽子をかぶっています。",
+          "after": "これは黒いペンです。"
+        }
+      }
+    },
+    {
+      "id": "word-l02-white",
+      "category": "words",
+      "level": 2,
+      "title": "white",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l02-circle",
+      "category": "words",
+      "level": 2,
+      "title": "circle",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "Draw a circle around the answer.",
+          "after": "Draw a circle."
+        },
+        "exampleJapanese": {
+          "before": "答えを丸で囲んでください。",
+          "after": "丸を描いてください。"
+        }
+      }
+    },
+    {
+      "id": "word-l02-square",
+      "category": "words",
+      "level": 2,
+      "title": "square",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l02-star",
+      "category": "words",
+      "level": 2,
+      "title": "star",
+      "decision": "revised",
+      "changedFields": {
+        "pronunciationHint": {
+          "before": "Open with /st/ and hold the central vowel.",
+          "after": "Join /s/ and /t/. US English ends with an r sound; the usual UK model has a long vowel without r."
+        }
+      }
+    },
+    {
+      "id": "word-l02-line",
+      "category": "words",
+      "level": 2,
+      "title": "line",
+      "decision": "revised",
+      "changedFields": {
+        "japanese": {
+          "before": "線・列",
+          "after": "線"
+        },
+        "exampleSentence": {
+          "before": "Stand in a straight line.",
+          "after": "Draw a straight line."
+        },
+        "exampleJapanese": {
+          "before": "まっすぐ一列に並んでください。",
+          "after": "まっすぐな線を描いてください。"
+        },
+        "commonMistake": {
+          "before": "Do not pronounce it like “lean.”",
+          "after": "For the shape, say “draw a line.” “Stand in line” uses the separate meaning of a queue."
+        }
+      }
+    },
+    {
+      "id": "word-l03-mother",
+      "category": "words",
+      "level": 3,
+      "title": "mother",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l03-father",
+      "category": "words",
+      "level": 3,
+      "title": "father",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l03-sister",
+      "category": "words",
+      "level": 3,
+      "title": "sister",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l03-brother",
+      "category": "words",
+      "level": 3,
+      "title": "brother",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l03-grandmother",
+      "category": "words",
+      "level": 3,
+      "title": "grandmother",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "My grandmother tells funny stories.",
+          "after": "My grandmother is kind."
+        },
+        "exampleJapanese": {
+          "before": "私の祖母は面白い話をしてくれます。",
+          "after": "私の祖母は親切です。"
+        }
+      }
+    },
+    {
+      "id": "word-l03-grandfather",
+      "category": "words",
+      "level": 3,
+      "title": "grandfather",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "His grandfather grows tomatoes.",
+          "after": "My grandfather likes books."
+        },
+        "exampleJapanese": {
+          "before": "彼の祖父はトマトを育てています。",
+          "after": "私の祖父は本が好きです。"
+        }
+      }
+    },
+    {
+      "id": "word-l03-baby",
+      "category": "words",
+      "level": 3,
+      "title": "baby",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l03-friend",
+      "category": "words",
+      "level": 3,
+      "title": "friend",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l03-boy",
+      "category": "words",
+      "level": 3,
+      "title": "boy",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l03-girl",
+      "category": "words",
+      "level": 3,
+      "title": "girl",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l04-head",
+      "category": "words",
+      "level": 4,
+      "title": "head",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "Put the hat on your head.",
+          "after": "Touch your head."
+        },
+        "exampleJapanese": {
+          "before": "帽子を頭にかぶってください。",
+          "after": "頭を触ってください。"
+        }
+      }
+    },
+    {
+      "id": "word-l04-face",
+      "category": "words",
+      "level": 4,
+      "title": "face",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "Wash your face with warm water.",
+          "after": "Wash your face."
+        },
+        "exampleJapanese": {
+          "before": "ぬるま湯で顔を洗ってください。",
+          "after": "顔を洗ってください。"
+        }
+      }
+    },
+    {
+      "id": "word-l04-eye",
+      "category": "words",
+      "level": 4,
+      "title": "eye",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l04-ear",
+      "category": "words",
+      "level": 4,
+      "title": "ear",
+      "decision": "revised",
+      "changedFields": {
+        "pronunciationHint": {
+          "before": "Begin with /ɪ/ and glide gently toward r.",
+          "after": "Start with a relaxed /ɪ/. US English ends in r; the usual UK model does not pronounce a final r here."
+        }
+      }
+    },
+    {
+      "id": "word-l04-nose",
+      "category": "words",
+      "level": 4,
+      "title": "nose",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l04-mouth",
+      "category": "words",
+      "level": 4,
+      "title": "mouth",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l04-hand",
+      "category": "words",
+      "level": 4,
+      "title": "hand",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "Raise your hand if you know.",
+          "after": "Raise your hand."
+        },
+        "exampleJapanese": {
+          "before": "分かったら手を挙げてください。",
+          "after": "手を挙げてください。"
+        }
+      }
+    },
+    {
+      "id": "word-l04-foot",
+      "category": "words",
+      "level": 4,
+      "title": "foot",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l04-arm",
+      "category": "words",
+      "level": 4,
+      "title": "arm",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "She carried the box in one arm.",
+          "after": "Raise your right arm."
+        },
+        "exampleJapanese": {
+          "before": "彼女は片腕で箱を運びました。",
+          "after": "右腕を上げてください。"
+        }
+      }
+    },
+    {
+      "id": "word-l04-leg",
+      "category": "words",
+      "level": 4,
+      "title": "leg",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "Stretch each leg slowly.",
+          "after": "My left leg hurts."
+        },
+        "exampleJapanese": {
+          "before": "両脚をゆっくり伸ばしてください。",
+          "after": "左脚が痛いです。"
+        }
+      }
+    },
+    {
+      "id": "word-l05-rice",
+      "category": "words",
+      "level": 5,
+      "title": "rice",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l05-bread",
+      "category": "words",
+      "level": 5,
+      "title": "bread",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "I made toast with this bread.",
+          "after": "I like bread."
+        },
+        "exampleJapanese": {
+          "before": "このパンでトーストを作りました。",
+          "after": "私はパンが好きです。"
+        }
+      }
+    },
+    {
+      "id": "word-l05-egg",
+      "category": "words",
+      "level": 5,
+      "title": "egg",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "Would you like an egg?",
+          "after": "I have an egg."
+        },
+        "exampleJapanese": {
+          "before": "卵はいかがですか。",
+          "after": "私は卵を1つ持っています。"
+        }
+      }
+    },
+    {
+      "id": "word-l05-milk",
+      "category": "words",
+      "level": 5,
+      "title": "milk",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "Please put the milk in the fridge.",
+          "after": "I drink milk."
+        },
+        "exampleJapanese": {
+          "before": "牛乳を冷蔵庫に入れてください。",
+          "after": "私は牛乳を飲みます。"
+        }
+      }
+    },
+    {
+      "id": "word-l05-water",
+      "category": "words",
+      "level": 5,
+      "title": "water",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l05-apple",
+      "category": "words",
+      "level": 5,
+      "title": "apple",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "I cut the apple in half.",
+          "after": "This apple is green."
+        },
+        "exampleJapanese": {
+          "before": "りんごを半分に切りました。",
+          "after": "このりんごは緑色です。"
+        }
+      }
+    },
+    {
+      "id": "word-l05-banana",
+      "category": "words",
+      "level": 5,
+      "title": "banana",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l05-chicken",
+      "category": "words",
+      "level": 5,
+      "title": "chicken",
+      "decision": "revised",
+      "changedFields": {
+        "japanese": {
+          "before": "鶏肉・にわとり",
+          "after": "鶏肉"
+        },
+        "exampleSentence": {
+          "before": "We had chicken for lunch.",
+          "after": "I like chicken and rice."
+        },
+        "exampleJapanese": {
+          "before": "昼食に鶏肉を食べました。",
+          "after": "私は鶏肉とご飯が好きです。"
+        },
+        "commonMistake": {
+          "before": "Use “chicken” without “a” when you mean the food.",
+          "after": "The food is uncountable: “some chicken.” “A chicken” means one bird."
+        }
+      }
+    },
+    {
+      "id": "word-l05-fish",
+      "category": "words",
+      "level": 5,
+      "title": "fish",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l05-soup",
+      "category": "words",
+      "level": 5,
+      "title": "soup",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "The soup smells wonderful.",
+          "after": "The soup is hot."
+        },
+        "exampleJapanese": {
+          "before": "そのスープはとてもいい香りです。",
+          "after": "スープは熱いです。"
+        }
+      }
+    },
+    {
+      "id": "word-l06-house",
+      "category": "words",
+      "level": 6,
+      "title": "house",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "Their house has a small garden.",
+          "after": "Our house is small."
+        },
+        "exampleJapanese": {
+          "before": "彼らの家には小さな庭があります。",
+          "after": "私たちの家は小さいです。"
+        }
+      }
+    },
+    {
+      "id": "word-l06-room",
+      "category": "words",
+      "level": 6,
+      "title": "room",
+      "decision": "revised",
+      "changedFields": {
+        "pronunciationHint": {
+          "before": "Hold the long /uː/ sound.",
+          "after": "A long /uː/ is common. Some speakers use a shorter /ʊ/; follow the voice you are practising."
+        },
+        "exampleSentence": {
+          "before": "My room is upstairs.",
+          "after": "My room is clean."
+        },
+        "exampleJapanese": {
+          "before": "私の部屋は2階です。",
+          "after": "私の部屋はきれいです。"
+        }
+      }
+    },
+    {
+      "id": "word-l06-kitchen",
+      "category": "words",
+      "level": 6,
+      "title": "kitchen",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l06-bathroom",
+      "category": "words",
+      "level": 6,
+      "title": "bathroom",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l06-bedroom",
+      "category": "words",
+      "level": 6,
+      "title": "bedroom",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "The bedroom gets morning sun.",
+          "after": "This is my bedroom."
+        },
+        "exampleJapanese": {
+          "before": "寝室には朝日が入ります。",
+          "after": "ここは私の寝室です。"
+        }
+      }
+    },
+    {
+      "id": "word-l06-bed",
+      "category": "words",
+      "level": 6,
+      "title": "bed",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "I went to bed early.",
+          "after": "My bed is next to the window."
+        },
+        "exampleJapanese": {
+          "before": "私は早く寝ました。",
+          "after": "私のベッドは窓の隣にあります。"
+        }
+      }
+    },
+    {
+      "id": "word-l06-table",
+      "category": "words",
+      "level": 6,
+      "title": "table",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l06-lamp",
+      "category": "words",
+      "level": 6,
+      "title": "lamp",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l06-key",
+      "category": "words",
+      "level": 6,
+      "title": "key",
+      "decision": "revised",
+      "changedFields": {
+        "commonMistake": {
+          "before": "“Key” and “quay” can sound the same, but meanings differ.",
+          "after": "A key opens a lock. Use “my key” for one, and “my keys” for several."
+        }
+      }
+    },
+    {
+      "id": "word-l06-clock",
+      "category": "words",
+      "level": 6,
+      "title": "clock",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "The clock is five minutes fast.",
+          "after": "The clock is on the wall."
+        },
+        "exampleJapanese": {
+          "before": "その時計は5分進んでいます。",
+          "after": "時計は壁にあります。"
+        }
+      }
+    },
+    {
+      "id": "word-l07-dog",
+      "category": "words",
+      "level": 7,
+      "title": "dog",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l07-cat",
+      "category": "words",
+      "level": 7,
+      "title": "cat",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l07-bird",
+      "category": "words",
+      "level": 7,
+      "title": "bird",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l07-rabbit",
+      "category": "words",
+      "level": 7,
+      "title": "rabbit",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l07-horse",
+      "category": "words",
+      "level": 7,
+      "title": "horse",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "The horse ran across the field.",
+          "after": "The horse can run fast."
+        },
+        "exampleJapanese": {
+          "before": "馬は野原を走りました。",
+          "after": "馬は速く走れます。"
+        }
+      }
+    },
+    {
+      "id": "word-l07-cow",
+      "category": "words",
+      "level": 7,
+      "title": "cow",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l07-sheep",
+      "category": "words",
+      "level": 7,
+      "title": "sheep",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l07-pig",
+      "category": "words",
+      "level": 7,
+      "title": "pig",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "The pig rolled in the mud.",
+          "after": "The pig is pink."
+        },
+        "exampleJapanese": {
+          "before": "豚は泥の中を転がりました。",
+          "after": "豚はピンク色です。"
+        }
+      }
+    },
+    {
+      "id": "word-l07-lion",
+      "category": "words",
+      "level": 7,
+      "title": "lion",
+      "decision": "revised",
+      "changedFields": {
+        "pronunciationHint": {
+          "before": "Stress LI and make the ending two light sounds.",
+          "after": "Stress the first syllable: LI-on. Let the second syllable stay light."
+        },
+        "exampleSentence": {
+          "before": "The lion rested in the shade.",
+          "after": "The lion is big."
+        },
+        "exampleJapanese": {
+          "before": "ライオンは日陰で休みました。",
+          "after": "ライオンは大きいです。"
+        }
+      }
+    },
+    {
+      "id": "word-l07-elephant",
+      "category": "words",
+      "level": 7,
+      "title": "elephant",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "An elephant can use its trunk like a hand.",
+          "after": "The elephant has big ears."
+        },
+        "exampleJapanese": {
+          "before": "象は鼻を手のように使えます。",
+          "after": "象は耳が大きいです。"
+        }
+      }
+    },
+    {
+      "id": "word-l08-run",
+      "category": "words",
+      "level": 8,
+      "title": "run",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "I run around the park each morning.",
+          "after": "I can run fast."
+        },
+        "exampleJapanese": {
+          "before": "私は毎朝公園を走ります。",
+          "after": "私は速く走れます。"
+        }
+      }
+    },
+    {
+      "id": "word-l08-walk",
+      "category": "words",
+      "level": 8,
+      "title": "walk",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l08-jump",
+      "category": "words",
+      "level": 8,
+      "title": "jump",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l08-sit",
+      "category": "words",
+      "level": 8,
+      "title": "sit",
+      "decision": "revised",
+      "changedFields": {
+        "commonMistake": {
+          "before": "“Sit” is intransitive; do not use it as “seat someone.”",
+          "after": "Say “sit on a chair” or “sit down.” “Seat” is a different verb: “Please seat the guests.”"
+        }
+      }
+    },
+    {
+      "id": "word-l08-stand",
+      "category": "words",
+      "level": 8,
+      "title": "stand",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "Stand near the yellow sign.",
+          "after": "Please stand up."
+        },
+        "exampleJapanese": {
+          "before": "黄色い標識の近くに立ってください。",
+          "after": "立ってください。"
+        }
+      }
+    },
+    {
+      "id": "word-l08-open",
+      "category": "words",
+      "level": 8,
+      "title": "open",
+      "decision": "revised",
+      "changedFields": {
+        "japanese": {
+          "before": "開ける・開いている",
+          "after": "開ける"
+        },
+        "exampleSentence": {
+          "before": "Open the box carefully.",
+          "after": "Open your book, please."
+        },
+        "exampleJapanese": {
+          "before": "箱を注意して開けてください。",
+          "after": "本を開いてください。"
+        }
+      }
+    },
+    {
+      "id": "word-l08-close",
+      "category": "words",
+      "level": 8,
+      "title": "close",
+      "decision": "revised",
+      "changedFields": {
+        "japanese": {
+          "before": "閉める・近い",
+          "after": "閉める"
+        },
+        "exampleSentence": {
+          "before": "Close the gate behind you.",
+          "after": "Close the door, please."
+        },
+        "exampleJapanese": {
+          "before": "後ろの門を閉めてください。",
+          "after": "ドアを閉めてください。"
+        }
+      }
+    },
+    {
+      "id": "word-l08-read",
+      "category": "words",
+      "level": 8,
+      "title": "read",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l08-write",
+      "category": "words",
+      "level": 8,
+      "title": "write",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l08-listen",
+      "category": "words",
+      "level": 8,
+      "title": "listen",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "Listen to the whole sentence.",
+          "after": "Listen to the teacher."
+        },
+        "exampleJapanese": {
+          "before": "文全体を聞いてください。",
+          "after": "先生の話を聞いてください。"
+        }
+      }
+    },
+    {
+      "id": "word-l09-happy",
+      "category": "words",
+      "level": 9,
+      "title": "happy",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l09-sad",
+      "category": "words",
+      "level": 9,
+      "title": "sad",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l09-tired",
+      "category": "words",
+      "level": 9,
+      "title": "tired",
+      "decision": "revised",
+      "changedFields": {
+        "pronunciationHint": {
+          "before": "Usually one smooth syllable in natural speech.",
+          "after": "US English often has one smooth syllable /taɪrd/. UK English may glide through /aɪə/ before d."
+        }
+      }
+    },
+    {
+      "id": "word-l09-angry",
+      "category": "words",
+      "level": 9,
+      "title": "angry",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "He was angry about the broken promise.",
+          "after": "He is angry about the broken toy."
+        },
+        "exampleJapanese": {
+          "before": "彼は約束が破られたことに怒っていました。",
+          "after": "彼はおもちゃが壊れたことに怒っています。"
+        }
+      }
+    },
+    {
+      "id": "word-l09-scared",
+      "category": "words",
+      "level": 9,
+      "title": "scared",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l09-excited",
+      "category": "words",
+      "level": 9,
+      "title": "excited",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l09-hungry",
+      "category": "words",
+      "level": 9,
+      "title": "hungry",
+      "decision": "revised",
+      "changedFields": {
+        "pronunciationHint": {
+          "before": "Stress HUN and pronounce ng as one sound.",
+          "after": "Stress HUN. After /ŋ/, pronounce /ɡ/ before /r/: /ˈhʌŋɡri/."
+        }
+      }
+    },
+    {
+      "id": "word-l09-thirsty",
+      "category": "words",
+      "level": 9,
+      "title": "thirsty",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l09-sick",
+      "category": "words",
+      "level": 9,
+      "title": "sick",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l09-fine",
+      "category": "words",
+      "level": 9,
+      "title": "fine",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l10-sunny",
+      "category": "words",
+      "level": 10,
+      "title": "sunny",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l10-rainy",
+      "category": "words",
+      "level": 10,
+      "title": "rainy",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l10-cloudy",
+      "category": "words",
+      "level": 10,
+      "title": "cloudy",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l10-windy",
+      "category": "words",
+      "level": 10,
+      "title": "windy",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l10-hot",
+      "category": "words",
+      "level": 10,
+      "title": "hot",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l10-cold",
+      "category": "words",
+      "level": 10,
+      "title": "cold",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l10-sky",
+      "category": "words",
+      "level": 10,
+      "title": "sky",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l10-sun",
+      "category": "words",
+      "level": 10,
+      "title": "sun",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l10-moon",
+      "category": "words",
+      "level": 10,
+      "title": "moon",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l10-snow",
+      "category": "words",
+      "level": 10,
+      "title": "snow",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l11-morning",
+      "category": "words",
+      "level": 11,
+      "title": "morning",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l11-afternoon",
+      "category": "words",
+      "level": 11,
+      "title": "afternoon",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l11-evening",
+      "category": "words",
+      "level": 11,
+      "title": "evening",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l11-night",
+      "category": "words",
+      "level": 11,
+      "title": "night",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l11-today",
+      "category": "words",
+      "level": 11,
+      "title": "today",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l11-tomorrow",
+      "category": "words",
+      "level": 11,
+      "title": "tomorrow",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l11-yesterday",
+      "category": "words",
+      "level": 11,
+      "title": "yesterday",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l11-early",
+      "category": "words",
+      "level": 11,
+      "title": "early",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l11-late",
+      "category": "words",
+      "level": 11,
+      "title": "late",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l11-busy",
+      "category": "words",
+      "level": 11,
+      "title": "busy",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l12-school",
+      "category": "words",
+      "level": 12,
+      "title": "school",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l12-park",
+      "category": "words",
+      "level": 12,
+      "title": "park",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l12-station",
+      "category": "words",
+      "level": 12,
+      "title": "station",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l12-store",
+      "category": "words",
+      "level": 12,
+      "title": "store",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l12-hospital",
+      "category": "words",
+      "level": 12,
+      "title": "hospital",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l12-library",
+      "category": "words",
+      "level": 12,
+      "title": "library",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l12-restaurant",
+      "category": "words",
+      "level": 12,
+      "title": "restaurant",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l12-bank",
+      "category": "words",
+      "level": 12,
+      "title": "bank",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l12-post-office",
+      "category": "words",
+      "level": 12,
+      "title": "post office",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l12-playground",
+      "category": "words",
+      "level": 12,
+      "title": "playground",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l13-shirt",
+      "category": "words",
+      "level": 13,
+      "title": "shirt",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l13-pants",
+      "category": "words",
+      "level": 13,
+      "title": "pants",
+      "decision": "revised",
+      "changedFields": {
+        "commonMistake": {
+          "before": "“Pants” is plural in form: say “these pants.”",
+          "after": "US “pants” means trousers; UK “pants” usually means underwear. For this item, practise the US clothing meaning: “these pants.”"
+        }
+      }
+    },
+    {
+      "id": "word-l13-dress",
+      "category": "words",
+      "level": 13,
+      "title": "dress",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l13-skirt",
+      "category": "words",
+      "level": 13,
+      "title": "skirt",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l13-shoes",
+      "category": "words",
+      "level": 13,
+      "title": "shoes",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l13-socks",
+      "category": "words",
+      "level": 13,
+      "title": "socks",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l13-hat",
+      "category": "words",
+      "level": 13,
+      "title": "hat",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l13-coat",
+      "category": "words",
+      "level": 13,
+      "title": "coat",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l13-gloves",
+      "category": "words",
+      "level": 13,
+      "title": "gloves",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l13-umbrella",
+      "category": "words",
+      "level": 13,
+      "title": "umbrella",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l14-car",
+      "category": "words",
+      "level": 14,
+      "title": "car",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l14-bus",
+      "category": "words",
+      "level": 14,
+      "title": "bus",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l14-train",
+      "category": "words",
+      "level": 14,
+      "title": "train",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l14-bicycle",
+      "category": "words",
+      "level": 14,
+      "title": "bicycle",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l14-airplane",
+      "category": "words",
+      "level": 14,
+      "title": "airplane",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l14-taxi",
+      "category": "words",
+      "level": 14,
+      "title": "taxi",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l14-boat",
+      "category": "words",
+      "level": 14,
+      "title": "boat",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l14-ticket",
+      "category": "words",
+      "level": 14,
+      "title": "ticket",
+      "decision": "revised",
+      "changedFields": {
+        "commonMistake": {
+          "before": "Say “a ticket to Tokyo,” not “a ticket for Tokyo” when naming a destination.",
+          "after": "Use “a ticket to Tokyo” for the destination, and “a ticket for the ten o’clock train” for a particular service."
+        }
+      }
+    },
+    {
+      "id": "word-l14-map",
+      "category": "words",
+      "level": 14,
+      "title": "map",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l14-trip",
+      "category": "words",
+      "level": 14,
+      "title": "trip",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l15-clean",
+      "category": "words",
+      "level": 15,
+      "title": "clean",
+      "decision": "revised",
+      "changedFields": {
+        "commonMistake": {
+          "before": "Use “clean” without “up” when removing dirt generally.",
+          "after": "“Clean the kitchen” focuses on making it clean. “Clean up the kitchen” can also include tidying it."
+        }
+      }
+    },
+    {
+      "id": "word-l15-wash",
+      "category": "words",
+      "level": 15,
+      "title": "wash",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l15-cook",
+      "category": "words",
+      "level": 15,
+      "title": "cook",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l15-sweep",
+      "category": "words",
+      "level": 15,
+      "title": "sweep",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l15-carry",
+      "category": "words",
+      "level": 15,
+      "title": "carry",
+      "decision": "revised",
+      "changedFields": {
+        "commonMistake": {
+          "before": "Do not use “bring” when the direction is away from the speaker.",
+          "after": "“Carry” describes holding and moving something. “Bring” and “take” also tell us about the direction of movement."
+        }
+      }
+    },
+    {
+      "id": "word-l15-fix",
+      "category": "words",
+      "level": 15,
+      "title": "fix",
+      "decision": "revised",
+      "changedFields": {
+        "commonMistake": {
+          "before": "Use “fix” for repair, not every kind of problem-solving in formal writing.",
+          "after": "Use “fix” directly with the problem or broken object: “fix the handle,” not “fix to the handle.”"
+        }
+      }
+    },
+    {
+      "id": "word-l15-borrow",
+      "category": "words",
+      "level": 15,
+      "title": "borrow",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l15-return",
+      "category": "words",
+      "level": 15,
+      "title": "return",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l15-choose",
+      "category": "words",
+      "level": 15,
+      "title": "choose",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l15-pack",
+      "category": "words",
+      "level": 15,
+      "title": "pack",
+      "decision": "revised",
+      "changedFields": {
+        "commonMistake": {
+          "before": "Say “pack a bag,” not “pack up a bag” unless emphasizing completion.",
+          "after": "“Pack a bag” means put things in it. “Pack up” can mean collect your things before leaving."
+        }
+      }
+    },
+    {
+      "id": "word-l16-ask",
+      "category": "words",
+      "level": 16,
+      "title": "ask",
+      "decision": "revised",
+      "changedFields": {
+        "commonMistake": {
+          "before": "Use “ask someone a question,” not “ask a question to someone.”",
+          "after": "The useful everyday pattern is “ask someone a question.” Use “ask for help” when you want assistance."
+        }
+      }
+    },
+    {
+      "id": "word-l16-answer",
+      "category": "words",
+      "level": 16,
+      "title": "answer",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l16-explain",
+      "category": "words",
+      "level": 16,
+      "title": "explain",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l16-repeat",
+      "category": "words",
+      "level": 16,
+      "title": "repeat",
+      "decision": "revised",
+      "changedFields": {
+        "commonMistake": {
+          "before": "Do not add “again” unless repetition needs extra emphasis.",
+          "after": "Say “repeat the word,” not “repeat to the word.” “Repeat it again” is possible when another repetition is needed."
+        }
+      }
+    },
+    {
+      "id": "word-l16-speak",
+      "category": "words",
+      "level": 16,
+      "title": "speak",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l16-whisper",
+      "category": "words",
+      "level": 16,
+      "title": "whisper",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l16-shout",
+      "category": "words",
+      "level": 16,
+      "title": "shout",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l16-call",
+      "category": "words",
+      "level": 16,
+      "title": "call",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l16-message",
+      "category": "words",
+      "level": 16,
+      "title": "message",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l16-invite",
+      "category": "words",
+      "level": 16,
+      "title": "invite",
+      "decision": "revised",
+      "changedFields": {
+        "commonMistake": {
+          "before": "Use “invite someone to an event,” not “invite someone for an event.”",
+          "after": "Use “invite someone to a party.” With a meal, both “invite someone to dinner” and “invite someone for dinner” occur."
+        }
+      }
+    },
+    {
+      "id": "word-l17-homework",
+      "category": "words",
+      "level": 17,
+      "title": "homework",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "I finished my homework before dinner.",
+          "after": "I put off my homework until the last minute."
+        },
+        "exampleJapanese": {
+          "before": "夕食前に宿題を終えました。",
+          "after": "私はぎりぎりまで宿題を後回しにしました。"
+        }
+      }
+    },
+    {
+      "id": "word-l17-question",
+      "category": "words",
+      "level": 17,
+      "title": "question",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "Write one question about the story.",
+          "after": "Ask a follow-up question if the answer is unclear."
+        },
+        "exampleJapanese": {
+          "before": "物語について質問を1つ書いてください。",
+          "after": "答えがはっきりしなければ、追加で質問してください。"
+        }
+      }
+    },
+    {
+      "id": "word-l17-notebook",
+      "category": "words",
+      "level": 17,
+      "title": "notebook",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "I keep new vocabulary in a notebook.",
+          "after": "I keep track of new words in a notebook."
+        },
+        "exampleJapanese": {
+          "before": "新しい単語をノートに書いています。",
+          "after": "私は新しい単語をノートに記録しています。"
+        }
+      }
+    },
+    {
+      "id": "word-l17-dictionary",
+      "category": "words",
+      "level": 17,
+      "title": "dictionary",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "Check the word in a learner’s dictionary.",
+          "after": "Look the word up in a dictionary, then make your own sentence."
+        },
+        "exampleJapanese": {
+          "before": "学習者向け辞書でその単語を調べてください。",
+          "after": "辞書でその単語を調べてから、自分で文を作ってください。"
+        }
+      }
+    },
+    {
+      "id": "word-l17-subject",
+      "category": "words",
+      "level": 17,
+      "title": "subject",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "Science is my favorite subject.",
+          "after": "Which subject would you like to get better at?"
+        },
+        "exampleJapanese": {
+          "before": "理科は私の好きな科目です。",
+          "after": "どの科目がもっと得意になりたいですか。"
+        }
+      }
+    },
+    {
+      "id": "word-l17-grade",
+      "category": "words",
+      "level": 17,
+      "title": "grade",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l17-test",
+      "category": "words",
+      "level": 17,
+      "title": "test",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l17-practice",
+      "category": "words",
+      "level": 17,
+      "title": "practice",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l17-remember",
+      "category": "words",
+      "level": 17,
+      "title": "remember",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l17-improve",
+      "category": "words",
+      "level": 17,
+      "title": "improve",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l18-office",
+      "category": "words",
+      "level": 18,
+      "title": "office",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "Our office is near the station.",
+          "after": "I work from home twice a week and spend the other days at the office."
+        },
+        "exampleJapanese": {
+          "before": "私たちのオフィスは駅の近くです。",
+          "after": "週に2日は在宅で働き、ほかの日はオフィスで働きます。"
+        }
+      }
+    },
+    {
+      "id": "word-l18-meeting",
+      "category": "words",
+      "level": 18,
+      "title": "meeting",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l18-schedule",
+      "category": "words",
+      "level": 18,
+      "title": "schedule",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l18-customer",
+      "category": "words",
+      "level": 18,
+      "title": "customer",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l18-manager",
+      "category": "words",
+      "level": 18,
+      "title": "manager",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l18-project",
+      "category": "words",
+      "level": 18,
+      "title": "project",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l18-report",
+      "category": "words",
+      "level": 18,
+      "title": "report",
+      "decision": "revised",
+      "changedFields": {
+        "commonMistake": {
+          "before": "Say “report on a topic,” not “report about” in formal contexts.",
+          "after": "Use “write a report on the results.” As a verb, “report to the manager” identifies the person you report to."
+        }
+      }
+    },
+    {
+      "id": "word-l18-deadline",
+      "category": "words",
+      "level": 18,
+      "title": "deadline",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l18-colleague",
+      "category": "words",
+      "level": 18,
+      "title": "colleague",
+      "decision": "revised",
+      "changedFields": {
+        "pronunciationHint": {
+          "before": "Stress COL and hold /iː/ at the end.",
+          "after": "Stress COL, then use /iː/ and finish with /ɡ/."
+        },
+        "commonMistake": {
+          "before": "Do not use “colleague” for every friend at work unless you work together.",
+          "after": "A colleague is someone you work with; “classmate” is someone in your class."
+        }
+      }
+    },
+    {
+      "id": "word-l18-break",
+      "category": "words",
+      "level": 18,
+      "title": "break",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l19-doctor",
+      "category": "words",
+      "level": 19,
+      "title": "doctor",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l19-medicine",
+      "category": "words",
+      "level": 19,
+      "title": "medicine",
+      "decision": "revised",
+      "changedFields": {
+        "pronunciationHint": {
+          "before": "Usually three syllables: MED-i-cine.",
+          "after": "Stress MED. Speakers may use two syllables or a light middle syllable; do not stress the ending."
+        }
+      }
+    },
+    {
+      "id": "word-l19-fever",
+      "category": "words",
+      "level": 19,
+      "title": "fever",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l19-cough",
+      "category": "words",
+      "level": 19,
+      "title": "cough",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l19-headache",
+      "category": "words",
+      "level": 19,
+      "title": "headache",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l19-rest",
+      "category": "words",
+      "level": 19,
+      "title": "rest",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l19-healthy",
+      "category": "words",
+      "level": 19,
+      "title": "healthy",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l19-exercise",
+      "category": "words",
+      "level": 19,
+      "title": "exercise",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l19-pain",
+      "category": "words",
+      "level": 19,
+      "title": "pain",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l19-appointment",
+      "category": "words",
+      "level": 19,
+      "title": "appointment",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l20-price",
+      "category": "words",
+      "level": 20,
+      "title": "price",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l20-cost",
+      "category": "words",
+      "level": 20,
+      "title": "cost",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l20-cash",
+      "category": "words",
+      "level": 20,
+      "title": "cash",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l20-change",
+      "category": "words",
+      "level": 20,
+      "title": "change",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l20-receipt",
+      "category": "words",
+      "level": 20,
+      "title": "receipt",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l20-discount",
+      "category": "words",
+      "level": 20,
+      "title": "discount",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l20-size",
+      "category": "words",
+      "level": 20,
+      "title": "size",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l20-cheap",
+      "category": "words",
+      "level": 20,
+      "title": "cheap",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l20-expensive",
+      "category": "words",
+      "level": 20,
+      "title": "expensive",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l20-order",
+      "category": "words",
+      "level": 20,
+      "title": "order",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l21-neighbor",
+      "category": "words",
+      "level": 21,
+      "title": "neighbor",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l21-guest",
+      "category": "words",
+      "level": 21,
+      "title": "guest",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "Each guest received a name card.",
+          "after": "We introduced each guest by name so nobody felt left out."
+        },
+        "exampleJapanese": {
+          "before": "客は一人ずつ名札を受け取りました。",
+          "after": "誰も取り残されたと感じないように、一人ずつ名前でお客さんを紹介しました。"
+        }
+      }
+    },
+    {
+      "id": "word-l21-host",
+      "category": "words",
+      "level": 21,
+      "title": "host",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l21-partner",
+      "category": "words",
+      "level": 21,
+      "title": "partner",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "Practice the dialogue with a partner.",
+          "after": "Check with your partner before making the final decision."
+        },
+        "exampleJapanese": {
+          "before": "相手と会話を練習してください。",
+          "after": "最終的な決定をする前に、一緒に取り組む相手に確認してください。"
+        }
+      }
+    },
+    {
+      "id": "word-l21-team",
+      "category": "words",
+      "level": 21,
+      "title": "team",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l21-promise",
+      "category": "words",
+      "level": 21,
+      "title": "promise",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l21-trust",
+      "category": "words",
+      "level": 21,
+      "title": "trust",
+      "decision": "revised",
+      "changedFields": {
+        "commonMistake": {
+          "before": "Use “trust someone,” not “trust in someone,” for ordinary confidence.",
+          "after": "“Trust someone” is the direct everyday pattern. “Trust in someone” can express strong faith and is also correct."
+        }
+      }
+    },
+    {
+      "id": "word-l21-support",
+      "category": "words",
+      "level": 21,
+      "title": "support",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l21-respect",
+      "category": "words",
+      "level": 21,
+      "title": "respect",
+      "decision": "revised",
+      "changedFields": {
+        "pronunciationHint": {
+          "before": "As a noun, stress SPECT strongly.",
+          "after": "Stress SPECT in both the noun and the verb."
+        }
+      }
+    },
+    {
+      "id": "word-l21-advice",
+      "category": "words",
+      "level": 21,
+      "title": "advice",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l22-available",
+      "category": "words",
+      "level": 22,
+      "title": "available",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l22-convenient",
+      "category": "words",
+      "level": 22,
+      "title": "convenient",
+      "decision": "revised",
+      "changedFields": {
+        "commonMistake": {
+          "before": "Something is convenient for a person, not convenient to a person.",
+          "after": "Say “The time is convenient for me.” To describe your own availability, say “I’m free,” not “I’m convenient.”"
+        }
+      }
+    },
+    {
+      "id": "word-l22-possible",
+      "category": "words",
+      "level": 22,
+      "title": "possible",
+      "decision": "revised",
+      "changedFields": {
+        "commonMistake": {
+          "before": "Say “It is possible to…,” not “It is possible that I can…” when simpler.",
+          "after": "Use “It is possible to change it.” For personal ability, use “I can change it,” not “I am possible to change it.”"
+        }
+      }
+    },
+    {
+      "id": "word-l22-necessary",
+      "category": "words",
+      "level": 22,
+      "title": "necessary",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l22-certain",
+      "category": "words",
+      "level": 22,
+      "title": "certain",
+      "decision": "revised",
+      "changedFields": {
+        "japanese": {
+          "before": "確かな・ある",
+          "after": "確信している・確かな"
+        }
+      }
+    },
+    {
+      "id": "word-l22-familiar",
+      "category": "words",
+      "level": 22,
+      "title": "familiar",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l22-polite",
+      "category": "words",
+      "level": 22,
+      "title": "polite",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l22-honest",
+      "category": "words",
+      "level": 22,
+      "title": "honest",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l22-patient",
+      "category": "words",
+      "level": 22,
+      "title": "patient",
+      "decision": "revised",
+      "changedFields": {
+        "japanese": {
+          "before": "辛抱強い・患者",
+          "after": "辛抱強い"
+        },
+        "commonMistake": {
+          "before": "Do not confuse adjective “patient” with noun “patient.”",
+          "after": "As an adjective, say “be patient with someone.” “A patient” is a different meaning: a person receiving medical care."
+        }
+      }
+    },
+    {
+      "id": "word-l22-careful",
+      "category": "words",
+      "level": 22,
+      "title": "careful",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "Be careful with the hot plate.",
+          "after": "Be careful not to share the wrong file."
+        },
+        "exampleJapanese": {
+          "before": "熱い皿に気をつけてください。",
+          "after": "間違ったファイルを共有しないように気をつけてください。"
+        }
+      }
+    },
+    {
+      "id": "word-l23-arrive",
+      "category": "words",
+      "level": 23,
+      "title": "arrive",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l23-leave",
+      "category": "words",
+      "level": 23,
+      "title": "leave",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l23-miss",
+      "category": "words",
+      "level": 23,
+      "title": "miss",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l23-catch",
+      "category": "words",
+      "level": 23,
+      "title": "catch",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l23-cancel",
+      "category": "words",
+      "level": 23,
+      "title": "cancel",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l23-delay",
+      "category": "words",
+      "level": 23,
+      "title": "delay",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l23-reserve",
+      "category": "words",
+      "level": 23,
+      "title": "reserve",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l23-confirm",
+      "category": "words",
+      "level": 23,
+      "title": "confirm",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l23-prepare",
+      "category": "words",
+      "level": 23,
+      "title": "prepare",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l23-deliver",
+      "category": "words",
+      "level": 23,
+      "title": "deliver",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l24-device",
+      "category": "words",
+      "level": 24,
+      "title": "device",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l24-screen",
+      "category": "words",
+      "level": 24,
+      "title": "screen",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l24-charger",
+      "category": "words",
+      "level": 24,
+      "title": "charger",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l24-battery",
+      "category": "words",
+      "level": 24,
+      "title": "battery",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l24-password",
+      "category": "words",
+      "level": 24,
+      "title": "password",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "Choose a unique password for this account.",
+          "after": "I forgot my password and had to reset it."
+        },
+        "exampleJapanese": {
+          "before": "このアカウントには固有のパスワードを選んでください。",
+          "after": "パスワードを忘れたので、再設定しなければなりませんでした。"
+        },
+        "commonMistake": {
+          "before": "Do not share or reuse passwords.",
+          "after": "“Reset a password” means choose a new one after losing access. “Forget” describes what happened to your memory."
+        }
+      }
+    },
+    {
+      "id": "word-l24-account",
+      "category": "words",
+      "level": 24,
+      "title": "account",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l24-update",
+      "category": "words",
+      "level": 24,
+      "title": "update",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l24-download",
+      "category": "words",
+      "level": 24,
+      "title": "download",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l24-upload",
+      "category": "words",
+      "level": 24,
+      "title": "upload",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l24-connect",
+      "category": "words",
+      "level": 24,
+      "title": "connect",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l25-recycle",
+      "category": "words",
+      "level": 25,
+      "title": "recycle",
+      "decision": "revised",
+      "changedFields": {
+        "commonMistake": {
+          "before": "Not every material marked plastic is locally recyclable.",
+          "after": "Use “recycle paper” directly. “Recyclable” describes a material; “recycling” names the process."
+        }
+      }
+    },
+    {
+      "id": "word-l25-waste",
+      "category": "words",
+      "level": 25,
+      "title": "waste",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l25-energy",
+      "category": "words",
+      "level": 25,
+      "title": "energy",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l25-pollution",
+      "category": "words",
+      "level": 25,
+      "title": "pollution",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l25-climate",
+      "category": "words",
+      "level": 25,
+      "title": "climate",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l25-protect",
+      "category": "words",
+      "level": 25,
+      "title": "protect",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l25-reduce",
+      "category": "words",
+      "level": 25,
+      "title": "reduce",
+      "decision": "revised",
+      "changedFields": {
+        "commonMistake": {
+          "before": "“Reduce” is transitive; say what becomes smaller.",
+          "after": "“Reduce water use” names what you make smaller. “Reduce by ten percent” gives the amount of the change."
+        }
+      }
+    },
+    {
+      "id": "word-l25-reuse",
+      "category": "words",
+      "level": 25,
+      "title": "reuse",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l25-resource",
+      "category": "words",
+      "level": 25,
+      "title": "resource",
+      "decision": "revised",
+      "changedFields": {
+        "pronunciationHint": {
+          "before": "Stress RE in US English; UK stress may differ.",
+          "after": "Stress differs across speakers and varieties. Listen for the stressed syllable in your selected US or UK model."
+        }
+      }
+    },
+    {
+      "id": "word-l25-sustainable",
+      "category": "words",
+      "level": 25,
+      "title": "sustainable",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l26-confident",
+      "category": "words",
+      "level": 26,
+      "title": "confident",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l26-nervous",
+      "category": "words",
+      "level": 26,
+      "title": "nervous",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l26-proud",
+      "category": "words",
+      "level": 26,
+      "title": "proud",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l26-disappointed",
+      "category": "words",
+      "level": 26,
+      "title": "disappointed",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l26-grateful",
+      "category": "words",
+      "level": 26,
+      "title": "grateful",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l26-curious",
+      "category": "words",
+      "level": 26,
+      "title": "curious",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l26-embarrassed",
+      "category": "words",
+      "level": 26,
+      "title": "embarrassed",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l26-relieved",
+      "category": "words",
+      "level": 26,
+      "title": "relieved",
+      "decision": "revised",
+      "changedFields": {
+        "commonMistake": {
+          "before": "Say “relieved to know” or “relieved that…,” not “relieved about” in every case.",
+          "after": "Use “relieved to hear the news” or “relieved that everyone is safe.” “Relieved about” also works with an appropriate noun."
+        }
+      }
+    },
+    {
+      "id": "word-l26-frustrated",
+      "category": "words",
+      "level": 26,
+      "title": "frustrated",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l26-calm",
+      "category": "words",
+      "level": 26,
+      "title": "calm",
+      "decision": "revised",
+      "changedFields": {
+        "pronunciationHint": {
+          "before": "The l is silent; hold the vowel.",
+          "after": "A pronunciation without /l/ is common in both models. Some speakers pronounce a light /l/."
+        },
+        "commonMistake": {
+          "before": "Do not pronounce the written l.",
+          "after": "“Stay calm” describes your state. Use “calmly” with an action: “speak calmly.”"
+        }
+      }
+    },
+    {
+      "id": "word-l27-compare",
+      "category": "words",
+      "level": 27,
+      "title": "compare",
+      "decision": "revised",
+      "changedFields": {
+        "commonMistake": {
+          "before": "Compare A with B to examine differences; “compare to” often notes similarity.",
+          "after": "“Compare A with B” and “compare A to B” can both introduce a comparison; explain which similarities or differences you mean."
+        }
+      }
+    },
+    {
+      "id": "word-l27-contrast",
+      "category": "words",
+      "level": 27,
+      "title": "contrast",
+      "decision": "revised",
+      "changedFields": {
+        "pronunciationHint": {
+          "before": "As a verb, stress TRAST; noun stress often begins earlier.",
+          "after": "As a verb, stress TRAST. The noun usually stresses CON."
+        }
+      }
+    },
+    {
+      "id": "word-l27-describe",
+      "category": "words",
+      "level": 27,
+      "title": "describe",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l27-summarize",
+      "category": "words",
+      "level": 27,
+      "title": "summarize",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l27-analyze",
+      "category": "words",
+      "level": 27,
+      "title": "analyze",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l27-evidence",
+      "category": "words",
+      "level": 27,
+      "title": "evidence",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l27-reason",
+      "category": "words",
+      "level": 27,
+      "title": "reason",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l27-result",
+      "category": "words",
+      "level": 27,
+      "title": "result",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l27-method",
+      "category": "words",
+      "level": 27,
+      "title": "method",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l27-opinion",
+      "category": "words",
+      "level": 27,
+      "title": "opinion",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l28-proposal",
+      "category": "words",
+      "level": 28,
+      "title": "proposal",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l28-budget",
+      "category": "words",
+      "level": 28,
+      "title": "budget",
+      "decision": "revised",
+      "changedFields": {
+        "commonMistake": {
+          "before": "Say “within budget” or “over budget,” not “inside the budget.”",
+          "after": "Use “stay within budget” for keeping to a spending limit, and “go over budget” for spending too much."
+        }
+      }
+    },
+    {
+      "id": "word-l28-priority",
+      "category": "words",
+      "level": 28,
+      "title": "priority",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l28-strategy",
+      "category": "words",
+      "level": 28,
+      "title": "strategy",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l28-progress",
+      "category": "words",
+      "level": 28,
+      "title": "progress",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l28-feedback",
+      "category": "words",
+      "level": 28,
+      "title": "feedback",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l28-negotiate",
+      "category": "words",
+      "level": 28,
+      "title": "negotiate",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l28-approve",
+      "category": "words",
+      "level": 28,
+      "title": "approve",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l28-revise",
+      "category": "words",
+      "level": 28,
+      "title": "revise",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l28-launch",
+      "category": "words",
+      "level": 28,
+      "title": "launch",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l29-luggage",
+      "category": "words",
+      "level": 29,
+      "title": "luggage",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "Your luggage can go under the seat.",
+          "after": "Could you tell me where to report missing luggage?"
+        },
+        "exampleJapanese": {
+          "before": "荷物は座席の下に置けます。",
+          "after": "荷物が届かない場合、どこに届け出ればよいか教えていただけますか。"
+        }
+      }
+    },
+    {
+      "id": "word-l29-passport",
+      "category": "words",
+      "level": 29,
+      "title": "passport",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "Keep your passport in a safe place.",
+          "after": "I had to renew my passport before I could book the trip."
+        },
+        "exampleJapanese": {
+          "before": "パスポートを安全な場所に保管してください。",
+          "after": "旅行を予約する前に、パスポートを更新する必要がありました。"
+        },
+        "commonMistake": {
+          "before": "Do not drop the final t.",
+          "after": "Use “renew a passport” when you need a new period of validity. “Update” usually describes changing information."
+        }
+      }
+    },
+    {
+      "id": "word-l29-customs",
+      "category": "words",
+      "level": 29,
+      "title": "customs",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "We went through customs quickly.",
+          "after": "We were asked to declare the food we were carrying at customs."
+        },
+        "exampleJapanese": {
+          "before": "私たちはすぐに税関を通過しました。",
+          "after": "税関で、持っていた食品を申告するよう求められました。"
+        }
+      }
+    },
+    {
+      "id": "word-l29-destination",
+      "category": "words",
+      "level": 29,
+      "title": "destination",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "Kyoto is our final destination.",
+          "after": "We changed our destination after the original flight was canceled."
+        },
+        "exampleJapanese": {
+          "before": "京都が私たちの最終目的地です。",
+          "after": "最初の便が欠航したので、私たちは目的地を変更しました。"
+        }
+      }
+    },
+    {
+      "id": "word-l29-accommodation",
+      "category": "words",
+      "level": 29,
+      "title": "accommodation",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "The price includes accommodation and breakfast.",
+          "after": "We need to arrange accommodation within walking distance of the station."
+        },
+        "exampleJapanese": {
+          "before": "料金には宿泊と朝食が含まれています。",
+          "after": "駅から歩ける範囲で宿泊先を手配する必要があります。"
+        }
+      }
+    },
+    {
+      "id": "word-l29-reservation",
+      "category": "words",
+      "level": 29,
+      "title": "reservation",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "I changed the reservation online.",
+          "after": "Could you confirm whether my reservation includes breakfast?"
+        },
+        "exampleJapanese": {
+          "before": "オンラインで予約を変更しました。",
+          "after": "私の予約に朝食が含まれるか確認していただけますか。"
+        }
+      }
+    },
+    {
+      "id": "word-l29-departure",
+      "category": "words",
+      "level": 29,
+      "title": "departure",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "Check the departure time on the board.",
+          "after": "Our departure was brought forward, so we had to leave the hotel earlier."
+        },
+        "exampleJapanese": {
+          "before": "掲示板で出発時刻を確認してください。",
+          "after": "出発時刻が早まったので、ホテルをもっと早く出なければなりませんでした。"
+        }
+      }
+    },
+    {
+      "id": "word-l29-arrival",
+      "category": "words",
+      "level": 29,
+      "title": "arrival",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "Please wait in the arrival hall.",
+          "after": "Please let the hotel know your estimated time of arrival."
+        },
+        "exampleJapanese": {
+          "before": "到着ロビーで待ってください。",
+          "after": "到着予定時刻をホテルに知らせてください。"
+        },
+        "commonMistake": {
+          "before": "Use “on arrival” for the moment you reach a place.",
+          "after": "“On arrival” means when you reach a place. At an airport, the usual sign is “Arrivals,” and the room is the “arrivals hall.”"
+        }
+      }
+    },
+    {
+      "id": "word-l29-platform",
+      "category": "words",
+      "level": 29,
+      "title": "platform",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "The train leaves from platform six.",
+          "after": "The platform changed at the last minute, and we nearly missed the train."
+        },
+        "exampleJapanese": {
+          "before": "電車は6番ホームから出ます。",
+          "after": "直前にホームが変更になり、もう少しで電車に乗り遅れるところでした。"
+        }
+      }
+    },
+    {
+      "id": "word-l29-transfer",
+      "category": "words",
+      "level": 29,
+      "title": "transfer",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "We have a short transfer in Seoul.",
+          "after": "We missed our connection because the airport transfer took longer than expected."
+        },
+        "exampleJapanese": {
+          "before": "ソウルで短い乗り継ぎがあります。",
+          "after": "空港間の移動が予想以上にかかり、乗り継ぎ便に間に合いませんでした。"
+        },
+        "commonMistake": {
+          "before": "Stress changes between common noun and verb uses.",
+          "after": "An airport transfer is transport between an airport and another place. A connection is the next flight or train you catch."
+        }
+      }
+    },
+    {
+      "id": "word-l30-manage",
+      "category": "words",
+      "level": 30,
+      "title": "manage",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l30-avoid",
+      "category": "words",
+      "level": 30,
+      "title": "avoid",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l30-afford",
+      "category": "words",
+      "level": 30,
+      "title": "afford",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l30-recommend",
+      "category": "words",
+      "level": 30,
+      "title": "recommend",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l30-suggest",
+      "category": "words",
+      "level": 30,
+      "title": "suggest",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l30-prefer",
+      "category": "words",
+      "level": 30,
+      "title": "prefer",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "I prefer tea without sugar.",
+          "after": "I'd prefer to wait until we have all the details."
+        },
+        "exampleJapanese": {
+          "before": "私は砂糖なしの紅茶のほうが好きです。",
+          "after": "詳細がすべて分かるまで待ちたいです。"
+        }
+      }
+    },
+    {
+      "id": "word-l30-depend",
+      "category": "words",
+      "level": 30,
+      "title": "depend",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l30-notice",
+      "category": "words",
+      "level": 30,
+      "title": "notice",
+      "decision": "revised",
+      "changedFields": {
+        "japanese": {
+          "before": "気づく・通知",
+          "after": "気づく"
+        }
+      }
+    },
+    {
+      "id": "word-l30-realize",
+      "category": "words",
+      "level": 30,
+      "title": "realize",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l30-handle",
+      "category": "words",
+      "level": 30,
+      "title": "handle",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l31-efficient",
+      "category": "words",
+      "level": 31,
+      "title": "efficient",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l31-flexible",
+      "category": "words",
+      "level": 31,
+      "title": "flexible",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l31-reliable",
+      "category": "words",
+      "level": 31,
+      "title": "reliable",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l31-appropriate",
+      "category": "words",
+      "level": 31,
+      "title": "appropriate",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l31-significant",
+      "category": "words",
+      "level": 31,
+      "title": "significant",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l31-specific",
+      "category": "words",
+      "level": 31,
+      "title": "specific",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l31-temporary",
+      "category": "words",
+      "level": 31,
+      "title": "temporary",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l31-permanent",
+      "category": "words",
+      "level": 31,
+      "title": "permanent",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l31-likely",
+      "category": "words",
+      "level": 31,
+      "title": "likely",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "Rain is likely this evening.",
+          "after": "We're likely to miss the deadline unless we get more help."
+        },
+        "exampleJapanese": {
+          "before": "今晩は雨が降りそうです。",
+          "after": "もっと協力を得られなければ、締め切りに間に合いそうにありません。"
+        },
+        "commonMistake": {
+          "before": "Say “It is likely that…” or “is likely to…,” not “maybe likely.”",
+          "after": "Use “be likely to do” or “It is likely that…”; do not say “I likely go” when you mean “I am likely to go.”"
+        }
+      }
+    },
+    {
+      "id": "word-l31-unlikely",
+      "category": "words",
+      "level": 31,
+      "title": "unlikely",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "The shop is unlikely to open today.",
+          "after": "The plan is unlikely to work without a reliable backup."
+        },
+        "exampleJapanese": {
+          "before": "その店は今日開かないでしょう。",
+          "after": "確実な代替策がなければ、この計画はうまくいきそうにありません。"
+        }
+      }
+    },
+    {
+      "id": "word-l32-clarify",
+      "category": "words",
+      "level": 32,
+      "title": "clarify",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l32-emphasize",
+      "category": "words",
+      "level": 32,
+      "title": "emphasize",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l32-persuade",
+      "category": "words",
+      "level": 32,
+      "title": "persuade",
+      "decision": "revised",
+      "changedFields": {
+        "commonMistake": {
+          "before": "Use “persuade someone to do”; “convince” commonly takes “that.”",
+          "after": "Use “persuade someone to do something.” “Convince someone to do something” is also common, especially in US English."
+        }
+      }
+    },
+    {
+      "id": "word-l32-acknowledge",
+      "category": "words",
+      "level": 32,
+      "title": "acknowledge",
+      "decision": "revised",
+      "changedFields": {
+        "pronunciationHint": {
+          "before": "Stress KNOL; the ending is /ɪdʒ/.",
+          "after": "Stress the second syllable /ˈnɒl/ (UK) or /ˈnɑːl/ (US). Finish with /ɪdʒ/."
+        },
+        "commonMistake": {
+          "before": "The initial k is pronounced; the written w is not separately heard.",
+          "after": "The k in “ack” is pronounced, but the written w is silent."
+        }
+      }
+    },
+    {
+      "id": "word-l32-respond",
+      "category": "words",
+      "level": 32,
+      "title": "respond",
+      "decision": "revised",
+      "changedFields": {
+        "exampleSentence": {
+          "before": "Please respond by the end of the week.",
+          "after": "How we respond to criticism can be just as important as the work itself."
+        },
+        "exampleJapanese": {
+          "before": "週末までに返答してください。",
+          "after": "批判にどう応じるかは、仕事そのものと同じくらい大切なことがあります。"
+        }
+      }
+    },
+    {
+      "id": "word-l32-contribute",
+      "category": "words",
+      "level": 32,
+      "title": "contribute",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l32-collaborate",
+      "category": "words",
+      "level": 32,
+      "title": "collaborate",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l32-resolve",
+      "category": "words",
+      "level": 32,
+      "title": "resolve",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l32-reflect",
+      "category": "words",
+      "level": 32,
+      "title": "reflect",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "word-l32-adapt",
+      "category": "words",
+      "level": 32,
+      "title": "adapt",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l01-01",
+      "category": "phrases",
+      "level": 1,
+      "title": "Hi, I'm Ren.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l01-02",
+      "category": "phrases",
+      "level": 1,
+      "title": "Nice to meet you.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l01-03",
+      "category": "phrases",
+      "level": 1,
+      "title": "I'm hungry.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l01-04",
+      "category": "phrases",
+      "level": 1,
+      "title": "Thank you.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l02-01",
+      "category": "phrases",
+      "level": 2,
+      "title": "Can I try?",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l02-02",
+      "category": "phrases",
+      "level": 2,
+      "title": "Please help me.",
+      "decision": "revised",
+      "changedFields": {
+        "commonMistake": {
+          "before": "Help me please. も通じますが、Please help me. は初級者にも使いやすい形です。",
+          "after": "Please help me. と Help me, please. はどちらも自然です。困っていることを穏やかな声で伝えましょう。"
+        }
+      }
+    },
+    {
+      "id": "phrase-l02-03",
+      "category": "phrases",
+      "level": 2,
+      "title": "I don't know.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l02-04",
+      "category": "phrases",
+      "level": 2,
+      "title": "One more time, please.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l03-01",
+      "category": "phrases",
+      "level": 3,
+      "title": "I like this one.",
+      "decision": "revised",
+      "changedFields": {
+        "commonMistake": {
+          "before": "I like this it. のように one と it を重ねません。",
+          "after": "this one は一つの物を指します。I like this one it. のように one と it を重ねません。"
+        }
+      }
+    },
+    {
+      "id": "phrase-l03-02",
+      "category": "phrases",
+      "level": 3,
+      "title": "That's my favorite.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l03-03",
+      "category": "phrases",
+      "level": 3,
+      "title": "I don't like it very much.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l03-04",
+      "category": "phrases",
+      "level": 3,
+      "title": "Which one do you want?",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l04-01",
+      "category": "phrases",
+      "level": 4,
+      "title": "This is my brother.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l04-02",
+      "category": "phrases",
+      "level": 4,
+      "title": "I'm home!",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l04-03",
+      "category": "phrases",
+      "level": 4,
+      "title": "Where's my backpack?",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l04-04",
+      "category": "phrases",
+      "level": 4,
+      "title": "Let's clean up.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l05-01",
+      "category": "phrases",
+      "level": 5,
+      "title": "What time is it?",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l05-02",
+      "category": "phrases",
+      "level": 5,
+      "title": "I'm getting ready.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l05-03",
+      "category": "phrases",
+      "level": 5,
+      "title": "I usually walk to school.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l05-04",
+      "category": "phrases",
+      "level": 5,
+      "title": "See you tomorrow.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l06-01",
+      "category": "phrases",
+      "level": 6,
+      "title": "Can I have some water?",
+      "decision": "revised",
+      "changedFields": {
+        "commonMistake": {
+          "before": "Can I have a water? より、量を表す some water が基本です。",
+          "after": "基本は some water です。店で a water と言うと、水を一杯・一本注文する意味で自然に使えます。"
+        }
+      }
+    },
+    {
+      "id": "phrase-l06-02",
+      "category": "phrases",
+      "level": 6,
+      "title": "It smells good.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l06-03",
+      "category": "phrases",
+      "level": 6,
+      "title": "I'm full.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l06-04",
+      "category": "phrases",
+      "level": 6,
+      "title": "Could I get this without cheese?",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l07-01",
+      "category": "phrases",
+      "level": 7,
+      "title": "How much is this?",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l07-02",
+      "category": "phrases",
+      "level": 7,
+      "title": "Do you have this in blue?",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l07-03",
+      "category": "phrases",
+      "level": 7,
+      "title": "Can I try it on?",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l07-04",
+      "category": "phrases",
+      "level": 7,
+      "title": "I'll take it.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l08-01",
+      "category": "phrases",
+      "level": 8,
+      "title": "How do I get to the station?",
+      "decision": "revised",
+      "changedFields": {
+        "commonMistake": {
+          "before": "How can I go the station? ではなく、get to the station が自然です。",
+          "after": "get to the station と、行き先の前に to を入れます。How can I get to the station? も自然です。"
+        }
+      }
+    },
+    {
+      "id": "phrase-l08-02",
+      "category": "phrases",
+      "level": 8,
+      "title": "Is it far from here?",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l08-03",
+      "category": "phrases",
+      "level": 8,
+      "title": "It's across from the park.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l08-04",
+      "category": "phrases",
+      "level": 8,
+      "title": "I think we're lost.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l09-01",
+      "category": "phrases",
+      "level": 9,
+      "title": "It looks like rain.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l09-02",
+      "category": "phrases",
+      "level": 9,
+      "title": "What are you doing this weekend?",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l09-03",
+      "category": "phrases",
+      "level": 9,
+      "title": "Let's stay inside today.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l09-04",
+      "category": "phrases",
+      "level": 9,
+      "title": "The weather cleared up.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l10-01",
+      "category": "phrases",
+      "level": 10,
+      "title": "I don't feel well.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l10-02",
+      "category": "phrases",
+      "level": 10,
+      "title": "My throat hurts.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l10-03",
+      "category": "phrases",
+      "level": 10,
+      "title": "I need to take a break.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l10-04",
+      "category": "phrases",
+      "level": 10,
+      "title": "Are you feeling better?",
+      "decision": "revised",
+      "changedFields": {
+        "commonMistake": {
+          "before": "Do you feel better? も正しいですが、回復中の様子には Are you feeling better? が自然です。",
+          "after": "Are you feeling better? と Do you feel better? はどちらも回復を気づかう自然な質問です。better は good / well の比較級です。"
+        }
+      }
+    },
+    {
+      "id": "phrase-l11-01",
+      "category": "phrases",
+      "level": 11,
+      "title": "Do you want to join us?",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l11-02",
+      "category": "phrases",
+      "level": 11,
+      "title": "That sounds fun.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l11-03",
+      "category": "phrases",
+      "level": 11,
+      "title": "Maybe next time.",
+      "decision": "revised",
+      "changedFields": {
+        "commonMistake": {
+          "before": "Next time maybe. より Maybe next time. の語順が自然です。",
+          "after": "Maybe next time. は確約ではありません。本当に次の予定を立てたいなら、別の日を提案しましょう。"
+        }
+      }
+    },
+    {
+      "id": "phrase-l11-04",
+      "category": "phrases",
+      "level": 11,
+      "title": "I'm really into drawing.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l12-01",
+      "category": "phrases",
+      "level": 12,
+      "title": "What page are we on?",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l12-02",
+      "category": "phrases",
+      "level": 12,
+      "title": "Can we work together?",
+      "decision": "revised",
+      "changedFields": {
+        "naturalUsage": {
+          "before": "クラスメートを共同作業に誘う簡潔な表現です。",
+          "after": "先生には一緒に作業してよいかを尋ねられます。友達には協力を提案する形にもなります。"
+        },
+        "commonMistake": {
+          "before": "work together with us のように不要な語を足さず、二人ならこの形で十分です。",
+          "after": "Can we work together? では work の原形を使います。working を続けません。"
+        }
+      }
+    },
+    {
+      "id": "phrase-l12-03",
+      "category": "phrases",
+      "level": 12,
+      "title": "I left my notebook at home.",
+      "decision": "revised",
+      "changedFields": {
+        "commonMistake": {
+          "before": "I forgot my notebook at home. より left my notebook at home が自然です。",
+          "after": "I left my notebook at home. は置いてきた場所を伝えます。I forgot my notebook. は持参し忘れたことに焦点を当てます。"
+        }
+      }
+    },
+    {
+      "id": "phrase-l12-04",
+      "category": "phrases",
+      "level": 12,
+      "title": "Good luck on your test.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l13-01",
+      "category": "phrases",
+      "level": 13,
+      "title": "I've never tried that before.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l13-02",
+      "category": "phrases",
+      "level": 13,
+      "title": "It was better than I expected.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l13-03",
+      "category": "phrases",
+      "level": 13,
+      "title": "I had a great time.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l13-04",
+      "category": "phrases",
+      "level": 13,
+      "title": "How did it go?",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l14-01",
+      "category": "phrases",
+      "level": 14,
+      "title": "Are you free after school?",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l14-02",
+      "category": "phrases",
+      "level": 14,
+      "title": "I'm planning to leave early.",
+      "decision": "revised",
+      "changedFields": {
+        "naturalUsage": {
+          "before": "確定に近い個人的な計画を plan to で伝えます。",
+          "after": "plan to で今考えている計画を伝えます。予定が確定しているとは限りません。"
+        }
+      }
+    },
+    {
+      "id": "phrase-l14-03",
+      "category": "phrases",
+      "level": 14,
+      "title": "Does Saturday work for you?",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l14-04",
+      "category": "phrases",
+      "level": 14,
+      "title": "I'll let you know tonight.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l15-01",
+      "category": "phrases",
+      "level": 15,
+      "title": "I'd like to check in.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l15-02",
+      "category": "phrases",
+      "level": 15,
+      "title": "Which platform does it leave from?",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l15-03",
+      "category": "phrases",
+      "level": 15,
+      "title": "Is this seat taken?",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l15-04",
+      "category": "phrases",
+      "level": 15,
+      "title": "Could you recommend somewhere nearby?",
+      "decision": "revised",
+      "changedFields": {
+        "situation": {
+          "before": "近所の店や観光地を教えてもらうとき",
+          "after": "食事をする場所など、目的を伝えてから近くのおすすめを聞くとき"
+        },
+        "naturalUsage": {
+          "before": "somewhere nearby で場所の種類を限定せずおすすめを尋ねられます。",
+          "after": "食事・買い物などの目的を先に共有すると、somewhere nearby がどんな場所を指すか伝わります。"
+        },
+        "exampleDialogue": {
+          "before": "A: Could you recommend somewhere nearby? B: There's a nice café around the corner.",
+          "after": "A: We're looking for lunch. Could you recommend somewhere nearby? B: There's a nice café around the corner."
+        }
+      }
+    },
+    {
+      "id": "phrase-l16-01",
+      "category": "phrases",
+      "level": 16,
+      "title": "Something seems to be wrong.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l16-02",
+      "category": "phrases",
+      "level": 16,
+      "title": "I can't get this to work.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l16-03",
+      "category": "phrases",
+      "level": 16,
+      "title": "I may have misunderstood.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l16-04",
+      "category": "phrases",
+      "level": 16,
+      "title": "Could you take a look?",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l17-01",
+      "category": "phrases",
+      "level": 17,
+      "title": "I think it's worth a try.",
+      "decision": "revised",
+      "changedFields": {
+        "phrase": {
+          "before": "In my opinion, it's worth trying.",
+          "after": "I think it's worth a try."
+        },
+        "japanese": {
+          "before": "私の意見では、試す価値があります。",
+          "after": "試してみる価値はあると思います。"
+        },
+        "naturalUsage": {
+          "before": "意見であることを示してから、worth + 動名詞で価値を伝えます。",
+          "after": "I think で意見をやわらかく伝えます。worth a try は、結果は分からなくても試す価値があるという自然な会話表現です。"
+        },
+        "exampleDialogue": {
+          "before": "A: Should we use the new app? B: In my opinion, it's worth trying.",
+          "after": "A: Should we use the new app? B: I think it's worth a try."
+        },
+        "commonMistake": {
+          "before": "worth to try ではなく、worth trying とします。",
+          "after": "worth a try と worth trying はどちらも自然です。worth to try とは言いません。"
+        }
+      }
+    },
+    {
+      "id": "phrase-l17-02",
+      "category": "phrases",
+      "level": 17,
+      "title": "I see what you mean.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l17-03",
+      "category": "phrases",
+      "level": 17,
+      "title": "I completely agree with you.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l17-04",
+      "category": "phrases",
+      "level": 17,
+      "title": "I'm not convinced yet.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l18-01",
+      "category": "phrases",
+      "level": 18,
+      "title": "Why don't we start with the easiest part?",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l18-02",
+      "category": "phrases",
+      "level": 18,
+      "title": "We could give it another day.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l18-03",
+      "category": "phrases",
+      "level": 18,
+      "title": "Let's think it over.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l18-04",
+      "category": "phrases",
+      "level": 18,
+      "title": "That seems like the best option.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l19-01",
+      "category": "phrases",
+      "level": 19,
+      "title": "Could you say that another way?",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l19-02",
+      "category": "phrases",
+      "level": 19,
+      "title": "What exactly do you mean?",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l19-03",
+      "category": "phrases",
+      "level": 19,
+      "title": "Let me make sure I understood.",
+      "decision": "revised",
+      "changedFields": {
+        "exampleDialogue": {
+          "before": "A: Send the draft by noon. B: Let me make sure I understood. You need it before lunch, right?",
+          "after": "A: Send the draft by noon. B: Let me make sure I understood. You need it by twelve, right?"
+        }
+      }
+    },
+    {
+      "id": "phrase-l19-04",
+      "category": "phrases",
+      "level": 19,
+      "title": "I didn't catch the last part.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l20-01",
+      "category": "phrases",
+      "level": 20,
+      "title": "I'll get back to you by Friday.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l20-02",
+      "category": "phrases",
+      "level": 20,
+      "title": "Could we move the meeting to three?",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l20-03",
+      "category": "phrases",
+      "level": 20,
+      "title": "I'm running a little behind.",
+      "decision": "revised",
+      "changedFields": {
+        "commonMistake": {
+          "before": "I'm running late は明確な遅刻、running behind は予定からの遅れを広く表します。",
+          "after": "running late も running behind も、予定より遅れているときに使えます。状況が不明なら behind schedule と補えます。"
+        }
+      }
+    },
+    {
+      "id": "phrase-l20-04",
+      "category": "phrases",
+      "level": 20,
+      "title": "Let's divide the work evenly.",
+      "decision": "revised",
+      "changedFields": {
+        "commonMistake": {
+          "before": "divide the work equally も可能ですが、人ごとの量には evenly が自然です。",
+          "after": "evenly と equally は、どちらも作業量を均等に分ける意味で使えます。divide のあとに the work を置きます。"
+        }
+      }
+    },
+    {
+      "id": "phrase-l21-01",
+      "category": "phrases",
+      "level": 21,
+      "title": "I hope I'm not interrupting.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l21-02",
+      "category": "phrases",
+      "level": 21,
+      "title": "No rush—whenever you're ready.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l21-03",
+      "category": "phrases",
+      "level": 21,
+      "title": "It was thoughtful of you to ask.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l21-04",
+      "category": "phrases",
+      "level": 21,
+      "title": "I didn't mean to leave you out.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l22-01",
+      "category": "phrases",
+      "level": 22,
+      "title": "I'm afraid this isn't what I ordered.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l22-02",
+      "category": "phrases",
+      "level": 22,
+      "title": "Would it be possible to exchange this?",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l22-03",
+      "category": "phrases",
+      "level": 22,
+      "title": "There seems to be an extra charge.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l22-04",
+      "category": "phrases",
+      "level": 22,
+      "title": "Thank you for sorting that out.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l23-01",
+      "category": "phrases",
+      "level": 23,
+      "title": "You won't believe what happened next.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l23-02",
+      "category": "phrases",
+      "level": 23,
+      "title": "It turned out to be a misunderstanding.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l23-03",
+      "category": "phrases",
+      "level": 23,
+      "title": "I couldn't stop laughing.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l23-04",
+      "category": "phrases",
+      "level": 23,
+      "title": "That must have been stressful.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l24-01",
+      "category": "phrases",
+      "level": 24,
+      "title": "I'm working on being more consistent.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l24-02",
+      "category": "phrases",
+      "level": 24,
+      "title": "I've made more progress than I realized.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l24-03",
+      "category": "phrases",
+      "level": 24,
+      "title": "I'm taking it one step at a time.",
+      "decision": "revised",
+      "changedFields": {
+        "commonMistake": {
+          "before": "step by step も使えますが、この文では one step at a time が自然です。",
+          "after": "one step at a time は一度に一歩ずつ進める意味です。take it step by step も自然な表現です。"
+        }
+      }
+    },
+    {
+      "id": "phrase-l24-04",
+      "category": "phrases",
+      "level": 24,
+      "title": "What would you like to improve next?",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l25-01",
+      "category": "phrases",
+      "level": 25,
+      "title": "I understand your point, but I see it differently.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l25-02",
+      "category": "phrases",
+      "level": 25,
+      "title": "I'm not sure that's the whole picture.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l25-03",
+      "category": "phrases",
+      "level": 25,
+      "title": "Could there be another explanation?",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l25-04",
+      "category": "phrases",
+      "level": 25,
+      "title": "Let's agree to disagree on that.",
+      "decision": "revised",
+      "changedFields": {
+        "naturalUsage": {
+          "before": "互いの立場を変えずに、対立を長引かせないための表現です。",
+          "after": "好みなど、結論を一つにする必要がない話題で使います。共同の決定が必要な場面では、次の解決策も話し合いましょう。"
+        }
+      }
+    },
+    {
+      "id": "phrase-l26-01",
+      "category": "phrases",
+      "level": 26,
+      "title": "Let me walk you through the main idea.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l26-02",
+      "category": "phrases",
+      "level": 26,
+      "title": "The key takeaway is that small changes add up.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l26-03",
+      "category": "phrases",
+      "level": 26,
+      "title": "I'd like to build on that idea.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l26-04",
+      "category": "phrases",
+      "level": 26,
+      "title": "Does anyone have a different perspective?",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l27-01",
+      "category": "phrases",
+      "level": 27,
+      "title": "What would a fair compromise look like?",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l27-02",
+      "category": "phrases",
+      "level": 27,
+      "title": "I can be flexible on the timing.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l27-03",
+      "category": "phrases",
+      "level": 27,
+      "title": "That works for me, provided we keep the scope small.",
+      "decision": "revised",
+      "changedFields": {
+        "naturalUsage": {
+          "before": "provided ... で、合意に必要な条件を明確に示します。",
+          "after": "provided (that) ... は条件付きの合意を示す、少し改まった表現です。日常会話なら as long as ... も自然です。"
+        }
+      }
+    },
+    {
+      "id": "phrase-l27-04",
+      "category": "phrases",
+      "level": 27,
+      "title": "I think we're closer to an agreement.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l28-01",
+      "category": "phrases",
+      "level": 28,
+      "title": "I'm still getting the hang of it.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l28-02",
+      "category": "phrases",
+      "level": 28,
+      "title": "Let's call it a day.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l28-03",
+      "category": "phrases",
+      "level": 28,
+      "title": "That idea is worth keeping in mind.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l28-04",
+      "category": "phrases",
+      "level": 28,
+      "title": "We're on the same page now.",
+      "decision": "revised",
+      "changedFields": {
+        "commonMistake": {
+          "before": "実際に同じページを開いている意味だけではなく、認識の一致にも使います。",
+          "after": "意味は「共通の理解がある」です。We are in the same page. ではなく on the same page と言います。"
+        }
+      }
+    },
+    {
+      "id": "phrase-l29-01",
+      "category": "phrases",
+      "level": 29,
+      "title": "Just to keep you in the loop, the deadline has changed.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l29-02",
+      "category": "phrases",
+      "level": 29,
+      "title": "Could you clarify what you need from me?",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l29-03",
+      "category": "phrases",
+      "level": 29,
+      "title": "I'll make sure this is handled today.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l29-04",
+      "category": "phrases",
+      "level": 29,
+      "title": "I appreciate you bringing this to my attention.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l30-01",
+      "category": "phrases",
+      "level": 30,
+      "title": "Looking back, I would have approached it differently.",
+      "decision": "revised",
+      "changedFields": {
+        "japanese": {
+          "before": "振り返ると、今なら別のやり方で取り組むと思います。",
+          "after": "振り返ると、別のやり方で取り組めばよかったと思います。"
+        },
+        "exampleDialogue": {
+          "before": "A: Would you run the project the same way again? B: Looking back, I would have approached it differently.",
+          "after": "A: Now that you've seen the results, would you have made the same choices? B: Looking back, I would have approached it differently."
+        }
+      }
+    },
+    {
+      "id": "phrase-l30-02",
+      "category": "phrases",
+      "level": 30,
+      "title": "The experience changed how I think about success.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l30-03",
+      "category": "phrases",
+      "level": 30,
+      "title": "There isn't always a clear-cut answer.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l30-04",
+      "category": "phrases",
+      "level": 30,
+      "title": "What matters most is how we respond.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l31-01",
+      "category": "phrases",
+      "level": 31,
+      "title": "I can see both sides of the argument.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l31-02",
+      "category": "phrases",
+      "level": 31,
+      "title": "That's true to an extent.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l31-03",
+      "category": "phrases",
+      "level": 31,
+      "title": "The issue is more subtle than it first appears.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l31-04",
+      "category": "phrases",
+      "level": 31,
+      "title": "I wouldn't go so far as to say that.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l32-01",
+      "category": "phrases",
+      "level": 32,
+      "title": "To put it another way, we're treating the symptom, not the cause.",
+      "decision": "revised",
+      "changedFields": {
+        "commonMistake": {
+          "before": "put it in another way も通じますが、定型表現は put it another way です。",
+          "after": "To put it another way は言い換えの合図です。put の目的語 it を落とさず、put it another way とまとめて使います。"
+        }
+      }
+    },
+    {
+      "id": "phrase-l32-02",
+      "category": "phrases",
+      "level": 32,
+      "title": "I don't have a firm view on that yet.",
+      "decision": "revised",
+      "changedFields": {
+        "naturalUsage": {
+          "before": "無知ではなく、判断を保留していることを落ち着いて伝えます。",
+          "after": "yet を添えて、今は判断を保留しているが、今後考えがまとまる可能性を示します。"
+        },
+        "commonMistake": {
+          "before": "I have no opinion. は関心がないようにも響くため、この表現はより慎重です。",
+          "after": "I have no opinion. も正しい表現です。この文の firm view は「考えが固まった意見」を表します。"
+        }
+      }
+    },
+    {
+      "id": "phrase-l32-03",
+      "category": "phrases",
+      "level": 32,
+      "title": "That raises a broader question about who benefits.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phrase-l32-04",
+      "category": "phrases",
+      "level": 32,
+      "title": "We may need to rethink the assumptions behind our plan.",
+      "decision": "retained",
+      "changedFields": {}
+    },
+    {
+      "id": "phonics-l01",
+      "category": "phonics",
+      "level": 1,
+      "title": "First alphabet sounds: m, s, t, p",
+      "decision": "revised",
+      "changedFields": {
+        "audioFocus": {
+          "before": null,
+          "after": "Listen for the first sounds in moon, sun, top, and pen."
+        },
+        "contrastPairs": {
+          "before": null,
+          "after": [
+            [
+              "top",
+              "pop"
+            ],
+            [
+              "map",
+              "sap"
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "phonics-l02",
+      "category": "phonics",
+      "level": 2,
+      "title": "Alphabet sounds: n, b, d, g",
+      "decision": "revised",
+      "changedFields": {
+        "audioFocus": {
+          "before": null,
+          "after": "Listen for the first sounds in net, bag, dog, and gum."
+        },
+        "contrastPairs": {
+          "before": null,
+          "after": [
+            [
+              "net",
+              "bet"
+            ],
+            [
+              "bag",
+              "nag"
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "phonics-l03",
+      "category": "phonics",
+      "level": 3,
+      "title": "Breathy and voiced consonants: f, v, h, w",
+      "decision": "revised",
+      "changedFields": {
+        "audioFocus": {
+          "before": null,
+          "after": "Listen to fan and van. Feel your voice start in van."
+        },
+        "contrastPairs": {
+          "before": null,
+          "after": [
+            [
+              "fan",
+              "van"
+            ],
+            [
+              "wet",
+              "vet"
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "phonics-l04",
+      "category": "phonics",
+      "level": 4,
+      "title": "L and r, plus c, k, j, z, y, x, and q",
+      "decision": "revised",
+      "changedFields": {
+        "phonicsTarget": {
+          "before": "Remaining common alphabet sounds: c, k, j, z, y, x, q",
+          "after": "L and r, plus c, k, j, z, y, x, and q"
+        },
+        "sound": {
+          "before": "/k/, /dʒ/, /z/, /j/, /ks/, /kw/",
+          "after": "/l/, /r/, /k/, /dʒ/, /z/, /j/, /ks/, /kw/"
+        },
+        "examples": {
+          "before": [
+            "cat",
+            "kite",
+            "jam",
+            "zip",
+            "yes",
+            "box",
+            "quiz"
+          ],
+          "after": [
+            "light",
+            "right",
+            "cat",
+            "kite",
+            "jam",
+            "zip",
+            "yes",
+            "box",
+            "quiz"
+          ]
+        },
+        "japaneseHint": {
+          "before": "cはcatでは/k/、jは/dʒ/、yはyesの短い子音です。xは多くの場合/k/と/s/を続けます。",
+          "after": "lは舌先を上の歯ぐきにつけ、rでは舌を後ろへ引いて上につけません。cはcatでは/k/、xはboxでは/ks/、qはquizでは/kw/です。"
+        },
+        "mouthTip": {
+          "before": "Use the back of the tongue for /k/. Round the lips while starting /kw/. Keep /ks/ together at the end of a word.",
+          "after": "For /l/, touch the ridge behind the upper teeth with the tongue tip. For /r/, raise or bunch the tongue without touching the roof. Use the back of the tongue for /k/ and keep final /ks/ together."
+        },
+        "practiceWords": {
+          "before": [
+            "cup",
+            "kid",
+            "jet",
+            "zoo",
+            "yak",
+            "fox",
+            "quit"
+          ],
+          "after": [
+            "lip",
+            "rip",
+            "cup",
+            "kid",
+            "jet",
+            "zoo",
+            "yak",
+            "fox",
+            "quit"
+          ]
+        },
+        "practiceSentence": {
+          "before": "The quick fox can jump.",
+          "after": "Look right at the red fox."
+        },
+        "audioFocus": {
+          "before": null,
+          "after": "Listen to light and right. Then try the other first and last sounds."
+        },
+        "contrastPairs": {
+          "before": null,
+          "after": [
+            [
+              "light",
+              "right"
+            ],
+            [
+              "zip",
+              "sip"
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "phonics-l05",
+      "category": "phonics",
+      "level": 5,
+      "title": "Short a in closed syllables",
+      "decision": "revised",
+      "changedFields": {
+        "audioFocus": {
+          "before": null,
+          "after": "Listen to the short vowel in cat."
+        },
+        "contrastPairs": {
+          "before": null,
+          "after": [
+            [
+              "cat",
+              "cut"
+            ],
+            [
+              "cap",
+              "cup"
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "phonics-l06",
+      "category": "phonics",
+      "level": 6,
+      "title": "Short i in closed syllables",
+      "decision": "revised",
+      "changedFields": {
+        "audioFocus": {
+          "before": null,
+          "after": "Listen to the short vowel in sit."
+        },
+        "contrastPairs": {
+          "before": null,
+          "after": [
+            [
+              "ship",
+              "sheep"
+            ],
+            [
+              "sit",
+              "seat"
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "phonics-l07",
+      "category": "phonics",
+      "level": 7,
+      "title": "Short o in closed syllables",
+      "decision": "revised",
+      "changedFields": {
+        "audioFocus": {
+          "before": null,
+          "after": "Listen to the vowel in hot. Notice how each accent sounds."
+        },
+        "contrastPairs": {
+          "before": null,
+          "after": [
+            [
+              "hot",
+              "hut"
+            ],
+            [
+              "cot",
+              "cut"
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "phonics-l08",
+      "category": "phonics",
+      "level": 8,
+      "title": "Short e in closed syllables",
+      "decision": "revised",
+      "changedFields": {
+        "audioFocus": {
+          "before": null,
+          "after": "Listen to the short vowel in bed."
+        },
+        "contrastPairs": {
+          "before": null,
+          "after": [
+            [
+              "pen",
+              "pin"
+            ],
+            [
+              "bed",
+              "bad"
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "phonics-l09",
+      "category": "phonics",
+      "level": 9,
+      "title": "Short u in closed syllables",
+      "decision": "revised",
+      "changedFields": {
+        "audioFocus": {
+          "before": null,
+          "after": "Listen to the short vowel in sun."
+        },
+        "contrastPairs": {
+          "before": null,
+          "after": [
+            [
+              "cup",
+              "cap"
+            ],
+            [
+              "luck",
+              "lock"
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "phonics-l10",
+      "category": "phonics",
+      "level": 10,
+      "title": "CVC blending and clear final consonants",
+      "decision": "revised",
+      "changedFields": {
+        "mouthTip": {
+          "before": "Stretch the first two sounds just enough to connect them, then stop cleanly on the final consonant.",
+          "after": "Join the first consonant to the vowel, then finish with the last consonant. Do not add a vowel after it."
+        },
+        "audioFocus": {
+          "before": null,
+          "after": "Join the sounds into a word. Listen for the final consonant."
+        },
+        "contrastPairs": {
+          "before": null,
+          "after": [
+            [
+              "cap",
+              "cat"
+            ],
+            [
+              "hop",
+              "hot"
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "phonics-l11",
+      "category": "phonics",
+      "level": 11,
+      "title": "L-blends at the beginning",
+      "decision": "revised",
+      "changedFields": {
+        "sound": {
+          "before": "/bl/, /cl/, /fl/, /gl/, /pl/, /sl/",
+          "after": "/bl/, /kl/, /fl/, /gl/, /pl/, /sl/"
+        },
+        "audioFocus": {
+          "before": null,
+          "after": "Listen to both consonants at the start of blue."
+        },
+        "contrastPairs": {
+          "before": null,
+          "after": [
+            [
+              "play",
+              "pray"
+            ],
+            [
+              "glass",
+              "grass"
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "phonics-l12",
+      "category": "phonics",
+      "level": 12,
+      "title": "R-blends at the beginning",
+      "decision": "revised",
+      "changedFields": {
+        "sound": {
+          "before": "/br/, /cr/, /dr/, /fr/, /gr/, /pr/, /tr/",
+          "after": "/br/, /kr/, /dr/, /fr/, /gr/, /pr/, /tr/"
+        },
+        "audioFocus": {
+          "before": null,
+          "after": "Listen to both consonants at the start of brown."
+        },
+        "contrastPairs": {
+          "before": null,
+          "after": [
+            [
+              "grass",
+              "glass"
+            ],
+            [
+              "fry",
+              "fly"
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "phonics-l13",
+      "category": "phonics",
+      "level": 13,
+      "title": "S-blends and three-consonant starts",
+      "decision": "revised",
+      "changedFields": {
+        "audioFocus": {
+          "before": null,
+          "after": "Keep the first consonants together. Listen to spin and street."
+        },
+        "contrastPairs": {
+          "before": null,
+          "after": [
+            [
+              "spin",
+              "pin"
+            ],
+            [
+              "stop",
+              "top"
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "phonics-l14",
+      "category": "phonics",
+      "level": 14,
+      "title": "Digraphs sh and ch",
+      "decision": "revised",
+      "changedFields": {
+        "audioFocus": {
+          "before": null,
+          "after": "Listen to ship and chip. The start of chip has a short stop."
+        },
+        "contrastPairs": {
+          "before": null,
+          "after": [
+            [
+              "ship",
+              "chip"
+            ],
+            [
+              "wash",
+              "watch"
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "phonics-l15",
+      "category": "phonics",
+      "level": 15,
+      "title": "Voiceless and voiced th",
+      "decision": "revised",
+      "changedFields": {
+        "practiceSentence": {
+          "before": "Those three paths are narrow.",
+          "after": "Those three things are over there."
+        },
+        "audioFocus": {
+          "before": null,
+          "after": "Listen to think and this. Your voice starts in this."
+        },
+        "contrastPairs": {
+          "before": null,
+          "after": [
+            [
+              "thin",
+              "sin"
+            ],
+            [
+              "then",
+              "den"
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "phonics-l16",
+      "category": "phonics",
+      "level": 16,
+      "title": "Digraphs wh, ph, and ng",
+      "decision": "revised",
+      "changedFields": {
+        "audioFocus": {
+          "before": null,
+          "after": "Listen to when, phone, and sing. Keep the end of sing smooth."
+        },
+        "contrastPairs": {
+          "before": null,
+          "after": [
+            [
+              "sin",
+              "sing"
+            ],
+            [
+              "win",
+              "wing"
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "phonics-l17",
+      "category": "phonics",
+      "level": 17,
+      "title": "Silent e makes long a",
+      "decision": "revised",
+      "changedFields": {
+        "japaneseHint": {
+          "before": "最後のeは読まず、その前のaを文字名の/eɪ/に変えます。",
+          "after": "最後のeは読まず、その前のaを文字名の/eɪ/に変えます。 ここでの語に共通するパターンです。have・give・loveのような例外もあります。"
+        },
+        "audioFocus": {
+          "before": null,
+          "after": "Listen to cap, then cape. The vowel changes."
+        },
+        "contrastPairs": {
+          "before": null,
+          "after": [
+            [
+              "cap",
+              "cape"
+            ],
+            [
+              "mad",
+              "made"
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "phonics-l18",
+      "category": "phonics",
+      "level": 18,
+      "title": "Silent e makes long i",
+      "decision": "revised",
+      "changedFields": {
+        "japaneseHint": {
+          "before": "最後のeは無音で、iは/aɪ/になります。短いiのsitと比べます。",
+          "after": "最後のeは無音で、iは/aɪ/になります。短いiのsitと比べます。 ここでの語に共通するパターンです。have・give・loveのような例外もあります。"
+        },
+        "audioFocus": {
+          "before": null,
+          "after": "Listen to bit, then bite. The vowel changes."
+        },
+        "contrastPairs": {
+          "before": null,
+          "after": [
+            [
+              "bit",
+              "bite"
+            ],
+            [
+              "kit",
+              "kite"
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "phonics-l19",
+      "category": "phonics",
+      "level": 19,
+      "title": "Silent e makes long o",
+      "decision": "revised",
+      "changedFields": {
+        "sound": {
+          "before": "/oʊ/ in o_e",
+          "after": "/oʊ/ (US), /əʊ/ (UK) in o_e"
+        },
+        "japaneseHint": {
+          "before": "最後のeは読まず、oを滑らかな/oʊ/にします。hopとhopeを聞き分けます。",
+          "after": "最後のeは読まず、oを滑らかな/oʊ/にします。hopとhopeを聞き分けます。 ここでの語に共通するパターンです。have・give・loveのような例外もあります。"
+        },
+        "practiceWords": {
+          "before": [
+            "hope",
+            "rope",
+            "close",
+            "phone"
+          ],
+          "after": [
+            "hope",
+            "rope",
+            "bone",
+            "phone"
+          ]
+        },
+        "audioFocus": {
+          "before": null,
+          "after": "Listen to hop, then hope. The vowel changes."
+        },
+        "contrastPairs": {
+          "before": null,
+          "after": [
+            [
+              "hop",
+              "hope"
+            ],
+            [
+              "not",
+              "note"
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "phonics-l20",
+      "category": "phonics",
+      "level": 20,
+      "title": "Silent e patterns with u and e",
+      "decision": "revised",
+      "changedFields": {
+        "japaneseHint": {
+          "before": "u_eは/juː/または/uː/、e_eは/iː/になります。最後のeは発音しません。",
+          "after": "u_eは/juː/または/uː/、e_eは/iː/になります。最後のeは発音しません。 ここでの語に共通するパターンです。have・give・loveのような例外もあります。"
+        },
+        "practiceSentence": {
+          "before": "June chose a cute theme for the flute show.",
+          "after": "June chose these cute cubes."
+        },
+        "audioFocus": {
+          "before": null,
+          "after": "Listen to cub and cube. Then listen to these."
+        },
+        "contrastPairs": {
+          "before": null,
+          "after": [
+            [
+              "cub",
+              "cube"
+            ],
+            [
+              "cut",
+              "cute"
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "phonics-l21",
+      "category": "phonics",
+      "level": 21,
+      "title": "Long a vowel teams ai and ay",
+      "decision": "revised",
+      "changedFields": {
+        "audioFocus": {
+          "before": null,
+          "after": "Listen to the same vowel in rain and day."
+        },
+        "contrastPairs": {
+          "before": null,
+          "after": [
+            [
+              "paid",
+              "pad"
+            ],
+            [
+              "day",
+              "die"
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "phonics-l22",
+      "category": "phonics",
+      "level": 22,
+      "title": "Long e vowel teams ee and ea",
+      "decision": "revised",
+      "changedFields": {
+        "examples": {
+          "before": [
+            "green",
+            "sleep",
+            "read",
+            "team"
+          ],
+          "after": [
+            "green",
+            "sleep",
+            "leaf",
+            "team"
+          ]
+        },
+        "audioFocus": {
+          "before": null,
+          "after": "Listen to the long vowel in green and leaf."
+        },
+        "contrastPairs": {
+          "before": null,
+          "after": [
+            [
+              "ship",
+              "sheep"
+            ],
+            [
+              "fit",
+              "feet"
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "phonics-l23",
+      "category": "phonics",
+      "level": 23,
+      "title": "Long o vowel teams oa and ow",
+      "decision": "revised",
+      "changedFields": {
+        "sound": {
+          "before": "/oʊ/",
+          "after": "/oʊ/ (US), /əʊ/ (UK)"
+        },
+        "practiceSentence": {
+          "before": "The yellow boat moves slowly down the road.",
+          "after": "The boat moves slowly past the yellow house."
+        },
+        "audioFocus": {
+          "before": null,
+          "after": "Listen to the same vowel in boat and snow."
+        },
+        "contrastPairs": {
+          "before": null,
+          "after": [
+            [
+              "coat",
+              "cot"
+            ],
+            [
+              "low",
+              "law"
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "phonics-l24",
+      "category": "phonics",
+      "level": 24,
+      "title": "Two common sounds of oo",
+      "decision": "revised",
+      "changedFields": {
+        "practiceWords": {
+          "before": [
+            "room",
+            "spoon",
+            "cook",
+            "foot"
+          ],
+          "after": [
+            "pool",
+            "spoon",
+            "cook",
+            "foot"
+          ]
+        },
+        "practiceSentence": {
+          "before": "The cook put good food in the cool room.",
+          "after": "The cook put good food by the cool pool."
+        },
+        "audioFocus": {
+          "before": null,
+          "after": "Listen to fool and full. Compare the two vowels."
+        },
+        "contrastPairs": {
+          "before": null,
+          "after": [
+            [
+              "fool",
+              "full"
+            ],
+            [
+              "pool",
+              "pull"
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "phonics-l25",
+      "category": "phonics",
+      "level": 25,
+      "title": "R-controlled vowels ar and or",
+      "decision": "revised",
+      "changedFields": {
+        "audioFocus": {
+          "before": null,
+          "after": "Listen to car and core. Notice how each accent treats the ending."
+        },
+        "contrastPairs": {
+          "before": null,
+          "after": [
+            [
+              "car",
+              "core"
+            ],
+            [
+              "park",
+              "pork"
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "phonics-l26",
+      "category": "phonics",
+      "level": 26,
+      "title": "R-controlled spellings er, ir, and ur",
+      "decision": "revised",
+      "changedFields": {
+        "audioFocus": {
+          "before": null,
+          "after": "Listen to the vowel in her, bird, and turn."
+        },
+        "contrastPairs": {
+          "before": null,
+          "after": [
+            [
+              "bird",
+              "beard"
+            ],
+            [
+              "fur",
+              "far"
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "phonics-l27",
+      "category": "phonics",
+      "level": 27,
+      "title": "Diphthong oi and oy",
+      "decision": "revised",
+      "changedFields": {
+        "audioFocus": {
+          "before": null,
+          "after": "Listen to the moving vowel in coin and boy."
+        },
+        "contrastPairs": {
+          "before": null,
+          "after": [
+            [
+              "toy",
+              "tie"
+            ],
+            [
+              "coin",
+              "cane"
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "phonics-l28",
+      "category": "phonics",
+      "level": 28,
+      "title": "Diphthong ou and ow",
+      "decision": "revised",
+      "changedFields": {
+        "audioFocus": {
+          "before": null,
+          "after": "Listen to the moving vowel in house and cow."
+        },
+        "contrastPairs": {
+          "before": null,
+          "after": [
+            [
+              "loud",
+              "load"
+            ],
+            [
+              "now",
+              "know"
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "phonics-l29",
+      "category": "phonics",
+      "level": 29,
+      "title": "Common spelling choices: c, k, ck, soft c, soft g, and dge",
+      "decision": "revised",
+      "changedFields": {
+        "audioFocus": {
+          "before": null,
+          "after": "Listen to the sounds in cat, city, giant, and bridge."
+        },
+        "contrastPairs": {
+          "before": null,
+          "after": [
+            [
+              "coat",
+              "goat"
+            ],
+            [
+              "badge",
+              "batch"
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "phonics-l30",
+      "category": "phonics",
+      "level": 30,
+      "title": "Pronouncing plural -s and past -ed endings",
+      "decision": "revised",
+      "changedFields": {
+        "audioFocus": {
+          "before": null,
+          "after": "Listen to the endings. Some add a beat, and some do not."
+        },
+        "contrastPairs": {
+          "before": null,
+          "after": [
+            [
+              "pack",
+              "packed"
+            ],
+            [
+              "need",
+              "needed"
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "phonics-l31",
+      "category": "phonics",
+      "level": 31,
+      "title": "Word stress, schwa, and r-colored weak vowels",
+      "decision": "revised",
+      "changedFields": {
+        "audioFocus": {
+          "before": null,
+          "after": "Listen for the strong beat. Keep the other syllables light."
+        },
+        "contrastPairs": {
+          "before": null,
+          "after": [
+            [
+              "a present",
+              "I present my work."
+            ],
+            [
+              "a record",
+              "I record my voice."
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "phonics-l32",
+      "category": "phonics",
+      "level": 32,
+      "title": "Sentence rhythm, linking, and reduced function words",
+      "decision": "revised",
+      "changedFields": {
+        "audioFocus": {
+          "before": null,
+          "after": "Listen for the main beats. Connect the words smoothly."
+        },
+        "contrastPairs": {
+          "before": null,
+          "after": [
+            [
+              "Turn it on.",
+              "Turn it off."
+            ],
+            [
+              "Meet at eight.",
+              "Meet at nine."
+            ]
+          ]
+        }
+      }
+    }
+  ]
+}

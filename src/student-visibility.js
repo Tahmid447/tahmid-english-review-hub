@@ -2,10 +2,12 @@ import {
   DEFAULT_HUB_SETTINGS,
   fetchStudentAnnouncements,
   fetchStudentHubContext,
-} from "./curriculum-api.js?v=20260905-hub1";
-import { getStudentSession } from "./supabase.js?v=20260905-release5";
+} from "./curriculum-api.js?v=20260906-studio1";
+import { getStudentSession } from "./supabase.js?v=20260906-studio1";
 
 let accessPromise;
+let accessIdentity;
+let accessLoadedAt = 0;
 
 const recordFrom = (result, key) => (
   result?.[key]
@@ -19,10 +21,22 @@ const normalizedSettings = (value) => ({
 });
 
 export async function loadStudentAccess({ refresh = false } = {}) {
-  if (refresh) accessPromise = undefined;
+  let currentSession;
+  try { currentSession = await getStudentSession(); } catch (error) {
+    accessPromise = undefined;
+    return {
+      authenticated: true, session: null,
+      settings: normalizedSettings({ account_enabled: false }),
+      reason: "access-check-failed", error,
+    };
+  }
+  const identity = currentSession?.user?.id || "anonymous";
+  if (refresh || identity !== accessIdentity || Date.now() - accessLoadedAt > 30000) accessPromise = undefined;
+  accessIdentity = identity;
   if (!accessPromise) {
     accessPromise = (async () => {
-      const session = await getStudentSession();
+      const session = currentSession;
+      accessLoadedAt = Date.now();
       if (!session?.user) {
         return {
           authenticated: false,
@@ -33,7 +47,7 @@ export async function loadStudentAccess({ refresh = false } = {}) {
       }
       try {
         const result = await fetchStudentHubContext();
-        if (result?.error || (result?.reason && result.reason !== "migration-unavailable")) {
+        if (result?.error || result?.reason || !recordFrom(result, "settings") || result?.data?.migrationReady !== true) {
           throw result.error || new Error(`Student access check failed: ${result.reason}`);
         }
         return {

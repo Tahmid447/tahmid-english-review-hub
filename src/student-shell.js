@@ -3,7 +3,7 @@ import {
   enforceStudentFeature,
   loadStudentAccess,
   renderStudentAccessBoundary,
-} from "./student-visibility.js?v=20260905-hub1";
+} from "./student-visibility.js?v=20260906-studio1";
 
 async function initialiseStudentShell() {
   const selector = document.body.dataset.studentShellMain || "main";

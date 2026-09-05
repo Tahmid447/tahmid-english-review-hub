@@ -1,0 +1,1330 @@
+{
+  "checkedAt": "2026-09-05T15:12:43.090Z",
+  "endpoint": "https://ycmybggetemkhorkhfnf.supabase.co/functions/v1/natural-speech",
+  "profile": "natural-v2",
+  "static": {
+    "itemCount": 480,
+    "payloadCount": 2112,
+    "phonicsLevels": 32
+  },
+  "live": {
+    "responses": 54,
+    "listeningCompleted": false,
+    "note": "API headers and MP3 bytes validate voice selection and delivery. All 54 saved production MP3 samples were then played sequentially to their ended event in the Codex in-app browser. Perceptual listening judgments about speaker identity, naturalness and pronunciation were not made.",
+    "rejectionChecks": [
+      {
+        "name": "unsupported-accent",
+        "expectedStatus": 400,
+        "actualStatus": 400
+      },
+      {
+        "name": "mismatched-voice",
+        "expectedStatus": 409,
+        "actualStatus": 409
+      },
+      {
+        "name": "mismatched-profile",
+        "expectedStatus": 409,
+        "actualStatus": 409
+      },
+      {
+        "name": "empty-text",
+        "expectedStatus": 400,
+        "actualStatus": 400
+      }
+    ],
+    "rejectionCheckedAt": "2026-09-05T15:15:49.601Z",
+    "browserPlaybackCompleted": true
+  },
+  "phonicsPayloads": [
+    {
+      "level": 1,
+      "id": "phonics-l01",
+      "text": "Listen for the first sounds in moon, sun, top, and pen. moon. sun. top. pen. Listen and compare. top. pop. map. sap. Now try the sentence. Sam taps the map.",
+      "sampleCount": 5
+    },
+    {
+      "level": 2,
+      "id": "phonics-l02",
+      "text": "Listen for the first sounds in net, bag, dog, and gum. net. bag. dog. gum. Listen and compare. net. bet. bag. nag. Now try the sentence. Ben digs by the big bed.",
+      "sampleCount": 5
+    },
+    {
+      "level": 3,
+      "id": "phonics-l03",
+      "text": "Listen to fan and van. Feel your voice start in van. fan. van. hat. wet. Listen and compare. fan. van. wet. vet. Now try the sentence. We have five hats.",
+      "sampleCount": 5
+    },
+    {
+      "level": 4,
+      "id": "phonics-l04",
+      "text": "Listen to light and right. Then try the other first and last sounds. light. right. cat. kite. Listen and compare. light. right. zip. sip. Now try the sentence. Look right at the red fox.",
+      "sampleCount": 5
+    },
+    {
+      "level": 5,
+      "id": "phonics-l05",
+      "text": "Listen to the short vowel in cat. cat. map. hand. bag. Listen and compare. cat. cut. cap. cup. Now try the sentence. A black cat sat on the mat.",
+      "sampleCount": 5
+    },
+    {
+      "level": 6,
+      "id": "phonics-l06",
+      "text": "Listen to the short vowel in sit. sit. fish. milk. ring. Listen and compare. ship. sheep. sit. seat. Now try the sentence. Six fish swim in the river.",
+      "sampleCount": 5
+    },
+    {
+      "level": 7,
+      "id": "phonics-l07",
+      "text": "Listen to the vowel in hot. Notice how each accent sounds. hot. box. clock. stop. Listen and compare. hot. hut. cot. cut. Now try the sentence. Tom drops the box by the clock.",
+      "sampleCount": 5
+    },
+    {
+      "level": 8,
+      "id": "phonics-l08",
+      "text": "Listen to the short vowel in bed. bed. pen. head. step. Listen and compare. pen. pin. bed. bad. Now try the sentence. Meg left her red pen on the desk.",
+      "sampleCount": 5
+    },
+    {
+      "level": 9,
+      "id": "phonics-l09",
+      "text": "Listen to the short vowel in sun. sun. cup. bus. lunch. Listen and compare. cup. cap. luck. lock. Now try the sentence. The duck runs under the bus.",
+      "sampleCount": 5
+    },
+    {
+      "level": 10,
+      "id": "phonics-l10",
+      "text": "Join the sounds into a word. Listen for the final consonant. map. sit. bed. hot. Listen and compare. cap. cat. hop. hot. Now try the sentence. Kim can hop and run.",
+      "sampleCount": 5
+    },
+    {
+      "level": 11,
+      "id": "phonics-l11",
+      "text": "Listen to both consonants at the start of blue. blue. clap. flag. glad. Listen and compare. play. pray. glass. grass. Now try the sentence. The blue flag flies above the plane.",
+      "sampleCount": 5
+    },
+    {
+      "level": 12,
+      "id": "phonics-l12",
+      "text": "Listen to both consonants at the start of brown. brown. crab. dress. frog. Listen and compare. grass. glass. fry. fly. Now try the sentence. A green frog rests by the tree.",
+      "sampleCount": 5
+    },
+    {
+      "level": 13,
+      "id": "phonics-l13",
+      "text": "Keep the first consonants together. Listen to spin and street. spin. stop. skin. smile. Listen and compare. spin. pin. stop. top. Now try the sentence. The strong swimmer starts slowly.",
+      "sampleCount": 5
+    },
+    {
+      "level": 14,
+      "id": "phonics-l14",
+      "text": "Listen to ship and chip. The start of chip has a short stop. ship. fish. chair. lunch. Listen and compare. ship. chip. wash. watch. Now try the sentence. She chose fresh fish for lunch.",
+      "sampleCount": 5
+    },
+    {
+      "level": 15,
+      "id": "phonics-l15",
+      "text": "Listen to think and this. Your voice starts in this. think. bath. this. mother. Listen and compare. thin. sin. then. den. Now try the sentence. Those three things are over there.",
+      "sampleCount": 5
+    },
+    {
+      "level": 16,
+      "id": "phonics-l16",
+      "text": "Listen to when, phone, and sing. Keep the end of sing smooth. when. phone. sing. Listen and compare. sin. sing. win. wing. Now try the sentence. When will Phil sing that long song?",
+      "sampleCount": 5
+    },
+    {
+      "level": 17,
+      "id": "phonics-l17",
+      "text": "Listen to cap, then cape. The vowel changes. cake. name. late. game. Listen and compare. cap. cape. mad. made. Now try the sentence. Jake made a cake by the lake.",
+      "sampleCount": 5
+    },
+    {
+      "level": 18,
+      "id": "phonics-l18",
+      "text": "Listen to bit, then bite. The vowel changes. bike. time. five. smile. Listen and compare. bit. bite. kit. kite. Now try the sentence. Mike rides his bike at five.",
+      "sampleCount": 5
+    },
+    {
+      "level": 19,
+      "id": "phonics-l19",
+      "text": "Listen to hop, then hope. The vowel changes. home. note. rose. stone. Listen and compare. hop. hope. not. note. Now try the sentence. Rose wrote a note at home.",
+      "sampleCount": 5
+    },
+    {
+      "level": 20,
+      "id": "phonics-l20",
+      "text": "Listen to cub and cube. Then listen to these. cube. June. rule. theme. Listen and compare. cub. cube. cut. cute. Now try the sentence. June chose these cute cubes.",
+      "sampleCount": 5
+    },
+    {
+      "level": 21,
+      "id": "phonics-l21",
+      "text": "Listen to the same vowel in rain and day. rain. train. day. play. Listen and compare. paid. pad. day. die. Now try the sentence. We may take the train on a rainy day.",
+      "sampleCount": 5
+    },
+    {
+      "level": 22,
+      "id": "phonics-l22",
+      "text": "Listen to the long vowel in green and leaf. green. sleep. leaf. team. Listen and compare. ship. sheep. fit. feet. Now try the sentence. The team reads beneath the green tree.",
+      "sampleCount": 5
+    },
+    {
+      "level": 23,
+      "id": "phonics-l23",
+      "text": "Listen to the same vowel in boat and snow. boat. road. snow. window. Listen and compare. coat. cot. low. law. Now try the sentence. The boat moves slowly past the yellow house.",
+      "sampleCount": 5
+    },
+    {
+      "level": 24,
+      "id": "phonics-l24",
+      "text": "Listen to fool and full. Compare the two vowels. moon. food. book. good. Listen and compare. fool. full. pool. pull. Now try the sentence. The cook put good food by the cool pool.",
+      "sampleCount": 5
+    },
+    {
+      "level": 25,
+      "id": "phonics-l25",
+      "text": "Listen to car and core. Notice how each accent treats the ending. car. star. fork. short. Listen and compare. car. core. park. pork. Now try the sentence. A short storm passed over the farm.",
+      "sampleCount": 5
+    },
+    {
+      "level": 26,
+      "id": "phonics-l26",
+      "text": "Listen to the vowel in her, bird, and turn. her. bird. turn. first. Listen and compare. bird. beard. fur. far. Now try the sentence. The first bird returned on Thursday.",
+      "sampleCount": 5
+    },
+    {
+      "level": 27,
+      "id": "phonics-l27",
+      "text": "Listen to the moving vowel in coin and boy. coin. voice. boy. enjoy. Listen and compare. toy. tie. coin. cane. Now try the sentence. The boy enjoyed choosing a shiny coin.",
+      "sampleCount": 5
+    },
+    {
+      "level": 28,
+      "id": "phonics-l28",
+      "text": "Listen to the moving vowel in house and cow. house. cloud. cow. town. Listen and compare. loud. load. now. know. Now try the sentence. A brown cow walked around the town.",
+      "sampleCount": 5
+    },
+    {
+      "level": 29,
+      "id": "phonics-l29",
+      "text": "Listen to the sounds in cat, city, giant, and bridge. cat. kite. back. city. Listen and compare. coat. goat. badge. batch. Now try the sentence. The giant placed a badge beside the city clock.",
+      "sampleCount": 5
+    },
+    {
+      "level": 30,
+      "id": "phonics-l30",
+      "text": "Listen to the endings. Some add a beat, and some do not. cats. dogs. buses. washed. Listen and compare. pack. packed. need. needed. Now try the sentence. She washed the cups, cleaned the trays, and packed the boxes.",
+      "sampleCount": 5
+    },
+    {
+      "level": 31,
+      "id": "phonics-l31",
+      "text": "Listen for the strong beat. Keep the other syllables light. about. banana. support. teacher. Listen and compare. a present. I present my work. a record. I record my voice. Now try the sentence. A computer can support a family project.",
+      "sampleCount": 5
+    },
+    {
+      "level": 32,
+      "id": "phonics-l32",
+      "text": "Listen for the main beats. Connect the words smoothly. pick it up. want to go. a cup of tea. meet you at eight. Listen and compare. Turn it on. Turn it off. Meet at eight. Meet at nine. Now try the sentence. Could you send it over when you arrive?",
+      "sampleCount": 5
+    }
+  ],
+  "rows": [
+    {
+      "category": "words",
+      "level": 1,
+      "id": "word-l01-book",
+      "sample": "required",
+      "text": "book",
+      "accent": "us",
+      "filename": "word-l01-book-us.mp3",
+      "bytes": 4608,
+      "sha256": "8e269eff0b3da7d72985906881f1c2032a76e195ba004bb90e2bd2cf90a6d123",
+      "voiceId": "en-US-AvaMultilingualNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 0.768,
+        "finalCurrentTimeSeconds": 0.768,
+        "error": null
+      }
+    },
+    {
+      "category": "words",
+      "level": 1,
+      "id": "word-l01-book",
+      "sample": "required",
+      "text": "book",
+      "accent": "gb",
+      "filename": "word-l01-book-gb.mp3",
+      "bytes": 8928,
+      "sha256": "4848c46bc21af84cd9375396ac643cdf62efdbdfd8b264c5db6dd63e3e227a9b",
+      "voiceId": "en-GB-LibbyNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 1.488,
+        "finalCurrentTimeSeconds": 1.488,
+        "error": null
+      }
+    },
+    {
+      "category": "words",
+      "level": 8,
+      "id": "word-l08-run",
+      "sample": "required",
+      "text": "run",
+      "accent": "us",
+      "filename": "word-l08-run-us.mp3",
+      "bytes": 5616,
+      "sha256": "400c12f01748f9c867ee74cad65d3df67329850d17aa0d65cdbf1ffc49f505e8",
+      "voiceId": "en-US-AvaMultilingualNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 0.936,
+        "finalCurrentTimeSeconds": 0.936,
+        "error": null
+      }
+    },
+    {
+      "category": "words",
+      "level": 8,
+      "id": "word-l08-run",
+      "sample": "required",
+      "text": "run",
+      "accent": "gb",
+      "filename": "word-l08-run-gb.mp3",
+      "bytes": 9072,
+      "sha256": "377a4c31eb3087e7cf1b979d19461a0a67a8bf941e3567542d185329f18ea509",
+      "voiceId": "en-GB-LibbyNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 1.512,
+        "finalCurrentTimeSeconds": 1.512,
+        "error": null
+      }
+    },
+    {
+      "category": "words",
+      "level": 16,
+      "id": "word-l16-ask",
+      "sample": "required",
+      "text": "ask",
+      "accent": "us",
+      "filename": "word-l16-ask-us.mp3",
+      "bytes": 6048,
+      "sha256": "4696badd846ab047ea3084e5fc0d0d3a5833e43516d95d9049ea0eff065ab7c0",
+      "voiceId": "en-US-AvaMultilingualNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 1.008,
+        "finalCurrentTimeSeconds": 1.008,
+        "error": null
+      }
+    },
+    {
+      "category": "words",
+      "level": 16,
+      "id": "word-l16-ask",
+      "sample": "required",
+      "text": "ask",
+      "accent": "gb",
+      "filename": "word-l16-ask-gb.mp3",
+      "bytes": 9792,
+      "sha256": "12fbd5dc7164bbd34d681bb74d8f1628cc77874e2a22f8109625f14b84eb2260",
+      "voiceId": "en-GB-LibbyNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 1.632,
+        "finalCurrentTimeSeconds": 1.632,
+        "error": null
+      }
+    },
+    {
+      "category": "words",
+      "level": 24,
+      "id": "word-l24-device",
+      "sample": "required",
+      "text": "device",
+      "accent": "us",
+      "filename": "word-l24-device-us.mp3",
+      "bytes": 6912,
+      "sha256": "a8238c697d6bc415399ba5322758b2fb62c2e593a8a9aca5754049d6942104d1",
+      "voiceId": "en-US-AvaMultilingualNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 1.152,
+        "finalCurrentTimeSeconds": 1.152,
+        "error": null
+      }
+    },
+    {
+      "category": "words",
+      "level": 24,
+      "id": "word-l24-device",
+      "sample": "required",
+      "text": "device",
+      "accent": "gb",
+      "filename": "word-l24-device-gb.mp3",
+      "bytes": 10368,
+      "sha256": "d74ffd92dfee4f03f1af341c0a9c32be0a9ec2310773f1adba2a9d9d886e9c7b",
+      "voiceId": "en-GB-LibbyNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 1.728,
+        "finalCurrentTimeSeconds": 1.728,
+        "error": null
+      }
+    },
+    {
+      "category": "words",
+      "level": 32,
+      "id": "word-l32-clarify",
+      "sample": "required",
+      "text": "clarify",
+      "accent": "us",
+      "filename": "word-l32-clarify-us.mp3",
+      "bytes": 7056,
+      "sha256": "36231412543d86fa6e4a49f1daa150f7722256d2b3bbdad2dfcd9bca8c049407",
+      "voiceId": "en-US-AvaMultilingualNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 1.176,
+        "finalCurrentTimeSeconds": 1.176,
+        "error": null
+      }
+    },
+    {
+      "category": "words",
+      "level": 32,
+      "id": "word-l32-clarify",
+      "sample": "required",
+      "text": "clarify",
+      "accent": "gb",
+      "filename": "word-l32-clarify-gb.mp3",
+      "bytes": 11520,
+      "sha256": "4269e55fe30e6f2d33b052113c33fd11ad7064b2a83bea1c75f8094de9bc693f",
+      "voiceId": "en-GB-LibbyNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 1.92,
+        "finalCurrentTimeSeconds": 1.92,
+        "error": null
+      }
+    },
+    {
+      "category": "words",
+      "level": 13,
+      "id": "word-l13-coat",
+      "sample": "random",
+      "text": "coat",
+      "accent": "us",
+      "filename": "word-l13-coat-us.mp3",
+      "bytes": 5472,
+      "sha256": "3a8b75923564977bcdca4f86d89b2f757cb8304053a884aa6e414adb18ec3ae2",
+      "voiceId": "en-US-AvaMultilingualNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 0.912,
+        "finalCurrentTimeSeconds": 0.912,
+        "error": null
+      }
+    },
+    {
+      "category": "words",
+      "level": 13,
+      "id": "word-l13-coat",
+      "sample": "random",
+      "text": "coat",
+      "accent": "gb",
+      "filename": "word-l13-coat-gb.mp3",
+      "bytes": 8928,
+      "sha256": "5bf682de98dbfa8362f75f04298ac1dc0124319c00eadd340c26f4e4cf6a05f5",
+      "voiceId": "en-GB-LibbyNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 1.488,
+        "finalCurrentTimeSeconds": 1.488,
+        "error": null
+      }
+    },
+    {
+      "category": "words",
+      "level": 21,
+      "id": "word-l21-advice",
+      "sample": "random",
+      "text": "advice",
+      "accent": "us",
+      "filename": "word-l21-advice-us.mp3",
+      "bytes": 6912,
+      "sha256": "6e9f213e41616cbe4c3af870ccee5f352111ed14c2d7f84d1c39bd13eb730daf",
+      "voiceId": "en-US-AvaMultilingualNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 1.152,
+        "finalCurrentTimeSeconds": 1.152,
+        "error": null
+      }
+    },
+    {
+      "category": "words",
+      "level": 21,
+      "id": "word-l21-advice",
+      "sample": "random",
+      "text": "advice",
+      "accent": "gb",
+      "filename": "word-l21-advice-gb.mp3",
+      "bytes": 10224,
+      "sha256": "c05646eb0a608db5e5cbd6c47934fe1058200221d6173b22c694e5f6279f771a",
+      "voiceId": "en-GB-LibbyNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 1.704,
+        "finalCurrentTimeSeconds": 1.704,
+        "error": null
+      }
+    },
+    {
+      "category": "words",
+      "level": 3,
+      "id": "word-l03-grandmother",
+      "sample": "random",
+      "text": "grandmother",
+      "accent": "us",
+      "filename": "word-l03-grandmother-us.mp3",
+      "bytes": 7200,
+      "sha256": "6b2376b1f42bfd1dede1fffa77b831fd069629398ae46d3a10073b2a78f109ab",
+      "voiceId": "en-US-AvaMultilingualNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 1.2,
+        "finalCurrentTimeSeconds": 1.2,
+        "error": null
+      }
+    },
+    {
+      "category": "words",
+      "level": 3,
+      "id": "word-l03-grandmother",
+      "sample": "random",
+      "text": "grandmother",
+      "accent": "gb",
+      "filename": "word-l03-grandmother-gb.mp3",
+      "bytes": 11520,
+      "sha256": "03dafd20a709ddc4c470e9a0c0c4fcaa49b2325ee84e737df1b2332cdb8b546a",
+      "voiceId": "en-GB-LibbyNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 1.92,
+        "finalCurrentTimeSeconds": 1.92,
+        "error": null
+      }
+    },
+    {
+      "category": "phrases",
+      "level": 1,
+      "id": "phrase-l01-01",
+      "sample": "required",
+      "text": "Hi, I'm Ren.",
+      "accent": "us",
+      "filename": "phrase-l01-01-us.mp3",
+      "bytes": 9936,
+      "sha256": "ff3699692313a4896935a3c88b90764a34c7736afe81873fd4c4ff5a554b7db2",
+      "voiceId": "en-US-AvaMultilingualNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 1.656,
+        "finalCurrentTimeSeconds": 1.656,
+        "error": null
+      }
+    },
+    {
+      "category": "phrases",
+      "level": 1,
+      "id": "phrase-l01-01",
+      "sample": "required",
+      "text": "Hi, I'm Ren.",
+      "accent": "gb",
+      "filename": "phrase-l01-01-gb.mp3",
+      "bytes": 13248,
+      "sha256": "911eb36e052e40c1123f537c47e68bd77469fd746cbe723acb2e1814b17a480b",
+      "voiceId": "en-GB-LibbyNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 2.208,
+        "finalCurrentTimeSeconds": 2.208,
+        "error": null
+      }
+    },
+    {
+      "category": "phrases",
+      "level": 8,
+      "id": "phrase-l08-01",
+      "sample": "required",
+      "text": "How do I get to the station?",
+      "accent": "us",
+      "filename": "phrase-l08-01-us.mp3",
+      "bytes": 10656,
+      "sha256": "ceddec80b7e7d600fa458acc6c13ccecd9b47e18b0906e74af79b770276c447e",
+      "voiceId": "en-US-AvaMultilingualNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 1.776,
+        "finalCurrentTimeSeconds": 1.776,
+        "error": null
+      }
+    },
+    {
+      "category": "phrases",
+      "level": 8,
+      "id": "phrase-l08-01",
+      "sample": "required",
+      "text": "How do I get to the station?",
+      "accent": "gb",
+      "filename": "phrase-l08-01-gb.mp3",
+      "bytes": 15984,
+      "sha256": "313abc3dacb9839e52cd42cb61eec22e6bfcc64e6e5ae135d42b68976bb42e4f",
+      "voiceId": "en-GB-LibbyNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 2.664,
+        "finalCurrentTimeSeconds": 2.664,
+        "error": null
+      }
+    },
+    {
+      "category": "phrases",
+      "level": 16,
+      "id": "phrase-l16-01",
+      "sample": "required",
+      "text": "Something seems to be wrong.",
+      "accent": "us",
+      "filename": "phrase-l16-01-us.mp3",
+      "bytes": 12816,
+      "sha256": "c8e1feaed6a4c11fc01f65ebe4f46b1da8bd1ac2bb366f9325a5295fd78141b1",
+      "voiceId": "en-US-AvaMultilingualNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 2.136,
+        "finalCurrentTimeSeconds": 2.136,
+        "error": null
+      }
+    },
+    {
+      "category": "phrases",
+      "level": 16,
+      "id": "phrase-l16-01",
+      "sample": "required",
+      "text": "Something seems to be wrong.",
+      "accent": "gb",
+      "filename": "phrase-l16-01-gb.mp3",
+      "bytes": 16560,
+      "sha256": "68325505ceb0036838ef9f6d7942fe179f705123f941580fe809bd5fb02e0bf0",
+      "voiceId": "en-GB-LibbyNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 2.76,
+        "finalCurrentTimeSeconds": 2.76,
+        "error": null
+      }
+    },
+    {
+      "category": "phrases",
+      "level": 24,
+      "id": "phrase-l24-01",
+      "sample": "required",
+      "text": "I'm working on being more consistent.",
+      "accent": "us",
+      "filename": "phrase-l24-01-us.mp3",
+      "bytes": 13248,
+      "sha256": "148524f7f92ada81e9ea7f21c060720a51c4fd143837229258c37170dd8f5be1",
+      "voiceId": "en-US-AvaMultilingualNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 2.208,
+        "finalCurrentTimeSeconds": 2.208,
+        "error": null
+      }
+    },
+    {
+      "category": "phrases",
+      "level": 24,
+      "id": "phrase-l24-01",
+      "sample": "required",
+      "text": "I'm working on being more consistent.",
+      "accent": "gb",
+      "filename": "phrase-l24-01-gb.mp3",
+      "bytes": 19728,
+      "sha256": "4f57b8d6c62ead7e1d02d0e38d23b8d5462d41aba64a9142fca3de8eb73f3dc4",
+      "voiceId": "en-GB-LibbyNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 3.288,
+        "finalCurrentTimeSeconds": 3.288,
+        "error": null
+      }
+    },
+    {
+      "category": "phrases",
+      "level": 32,
+      "id": "phrase-l32-01",
+      "sample": "required",
+      "text": "To put it another way, we're treating the symptom, not the cause.",
+      "accent": "us",
+      "filename": "phrase-l32-01-us.mp3",
+      "bytes": 23904,
+      "sha256": "1d0c27c03b88a410b7dce6722e0b0f03e198bbe9c7fe8976b844845a33995486",
+      "voiceId": "en-US-AvaMultilingualNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 3.984,
+        "finalCurrentTimeSeconds": 3.984,
+        "error": null
+      }
+    },
+    {
+      "category": "phrases",
+      "level": 32,
+      "id": "phrase-l32-01",
+      "sample": "required",
+      "text": "To put it another way, we're treating the symptom, not the cause.",
+      "accent": "gb",
+      "filename": "phrase-l32-01-gb.mp3",
+      "bytes": 28656,
+      "sha256": "b1793a6ab18669f1f9c841207bf5468c15b763cda477d5c054ad39ab9d0677a5",
+      "voiceId": "en-GB-LibbyNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 4.776,
+        "finalCurrentTimeSeconds": 4.776,
+        "error": null
+      }
+    },
+    {
+      "category": "phrases",
+      "level": 23,
+      "id": "phrase-l23-01",
+      "sample": "random",
+      "text": "You won't believe what happened next.",
+      "accent": "us",
+      "filename": "phrase-l23-01-us.mp3",
+      "bytes": 13536,
+      "sha256": "c70ff99db1bc50f8246073fe7f2d9ee360ad463697a82f761674269ed51d99bf",
+      "voiceId": "en-US-AvaMultilingualNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 2.256,
+        "finalCurrentTimeSeconds": 2.256,
+        "error": null
+      }
+    },
+    {
+      "category": "phrases",
+      "level": 23,
+      "id": "phrase-l23-01",
+      "sample": "random",
+      "text": "You won't believe what happened next.",
+      "accent": "gb",
+      "filename": "phrase-l23-01-gb.mp3",
+      "bytes": 18720,
+      "sha256": "e1dddf8b91670eec541d7279dd871fad07600caf36b63a094dce60656ce18caa",
+      "voiceId": "en-GB-LibbyNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 3.12,
+        "finalCurrentTimeSeconds": 3.12,
+        "error": null
+      }
+    },
+    {
+      "category": "phrases",
+      "level": 25,
+      "id": "phrase-l25-01",
+      "sample": "random",
+      "text": "I understand your point, but I see it differently.",
+      "accent": "us",
+      "filename": "phrase-l25-01-us.mp3",
+      "bytes": 19728,
+      "sha256": "97f3ab99355fba9b153a1ca7535bd43faaaed449dfbb26bb5507bb457ddac66f",
+      "voiceId": "en-US-AvaMultilingualNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 3.288,
+        "finalCurrentTimeSeconds": 3.288,
+        "error": null
+      }
+    },
+    {
+      "category": "phrases",
+      "level": 25,
+      "id": "phrase-l25-01",
+      "sample": "random",
+      "text": "I understand your point, but I see it differently.",
+      "accent": "gb",
+      "filename": "phrase-l25-01-gb.mp3",
+      "bytes": 24912,
+      "sha256": "c9828d37f032114059dd6db8f4af845e700bf807e6c3a9db4a81f12143fe0a60",
+      "voiceId": "en-GB-LibbyNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 4.152,
+        "finalCurrentTimeSeconds": 4.152,
+        "error": null
+      }
+    },
+    {
+      "category": "phrases",
+      "level": 2,
+      "id": "phrase-l02-02",
+      "sample": "random",
+      "text": "Please help me.",
+      "accent": "us",
+      "filename": "phrase-l02-02-us.mp3",
+      "bytes": 7776,
+      "sha256": "36ef7e8a06c758f1d61734fdd4d9e44edaad68c2d7316ff251ac75b40b96dcbe",
+      "voiceId": "en-US-AvaMultilingualNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 1.296,
+        "finalCurrentTimeSeconds": 1.296,
+        "error": null
+      }
+    },
+    {
+      "category": "phrases",
+      "level": 2,
+      "id": "phrase-l02-02",
+      "sample": "random",
+      "text": "Please help me.",
+      "accent": "gb",
+      "filename": "phrase-l02-02-gb.mp3",
+      "bytes": 12096,
+      "sha256": "323d676bd94db82a21a681dc6df4dfb40e28bda7c5c32025b42f88b9df628b2a",
+      "voiceId": "en-GB-LibbyNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 2.016,
+        "finalCurrentTimeSeconds": 2.016,
+        "error": null
+      }
+    },
+    {
+      "category": "phonics",
+      "level": 1,
+      "id": "phonics-l01",
+      "sample": "required",
+      "text": "Listen for the first sounds in moon, sun, top, and pen. moon. sun. top. pen. Listen and compare. top. pop. map. sap. Now try the sentence. Sam taps the map.",
+      "accent": "us",
+      "filename": "phonics-l01-us.mp3",
+      "bytes": 100944,
+      "sha256": "4b8d9c4f8ab61dba12788a0dc6782637167ffd63ce7bee278a5cd6b4842bfedc",
+      "voiceId": "en-US-AvaMultilingualNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 16.824,
+        "finalCurrentTimeSeconds": 16.824,
+        "error": null
+      }
+    },
+    {
+      "category": "phonics",
+      "level": 1,
+      "id": "phonics-l01",
+      "sample": "required",
+      "text": "Listen for the first sounds in moon, sun, top, and pen. moon. sun. top. pen. Listen and compare. top. pop. map. sap. Now try the sentence. Sam taps the map.",
+      "accent": "gb",
+      "filename": "phonics-l01-gb.mp3",
+      "bytes": 138528,
+      "sha256": "c61f92ca294ef7b4f2c0844173d0236da98688cd04f98d4ec47b67d234416058",
+      "voiceId": "en-GB-LibbyNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 23.088,
+        "finalCurrentTimeSeconds": 23.088,
+        "error": null
+      }
+    },
+    {
+      "category": "phonics",
+      "level": 8,
+      "id": "phonics-l08",
+      "sample": "required",
+      "text": "Listen to the short vowel in bed. bed. pen. head. step. Listen and compare. pen. pin. bed. bad. Now try the sentence. Meg left her red pen on the desk.",
+      "accent": "us",
+      "filename": "phonics-l08-us.mp3",
+      "bytes": 92160,
+      "sha256": "33197edf7c5c40a16ec13a9aaf83aafa959eec1fbcc795d4453a8c146eabff85",
+      "voiceId": "en-US-AvaMultilingualNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 15.36,
+        "finalCurrentTimeSeconds": 15.36,
+        "error": null
+      }
+    },
+    {
+      "category": "phonics",
+      "level": 8,
+      "id": "phonics-l08",
+      "sample": "required",
+      "text": "Listen to the short vowel in bed. bed. pen. head. step. Listen and compare. pen. pin. bed. bad. Now try the sentence. Meg left her red pen on the desk.",
+      "accent": "gb",
+      "filename": "phonics-l08-gb.mp3",
+      "bytes": 132624,
+      "sha256": "2470fba37d547172538af6b482296647fd8c4c31fbba95dd5be4284367cb7be6",
+      "voiceId": "en-GB-LibbyNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 22.104,
+        "finalCurrentTimeSeconds": 22.104,
+        "error": null
+      }
+    },
+    {
+      "category": "phonics",
+      "level": 16,
+      "id": "phonics-l16",
+      "sample": "required",
+      "text": "Listen to when, phone, and sing. Keep the end of sing smooth. when. phone. sing. Listen and compare. sin. sing. win. wing. Now try the sentence. When will Phil sing that long song?",
+      "accent": "us",
+      "filename": "phonics-l16-us.mp3",
+      "bytes": 106416,
+      "sha256": "5f340e09ce3a968335b5dcaa777d1c4844644965e343b11cda5c543b7be7f032",
+      "voiceId": "en-US-AvaMultilingualNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 17.736,
+        "finalCurrentTimeSeconds": 17.736,
+        "error": null
+      }
+    },
+    {
+      "category": "phonics",
+      "level": 16,
+      "id": "phonics-l16",
+      "sample": "required",
+      "text": "Listen to when, phone, and sing. Keep the end of sing smooth. when. phone. sing. Listen and compare. sin. sing. win. wing. Now try the sentence. When will Phil sing that long song?",
+      "accent": "gb",
+      "filename": "phonics-l16-gb.mp3",
+      "bytes": 141120,
+      "sha256": "ffbb987e8cf10a362181b4fa7933f11379652a467b396d1107b95a6cf9de484d",
+      "voiceId": "en-GB-LibbyNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 23.52,
+        "finalCurrentTimeSeconds": 23.52,
+        "error": null
+      }
+    },
+    {
+      "category": "phonics",
+      "level": 24,
+      "id": "phonics-l24",
+      "sample": "required",
+      "text": "Listen to fool and full. Compare the two vowels. moon. food. book. good. Listen and compare. fool. full. pool. pull. Now try the sentence. The cook put good food by the cool pool.",
+      "accent": "us",
+      "filename": "phonics-l24-us.mp3",
+      "bytes": 100944,
+      "sha256": "19ff3c89a721a8e3bf2c778978998f0b79248dab19210a4a256916c9d61b37cf",
+      "voiceId": "en-US-AvaMultilingualNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 16.824,
+        "finalCurrentTimeSeconds": 16.824,
+        "error": null
+      }
+    },
+    {
+      "category": "phonics",
+      "level": 24,
+      "id": "phonics-l24",
+      "sample": "required",
+      "text": "Listen to fool and full. Compare the two vowels. moon. food. book. good. Listen and compare. fool. full. pool. pull. Now try the sentence. The cook put good food by the cool pool.",
+      "accent": "gb",
+      "filename": "phonics-l24-gb.mp3",
+      "bytes": 144720,
+      "sha256": "39400507b72172a04bb76fb4eac8d85d6a854f9266933fb9dcb4db50dd6cf5ca",
+      "voiceId": "en-GB-LibbyNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 24.12,
+        "finalCurrentTimeSeconds": 24.12,
+        "error": null
+      }
+    },
+    {
+      "category": "phonics",
+      "level": 32,
+      "id": "phonics-l32",
+      "sample": "required",
+      "text": "Listen for the main beats. Connect the words smoothly. pick it up. want to go. a cup of tea. meet you at eight. Listen and compare. Turn it on. Turn it off. Meet at eight. Meet at nine. Now try the sentence. Could you send it over when you arrive?",
+      "accent": "us",
+      "filename": "phonics-l32-us.mp3",
+      "bytes": 117792,
+      "sha256": "336e67052958dda0338d6e866f5be40d2464907027c2add0fcc209c883bddefe",
+      "voiceId": "en-US-AvaMultilingualNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 19.632,
+        "finalCurrentTimeSeconds": 19.632,
+        "error": null
+      }
+    },
+    {
+      "category": "phonics",
+      "level": 32,
+      "id": "phonics-l32",
+      "sample": "required",
+      "text": "Listen for the main beats. Connect the words smoothly. pick it up. want to go. a cup of tea. meet you at eight. Listen and compare. Turn it on. Turn it off. Meet at eight. Meet at nine. Now try the sentence. Could you send it over when you arrive?",
+      "accent": "gb",
+      "filename": "phonics-l32-gb.mp3",
+      "bytes": 163584,
+      "sha256": "7e60c6c61a01e3c0324066b6ae62c3c0fcbea49828691a5d33e3c81048e4652f",
+      "voiceId": "en-GB-LibbyNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 27.264,
+        "finalCurrentTimeSeconds": 27.264,
+        "error": null
+      }
+    },
+    {
+      "category": "phonics",
+      "level": 11,
+      "id": "phonics-l11",
+      "sample": "random",
+      "text": "Listen to both consonants at the start of blue. blue. clap. flag. glad. Listen and compare. play. pray. glass. grass. Now try the sentence. The blue flag flies above the plane.",
+      "accent": "us",
+      "filename": "phonics-l11-us.mp3",
+      "bytes": 98208,
+      "sha256": "4aab3c5d2ec9f092c259be6e8983fe4e3ac99627f271121ae72528b394ac952a",
+      "voiceId": "en-US-AvaMultilingualNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 16.368,
+        "finalCurrentTimeSeconds": 16.368,
+        "error": null
+      }
+    },
+    {
+      "category": "phonics",
+      "level": 11,
+      "id": "phonics-l11",
+      "sample": "random",
+      "text": "Listen to both consonants at the start of blue. blue. clap. flag. glad. Listen and compare. play. pray. glass. grass. Now try the sentence. The blue flag flies above the plane.",
+      "accent": "gb",
+      "filename": "phonics-l11-gb.mp3",
+      "bytes": 138960,
+      "sha256": "a45ed0180984a7b7f0e2a65767f1132fdb14be8c6f38bece51e619ea609c5074",
+      "voiceId": "en-GB-LibbyNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 23.16,
+        "finalCurrentTimeSeconds": 23.16,
+        "error": null
+      }
+    },
+    {
+      "category": "phonics",
+      "level": 6,
+      "id": "phonics-l06",
+      "sample": "random",
+      "text": "Listen to the short vowel in sit. sit. fish. milk. ring. Listen and compare. ship. sheep. sit. seat. Now try the sentence. Six fish swim in the river.",
+      "accent": "us",
+      "filename": "phonics-l06-us.mp3",
+      "bytes": 94032,
+      "sha256": "21bae85654e809694888e2a734c0aadb071258d2939fc60c257c9157eeb42b1d",
+      "voiceId": "en-US-AvaMultilingualNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 15.672,
+        "finalCurrentTimeSeconds": 15.672,
+        "error": null
+      }
+    },
+    {
+      "category": "phonics",
+      "level": 6,
+      "id": "phonics-l06",
+      "sample": "random",
+      "text": "Listen to the short vowel in sit. sit. fish. milk. ring. Listen and compare. ship. sheep. sit. seat. Now try the sentence. Six fish swim in the river.",
+      "accent": "gb",
+      "filename": "phonics-l06-gb.mp3",
+      "bytes": 129600,
+      "sha256": "4d27b8d38129b1bdda30b8bc64c565d4fe608019756f0228d7342b57139d3eff",
+      "voiceId": "en-GB-LibbyNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 21.6,
+        "finalCurrentTimeSeconds": 21.6,
+        "error": null
+      }
+    },
+    {
+      "category": "phonics",
+      "level": 19,
+      "id": "phonics-l19",
+      "sample": "random",
+      "text": "Listen to hop, then hope. The vowel changes. home. note. rose. stone. Listen and compare. hop. hope. not. note. Now try the sentence. Rose wrote a note at home.",
+      "accent": "us",
+      "filename": "phonics-l19-us.mp3",
+      "bytes": 99936,
+      "sha256": "6e47250d2b693373c1aab367494e79795a8213d14bec2a7aea5088f54e6fb15e",
+      "voiceId": "en-US-AvaMultilingualNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 16.656,
+        "finalCurrentTimeSeconds": 16.656,
+        "error": null
+      }
+    },
+    {
+      "category": "phonics",
+      "level": 19,
+      "id": "phonics-l19",
+      "sample": "random",
+      "text": "Listen to hop, then hope. The vowel changes. home. note. rose. stone. Listen and compare. hop. hope. not. note. Now try the sentence. Rose wrote a note at home.",
+      "accent": "gb",
+      "filename": "phonics-l19-gb.mp3",
+      "bytes": 141552,
+      "sha256": "26246c3a099dfe00c9864d7e4bd778e4f1eff93d5adf384503fd6ff2d0135534",
+      "voiceId": "en-GB-LibbyNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 23.592,
+        "finalCurrentTimeSeconds": 23.592,
+        "error": null
+      }
+    },
+    {
+      "category": "words",
+      "level": 0,
+      "id": "canonical-words",
+      "sample": "canonical",
+      "text": "Hello. Let's practise English together. Please listen, then try it yourself.",
+      "accent": "us",
+      "filename": "canonical-words-us.mp3",
+      "bytes": 34560,
+      "sha256": "ccfcdeee9d57b6e2d5b3d52858369ff0736e1109d95a6286f1061ab5f7cdd714",
+      "voiceId": "en-US-AvaMultilingualNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 5.76,
+        "finalCurrentTimeSeconds": 5.76,
+        "error": null
+      }
+    },
+    {
+      "category": "words",
+      "level": 0,
+      "id": "canonical-words",
+      "sample": "canonical",
+      "text": "Hello. Let's practise English together. Please listen, then try it yourself.",
+      "accent": "gb",
+      "filename": "canonical-words-gb.mp3",
+      "bytes": 45648,
+      "sha256": "096085d89a3c8c8e1f5f61eb6144a20b582d6cd8e18de3ba45b57c2408356fed",
+      "voiceId": "en-GB-LibbyNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 7.608,
+        "finalCurrentTimeSeconds": 7.608,
+        "error": null
+      }
+    },
+    {
+      "category": "phrases",
+      "level": 0,
+      "id": "canonical-phrases",
+      "sample": "canonical",
+      "text": "Hello. Let's practise English together. Please listen, then try it yourself.",
+      "accent": "us",
+      "filename": "canonical-phrases-us.mp3",
+      "bytes": 34560,
+      "sha256": "6eea748c5569657cb135b9d5361d0d274b908bd5f3d68f2d2e645af4ed03fa4d",
+      "voiceId": "en-US-AvaMultilingualNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 5.76,
+        "finalCurrentTimeSeconds": 5.76,
+        "error": null
+      }
+    },
+    {
+      "category": "phrases",
+      "level": 0,
+      "id": "canonical-phrases",
+      "sample": "canonical",
+      "text": "Hello. Let's practise English together. Please listen, then try it yourself.",
+      "accent": "gb",
+      "filename": "canonical-phrases-gb.mp3",
+      "bytes": 45648,
+      "sha256": "233dc3e8219d02aa3d7b29af2b49be0ec0ce0e9ba3b852efcbc1a42e11514dfa",
+      "voiceId": "en-GB-LibbyNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 7.608,
+        "finalCurrentTimeSeconds": 7.608,
+        "error": null
+      }
+    },
+    {
+      "category": "phonics",
+      "level": 0,
+      "id": "canonical-phonics",
+      "sample": "canonical",
+      "text": "Hello. Let's practise English together. Please listen, then try it yourself.",
+      "accent": "us",
+      "filename": "canonical-phonics-us.mp3",
+      "bytes": 34560,
+      "sha256": "7959b04bdece545ec5b37861251a3119b1e2150097250f38c7015cc4e8cbed8d",
+      "voiceId": "en-US-AvaMultilingualNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 5.76,
+        "finalCurrentTimeSeconds": 5.76,
+        "error": null
+      }
+    },
+    {
+      "category": "phonics",
+      "level": 0,
+      "id": "canonical-phonics",
+      "sample": "canonical",
+      "text": "Hello. Let's practise English together. Please listen, then try it yourself.",
+      "accent": "gb",
+      "filename": "canonical-phonics-gb.mp3",
+      "bytes": 45648,
+      "sha256": "8c6b2e91b73feec70c930e306cdd3b74b99ab68c2cbbc006a5a44b009b93dfb8",
+      "voiceId": "en-GB-LibbyNeural",
+      "profile": "natural-v2",
+      "playbackStatus": "ended",
+      "browserPlayback": {
+        "ended": true,
+        "durationSeconds": 7.608,
+        "finalCurrentTimeSeconds": 7.608,
+        "error": null
+      }
+    }
+  ],
+  "browserPlayback": {
+    "checkedAt": "2026-09-05T16:01:32.074Z",
+    "browser": "Codex in-app browser",
+    "fixtureUrl": "http://127.0.0.1:8894/",
+    "source": "Saved MP3 responses from the deployed production natural-speech Edge Function, using the exact curriculum sample builder.",
+    "startedThrough": "CUA locator clicks on playback buttons; the final 30 used a clicked sequential queue which advanced only after ended.",
+    "responsesPlayed": 54,
+    "ended": 54,
+    "errors": 0,
+    "playbackRate": 1,
+    "observedMaximumConcurrentPlaying": 1,
+    "proof": "For all 54 elements, audio.ended was true, currentTime equalled duration, and audio.error was null.",
+    "perceptualListeningCompleted": false,
+    "limitation": "This establishes browser MP3 playback. It does not substitute for final production page interaction QA or a human listener's assessment of timbre and pronunciation."
+  }
+}

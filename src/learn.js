@@ -1,22 +1,24 @@
+import { createCurriculumVisual, visualSpecFor } from './curriculum-visuals.js?v=20260906-studio1';
 import {
   fetchCurriculumItems,
+  fetchStudentLearningPacks,
   fetchCurriculumLevels,
   fetchCurriculumProgress,
   saveCurriculumProgress,
   toggleCurriculumFavorite,
-} from "./curriculum-api.js?v=20260905-hub1";
+} from "./curriculum-api.js?v=20260906-studio1";
 import {
   applyStudentFeatureVisibility,
   featureAllowed,
   loadStudentAccess,
   renderStudentAccessBoundary,
-} from "./student-visibility.js?v=20260905-hub1";
+} from "./student-visibility.js?v=20260906-studio1";
 import {
   playAnswerFeedback,
   playCompletionSound,
   speakText,
   stopAudio,
-} from "./audio.js?v=20260905-natural1";
+} from "./audio.js?v=20260906-studio1";
 import {
   applyThemePreference,
   getSettings,
@@ -24,9 +26,12 @@ import {
   setStorageUser,
   updateSettings,
   watchSystemTheme,
-} from "./store.js?v=20260905-release5";
-import { loadUserSettings, saveUserSettings } from "./supabase.js?v=20260905-release5";
-import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js?v=20260905-release5";
+} from "./store.js?v=20260906-studio1";
+import { loadUserSettings, saveUserSettings } from "./supabase.js?v=20260906-studio1";
+import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js?v=20260906-studio1";
+
+import { curriculumAudioSamples, curriculumPrimaryAudio } from "./curriculum-audio.js?v=20260906-studio1";
+import { VOICE_PROFILES } from "./speech-contract.js?v=20260906-studio1";
 
 const CATEGORY_ORDER = Object.freeze(["words", "phrases", "phonics"]);
 const CATEGORY_CONFIG = Object.freeze({
@@ -100,6 +105,7 @@ const state = {
   level: null,
   levels: [],
   items: [],
+  packs: [],
   progress: new Map(),
   favorites: new Set(),
   filter: "all",
@@ -482,45 +488,15 @@ function cardJapanese(item, content) {
 }
 
 function audioText(item) {
-  const content = contentObject(item);
-  if (state.category === "words") return content.word || item.title_en || "";
-  if (state.category === "phrases") return content.phrase || item.title_en || "";
-  return content.practiceSentence || content.practiceWords?.join(", ") || content.examples?.join(", ") || content.phonicsTarget || item.title_en || "";
+  return curriculumPrimaryAudio(state.category, item);
 }
 
 function audioSamples(item) {
-  const content = contentObject(item);
-  if (state.category === "words") return [
-    { value: "primary", labelEn: "Word", labelJa: "単語", text: content.word || item.title_en || "" },
-    { value: "example", labelEn: "Example sentence", labelJa: "例文", text: content.exampleSentence || "" },
-  ].filter((sample) => sample.text);
-  if (state.category === "phrases") return [
-    { value: "primary", labelEn: "Phrase", labelJa: "フレーズ", text: content.phrase || item.title_en || "" },
-    { value: "dialogue", labelEn: "Mini dialogue", labelJa: "ミニ会話", text: content.exampleDialogue || "" },
-  ].filter((sample) => sample.text);
-  return [
-    {
-      value: "examples",
-      labelEn: "Sound examples",
-      labelJa: "音の例",
-      text: Array.isArray(content.examples) ? content.examples.join(", ").replaceAll("_", " ") : content.examples || "",
-    },
-    {
-      value: "words",
-      labelEn: "Practice words",
-      labelJa: "練習語",
-      text: Array.isArray(content.practiceWords) ? content.practiceWords.join(", ").replaceAll("_", " ") : content.practiceWords || "",
-    },
-    { value: "sentence", labelEn: "Practice sentence", labelJa: "練習文", text: content.practiceSentence || "" },
-  ].filter((sample) => sample.text);
+  return curriculumAudioSamples(state.category, item);
 }
 
-function itemVoiceNames(item) {
-  const content = contentObject(item);
-  return {
-    us: String(content.audioUSVoice || "Ava"),
-    gb: String(content.audioUKVoice || "Libby"),
-  };
+function itemVoiceNames() {
+  return { us: VOICE_PROFILES.us.name, gb: VOICE_PROFILES.gb.name };
 }
 
 function renderCardDetails(body, item, content) {
@@ -542,6 +518,7 @@ function renderCardDetails(body, item, content) {
   addDetail(body, "Examples", "音の例", Array.isArray(content.examples) ? content.examples.join(" · ") : content.examples);
   addDetail(body, "Japanese sound guide", "日本語ガイド", content.japaneseHint, { contentLanguage: "ja" });
   addDetail(body, "Mouth & voice", "口と声のポイント", content.mouthTip);
+  addDetail(body, "Listen and compare", "音の違いを聞く", (content.contrastPairs || []).map((pair) => pair.join(" · ")));
   addDetail(body, "Practice words", "練習語", Array.isArray(content.practiceWords) ? content.practiceWords.join(" · ") : content.practiceWords);
   addDetail(body, "Practice sentence", "練習文", content.practiceSentence);
 }
@@ -762,17 +739,12 @@ function createItemCard(item) {
     const changed = await toggleFavorite(item.id, !favorite);
     if (!changed && favoriteButton.isConnected) favoriteButton.disabled = false;
   });
-  head.append(
-    element("span", {
-      className: "learn-card-icon",
-      text: content.imageType === "emoji" || item.icon || content.icon
-        ? (item.icon || content.icon || CATEGORY_CONFIG[state.category].icon)
-        : CATEGORY_CONFIG[state.category].icon,
-      attrs: { "aria-hidden": "true" },
-    }),
-    title,
-    favoriteButton,
-  );
+  head.append(title, favoriteButton);
+  const visual = element("figure", { className: "curriculum-visual" });
+  visual.append(createCurriculumVisual(item, state.category, document, { language: languageMode() }));
+  const spec = visualSpecFor(item, state.category);
+  card.classList.add("has-curriculum-visual");
+  card.dataset.visualKey = spec.visualKey;
   const body = element("div", { className: "learn-card-body" });
   renderCardDetails(body, item, content);
   const chips = element("ul", { className: "learn-chip-list", attrs: { "aria-label": text("Item details", "項目情報") } });
@@ -780,7 +752,11 @@ function createItemCard(item) {
   if (item.required_plan && item.required_plan !== "free") chips.append(element("li", { className: "learn-plan-pill", text: String(item.required_plan) }));
   if (item.is_preview) chips.append(element("li", { text: text("Preview", "プレビュー") }));
   if (chips.childElementCount) body.append(chips);
-  card.append(head, body, createAudioBlock(item), createProgressFooter(item));
+  const notes = element("details", { className: "learn-card-notes" }, [
+    element("summary", { text: text("Examples & teacher tips", "例文と先生のヒント") }), body,
+  ]);
+  if (state.category === "phonics") notes.open = true;
+  card.append(visual, head, createAudioBlock(item), notes, createProgressFooter(item));
   return card;
 }
 
@@ -836,7 +812,24 @@ function renderItems() {
   refs.itemGrid.replaceChildren(...items.map(createItemCard));
 }
 
+function renderPersonalPacks() {
+  document.getElementById("personalLearningPacks")?.remove();
+  const visible = state.packs.map((pack) => ({ ...pack, items: state.items.filter((item) => pack.itemIds.includes(item.id)) })).filter((pack) => pack.items.length);
+  if (!visible.length) return;
+  const section = element("section", { className: "learn-personal-packs", attrs: { id: "personalLearningPacks", "aria-label": text("Learning packs from your teacher", "先生からの学習パック") } });
+  section.append(element("h2", { text: text("Selected for you by your teacher", "先生があなたに選んだ教材") }));
+  for (const pack of visible) {
+    const row = element("article", {}, [element("h3", { text: pack.title })]);
+    if (pack.instructions) row.append(element("p", { text: pack.instructions }));
+    const links = element("div", { className: "learn-pack-links" });
+    for (const item of pack.items) links.append(element("a", { text: item.title_en, attrs: { href: categoryUrl(state.category, item.level, item.id) } }));
+    row.append(links); section.append(row);
+  }
+  refs.libraryPanel.prepend(section);
+}
+
 function renderAll() {
+  renderPersonalPacks();
   setCategoryTheme();
   renderCategoryTabs();
   renderSummary();
@@ -986,7 +979,7 @@ function buildReviewChoices(item, mode) {
   if (state.category === "phonics") {
     const examples = Array.isArray(content.examples) ? content.examples.map((value) => String(value).replaceAll("_", " ")) : [];
     const practiceWords = Array.isArray(content.practiceWords) ? content.practiceWords.map(String) : [];
-    const correct = examples[0] || content.practiceSentence || content.phonicsTarget || item.title_en || "—";
+    const correct = examples[0] || content.practiceSentence || "";
     if (mode === "text-choice") {
       const correctLabel = content.sound || content.phonicsTarget || item.title_en || "—";
       const otherSounds = accessibleChoicePool(item).map((candidate) => {
@@ -1207,6 +1200,11 @@ function renderReview() {
     element("p", { className: "learn-review-prompt", text: prompt.prompt, attrs: { tabindex: "-1" } }),
   );
   if (prompt.subprompt) refs.reviewCard.append(element("p", { className: "learn-review-subprompt", text: prompt.subprompt }));
+  if (state.reviewMode === "flash" || state.reviewRevealed) {
+    const visual = element("figure", { className: "curriculum-visual learn-review-visual" });
+    visual.append(createCurriculumVisual(item, state.category, document, { language: languageMode(), quiz: !state.reviewRevealed }));
+    refs.reviewCard.append(visual);
+  }
   const canPlayAnswer = state.reviewMode === "flash"
     || state.reviewMode === "audio-choice"
     || state.reviewRevealed;
@@ -1506,7 +1504,8 @@ async function initialise() {
     accessBoundaryFor("words", access.settings?.account_enabled === false);
     return;
   }
-  const progressResult = await fetchCurriculumProgress();
+  const [progressResult, packsResult] = await Promise.all([fetchCurriculumProgress(), state.access?.authenticated ? fetchStudentLearningPacks() : Promise.resolve({ data: [] })]);
+  state.packs = Array.isArray(packsResult?.data) ? packsResult.data : [];
   if (!progressResult?.error) normalizeProgress(apiData(progressResult, { progress: [], favorites: [] }));
   state.ready = true;
   await routePage();

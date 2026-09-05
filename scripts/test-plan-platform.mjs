@@ -101,7 +101,7 @@ assert.match(pricingPage, /id="planQuickNav"/);
 assert.match(pricingPage, /te-review-hub:theme:v1/);
 assert.match(pricingUi, /applyThemePreference/);
 assert.match(pricingUi, /watchSystemTheme/);
-assert.match(pricingUi, /import "\.\/pwa\.js\?v=20260905-release5"/);
+assert.match(pricingUi, /import "\.\/pwa\.js\?v=20260906-studio1"/);
 assert.match(pricingPage, /id="contactName"/);
 assert.match(pricingPage, /id="resetContactMessage"/);
 assert.doesNotMatch(pricingPage.match(/<textarea id="contactMessage"[^>]*>/)?.[0] || "", /readonly/);

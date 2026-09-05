@@ -1,12 +1,12 @@
-import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js?v=20260905-release5";
+import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js?v=20260906-studio1";
 import {
   applyThemePreference,
   getSettings,
   onSettingsChange,
   updateSettings,
   watchSystemTheme,
-} from "./store.js?v=20260905-release5";
-import "./pwa.js?v=20260905-release5";
+} from "./store.js?v=20260906-studio1";
+import "./pwa.js?v=20260906-studio1";
 import {
   BILLING_OPTIONS,
   CONTACT_CHANNELS,
@@ -19,12 +19,12 @@ import {
   planPrice,
   planSavings,
   promotionApplies,
-} from "./plans.js?v=20260905-release5";
+} from "./plans.js?v=20260906-studio1";
 import {
   applyStudentFeatureVisibility,
   enforceStudentFeature,
   renderStudentAccessBoundary,
-} from "./student-visibility.js?v=20260905-hub1";
+} from "./student-visibility.js?v=20260906-studio1";
 
 const elements = {
   language: document.querySelector("#languageToggle"),

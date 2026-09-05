@@ -4467,3 +4467,50 @@ html[data-theme="dark"] .answer-coach { background: rgba(255,255,255,.065); }
   .structured-hub-teacher-toggle-grid,
   .structured-hub-teacher-metrics { grid-template-columns: 1fr; }
 }
+
+/* Per-learner paths and personal packs remain usable inside the mobile dialog. */
+.structured-hub-visibility-summary {
+  padding: 1rem; border: 1px solid var(--line, #cbd5e1); border-radius: 16px;
+  background: var(--learner-surface, var(--paper)); overflow-wrap: anywhere;
+}
+.structured-hub-visibility-summary h4 { margin: 0 0 .6rem; }
+.structured-hub-visibility-summary ul { margin: 0; padding-left: 1.2rem; }
+.structured-hub-category-rule, .structured-hub-personal-packs {
+  min-width: 0; padding: .8rem 0; border-top: 1px solid var(--line, #cbd5e1);
+}
+.structured-hub-category-rule > summary, .structured-hub-personal-packs > summary {
+  cursor: pointer; min-height: 44px; display: list-item; font-weight: 750;
+}
+.structured-hub-category-rule fieldset { border: 0; min-width: 0; padding: .6rem 0; }
+.structured-hub-category-levels { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: .5rem; }
+.structured-hub-category-levels label { display: flex; align-items: center; gap: .35rem; min-width: 0; }
+.structured-hub-category-levels label > span { width: 1.4rem; flex-shrink: 0; }
+.structured-hub-category-levels select { min-width: 0; width: 100%; min-height: 44px; }
+.structured-hub-personal-packs form { display: grid; gap: .8rem; min-width: 0; }
+.structured-hub-personal-packs form > label { display: grid; gap: .35rem; min-width: 0; }
+.structured-hub-personal-packs :is(input:not([type=checkbox]), textarea, select) { max-width: 100%; min-width: 0; }
+.structured-hub-pack-choices { display: grid; gap: .35rem; max-height: 22rem; overflow: auto; border: 1px solid var(--line, #cbd5e1); border-radius: 12px; padding: .5rem; }
+.structured-hub-pack-choices > label { display: flex; align-items: center; gap: .5rem; min-height: 44px; padding: .35rem; min-width: 0; }
+.structured-hub-pack-choices > label > span { flex: 1; overflow-wrap: anywhere; }
+.structured-hub-pack-choices small { font-size: .7rem; }
+.structured-hub-pack-row { display: flex; gap: .6rem; align-items: center; flex-wrap: wrap; padding: .6rem 0; }
+.structured-hub-pack-row strong { flex: 1 1 10rem; overflow-wrap: anywhere; }
+@media (max-width: 520px) {
+  .structured-hub-teacher-item-filters { display: flex; flex-wrap: wrap; }
+  .structured-hub-teacher-item-filters > * { flex: 1 1 7rem; min-width: 0; max-width: 100%; }
+}
+
+/* The credits page keeps its optional player behind a native disclosure. */
+.music-credits-menu { position: relative; }
+.music-credits-menu > summary { cursor: pointer; min-height: 44px; }
+.music-credits-menu [data-study-music-controls] { display: flex; flex-wrap: wrap; gap: 12px; padding: 16px; max-width: 100%; }
+.music-credits-menu[open] { flex-basis: 100%; }
+body[data-page="music-credits"] .header-actions { flex-wrap: wrap; min-width: 0; }
+body[data-page="music-credits"] .compact-page-header { max-height: none; position: relative !important; align-items: flex-start; }
+@media (max-width: 720px) {
+  body[data-page="music-credits"] .compact-page-header { position: relative; flex-wrap: wrap; gap: 12px; padding: 14px; }
+  body[data-page="music-credits"] .compact-page-header .brand { flex-basis: 100%; }
+  body[data-page="music-credits"] .header-actions { width: 100%; justify-content: flex-start; }
+  .music-credits-menu [data-study-music-controls] .voice-select { min-width: 120px; }
+  .music-credits-menu .study-music-status { flex-basis: 100%; }
+}

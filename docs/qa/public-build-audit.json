@@ -1,0 +1,29 @@
+{
+  "serviceWorkerSource": "dist",
+  "files": 614,
+  "htmlPages": 11,
+  "localHtmlLinks": 124,
+  "cssUrls": 0,
+  "linkedModules": 30,
+  "assetRecords": 448,
+  "assetBytes": 6014893,
+  "jwtRoles": [
+    "anon"
+  ],
+  "secretFindings": 0,
+  "previewIds": [
+    "june-28",
+    "june-29"
+  ],
+  "precacheEntries": 38,
+  "missingPrecache": [],
+  "cache": "te-review-public-v23",
+  "privateApiCacheChecks": 5,
+  "release": {
+    "version": "10.1.0",
+    "commit": "8537cb53129e6c5743b19d977332bb5c6b9cf152",
+    "builtAt": "2026-09-05T16:38:56.262Z",
+    "cache": "te-review-public-v23"
+  },
+  "failures": []
+}

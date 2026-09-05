@@ -8,8 +8,8 @@ import {
   setStorageUser,
   updateSettings,
   watchSystemTheme,
-} from "./store.js?v=20260905-release5";
-import { loadPublishedLessons } from "./data.js?v=20260905-release5";
+} from "./store.js?v=20260906-studio1";
+import { loadPublishedLessons } from "./data.js?v=20260906-studio1";
 import {
   getStudentClient,
   getStudentMembership,
@@ -25,17 +25,17 @@ import {
   signInStudentWithGoogle,
   signUpStudent,
   signOutStudent,
-} from "./supabase.js?v=20260905-release5";
-import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js?v=20260905-release5";
-import { installPlayfulInteractions } from "./effects.js?v=20260905-release5";
-import { planFor } from "./plans.js?v=20260905-release5";
-import { setAmbientPlayback, stopAudio, syncAmbientFromSettings } from "./audio.js?v=20260905-natural1";
+} from "./supabase.js?v=20260906-studio1";
+import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js?v=20260906-studio1";
+import { installPlayfulInteractions } from "./effects.js?v=20260906-studio1";
+import { planFor } from "./plans.js?v=20260906-studio1";
+import { setAmbientPlayback, stopAudio, syncAmbientFromSettings } from "./audio.js?v=20260906-studio1";
 import {
   applyStudentFeatureVisibility,
   featureAllowed,
   loadStudentAccess,
   renderStudentAnnouncements,
-} from "./student-visibility.js?v=20260905-hub1";
+} from "./student-visibility.js?v=20260906-studio1";
 
 let publishedLessons = [];
 let visibleLessons = [];

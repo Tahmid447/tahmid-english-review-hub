@@ -299,6 +299,7 @@ assert.deepEqual(
   "A Japanese explanation may begin with a natural English model phrase.",
 );
 
+const { VOICE_PROFILES, SPEECH_PROFILE_VERSION } = await import("../src/speech-contract.js");
 const originalAudio = globalThis.Audio;
 const originalFetch = globalThis.fetch;
 const audioInstances = [];
@@ -338,11 +339,20 @@ class FakeAudio {
 }
 globalThis.Audio = FakeAudio;
 globalThis.fetch = async (_url, options = {}) => {
-  speechRequests.push(JSON.parse(options.body || "{}"));
-  return {
-    ok: true,
-    blob: async () => new Blob([new Uint8Array(256)], { type: "audio/mpeg" }),
-  };
+  const payload = JSON.parse(options.body || "{}");
+  speechRequests.push(payload);
+  const profile = VOICE_PROFILES[payload.accent];
+  return new Response(new Uint8Array(256), {
+    headers: {
+      "content-type": "audio/mpeg",
+      "x-review-voice": payload.accent,
+      "x-review-voice-id": profile.voiceId,
+      "x-review-speech-profile": SPEECH_PROFILE_VERSION,
+      "x-review-rate": profile.rate,
+      "x-review-pitch": profile.pitch,
+      "x-review-volume": profile.volume,
+    },
+  });
 };
 const ambientResult = await setAmbientPlayback(true, {
   ambientEnabled: true,
@@ -388,6 +398,15 @@ assert.deepEqual(
   ["ja", "us", "ja"],
   "Mixed explanations request Nanami, Ava, then Nanami in their natural language order.",
 );
+const audioCountBeforeBadVoice = audioInstances.length;
+const badVoiceStatuses = [];
+globalThis.fetch = async () => new Response(new Uint8Array(256), {
+  headers: { "content-type": "audio/mpeg", "x-review-voice": "us", "x-review-voice-id": "en-US-UnexpectedNeural" },
+});
+const badVoice = await speakText("Reject an unverified voice before playing it.", { voice: "us", onStatus: (status) => badVoiceStatuses.push(status) });
+assert.equal(badVoice.played, false);
+assert.equal(audioInstances.length, audioCountBeforeBadVoice, "Unexpected or missing identity headers never reach Audio or the cache.");
+assert.equal(badVoiceStatuses.at(-1)?.phase, "error");
 const naturalVoiceStatuses = [];
 globalThis.fetch = async () => { throw new Error("Natural speech offline"); };
 const unavailableNaturalVoice = await speakText("A natural-only voice check.", {

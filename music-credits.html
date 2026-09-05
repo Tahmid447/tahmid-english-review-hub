@@ -8,14 +8,14 @@
   <title>Music Credits · Tahmid English Review Hub</title>
   <link rel="manifest" href="/manifest.webmanifest">
   <script>try{const p=JSON.parse(localStorage.getItem("te-review-hub:theme:v1")||"\"light\"");const c=["system","light","dark"].includes(p)?p:"light";const d=c==="dark"||(c==="system"&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.dataset.themePreference=c;document.documentElement.dataset.theme=d?"dark":"light";document.documentElement.style.colorScheme=d?"dark":"light"}catch{document.documentElement.dataset.themePreference="light";document.documentElement.dataset.theme="light";document.documentElement.style.colorScheme="light"}</script>
-  <link rel="stylesheet" href="/src/styles.css?v=20260905-release5">
+  <link rel="stylesheet" href="/src/styles.css?v=20260906-studio1">
   <link rel="icon" type="image/png" sizes="192x192" href="/assets/app-icon-192.png">
 </head>
 <body data-page="music-credits">
   <a class="skip-link" href="#creditsMain">Skip to credits</a>
   <header class="site-header compact-page-header">
     <a class="brand" href="/"><img class="brand-logo" src="/assets/app-icon-192.png" alt="Tahmid English Club logo" width="50" height="50"><span><strong>Tahmid English Club</strong><small>English Review Hub · 英語復習ハブ</small></span></a>
-    <nav class="header-actions"><a class="quiet-btn" href="/">Lessons / レッスン</a><a class="quiet-btn" href="/plans" data-student-feature="show_pricing">Plans / 料金プラン</a><span data-study-music-controls></span></nav>
+    <nav class="header-actions"><a class="quiet-btn" href="/">Lessons / レッスン</a><a class="quiet-btn" href="/plans" data-student-feature="show_pricing">Plans / 料金プラン</a><details class="music-credits-menu"><summary class="quiet-btn">Music / BGM</summary><div data-study-music-controls></div></details></nav>
   </header>
   <main class="section shell music-credits-shell" id="creditsMain">
     <div class="section-heading">
@@ -36,8 +36,8 @@
   </main>
   <footer class="site-footer premium-footer"><div class="footer-brand"><img src="/assets/app-icon-192.png" alt="" width="44" height="44"><span><strong>Tahmid English Club</strong><small>Personal English review, built by Tahmid Ahmed.</small></span></div><nav aria-label="Footer"><a href="/">Lessons</a><a href="/learn" data-student-feature-any="show_words,show_phrases,show_phonics">Learning Library</a><a href="/phrases" data-student-feature-any="show_words,show_phrases">Lesson Phrasebook</a><a href="/plans" data-student-feature="show_pricing">Plans</a><a href="/plans#contact" data-student-feature="show_contact_teacher">Contact Tahmid</a></nav><p>© 2026 Tahmid Ahmed</p></footer>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js"></script>
-  <script type="module" src="/src/student-shell.js?v=20260905-hub1"></script>
-  <script type="module" src="/src/pwa.js?v=20260905-release5"></script>
-  <script type="module" src="/src/study-music.js?v=20260905-release5"></script>
+  <script type="module" src="/src/student-shell.js?v=20260906-studio1"></script>
+  <script type="module" src="/src/pwa.js?v=20260906-studio1"></script>
+  <script type="module" src="/src/study-music.js?v=20260906-studio1"></script>
 </body>
 </html>

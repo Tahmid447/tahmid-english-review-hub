@@ -12,21 +12,25 @@ import {
   signInTeacherWithGoogle,
   signOutTeacher,
   updateTeacherAccessCode,
-} from "./supabase.js?v=20260905-release5";
-import { planFor } from "./plans.js?v=20260905-release5";
-import { uiText } from "./i18n.js?v=20260905-release5";
-import { readHumanText } from "./lesson-guide-targets.js?v=20260905-release5";
+} from "./supabase.js?v=20260906-studio1";
+import { planFor } from "./plans.js?v=20260906-studio1";
+import { uiText } from "./i18n.js?v=20260906-studio1";
+import { readHumanText } from "./lesson-guide-targets.js?v=20260906-studio1";
 import {
   sourceSegmentFromLesson,
   sourceSegmentIsValid,
   sourceSegmentPartIndex,
-} from "./lesson-source.js?v=20260905-release5";
+} from "./lesson-source.js?v=20260906-studio1";
 import {
   DEFAULT_HUB_SETTINGS,
   fetchTeacherHubSettings,
   saveTeacherCurriculumAccess,
   saveTeacherHubSettings,
-} from "./curriculum-api.js?v=20260905-hub1";
+  assignTeacherLearningPack,
+  setTeacherLearningPackActive,
+} from "./curriculum-api.js?v=20260906-studio1";
+
+import { normalizeCategoryAccess, categoryVisibleLevels } from "./curriculum-access.js?v=20260906-studio1";
 
 const client = getTeacherClient();
 
@@ -61,6 +65,7 @@ const elements = {
   editorStatus: document.querySelector("#editorStatus"),
   editorAudience: document.querySelector("#editorAudience"),
   editorIsPreview: document.querySelector("#editorIsPreview"),
+  editorAssignmentOnly: document.querySelector("#editorAssignmentOnly"),
   editorSummary: document.querySelector("#editorSummary"),
   editorMessage: document.querySelector("#editorStatusMessage"),
   editorQuestionSummary: document.querySelector("#editorQuestionSummary"),
@@ -152,6 +157,7 @@ const state = {
     error: null,
     settings: [],
     items: [],
+    packs: [],
     access: [],
     progress: [],
     favorites: [],
@@ -966,7 +972,7 @@ async function ensureStructuredHubData({ force = false } = {}) {
       throw settingsResult.error || new Error(settingsResult.reason);
     }
 
-    const [items, access, progress, favorites, announcements, announcementTargets] = await Promise.all([
+    const [items, access, progress, favorites, announcements, announcementTargets, packs] = await Promise.all([
       fetchOptional(
         "review_curriculum_items",
         "id,category,level,title_en,title_ja,icon,required_plan,active,position,updated_at",
@@ -997,6 +1003,11 @@ async function ensureStructuredHubData({ force = false } = {}) {
         "announcement_id,student_id,created_at",
         { order: { column: "created_at", ascending: false } },
       ),
+      fetchOptional(
+        "review_student_learning_packs",
+        "id,student_id,title,instructions,active,created_at,updated_at",
+        { order: { column: "created_at", ascending: false } },
+      ),
     ]);
     if (state.structuredHub !== hub || hub.requestId !== requestId) return state.structuredHub;
     hub.settings = settingsResult.data || [];
@@ -1007,11 +1018,12 @@ async function ensureStructuredHubData({ force = false } = {}) {
       || String(left.id).localeCompare(String(right.id))
     ));
     hub.access = access.rows;
+    hub.packs = packs.rows;
     hub.progress = progress.rows;
     hub.favorites = favorites.rows;
     hub.announcements = announcements.rows;
     hub.announcementTargets = announcementTargets.rows;
-    hub.ready = [items, access, progress, favorites, announcements, announcementTargets]
+    hub.ready = [items, access, progress, favorites, announcements, announcementTargets, packs]
       .every((result) => result.available);
     return hub;
   })().catch((error) => {
@@ -2463,7 +2475,7 @@ function structuredHubProgressSummary(profile) {
   return wrap;
 }
 
-function structuredHubItemAccess(profile, settings) {
+function structuredHubItemAccess(profile, settings, onChange = () => {}) {
   const details = make("details", { className: "structured-hub-teacher-item-access" });
   details.append(make("summary", {
     text: teacherText(
@@ -2567,6 +2579,7 @@ function structuredHubItemAccess(profile, settings) {
         ));
         if (mode !== "inherit") state.structuredHub.access.push(saveResult.data);
         currentMode = mode;
+        onChange();
         status.textContent = teacherText(
           `Saved access for ${item.title_en}.`,
           `${item.title_ja || item.title_en}の利用設定を保存しました。`,
@@ -2600,6 +2613,201 @@ function structuredHubItemAccess(profile, settings) {
     if (details.open && !result.childElementCount) renderItems();
   });
   return details;
+}
+
+function structuredHubCategoryControls(settings) {
+  const section = make("fieldset", { className: "structured-hub-teacher-fieldset" });
+  section.append(make("legend", { text: teacherText("A different path for each subject", "カテゴリ別の学習ステップ") }));
+  section.append(make("p", { text: teacherText(
+    "Set a separate range for Words, Phrases and Phonics. Individual locks take priority over level unlocks. Item exceptions and personal packs can extend the range.",
+    "Words・Phrases・Phonicsを別々の範囲に設定できます。個別レベルはロック優先です。教材単位の許可や個人パックは範囲外にも公開できます。",
+  ) }));
+  const rules = {};
+  for (const [category, en, ja] of STRUCTURED_HUB_CATEGORIES) {
+    const rule = settings.category_access?.[category];
+    const details = make("details", { className: "structured-hub-category-rule" });
+    details.open = Boolean(rule);
+    details.append(make("summary", { text: teacherText(en, ja) }));
+    const custom = make("input");
+    custom.type = "checkbox";
+    custom.checked = Boolean(rule);
+    const enabled = make("label", { className: "editor-check-field" });
+    enabled.append(custom, make("span", { text: teacherText("Use a separate range", "このカテゴリを個別に設定") }));
+    const body = make("fieldset");
+    const range = make("div", { className: "structured-hub-teacher-level-range" });
+    const min = make("select");
+    const max = make("select");
+    [min, max].forEach((select, index) => {
+      for (let level = 1; level <= 32; level += 1) {
+        const option = make("option", { text: `Level ${level}` });
+        option.value = String(level);
+        select.append(option);
+      }
+      select.value = String(index === 0 ? rule?.min || settings.allowed_level_min : rule?.max || settings.allowed_level_max);
+      select.setAttribute("aria-label", `${en} ${index === 0 ? teacherText("minimum level", "最小レベル") : teacherText("maximum level", "最大レベル")}`);
+      range.append(teacherAnnouncementField(index === 0 ? teacherText("From", "開始") : teacherText("Through", "終了"), select));
+    });
+    const grid = make("div", { className: "structured-hub-category-levels" });
+    const levels = [];
+    for (let level = 1; level <= 32; level += 1) {
+      const label = make("label");
+      const select = make("select");
+      for (const [value, text] of [["inherit", teacherText("Range", "範囲に従う")], ["unlock", teacherText("Unlock", "公開")], ["lock", teacherText("Lock", "非公開")]]) {
+        const option = make("option", { text });
+        option.value = value;
+        select.append(option);
+      }
+      select.value = rule?.lock.includes(level) ? "lock" : rule?.unlock.includes(level) ? "unlock" : "inherit";
+      select.setAttribute("aria-label", `${en} Level ${level}`);
+      label.append(make("span", { text: String(level) }), select);
+      levels.push({ level, select });
+      grid.append(label);
+    }
+    body.append(range, grid);
+    body.disabled = !custom.checked;
+    custom.addEventListener("change", () => { body.disabled = !custom.checked; });
+    details.append(enabled, body);
+    section.append(details);
+    rules[category] = { custom, min, max, levels };
+  }
+  return {
+    section,
+    value() {
+      return normalizeCategoryAccess(Object.fromEntries(Object.entries(rules)
+        .filter(([, rule]) => rule.custom.checked).map(([category, rule]) => [category, {
+          min: Number(rule.min.value), max: Number(rule.max.value),
+          unlock: rule.levels.filter(({ select }) => select.value === "unlock").map(({ level }) => level),
+          lock: rule.levels.filter(({ select }) => select.value === "lock").map(({ level }) => level),
+        }])));
+    },
+  };
+}
+
+function structuredHubVisibilitySummary(profile, settings) {
+  const section = make("section", { className: "structured-hub-visibility-summary" });
+  section.append(make("h4", { text: teacherText("What this learner can see", "この生徒に見える内容") }));
+  if (!settings.account_enabled) {
+    section.append(make("p", { text: teacherText("Account paused — learning content is hidden.", "利用停止中 — 学習内容は非表示です。") }));
+    return section;
+  }
+  const list = make("ul");
+  const visible = STRUCTURED_HUB_FEATURES.filter(([key]) => settings[key] !== false).map(([, en, ja]) => teacherText(en, ja));
+  list.append(make("li", { text: visible.join(" · ") || teacherText("All features hidden", "すべて非表示") }));
+  for (const [category, en, ja] of STRUCTURED_HUB_CATEGORIES) {
+    const levels = categoryVisibleLevels(settings, category);
+    list.append(make("li", { text: `${teacherText(en, ja)}: ${levels.length ? `Level ${levels.join(", ")}` : teacherText("Hidden", "非表示")}` }));
+  }
+  const overrides = state.structuredHub.access.filter((entry) => entry.student_id === profile.user_id);
+  const packs = state.structuredHub.packs.filter((pack) => pack.student_id === profile.user_id && pack.active);
+  list.append(make("li", { text: teacherText(
+    `${overrides.filter((entry) => entry.access_mode === "allow").length} item exceptions · ${overrides.filter((entry) => entry.access_mode === "block").length} blocked items · ${packs.length} personal packs. Plan limits still apply to the normal range.`,
+    `個別許可 ${overrides.filter((entry) => entry.access_mode === "allow").length}件・個別非表示 ${overrides.filter((entry) => entry.access_mode === "block").length}件・個人パック ${packs.length}件。通常範囲にはプラン制限が適用されます。`,
+  ) }));
+  section.append(list);
+  return section;
+}
+
+function structuredHubPersonalPacks(profile, onChange = () => {}) {
+  const section = make("details", { className: "structured-hub-personal-packs" });
+  section.append(make("summary", { text: teacherText("Personal learning packs", "この生徒だけの学習パック") }));
+  section.append(make("p", { text: teacherText(
+    "Choose words, phrases or phonics across levels and send them as one named pack. Category visibility and individual item blocks still apply.",
+    "レベルをまたいで単語・フレーズ・発音教材を選び、名前付きパックとしてこの生徒だけに公開できます。カテゴリ非表示と個別教材の非表示は優先されます。",
+  ) }));
+  const existing = make("div");
+  const status = make("p", { className: "form-status" });
+  status.setAttribute("role", "status");
+  const refreshExisting = () => {
+    existing.replaceChildren();
+    const packs = state.structuredHub.packs.filter((pack) => pack.student_id === profile.user_id);
+    if (!packs.length) existing.append(make("p", { text: teacherText("No personal packs yet.", "個人パックはまだありません。") }));
+    for (const pack of packs) {
+      const row = make("div", { className: "structured-hub-pack-row" });
+      const button = makeAction(pack.active ? teacherText("Archive", "非公開にする") : teacherText("Restore", "再公開"), async () => {
+        if (pack.active && !window.confirm(teacherText("Hide this personal pack? Learning history will be kept.", "この個人パックを非公開にしますか？学習履歴は保持されます。"))) return;
+        button.disabled = true;
+        const result = await setTeacherLearningPackActive(pack.id, !pack.active).catch((error) => ({ error }));
+        button.disabled = false;
+        if (result.error || result.reason) { status.textContent = readableError(result.error, teacherText("The pack could not be updated.", "パックを更新できませんでした。")); return; }
+        Object.assign(pack, result.data);
+        onChange();
+        status.textContent = teacherText("Saved ✓", "保存しました ✓");
+        refreshExisting();
+      });
+      button.className = "secondary-btn";
+      row.append(make("strong", { text: pack.title }), make("span", { text: pack.active ? teacherText("Visible", "公開中") : teacherText("Archived", "非公開") }), button);
+      existing.append(row);
+    }
+  };
+  refreshExisting();
+  const form = make("form");
+  const title = make("input");
+  title.required = true;
+  title.maxLength = 160;
+  title.placeholder = teacherText("e.g. Maya's weekend practice", "例：週末の英語練習");
+  const instructions = make("textarea");
+  instructions.maxLength = 2000;
+  instructions.rows = 2;
+  const search = make("input");
+  search.type = "search";
+  search.placeholder = teacherText("Find a word or phrase", "単語・フレーズを検索");
+  search.setAttribute("aria-label", teacherText("Search pack items", "パックの教材を検索"));
+  const category = make("select");
+  category.setAttribute("aria-label", teacherText("Pack item category", "パックの教材カテゴリ"));
+  for (const [value, en, ja] of STRUCTURED_HUB_CATEGORIES) { const option = make("option", { text: teacherText(en, ja) }); option.value = value; category.append(option); }
+  const level = make("select");
+  level.setAttribute("aria-label", teacherText("Pack item level", "パックの教材レベル"));
+  for (let value = 1; value <= 32; value += 1) { const option = make("option", { text: `Level ${value}` }); option.value = String(value); level.append(option); }
+  const filters = make("div", { className: "structured-hub-teacher-item-filters" });
+  filters.append(category, level, search);
+  const choices = make("div", { className: "structured-hub-pack-choices" });
+  const selected = new Set();
+  const count = make("p");
+  count.setAttribute("role", "status");
+  const updateCount = () => { count.textContent = teacherText(`${selected.size} items selected`, `${selected.size}件選択中`); };
+  const renderChoices = () => {
+    const query = search.value.trim().toLocaleLowerCase();
+    const items = state.structuredHub.items.filter((item) => item.active && (query
+      ? `${item.title_en} ${item.title_ja || ""}`.toLocaleLowerCase().includes(query)
+      : item.category === category.value && Number(item.level) === Number(level.value)));
+    choices.replaceChildren();
+    if (!items.length) choices.append(make("p", { text: teacherText("No matching published items.", "一致する公開教材がありません。") }));
+    for (const item of items) {
+      const input = make("input");
+      input.type = "checkbox";
+      input.checked = selected.has(item.id);
+      input.addEventListener("change", () => { if (input.checked) selected.add(item.id); else selected.delete(item.id); updateCount(); });
+      const label = make("label");
+      label.append(input, make("span", { text: `${item.title_en} · ${item.title_ja || ""}` }), make("small", { text: `${item.category} · L${item.level}` }));
+      choices.append(label);
+    }
+  };
+  [category, level].forEach((control) => control.addEventListener("change", renderChoices));
+  search.addEventListener("input", renderChoices);
+  const submit = make("button", { type: "submit", className: "primary-btn", text: teacherText("Assign to this learner", "この生徒に割り当てる") });
+  const clear = makeAction(teacherText("Clear selection", "選択を解除"), () => { selected.clear(); renderChoices(); updateCount(); });
+  clear.className = "secondary-btn";
+  const actions = make("div", { className: "structured-hub-teacher-actions" });
+  actions.append(submit, clear);
+  form.append(teacherAnnouncementField(teacherText("Pack title", "パック名"), title), teacherAnnouncementField(teacherText("A note for this learner", "この生徒へのメッセージ"), instructions), filters, choices, count, actions);
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    if (!selected.size) { status.textContent = teacherText("Choose at least one learning item.", "教材を1件以上選んでください。"); return; }
+    submit.disabled = true;
+    form.setAttribute("aria-busy", "true");
+    const result = await assignTeacherLearningPack(profile.user_id, { title: title.value, instructions: instructions.value, itemIds: [...selected] }).catch((error) => ({ error }));
+    submit.disabled = false;
+    form.removeAttribute("aria-busy");
+    if (result.error || result.reason) { status.textContent = readableError(result.error, teacherText("The learning pack could not be assigned.", "学習パックを割り当てられませんでした。")); return; }
+    state.structuredHub.packs.unshift(result.data);
+    onChange();
+    selected.clear(); title.value = ""; instructions.value = "";
+    updateCount(); renderChoices(); refreshExisting();
+    status.textContent = teacherText("Saved ✓ This pack is assigned only to this learner.", "保存しました ✓ この生徒だけにパックを割り当てました。");
+  });
+  updateCount(); renderChoices();
+  section.append(existing, form, status);
+  return section;
 }
 
 function renderStructuredHubControls(profile, container, output) {
@@ -2707,7 +2915,11 @@ function renderStructuredHubControls(profile, container, output) {
     type: "submit",
   });
   actions.append(save);
-  form.append(features, range, actions);
+  const categories = structuredHubCategoryControls(settings);
+  const summary = make("div");
+  const refreshSummary = () => summary.replaceChildren(structuredHubVisibilitySummary(profile, settings));
+  refreshSummary();
+  form.append(features, range, categories.section, actions);
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
     const low = Number(minimum.value);
@@ -2727,7 +2939,10 @@ function renderStructuredHubControls(profile, container, output) {
       accountEnabled.checked = true;
       return;
     }
+    let categoryAccess;
+    try { categoryAccess = categories.value(); } catch (error) { output.textContent = error.message; return; }
     const patch = {
+      category_access: categoryAccess,
       account_enabled: accountEnabled.checked,
       ...Object.fromEntries(STRUCTURED_HUB_FEATURES.map(([key]) => [key, featureInputs[key].checked])),
       allowed_level_min: low,
@@ -2738,6 +2953,7 @@ function renderStructuredHubControls(profile, container, output) {
     accountEnabled.disabled = true;
     features.disabled = true;
     range.disabled = true;
+    categories.section.disabled = true;
     form.setAttribute("aria-busy", "true");
     output.textContent = teacherText("Saving Structured Hub settings…", "学習ハブ設定を保存しています…");
     let saveResult;
@@ -2750,6 +2966,7 @@ function renderStructuredHubControls(profile, container, output) {
     accountEnabled.disabled = false;
     features.disabled = false;
     range.disabled = false;
+    categories.section.disabled = false;
     form.removeAttribute("aria-busy");
     if (saveResult.error || saveResult.reason) {
       output.textContent = readableError(
@@ -2763,17 +2980,20 @@ function renderStructuredHubControls(profile, container, output) {
     }
     settings = { ...settings, ...saveResult.data };
     replaceHubSettings(profile.user_id, settings);
+    summary.replaceChildren(structuredHubVisibilitySummary(profile, settings));
     output.textContent = teacherText(
-      "Structured Hub settings saved.",
-      "学習ハブ設定を保存しました。",
+      "Saved ✓ Structured Hub settings updated.",
+      "保存しました ✓ 学習ハブ設定を更新しました。",
     );
     showToast(teacherText("Structured Hub settings saved.", "学習ハブ設定を保存しました。"), "success");
   });
 
   container.replaceChildren(
+    summary,
     structuredHubProgressSummary(profile),
     form,
-    structuredHubItemAccess(profile, settings),
+    structuredHubItemAccess(profile, settings, refreshSummary),
+    structuredHubPersonalPacks(profile, refreshSummary),
   );
 }
 
@@ -5335,6 +5555,7 @@ function openEditor(lesson = null) {
   elements.editorStatus.value = lesson?.status || "draft";
   elements.editorAudience.value = lesson?.audience || "both";
   elements.editorIsPreview.checked = Boolean(lesson?.is_preview);
+  elements.editorAssignmentOnly.checked = Boolean(lesson?.assignment_only);
   elements.editorSummary.value = lesson?.summary_en || "";
   updateLessonEditorControls(lesson);
   elements.editor.showModal();
@@ -5470,7 +5691,8 @@ async function saveLesson(event) {
     lesson_date: lessonDate,
     status,
     audience: elements.editorAudience.value,
-    is_preview: elements.editorIsPreview.checked,
+    is_preview: elements.editorIsPreview.checked && !elements.editorAssignmentOnly.checked,
+    assignment_only: elements.editorAssignmentOnly.checked,
     summary_en: elements.editorSummary.value.trim() || null,
   };
 
@@ -5489,7 +5711,7 @@ async function saveLesson(event) {
     payload.created_by = state.session.user.id;
     result = await client.from("review_lessons")
       .insert(payload)
-      .select("id,slug,lesson_date,title_en,title_ja,summary_en,summary_ja,status,audience,source_type,source_notion_url,source_segment,content_version,content,is_preview")
+      .select("id,slug,lesson_date,title_en,title_ja,summary_en,summary_ja,status,audience,source_type,source_notion_url,source_segment,content_version,content,is_preview,assignment_only")
       .single();
   }
 

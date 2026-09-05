@@ -1,4 +1,4 @@
-import { playInterfaceSound } from "./audio.js?v=20260905-natural1";
+import { playInterfaceSound } from "./audio.js?v=20260906-studio1";
 
 const reduceMotion = () => window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
 const installedRoots = new WeakSet();

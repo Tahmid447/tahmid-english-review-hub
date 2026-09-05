@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
+import { currentCurriculumRows, curriculumQualityPatches, readFrozenSeed, qualityPath } from "./curriculum-release.mjs";
 
 const migrationPath = new URL(
   "../supabase/migrations/202609050024_structured_learning_hub.sql",
@@ -59,11 +60,26 @@ assert.ok(generatedLevels.every(({ description_en: description }) => (
 )), "English level descriptions must not contain Japanese copy");
 assert.ok(generatedLevels.every(({ description_en: description }) => !/[a-z]+-[a-z]+/i.test(description)),
   "English level descriptions must present readable topics rather than internal slugs");
-const generatedItemsById = new Map(generatedItems.map((item) => [item.id, item]));
+readFrozenSeed();
+const currentRows = currentCurriculumRows();
+const qualitySql = await readFile(qualityPath, "utf8");
+const qualityPayloads = [...qualitySql.matchAll(/jsonb_to_recordset\(\$curriculum_quality\$(\[[\s\S]*?\])\$curriculum_quality\$::jsonb\)/g)].map((match) => JSON.parse(match[1]));
+const expectedPatches = curriculumQualityPatches();
+assert.deepEqual(qualityPayloads, [expectedPatches.items, expectedPatches.levels], "027 must match all reviewed before/after curriculum fields");
+assert.equal(currentRows.items.length, 480);
+assert.equal(currentRows.levels.length, 96);
+assert.match(qualitySql, /not in \(patch\.before_fields, patch\.after_fields\)/);
+assert.match(qualitySql, /in share row exclusive mode/);
+assert.match(qualitySql, /quality_postcheck/);
+assert.doesNotMatch(qualitySql, /\b(?:delete|truncate|drop)\s+(?:from|table)\b/i);
+const qualityUpdates = qualitySql.match(/update public\.review_curriculum_(?:items|levels) actual[\s\S]*?;/g) || [];
+assert.equal(qualityUpdates.length, 2);
+for (const update of qualityUpdates) assert.doesNotMatch(update.split("\nfrom ")[0], /\b(?:active|required_plan|is_preview|position|level|category|id)\s*=/i, "027 must preserve Teacher access controls and identifiers");
+const generatedItemsById = new Map(currentRows.items.map((item) => [item.id, item]));
 const seenItemIds = new Set();
 const expectedCounts = { words: 320, phrases: 128, phonics: 32 };
 const requiredFields = {
-  words: ["id", "level", "category", "word", "japanese", "pronunciationHint", "exampleSentence", "exampleJapanese", "commonMistake", "imageType", "icon", "audioUSVoice", "audioUKVoice", "tags"],
+  words: ["id", "level", "category", "word", "japanese", "pronunciationHint", "exampleSentence", "exampleJapanese", "commonMistake", "imageType", "audioUSVoice", "audioUKVoice", "tags"],
   phrases: ["id", "level", "phrase", "japanese", "situation", "naturalUsage", "exampleDialogue", "commonMistake", "audioUSVoice", "audioUKVoice", "tags"],
   phonics: ["id", "level", "phonicsTarget", "sound", "examples", "japaneseHint", "mouthTip", "practiceWords", "practiceSentence", "audioUSVoice", "audioUKVoice"],
 };
@@ -93,7 +109,10 @@ for (const [category, source] of Object.entries(curriculum)) {
     assert.equal(item.audioUSVoice, "Ava");
     assert.equal(item.audioUKVoice, "Libby");
     assert.doesNotMatch(JSON.stringify(item), /https?:\/\//i, `${item.id} must not embed an external asset`);
-    if (category === "words") assert.equal(item.imageType, "emoji");
+    if (category === "words") {
+      assert.equal(typeof item.icon, "string");
+      assert.notEqual(item.imageType, "emoji", "Emoji must not be the curriculum visual system");
+    }
 
     const generated = generatedItemsById.get(item.id);
     assert.ok(generated, `${item.id} is missing from the generated seed payload`);
@@ -121,7 +140,7 @@ assert.doesNotMatch(seed, /on conflict/i, "The one-time seed must never overwrit
 assert.match(seed, /actual_levels <> 96 or actual_items <> 480/i);
 assert.doesNotMatch(seed, /\b(?:delete|truncate|drop)\s+(?:from|table)\b/i);
 assert.match(seedGenerator, /Migration 025 is release-frozen/);
-assert.match(seedGenerator, /existing !== sql/);
+assert.match(seedGenerator, /readFrozenSeed/);
 assert.match(seedGenerator, /create migration 026 or later/);
 assert.match(
   JSON.parse(await readFile(new URL("../package.json", import.meta.url), "utf8")).scripts["generate:migration"],
@@ -332,8 +351,8 @@ assert.match(api, /reason: "migration-unavailable"/);
 assert.match(api, /error: null/);
 assert.match(api, /if \(!data\)[\s\S]*account_enabled: false[\s\S]*"hub-settings-missing"/,
   "A successful settings query with no row must close learner access");
-assert.match(studentVisibility, /result\?\.reason\s*&&\s*result\.reason !== "migration-unavailable"/,
-  "Only the explicit pre-migration compatibility result may retain open rollout defaults");
+assert.match(studentVisibility, /result\?\.error \|\| result\?\.reason/,
+  "Every failed signed-in access query, including an unavailable migration, must fail closed");
 
 const policySql = (name) => migration.match(
   new RegExp(`create policy ${name}\\b[\\s\\S]*?;(?=\\s*(?:drop policy|--|$))`, "i"),

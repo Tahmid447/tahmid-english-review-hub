@@ -1,9 +1,10 @@
+import { normalizeCategoryAccess } from "./curriculum-access.js?v=20260906-studio1";
 import {
   getStudentClient,
   getStudentSession,
   getTeacherClient,
   getTeacherSession,
-} from "./supabase.js?v=20260905-release5";
+} from "./supabase.js?v=20260906-studio1";
 
 const CATEGORY_VALUES = new Set(["words", "phrases", "phonics"]);
 const PROGRESS_VALUES = new Set(["not_started", "learning", "reviewed", "mastered"]);
@@ -29,6 +30,7 @@ const SETTING_KEYS = new Set([
   "allowed_level_min",
   "allowed_level_max",
   "allowed_levels",
+  "category_access",
 ]);
 
 export const DEFAULT_HUB_SETTINGS = Object.freeze({
@@ -48,13 +50,13 @@ export const DEFAULT_HUB_SETTINGS = Object.freeze({
   allowed_level_min: 1,
   allowed_level_max: 4,
   allowed_levels: Object.freeze([]),
+  category_access: Object.freeze({}),
 });
 
 const success = (data) => ({ data, reason: null, error: null });
 const unavailable = (data) => ({
   data,
   reason: "migration-unavailable",
-  // The rollout fallback is expected and should not trip fail-closed UI paths.
   error: null,
 });
 const failure = (data, reason, error = null) => ({ data, reason, error });
@@ -62,6 +64,7 @@ const failure = (data, reason, error = null) => ({ data, reason, error });
 const settingsDefaults = () => ({
   ...DEFAULT_HUB_SETTINGS,
   allowed_levels: [],
+  category_access: {},
 });
 
 const normalizeSettings = (settings) => ({
@@ -110,7 +113,7 @@ export async function fetchStudentHubContext() {
   const auth = await studentAuth();
   const fallback = {
     userId: auth.session?.user?.id || null,
-    settings: settingsDefaults(),
+    settings: { ...settingsDefaults(), account_enabled: false },
     migrationReady: false,
   };
   if (auth.reason) return failure(fallback, auth.reason);
@@ -123,6 +126,7 @@ export async function fetchStudentHubContext() {
       "allowed_level_min",
       "allowed_level_max",
       "allowed_levels",
+      "category_access",
       "updated_at",
     ].join(","))
     .eq("student_id", auth.session.user.id)
@@ -301,6 +305,10 @@ const normalizeSettingsPatch = (patch) => {
       normalized[key] = value;
       continue;
     }
+    if (key === "category_access") {
+      normalized[key] = normalizeCategoryAccess(value);
+      continue;
+    }
     if (key === "allowed_levels") {
       if (!Array.isArray(value)) throw new TypeError("allowed_levels must be an array.");
       const levels = [...new Set(value.map(Number))].sort((left, right) => left - right);
@@ -392,4 +400,49 @@ export async function saveTeacherCurriculumAccess(studentId, itemId, mode) {
   if (migrationUnavailable(error)) return unavailable(null);
   if (error) return failure(null, "teacher-curriculum-access-save-failed", error);
   return success(data);
+}
+
+
+export async function fetchStudentLearningPacks() {
+  const auth = await studentAuth();
+  if (auth.reason) return failure([], auth.reason);
+  const { data, error } = await auth.client.from("review_student_learning_packs")
+    .select("id,student_id,title,instructions,active,created_at,review_student_learning_pack_items(item_id,position)")
+    .eq("student_id", auth.session.user.id).eq("active", true)
+    .order("created_at", { ascending: false });
+  if (error) return failure([], "learning-packs-query-failed", error);
+  return success((data || []).map((pack) => ({
+    ...pack,
+    itemIds: (pack.review_student_learning_pack_items || [])
+      .sort((left, right) => left.position - right.position).map((entry) => entry.item_id),
+  })));
+}
+
+export async function assignTeacherLearningPack(studentId, { title, instructions = "", itemIds = [] } = {}) {
+  const auth = await teacherAuth();
+  if (auth.reason) return failure(null, auth.reason);
+  const safeTitle = String(title || "").trim();
+  const safeInstructions = String(instructions || "").trim();
+  if (!studentId || !safeTitle || safeTitle.length > 160 || safeInstructions.length > 2000
+    || !Array.isArray(itemIds) || !itemIds.length || itemIds.length > 480
+    || itemIds.some((item) => typeof item !== "string" || !item.trim())
+    || new Set(itemIds).size !== itemIds.length) {
+    return failure(null, "invalid-learning-pack", new Error("Add a title and choose unique published learning items."));
+  }
+  const { data, error } = await auth.client.rpc("review_assign_learning_pack", {
+    target_student: studentId, pack_title: safeTitle, pack_instructions: safeInstructions, item_ids: itemIds,
+  });
+  if (error) return failure(null, "learning-pack-assignment-failed", error);
+  return success(normalizeRpcRow(data));
+}
+
+export async function setTeacherLearningPackActive(packId, active) {
+  const auth = await teacherAuth();
+  if (auth.reason) return failure(null, auth.reason);
+  if (!packId || typeof active !== "boolean") return failure(null, "invalid-learning-pack");
+  const { data, error } = await auth.client.rpc("review_set_learning_pack_active", {
+    target_pack: packId, next_active: active,
+  });
+  if (error) return failure(null, "learning-pack-update-failed", error);
+  return success(normalizeRpcRow(data));
 }

@@ -1,0 +1,61 @@
+{
+  "checkedAt": "2026-09-05T16:01:32.074Z",
+  "browser": "Codex in-app browser",
+  "fixtureUrl": "http://127.0.0.1:8894/phonics.html",
+  "source": "src/phonics-visuals.js",
+  "levelsRenderedViaSelector": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32
+  ],
+  "results": {
+    "rendered": 32,
+    "missingAccessibleLabels": 0,
+    "clippedTextNodes": 0,
+    "diagramWidth": 850,
+    "diagramHeight": 531.25,
+    "viewBox": "0 0 640 400"
+  },
+  "screenshotsInspected": [
+    1,
+    8,
+    16,
+    24,
+    32,
+    11
+  ],
+  "darkBackgroundScreenshotInspected": [
+    32
+  ],
+  "standaloneRasterContactSheetsInspected": "All 32 diagrams, in /tmp/tahmid-phonics-visual-qa/contact-1.png through contact-4.png",
+  "scope": "Native SVG rendering and text bounds in an isolated browser fixture. Complete curriculum page responsive QA is performed separately."
+}

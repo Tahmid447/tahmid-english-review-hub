@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-09-05T16:34:58.405Z",
+  "scope": "Actual Teacher Studio header at http://127.0.0.1:4173/teacher using the built page with the current study-music.js. No login, account, or production data writes.",
+  "method": "Visible Settings/menu, language select, and music toggle clicks. Read-only DOM text verification after asynchronous playback events. English and Japanese transitions were tested both while playing and while off.",
+  "allPass": true,
+  "checks": [
+    {
+      "step": "Japanese initial menu",
+      "lang": "ja",
+      "menuOpen": true,
+      "toggle": "BGMオン",
+      "status": "再生中",
+      "trackLabel": "学習BGM",
+      "volumeLabel": "BGM音量",
+      "trackAria": "学習BGMの曲",
+      "singleLanguage": true
+    },
+    {
+      "step": "Select English",
+      "lang": "en",
+      "menuOpen": true,
+      "toggle": "Music On",
+      "status": "Playing",
+      "trackLabel": "Study music",
+      "volumeLabel": "Music level",
+      "trackAria": "Study music track",
+      "singleLanguage": true
+    },
+    {
+      "step": "Reopen English menu",
+      "lang": "en",
+      "menuOpen": true,
+      "toggle": "Music On",
+      "status": "Playing",
+      "trackLabel": "Study music",
+      "volumeLabel": "Music level",
+      "trackAria": "Study music track",
+      "singleLanguage": true
+    },
+    {
+      "step": "English music off",
+      "lang": "en",
+      "menuOpen": true,
+      "toggle": "Music Off",
+      "status": "Music off",
+      "trackLabel": "Study music",
+      "volumeLabel": "Music level",
+      "trackAria": "Study music track",
+      "singleLanguage": true
+    },
+    {
+      "step": "English music on after playback event",
+      "lang": "en",
+      "menuOpen": true,
+      "toggle": "Music On",
+      "status": "Playing",
+      "trackLabel": "Study music",
+      "volumeLabel": "Music level",
+      "trackAria": "Study music track",
+      "singleLanguage": true
+    },
+    {
+      "step": "Select Japanese",
+      "lang": "ja",
+      "menuOpen": true,
+      "toggle": "BGMオン",
+      "status": "再生中",
+      "trackLabel": "学習BGM",
+      "volumeLabel": "BGM音量",
+      "trackAria": "学習BGMの曲",
+      "singleLanguage": true
+    },
+    {
+      "step": "Reopen Japanese menu",
+      "lang": "ja",
+      "menuOpen": true,
+      "toggle": "BGMオン",
+      "status": "再生中",
+      "trackLabel": "学習BGM",
+      "volumeLabel": "BGM音量",
+      "trackAria": "学習BGMの曲",
+      "singleLanguage": true
+    },
+    {
+      "step": "Japanese music off",
+      "lang": "ja",
+      "menuOpen": true,
+      "toggle": "BGMオフ",
+      "status": "BGMオフ",
+      "trackLabel": "学習BGM",
+      "volumeLabel": "BGM音量",
+      "trackAria": "学習BGMの曲",
+      "singleLanguage": true
+    },
+    {
+      "step": "English while music remains off",
+      "lang": "en",
+      "menuOpen": true,
+      "toggle": "Music Off",
+      "status": "Music off",
+      "trackLabel": "Study music",
+      "volumeLabel": "Music level",
+      "trackAria": "Study music track",
+      "singleLanguage": true
+    },
+    {
+      "step": "Restore Japanese and music on",
+      "lang": "ja",
+      "menuOpen": true,
+      "toggle": "BGMオン",
+      "status": "再生中",
+      "trackLabel": "学習BGM",
+      "volumeLabel": "BGM音量",
+      "trackAria": "学習BGMの曲",
+      "singleLanguage": true
+    }
+  ],
+  "cleanup": "Restored the initial Japanese language and enabled music preference, then navigated the additional QA tab to a non-autoplay fixture to stop its extra playback.",
+  "limitations": [
+    "This checks UI language consistency and playback status events, not subjective audio quality."
+  ]
+}

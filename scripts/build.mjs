@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { execFileSync } from "node:child_process";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const dist = path.join(root, "dist");
@@ -13,6 +14,7 @@ const files = [
   "pricing.html",
   "pricing-layout-preview.html",
   "music-credits.html",
+  "illustration-credits.html",
   "404.html",
   "offline.html",
   "manifest.webmanifest",
@@ -20,6 +22,10 @@ const files = [
 ];
 const publicSourceFiles = [
   "audio.js",
+  "speech-contract.js",
+  "curriculum-audio.js",
+  "curriculum-access.js",
+  "phonics-visuals.js",
   "config.js",
   "data.js",
   "effects.js",
@@ -54,6 +60,8 @@ const offlinePreviewIds = new Set(["june-28", "june-29"]);
 
 fs.rmSync(dist, { recursive: true, force: true });
 fs.mkdirSync(dist, { recursive: true });
+const commit = process.env.COMMIT_REF || execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim();
+fs.writeFileSync(path.join(dist, 'release.json'), JSON.stringify({ version: '10.1.0', commit, builtAt: new Date().toISOString(), cache: 'te-review-public-v23' }, null, 2) + '\n');
 
 for (const file of files) {
   const source = path.join(root, file);
@@ -127,6 +135,9 @@ fs.writeFileSync(
     "",
     "/manifest.webmanifest",
     "  Cache-Control: public, max-age=3600",
+    "",
+    "/assets/curriculum/*",
+    "  Cache-Control: public, max-age=31536000, immutable",
     "",
     "/assets/audio/ambient/*",
     "  Cache-Control: public, max-age=31536000, immutable",

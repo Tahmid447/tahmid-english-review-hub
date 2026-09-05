@@ -1,4 +1,4 @@
-const CACHE_NAME = "te-review-public-v22";
+const CACHE_NAME = "te-review-public-v23";
 const OFFLINE_PAGE = "/offline.html";
 const PUBLIC_SHELL = new Set([
   "/",
@@ -23,7 +23,13 @@ const PUBLIC_SHELL = new Set([
   "/src/store.js",
   "/src/study-music.js",
   "/src/data.js",
+  "/src/lesson-source.js",
+  "/src/lesson-guide-targets.js",
   "/src/audio.js",
+  "/src/speech-contract.js",
+  "/src/curriculum-audio.js",
+  "/src/curriculum-access.js",
+  "/src/phonics-visuals.js",
   "/src/config.js",
   "/src/effects.js",
   "/src/i18n.js",

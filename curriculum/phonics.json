@@ -25,7 +25,18 @@
           ],
           "practiceSentence": "Sam taps the map.",
           "audioUSVoice": "Ava",
-          "audioUKVoice": "Libby"
+          "audioUKVoice": "Libby",
+          "audioFocus": "Listen for the first sounds in moon, sun, top, and pen.",
+          "contrastPairs": [
+            [
+              "top",
+              "pop"
+            ],
+            [
+              "map",
+              "sap"
+            ]
+          ]
         }
       ]
     },
@@ -53,7 +64,18 @@
           ],
           "practiceSentence": "Ben digs by the big bed.",
           "audioUSVoice": "Ava",
-          "audioUKVoice": "Libby"
+          "audioUKVoice": "Libby",
+          "audioFocus": "Listen for the first sounds in net, bag, dog, and gum.",
+          "contrastPairs": [
+            [
+              "net",
+              "bet"
+            ],
+            [
+              "bag",
+              "nag"
+            ]
+          ]
         }
       ]
     },
@@ -81,7 +103,18 @@
           ],
           "practiceSentence": "We have five hats.",
           "audioUSVoice": "Ava",
-          "audioUKVoice": "Libby"
+          "audioUKVoice": "Libby",
+          "audioFocus": "Listen to fan and van. Feel your voice start in van.",
+          "contrastPairs": [
+            [
+              "fan",
+              "van"
+            ],
+            [
+              "wet",
+              "vet"
+            ]
+          ]
         }
       ]
     },
@@ -91,9 +124,11 @@
         {
           "id": "phonics-l04",
           "level": 4,
-          "phonicsTarget": "Remaining common alphabet sounds: c, k, j, z, y, x, q",
-          "sound": "/k/, /dʒ/, /z/, /j/, /ks/, /kw/",
+          "phonicsTarget": "L and r, plus c, k, j, z, y, x, and q",
+          "sound": "/l/, /r/, /k/, /dʒ/, /z/, /j/, /ks/, /kw/",
           "examples": [
+            "light",
+            "right",
             "cat",
             "kite",
             "jam",
@@ -102,9 +137,11 @@
             "box",
             "quiz"
           ],
-          "japaneseHint": "cはcatでは/k/、jは/dʒ/、yはyesの短い子音です。xは多くの場合/k/と/s/を続けます。",
-          "mouthTip": "Use the back of the tongue for /k/. Round the lips while starting /kw/. Keep /ks/ together at the end of a word.",
+          "japaneseHint": "lは舌先を上の歯ぐきにつけ、rでは舌を後ろへ引いて上につけません。cはcatでは/k/、xはboxでは/ks/、qはquizでは/kw/です。",
+          "mouthTip": "For /l/, touch the ridge behind the upper teeth with the tongue tip. For /r/, raise or bunch the tongue without touching the roof. Use the back of the tongue for /k/ and keep final /ks/ together.",
           "practiceWords": [
+            "lip",
+            "rip",
             "cup",
             "kid",
             "jet",
@@ -113,9 +150,20 @@
             "fox",
             "quit"
           ],
-          "practiceSentence": "The quick fox can jump.",
+          "practiceSentence": "Look right at the red fox.",
           "audioUSVoice": "Ava",
-          "audioUKVoice": "Libby"
+          "audioUKVoice": "Libby",
+          "audioFocus": "Listen to light and right. Then try the other first and last sounds.",
+          "contrastPairs": [
+            [
+              "light",
+              "right"
+            ],
+            [
+              "zip",
+              "sip"
+            ]
+          ]
         }
       ]
     },
@@ -143,7 +191,18 @@
           ],
           "practiceSentence": "A black cat sat on the mat.",
           "audioUSVoice": "Ava",
-          "audioUKVoice": "Libby"
+          "audioUKVoice": "Libby",
+          "audioFocus": "Listen to the short vowel in cat.",
+          "contrastPairs": [
+            [
+              "cat",
+              "cut"
+            ],
+            [
+              "cap",
+              "cup"
+            ]
+          ]
         }
       ]
     },
@@ -171,7 +230,18 @@
           ],
           "practiceSentence": "Six fish swim in the river.",
           "audioUSVoice": "Ava",
-          "audioUKVoice": "Libby"
+          "audioUKVoice": "Libby",
+          "audioFocus": "Listen to the short vowel in sit.",
+          "contrastPairs": [
+            [
+              "ship",
+              "sheep"
+            ],
+            [
+              "sit",
+              "seat"
+            ]
+          ]
         }
       ]
     },
@@ -199,7 +269,18 @@
           ],
           "practiceSentence": "Tom drops the box by the clock.",
           "audioUSVoice": "Ava",
-          "audioUKVoice": "Libby"
+          "audioUKVoice": "Libby",
+          "audioFocus": "Listen to the vowel in hot. Notice how each accent sounds.",
+          "contrastPairs": [
+            [
+              "hot",
+              "hut"
+            ],
+            [
+              "cot",
+              "cut"
+            ]
+          ]
         }
       ]
     },
@@ -227,7 +308,18 @@
           ],
           "practiceSentence": "Meg left her red pen on the desk.",
           "audioUSVoice": "Ava",
-          "audioUKVoice": "Libby"
+          "audioUKVoice": "Libby",
+          "audioFocus": "Listen to the short vowel in bed.",
+          "contrastPairs": [
+            [
+              "pen",
+              "pin"
+            ],
+            [
+              "bed",
+              "bad"
+            ]
+          ]
         }
       ]
     },
@@ -255,7 +347,18 @@
           ],
           "practiceSentence": "The duck runs under the bus.",
           "audioUSVoice": "Ava",
-          "audioUKVoice": "Libby"
+          "audioUKVoice": "Libby",
+          "audioFocus": "Listen to the short vowel in sun.",
+          "contrastPairs": [
+            [
+              "cup",
+              "cap"
+            ],
+            [
+              "luck",
+              "lock"
+            ]
+          ]
         }
       ]
     },
@@ -275,7 +378,7 @@
             "cup"
           ],
           "japaneseHint": "3つの音を切り離さずにつなぎ、最後の子音の後に母音を足さない練習です。",
-          "mouthTip": "Stretch the first two sounds just enough to connect them, then stop cleanly on the final consonant.",
+          "mouthTip": "Join the first consonant to the vowel, then finish with the last consonant. Do not add a vowel after it.",
           "practiceWords": [
             "tap",
             "win",
@@ -285,7 +388,18 @@
           ],
           "practiceSentence": "Kim can hop and run.",
           "audioUSVoice": "Ava",
-          "audioUKVoice": "Libby"
+          "audioUKVoice": "Libby",
+          "audioFocus": "Join the sounds into a word. Listen for the final consonant.",
+          "contrastPairs": [
+            [
+              "cap",
+              "cat"
+            ],
+            [
+              "hop",
+              "hot"
+            ]
+          ]
         }
       ]
     },
@@ -296,7 +410,7 @@
           "id": "phonics-l11",
           "level": 11,
           "phonicsTarget": "L-blends at the beginning",
-          "sound": "/bl/, /cl/, /fl/, /gl/, /pl/, /sl/",
+          "sound": "/bl/, /kl/, /fl/, /gl/, /pl/, /sl/",
           "examples": [
             "blue",
             "clap",
@@ -317,7 +431,18 @@
           ],
           "practiceSentence": "The blue flag flies above the plane.",
           "audioUSVoice": "Ava",
-          "audioUKVoice": "Libby"
+          "audioUKVoice": "Libby",
+          "audioFocus": "Listen to both consonants at the start of blue.",
+          "contrastPairs": [
+            [
+              "play",
+              "pray"
+            ],
+            [
+              "glass",
+              "grass"
+            ]
+          ]
         }
       ]
     },
@@ -328,7 +453,7 @@
           "id": "phonics-l12",
           "level": 12,
           "phonicsTarget": "R-blends at the beginning",
-          "sound": "/br/, /cr/, /dr/, /fr/, /gr/, /pr/, /tr/",
+          "sound": "/br/, /kr/, /dr/, /fr/, /gr/, /pr/, /tr/",
           "examples": [
             "brown",
             "crab",
@@ -351,7 +476,18 @@
           ],
           "practiceSentence": "A green frog rests by the tree.",
           "audioUSVoice": "Ava",
-          "audioUKVoice": "Libby"
+          "audioUKVoice": "Libby",
+          "audioFocus": "Listen to both consonants at the start of brown.",
+          "contrastPairs": [
+            [
+              "grass",
+              "glass"
+            ],
+            [
+              "fry",
+              "fly"
+            ]
+          ]
         }
       ]
     },
@@ -385,7 +521,18 @@
           ],
           "practiceSentence": "The strong swimmer starts slowly.",
           "audioUSVoice": "Ava",
-          "audioUKVoice": "Libby"
+          "audioUKVoice": "Libby",
+          "audioFocus": "Keep the first consonants together. Listen to spin and street.",
+          "contrastPairs": [
+            [
+              "spin",
+              "pin"
+            ],
+            [
+              "stop",
+              "top"
+            ]
+          ]
         }
       ]
     },
@@ -413,7 +560,18 @@
           ],
           "practiceSentence": "She chose fresh fish for lunch.",
           "audioUSVoice": "Ava",
-          "audioUKVoice": "Libby"
+          "audioUKVoice": "Libby",
+          "audioFocus": "Listen to ship and chip. The start of chip has a short stop.",
+          "contrastPairs": [
+            [
+              "ship",
+              "chip"
+            ],
+            [
+              "wash",
+              "watch"
+            ]
+          ]
         }
       ]
     },
@@ -439,9 +597,20 @@
             "that",
             "weather"
           ],
-          "practiceSentence": "Those three paths are narrow.",
+          "practiceSentence": "Those three things are over there.",
           "audioUSVoice": "Ava",
-          "audioUKVoice": "Libby"
+          "audioUKVoice": "Libby",
+          "audioFocus": "Listen to think and this. Your voice starts in this.",
+          "contrastPairs": [
+            [
+              "thin",
+              "sin"
+            ],
+            [
+              "then",
+              "den"
+            ]
+          ]
         }
       ]
     },
@@ -469,7 +638,18 @@
           ],
           "practiceSentence": "When will Phil sing that long song?",
           "audioUSVoice": "Ava",
-          "audioUKVoice": "Libby"
+          "audioUKVoice": "Libby",
+          "audioFocus": "Listen to when, phone, and sing. Keep the end of sing smooth.",
+          "contrastPairs": [
+            [
+              "sin",
+              "sing"
+            ],
+            [
+              "win",
+              "wing"
+            ]
+          ]
         }
       ]
     },
@@ -487,7 +667,7 @@
             "late",
             "game"
           ],
-          "japaneseHint": "最後のeは読まず、その前のaを文字名の/eɪ/に変えます。",
+          "japaneseHint": "最後のeは読まず、その前のaを文字名の/eɪ/に変えます。 ここでの語に共通するパターンです。have・give・loveのような例外もあります。",
           "mouthTip": "Begin with a mid-front vowel and glide upward. Keep the final consonant clear; do not pronounce the final e.",
           "practiceWords": [
             "lake",
@@ -497,7 +677,18 @@
           ],
           "practiceSentence": "Jake made a cake by the lake.",
           "audioUSVoice": "Ava",
-          "audioUKVoice": "Libby"
+          "audioUKVoice": "Libby",
+          "audioFocus": "Listen to cap, then cape. The vowel changes.",
+          "contrastPairs": [
+            [
+              "cap",
+              "cape"
+            ],
+            [
+              "mad",
+              "made"
+            ]
+          ]
         }
       ]
     },
@@ -515,7 +706,7 @@
             "five",
             "smile"
           ],
-          "japaneseHint": "最後のeは無音で、iは/aɪ/になります。短いiのsitと比べます。",
+          "japaneseHint": "最後のeは無音で、iは/aɪ/になります。短いiのsitと比べます。 ここでの語に共通するパターンです。have・give・loveのような例外もあります。",
           "mouthTip": "Start with an open vowel and glide toward /ɪ/. Stop on the final consonant without sounding the e.",
           "practiceWords": [
             "kite",
@@ -525,7 +716,18 @@
           ],
           "practiceSentence": "Mike rides his bike at five.",
           "audioUSVoice": "Ava",
-          "audioUKVoice": "Libby"
+          "audioUKVoice": "Libby",
+          "audioFocus": "Listen to bit, then bite. The vowel changes.",
+          "contrastPairs": [
+            [
+              "bit",
+              "bite"
+            ],
+            [
+              "kit",
+              "kite"
+            ]
+          ]
         }
       ]
     },
@@ -536,24 +738,35 @@
           "id": "phonics-l19",
           "level": 19,
           "phonicsTarget": "Silent e makes long o",
-          "sound": "/oʊ/ in o_e",
+          "sound": "/oʊ/ (US), /əʊ/ (UK) in o_e",
           "examples": [
             "home",
             "note",
             "rose",
             "stone"
           ],
-          "japaneseHint": "最後のeは読まず、oを滑らかな/oʊ/にします。hopとhopeを聞き分けます。",
+          "japaneseHint": "最後のeは読まず、oを滑らかな/oʊ/にします。hopとhopeを聞き分けます。 ここでの語に共通するパターンです。have・give・loveのような例外もあります。",
           "mouthTip": "Begin with relaxed lips, then round them as the vowel glides. Keep the last consonant distinct.",
           "practiceWords": [
             "hope",
             "rope",
-            "close",
+            "bone",
             "phone"
           ],
           "practiceSentence": "Rose wrote a note at home.",
           "audioUSVoice": "Ava",
-          "audioUKVoice": "Libby"
+          "audioUKVoice": "Libby",
+          "audioFocus": "Listen to hop, then hope. The vowel changes.",
+          "contrastPairs": [
+            [
+              "hop",
+              "hope"
+            ],
+            [
+              "not",
+              "note"
+            ]
+          ]
         }
       ]
     },
@@ -571,7 +784,7 @@
             "rule",
             "theme"
           ],
-          "japaneseHint": "u_eは/juː/または/uː/、e_eは/iː/になります。最後のeは発音しません。",
+          "japaneseHint": "u_eは/juː/または/uː/、e_eは/iː/になります。最後のeは発音しません。 ここでの語に共通するパターンです。have・give・loveのような例外もあります。",
           "mouthTip": "For /juː/, begin with a light y sound before rounded /uː/. For /iː/, keep the tongue high and smile slightly.",
           "practiceWords": [
             "cute",
@@ -579,9 +792,20 @@
             "flute",
             "these"
           ],
-          "practiceSentence": "June chose a cute theme for the flute show.",
+          "practiceSentence": "June chose these cute cubes.",
           "audioUSVoice": "Ava",
-          "audioUKVoice": "Libby"
+          "audioUKVoice": "Libby",
+          "audioFocus": "Listen to cub and cube. Then listen to these.",
+          "contrastPairs": [
+            [
+              "cub",
+              "cube"
+            ],
+            [
+              "cut",
+              "cute"
+            ]
+          ]
         }
       ]
     },
@@ -609,7 +833,18 @@
           ],
           "practiceSentence": "We may take the train on a rainy day.",
           "audioUSVoice": "Ava",
-          "audioUKVoice": "Libby"
+          "audioUKVoice": "Libby",
+          "audioFocus": "Listen to the same vowel in rain and day.",
+          "contrastPairs": [
+            [
+              "paid",
+              "pad"
+            ],
+            [
+              "day",
+              "die"
+            ]
+          ]
         }
       ]
     },
@@ -624,7 +859,7 @@
           "examples": [
             "green",
             "sleep",
-            "read",
+            "leaf",
             "team"
           ],
           "japaneseHint": "eeとeaは長い/iː/になることが多いですが、headやbreadのeaは短い/e/です。",
@@ -637,7 +872,18 @@
           ],
           "practiceSentence": "The team reads beneath the green tree.",
           "audioUSVoice": "Ava",
-          "audioUKVoice": "Libby"
+          "audioUKVoice": "Libby",
+          "audioFocus": "Listen to the long vowel in green and leaf.",
+          "contrastPairs": [
+            [
+              "ship",
+              "sheep"
+            ],
+            [
+              "fit",
+              "feet"
+            ]
+          ]
         }
       ]
     },
@@ -648,7 +894,7 @@
           "id": "phonics-l23",
           "level": 23,
           "phonicsTarget": "Long o vowel teams oa and ow",
-          "sound": "/oʊ/",
+          "sound": "/oʊ/ (US), /əʊ/ (UK)",
           "examples": [
             "boat",
             "road",
@@ -663,9 +909,20 @@
             "grow",
             "yellow"
           ],
-          "practiceSentence": "The yellow boat moves slowly down the road.",
+          "practiceSentence": "The boat moves slowly past the yellow house.",
           "audioUSVoice": "Ava",
-          "audioUKVoice": "Libby"
+          "audioUKVoice": "Libby",
+          "audioFocus": "Listen to the same vowel in boat and snow.",
+          "contrastPairs": [
+            [
+              "coat",
+              "cot"
+            ],
+            [
+              "low",
+              "law"
+            ]
+          ]
         }
       ]
     },
@@ -686,14 +943,25 @@
           "japaneseHint": "moonのooは長い/uː/、bookのooは短い/ʊ/です。つづりだけでは判断できない語もあります。",
           "mouthTip": "Round the lips for both. Hold /uː/ longer with a tenser tongue; keep /ʊ/ short and relaxed.",
           "practiceWords": [
-            "room",
+            "pool",
             "spoon",
             "cook",
             "foot"
           ],
-          "practiceSentence": "The cook put good food in the cool room.",
+          "practiceSentence": "The cook put good food by the cool pool.",
           "audioUSVoice": "Ava",
-          "audioUKVoice": "Libby"
+          "audioUKVoice": "Libby",
+          "audioFocus": "Listen to fool and full. Compare the two vowels.",
+          "contrastPairs": [
+            [
+              "fool",
+              "full"
+            ],
+            [
+              "pool",
+              "pull"
+            ]
+          ]
         }
       ]
     },
@@ -721,7 +989,18 @@
           ],
           "practiceSentence": "A short storm passed over the farm.",
           "audioUSVoice": "Ava",
-          "audioUKVoice": "Libby"
+          "audioUKVoice": "Libby",
+          "audioFocus": "Listen to car and core. Notice how each accent treats the ending.",
+          "contrastPairs": [
+            [
+              "car",
+              "core"
+            ],
+            [
+              "park",
+              "pork"
+            ]
+          ]
         }
       ]
     },
@@ -749,7 +1028,18 @@
           ],
           "practiceSentence": "The first bird returned on Thursday.",
           "audioUSVoice": "Ava",
-          "audioUKVoice": "Libby"
+          "audioUKVoice": "Libby",
+          "audioFocus": "Listen to the vowel in her, bird, and turn.",
+          "contrastPairs": [
+            [
+              "bird",
+              "beard"
+            ],
+            [
+              "fur",
+              "far"
+            ]
+          ]
         }
       ]
     },
@@ -777,7 +1067,18 @@
           ],
           "practiceSentence": "The boy enjoyed choosing a shiny coin.",
           "audioUSVoice": "Ava",
-          "audioUKVoice": "Libby"
+          "audioUKVoice": "Libby",
+          "audioFocus": "Listen to the moving vowel in coin and boy.",
+          "contrastPairs": [
+            [
+              "toy",
+              "tie"
+            ],
+            [
+              "coin",
+              "cane"
+            ]
+          ]
         }
       ]
     },
@@ -805,7 +1106,18 @@
           ],
           "practiceSentence": "A brown cow walked around the town.",
           "audioUSVoice": "Ava",
-          "audioUKVoice": "Libby"
+          "audioUKVoice": "Libby",
+          "audioFocus": "Listen to the moving vowel in house and cow.",
+          "contrastPairs": [
+            [
+              "loud",
+              "load"
+            ],
+            [
+              "now",
+              "know"
+            ]
+          ]
         }
       ]
     },
@@ -837,7 +1149,18 @@
           ],
           "practiceSentence": "The giant placed a badge beside the city clock.",
           "audioUSVoice": "Ava",
-          "audioUKVoice": "Libby"
+          "audioUKVoice": "Libby",
+          "audioFocus": "Listen to the sounds in cat, city, giant, and bridge.",
+          "contrastPairs": [
+            [
+              "coat",
+              "goat"
+            ],
+            [
+              "badge",
+              "batch"
+            ]
+          ]
         }
       ]
     },
@@ -869,7 +1192,18 @@
           ],
           "practiceSentence": "She washed the cups, cleaned the trays, and packed the boxes.",
           "audioUSVoice": "Ava",
-          "audioUKVoice": "Libby"
+          "audioUKVoice": "Libby",
+          "audioFocus": "Listen to the endings. Some add a beat, and some do not.",
+          "contrastPairs": [
+            [
+              "pack",
+              "packed"
+            ],
+            [
+              "need",
+              "needed"
+            ]
+          ]
         }
       ]
     },
@@ -897,7 +1231,18 @@
           ],
           "practiceSentence": "A computer can support a family project.",
           "audioUSVoice": "Ava",
-          "audioUKVoice": "Libby"
+          "audioUKVoice": "Libby",
+          "audioFocus": "Listen for the strong beat. Keep the other syllables light.",
+          "contrastPairs": [
+            [
+              "a present",
+              "I present my work."
+            ],
+            [
+              "a record",
+              "I record my voice."
+            ]
+          ]
         }
       ]
     },
@@ -925,7 +1270,18 @@
           ],
           "practiceSentence": "Could you send it over when you arrive?",
           "audioUSVoice": "Ava",
-          "audioUKVoice": "Libby"
+          "audioUKVoice": "Libby",
+          "audioFocus": "Listen for the main beats. Connect the words smoothly.",
+          "contrastPairs": [
+            [
+              "Turn it on.",
+              "Turn it off."
+            ],
+            [
+              "Meet at eight.",
+              "Meet at nine."
+            ]
+          ]
         }
       ]
     }

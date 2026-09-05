@@ -1,5 +1,6 @@
-import { NATURAL_SPEECH_URL, SUPABASE_ANON_KEY } from "./config.js?v=20260905-release5";
-import { AMBIENT_TRACK_KEYS, getSettings, normalizeAnswerText } from "./store.js?v=20260905-release5";
+import { NATURAL_SPEECH_URL, SUPABASE_ANON_KEY } from "./config.js?v=20260906-studio1";
+import { AMBIENT_TRACK_KEYS, getSettings, normalizeAnswerText } from "./store.js?v=20260906-studio1";
+import { VOICE_PROFILES, createSpeechRequest, speechCacheKey, validateSpeechResponse } from "./speech-contract.js?v=20260906-studio1";
 
 const AUDIO_CACHE_LIMIT = 24;
 const remoteAudioCache = new Map();
@@ -247,10 +248,10 @@ export async function speakText(text, { voice, language, rate, onStatus } = {}) 
     for (let segmentIndex = 0; segmentIndex < segments.length; segmentIndex += 1) {
       const segment = segments[segmentIndex];
       const { voiceCode } = segment;
-      const cacheKey = `${voiceCode}:${segment.text.normalize("NFKC").toLocaleLowerCase()}`;
+      const cacheKey = speechCacheKey(segment.text, voiceCode, NATURAL_SPEECH_URL);
       let source = remoteAudioCache.get(cacheKey);
       if (!source && NATURAL_SPEECH_URL && SUPABASE_ANON_KEY && typeof fetch === "function") {
-        const voiceName = voiceCode === "ja" ? "Nanami" : voiceCode === "gb" ? "Libby" : "Ava";
+        const voiceName = VOICE_PROFILES[voiceCode].name;
         report(
           onStatus,
           "loading",
@@ -271,15 +272,16 @@ export async function speakText(text, { voice, language, rate, onStatus } = {}) 
                 apikey: SUPABASE_ANON_KEY,
                 Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
               },
-              body: JSON.stringify({ text: segment.text, accent: voiceCode }),
+              body: JSON.stringify(createSpeechRequest(segment.text, voiceCode)),
               signal: controller.signal,
               cache: "no-store",
             });
-            if (!response.ok) throw new Error(`Natural speech request failed (${response.status}).`);
+            validateSpeechResponse(response, voiceCode);
             const blob = await response.blob();
             if (!blob.type.startsWith("audio/") || blob.size < 128) {
               throw new Error("Natural speech returned an invalid audio file.");
             }
+            if (token !== requestGeneration) return { played: false, cancelled: true };
             source = URL.createObjectURL(blob);
             cacheAudio(cacheKey, source);
           } catch (error) {
@@ -303,6 +305,7 @@ export async function speakText(text, { voice, language, rate, onStatus } = {}) 
         if (result.played) playedSegments += 1;
       }
     }
+    if (!playedSegments) throw new Error("Natural speech configuration or a playable speech segment is missing.");
     if (playedSegments) return {
       played: true,
       source: "edge",
@@ -311,6 +314,7 @@ export async function speakText(text, { voice, language, rate, onStatus } = {}) 
         text: segmentText,
         language: segmentLanguage,
         voice: voiceCode,
+        voiceId: VOICE_PROFILES[voiceCode].voiceId,
       })),
     };
   } catch (error) {

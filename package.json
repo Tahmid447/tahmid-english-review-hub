@@ -34,6 +34,13 @@
     "test:source-segments": "node scripts/test-source-segments.mjs",
     "test:forward-migrations": "node scripts/test-forward-migrations.mjs",
     "test:existing-notion-parity": "node scripts/test-existing-notion-parity-migration.mjs",
-    "verify:live": "node scripts/verify-live-security.mjs"
+    "verify:live": "node scripts/verify-live-security.mjs",
+    "verify:voices": "node scripts/verify-voices.mjs",
+    "verify:voices:live": "node scripts/verify-voices.mjs --live",
+    "test:security": "node scripts/test-personalisation-security.mjs"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "0.5.8",
+    "sharp": "0.35.4"
   }
 }

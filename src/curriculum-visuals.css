@@ -1,275 +1,35 @@
-/*
- * Tahmid English Curriculum illustration system
- * Original deterministic SVG artwork; see /assets/ATTRIBUTIONS.md.
- */
-
-.learn-card.has-curriculum-visual .learn-card-head {
-  grid-template-columns: minmax(102px, 116px) minmax(0, 1fr) auto;
-  gap: 15px;
-  align-items: center;
-}
-
-.learn-card-icon.curriculum-visual {
-  display: block;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 4 / 3;
-  overflow: hidden;
-  border: 1px solid color-mix(in srgb, var(--card-accent) 17%, var(--learn-line));
-  border-radius: 18px;
-  background: transparent;
-  box-shadow: 0 10px 24px color-mix(in srgb, var(--card-accent) 13%, transparent);
-  font-size: 0;
-  isolation: isolate;
-}
-
-.curriculum-visual > svg {
-  display: block;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-}
-
-.curriculum-visual {
-  --visual-bg: #fff8ed;
-  --visual-ground: #f7e9d6;
-  --visual-primary: #e46e4f;
-  --visual-secondary: #3b8d83;
-  --visual-highlight: #f2b94b;
-  --visual-soft: #f9e0cc;
-  --visual-ink: #173745;
-  --visual-paper: #fffdf8;
-  --visual-sky: #bde3df;
-  --visual-skin: #edb98f;
-  --visual-hair: #293d43;
-}
-
-.curriculum-visual[data-visual-tone="amber"] {
-  --visual-bg: #fff9e8;
-  --visual-ground: #f6e6ba;
-  --visual-primary: #d98939;
-  --visual-secondary: #397d79;
-  --visual-highlight: #f0bd45;
-}
-
-.curriculum-visual[data-visual-tone="mint"] {
-  --visual-bg: #eef9f2;
-  --visual-ground: #d8eee0;
-  --visual-primary: #338a76;
-  --visual-secondary: #e48158;
-  --visual-highlight: #efbd55;
-  --visual-sky: #cce9e6;
-}
-
-.curriculum-visual[data-visual-tone="sky"] {
-  --visual-bg: #eff8fb;
-  --visual-ground: #d9eaf0;
-  --visual-primary: #347fa0;
-  --visual-secondary: #dd7355;
-  --visual-highlight: #efba51;
-  --visual-sky: #bfe4ee;
-}
-
-.curriculum-visual[data-visual-tone="iris"] {
-  --visual-bg: #f4f2ff;
-  --visual-ground: #e4e1f5;
-  --visual-primary: #626dc1;
-  --visual-secondary: #da7257;
-  --visual-highlight: #efb951;
-  --visual-sky: #d4def2;
-}
-
-.curriculum-visual[data-visual-tone="rose"] {
-  --visual-bg: #fff3f2;
-  --visual-ground: #f3dddd;
-  --visual-primary: #c95f6e;
-  --visual-secondary: #448982;
-  --visual-highlight: #efb64e;
-}
-
-.learn-card[data-category="phrases"] .curriculum-visual {
-  --visual-primary: #6670ca;
-  --visual-secondary: #d87760;
-  --visual-soft: #e7e7fb;
-}
-
-.learn-card[data-category="phonics"] .curriculum-visual {
-  --visual-primary: #278d75;
-  --visual-secondary: #e27755;
-  --visual-soft: #d8eee7;
-}
-
-html[data-theme="dark"] .curriculum-visual {
-  --visual-bg: #17333a;
-  --visual-ground: #203f43;
-  --visual-primary: #f09272;
-  --visual-secondary: #72c3b7;
-  --visual-highlight: #f4c469;
-  --visual-soft: #334e52;
-  --visual-ink: #ecf7f4;
-  --visual-paper: #e6f0ed;
-  --visual-sky: #4b7e84;
-  --visual-skin: #dfaa83;
-  --visual-hair: #15262b;
-}
-
-html[data-theme="dark"] .learn-card[data-category="phrases"] .curriculum-visual {
-  --visual-primary: #aeb5ff;
-  --visual-secondary: #f09a81;
-  --visual-soft: #383d63;
-}
-
-html[data-theme="dark"] .learn-card[data-category="phonics"] .curriculum-visual {
-  --visual-primary: #70d3bc;
-  --visual-secondary: #f09a78;
-  --visual-soft: #254e48;
-}
-
-.visual-canvas { fill: var(--visual-bg); }
-.visual-ground { fill: var(--visual-ground); opacity: 0.78; }
-.visual-orbit { fill: var(--visual-highlight); opacity: 0.15; }
-.visual-primary { fill: var(--visual-primary); }
-.visual-secondary { fill: var(--visual-secondary); }
-.visual-highlight { fill: var(--visual-highlight); }
-.visual-soft { fill: var(--visual-soft); }
-.visual-paper { fill: var(--visual-paper); stroke: var(--visual-ink); stroke-width: 2.4; }
-.visual-sky { fill: var(--visual-sky); }
-.visual-skin { fill: var(--visual-skin); stroke: var(--visual-ink); stroke-width: 2.3; }
-.visual-hair { fill: var(--visual-hair); stroke: var(--visual-hair); stroke-linecap: round; stroke-width: 2; }
-.visual-line,
-.visual-limb,
-.visual-face-line,
-.visual-ground-line,
-.visual-paper-line,
-.visual-highlight-line,
-.visual-sound-wave,
-.visual-pointer,
-.visual-horn,
-.visual-steam,
-.visual-rain,
-.visual-sun-ray,
-.visual-frame-line,
-.visual-clock-hand,
-.visual-calendar-ring,
-.visual-bread-line,
-.visual-leaf-line,
-.visual-connection,
-.visual-chart-line,
-.visual-route-line,
-.visual-gauge-hand,
-.visual-gauge-ticks,
-.visual-speech-line,
-.visual-rhythm {
-  fill: none;
-  stroke: var(--visual-ink);
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-width: 3;
-}
-
-.visual-limb { stroke-width: 6; }
-.visual-face-line { stroke-width: 2.6; }
-.visual-ground-line { opacity: 0.35; stroke-width: 3; }
-.visual-paper-line { opacity: 0.42; stroke-width: 2.4; }
-.visual-highlight-line,
-.visual-chart-line { stroke: var(--visual-highlight); stroke-width: 5; }
-.visual-sound-wave { stroke: var(--visual-secondary); stroke-width: 5; }
-.visual-pointer { stroke: var(--visual-primary); stroke-width: 4; }
-.visual-horn { stroke-width: 5; }
-.visual-steam { opacity: 0.48; stroke-width: 3; }
-.visual-rain { stroke: #4d95bb; stroke-width: 5; }
-.visual-sun-ray { stroke: var(--visual-highlight); stroke-width: 5; }
-.visual-calendar-ring { stroke-width: 5; }
-.visual-bread-line { opacity: 0.5; }
-.visual-leaf-line { stroke: var(--visual-secondary); stroke-width: 4; }
-.visual-connection { stroke: var(--visual-highlight); stroke-width: 5; }
-.visual-route-line { stroke: var(--visual-secondary); stroke-dasharray: 7 8; stroke-width: 5; }
-.visual-gauge-hand { stroke: var(--visual-primary); stroke-width: 5; }
-.visual-gauge-ticks { opacity: 0.55; stroke-width: 4; }
-.visual-speech-line { opacity: 0.45; stroke-width: 3; }
-.visual-rhythm { stroke: var(--visual-highlight); stroke-width: 4; }
-.visual-thick-line { fill: none; stroke: var(--visual-primary); stroke-linecap: round; stroke-width: 13; }
-.visual-check { fill: none; stroke: var(--visual-paper); stroke-linecap: round; stroke-linejoin: round; stroke-width: 7; }
-.visual-ink-fill { fill: var(--visual-ink); }
-.visual-mouth-fill { fill: var(--visual-secondary); }
-.visual-nose { fill: var(--visual-ink); }
-.visual-focus-ring { fill: none; stroke: var(--visual-highlight); stroke-width: 5; }
-.visual-board { fill: var(--visual-ink); }
-.visual-board-text { fill: var(--visual-paper); font-size: 14px; font-weight: 900; letter-spacing: 0.08em; }
-.visual-tip { fill: var(--visual-ink); }
-.visual-frame { fill: var(--visual-paper); stroke: var(--visual-ink); stroke-width: 3; }
-.visual-sun { fill: var(--visual-highlight); }
-.visual-moon { fill: var(--visual-highlight); }
-.visual-star { fill: var(--visual-paper); }
-.visual-bg-hole { fill: var(--visual-bg); }
-.visual-swatch-shadow { fill: var(--visual-ink); opacity: 0.12; }
-.visual-swatch { stroke: var(--visual-ink); stroke-width: 2.5; }
-.visual-swatch-shine { fill: none; opacity: 0.7; stroke: var(--visual-paper); stroke-linecap: round; stroke-width: 5; }
-.visual-label-tile { fill: var(--visual-paper); stroke: var(--visual-ink); stroke-width: 2; }
-.visual-label { fill: var(--visual-ink); font-size: 10px; font-weight: 900; letter-spacing: 0.08em; }
-.visual-leaf { fill: #52a873; stroke: var(--visual-ink); stroke-linejoin: round; stroke-width: 2.2; }
-.visual-glass { fill: var(--visual-paper); opacity: 0.8; stroke: var(--visual-ink); stroke-width: 3; }
-.visual-water { fill: #65b8d2; }
-.visual-bread { fill: #e5ad62; stroke: var(--visual-ink); stroke-width: 2.4; }
-.visual-bowl { fill: var(--visual-primary); stroke: var(--visual-ink); stroke-width: 2.5; }
-.visual-food-fill { fill: var(--visual-highlight); }
-.visual-roof { fill: var(--visual-primary); stroke: var(--visual-ink); stroke-linejoin: round; stroke-width: 2.5; }
-.visual-tree-trunk { fill: #8b654b; }
-.visual-mane { fill: var(--visual-highlight); stroke: var(--visual-ink); stroke-width: 2.5; }
-.visual-face { fill: var(--visual-highlight); stroke: var(--visual-ink); stroke-width: 3; }
-.visual-cloud { fill: var(--visual-paper); stroke: var(--visual-ink); stroke-linejoin: round; stroke-width: 2.4; }
-.visual-snow { fill: #72a9c1; font-size: 18px; font-weight: 900; }
-.visual-horizon { fill: none; stroke: var(--visual-secondary); stroke-linecap: round; stroke-width: 5; }
-.visual-clock-face { fill: var(--visual-soft); stroke: var(--visual-ink); stroke-width: 2.5; }
-.visual-time-text { fill: var(--visual-primary); font-size: 27px; font-weight: 900; }
-.visual-building { fill: var(--visual-paper); stroke: var(--visual-ink); stroke-width: 2.5; }
-.visual-sign-text { fill: var(--visual-paper); font-size: 10px; font-weight: 900; letter-spacing: 0.05em; }
-.visual-wheel { fill: var(--visual-ink); stroke: var(--visual-paper); stroke-width: 4; }
-.visual-device { fill: var(--visual-ink); }
-.visual-device-text { fill: var(--visual-primary); font-size: 20px; font-weight: 900; letter-spacing: 0.05em; }
-.visual-coin-text { fill: var(--visual-paper); font-size: 25px; font-weight: 900; }
-.visual-question { fill: var(--visual-ink); font-size: 22px; font-weight: 900; }
-.visual-gauge { fill: none; stroke: var(--visual-secondary); stroke-linecap: round; stroke-width: 10; }
-.visual-speech-bubble { fill: var(--visual-paper); stroke: var(--visual-ink); stroke-linejoin: round; stroke-width: 2.4; }
-.visual-lips { fill: var(--visual-primary); stroke: var(--visual-ink); stroke-width: 2.5; }
-.visual-phonics-label-tile { fill: var(--visual-paper); stroke: var(--visual-ink); stroke-width: 2.2; }
-.visual-phonics-label { fill: var(--visual-ink); font-size: 13px; font-weight: 900; letter-spacing: 0.04em; }
-
-.learn-card:hover .curriculum-visual .visual-motif {
-  transform: translateY(-1.5px);
-}
-
-.curriculum-visual .visual-motif {
-  transform-origin: center;
-  transition: transform 180ms ease;
-}
-
-@media (max-width: 760px) {
-  .learn-card.has-curriculum-visual .learn-card-head {
-    grid-template-columns: 92px minmax(0, 1fr) auto;
-    gap: 12px;
-  }
-}
-
-@media (max-width: 430px) {
-  .learn-card.has-curriculum-visual .learn-card-head {
-    grid-template-columns: 82px minmax(0, 1fr) auto;
-    padding-inline: 14px;
-  }
-
-  .learn-card-icon.curriculum-visual {
-    border-radius: 15px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .curriculum-visual .visual-motif {
-    transition: none;
-  }
-}
-
-@media (forced-colors: active) {
-  .curriculum-visual > svg {
-    border: 1px solid CanvasText;
-  }
-}
+/* Authored semantic artwork; asset licences are at /illustration-credits.html. */
+.learn-card.has-curriculum-visual { position: relative; overflow: hidden; gap: 0; }
+.learn-card.has-curriculum-visual .learn-card-head { display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: start; gap: 12px; padding-bottom: 14px; }
+.curriculum-visual { position: relative; display: block; margin: 0 0 20px; width: 100%; aspect-ratio: 8/5; overflow: hidden; border-radius: 15px; background: #fbf8f1; border: 1px solid #ece8dc; }
+.curriculum-visual > img,.curriculum-visual > svg { display: block; width: 100%; height: 100%; object-fit: contain; }
+.curriculum-visual figcaption { position: absolute; bottom: 9px; left: 12px; right: 12px; color: #25443d; font-size: 11px; font-weight: 600; line-height: 1.3; text-align: center; }
+.curriculum-visual-missing { display: grid; height: 100%; place-content: center; color: #53675f; font-size: 14px; }
+.learn-card[data-category="phonics"] .curriculum-visual { aspect-ratio: 8/5; }
+.learn-card.has-curriculum-visual .learn-card-title h3 { font-size: clamp(22px,2.3vw,30px); line-height: 1.25; letter-spacing: -.035em; }
+.learn-card[data-category="phrases"] .learn-card-title h3,.learn-card[data-category="phonics"] .learn-card-title h3 { font-size: clamp(19px,1.8vw,25px); }
+.learn-card.has-curriculum-visual .learn-card-title small { font-size: 10px; letter-spacing: .09em; }
+.learn-card.has-curriculum-visual .learn-card-ja { font-size: 15px; margin-top: 7px; }
+.learn-card-notes { border-top: 1px solid var(--learn-line); margin-top: 15px; padding: 10px 16px 0; }
+.learn-card-notes > summary { min-height: 44px; display: flex; align-items: center; gap: 10px; cursor: pointer; color: var(--learn-brand-deep); font-size: 13px; font-weight: 650; list-style: none; }
+.learn-card-notes > summary::after { content: '+'; margin-left: auto; font-size: 20px; flex-shrink: 0; }
+.learn-card-notes[open] > summary::after { content: '−'; }
+.learn-card-notes > summary:focus-visible { outline: 3px solid var(--learn-brand); outline-offset: 3px; border-radius: 6px; }
+.learn-card-notes .learn-chip-list { margin-top: 12px; }
+.learn-level-heading { flex-wrap: wrap; }
+.learn-level-heading > div { flex: 1 1 100%; }
+.learn-card-notes .learn-card-body { padding: 0 0 10px; }
+.learn-card.has-curriculum-visual .learn-audio-block { margin-top: 12px; }
+.learn-card.has-curriculum-visual .learn-card-body { gap: 8px; }
+.learn-card.has-curriculum-visual .learn-card-footer { margin-top: 14px; }
+.learn-review-visual { width: min(100%,480px); margin: 12px auto 20px; }
+html[data-theme="dark"] .curriculum-visual { background: #f7f4eb; border-color: #34564f; }
+html[data-theme="dark"] .curriculum-visual > img { filter: brightness(.94); }
+.learn-personal-packs { margin: 0 0 22px; padding: 20px; border: 1px solid var(--learn-line); background: var(--learn-surface); border-radius: 20px; }
+.learn-personal-packs h2 { font-size: 18px; margin: 0 0 10px; }
+.learn-personal-packs p { color: var(--learn-muted); font-size: 14px; }
+.learn-pack-links { display: flex; flex-wrap: wrap; gap: 8px; }
+.learn-pack-links a { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 14px; border: 1px solid var(--learn-line); border-radius: 12px; color: var(--learn-brand-deep); text-decoration: none; font-weight: 600; font-size: 13px; }
+@media (min-width: 1200px) { .learn-card-grid { grid-template-columns: repeat(3,minmax(0,1fr)); } .learn-card-grid:has(.learn-card[data-category="phonics"]) { grid-template-columns: minmax(0,850px); justify-content: center; } }
+@media (max-width: 600px) { .curriculum-visual { margin-bottom: 16px; } .learn-card.has-curriculum-visual .learn-card-title h3 { font-size: 26px; } .learn-card[data-category="phrases"] .learn-card-title h3,.learn-card[data-category="phonics"] .learn-card-title h3 { font-size: 22px; } }
+@media (prefers-reduced-motion: reduce) { .curriculum-visual *, .learn-review-visual { animation: none !important; transition: none !important; } }

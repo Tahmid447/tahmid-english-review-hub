@@ -214,3 +214,5 @@ export async function toggleCurriculumFavorite(itemId, favorite) {
   writeStorage(DEMO_FAVORITES_STORAGE_KEY, [...favorites]);
   return success(favorite === true);
 }
+
+export async function fetchStudentLearningPacks() { assertLocalDemoRuntime(); return success([]); }

@@ -1,0 +1,487 @@
+{
+  "title": "Tahmid English Curriculum Level 1–32",
+  "version": "2026-09-05-quality",
+  "note": "These are teacher-guided learning goals, not certified CEFR equivalences. Vocabulary, grammar and pronunciation develop at different rates.",
+  "levels": [
+    {
+      "level": 1,
+      "words": {
+        "en": "Name the things and people in your first lesson.",
+        "ja": "最初のレッスンで使う物や人の名前を言えます。"
+      },
+      "phrases": {
+        "en": "Greet someone, introduce yourself, and say thank you.",
+        "ja": "あいさつ、自己紹介、お礼が言えます。"
+      },
+      "phonics": {
+        "en": "Hear first consonants inside words and copy a short model.",
+        "ja": "単語の最初の子音を聞き、短いお手本をまねできます。"
+      }
+    },
+    {
+      "level": 2,
+      "words": {
+        "en": "Describe familiar things using colours and shapes.",
+        "ja": "身近な物を色や形で説明できます。"
+      },
+      "phrases": {
+        "en": "Ask for help, another turn, or a repetition.",
+        "ja": "助けや自分の順番、繰り返しを頼めます。"
+      },
+      "phonics": {
+        "en": "Feel how the tongue and lips make voiced consonants.",
+        "ja": "舌や唇を使う有声子音の違いを感じられます。"
+      }
+    },
+    {
+      "level": 3,
+      "words": {
+        "en": "Introduce family members and friends.",
+        "ja": "家族や友達を紹介できます。"
+      },
+      "phrases": {
+        "en": "Choose something and express likes politely.",
+        "ja": "物を選び、好みを穏やかに伝えられます。"
+      },
+      "phonics": {
+        "en": "Contrast breath and voice in f/v, then practise h/w.",
+        "ja": "fとvの息・声の違いを聞き、hとwを練習できます。"
+      }
+    },
+    {
+      "level": 4,
+      "words": {
+        "en": "Name body parts and follow simple actions.",
+        "ja": "体の部位を言い、簡単な動作の指示が分かります。"
+      },
+      "phrases": {
+        "en": "Introduce family and use simple home routines.",
+        "ja": "家族を紹介し、家での簡単なやり取りができます。"
+      },
+      "phonics": {
+        "en": "Distinguish l/r and recognise other common consonant spellings.",
+        "ja": "lとrを聞き分け、ほかの基本的な子音のつづりに慣れます。"
+      }
+    },
+    {
+      "level": 5,
+      "words": {
+        "en": "Name everyday food and ask for a drink.",
+        "ja": "日常の食べ物を言い、飲み物を頼めます。"
+      },
+      "phrases": {
+        "en": "Ask the time and talk about everyday routines.",
+        "ja": "時刻を聞き、毎日の行動について話せます。"
+      },
+      "phonics": {
+        "en": "Hear and form short a with an open jaw.",
+        "ja": "口を開いて短いaの音を聞き取り、発音できます。"
+      }
+    },
+    {
+      "level": 6,
+      "words": {
+        "en": "Describe rooms and find things at home.",
+        "ja": "部屋を説明し、家の中の物の場所を言えます。"
+      },
+      "phrases": {
+        "en": "Ask for food or drink and explain a preference.",
+        "ja": "食べ物や飲み物を頼み、希望を伝えられます。"
+      },
+      "phonics": {
+        "en": "Keep short i relaxed and distinct from a long ee sound.",
+        "ja": "力を抜いた短いiを、長いeeの音と区別できます。"
+      }
+    },
+    {
+      "level": 7,
+      "words": {
+        "en": "Describe animals using simple sentences.",
+        "ja": "動物について短い文で説明できます。"
+      },
+      "phrases": {
+        "en": "Ask about prices, colours, and trying clothes on.",
+        "ja": "値段や色、試着について尋ねられます。"
+      },
+      "phonics": {
+        "en": "Recognise the US and UK models of short o.",
+        "ja": "短いoのUS・UKのお手本の違いに気づけます。"
+      }
+    },
+    {
+      "level": 8,
+      "words": {
+        "en": "Follow instructions and say what you can do.",
+        "ja": "指示を理解し、自分にできる動作を言えます。"
+      },
+      "phrases": {
+        "en": "Ask for directions and describe a location.",
+        "ja": "道を尋ね、場所を説明できます。"
+      },
+      "phonics": {
+        "en": "Hear short e without gliding into another vowel.",
+        "ja": "短いeを、別の母音へ滑らせずに発音できます。"
+      }
+    },
+    {
+      "level": 9,
+      "words": {
+        "en": "Say how you feel and what you need.",
+        "ja": "気持ちや必要なことを伝えられます。"
+      },
+      "phrases": {
+        "en": "Discuss the weather and nearby plans.",
+        "ja": "天気や近い予定について話せます。"
+      },
+      "phonics": {
+        "en": "Keep short u unrounded and clear.",
+        "ja": "唇を丸めずに短いuを発音できます。"
+      }
+    },
+    {
+      "level": 10,
+      "words": {
+        "en": "Talk about the weather and the world outside.",
+        "ja": "天気や外の様子について話せます。"
+      },
+      "phrases": {
+        "en": "Describe how you feel and check on someone.",
+        "ja": "体調を伝え、相手を気づかえます。"
+      },
+      "phonics": {
+        "en": "Blend a consonant, short vowel, and final consonant.",
+        "ja": "子音・短母音・最後の子音をつなげて読めます。"
+      }
+    },
+    {
+      "level": 11,
+      "words": {
+        "en": "Describe daily routines and when things happen.",
+        "ja": "毎日の習慣や出来事の時を説明できます。"
+      },
+      "phrases": {
+        "en": "Invite a friend and talk about hobbies.",
+        "ja": "友達を誘い、趣味について話せます。"
+      },
+      "phonics": {
+        "en": "Join a first consonant directly to l.",
+        "ja": "最初の子音からlへ母音を足さずにつなげられます。"
+      }
+    },
+    {
+      "level": 12,
+      "words": {
+        "en": "Find places in town and explain where they are.",
+        "ja": "町の施設を探し、場所を説明できます。"
+      },
+      "phrases": {
+        "en": "Manage classroom tasks and encourage a classmate.",
+        "ja": "授業中の困り事を伝え、クラスメートを応援できます。"
+      },
+      "phonics": {
+        "en": "Join a first consonant directly to r.",
+        "ja": "最初の子音からrへ母音を足さずにつなげられます。"
+      }
+    },
+    {
+      "level": 13,
+      "words": {
+        "en": "Describe clothes, fit, and what to wear.",
+        "ja": "服の特徴やサイズ、着る物について話せます。"
+      },
+      "phrases": {
+        "en": "Describe an experience and ask how it went.",
+        "ja": "体験の感想を伝え、結果を尋ねられます。"
+      },
+      "phonics": {
+        "en": "Keep s clusters together without inserting a vowel.",
+        "ja": "sで始まる子音の連続を、母音を入れずに発音できます。"
+      }
+    },
+    {
+      "level": 14,
+      "words": {
+        "en": "Choose transport and talk about a journey.",
+        "ja": "交通手段を選び、移動について話せます。"
+      },
+      "phrases": {
+        "en": "Arrange a time and promise a later reply.",
+        "ja": "日程を調整し、後で返事をすると伝えられます。"
+      },
+      "phonics": {
+        "en": "Distinguish the flowing sh sound from the stopped ch sound.",
+        "ja": "息が続くshと、息を止めて出すchを区別できます。"
+      }
+    },
+    {
+      "level": 15,
+      "words": {
+        "en": "Explain household tasks and ask for practical help.",
+        "ja": "家事を説明し、具体的な手助けを頼めます。"
+      },
+      "phrases": {
+        "en": "Check in, find a seat, and ask for a local recommendation.",
+        "ja": "チェックインや席の確認、近くのおすすめを尋ねられます。"
+      },
+      "phonics": {
+        "en": "Use tongue placement and voicing to contrast the two th sounds.",
+        "ja": "舌の位置と声の有無で2つのthを区別できます。"
+      }
+    },
+    {
+      "level": 16,
+      "words": {
+        "en": "Ask questions, explain an idea, and keep a conversation going.",
+        "ja": "質問や説明をして、会話を続けられます。"
+      },
+      "phrases": {
+        "en": "Explain a problem and acknowledge a possible misunderstanding.",
+        "ja": "問題を伝え、自分が誤解した可能性を認められます。"
+      },
+      "phonics": {
+        "en": "Connect wh, ph, and ng spellings with their sounds.",
+        "ja": "wh・ph・ngのつづりと音を結びつけられます。"
+      }
+    },
+    {
+      "level": 17,
+      "words": {
+        "en": "Describe study habits, check meaning, and plan improvements.",
+        "ja": "学習習慣を説明し、意味を調べ、改善点を考えられます。"
+      },
+      "phrases": {
+        "en": "Give an opinion and respond to another viewpoint.",
+        "ja": "意見を述べ、相手の見方に応じられます。"
+      },
+      "phonics": {
+        "en": "Contrast short a and long a in common silent e words.",
+        "ja": "よく使うsilent eの語で短いaと長いaを区別できます。"
+      }
+    },
+    {
+      "level": 18,
+      "words": {
+        "en": "Coordinate a workday and discuss a shared project.",
+        "ja": "仕事の予定を調整し、共同の仕事について話せます。"
+      },
+      "phrases": {
+        "en": "Suggest a way forward and weigh simple options.",
+        "ja": "進め方を提案し、選択肢を検討できます。"
+      },
+      "phonics": {
+        "en": "Contrast short i and long i in common silent e words.",
+        "ja": "よく使うsilent eの語で短いiと長いiを区別できます。"
+      }
+    },
+    {
+      "level": 19,
+      "words": {
+        "en": "Describe symptoms and arrange an appointment.",
+        "ja": "症状を説明し、診察の予約について話せます。"
+      },
+      "phrases": {
+        "en": "Request clarification and check your understanding precisely.",
+        "ja": "言い換えを頼み、理解が合っているか正確に確認できます。"
+      },
+      "phonics": {
+        "en": "Contrast short o and long o in US and UK models.",
+        "ja": "US・UKのお手本で短いoと長いoを区別できます。"
+      }
+    },
+    {
+      "level": 20,
+      "words": {
+        "en": "Compare prices and complete a purchase.",
+        "ja": "値段を比較し、買い物を進められます。"
+      },
+      "phrases": {
+        "en": "Coordinate deadlines, meetings, and shared work.",
+        "ja": "期限や会議、作業の分担を調整できます。"
+      },
+      "phonics": {
+        "en": "Recognise u_e and e_e patterns while noticing exceptions.",
+        "ja": "例外に注意しながらu_eとe_eの音を練習できます。"
+      }
+    },
+    {
+      "level": 21,
+      "words": {
+        "en": "Discuss relationships, support, and shared responsibilities.",
+        "ja": "人間関係や支え合い、分担について話せます。"
+      },
+      "phrases": {
+        "en": "Show consideration, gratitude, and a thoughtful apology.",
+        "ja": "配慮や感謝、相手を気づかう謝罪を伝えられます。"
+      },
+      "phonics": {
+        "en": "Recognise common ai and ay spellings for long a.",
+        "ja": "長いaを表すaiとayの基本パターンを使えます。"
+      }
+    },
+    {
+      "level": 22,
+      "words": {
+        "en": "Choose precise descriptions for plans and behaviour.",
+        "ja": "予定や振る舞いを適切な形容詞で説明できます。"
+      },
+      "phrases": {
+        "en": "Raise a service problem politely and ask for a solution.",
+        "ja": "サービスの問題を丁寧に伝え、解決を頼めます。"
+      },
+      "phonics": {
+        "en": "Recognise common ee and ea spellings for long e.",
+        "ja": "長いeを表すeeとeaの基本パターンを使えます。"
+      }
+    },
+    {
+      "level": 23,
+      "words": {
+        "en": "Manage arrangements and respond to changes.",
+        "ja": "手配を進め、予定の変更に対応できます。"
+      },
+      "phrases": {
+        "en": "Tell a lively story and respond empathetically.",
+        "ja": "出来事を生き生きと話し、相手の体験に共感できます。"
+      },
+      "phonics": {
+        "en": "Hear long o in oa/ow words and contrast different ow sounds.",
+        "ja": "oa・owの長いoを聞き、別のowの音と区別できます。"
+      }
+    },
+    {
+      "level": 24,
+      "words": {
+        "en": "Explain a technology problem and follow practical steps.",
+        "ja": "機器の問題を説明し、操作の手順を伝えられます。"
+      },
+      "phrases": {
+        "en": "Reflect on progress and choose a next learning goal.",
+        "ja": "上達を振り返り、次の学習目標を考えられます。"
+      },
+      "phonics": {
+        "en": "Distinguish the vowel quality in moon and book.",
+        "ja": "moonとbookの母音の質の違いを聞き分けられます。"
+      }
+    },
+    {
+      "level": 25,
+      "words": {
+        "en": "Discuss environmental choices and their consequences.",
+        "ja": "環境に関する選択とその結果を話し合えます。"
+      },
+      "phrases": {
+        "en": "Disagree respectfully and consider alternative explanations.",
+        "ja": "相手を尊重して反対し、別の説明を検討できます。"
+      },
+      "phonics": {
+        "en": "Compare US and UK ar/or models without adding a vowel after r.",
+        "ja": "rの後に母音を足さず、ar・orのUS・UKモデルを比べられます。"
+      }
+    },
+    {
+      "level": 26,
+      "words": {
+        "en": "Explain nuanced feelings and respond with empathy.",
+        "ja": "細かな感情を説明し、相手に共感できます。"
+      },
+      "phrases": {
+        "en": "Present a main idea and invite other perspectives.",
+        "ja": "要点を説明し、別の視点を募れます。"
+      },
+      "phonics": {
+        "en": "Recognise the central vowels in er/ir/ur words.",
+        "ja": "er・ir・urの語に出る中央母音を聞き取れます。"
+      }
+    },
+    {
+      "level": 27,
+      "words": {
+        "en": "Compare evidence and explain the reasoning behind a view.",
+        "ja": "根拠を比較し、意見の理由を説明できます。"
+      },
+      "phrases": {
+        "en": "Negotiate conditions and work towards a compromise.",
+        "ja": "条件を交渉し、双方が受け入れられる案を探せます。"
+      },
+      "phonics": {
+        "en": "Keep oi/oy as one smooth vowel glide.",
+        "ja": "oi・oyを1音節の中で滑らかに発音できます。"
+      }
+    },
+    {
+      "level": 28,
+      "words": {
+        "en": "Prioritise, negotiate, and improve a shared project.",
+        "ja": "優先順位を決め、交渉し、共同の計画を改善できます。"
+      },
+      "phrases": {
+        "en": "Use everyday idioms to describe progress and shared understanding.",
+        "ja": "慣用表現で進み具合や共通の理解を伝えられます。"
+      },
+      "phonics": {
+        "en": "Keep ou/ow as one glide and distinguish it from long o.",
+        "ja": "ou・owの音を一続きにし、長いoと区別できます。"
+      }
+    },
+    {
+      "level": 29,
+      "words": {
+        "en": "Handle travel changes, missing baggage, and detailed arrangements.",
+        "ja": "旅行の変更や荷物の問題、詳しい手配に対応できます。"
+      },
+      "phrases": {
+        "en": "Share updates, clarify responsibility, and acknowledge concerns.",
+        "ja": "最新情報を共有し、役割を確認して懸念を受け止められます。"
+      },
+      "phonics": {
+        "en": "Choose common spellings while noticing soft c/g exceptions.",
+        "ja": "soft c・gの例外に注意し、よく使うつづりを選べます。"
+      }
+    },
+    {
+      "level": 30,
+      "words": {
+        "en": "Express preferences, constraints, and decisions using natural verb patterns.",
+        "ja": "自然な動詞の形で、希望や制約、判断を伝えられます。"
+      },
+      "phrases": {
+        "en": "Reflect on past choices and discuss complex outcomes.",
+        "ja": "過去の選択を振り返り、単純には言えない結果を話せます。"
+      },
+      "phonics": {
+        "en": "Choose -s and -ed endings by the previous sound.",
+        "ja": "直前の音に合わせて-sと-edの語尾を発音できます。"
+      }
+    },
+    {
+      "level": 31,
+      "words": {
+        "en": "Evaluate options precisely and express degrees of certainty.",
+        "ja": "選択肢を的確に評価し、確信の程度を伝えられます。"
+      },
+      "phrases": {
+        "en": "Qualify an opinion and recognise nuance in an argument.",
+        "ja": "同意する範囲を示し、議論の細かな違いを捉えられます。"
+      },
+      "phonics": {
+        "en": "Use stress and weak vowels to make a word easier to understand.",
+        "ja": "強勢と弱い母音を使い、単語を聞き取りやすく発音できます。"
+      }
+    },
+    {
+      "level": 32,
+      "words": {
+        "en": "Clarify assumptions, resolve disagreements, and reflect on decisions.",
+        "ja": "前提を明確にし、意見の違いを解決して判断を振り返れます。"
+      },
+      "phrases": {
+        "en": "Reframe an issue and question the assumptions behind a plan.",
+        "ja": "問題を別の角度から説明し、計画の前提を検討できます。"
+      },
+      "phonics": {
+        "en": "Link words and use stress to highlight meaning in a sentence.",
+        "ja": "単語をつなぎ、文で伝えたい意味を強勢で示せます。"
+      }
+    }
+  ]
+}

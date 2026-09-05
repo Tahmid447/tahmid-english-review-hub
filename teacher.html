@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="robots" content="noindex,nofollow">
   <title>Teacher Studio · Tahmid English Club</title>
-  <link rel="stylesheet" href="/src/styles.css?v=20260905-release5">
+  <link rel="stylesheet" href="/src/styles.css?v=20260906-studio1">
   <link rel="icon" type="image/png" sizes="192x192" href="/assets/app-icon-192.png">
 </head>
 <body data-page="teacher">
@@ -88,6 +88,7 @@
         <label><span data-teacher-en="Lesson date" data-teacher-ja="レッスン日">Lesson date</span><input id="editorDate" type="date" required></label>
         <label><span data-teacher-en="Status" data-teacher-ja="公開状態">Status</span><select id="editorStatus"><option value="draft" data-teacher-en="Draft" data-teacher-ja="下書き">Draft</option><option value="review" data-teacher-en="Ready for review" data-teacher-ja="確認待ち">Ready for review</option><option value="published" data-teacher-en="Published" data-teacher-ja="公開中">Published</option><option value="archived" data-teacher-en="Archived" data-teacher-ja="非表示">Archived</option></select></label>
         <label><span data-teacher-en="Audience" data-teacher-ja="公開先">Audience</span><select id="editorAudience"><option value="takiwaki" data-teacher-en="Takiwaki only" data-teacher-ja="Takiwaki専用">Takiwaki only</option><option value="general" data-teacher-en="General" data-teacher-ja="一般">General</option><option value="both" data-teacher-en="Both" data-teacher-ja="両方">Both</option></select></label>
+        <label class="editor-check-field"><input id="editorAssignmentOnly" type="checkbox"> <span data-teacher-en="Personal lesson: visible only to assigned learners" data-teacher-ja="個人限定レッスン：割り当てた生徒だけに公開">Personal lesson: visible only to assigned learners</span></label>
         <label class="editor-check-field"><input id="editorIsPreview" type="checkbox"> <span data-teacher-en="Free sample (available without an account)" data-teacher-ja="無料公開（会員登録なしで閲覧可能）">Free sample (available without an account)</span></label>
         <label class="wide"><span data-teacher-en="Summary" data-teacher-ja="概要">Summary</span><textarea id="editorSummary" rows="4"></textarea></label>
         <div class="wide editor-question-callout"><div><strong data-teacher-en="Practice questions" data-teacher-ja="練習問題">Practice questions</strong><p id="editorQuestionSummary" data-teacher-en="Save the draft to continue to question creation." data-teacher-ja="下書きを保存すると、続けて問題を作成できます。">Save the draft to continue to question creation.</p></div><button class="secondary-btn" id="manageLessonQuestionsButton" type="button" data-teacher-en="Manage questions" data-teacher-ja="問題を作る・編集">Manage questions</button></div>
@@ -196,7 +197,7 @@
   </main>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js"></script>
-  <script type="module" src="/src/teacher.js?v=20260905-release5"></script>
-  <script type="module" src="/src/study-music.js?v=20260905-release5"></script>
+  <script type="module" src="/src/teacher.js?v=20260906-studio1"></script>
+  <script type="module" src="/src/study-music.js?v=20260906-studio1"></script>
 </body>
 </html>

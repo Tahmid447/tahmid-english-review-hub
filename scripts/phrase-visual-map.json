@@ -1,0 +1,3333 @@
+{
+  "phrase-l01-01": {
+    "assets": [
+      "hello.svg",
+      "new_document.svg",
+      "write_,_to.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A learner waves hello and writes Ren on a name card.",
+    "altJa": "初めての英語クラブ。初めて会った人に名前を伝える場面。",
+    "labels": [
+      "Hello",
+      "Ren",
+      "Name card"
+    ],
+    "sceneEn": "First day at the club",
+    "sceneJa": "初めての英語クラブ",
+    "background": "classroom",
+    "composition": {
+      "type": "context",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l01-02": {
+    "assets": [
+      "shake_hands_,_to.svg",
+      "school_bag.svg",
+      "happy_lady.svg"
+    ],
+    "layout": "scene",
+    "altEn": "Two people shake hands beside a school bag as they meet for the first time.",
+    "altJa": "新しいクラスメートと対面。初対面のあいさつをする場面。",
+    "labels": [
+      "First meeting",
+      "Classmate",
+      "Welcome"
+    ],
+    "sceneEn": "Meeting a new classmate",
+    "sceneJa": "新しいクラスメートと対面",
+    "background": "classroom",
+    "composition": {
+      "type": "context",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l01-03": {
+    "assets": [
+      "hungry.svg",
+      "plate.svg",
+      "sandwich_cheese.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "A hungry learner looks forward to a sandwich on an empty plate.",
+    "altJa": "昼食前。食べたい気持ちを伝える場面。",
+    "labels": [
+      "Hungry",
+      "Lunch soon",
+      "Something to eat"
+    ],
+    "sceneEn": "Before lunch",
+    "sceneJa": "昼食前",
+    "background": "home",
+    "composition": {
+      "type": "tabletop",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l01-04": {
+    "assets": [
+      "give_,_to.svg",
+      "present.svg",
+      "smile_,_to.svg"
+    ],
+    "layout": "scene",
+    "altEn": "One person gives a wrapped present and the recipient smiles appreciatively.",
+    "altJa": "プレゼントを受け取って。何かをしてもらった場面。",
+    "labels": [
+      "For you",
+      "A gift",
+      "Thankful"
+    ],
+    "sceneEn": "Receiving a thoughtful gift",
+    "sceneJa": "プレゼントを受け取って",
+    "background": "home",
+    "composition": {
+      "type": "tabletop",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l02-01": {
+    "assets": [
+      "shape_puzzle.svg",
+      "which.svg",
+      "begin_start.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A learner asks for a turn with a shape puzzle before beginning.",
+    "altJa": "新しいゲームに挑戦。活動やゲームに挑戦したい場面。",
+    "labels": [
+      "My turn?",
+      "A new game",
+      "Try it"
+    ],
+    "sceneEn": "Trying a new game",
+    "sceneJa": "新しいゲームに挑戦",
+    "background": "classroom",
+    "composition": {
+      "type": "tabletop",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l02-02": {
+    "assets": [
+      "carry_books_,_to.svg",
+      "help_,_to.svg",
+      "bookcase.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A person carrying a stack of books asks for help reaching the bookcase.",
+    "altJa": "荷物を一緒に運ぶ。一人では難しくて助けが必要な場面。",
+    "labels": [
+      "Too many books",
+      "Help needed",
+      "Together"
+    ],
+    "sceneEn": "Carrying something together",
+    "sceneJa": "荷物を一緒に運ぶ",
+    "background": "home",
+    "composition": {
+      "type": "context",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l02-03": {
+    "assets": [
+      "worksheet.svg",
+      "confused_lady.svg",
+      "what.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A learner pauses over an unfamiliar worksheet question with a puzzled expression.",
+    "altJa": "分からない質問。答えや情報が分からない場面。",
+    "labels": [
+      "A question",
+      "Not sure",
+      "Ask for help"
+    ],
+    "sceneEn": "An unfamiliar question",
+    "sceneJa": "分からない質問",
+    "background": "classroom",
+    "composition": {
+      "type": "context",
+      "hero": 1,
+      "pair": [
+        0,
+        2
+      ]
+    }
+  },
+  "phrase-l02-04": {
+    "assets": [
+      "hear_,_to.svg",
+      "rewind.svg",
+      "talk_2_,_to.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "A spoken instruction is heard, rewound, and repeated more slowly.",
+    "altJa": "口頭の説明を練習。聞き取れなかった内容を繰り返してほしい場面。",
+    "labels": [
+      "Listen",
+      "Again",
+      "Repeat slowly"
+    ],
+    "sceneEn": "Practising a spoken instruction",
+    "sceneJa": "口頭の説明を練習",
+    "background": "classroom",
+    "composition": {
+      "type": "steps",
+      "hero": 2,
+      "pair": [
+        0,
+        1
+      ]
+    }
+  },
+  "phrase-l03-01": {
+    "assets": [
+      "apple.svg",
+      "banana.svg",
+      "favourite.svg"
+    ],
+    "layout": "contrast",
+    "altEn": "Two different fruit snacks are compared and one is marked as the preferred choice.",
+    "altJa": "おやつを選ぶ。いくつかの中から好みを伝える場面。",
+    "labels": [
+      "This one",
+      "Another choice",
+      "My choice"
+    ],
+    "sceneEn": "Choosing a snack",
+    "sceneJa": "おやつを選ぶ",
+    "background": "cafe",
+    "composition": {
+      "type": "compare",
+      "hero": 0,
+      "pair": [
+        0,
+        1
+      ]
+    }
+  },
+  "phrase-l03-02": {
+    "assets": [
+      "football.svg",
+      "favourite.svg",
+      "dribble_football_,_to.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A football and a favourite marker show the activity someone most enjoys playing.",
+    "altJa": "大好きな遊び。特に好きなものを伝える場面。",
+    "labels": [
+      "Football",
+      "My favourite",
+      "Let's play"
+    ],
+    "sceneEn": "A favourite activity",
+    "sceneJa": "大好きな遊び",
+    "background": "park",
+    "composition": {
+      "type": "context",
+      "hero": 2,
+      "pair": [
+        0,
+        1
+      ]
+    }
+  },
+  "phrase-l03-03": {
+    "assets": [
+      "olives.svg",
+      "confused_man.svg",
+      "salad_plate.svg"
+    ],
+    "layout": "contrast",
+    "altEn": "A diner tries olives, looks uncertain, and considers a different plate of food.",
+    "altJa": "食べ物の好みをやわらかく伝える。好みではないことをやわらかく伝える場面。",
+    "labels": [
+      "A new taste",
+      "Not for me",
+      "Something else"
+    ],
+    "sceneEn": "A gentle food preference",
+    "sceneJa": "食べ物の好みをやわらかく伝える",
+    "background": "cafe",
+    "composition": {
+      "type": "compare",
+      "hero": 1,
+      "pair": [
+        0,
+        2
+      ]
+    }
+  },
+  "phrase-l03-04": {
+    "assets": [
+      "t-shirt.svg",
+      "sweatshirt.svg",
+      "which.svg"
+    ],
+    "layout": "contrast",
+    "altEn": "Two different tops are offered while the customer is invited to choose.",
+    "altJa": "二つの選択肢を差し出す。相手に選んでもらう場面。",
+    "labels": [
+      "This one?",
+      "Or this?",
+      "Your choice"
+    ],
+    "sceneEn": "Offering two choices",
+    "sceneJa": "二つの選択肢を差し出す",
+    "background": "shop",
+    "composition": {
+      "type": "compare",
+      "hero": 0,
+      "pair": [
+        0,
+        1
+      ]
+    }
+  },
+  "phrase-l04-01": {
+    "assets": [
+      "brother.svg",
+      "hello.svg",
+      "house.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A learner introduces their brother to a visitor at home.",
+    "altJa": "家族を紹介。家族を人に紹介する場面。",
+    "labels": [
+      "My brother",
+      "Meet Ren",
+      "Our home"
+    ],
+    "sceneEn": "Introducing family",
+    "sceneJa": "家族を紹介",
+    "background": "home",
+    "composition": {
+      "type": "context",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l04-02": {
+    "assets": [
+      "front_door.svg",
+      "enter_door_,_to.svg",
+      "hello.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "A returning learner comes through the front door and calls a greeting.",
+    "altJa": "帰宅したところ。家に帰ってきたことを知らせる場面。",
+    "labels": [
+      "The front door",
+      "I'm back",
+      "Hello again"
+    ],
+    "sceneEn": "Arriving home",
+    "sceneJa": "帰宅したところ",
+    "background": "home",
+    "composition": {
+      "type": "steps",
+      "hero": 1,
+      "pair": [
+        0,
+        2
+      ]
+    }
+  },
+  "phrase-l04-03": {
+    "assets": [
+      "school_bag.svg",
+      "where.svg",
+      "chair.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A school bag is being searched for around a chair at home.",
+    "altJa": "通学バッグを探す。持ち物が見つからない場面。",
+    "labels": [
+      "My backpack",
+      "Where is it?",
+      "Check here"
+    ],
+    "sceneEn": "Looking for a school bag",
+    "sceneJa": "通学バッグを探す",
+    "background": "home",
+    "composition": {
+      "type": "context",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l04-04": {
+    "assets": [
+      "jigsaw_puzzle.svg",
+      "tidy_up_,_to.svg",
+      "clean_room.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "Scattered play materials are tidied away so a shared room becomes clear.",
+    "altJa": "部屋を一緒に片づける。一緒に片づけを始める場面。",
+    "labels": [
+      "Toys out",
+      "Tidy together",
+      "A clear room"
+    ],
+    "sceneEn": "Tidying a shared room",
+    "sceneJa": "部屋を一緒に片づける",
+    "background": "home",
+    "composition": {
+      "type": "steps",
+      "hero": 1,
+      "pair": [
+        0,
+        2
+      ]
+    }
+  },
+  "phrase-l05-01": {
+    "assets": [
+      "clock.svg",
+      "when.svg",
+      "school.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A learner checks a wall clock before class begins.",
+    "altJa": "時刻を確認。現在の時刻を知りたい場面。",
+    "labels": [
+      "What time?",
+      "Class soon",
+      "Check the clock"
+    ],
+    "sceneEn": "Checking the time",
+    "sceneJa": "時刻を確認",
+    "background": "classroom",
+    "composition": {
+      "type": "context",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l05-02": {
+    "assets": [
+      "get_dressed_,_to.svg",
+      "school_bag.svg",
+      "ready.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "A learner gets dressed, prepares a school bag, and is nearly ready to go.",
+    "altJa": "出発の準備。出発などの準備中だと伝える場面。",
+    "labels": [
+      "Get dressed",
+      "Pack my bag",
+      "Almost ready"
+    ],
+    "sceneEn": "Getting ready to leave",
+    "sceneJa": "出発の準備",
+    "background": "home",
+    "composition": {
+      "type": "steps",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l05-03": {
+    "assets": [
+      "house.svg",
+      "walk_,_to.svg",
+      "school.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "A child walks from home to school on their usual daily route.",
+    "altJa": "いつもの通学。普段の通学方法を話す場面。",
+    "labels": [
+      "From home",
+      "On foot",
+      "To school"
+    ],
+    "sceneEn": "A usual school journey",
+    "sceneJa": "いつもの通学",
+    "background": "street",
+    "composition": {
+      "type": "route",
+      "hero": 1,
+      "pair": [
+        0,
+        2
+      ]
+    }
+  },
+  "phrase-l05-04": {
+    "assets": [
+      "hello.svg",
+      "exit_door_,_to.svg",
+      "tomorrow.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "Classmates wave as one leaves and mark that they will meet tomorrow.",
+    "altJa": "また翌日に会う別れ際。翌日にまた会う相手と別れる場面。",
+    "labels": [
+      "Bye for now",
+      "Going home",
+      "Tomorrow"
+    ],
+    "sceneEn": "Leaving until the next day",
+    "sceneJa": "また翌日に会う別れ際",
+    "background": "classroom",
+    "composition": {
+      "type": "steps",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l06-01": {
+    "assets": [
+      "wait_table_,_to.svg",
+      "water.svg",
+      "glass_,_drinking.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A diner asks the server for a glass of water.",
+    "altJa": "飲み物をお願い。飲み物をお願いする場面。",
+    "labels": [
+      "Please",
+      "Some water",
+      "A glass"
+    ],
+    "sceneEn": "Asking for a drink",
+    "sceneJa": "飲み物をお願い",
+    "background": "cafe",
+    "composition": {
+      "type": "tabletop",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l06-02": {
+    "assets": [
+      "soup.svg",
+      "food_hot.svg",
+      "delicious_food.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A steaming bowl of soup has an inviting aroma that someone notices.",
+    "altJa": "料理のいい香り。料理の香りをほめる場面。",
+    "labels": [
+      "Fresh soup",
+      "Warm aroma",
+      "Smells good"
+    ],
+    "sceneEn": "A delicious smell",
+    "sceneJa": "料理のいい香り",
+    "background": "home",
+    "composition": {
+      "type": "tabletop",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l06-03": {
+    "assets": [
+      "eat_1_,_to.svg",
+      "plate.svg",
+      "give_up_foods_,_to.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "A diner finishes their meal and indicates that they have eaten enough.",
+    "altJa": "食事を十分に食べて。十分に食べたことを伝える場面。",
+    "labels": [
+      "Enjoy lunch",
+      "All finished",
+      "No more, thanks"
+    ],
+    "sceneEn": "After a satisfying meal",
+    "sceneJa": "食事を十分に食べて",
+    "background": "cafe",
+    "composition": {
+      "type": "tabletop",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l06-04": {
+    "assets": [
+      "cheese_burger.svg",
+      "cheese.svg",
+      "hamburger.svg"
+    ],
+    "layout": "contrast",
+    "altEn": "A burger order is contrasted with the cheese ingredient that should be left out.",
+    "altJa": "料理の材料を変更。料理から食材を抜いてほしい場面。",
+    "labels": [
+      "Original order",
+      "Without cheese",
+      "My order"
+    ],
+    "sceneEn": "Changing a food order",
+    "sceneJa": "料理の材料を変更",
+    "background": "cafe",
+    "composition": {
+      "type": "compare",
+      "hero": 0,
+      "pair": [
+        0,
+        2
+      ]
+    }
+  },
+  "phrase-l07-01": {
+    "assets": [
+      "t-shirt.svg",
+      "how_many.svg",
+      "money.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A customer points to a shirt and asks how much money it costs.",
+    "altJa": "値段を尋ねる。店で商品の値段を尋ねる場面。",
+    "labels": [
+      "This shirt",
+      "How much?",
+      "The price"
+    ],
+    "sceneEn": "Checking the price",
+    "sceneJa": "値段を尋ねる",
+    "background": "shop",
+    "composition": {
+      "type": "tabletop",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l07-02": {
+    "assets": [
+      "shirt.svg",
+      "blue.svg",
+      "shirt.svg"
+    ],
+    "layout": "contrast",
+    "altEn": "A shopper compares the same shirt design in a warm colour and in blue.",
+    "altJa": "欲しい色を探す。同じ商品の別の色を探す場面。",
+    "labels": [
+      "This design",
+      "In blue",
+      "The same shirt"
+    ],
+    "sceneEn": "Finding the right colour",
+    "sceneJa": "欲しい色を探す",
+    "background": "shop",
+    "composition": {
+      "type": "compare",
+      "hero": 0,
+      "pair": [
+        0,
+        2
+      ]
+    },
+    "assetHueRotations": {
+      "0": 140
+    }
+  },
+  "phrase-l07-03": {
+    "assets": [
+      "dress.svg",
+      "get_dressed_,_to.svg",
+      "mirror.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "A shopper selects a dress, tries it on, and checks the fit in a mirror.",
+    "altJa": "試着する前。服や靴を試着したい場面。",
+    "labels": [
+      "Choose clothes",
+      "Try them on",
+      "Check the fit"
+    ],
+    "sceneEn": "Using the fitting room",
+    "sceneJa": "試着する前",
+    "background": "shop",
+    "composition": {
+      "type": "steps",
+      "hero": 1,
+      "pair": [
+        0,
+        2
+      ]
+    }
+  },
+  "phrase-l07-04": {
+    "assets": [
+      "shop.svg",
+      "good.svg",
+      "bank_card.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "A customer chooses an item in the shop and gets a bank card ready to pay.",
+    "altJa": "購入を決める。店で買う商品を決めた場面。",
+    "labels": [
+      "My choice",
+      "I'll buy it",
+      "Pay here"
+    ],
+    "sceneEn": "Deciding what to buy",
+    "sceneJa": "購入を決める",
+    "background": "shop",
+    "composition": {
+      "type": "steps",
+      "hero": 2,
+      "pair": [
+        0,
+        1
+      ]
+    }
+  },
+  "phrase-l08-01": {
+    "assets": [
+      "where_1.svg",
+      "road.svg",
+      "train.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A traveller asks which road leads to the train station.",
+    "altJa": "駅への道を尋ねる。道順を尋ねる場面。",
+    "labels": [
+      "Where?",
+      "Which way?",
+      "The station"
+    ],
+    "sceneEn": "Finding the station",
+    "sceneJa": "駅への道を尋ねる",
+    "background": "street",
+    "composition": {
+      "type": "route",
+      "hero": 2,
+      "pair": [
+        0,
+        1
+      ]
+    }
+  },
+  "phrase-l08-02": {
+    "assets": [
+      "house.svg",
+      "walk_,_to.svg",
+      "near.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "A traveller checks how near a destination is before walking there.",
+    "altJa": "歩く距離を確認。目的地までの距離感を確認する場面。",
+    "labels": [
+      "From here",
+      "Walking distance",
+      "Near or far?"
+    ],
+    "sceneEn": "Checking the walking distance",
+    "sceneJa": "歩く距離を確認",
+    "background": "street",
+    "composition": {
+      "type": "route",
+      "hero": 1,
+      "pair": [
+        0,
+        2
+      ]
+    }
+  },
+  "phrase-l08-03": {
+    "assets": [
+      "shop.svg",
+      "opposite.svg",
+      "tree.svg"
+    ],
+    "layout": "contrast",
+    "altEn": "A shop and a park tree sit on opposite sides of the road.",
+    "altJa": "建物の位置を説明。建物や場所の位置を説明する場面。",
+    "labels": [
+      "The shop",
+      "Across the road",
+      "The park"
+    ],
+    "sceneEn": "Describing a location",
+    "sceneJa": "建物の位置を説明",
+    "background": "street",
+    "composition": {
+      "type": "route",
+      "hero": 0,
+      "pair": [
+        0,
+        2
+      ]
+    }
+  },
+  "phrase-l08-04": {
+    "assets": [
+      "lost.svg",
+      "road.svg",
+      "confused_man.svg"
+    ],
+    "layout": "scene",
+    "altEn": "Travellers look confused at a road junction after losing their way.",
+    "altJa": "道に迷ったところ。正しい道から外れたと思う場面。",
+    "labels": [
+      "Wrong turn",
+      "Which road?",
+      "Not sure"
+    ],
+    "sceneEn": "A wrong turn",
+    "sceneJa": "道に迷ったところ",
+    "background": "street",
+    "composition": {
+      "type": "context",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l09-01": {
+    "assets": [
+      "cloudy.svg",
+      "rain.svg",
+      "raincoat.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "Dark clouds suggest approaching rain and someone gets a raincoat ready.",
+    "altJa": "空模様を確認。空模様を見て雨を予想する場面。",
+    "labels": [
+      "Dark clouds",
+      "Rain soon",
+      "Be prepared"
+    ],
+    "sceneEn": "Watching the sky",
+    "sceneJa": "空模様を確認",
+    "background": "park",
+    "composition": {
+      "type": "weather",
+      "hero": 2,
+      "pair": [
+        0,
+        1
+      ]
+    }
+  },
+  "phrase-l09-02": {
+    "assets": [
+      "weekend.svg",
+      "calendar.svg",
+      "badminton.svg"
+    ],
+    "layout": "scene",
+    "altEn": "Friends look at their weekend calendar and consider a game of badminton.",
+    "altJa": "週末の予定を相談。近い週末の予定を尋ねる場面。",
+    "labels": [
+      "The weekend",
+      "Any plans?",
+      "A game together?"
+    ],
+    "sceneEn": "Making weekend plans",
+    "sceneJa": "週末の予定を相談",
+    "background": "park",
+    "composition": {
+      "type": "context",
+      "hero": 2,
+      "pair": [
+        0,
+        1
+      ]
+    }
+  },
+  "phrase-l09-03": {
+    "assets": [
+      "rain.svg",
+      "inside_room.svg",
+      "playing_cards.svg"
+    ],
+    "layout": "contrast",
+    "altEn": "Rain falls outside while friends choose to play cards indoors.",
+    "altJa": "雨の日に屋内で過ごす。天気が悪く屋内で過ごす提案をする場面。",
+    "labels": [
+      "Rain outside",
+      "Stay inside",
+      "Play together"
+    ],
+    "sceneEn": "A rainy day indoors",
+    "sceneJa": "雨の日に屋内で過ごす",
+    "background": "home",
+    "composition": {
+      "type": "compare",
+      "hero": 2,
+      "pair": [
+        0,
+        2
+      ]
+    }
+  },
+  "phrase-l09-04": {
+    "assets": [
+      "rain.svg",
+      "cloudy.svg",
+      "sun.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "A rainy sky becomes cloudy and then clears to sunshine.",
+    "altJa": "雨上がり。雨や曇りのあとに空が晴れた場面。",
+    "labels": [
+      "Rainy",
+      "Clouds move",
+      "Sunshine again"
+    ],
+    "sceneEn": "After the rain",
+    "sceneJa": "雨上がり",
+    "background": "park",
+    "composition": {
+      "type": "weather",
+      "hero": 2,
+      "pair": [
+        0,
+        1
+      ]
+    }
+  },
+  "phrase-l10-01": {
+    "assets": [
+      "headache.svg",
+      "rest_,_to.svg",
+      "medicine.svg"
+    ],
+    "layout": "scene",
+    "altEn": "Someone with a headache closes their eyes to rest with medicine nearby.",
+    "altJa": "体調が悪いとき。体調が悪いことを伝える場面。",
+    "labels": [
+      "Not feeling well",
+      "Rest",
+      "Take care"
+    ],
+    "sceneEn": "Feeling unwell",
+    "sceneJa": "体調が悪いとき",
+    "background": "home",
+    "composition": {
+      "type": "context",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l10-02": {
+    "assets": [
+      "throat.svg",
+      "sneeze_cold.svg",
+      "drink_hot.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A person with a cold points out their sore throat and reaches for a warm drink.",
+    "altJa": "のどの症状を伝える。のどの痛みを説明する場面。",
+    "labels": [
+      "My throat",
+      "It hurts",
+      "A warm drink"
+    ],
+    "sceneEn": "Describing a sore throat",
+    "sceneJa": "のどの症状を伝える",
+    "background": "home",
+    "composition": {
+      "type": "context",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l10-03": {
+    "assets": [
+      "sit_at_computer_,_to.svg",
+      "take_a_work_break_,_to.svg",
+      "drink.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "Someone stops working at a computer to take a short drink break.",
+    "altJa": "作業の途中で休む。疲れて少し休みたい場面。",
+    "labels": [
+      "Working",
+      "Pause",
+      "A short break"
+    ],
+    "sceneEn": "Taking a work break",
+    "sceneJa": "作業の途中で休む",
+    "background": "office",
+    "composition": {
+      "type": "steps",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l10-04": {
+    "assets": [
+      "headache.svg",
+      "healthy.svg",
+      "smile_,_to.svg"
+    ],
+    "layout": "contrast",
+    "altEn": "An earlier headache is contrasted with feeling healthy again as a friend checks in.",
+    "altJa": "回復したか気づかう。体調を崩した人の回復具合を尋ねる場面。",
+    "labels": [
+      "Earlier",
+      "Feeling better",
+      "Checking in"
+    ],
+    "sceneEn": "Checking on recovery",
+    "sceneJa": "回復したか気づかう",
+    "background": "home",
+    "composition": {
+      "type": "compare",
+      "hero": 1,
+      "pair": [
+        0,
+        1
+      ]
+    }
+  },
+  "phrase-l11-01": {
+    "assets": [
+      "basketball_game.svg",
+      "join_,_to.svg",
+      "ball.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A group playing basketball invites another person to join the game.",
+    "altJa": "遊びに友達を誘う。友達を活動に誘う場面。",
+    "labels": [
+      "Our game",
+      "Join us?",
+      "Your turn"
+    ],
+    "sceneEn": "Inviting someone to play",
+    "sceneJa": "遊びに友達を誘う",
+    "background": "park",
+    "composition": {
+      "type": "context",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l11-02": {
+    "assets": [
+      "theme_park.svg",
+      "happy_lady.svg",
+      "calendar.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A suggested visit to a theme park receives an enthusiastic response.",
+    "altJa": "楽しそうな提案を聞く。相手の提案や予定に興味を示す場面。",
+    "labels": [
+      "A day out",
+      "Sounds fun",
+      "Make a plan"
+    ],
+    "sceneEn": "Responding to an invitation",
+    "sceneJa": "楽しそうな提案を聞く",
+    "background": "park",
+    "composition": {
+      "type": "context",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l11-03": {
+    "assets": [
+      "weekend.svg",
+      "busy.svg",
+      "tomorrow.svg"
+    ],
+    "layout": "contrast",
+    "altEn": "Someone is busy this weekend and suggests meeting another time.",
+    "altJa": "今日は見送る誘い。誘いをやわらかく断る場面。",
+    "labels": [
+      "This time",
+      "I'm busy",
+      "Another time"
+    ],
+    "sceneEn": "Declining for today",
+    "sceneJa": "今日は見送る誘い",
+    "background": "home",
+    "composition": {
+      "type": "compare",
+      "hero": 1,
+      "pair": [
+        0,
+        2
+      ]
+    }
+  },
+  "phrase-l11-04": {
+    "assets": [
+      "draw_,_to.svg",
+      "pencil_and_paper.svg",
+      "colouring_book.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A keen artist fills paper and a colouring book with drawings.",
+    "altJa": "お絵かきに夢中。今熱中している趣味を話す場面。",
+    "labels": [
+      "I love drawing",
+      "Sketch ideas",
+      "Keep practising"
+    ],
+    "sceneEn": "A drawing hobby",
+    "sceneJa": "お絵かきに夢中",
+    "background": "studio",
+    "composition": {
+      "type": "context",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l12-01": {
+    "assets": [
+      "read_book_,_to.svg",
+      "work_book.svg",
+      "where.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A learner looks through a workbook to find the page the class is using.",
+    "altJa": "授業のページを確認。授業で開くページを確認する場面。",
+    "labels": [
+      "Open your book",
+      "Which page?",
+      "Follow the class"
+    ],
+    "sceneEn": "Finding the class page",
+    "sceneJa": "授業のページを確認",
+    "background": "classroom",
+    "composition": {
+      "type": "context",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l12-02": {
+    "assets": [
+      "help_,_to.svg",
+      "worksheet.svg",
+      "show_me_,_to.svg"
+    ],
+    "layout": "scene",
+    "altEn": "Two learners bring a worksheet to a shared work area to solve it together.",
+    "altJa": "ペアで課題に取り組む。ペアやグループで作業したい場面。",
+    "labels": [
+      "Two learners",
+      "One task",
+      "Work together"
+    ],
+    "sceneEn": "Working as a pair",
+    "sceneJa": "ペアで課題に取り組む",
+    "background": "classroom",
+    "composition": {
+      "type": "tabletop",
+      "hero": 2,
+      "pair": [
+        0,
+        1
+      ]
+    }
+  },
+  "phrase-l12-03": {
+    "assets": [
+      "notebook.svg",
+      "house.svg",
+      "school_bag.svg"
+    ],
+    "layout": "contrast",
+    "altEn": "A notebook remains at home while a learner discovers it is absent from their school bag.",
+    "altJa": "ノートを忘れて登校。必要な持ち物を家に忘れた場面。",
+    "labels": [
+      "My notebook",
+      "At home",
+      "Missing at school"
+    ],
+    "sceneEn": "A forgotten notebook",
+    "sceneJa": "ノートを忘れて登校",
+    "background": "classroom",
+    "composition": {
+      "type": "compare",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l12-04": {
+    "assets": [
+      "test.svg",
+      "cross_fingers_,_to.svg",
+      "good.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A friend offers encouragement and crosses their fingers before a test.",
+    "altJa": "テスト前に応援。テスト前の相手を応援する場面。",
+    "labels": [
+      "Your test",
+      "Good luck",
+      "You can do it"
+    ],
+    "sceneEn": "Encouraging a test taker",
+    "sceneJa": "テスト前に応援",
+    "background": "classroom",
+    "composition": {
+      "type": "tabletop",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l13-01": {
+    "assets": [
+      "paint_box.svg",
+      "paint_1_,_to.svg",
+      "begin_start.svg"
+    ],
+    "layout": "scene",
+    "altEn": "Someone picks up a paint box and starts painting for the first time.",
+    "altJa": "初めての体験。初めての体験だと伝える場面。",
+    "labels": [
+      "New to me",
+      "First attempt",
+      "Give it a try"
+    ],
+    "sceneEn": "A first attempt",
+    "sceneJa": "初めての体験",
+    "background": "studio",
+    "composition": {
+      "type": "context",
+      "hero": 1,
+      "pair": [
+        0,
+        2
+      ]
+    }
+  },
+  "phrase-l13-02": {
+    "assets": [
+      "confused_man.svg",
+      "delicious_food.svg",
+      "surprised_man.svg"
+    ],
+    "layout": "contrast",
+    "altEn": "An uncertain diner tries a meal and is pleasantly surprised by how good it is.",
+    "altJa": "予想以上によかった食事。体験が予想以上によかった場面。",
+    "labels": [
+      "Before trying",
+      "A great meal",
+      "Better than expected"
+    ],
+    "sceneEn": "An unexpectedly good meal",
+    "sceneJa": "予想以上によかった食事",
+    "background": "cafe",
+    "composition": {
+      "type": "compare",
+      "hero": 2,
+      "pair": [
+        0,
+        2
+      ]
+    }
+  },
+  "phrase-l13-03": {
+    "assets": [
+      "party_celebration.svg",
+      "birthday_cake.svg",
+      "happy_man.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A smiling guest remembers a celebration with a birthday cake.",
+    "altJa": "楽しかった会を振り返る。イベントや訪問の感想を伝える場面。",
+    "labels": [
+      "The celebration",
+      "Happy memories",
+      "A great time"
+    ],
+    "sceneEn": "Remembering a great celebration",
+    "sceneJa": "楽しかった会を振り返る",
+    "background": "home",
+    "composition": {
+      "type": "context",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l13-04": {
+    "assets": [
+      "test.svg",
+      "finish.svg",
+      "answer.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "After a test is finished, a friend asks how it went.",
+    "altJa": "終わった出来事の感想を聞く。相手が終えた出来事の結果や様子を尋ねる場面。",
+    "labels": [
+      "The test",
+      "All finished",
+      "How was it?"
+    ],
+    "sceneEn": "Asking about a result",
+    "sceneJa": "終わった出来事の感想を聞く",
+    "background": "classroom",
+    "composition": {
+      "type": "steps",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l14-01": {
+    "assets": [
+      "school.svg",
+      "clock.svg",
+      "badminton_racket.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "Friends check the time after school and discuss playing badminton.",
+    "altJa": "放課後の空き時間を確認。相手の予定が空いているか確認する場面。",
+    "labels": [
+      "After school",
+      "Are you free?",
+      "Play together?"
+    ],
+    "sceneEn": "Checking after-school availability",
+    "sceneJa": "放課後の空き時間を確認",
+    "background": "classroom",
+    "composition": {
+      "type": "steps",
+      "hero": 2,
+      "pair": [
+        0,
+        1
+      ]
+    }
+  },
+  "phrase-l14-02": {
+    "assets": [
+      "pack_suitcase_,_to.svg",
+      "clock.svg",
+      "exit_door_,_to.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "A traveller packs a suitcase and plans to leave before the usual time.",
+    "altJa": "早めの出発を計画。自分が考えている予定を共有する場面。",
+    "labels": [
+      "Get ready",
+      "Leave early",
+      "Head out"
+    ],
+    "sceneEn": "Planning an early departure",
+    "sceneJa": "早めの出発を計画",
+    "background": "home",
+    "composition": {
+      "type": "route",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l14-03": {
+    "assets": [
+      "calendar_month.svg",
+      "weekend.svg",
+      "good.svg"
+    ],
+    "layout": "scene",
+    "altEn": "Two people check their calendars and see whether Saturday suits both of them.",
+    "altJa": "会う日を調整。会う日程を調整する場面。",
+    "labels": [
+      "Saturday?",
+      "Your schedule",
+      "Does it work?"
+    ],
+    "sceneEn": "Choosing a meeting day",
+    "sceneJa": "会う日を調整",
+    "background": "cafe",
+    "composition": {
+      "type": "context",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l14-04": {
+    "assets": [
+      "think_,_to.svg",
+      "night.svg",
+      "mobile_phone_text_message.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "Someone considers a plan and promises to send a reply tonight.",
+    "altJa": "夜までに返事を約束。すぐに決められず、あとで返事をする場面。",
+    "labels": [
+      "Think first",
+      "Tonight",
+      "Send a reply"
+    ],
+    "sceneEn": "Promising a later reply",
+    "sceneJa": "夜までに返事を約束",
+    "background": "home",
+    "composition": {
+      "type": "steps",
+      "hero": 2,
+      "pair": [
+        0,
+        1
+      ]
+    }
+  },
+  "phrase-l15-01": {
+    "assets": [
+      "suitcase_1.svg",
+      "personal_passport.svg",
+      "key_2.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A traveller arrives with a suitcase and passport and receives a room key.",
+    "altJa": "ホテルに到着。ホテルのフロントで到着手続きをする場面。",
+    "labels": [
+      "Arrival",
+      "My booking",
+      "Room key"
+    ],
+    "sceneEn": "Arriving for a hotel stay",
+    "sceneJa": "ホテルに到着",
+    "background": "studio",
+    "composition": {
+      "type": "tabletop",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l15-02": {
+    "assets": [
+      "train.svg",
+      "which.svg",
+      "three.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A traveller asks which platform their train leaves from and is directed to platform three.",
+    "altJa": "出発ホームを確認。電車の出発ホームを確認する場面。",
+    "labels": [
+      "My train",
+      "Which platform?",
+      "Platform three"
+    ],
+    "sceneEn": "Checking a train departure",
+    "sceneJa": "出発ホームを確認",
+    "background": "street",
+    "composition": {
+      "type": "context",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l15-03": {
+    "assets": [
+      "chair_dining.svg",
+      "hand_bag.svg",
+      "which.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A diner notices a bag near a chair and checks whether the seat is already taken.",
+    "altJa": "座る前に確認。席を使ってよいか確認する場面。",
+    "labels": [
+      "This seat",
+      "Taken?",
+      "May I sit?"
+    ],
+    "sceneEn": "Checking before sitting",
+    "sceneJa": "座る前に確認",
+    "background": "cafe",
+    "composition": {
+      "type": "tabletop",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l15-04": {
+    "assets": [
+      "near.svg",
+      "menu.svg",
+      "shop_2.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A visitor asks someone local to recommend a nearby place to eat.",
+    "altJa": "近くのおすすめを聞く。食事をする場所など、目的を伝えてから近くのおすすめを聞く場面。",
+    "labels": [
+      "Nearby",
+      "Somewhere to eat",
+      "Any recommendations?"
+    ],
+    "sceneEn": "Asking for a nearby recommendation",
+    "sceneJa": "近くのおすすめを聞く",
+    "background": "street",
+    "composition": {
+      "type": "context",
+      "hero": 2,
+      "pair": [
+        0,
+        1
+      ]
+    }
+  },
+  "phrase-l16-01": {
+    "assets": [
+      "computer_monitor.svg",
+      "warning_light.svg",
+      "worried_lady.svg"
+    ],
+    "layout": "scene",
+    "altEn": "An unexpected warning on a computer screen makes its user concerned.",
+    "altJa": "異変に気づく。原因は不明だが正常ではないと伝える場面。",
+    "labels": [
+      "Something changed",
+      "Warning",
+      "Check the problem"
+    ],
+    "sceneEn": "Noticing a problem",
+    "sceneJa": "異変に気づく",
+    "background": "office",
+    "composition": {
+      "type": "context",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l16-02": {
+    "assets": [
+      "press_button_,_to.svg",
+      "computer_1.svg",
+      "plug_2.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "Someone presses a computer button but gets no response and checks its plug.",
+    "altJa": "機械がうまく動かない。機械やアプリがうまく動かない場面。",
+    "labels": [
+      "Press the button",
+      "No response",
+      "Check the plug"
+    ],
+    "sceneEn": "A device that will not work",
+    "sceneJa": "機械がうまく動かない",
+    "background": "home",
+    "composition": {
+      "type": "steps",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l16-03": {
+    "assets": [
+      "wrong_thought.svg",
+      "calendar.svg",
+      "change_mind_,_to.svg"
+    ],
+    "layout": "contrast",
+    "altEn": "Someone realises they understood a calendar date incorrectly and revises their understanding.",
+    "altJa": "聞き間違いに気づく。説明の理解が違っていた可能性を認める場面。",
+    "labels": [
+      "My understanding",
+      "Check the date",
+      "Let me correct that"
+    ],
+    "sceneEn": "Correcting a misunderstanding",
+    "sceneJa": "聞き間違いに気づく",
+    "background": "office",
+    "composition": {
+      "type": "compare",
+      "hero": 0,
+      "pair": [
+        0,
+        2
+      ]
+    }
+  },
+  "phrase-l16-04": {
+    "assets": [
+      "pencil_and_paper_2.svg",
+      "show_me_,_to.svg",
+      "look_,_to.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A person shows a draft on paper and asks someone to look it over.",
+    "altJa": "作業内容を見てもらう。問題や作業内容を確認してほしい場面。",
+    "labels": [
+      "My draft",
+      "Take a look",
+      "Any feedback?"
+    ],
+    "sceneEn": "Asking someone to inspect work",
+    "sceneJa": "作業内容を見てもらう",
+    "background": "studio",
+    "composition": {
+      "type": "tabletop",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l17-01": {
+    "assets": [
+      "lightbulb.svg",
+      "build_,_to.svg",
+      "good.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "An idea is tested by building a small model to see whether it works.",
+    "altJa": "小さく試してみる提案。自分の考えを明確に述べる場面。",
+    "labels": [
+      "An idea",
+      "Try a model",
+      "See what happens"
+    ],
+    "sceneEn": "Considering a practical experiment",
+    "sceneJa": "小さく試してみる提案",
+    "background": "studio",
+    "composition": {
+      "type": "steps",
+      "hero": 1,
+      "pair": [
+        0,
+        2
+      ]
+    }
+  },
+  "phrase-l17-02": {
+    "assets": [
+      "road.svg",
+      "right.svg",
+      "good.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A listener follows a road explanation and understands where to turn right.",
+    "altJa": "道順の説明に納得。相手の考えを理解したと示す場面。",
+    "labels": [
+      "This road",
+      "Turn right",
+      "Now I understand"
+    ],
+    "sceneEn": "Understanding a route explanation",
+    "sceneJa": "道順の説明に納得",
+    "background": "street",
+    "composition": {
+      "type": "context",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l17-03": {
+    "assets": [
+      "group_work.svg",
+      "same.svg",
+      "good.svg"
+    ],
+    "layout": "scene",
+    "altEn": "Two colleagues compare their views and recognise that they agree.",
+    "altJa": "共通の意見に賛成。相手の意見に強く賛成する場面。",
+    "labels": [
+      "Your view",
+      "My view too",
+      "Agreed"
+    ],
+    "sceneEn": "Agreeing on a shared choice",
+    "sceneJa": "共通の意見に賛成",
+    "background": "office",
+    "composition": {
+      "type": "context",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l17-04": {
+    "assets": [
+      "new_document.svg",
+      "confused_lady.svg",
+      "why.svg"
+    ],
+    "layout": "contrast",
+    "altEn": "A colleague reviews a written proposal but still has questions about the evidence.",
+    "altJa": "まだ判断を保留。説明を聞いても判断が変わっていない場面。",
+    "labels": [
+      "The proposal",
+      "Not convinced",
+      "More evidence?"
+    ],
+    "sceneEn": "Still considering the evidence",
+    "sceneJa": "まだ判断を保留",
+    "background": "office",
+    "composition": {
+      "type": "compare",
+      "hero": 1,
+      "pair": [
+        0,
+        1
+      ]
+    }
+  },
+  "phrase-l18-01": {
+    "assets": [
+      "jigsaw_puzzle_piece.svg",
+      "begin_start.svg",
+      "jigsaw_puzzle.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "A team starts with one easy puzzle piece before tackling the whole puzzle.",
+    "altJa": "簡単な作業から始める。作業の進め方を提案する場面。",
+    "labels": [
+      "One easy piece",
+      "Start here",
+      "Build from there"
+    ],
+    "sceneEn": "Beginning with an easy step",
+    "sceneJa": "簡単な作業から始める",
+    "background": "studio",
+    "composition": {
+      "type": "steps",
+      "hero": 2,
+      "pair": [
+        0,
+        1
+      ]
+    }
+  },
+  "phrase-l18-02": {
+    "assets": [
+      "potted_plant.svg",
+      "wait_,_to.svg",
+      "tomorrow.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "Someone checking a plant suggests waiting one more day before deciding what to do.",
+    "altJa": "判断をもう一日待つ。決定を急がず待つ案を出す場面。",
+    "labels": [
+      "Check it today",
+      "Wait a little",
+      "Review tomorrow"
+    ],
+    "sceneEn": "Allowing more time",
+    "sceneJa": "判断をもう一日待つ",
+    "background": "home",
+    "composition": {
+      "type": "steps",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l18-03": {
+    "assets": [
+      "new_document.svg",
+      "think_,_to.svg",
+      "clock.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A person gives a written proposal careful thought instead of deciding immediately.",
+    "altJa": "結論の前によく考える。結論を出す前に検討する時間を取りたい場面。",
+    "labels": [
+      "A decision",
+      "Think it over",
+      "Take some time"
+    ],
+    "sceneEn": "Considering a decision carefully",
+    "sceneJa": "結論の前によく考える",
+    "background": "office",
+    "composition": {
+      "type": "context",
+      "hero": 1,
+      "pair": [
+        0,
+        2
+      ]
+    }
+  },
+  "phrase-l18-04": {
+    "assets": [
+      "which.svg",
+      "bank_card.svg",
+      "good.svg"
+    ],
+    "layout": "contrast",
+    "altEn": "Several purchase options are compared against a budget and the best is selected.",
+    "altJa": "比較して最善案を選ぶ。比較したあとで有力な案を示す場面。",
+    "labels": [
+      "Compare choices",
+      "Within budget",
+      "Best option"
+    ],
+    "sceneEn": "Selecting the best of several options",
+    "sceneJa": "比較して最善案を選ぶ",
+    "background": "shop",
+    "composition": {
+      "type": "compare",
+      "hero": 1,
+      "pair": [
+        0,
+        2
+      ]
+    }
+  },
+  "phrase-l19-01": {
+    "assets": [
+      "talk_1_,_to.svg",
+      "change_,_to.svg",
+      "show_me_,_to.svg"
+    ],
+    "layout": "contrast",
+    "altEn": "A learner asks a speaker to explain the same idea again using an example.",
+    "altJa": "別の説明をお願い。同じ説明を別の表現で聞きたい場面。",
+    "labels": [
+      "First explanation",
+      "Another way",
+      "Show an example"
+    ],
+    "sceneEn": "Requesting a different explanation",
+    "sceneJa": "別の説明をお願い",
+    "background": "classroom",
+    "composition": {
+      "type": "compare",
+      "hero": 0,
+      "pair": [
+        0,
+        2
+      ]
+    }
+  },
+  "phrase-l19-02": {
+    "assets": [
+      "new_document.svg",
+      "what.svg",
+      "look_,_to.svg"
+    ],
+    "layout": "scene",
+    "altEn": "Two colleagues look closely at one sentence in a document to clarify its meaning.",
+    "altJa": "意味を具体的に確認。相手の意図をより正確に確認する場面。",
+    "labels": [
+      "This sentence",
+      "What exactly?",
+      "Look closely"
+    ],
+    "sceneEn": "Clarifying an exact meaning",
+    "sceneJa": "意味を具体的に確認",
+    "background": "office",
+    "composition": {
+      "type": "tabletop",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l19-03": {
+    "assets": [
+      "hear_,_to.svg",
+      "notepad.svg",
+      "same.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "A listener checks their notes and restates what they understood.",
+    "altJa": "理解した内容を確認。聞いた内容を自分の言葉で確認する前の場面。",
+    "labels": [
+      "Listen",
+      "My notes",
+      "Is this right?"
+    ],
+    "sceneEn": "Checking understanding aloud",
+    "sceneJa": "理解した内容を確認",
+    "background": "classroom",
+    "composition": {
+      "type": "steps",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l19-04": {
+    "assets": [
+      "talk_3_,_to.svg",
+      "rewind.svg",
+      "finish.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "A learner requests that only the missed end of an explanation be repeated.",
+    "altJa": "聞き逃した最後を確認。発言の終わりだけ聞こえなかった場面。",
+    "labels": [
+      "The explanation",
+      "Please repeat",
+      "The last part"
+    ],
+    "sceneEn": "Recovering the missed ending",
+    "sceneJa": "聞き逃した最後を確認",
+    "background": "classroom",
+    "composition": {
+      "type": "steps",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l20-01": {
+    "assets": [
+      "calendar.svg",
+      "write_letter_,_to.svg",
+      "mobile_phone_text_message.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "A colleague marks Friday on the calendar and prepares to send a considered reply by then.",
+    "altJa": "返事の期限を約束。確認後の返答期限を伝える場面。",
+    "labels": [
+      "By Friday",
+      "Check the details",
+      "Send a reply"
+    ],
+    "sceneEn": "Giving a reply deadline",
+    "sceneJa": "返事の期限を約束",
+    "background": "office",
+    "composition": {
+      "type": "steps",
+      "hero": 2,
+      "pair": [
+        0,
+        1
+      ]
+    }
+  },
+  "phrase-l20-02": {
+    "assets": [
+      "clock.svg",
+      "change_,_to.svg",
+      "three.svg"
+    ],
+    "layout": "contrast",
+    "altEn": "A meeting time is moved from its original clock slot to three o'clock.",
+    "altJa": "会議時刻を変更。予定時刻の変更を相談する場面。",
+    "labels": [
+      "Original time",
+      "Move the meeting",
+      "Three o'clock"
+    ],
+    "sceneEn": "Moving a meeting time",
+    "sceneJa": "会議時刻を変更",
+    "background": "office",
+    "composition": {
+      "type": "compare",
+      "hero": 0,
+      "pair": [
+        0,
+        2
+      ]
+    }
+  },
+  "phrase-l20-03": {
+    "assets": [
+      "miss_bus_,_to.svg",
+      "clock.svg",
+      "telephone_mobile_,_to.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A traveller delayed by a missed bus phones ahead to explain they are running late.",
+    "altJa": "遅れを連絡。到着や作業が遅れていると連絡する場面。",
+    "labels": [
+      "A delay",
+      "Running behind",
+      "Let them know"
+    ],
+    "sceneEn": "Reporting a delay",
+    "sceneJa": "遅れを連絡",
+    "background": "street",
+    "composition": {
+      "type": "context",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l20-04": {
+    "assets": [
+      "group_work.svg",
+      "share_,_to.svg",
+      "worksheet.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A team divides a set of worksheets into equal portions of work.",
+    "altJa": "チームの仕事を公平に分担。チームで担当を決める場面。",
+    "labels": [
+      "Our task",
+      "Equal shares",
+      "One part each"
+    ],
+    "sceneEn": "Sharing a team task fairly",
+    "sceneJa": "チームの仕事を公平に分担",
+    "background": "office",
+    "composition": {
+      "type": "context",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l21-01": {
+    "assets": [
+      "knock_,_to.svg",
+      "busy.svg",
+      "sit_at_computer_,_to.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A visitor knocks before asking a question of someone busy at a computer.",
+    "altJa": "忙しそうな人に声をかける。忙しそうな人に声をかける場面。",
+    "labels": [
+      "May I?",
+      "You're busy",
+      "A quick question"
+    ],
+    "sceneEn": "Approaching someone busy",
+    "sceneJa": "忙しそうな人に声をかける",
+    "background": "office",
+    "composition": {
+      "type": "context",
+      "hero": 2,
+      "pair": [
+        0,
+        1
+      ]
+    }
+  },
+  "phrase-l21-02": {
+    "assets": [
+      "ready_2.svg",
+      "wait_,_to.svg",
+      "serene_man.svg"
+    ],
+    "layout": "scene",
+    "altEn": "One person calmly waits while another finishes getting ready.",
+    "altJa": "相手を急がせず待つ。相手を急がせたくないと伝える場面。",
+    "labels": [
+      "Getting ready",
+      "Take your time",
+      "No rush"
+    ],
+    "sceneEn": "Letting someone take their time",
+    "sceneJa": "相手を急がせず待つ",
+    "background": "home",
+    "composition": {
+      "type": "context",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l21-03": {
+    "assets": [
+      "telephone_mobile_2_,_to.svg",
+      "take_care_of_,_to.svg",
+      "happy_lady.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A caring phone call makes someone feel remembered and appreciated.",
+    "altJa": "気づかいに感謝。相手の心づかいに感謝する場面。",
+    "labels": [
+      "Checking in",
+      "You remembered",
+      "Thank you"
+    ],
+    "sceneEn": "Appreciating a caring question",
+    "sceneJa": "気づかいに感謝",
+    "background": "home",
+    "composition": {
+      "type": "tabletop",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l21-04": {
+    "assets": [
+      "group_work.svg",
+      "join_2_,_to.svg",
+      "hug_,_to.svg"
+    ],
+    "layout": "contrast",
+    "altEn": "A friend who was accidentally left out is invited back into the group with an apology.",
+    "altJa": "誘い忘れを説明。相手を意図せず誘いや話から外してしまった場面。",
+    "labels": [
+      "The group",
+      "You belong too",
+      "I'm sorry"
+    ],
+    "sceneEn": "Repairing an accidental exclusion",
+    "sceneJa": "誘い忘れを説明",
+    "background": "park",
+    "composition": {
+      "type": "compare",
+      "hero": 1,
+      "pair": [
+        0,
+        1
+      ]
+    }
+  },
+  "phrase-l22-01": {
+    "assets": [
+      "menu.svg",
+      "salad_plate.svg",
+      "soup.svg"
+    ],
+    "layout": "contrast",
+    "altEn": "The meal a diner ordered is contrasted with a different dish that arrived.",
+    "altJa": "注文と違う料理が届く。店で注文と違う品が届いた場面。",
+    "labels": [
+      "What I ordered",
+      "What arrived",
+      "Please check"
+    ],
+    "sceneEn": "Receiving the wrong order",
+    "sceneJa": "注文と違う料理が届く",
+    "background": "cafe",
+    "composition": {
+      "type": "compare",
+      "hero": 1,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l22-02": {
+    "assets": [
+      "clothes_small.svg",
+      "return_,_to.svg",
+      "clothes_large.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "A customer returns clothes that are too small and requests a larger size.",
+    "altJa": "買った商品を交換。購入品の交換を丁寧に依頼する場面。",
+    "labels": [
+      "Too small",
+      "Exchange please",
+      "A larger size"
+    ],
+    "sceneEn": "Exchanging a purchase",
+    "sceneJa": "買った商品を交換",
+    "background": "shop",
+    "composition": {
+      "type": "steps",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l22-03": {
+    "assets": [
+      "paper.svg",
+      "money.svg",
+      "more.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A customer notices an additional amount on a bill and asks the shop to check it.",
+    "altJa": "請求の追加料金を確認。請求額に心当たりのない料金がある場面。",
+    "labels": [
+      "The bill",
+      "An extra amount",
+      "Please check"
+    ],
+    "sceneEn": "Questioning an extra charge",
+    "sceneJa": "請求の追加料金を確認",
+    "background": "shop",
+    "composition": {
+      "type": "context",
+      "hero": 1,
+      "pair": [
+        0,
+        2
+      ]
+    }
+  },
+  "phrase-l22-04": {
+    "assets": [
+      "mistake_no_wrong.svg",
+      "change_,_to.svg",
+      "smile_,_to.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "A shop corrects a problem and the customer responds with an appreciative smile.",
+    "altJa": "問題解決に感謝。店員や担当者が問題を解決してくれた場面。",
+    "labels": [
+      "A problem",
+      "Sorted out",
+      "Thank you"
+    ],
+    "sceneEn": "Thanking someone for a fix",
+    "sceneJa": "問題解決に感謝",
+    "background": "shop",
+    "composition": {
+      "type": "steps",
+      "hero": 2,
+      "pair": [
+        0,
+        1
+      ]
+    }
+  },
+  "phrase-l23-01": {
+    "assets": [
+      "talk_4_,_to.svg",
+      "party_popper.svg",
+      "surprised_lady.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "A storyteller builds suspense before revealing a surprising celebration.",
+    "altJa": "驚く出来事を話す。驚く展開の前に聞き手の興味を引く場面。",
+    "labels": [
+      "And then…",
+      "A surprise",
+      "You won't believe it"
+    ],
+    "sceneEn": "Telling a surprising story",
+    "sceneJa": "驚く出来事を話す",
+    "background": "cafe",
+    "composition": {
+      "type": "steps",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l23-02": {
+    "assets": [
+      "wrong_thought.svg",
+      "talk_2_,_to.svg",
+      "same.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "Two people discuss what happened and discover that they had understood it differently.",
+    "altJa": "誤解だったと説明。出来事の意外な結末を説明する場面。",
+    "labels": [
+      "Different meanings",
+      "Talk it through",
+      "A misunderstanding"
+    ],
+    "sceneEn": "Explaining an eventual misunderstanding",
+    "sceneJa": "誤解だったと説明",
+    "background": "office",
+    "composition": {
+      "type": "steps",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l23-03": {
+    "assets": [
+      "funny_laugh.svg",
+      "comedy_tv.svg",
+      "laughing_man.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A viewer recalls a funny television scene and cannot stop laughing.",
+    "altJa": "おもしろかった出来事。とてもおもしろかった出来事を振り返る場面。",
+    "labels": [
+      "A funny scene",
+      "Still laughing",
+      "Such a good time"
+    ],
+    "sceneEn": "Remembering a funny moment",
+    "sceneJa": "おもしろかった出来事",
+    "background": "home",
+    "composition": {
+      "type": "context",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l23-04": {
+    "assets": [
+      "worried_man.svg",
+      "talk_1_,_to.svg",
+      "take_care_of_,_to.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A listener offers care as a worried friend describes a difficult day.",
+    "altJa": "大変な体験に共感。相手のつらい体験に共感する場面。",
+    "labels": [
+      "A difficult day",
+      "I'm listening",
+      "That sounds hard"
+    ],
+    "sceneEn": "Responding with empathy",
+    "sceneJa": "大変な体験に共感",
+    "background": "cafe",
+    "composition": {
+      "type": "context",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l24-01": {
+    "assets": [
+      "calendar_month.svg",
+      "work_book.svg",
+      "today.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "A learner uses a calendar to maintain a little workbook practice every day.",
+    "altJa": "毎日続ける学習習慣。改善したい習慣や目標を話す場面。",
+    "labels": [
+      "A little each day",
+      "Practise",
+      "Keep going"
+    ],
+    "sceneEn": "Building a steady learning habit",
+    "sceneJa": "毎日続ける学習習慣",
+    "background": "home",
+    "composition": {
+      "type": "steps",
+      "hero": 1,
+      "pair": [
+        0,
+        2
+      ]
+    }
+  },
+  "phrase-l24-02": {
+    "assets": [
+      "worksheet.svg",
+      "certificate.svg",
+      "surprised_man.svg"
+    ],
+    "layout": "contrast",
+    "altEn": "A learner compares an early worksheet with a recent achievement and notices their growth.",
+    "altJa": "自分の成長に気づく。自分の成長に気づいた場面。",
+    "labels": [
+      "Where I began",
+      "What I can do",
+      "More progress"
+    ],
+    "sceneEn": "Noticing personal progress",
+    "sceneJa": "自分の成長に気づく",
+    "background": "classroom",
+    "composition": {
+      "type": "compare",
+      "hero": 1,
+      "pair": [
+        0,
+        1
+      ]
+    }
+  },
+  "phrase-l24-03": {
+    "assets": [
+      "walk_upstairs_,_to.svg",
+      "stairs.svg",
+      "certificate.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "A learner takes a series of small steps towards a certificate marking their learning goal.",
+    "altJa": "大きな目標へ一歩ずつ。大きな目標へ焦らず着実に進む場面。",
+    "labels": [
+      "One step",
+      "Then another",
+      "Towards my goal"
+    ],
+    "sceneEn": "Approaching a large goal gradually",
+    "sceneJa": "大きな目標へ一歩ずつ",
+    "background": "park",
+    "composition": {
+      "type": "steps",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l24-04": {
+    "assets": [
+      "read_book_,_to.svg",
+      "talk_3_,_to.svg",
+      "archery_target.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A teacher and learner compare reading and speaking as possible next goals.",
+    "altJa": "次の学習目標を相談。次の学習目標を一緒に考える場面。",
+    "labels": [
+      "Reading?",
+      "Speaking?",
+      "My next goal"
+    ],
+    "sceneEn": "Choosing a next learning goal",
+    "sceneJa": "次の学習目標を相談",
+    "background": "classroom",
+    "composition": {
+      "type": "tabletop",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l25-01": {
+    "assets": [
+      "talk_4_,_to.svg",
+      "bus.svg",
+      "walk_,_to.svg"
+    ],
+    "layout": "contrast",
+    "altEn": "One traveller listens respectfully to a suggestion to take the bus but prefers walking.",
+    "altJa": "移動方法について違う意見。相手を尊重しながら異なる意見を述べる場面。",
+    "labels": [
+      "I hear you",
+      "Take the bus?",
+      "I would walk"
+    ],
+    "sceneEn": "Different ways to travel",
+    "sceneJa": "移動方法について違う意見",
+    "background": "street",
+    "composition": {
+      "type": "compare",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l25-02": {
+    "assets": [
+      "jigsaw_puzzle_piece.svg",
+      "part.svg",
+      "jigsaw_puzzle.svg"
+    ],
+    "layout": "contrast",
+    "altEn": "A single puzzle piece is contrasted with the full picture that includes more information.",
+    "altJa": "一部だけで判断しない。議論に不足している視点があると示す場面。",
+    "labels": [
+      "One piece",
+      "Only part",
+      "The whole picture"
+    ],
+    "sceneEn": "Looking beyond one piece of evidence",
+    "sceneJa": "一部だけで判断しない",
+    "background": "office",
+    "composition": {
+      "type": "compare",
+      "hero": 2,
+      "pair": [
+        0,
+        2
+      ]
+    }
+  },
+  "phrase-l25-03": {
+    "assets": [
+      "dead_plant.svg",
+      "water_plants_,_to.svg",
+      "sun.svg"
+    ],
+    "layout": "contrast",
+    "altEn": "A wilting plant prompts two possible explanations involving water and sunlight.",
+    "altJa": "別の原因を考える。結論に対する別の可能性を提案する場面。",
+    "labels": [
+      "The problem",
+      "Too little water?",
+      "Not enough light?"
+    ],
+    "sceneEn": "Suggesting another cause",
+    "sceneJa": "別の原因を考える",
+    "background": "home",
+    "composition": {
+      "type": "compare",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l25-04": {
+    "assets": [
+      "opposite.svg",
+      "shake_hands_,_to.svg",
+      "serene_man.svg"
+    ],
+    "layout": "scene",
+    "altEn": "People with different views finish their discussion with a respectful handshake.",
+    "altJa": "意見の違いを認め合う。意見の一致が難しく、友好的に議論を終える場面。",
+    "labels": [
+      "Different views",
+      "Mutual respect",
+      "Still friends"
+    ],
+    "sceneEn": "Ending a disagreement amicably",
+    "sceneJa": "意見の違いを認め合う",
+    "background": "cafe",
+    "composition": {
+      "type": "context",
+      "hero": 1,
+      "pair": [
+        0,
+        2
+      ]
+    }
+  },
+  "phrase-l26-01": {
+    "assets": [
+      "show_me_,_to.svg",
+      "index_cards.svg",
+      "three.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "A presenter uses ordered index cards to explain a main idea step by step.",
+    "altJa": "中心の考えを順に説明。発表や説明を始める場面。",
+    "labels": [
+      "The main idea",
+      "Step by step",
+      "Follow along"
+    ],
+    "sceneEn": "Explaining an idea in order",
+    "sceneJa": "中心の考えを順に説明",
+    "background": "office",
+    "composition": {
+      "type": "steps",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l26-02": {
+    "assets": [
+      "jigsaw_puzzle_piece.svg",
+      "build_,_to.svg",
+      "jigsaw_puzzle.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "Small pieces added one at a time produce a complete result.",
+    "altJa": "小さな変化の積み重ね。発表の要点をまとめる場面。",
+    "labels": [
+      "Small changes",
+      "Add them together",
+      "A bigger result"
+    ],
+    "sceneEn": "Summarising cumulative change",
+    "sceneJa": "小さな変化の積み重ね",
+    "background": "studio",
+    "composition": {
+      "type": "steps",
+      "hero": 2,
+      "pair": [
+        0,
+        1
+      ]
+    }
+  },
+  "phrase-l26-03": {
+    "assets": [
+      "lightbulb.svg",
+      "more.svg",
+      "build_,_to.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "An existing idea is expanded by adding another contribution and building further.",
+    "altJa": "相手の案を発展。他の人の発言につなげて意見を加える場面。",
+    "labels": [
+      "Your idea",
+      "Add a thought",
+      "Build on it"
+    ],
+    "sceneEn": "Developing someone else's idea",
+    "sceneJa": "相手の案を発展",
+    "background": "studio",
+    "composition": {
+      "type": "steps",
+      "hero": 2,
+      "pair": [
+        0,
+        1
+      ]
+    }
+  },
+  "phrase-l26-04": {
+    "assets": [
+      "group_work.svg",
+      "which.svg",
+      "show_me_,_to.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A group discussion invites someone to share a different way of looking at the issue.",
+    "altJa": "別の視点を募る。議論で多様な意見を募る場面。",
+    "labels": [
+      "The discussion",
+      "Another view?",
+      "Your perspective"
+    ],
+    "sceneEn": "Inviting different perspectives",
+    "sceneJa": "別の視点を募る",
+    "background": "office",
+    "composition": {
+      "type": "tabletop",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l27-01": {
+    "assets": [
+      "share_,_to.svg",
+      "half.svg",
+      "shake_hands_,_to.svg"
+    ],
+    "layout": "contrast",
+    "altEn": "Two people consider their needs and agree to a fair division.",
+    "altJa": "公平な折り合いを探す。双方が受け入れられる解決策を探す場面。",
+    "labels": [
+      "Both needs",
+      "A fair share",
+      "A compromise"
+    ],
+    "sceneEn": "Finding a fair middle ground",
+    "sceneJa": "公平な折り合いを探す",
+    "background": "office",
+    "composition": {
+      "type": "compare",
+      "hero": 0,
+      "pair": [
+        0,
+        2
+      ]
+    }
+  },
+  "phrase-l27-02": {
+    "assets": [
+      "calendar_month.svg",
+      "change_,_to.svg",
+      "clock.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A colleague is willing to move calendar dates or times to make an arrangement work.",
+    "altJa": "日程を柔軟に調整。交渉で譲れる条件を示す場面。",
+    "labels": [
+      "Our dates",
+      "Flexible timing",
+      "Find a time"
+    ],
+    "sceneEn": "Being flexible about timing",
+    "sceneJa": "日程を柔軟に調整",
+    "background": "office",
+    "composition": {
+      "type": "context",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l27-03": {
+    "assets": [
+      "good.svg",
+      "worksheet.svg",
+      "work_book.svg"
+    ],
+    "layout": "contrast",
+    "altEn": "A proposal is accepted on the condition that the work covers one worksheet rather than the whole book.",
+    "altJa": "取り組む範囲を決める。条件付きで提案に同意する場面。",
+    "labels": [
+      "That works",
+      "Just one task",
+      "Keep it small"
+    ],
+    "sceneEn": "Agreeing on a manageable task",
+    "sceneJa": "取り組む範囲を決める",
+    "background": "classroom",
+    "composition": {
+      "type": "compare",
+      "hero": 1,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l27-04": {
+    "assets": [
+      "calendar.svg",
+      "group_work.svg",
+      "shake_hands_,_to.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "Colleagues discuss possible calendar dates and move closer to an agreement they can shake hands on.",
+    "altJa": "日程の合意に近づく。交渉が前進したことを確認する場面。",
+    "labels": [
+      "Discuss the dates",
+      "Find common ground",
+      "Nearly agreed"
+    ],
+    "sceneEn": "Reaching a scheduling agreement",
+    "sceneJa": "日程の合意に近づく",
+    "background": "office",
+    "composition": {
+      "type": "steps",
+      "hero": 1,
+      "pair": [
+        0,
+        2
+      ]
+    }
+  },
+  "phrase-l28-01": {
+    "assets": [
+      "paint_brush.svg",
+      "paint_2_,_to.svg",
+      "work_book.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "A beginner practises brush control and gradually becomes more comfortable with painting.",
+    "altJa": "新しい技能のコツを練習。新しい技能にまだ慣れていない場面。",
+    "labels": [
+      "A new skill",
+      "Keep practising",
+      "Getting the hang"
+    ],
+    "sceneEn": "Learning the feel of a new skill",
+    "sceneJa": "新しい技能のコツを練習",
+    "background": "studio",
+    "composition": {
+      "type": "steps",
+      "hero": 1,
+      "pair": [
+        0,
+        2
+      ]
+    }
+  },
+  "phrase-l28-02": {
+    "assets": [
+      "work_2_,_to.svg",
+      "finish.svg",
+      "exit_door_,_to.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "Colleagues finish the day's work and leave the office.",
+    "altJa": "その日の仕事を終える。その日の作業を終える場面。",
+    "labels": [
+      "Today's work",
+      "Enough for today",
+      "Head home"
+    ],
+    "sceneEn": "Finishing the day's work",
+    "sceneJa": "その日の仕事を終える",
+    "background": "office",
+    "composition": {
+      "type": "steps",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l28-03": {
+    "assets": [
+      "lightbulb.svg",
+      "notepad.svg",
+      "tomorrow.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "Someone writes a useful idea in a notepad to remember it for later.",
+    "altJa": "後で使える案を記録。今すぐ採用しなくても後で役立つ意見を評価する場面。",
+    "labels": [
+      "A useful idea",
+      "Write it down",
+      "Keep for later"
+    ],
+    "sceneEn": "Saving an idea for later",
+    "sceneJa": "後で使える案を記録",
+    "background": "office",
+    "composition": {
+      "type": "steps",
+      "hero": 1,
+      "pair": [
+        0,
+        2
+      ]
+    }
+  },
+  "phrase-l28-04": {
+    "assets": [
+      "work_book.svg",
+      "group_work.svg",
+      "same.svg"
+    ],
+    "layout": "scene",
+    "altEn": "Colleagues discuss the same plan and confirm a shared understanding.",
+    "altJa": "認識が一致する。お互いの理解や方針が一致した場面。",
+    "labels": [
+      "One plan",
+      "Discuss together",
+      "Same understanding"
+    ],
+    "sceneEn": "Reaching a shared understanding",
+    "sceneJa": "認識が一致する",
+    "background": "office",
+    "composition": {
+      "type": "context",
+      "hero": 1,
+      "pair": [
+        0,
+        2
+      ]
+    }
+  },
+  "phrase-l29-01": {
+    "assets": [
+      "calendar.svg",
+      "change_,_to.svg",
+      "mobile_phone_text_message.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "A changed deadline on the calendar is shared in a message to the team.",
+    "altJa": "締切変更を共有。関係者へ最新情報を簡潔に伝える場面。",
+    "labels": [
+      "The deadline",
+      "A new date",
+      "Keep everyone updated"
+    ],
+    "sceneEn": "Sharing a deadline change",
+    "sceneJa": "締切変更を共有",
+    "background": "office",
+    "composition": {
+      "type": "steps",
+      "hero": 2,
+      "pair": [
+        0,
+        1
+      ]
+    }
+  },
+  "phrase-l29-02": {
+    "assets": [
+      "worksheet.svg",
+      "which.svg",
+      "work_2_,_to.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A team member asks which part of a worksheet task they are responsible for.",
+    "altJa": "依頼された役割を確認。自分の役割や依頼内容が曖昧な場面。",
+    "labels": [
+      "The task",
+      "My part?",
+      "What do you need?"
+    ],
+    "sceneEn": "Clarifying a personal responsibility",
+    "sceneJa": "依頼された役割を確認",
+    "background": "office",
+    "composition": {
+      "type": "tabletop",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l29-03": {
+    "assets": [
+      "today.svg",
+      "new_document.svg",
+      "finish.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "A colleague takes ownership of a document task and commits to finishing it today.",
+    "altJa": "今日中の対応を引き受ける。問題への対応を引き受ける場面。",
+    "labels": [
+      "Today",
+      "I'll handle it",
+      "Get it done"
+    ],
+    "sceneEn": "Taking responsibility for today's task",
+    "sceneJa": "今日中の対応を引き受ける",
+    "background": "office",
+    "composition": {
+      "type": "steps",
+      "hero": 1,
+      "pair": [
+        0,
+        2
+      ]
+    }
+  },
+  "phrase-l29-04": {
+    "assets": [
+      "warning_light.svg",
+      "show_me_,_to.svg",
+      "smile_,_to.svg"
+    ],
+    "layout": "scene",
+    "altEn": "Someone points out a missed warning and their colleague thanks them for the alert.",
+    "altJa": "見落としの指摘に感謝。問題や見落としを知らせてもらった場面。",
+    "labels": [
+      "A missed issue",
+      "You noticed",
+      "Thank you"
+    ],
+    "sceneEn": "Appreciating a useful alert",
+    "sceneJa": "見落としの指摘に感謝",
+    "background": "office",
+    "composition": {
+      "type": "context",
+      "hero": 1,
+      "pair": [
+        0,
+        2
+      ]
+    }
+  },
+  "phrase-l30-01": {
+    "assets": [
+      "yesterday.svg",
+      "wrong_thought.svg",
+      "change_mind_,_to.svg"
+    ],
+    "layout": "contrast",
+    "altEn": "A person reflects on yesterday's approach and considers how they would change it now.",
+    "altJa": "過去の進め方を振り返る。過去の判断から学んだことを話す場面。",
+    "labels": [
+      "Looking back",
+      "My old approach",
+      "A different way"
+    ],
+    "sceneEn": "Reflecting on a past approach",
+    "sceneJa": "過去の進め方を振り返る",
+    "background": "office",
+    "composition": {
+      "type": "compare",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l30-02": {
+    "assets": [
+      "winner.svg",
+      "group_work.svg",
+      "happy_man.svg"
+    ],
+    "layout": "contrast",
+    "altEn": "An individual prize is contrasted with the satisfaction of shared growth and teamwork.",
+    "altJa": "成功の意味を考え直す。経験による価値観の変化を説明する場面。",
+    "labels": [
+      "Winning alone",
+      "Growing together",
+      "A new meaning"
+    ],
+    "sceneEn": "Reconsidering the meaning of success",
+    "sceneJa": "成功の意味を考え直す",
+    "background": "park",
+    "composition": {
+      "type": "compare",
+      "hero": 1,
+      "pair": [
+        0,
+        1
+      ]
+    }
+  },
+  "phrase-l30-03": {
+    "assets": [
+      "road.svg",
+      "tree.svg",
+      "confused_lady.svg"
+    ],
+    "layout": "contrast",
+    "altEn": "A planned road could improve travel but affect green space, leaving a resident with a difficult decision.",
+    "altJa": "地域の難しい選択。複雑で単純に判断できない問題を話す場面。",
+    "labels": [
+      "Easier travel",
+      "Green space",
+      "A difficult choice"
+    ],
+    "sceneEn": "Weighing a neighbourhood decision",
+    "sceneJa": "地域の難しい選択",
+    "background": "street",
+    "composition": {
+      "type": "compare",
+      "hero": 2,
+      "pair": [
+        0,
+        1
+      ]
+    }
+  },
+  "phrase-l30-04": {
+    "assets": [
+      "spill_,_to.svg",
+      "help_,_to.svg",
+      "clean_room.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "After a spill, people respond by helping to clean up instead of blaming each other.",
+    "altJa": "困難にどう対応するか。困難への姿勢を重視すると伝える場面。",
+    "labels": [
+      "Something goes wrong",
+      "Choose to help",
+      "Make things better"
+    ],
+    "sceneEn": "Choosing a response to difficulty",
+    "sceneJa": "困難にどう対応するか",
+    "background": "home",
+    "composition": {
+      "type": "steps",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l31-01": {
+    "assets": [
+      "road.svg",
+      "group_work.svg",
+      "tree.svg"
+    ],
+    "layout": "contrast",
+    "altEn": "A group considers both faster journeys on a new road and the need to protect a nearby park.",
+    "altJa": "新しい道路について議論。対立する二つの意見にそれぞれ理由がある場面。",
+    "labels": [
+      "Faster journeys",
+      "Weigh both sides",
+      "Protect the park"
+    ],
+    "sceneEn": "Debating a new road",
+    "sceneJa": "新しい道路について議論",
+    "background": "park",
+    "composition": {
+      "type": "compare",
+      "hero": 1,
+      "pair": [
+        0,
+        2
+      ]
+    }
+  },
+  "phrase-l31-02": {
+    "assets": [
+      "work_book.svg",
+      "good.svg",
+      "half.svg"
+    ],
+    "layout": "contrast",
+    "altEn": "A learner agrees that workbook practice helps, while qualifying that it explains only part of progress.",
+    "altJa": "学習に役立つことを相談。相手の主張を部分的に認める場面。",
+    "labels": [
+      "Practice helps",
+      "Some truth",
+      "Not a guarantee"
+    ],
+    "sceneEn": "Discussing what helps learning",
+    "sceneJa": "学習に役立つことを相談",
+    "background": "classroom",
+    "composition": {
+      "type": "compare",
+      "hero": 0,
+      "pair": [
+        0,
+        2
+      ]
+    }
+  },
+  "phrase-l31-03": {
+    "assets": [
+      "tree.svg",
+      "microscope.svg",
+      "roots.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "A tree seen at first glance is examined more closely to reveal the roots beneath it.",
+    "altJa": "微妙な問題を詳しく見る。表面的な理解では不十分だと指摘する場面。",
+    "labels": [
+      "At first glance",
+      "Look closer",
+      "More beneath it"
+    ],
+    "sceneEn": "Looking more closely at a subtle issue",
+    "sceneJa": "微妙な問題を詳しく見る",
+    "background": "studio",
+    "composition": {
+      "type": "steps",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l31-04": {
+    "assets": [
+      "winner.svg",
+      "paint_2_,_to.svg",
+      "pencil_and_paper.svg"
+    ],
+    "layout": "contrast",
+    "altEn": "An exaggerated claim of being the best is qualified by showing a first painting and further practice.",
+    "altJa": "強すぎる評価をやわらげる。相手の結論が強すぎるとやわらかく反論する場面。",
+    "labels": [
+      "Best ever?",
+      "A good start",
+      "Still developing"
+    ],
+    "sceneEn": "Responding to an exaggerated claim",
+    "sceneJa": "強すぎる評価をやわらげる",
+    "background": "studio",
+    "composition": {
+      "type": "compare",
+      "hero": 1,
+      "pair": [
+        0,
+        1
+      ]
+    }
+  },
+  "phrase-l32-01": {
+    "assets": [
+      "dead_plant.svg",
+      "leaf.svg",
+      "roots.svg"
+    ],
+    "layout": "contrast",
+    "altEn": "Visible damage on a plant is distinguished from the roots where its cause may lie.",
+    "altJa": "症状と原因を区別。複雑な考えを言い換えて核心を示す場面。",
+    "labels": [
+      "Visible symptom",
+      "What we notice",
+      "Underlying cause"
+    ],
+    "sceneEn": "Distinguishing symptoms and causes",
+    "sceneJa": "症状と原因を区別",
+    "background": "home",
+    "composition": {
+      "type": "compare",
+      "hero": 0,
+      "pair": [
+        0,
+        2
+      ]
+    }
+  },
+  "phrase-l32-02": {
+    "assets": [
+      "new_document.svg",
+      "wait_,_to.svg",
+      "why.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A person reviews information and keeps their view open while questions remain.",
+    "altJa": "まだ立場を決めない。情報不足で立場を決めていない場面。",
+    "labels": [
+      "Gather information",
+      "No firm view yet",
+      "More questions"
+    ],
+    "sceneEn": "Keeping an open position",
+    "sceneJa": "まだ立場を決めない",
+    "background": "office",
+    "composition": {
+      "type": "context",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l32-03": {
+    "assets": [
+      "group_work.svg",
+      "money.svg",
+      "share_,_to.svg"
+    ],
+    "layout": "scene",
+    "altEn": "A group considers who receives the benefits of a proposal and how they are shared.",
+    "altJa": "誰の利益になるか考える。個別の話題からより大きな論点へ広げる場面。",
+    "labels": [
+      "A proposal",
+      "Who benefits?",
+      "How is it shared?"
+    ],
+    "sceneEn": "Asking who benefits",
+    "sceneJa": "誰の利益になるか考える",
+    "background": "office",
+    "composition": {
+      "type": "tabletop",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  },
+  "phrase-l32-04": {
+    "assets": [
+      "build_,_to.svg",
+      "why.svg",
+      "change_mind_,_to.svg"
+    ],
+    "layout": "sequence",
+    "altEn": "A team examines the foundations of its plan and reconsiders the assumptions behind it.",
+    "altJa": "計画の前提を見直す。計画の土台となる考えに疑問を投げかける場面。",
+    "labels": [
+      "Our plan",
+      "Check the foundations",
+      "Rethink assumptions"
+    ],
+    "sceneEn": "Revisiting a plan's assumptions",
+    "sceneJa": "計画の前提を見直す",
+    "background": "studio",
+    "composition": {
+      "type": "steps",
+      "hero": 0,
+      "pair": [
+        1,
+        2
+      ]
+    }
+  }
+}

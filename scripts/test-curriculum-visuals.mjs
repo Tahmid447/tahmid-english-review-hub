@@ -1,89 +1,45 @@
-import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
-import {
-  curriculumVisualMarkup,
-  curriculumVisualMetadata,
-  visualSpecFor,
-} from "../src/curriculum-visuals.js";
-
-const categories = ["words", "phrases", "phonics"];
-const sources = await Promise.all(categories.map(async (category) => JSON.parse(await readFile(
-  new URL(`../curriculum/${category}.json`, import.meta.url),
-  "utf8",
-))));
-
-const visualModule = await readFile(new URL("../src/curriculum-visuals.js", import.meta.url), "utf8");
-const visualCss = await readFile(new URL("../src/curriculum-visuals.css", import.meta.url), "utf8");
-const learningPage = await readFile(new URL("../learn.html", import.meta.url), "utf8");
-const buildScript = await readFile(new URL("./build.mjs", import.meta.url), "utf8");
-const serviceWorker = await readFile(new URL("../sw.js", import.meta.url), "utf8");
-const attribution = await readFile(new URL("../assets/ATTRIBUTIONS.md", import.meta.url), "utf8");
-
-const allVisuals = [];
-const visualKeys = new Set();
-const expectedCounts = { words: 320, phrases: 128, phonics: 32 };
-
-for (const [sourceIndex, source] of sources.entries()) {
-  const category = categories[sourceIndex];
-  const items = source.levels.flatMap(({ items: levelItems }) => levelItems);
-  assert.equal(items.length, expectedCounts[category], `${category} visual coverage must match its curriculum`);
-
-  for (const item of items) {
-    const spec = visualSpecFor(item, category);
-    const markup = curriculumVisualMarkup(item, category);
-    const repeatedMarkup = curriculumVisualMarkup(item, category);
-
-    assert.equal(spec.id, item.id);
-    assert.equal(spec.category, category);
-    assert.equal(spec.source, "original-inline-svg");
-    assert.ok(spec.family && spec.variant && spec.visualKey, `${item.id} needs a meaningful visual specification`);
-    assert.equal(visualKeys.has(spec.visualKey), false, `${item.id} must have its own stable visual key`);
-    visualKeys.add(spec.visualKey);
-
-    assert.equal(markup, repeatedMarkup, `${item.id} illustration must be deterministic`);
-    assert.match(markup, /^<svg\b/);
-    assert.match(markup, /data-generated-art="tahmid-original"/);
-    assert.match(markup, new RegExp(`data-visual-id="${item.id}"`));
-    assert.doesNotMatch(markup, /<(?:image|foreignObject|use)\b/i, `${item.id} must not embed an external asset`);
-    assert.doesNotMatch(markup.replace("http://www.w3.org/2000/svg", ""), /(?:https?:|data:|blob:|href\s*=|url\s*\()/i);
-    assert.doesNotMatch(markup, /\p{Extended_Pictographic}/u, `${item.id} main artwork must not be an emoji`);
-
-    if (category === "words" && item.level <= 12) {
-      assert.equal(spec.confidence, "exact", `${item.id} needs an exact semantic illustration for foundational learning`);
-    }
-    if (category === "phrases") assert.equal(spec.family, "dialogue");
-    if (category === "phonics") {
-      assert.equal(spec.family, "phonics");
-      assert.ok(spec.label.length >= 1 && spec.label.length <= 13, `${item.id} needs a compact sound label`);
-    }
-    allVisuals.push({ item, spec, markup });
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import crypto from 'node:crypto';
+import {curriculumVisualMarkup,visualSpecFor} from '../src/curriculum-visuals.js';
+const root=new URL('../',import.meta.url);
+let totalBytes=0,count=0;
+const ledger=JSON.parse(fs.readFileSync(new URL('assets/curriculum-attributions.json',root),'utf8')).assets;
+for(const category of ['words','phrases','phonics']) {
+ const data=JSON.parse(fs.readFileSync(new URL(`curriculum/${category}.json`,root),'utf8'));
+ assert.equal(data.levels.length,32);
+ for(const level of data.levels){
+  const fingerprints=new Set();
+  for(const item of level.items){
+   count++;
+   const spec=visualSpecFor(item,category);
+   assert.notEqual(spec.source,'missing',`${item.id}: missing illustration`);
+   const markup=curriculumVisualMarkup(item,category);
+   assert.equal(markup,curriculumVisualMarkup(item,category));
+   assert.doesNotMatch(markup,/<script|<foreignObject|onerror=|onload=/i);
+   assert.ok(spec.altEn.length>12&&spec.altJa.length>5,`${item.id}: semantic accessible labels required`);
+   if(category==='phonics'){
+    assert.match(markup,/<svg/);assert.match(markup,/role="img"/);
+    assert.notEqual(markup,curriculumVisualMarkup({...item,level:level.level%32+1},category));
+   }else{
+    assert.equal(item.imageType,'licensed-illustration');assert.ok(!item.icon);
+    assert.match(markup,/loading="lazy"/);assert.match(markup,/width="640" height="400"/);
+    assert.match(curriculumVisualMarkup(item,category,{quiz:true}),/alt=""/);
+    const asset=fs.readFileSync(new URL(spec.src.slice(1),root));totalBytes+=asset.length;
+    assert.ok(asset.length<350_000,`${item.id}: asset too large`);
+    const source=asset.toString();assert.doesNotMatch(source,/<script|<image|<foreignObject|\son\w+=|(?:href|src)="(?:https?:|data:|blob:)/i);
+    const entry=ledger.find(row=>row.filename===spec.src.slice(1));assert.ok(entry,`${item.id}: no attribution`);
+    assert.equal(entry.sha256,crypto.createHash('sha256').update(asset).digest('hex'));
+    assert.ok(entry.licenseUrl.startsWith('https://creativecommons.org/'));
+    // Text, ids and titles cannot make duplicated drawings pass the visual gate.
+    const drawing=source.replace(/<(?:title|text)[\s\S]*?<\/(?:title|text)>/g,'').replace(/\bid="[^"]*"/g,'');
+    const fingerprint=crypto.createHash('sha256').update(drawing).digest('hex');
+    assert.ok(!fingerprints.has(fingerprint),`${item.id}: repeated drawing at level ${level.level}`);fingerprints.add(fingerprint);
+   }
   }
+ }
 }
-
-assert.equal(allVisuals.length, 480, "Every curriculum item needs a main visual");
-assert.equal(visualKeys.size, 480, "All curriculum visual keys must be stable and unique");
-assert.equal(curriculumVisualMetadata.earlyWordMotifCount, 120, "Words Levels 1–12 need exact concept mappings");
-assert.equal(curriculumVisualMetadata.externalAssets, 0);
-
-assert.doesNotMatch(visualModule, /\.(?:innerHTML|outerHTML)\s*=|insertAdjacentHTML|new\s+DOMParser/i,
-  "The illustration renderer must construct SVG safely with DOM APIs");
-assert.doesNotMatch(visualCss, /@import|url\s*\(/i, "Illustration CSS must not request a remote or bundled third-party asset");
-assert.match(visualCss, /\.learn-card\.has-curriculum-visual \.learn-card-head/);
-assert.match(visualCss, /@media \(prefers-reduced-motion: reduce\)/);
-assert.match(visualCss, /html\[data-theme="dark"\] \.curriculum-visual/);
-
-assert.match(learningPage, /href="\/src\/curriculum-visuals\.css/,
-  "The Learning Library must load the original illustration stylesheet");
-assert.match(learningPage, /src="\/src\/curriculum-visuals\.js/,
-  "The Learning Library must install the illustration enhancer");
-assert.match(buildScript, /"curriculum-visuals\.js"/);
-assert.match(buildScript, /"curriculum-visuals\.css"/);
-assert.match(serviceWorker, /"\/src\/curriculum-visuals\.js"/);
-assert.match(serviceWorker, /"\/src\/curriculum-visuals\.css"/);
-
-assert.match(attribution, /Original artwork generated locally/i);
-assert.match(attribution, /does not download, hotlink, trace or bundle artwork/i);
-assert.match(attribution, /externalAssets|third-party illustration licence|no third-party illustration/i);
-assert.doesNotMatch(attribution, /https?:\/\//i, "Original artwork documentation does not need an external attribution URL");
-
-console.log("Curriculum visuals verified: 480/480 original SVG cues, including 120 exact foundational word motifs.");
+assert.equal(count,480);assert.equal(ledger.length,448);assert.ok(totalBytes<15_000_000,`Art budget exceeded: ${totalBytes}`);
+const build=fs.readFileSync(new URL('scripts/build.mjs',root),'utf8');
+assert.ok(!build.includes('"word-visual-map.json"'));assert.ok(!build.includes('"phrase-visual-map.json"'));
+console.log(`Visual contract passed: ${count} semantic visuals, 448 licensed asset records, ${Math.round(totalBytes/1024)} KiB, no same-level drawing duplicates. Screenshot quality review is a separate required gate.`);
