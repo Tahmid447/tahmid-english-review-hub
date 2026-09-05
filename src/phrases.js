@@ -30,6 +30,7 @@ import {
   featureAllowed,
   loadStudentAccess,
   renderStudentAccessBoundary,
+  studentAccessBoundaryCopy,
 } from "./student-visibility.js?v=20260906-studio1";
 
 const LEGACY_ACTIVITY_KEY = "teh_phrase_activity_v1";
@@ -1154,15 +1155,10 @@ async function initialise() {
     tab.setAttribute("aria-hidden", String(hidden));
   });
   if (access.authenticated && !allowedLibraryKinds.size) {
-    renderStudentAccessBoundary(document.querySelector("#main"), access.settings.account_enabled === false ? {
-      title: "Your Review Hub access is paused.",
-      titleJa: "Review Hubの利用は一時停止中です。",
-      detail: "No vocabulary or phrase content is being shared with this account right now.",
-      detailJa: "現在、このアカウントには単語・フレーズ教材が公開されていません。",
-    } : {
+    renderStudentAccessBoundary(document.querySelector("#main"), studentAccessBoundaryCopy(access, {
       title: "This library is not in your current learning plan.",
       titleJa: "このライブラリは現在の学習プランには含まれていません。",
-    });
+    }));
     return;
   }
   if (!allowedLibraryKinds.has(activeLibraryKind)) {

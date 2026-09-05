@@ -20,6 +20,12 @@ import {
 } from "../src/data.js";
 import { DEFAULT_SETTINGS, resolvedTheme, safeLocalReturnPath } from "../src/store.js";
 import { persistStudentProfileRow } from "../src/supabase.js";
+import {
+  enforceStudentFeature,
+  featureAllowed,
+  loadStudentAccess,
+  studentAccessBoundaryCopy,
+} from "../src/student-visibility.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const question = (format, extra = {}) => ({ id: format, format, maxPoints: 1, ...extra });
@@ -257,6 +263,84 @@ const failedProfileResult = await persistStudentProfileRow(
 assert.equal(failedProfileResult.error?.code, "42501");
 assert.equal(failedProfileWrite.calls.some(([operation]) => operation === "update"), false,
   "Non-conflict INSERT errors are returned without an unsafe fallback write.");
+
+// Exercise the real access loader and page boundary with failing Auth/settings
+// responses. The client fixture is local: no learner account or network call.
+const previousWindow = globalThis.window;
+const previousDocument = globalThis.document;
+let accessFixture = { session: { user: { id: "access-message-fixture" } } };
+const settingsQueries = [];
+const visibilityNode = { dataset: { studentFeature: "show_words" }, setAttribute() {}, contains: () => false };
+const fakeElement = (tagName) => ({
+  tagName, children: [], textContent: "", setAttribute() {},
+  append(...children) { this.children.push(...children); },
+  replaceChildren(...children) { this.children = children; },
+});
+try {
+  globalThis.window = { supabase: { createClient: () => ({
+    auth: { getSession: async () => {
+      if (accessFixture.sessionError) throw accessFixture.sessionError;
+      return { data: { session: accessFixture.session }, error: null };
+    } },
+    from(table) {
+      settingsQueries.push(table);
+      return { select() { return this; }, eq() { return this; },
+        maybeSingle: async () => accessFixture.settingsResult };
+    },
+  }) } };
+  globalThis.document = {
+    documentElement: { dataset: {} }, activeElement: null,
+    querySelectorAll: (selector) => selector === "[data-student-feature]" ? [visibilityNode] : [],
+    createElement: fakeElement,
+  };
+  const featureCopy = { title: "This library is hidden.", titleJa: "このライブラリは非表示です。" };
+  for (const failure of [
+    { sessionError: new Error("Auth check interrupted") },
+    { settingsResult: { data: null, error: new Error("Network interrupted") } },
+    { settingsResult: { data: null, error: null } },
+    { settingsResult: { data: null, error: { code: "42P01", message: "Settings unavailable" } } },
+  ]) {
+    accessFixture = { session: { user: { id: "access-message-fixture" } }, ...failure };
+    const access = await loadStudentAccess({ refresh: true });
+    assert.equal(access.reason, "access-check-failed");
+    assert.equal(access.settings.account_enabled, false, "A failed check must still close access.");
+    assert.deepEqual(["show_words", "show_phrases", "show_phonics", "show_review_lessons", "show_homework"]
+      .filter((feature) => featureAllowed(access, feature)), [], "No learning surface opens after a failed check.");
+    const boundary = fakeElement("main");
+    assert.equal((await enforceStudentFeature("show_words", boundary, featureCopy)).allowed, false);
+    const copy = studentAccessBoundaryCopy(access, featureCopy);
+    assert.equal(boundary.children[0].children[1].children[0].textContent, copy.title,
+      "The actual page boundary uses the access error instead of the hidden-feature copy.");
+    assert.match(copy.title, /could not verify/);
+    assert.match(copy.detail, /connection and sign-in.*try again/);
+    assert.doesNotMatch(Object.values(copy).join(" "), /paused|一時停止/,
+      "Missing settings and transient failures must never claim a deliberate account pause.");
+    assert.equal(document.documentElement.dataset.studentAccess, "error");
+    assert.equal(visibilityNode.dataset.studentHidden, "true");
+  }
+  assert.match(studentAccessBoundaryCopy({ authenticated: true, reason: "hub-settings-missing", settings: { account_enabled: false } }).title,
+    /could not verify/, "An explicit missing-settings reason also takes precedence over fail-closed defaults.");
+  accessFixture = { session: { user: { id: "access-message-fixture" } }, settingsResult: { data: { account_enabled: false }, error: null } };
+  const paused = await loadStudentAccess({ refresh: true });
+  assert.equal(paused.reason, null);
+  assert.equal(studentAccessBoundaryCopy(paused, featureCopy).title, "Your Review Hub access is paused.");
+  assert.equal(featureAllowed(paused, "show_words"), false);
+  accessFixture.settingsResult = { data: { account_enabled: true, show_words: false }, error: null };
+  assert.deepEqual(studentAccessBoundaryCopy(await loadStudentAccess({ refresh: true }), featureCopy), featureCopy,
+    "A verified hidden feature keeps its teacher-managed learning-plan explanation.");
+  accessFixture.settingsResult = { data: { account_enabled: true, show_words: true }, error: null };
+  assert.equal(featureAllowed(await loadStudentAccess({ refresh: true }), "show_words"), true,
+    "A later successful refresh replaces the temporary failure.");
+  accessFixture.session = null;
+  const anonymous = await loadStudentAccess({ refresh: true });
+  assert.equal(anonymous.authenticated, false);
+  assert.equal(featureAllowed(anonymous, "show_words"), true, "Signed-out public preview behavior is preserved.");
+  assert(settingsQueries.every((table) => table === "review_student_hub_settings"),
+    "The failed-access path reads only settings, with no learning-content query.");
+} finally {
+  if (previousWindow === undefined) delete globalThis.window; else globalThis.window = previousWindow;
+  if (previousDocument === undefined) delete globalThis.document; else globalThis.document = previousDocument;
+}
 
 const lessonScript = fs.readFileSync(path.join(root, "src", "lesson.js"), "utf8");
 const lessonPage = fs.readFileSync(path.join(root, "lesson.html"), "utf8");

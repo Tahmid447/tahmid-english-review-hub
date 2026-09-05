@@ -12,6 +12,7 @@ import {
   featureAllowed,
   loadStudentAccess,
   renderStudentAccessBoundary,
+  studentAccessBoundaryCopy,
 } from "./student-visibility.js?v=20260906-studio1";
 import {
   playAnswerFeedback,
@@ -1251,7 +1252,7 @@ function renderReview() {
       refs.reviewCard.append(element("p", {
         className: `learn-choice-feedback ${state.reviewChoiceCorrect ? "is-correct" : "is-wrong"}`,
         text: state.reviewChoiceCorrect
-          ? text("Correct — nicely noticed.", "正解です。よく聞き分けました。")
+          ? text("Correct — nicely noticed.", "正解です。よくできました。")
           : text(`Not quite. The answer is “${prompt.choices.correctLabel}”.`, `惜しいです。答えは「${prompt.choices.correctLabel}」です。`),
         attrs: { role: "status", tabindex: "-1" },
       }));
@@ -1451,25 +1452,20 @@ function bindLibraryControls() {
   window.addEventListener("popstate", () => routePage({ replaceInvalid: false }));
 }
 
-function accessBoundaryFor(category, paused = false) {
-  renderStudentAccessBoundary(document.querySelector("#main"), paused ? {
-    title: "Your Review Hub access is paused.",
-    titleJa: "Review Hubの利用は一時停止中です。",
-    detail: "No learning library content is being shared with this account right now.",
-    detailJa: "現在、このアカウントには教材ライブラリが公開されていません。",
-  } : {
+function accessBoundaryFor(category) {
+  renderStudentAccessBoundary(document.querySelector("#main"), studentAccessBoundaryCopy(state.access, {
     title: `The ${CATEGORY_CONFIG[category]?.labelEn || "learning"} library is not in your plan.`,
     titleJa: `この${CATEGORY_CONFIG[category]?.labelJa || "教材"}ライブラリは現在のプランに含まれていません。`,
     detail: "Your teacher can change which learning categories appear in your Review Hub.",
     detailJa: "表示する学習カテゴリーは、担当の先生が変更できます。",
-  });
+  }));
 }
 
 async function routePage({ replaceInvalid = true } = {}) {
   const route = parseRoute();
   const categories = visibleCategories();
   if (!categories.length) {
-    accessBoundaryFor("words", state.access?.settings?.account_enabled === false);
+    accessBoundaryFor("words");
     return;
   }
   if (route.categoryWasRequested && route.category && !categories.includes(route.category) && state.access?.authenticated) {
@@ -1501,7 +1497,7 @@ async function initialise() {
   await syncRemoteSettings();
   applySettings(getSettings(), { rerender: false });
   if (!visibleCategories().length) {
-    accessBoundaryFor("words", access.settings?.account_enabled === false);
+    accessBoundaryFor("words");
     return;
   }
   const [progressResult, packsResult] = await Promise.all([fetchCurriculumProgress(), state.access?.authenticated ? fetchStudentLearningPacks() : Promise.resolve({ data: [] })]);

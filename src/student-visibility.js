@@ -81,6 +81,28 @@ export const featureAllowed = (access, feature) => (
   !access?.authenticated || access.settings?.account_enabled !== false
 ) && access?.settings?.[feature] !== false;
 
+const accessCheckFailed = (access) => Boolean(
+  access?.authenticated && (access.error || (access.reason && access.reason !== "anonymous"))
+);
+
+export function studentAccessBoundaryCopy(access, hiddenFeatureCopy = {}) {
+  // Fail-closed settings also represent an unavailable check. Only a verified
+  // settings row can tell the learner that their teacher paused access.
+  if (accessCheckFailed(access)) return {
+    title: "We could not verify your Review Hub access.",
+    titleJa: "Review Hubの利用状況を確認できませんでした。",
+    detail: "Return to the Review Hub, check your connection and sign-in, then try again. If this continues, contact your teacher.",
+    detailJa: "Review Hubに戻り、通信状況とログイン状態を確認して、もう一度お試しください。解決しない場合は、担当の先生にご連絡ください。",
+  };
+  if (access?.authenticated && access.settings?.account_enabled === false) return {
+    title: "Your Review Hub access is paused.",
+    titleJa: "Review Hubの利用は一時停止中です。",
+    detail: "No learning content is being shared with this account right now.",
+    detailJa: "現在、このアカウントには学習内容が公開されていません。",
+  };
+  return hiddenFeatureCopy;
+}
+
 export function applyStudentFeatureVisibility(access, root = document) {
   const settings = access?.settings || normalizedSettings();
   root.querySelectorAll?.("[data-student-feature]").forEach((node) => {
@@ -102,7 +124,8 @@ export function applyStudentFeatureVisibility(access, root = document) {
   });
   document.documentElement.dataset.studentAccess = !access?.authenticated
     ? "anonymous"
-    : settings.account_enabled === false ? "disabled" : "ready";
+    : accessCheckFailed(access) ? "error"
+      : settings.account_enabled === false ? "disabled" : "ready";
   return access;
 }
 
@@ -145,13 +168,7 @@ export async function enforceStudentFeature(feature, container, copy) {
   const access = await loadStudentAccess();
   applyStudentFeatureVisibility(access);
   if (access.authenticated && !featureAllowed(access, feature)) {
-    renderStudentAccessBoundary(container, access.settings.account_enabled === false ? {
-      title: "Your Review Hub access is paused.",
-      titleJa: "Review Hubの利用は一時停止中です。",
-      detail: "No learning content is being shared with this account right now.",
-      detailJa: "現在、このアカウントには学習内容が公開されていません。",
-      ...copy,
-    } : copy);
+    renderStudentAccessBoundary(container, studentAccessBoundaryCopy(access, copy));
     return { ...access, allowed: false };
   }
   return { ...access, allowed: true };

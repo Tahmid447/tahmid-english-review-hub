@@ -42,6 +42,7 @@ import {
   featureAllowed,
   loadStudentAccess,
   renderStudentAccessBoundary,
+  studentAccessBoundaryCopy,
 } from "./student-visibility.js?v=20260906-studio1";
 import {
   answerExists as answerValueExists,
@@ -1794,17 +1795,12 @@ const initialiseLesson = async () => {
       // back to a bundled public preview after that RLS lookup is denied.
       allowOfflinePreview = !access.authenticated;
       if (access.authenticated && !allowed) {
-        renderStudentAccessBoundary(document.querySelector("#quizMain"), access.settings.account_enabled === false ? {
-          title: "Your Review Hub access is paused.",
-          titleJa: "Review Hubの利用は一時停止中です。",
-          detail: "No lessons are being shared with this account right now.",
-          detailJa: "現在、このアカウントにはレッスンが公開されていません。",
-        } : {
+        renderStudentAccessBoundary(document.querySelector("#quizMain"), studentAccessBoundaryCopy(access, {
           title: "Lessons are not in your current learning plan.",
           titleJa: "現在の学習プランでは、レッスンは非表示です。",
           detail: "Your teacher can make review lessons or homework available when needed.",
           detailJa: "必要に応じて、先生が復習レッスンや宿題を公開できます。",
-        });
+        }));
         return;
       }
     }
