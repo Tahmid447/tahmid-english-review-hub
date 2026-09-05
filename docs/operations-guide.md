@@ -1,17 +1,19 @@
 # Operations Guide / 運用ガイド
 
-Updated: 2026-08-28 (Asia/Tokyo)
+Updated: 2026-09-05 (Asia/Tokyo)
 
 This guide distinguishes repository state, manually applied database changes
-and deployed behavior. The working branch is
-`upgrade/review-hub-v9-final-product`; the formal site is
-`https://tahmid-english-review-hub.netlify.app/`. The current documentation
-checkpoint is branch HEAD (`git rev-parse HEAD`); this file cannot embed the
-final hash of the commit that contains itself. Historical rollout/logical-
+and deployed behavior. The v10 release candidate is maintained on
+`codex/structured-learning-hub`; release status must be verified from the exact
+commit and deploy record rather than inferred from this document. The formal
+site remains
+`https://tahmid-english-review-hub.netlify.app/`. Historical rollout/logical-
 restore checkpoint `fcf561d` remains limited and must not be treated as a full
-database backup. Migrations `015`–`023` and the matching updated
-`membership-access` Edge Function are live on shared Supabase project
-`ycmybggetemkhorkhfnf`.
+database backup. Migrations `015`–`023` and their matching Edge Function were
+the last verified live backend state on shared Supabase project
+`ycmybggetemkhorkhfnf`; migrations `024`–`025` and the current
+`membership-access` function are pending the explicit v10 Preview rollout in
+section 11.
 
 ## 1. Learner accounts and profile completion
 
@@ -250,13 +252,43 @@ Before release, test install, update, navigation, and offline fallback on a real
 iPhone and Android phone. Clear old preview service-worker data between release
 candidates when validating a new cache version.
 
+For pre-migration visual review, `npm run preview:demo` builds and serves a
+separate `demo-dist/` at `http://127.0.0.1:4174/`. Its learner personas,
+editable mock Teacher Studio, favorites, and progress use localStorage only.
+The server binds to loopback and rejects non-local Host headers; its demo data
+adapter also refuses non-localhost origins. It unregisters stale localhost
+service workers and does not include one of its own. Never upload `demo-dist/`
+or change Netlify's publish directory from `dist/`; the local demo is not RLS
+evidence and is not a substitute for authenticated Preview QA.
+
+New learner settings start with every feature switch enabled but expose only
+Learning Library Levels 1–4. Teachers may extend that range to Level 32 or use
+an exact allow-list. A missing settings row is treated as an integrity error and
+fails closed in both RLS and the browser.
+
 ## 10. Forward-only Supabase rollout
 
 Apply future numbered migrations in filename order. Do not edit or replay a
 previously released migration to carry new behavior.
 
-This release was applied manually to project `ycmybggetemkhorkhfnf` in this
-order:
+Migrations `024` and `025` are one-time, forward-only release artifacts. `024`
+refuses to run if any v10 foundation object already exists; `025` refuses a
+non-empty curriculum catalogue and never upserts over Teacher edits. The build
+verifies the frozen `025` bytes against `curriculum/*.json`; all later curriculum
+changes require a new migration numbered `026` or higher.
+
+The production preflight must confirm at least one active row in
+`public.review_teachers`. A clean 001→025 development replay currently stops in
+the already-applied migration `015`, because its Premium-task postcondition
+expects an active Teacher before the configured post-migration seed stage. The
+v10 semantic test therefore uses a PostgreSQL 17 fixture inserted immediately
+after `014`; with that production-equivalent prerequisite, all 25 migrations,
+the 96/480 postconditions, replay guards, and learner/Teacher RLS cases pass.
+Do not mistake this clean-reset limitation for permission to edit an applied
+migration.
+
+The prior v9 release was applied manually to project
+`ycmybggetemkhorkhfnf` in this order:
 
 1. Supabase Free did not offer an official dashboard backup, so privacy-safe
    logical restore schema `codex_backup_20260814_fcf561d` was created. It
@@ -290,11 +322,12 @@ order:
    with 1,100 questions overall, and 14 speaking plus 14 essay tasks for the
    new lessons.
 
-The project has no `supabase_migrations.schema_migrations` table and the
-dashboard reports no tracked migrations. Do not infer ledger entries or rerun
-`015`–`023` merely to create history. Record future manual applications and
-their postconditions explicitly. Anonymous, learner, and teacher negative and
-positive RLS/browser checks remain in progress.
+The live `supabase_migrations.schema_migrations` table is incomplete: read-only
+preflight found only `20260820104726 legacy_notion_source_links`, while the
+verified 001–023 schema/data is present. Do not infer ledger entries or rerun
+`015`–`023` merely to create history. Record future manual applications, file
+hashes, and postconditions explicitly. Anonymous, learner, and teacher negative
+and positive RLS/browser checks remain in progress.
 
 After rollout, confirm:
 
@@ -309,36 +342,50 @@ After rollout, confirm:
 - incomplete profiles remain Free/locked until required fields are saved;
 - all 31 lessons have exactly one active speaking and one active essay task.
 
-## 11. Preview gate, production promotion, and rollback
+## 11. v10 Preview gate, production promotion, and rollback
 
 For code/design/backend changes:
 
 1. Run the final integrated suite, build, visual verification, and
    `git diff --check` on the exact worktree.
-2. Commit intentionally and push `upgrade/review-hub-v9-final-product`.
-3. Confirm the recorded Supabase/Edge postconditions and do not blindly replay
-   the manually applied migrations.
-4. Confirm the current-account Netlify Preview serves application checkpoint
-   `8fb49e0` at its immutable permalink:
-   `https://6a8eee9d22a46700081feb04--tahmid-english-review-hub-preview.netlify.app`.
-   This checkpoint includes 17/17 verified Teacher Studio source links,
-   Quick Practice, licensed cross-page Study Music with one-tap fallback,
-   transcript-aware speaking feedback, the entrance/value-story polish,
-   the adopted 2×2 pricing layout, bilingual typography, question-local
-   settings and complete Lesson Guide Practice maps.
-5. Preserve the recorded public QA evidence: home inventory; pricing and Dark
-   persistence; phrases 24→30; shuffle/radio behavior; visual guidance; fixed
-   Retry score; 0.5x and mixed-language controls; locked payload; Teacher gate
-   and language switch; Taki redirect; replacement WebP; clean browser log.
-6. Preserve passed Google learner evidence: modal/page save success, gate close,
-   complete reload, Standard through August 2, 2027, all 44 June 30 questions,
-   and safe sign-out/reload/cross-tab lock.
-7. Complete authenticated Teacher and dedicated non-teacher tier/RLS/access-
-   code/submission checks, plus remaining responsive/Lighthouse checks.
-8. Test real iPhone Safari and Android Chrome touch, microphone, PWA, and
-   offline behavior.
-9. Promote only after all gates pass and the correct production Netlify account
-   is available.
+2. Commit the complete v10 release candidate intentionally and push the branch
+   configured for the dedicated Preview. Do not assume the historical v9 branch
+   or deploy ID is still the active target; verify the Netlify site settings.
+3. Confirm the shared project has an active Teacher and no v10 foundation
+   objects. Take the best available database backup/logical snapshot. At the
+   September 5 preflight, the backup API returned no physical backup and PITR
+   disabled; a permission-restricted external archive captured all 19 existing
+   `public.review_*` tables plus schema/function/policy/grant/ledger metadata.
+   It excludes Auth and Storage binaries and is not full disaster recovery.
+   Because the migration ledger is incomplete, do not use a blind `db push`.
+4. Record SHA-256 hashes for both frozen SQL files. Apply
+   `202609050024_structured_learning_hub.sql` exactly once, run its
+   postconditions, then apply `202609050025_structured_learning_content.sql`
+   exactly once. Verify 96 level rows and item totals of 320 Words, 128 Phrases,
+   and 32 Phonics. Never replay either file to make a correction.
+5. Inspect the remote Supabase Auth URL Configuration. The September 5
+   read-only preflight confirmed the stable Preview and production `/**`
+   callbacks are already present and Google/email sign-in is enabled, so no
+   Auth write is required while that remains true. If it drifts, make only a
+   targeted callback correction. Do not issue a whole-project `config push`
+   without a remote diff: the local file also contains defaults unrelated to
+   this release.
+6. Deploy the matching `membership-access` Edge Function, then publish the same
+   commit to the stable Netlify Preview alias. Per-deploy hash URLs are not in
+   the Edge CORS allow-list and cannot prove OAuth/RPC behavior.
+7. Run `npm run verify:live` plus authenticated teacher, learner, disabled-
+   account, category/range, item allow/block, plan, access-code, announcement,
+   progress, favourite, and multi-teacher isolation checks on Preview.
+8. Confirm Netlify rewrites and security headers, OAuth callbacks, recordings,
+   microphone, first-install/upgrade offline behavior, Lighthouse, and physical
+   iPhone/Android/tablet layouts. The CSP must allow only the project-scoped
+   Supabase host for signed recording media.
+9. Promote that exact commit only after every gate passes and the correct
+   production Netlify account is available. Keep the prior successful deploy as
+   the static rollback point; handle database rollback separately and explicitly.
+
+The older checkpoints below are retained as historical v9 evidence only; they
+must not be used as v10 branch or deployment instructions.
 
 Google learner auth/profile/reload/sign-out passes for the scoped identity.
 Premium task cards appeared despite a Standard label, so it seems
@@ -354,5 +401,5 @@ pre-v9. The logical restore schema is limited and excludes personal/Auth data;
 database problems therefore require a carefully tested forward-fix plan. Do not
 use destructive rollback SQL casually.
 
-The exact current status and next command sequence are maintained in
-`docs/CODEX_HANDOFF_2026-08-02.md`.
+This guide and `README.md` contain the current v10 status and next sequence.
+`docs/CODEX_HANDOFF_2026-08-02.md` is retained only as historical v9 evidence.

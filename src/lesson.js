@@ -1,4 +1,4 @@
-import { buildPhraseCatalog, getLessonById, normalizeJapaneseMeaning } from "./data.js?v=20260828-release4";
+import { buildPhraseCatalog, getLessonById, normalizeJapaneseMeaning } from "./data.js?v=20260905-release5";
 import {
   applyThemePreference,
   escapeHTML,
@@ -10,7 +10,7 @@ import {
   shuffleArray,
   updateSettings,
   watchSystemTheme,
-} from "./store.js?v=20260828-release4";
+} from "./store.js?v=20260905-release5";
 import {
   answerCoachingFeedback,
   playAnswerFeedback,
@@ -22,7 +22,7 @@ import {
   stopAudio,
   stopSpeechPractice,
   syncAmbientFromSettings,
-} from "./audio.js?v=20260828-release4";
+} from "./audio.js?v=20260905-natural1";
 import {
   getStudentSession,
   loadUserSettings,
@@ -30,13 +30,19 @@ import {
   saveAttempt,
   saveSpeakingActivity,
   saveUserSettings,
-} from "./supabase.js?v=20260828-release4";
-import { applyLanguageMode, languageModeFromSettings, learningText, uiText } from "./i18n.js?v=20260828-release4";
-import { DEEP_LESSON_GUIDES } from "./lesson-guides.js?v=20260828-release4";
-import { buildPracticeMapTargets } from "./lesson-guide-targets.js?v=20260828-release4";
-import { animateAnswerFeedback, installPlayfulInteractions } from "./effects.js?v=20260828-release4";
-import { renderPremiumLessonTasks } from "./premium-tasks.js?v=20260828-release4";
-import { planFor } from "./plans.js?v=20260828-release4";
+} from "./supabase.js?v=20260905-release5";
+import { applyLanguageMode, languageModeFromSettings, learningText, uiText } from "./i18n.js?v=20260905-release5";
+import { DEEP_LESSON_GUIDES } from "./lesson-guides.js?v=20260905-release5";
+import { buildPracticeMapTargets } from "./lesson-guide-targets.js?v=20260905-release5";
+import { animateAnswerFeedback, installPlayfulInteractions } from "./effects.js?v=20260905-release5";
+import { renderPremiumLessonTasks } from "./premium-tasks.js?v=20260905-release5";
+import { planFor } from "./plans.js?v=20260905-release5";
+import {
+  applyStudentFeatureVisibility,
+  featureAllowed,
+  loadStudentAccess,
+  renderStudentAccessBoundary,
+} from "./student-visibility.js?v=20260905-hub1";
 import {
   answerExists as answerValueExists,
   calculateOfficialTotals,
@@ -46,7 +52,7 @@ import {
   preserveFirstResult,
   selectQuickPracticeIds,
   storyboardPanelLayout,
-} from "./lesson-grading.js?v=20260828-release4";
+} from "./lesson-grading.js?v=20260905-release5";
 
 const $ = (selector) => document.querySelector(selector);
 
@@ -1290,9 +1296,9 @@ const attachAudioHandlers = (root = elements.questionCard) => {
           button.dataset.audioSecondaryLanguage || "ja",
         );
       }
-      if (result?.reason === "sound-off") showToast(t("Sound is off. Turn it on to listen.", "音声がオフです。ヘッダーでオンにしてください。"));
-      if (["unavailable", "natural-voice-unavailable"].includes(result?.reason)) {
-        showToast(t("Natural audio is temporarily unavailable. Please tap once more.", "自然な音声を一時的に利用できません。もう一度押してください。"));
+      if (["sound-off", "voice-off"].includes(result?.reason)) showToast(t("Voice is off. Turn it on to listen.", "音声がオフです。ヘッダーでオンにしてください。"));
+      if (["unavailable", "natural-voice-unavailable", "browser-voice-unavailable", "voice-unavailable"].includes(result?.reason)) {
+        showToast(t("Voice is temporarily unavailable on this device.", "この端末では音声を一時的に利用できません。"));
       }
       button.disabled = false;
       button.classList.remove("loading");
@@ -1776,10 +1782,39 @@ const maybeCompleteRun = () => {
 const initialiseLesson = async () => {
   elements.hubBackLink.href = returnTo;
   try {
+    let allowOfflinePreview = true;
+    if (!isTeacherPreview) {
+      const access = await loadStudentAccess({ refresh: true });
+      applyStudentFeatureVisibility(access);
+      const reviewLessonsAllowed = featureAllowed(access, "show_review_lessons");
+      const homeworkAllowed = featureAllowed(access, "show_homework");
+      const allowed = reviewLessonsAllowed || homeworkAllowed;
+      // A signed-in learner whose general Review Lessons surface is hidden may
+      // still open an assigned homework lesson through RLS, but must never fall
+      // back to a bundled public preview after that RLS lookup is denied.
+      allowOfflinePreview = !access.authenticated;
+      if (access.authenticated && !allowed) {
+        renderStudentAccessBoundary(document.querySelector("#quizMain"), access.settings.account_enabled === false ? {
+          title: "Your Review Hub access is paused.",
+          titleJa: "Review Hubの利用は一時停止中です。",
+          detail: "No lessons are being shared with this account right now.",
+          detailJa: "現在、このアカウントにはレッスンが公開されていません。",
+        } : {
+          title: "Lessons are not in your current learning plan.",
+          titleJa: "現在の学習プランでは、レッスンは非表示です。",
+          detail: "Your teacher can make review lessons or homework available when needed.",
+          detailJa: "必要に応じて、先生が復習レッスンや宿題を公開できます。",
+        });
+        return;
+      }
+    }
     await loadScopedSettings();
     syncAmbientFromSettings();
     lessonScopeReady = true;
-    const lesson = await getLessonById(lessonId, { preview: isTeacherPreview });
+    const lesson = await getLessonById(lessonId, {
+      preview: isTeacherPreview,
+      allowOfflinePreview,
+    });
     if (!lesson) throw new Error("This lesson could not be found.");
     state.lesson = lesson;
     state.masterQuestions = lesson.questions;

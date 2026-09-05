@@ -1,10 +1,10 @@
-import { SUPABASE_ANON_KEY, SUPABASE_URL } from "./config.js?v=20260828-release4";
-import { normalizePlanKey, planFor, planMeetsRequirement } from "./plans.js?v=20260828-release4";
+import { SUPABASE_ANON_KEY, SUPABASE_URL } from "./config.js?v=20260905-release5";
+import { normalizePlanKey, planFor, planMeetsRequirement } from "./plans.js?v=20260905-release5";
 import {
   compareLessonSourceOrder,
   sourceSegmentFromLesson,
   sourceSegmentPartIndex,
-} from "./lesson-source.js?v=20260828-release4";
+} from "./lesson-source.js?v=20260905-release5";
 
 let studentClient;
 let teacherClient;
@@ -1074,6 +1074,33 @@ export async function fetchDatabaseLesson(lessonSlug, { preview = false } = {}) 
       .eq("slug", slug)
       .maybeSingle();
     if (error) return { lesson: null, reason: "lesson-query-failed", error };
+    if (authenticated && data) {
+      const accessMode = await client.rpc("review_lesson_access_mode", {
+        check_lesson: data.id,
+      });
+      if (accessMode.error) {
+        return { lesson: null, reason: "lesson-access-check-failed", error: accessMode.error };
+      }
+      if (accessMode.data === "block") {
+        return { lesson: null, reason: "lesson-access-denied" };
+      }
+
+      const featureAccess = await client.rpc("review_student_hub_feature_enabled", {
+        requested_feature: "review_lessons",
+      });
+      const featureCode = String(featureAccess.error?.code || "").toUpperCase();
+      const featureMessage = String(featureAccess.error?.message || "").toLowerCase();
+      const featureMigrationPending = ["42883", "PGRST202", "PGRST204"].includes(featureCode)
+        || featureMessage.includes("schema cache")
+        || featureMessage.includes("could not find the function")
+        || featureMessage.includes("does not exist");
+      if (featureAccess.error && !featureMigrationPending) {
+        return { lesson: null, reason: "lesson-access-check-failed", error: featureAccess.error };
+      }
+      if (!featureAccess.error && featureAccess.data !== true) {
+        return { lesson: null, reason: "lesson-access-denied" };
+      }
+    }
     lesson = data;
   }
   if (!lesson) return { lesson: null, reason: "lesson-not-readable" };

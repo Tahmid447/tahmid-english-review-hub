@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en" data-theme="light" data-theme-preference="light" data-local-demo="true">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="theme-color" content="#123b4a">
+  <title>LOCAL DEMO · Teacher Studio</title>
+  <link rel="stylesheet" href="/src/styles.css?v=20260905-release5">
+  <link rel="stylesheet" href="/src/demo.css?v=local-demo1">
+  <link rel="stylesheet" href="/src/demo-teacher.css?v=local-demo1">
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/app-icon-192.png">
+</head>
+<body class="demo-teacher-page">
+  <header class="demo-teacher-header">
+    <a href="/learn?persona=full" class="demo-teacher-brand">
+      <img src="/assets/app-icon-192.png" alt="" width="48" height="48">
+      <span><strong>Tahmid English Club</strong><small>LOCAL Teacher Studio Demo</small></span>
+    </a>
+    <div class="demo-local-badge"><strong>◆ LOCAL DEMO</strong><span>No Supabase writes · 本番データ変更なし</span></div>
+  </header>
+
+  <main class="demo-teacher-main">
+    <section class="demo-teacher-intro">
+      <div>
+        <p class="demo-kicker">STUDENT VISIBILITY LAB</p>
+        <h1>Shape each learner’s Review Hub.</h1>
+        <p>Choose a mock learner, change the teacher-controlled visibility and level scope, then open the learner view. Everything here stays in this browser.</p>
+        <p class="jp" lang="ja">モック生徒を選び、表示機能と公開レベルを変更して、生徒画面で確認できます。設定はこのブラウザ内だけに保存されます。</p>
+      </div>
+      <a class="demo-open-student" id="openStudentTop" href="/learn?persona=full">Open learner view <span aria-hidden="true">↗</span></a>
+    </section>
+
+    <div class="demo-teacher-layout">
+      <aside class="demo-student-sidebar" aria-labelledby="demoStudentsHeading">
+        <p class="demo-kicker">MOCK LEARNERS</p>
+        <h2 id="demoStudentsHeading">Choose a student</h2>
+        <div id="demoStudentList" class="demo-student-list"></div>
+      </aside>
+
+      <section class="demo-settings-panel" aria-labelledby="demoSettingsHeading">
+        <header class="demo-settings-heading">
+          <div>
+            <p class="demo-kicker">LEARNING LIBRARY ACCESS</p>
+            <h2 id="demoSettingsHeading">Visibility settings</h2>
+            <p id="demoStudentDescription"></p>
+          </div>
+          <span id="demoUnsavedBadge" class="demo-unsaved-badge" hidden>Unsaved changes</span>
+        </header>
+
+        <form id="demoSettingsForm">
+          <fieldset>
+            <legend>Account</legend>
+            <label class="demo-switch demo-switch-primary"><span><strong>Student account enabled</strong><small>Pause this to block the whole learner library.</small></span><input type="checkbox" name="account_enabled"><i aria-hidden="true"></i></label>
+          </fieldset>
+
+          <fieldset>
+            <legend>Library & learning</legend>
+            <div id="demoLearningSettings" class="demo-setting-grid"></div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Commercial & support</legend>
+            <div id="demoCommercialSettings" class="demo-setting-grid"></div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Level access</legend>
+            <div class="demo-level-controls">
+              <label><span>From level</span><input name="allowed_level_min" type="number" min="1" max="32" required></label>
+              <label><span>To level</span><input name="allowed_level_max" type="number" min="1" max="32" required></label>
+              <label class="demo-exact-levels"><span>Exact open levels <small>(optional, comma-separated)</small></span><input name="allowed_levels" type="text" inputmode="numeric" placeholder="e.g. 1, 2, 5, 8, 12"></label>
+            </div>
+            <p class="demo-field-help">When exact levels are blank, every level inside the range is open. Individual allow/block examples remain part of the selected persona.</p>
+          </fieldset>
+
+          <p class="demo-form-status" id="demoFormStatus" role="status" aria-live="polite"></p>
+          <div class="demo-form-actions">
+            <button class="demo-save" type="submit">Save local settings</button>
+            <button class="demo-reset-persona" id="resetPersona" type="button">Restore persona defaults</button>
+            <a class="demo-open-student" id="openStudent" href="/learn?persona=full">Open as this learner <span aria-hidden="true">↗</span></a>
+          </div>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <script type="module" src="/src/demo-teacher.js?v=local-demo1"></script>
+</body>
+</html>

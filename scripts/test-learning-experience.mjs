@@ -303,7 +303,9 @@ const originalAudio = globalThis.Audio;
 const originalFetch = globalThis.fetch;
 const audioInstances = [];
 const speechRequests = [];
-globalThis.Audio = class FakeAudio {
+class FakeAudio {
+  static hangNext = false;
+
   constructor(source) {
     this.source = source;
     this.readyState = 4;
@@ -322,13 +324,19 @@ globalThis.Audio = class FakeAudio {
 
   play() {
     this.paused = false;
+    if (FakeAudio.hangNext) {
+      FakeAudio.hangNext = false;
+      queueMicrotask(() => this.onplaying?.());
+      return Promise.resolve();
+    }
     queueMicrotask(() => {
       this.onplaying?.();
       this.onended?.();
     });
     return Promise.resolve();
   }
-};
+}
+globalThis.Audio = FakeAudio;
 globalThis.fetch = async (_url, options = {}) => {
   speechRequests.push(JSON.parse(options.body || "{}"));
   return {
@@ -358,6 +366,16 @@ assert.equal(slowVoice.played, true);
 assert.equal(slowVoice.rate, 0.5);
 assert.equal(audioInstances.at(-1).playbackRate, 0.5, "The audio element receives the selected slow rate.");
 assert.equal(audioInstances.at(-1).volume, 1, "Voice has its own volume independent of SFX and Ambient.");
+FakeAudio.hangNext = true;
+const cancelledVoice = speakText("Cancel this unique natural voice.", { language: "en" });
+await new Promise((resolve) => setTimeout(resolve, 0));
+const replacementVoice = speakText("Play this replacement natural voice.", { language: "en" });
+const [cancelledResult, replacementResult] = await Promise.race([
+  Promise.all([cancelledVoice, replacementVoice]),
+  new Promise((_, reject) => setTimeout(() => reject(new Error("Cancelled natural audio did not settle.")), 250)),
+]);
+assert.equal(cancelledResult.cancelled, true, "Starting another card settles the earlier audio request.");
+assert.equal(replacementResult.played, true, "The replacement card audio still plays normally.");
 const mixedVoice = await speakText(
   "注文するときは “I’d like pasta, please.” が丁寧で自然です。",
   { language: "ja", voice: "us", rate: 1.5 },
@@ -370,6 +388,19 @@ assert.deepEqual(
   ["ja", "us", "ja"],
   "Mixed explanations request Nanami, Ava, then Nanami in their natural language order.",
 );
+const naturalVoiceStatuses = [];
+globalThis.fetch = async () => { throw new Error("Natural speech offline"); };
+const unavailableNaturalVoice = await speakText("A natural-only voice check.", {
+  voice: "us",
+  rate: 1.5,
+  onStatus: (status) => naturalVoiceStatuses.push(status),
+});
+assert.equal(unavailableNaturalVoice.played, false);
+assert.equal(unavailableNaturalVoice.reason, "natural-voice-unavailable");
+assert.equal(unavailableNaturalVoice.rate, 1.5);
+assert.equal(naturalVoiceStatuses.at(-1)?.phase, "error");
+assert.match(naturalVoiceStatuses.at(-1)?.messageEn || "", /Natural voice is temporarily unavailable/);
+assert.doesNotMatch(audioScript, /speechSynthesis|SpeechSynthesisUtterance/, "Student audio must never fall back to a browser computer voice.");
 assert.equal((await playInterfaceSound("click")).reason, "unsupported", "Procedural SFX fails safely without Web Audio.");
 if (originalAudio === undefined) delete globalThis.Audio;
 else globalThis.Audio = originalAudio;

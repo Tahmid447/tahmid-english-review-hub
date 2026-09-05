@@ -5,19 +5,22 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="robots" content="noindex,nofollow">
   <title>Teacher Studio · Tahmid English Club</title>
-  <link rel="stylesheet" href="/src/styles.css?v=20260828-release4">
+  <link rel="stylesheet" href="/src/styles.css?v=20260905-release5">
   <link rel="icon" type="image/png" sizes="192x192" href="/assets/app-icon-192.png">
 </head>
 <body data-page="teacher">
   <header class="site-header">
     <a class="brand" href="/teacher"><img class="brand-logo" src="/assets/tahmid-english-club-logo.png" alt="Tahmid English Club logo"><span><strong>Teacher Studio</strong><small data-teacher-en="Tahmid English Club · lesson management" data-teacher-ja="Tahmid English Club · レッスン管理">Tahmid English Club · lesson management</small></span></a>
     <nav class="header-actions">
-      <label><span data-teacher-en="Language" data-teacher-ja="表示言語">Language</span>
-        <select id="teacherLanguage" aria-label="Teacher Studio language" data-teacher-aria-en="Teacher Studio language" data-teacher-aria-ja="Teacher Studioの表示言語"><option value="en">English</option><option value="ja">日本語</option></select>
-      </label>
-      <span data-study-music-controls></span>
-      <span class="role-badge" data-teacher-en="Teacher only" data-teacher-ja="先生専用">Teacher only</span>
-      <button class="quiet-btn" id="teacherLogout" type="button" hidden data-teacher-en="Sign out" data-teacher-ja="ログアウト">Sign out</button>
+      <button class="quiet-btn mobile-settings-toggle" id="teacherMobileSettingsToggle" type="button" aria-expanded="false" aria-controls="teacherSiteSettingsControls" data-teacher-en="Settings" data-teacher-ja="設定">Settings</button>
+      <span class="header-settings-controls" id="teacherSiteSettingsControls">
+        <label><span data-teacher-en="Language" data-teacher-ja="表示言語">Language</span>
+          <select id="teacherLanguage" aria-label="Teacher Studio language" data-teacher-aria-en="Teacher Studio language" data-teacher-aria-ja="Teacher Studioの表示言語"><option value="en">English</option><option value="ja">日本語</option></select>
+        </label>
+        <span data-study-music-controls></span>
+        <span class="role-badge" data-teacher-en="Teacher only" data-teacher-ja="先生専用">Teacher only</span>
+        <button class="quiet-btn" id="teacherLogout" type="button" hidden data-teacher-en="Sign out" data-teacher-ja="ログアウト">Sign out</button>
+      </span>
     </nav>
   </header>
   <main class="teacher-shell shell">
@@ -183,16 +186,17 @@
       </form>
     </dialog>
 
-    <dialog class="editor-dialog learner-dialog" id="learnerDialog">
+    <dialog class="editor-dialog learner-dialog" id="learnerDialog" aria-labelledby="learnerDialogHeading" aria-describedby="learnerDialogHelp">
       <form method="dialog"><button class="dialog-close" aria-label="Close learner profile" data-teacher-aria-en="Close learner profile" data-teacher-aria-ja="生徒プロフィールを閉じる">×</button></form>
       <p class="eyebrow" data-teacher-en="Learner profile &amp; controls" data-teacher-ja="生徒プロフィール・設定">Learner profile &amp; controls</p>
       <h2 id="learnerDialogHeading">Learner</h2>
+      <p class="sr-only" id="learnerDialogHelp" data-teacher-en="Manage this learner's account, curriculum visibility, level access and learning activity." data-teacher-ja="この生徒のアカウント、教材表示、レベル公開範囲、学習状況を管理します。">Manage this learner's account, curriculum visibility, level access and learning activity.</p>
       <div id="learnerDialogContent"></div>
     </dialog>
   </main>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js"></script>
-  <script type="module" src="/src/teacher.js?v=20260828-release4"></script>
-  <script type="module" src="/src/study-music.js?v=20260828-release4"></script>
+  <script type="module" src="/src/teacher.js?v=20260905-release5"></script>
+  <script type="module" src="/src/study-music.js?v=20260905-release5"></script>
 </body>
 </html>

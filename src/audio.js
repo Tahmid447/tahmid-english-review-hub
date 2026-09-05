@@ -1,9 +1,10 @@
-import { NATURAL_SPEECH_URL, SUPABASE_ANON_KEY } from "./config.js?v=20260828-release4";
-import { AMBIENT_TRACK_KEYS, getSettings, normalizeAnswerText } from "./store.js?v=20260828-release4";
+import { NATURAL_SPEECH_URL, SUPABASE_ANON_KEY } from "./config.js?v=20260905-release5";
+import { AMBIENT_TRACK_KEYS, getSettings, normalizeAnswerText } from "./store.js?v=20260905-release5";
 
 const AUDIO_CACHE_LIMIT = 24;
 const remoteAudioCache = new Map();
 let activeAudio = null;
+let activeAudioFinish = null;
 let activeRequest = null;
 let requestGeneration = 0;
 let activeRecognition = null;
@@ -65,10 +66,14 @@ const cacheAudio = (key, source) => {
 
 const cancelPlayingAudio = () => {
   if (activeAudio) {
-    activeAudio.pause();
-    activeAudio.removeAttribute("src");
-    activeAudio.load();
+    const audio = activeAudio;
+    const finish = activeAudioFinish;
     activeAudio = null;
+    activeAudioFinish = null;
+    finish?.({ played: false, cancelled: true });
+    audio.pause();
+    audio.removeAttribute("src");
+    audio.load();
   }
   duckAmbient(false);
 };
@@ -153,10 +158,29 @@ const playBlobSource = (source, onStatus, token, rate = 1, { finalSegment = true
     { source: "edge", rate: playbackRate },
   );
   let settled = false;
+  let readyTimeout;
+  const release = () => {
+    clearTimeout(readyTimeout);
+    audio.onplaying = null;
+    audio.onerror = null;
+    audio.onended = null;
+    if (activeAudio === audio) {
+      activeAudio = null;
+      activeAudioFinish = null;
+    }
+  };
+  const cancel = (result = { played: false, cancelled: true }) => {
+    if (settled) return;
+    settled = true;
+    release();
+    duckAmbient(false);
+    resolve(result);
+  };
+  activeAudioFinish = cancel;
   const fail = (error) => {
     if (settled) return;
     settled = true;
-    if (activeAudio === audio) activeAudio = null;
+    release();
     duckAmbient(false);
     reject(error instanceof Error ? error : new Error("The natural audio could not be played."));
   };
@@ -164,21 +188,20 @@ const playBlobSource = (source, onStatus, token, rate = 1, { finalSegment = true
   audio.onended = () => {
     if (settled) return;
     settled = true;
-    if (activeAudio === audio) activeAudio = null;
+    release();
     duckAmbient(false);
     if (finalSegment) {
       report(onStatus, "ready", "Ready to play again.", "もう一度再生できます。", { source: "edge", rate: playbackRate });
     }
     resolve({ played: true, source: "edge", rate: playbackRate });
   };
-  const readyTimeout = setTimeout(() => {
+  readyTimeout = setTimeout(() => {
     if (audio.readyState < 2) fail(new Error("The natural audio took too long to load."));
   }, 8000);
   const begin = () => {
     clearTimeout(readyTimeout);
     if (token !== requestGeneration) {
-      settled = true;
-      resolve({ played: false, cancelled: true });
+      cancel();
       return;
     }
     // Some mobile browsers restore the default rate after metadata loads.
@@ -297,8 +320,8 @@ export async function speakText(text, { voice, language, rate, onStatus } = {}) 
     report(
       onStatus,
       "error",
-      "Natural voice is temporarily unavailable. No computer voice will be used. Please try again.",
-      "自然な音声を一時的に利用できません。機械音声には切り替えません。もう一度お試しください。",
+      "Natural voice is temporarily unavailable. Please try again shortly.",
+      "自然音声を現在再生できません。少し時間をおいて、もう一度お試しください。",
       { error: error?.message || String(error) },
     );
   }

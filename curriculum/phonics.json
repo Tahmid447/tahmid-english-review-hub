@@ -1,0 +1,933 @@
+{
+  "type": "phonics",
+  "levels": [
+    {
+      "level": 1,
+      "items": [
+        {
+          "id": "phonics-l01",
+          "level": 1,
+          "phonicsTarget": "First alphabet sounds: m, s, t, p",
+          "sound": "/m/, /s/, /t/, /p/",
+          "examples": [
+            "moon",
+            "sun",
+            "top",
+            "pen"
+          ],
+          "japaneseHint": "文字の名前ではなく、単語の最初に聞こえる短い音を意識します。mは唇を閉じ、sは息を細く出します。",
+          "mouthTip": "Close both lips for /m/. For /s/, keep a narrow air channel. Release /t/ and /p/ without adding a vowel.",
+          "practiceWords": [
+            "map",
+            "sip",
+            "tap",
+            "pot"
+          ],
+          "practiceSentence": "Sam taps the map.",
+          "audioUSVoice": "Ava",
+          "audioUKVoice": "Libby"
+        }
+      ]
+    },
+    {
+      "level": 2,
+      "items": [
+        {
+          "id": "phonics-l02",
+          "level": 2,
+          "phonicsTarget": "Alphabet sounds: n, b, d, g",
+          "sound": "/n/, /b/, /d/, /g/",
+          "examples": [
+            "net",
+            "bag",
+            "dog",
+            "gum"
+          ],
+          "japaneseHint": "nは舌先、bは両唇、dは上の歯ぐき、gは喉の奥を使います。後ろに「ウ」を足さないようにします。",
+          "mouthTip": "Touch the ridge behind your upper teeth for /n/ and /d/. Close the lips for /b/ and use the back of the tongue for /g/.",
+          "practiceWords": [
+            "nod",
+            "bed",
+            "dig",
+            "big"
+          ],
+          "practiceSentence": "Ben digs by the big bed.",
+          "audioUSVoice": "Ava",
+          "audioUKVoice": "Libby"
+        }
+      ]
+    },
+    {
+      "level": 3,
+      "items": [
+        {
+          "id": "phonics-l03",
+          "level": 3,
+          "phonicsTarget": "Breathy and voiced consonants: f, v, h, w",
+          "sound": "/f/, /v/, /h/, /w/",
+          "examples": [
+            "fan",
+            "van",
+            "hat",
+            "wet"
+          ],
+          "japaneseHint": "fとvは上の歯を下唇に軽く当てます。vでは喉を震わせます。hは息、wは丸い唇から始めます。",
+          "mouthTip": "Let air pass between the upper teeth and lower lip for /f/ and /v/. Voice only /v/. Round the lips before /w/.",
+          "practiceWords": [
+            "fine",
+            "vine",
+            "hop",
+            "win"
+          ],
+          "practiceSentence": "We have five hats.",
+          "audioUSVoice": "Ava",
+          "audioUKVoice": "Libby"
+        }
+      ]
+    },
+    {
+      "level": 4,
+      "items": [
+        {
+          "id": "phonics-l04",
+          "level": 4,
+          "phonicsTarget": "Remaining common alphabet sounds: c, k, j, z, y, x, q",
+          "sound": "/k/, /dʒ/, /z/, /j/, /ks/, /kw/",
+          "examples": [
+            "cat",
+            "kite",
+            "jam",
+            "zip",
+            "yes",
+            "box",
+            "quiz"
+          ],
+          "japaneseHint": "cはcatでは/k/、jは/dʒ/、yはyesの短い子音です。xは多くの場合/k/と/s/を続けます。",
+          "mouthTip": "Use the back of the tongue for /k/. Round the lips while starting /kw/. Keep /ks/ together at the end of a word.",
+          "practiceWords": [
+            "cup",
+            "kid",
+            "jet",
+            "zoo",
+            "yak",
+            "fox",
+            "quit"
+          ],
+          "practiceSentence": "The quick fox can jump.",
+          "audioUSVoice": "Ava",
+          "audioUKVoice": "Libby"
+        }
+      ]
+    },
+    {
+      "level": 5,
+      "items": [
+        {
+          "id": "phonics-l05",
+          "level": 5,
+          "phonicsTarget": "Short a in closed syllables",
+          "sound": "/æ/",
+          "examples": [
+            "cat",
+            "map",
+            "hand",
+            "bag"
+          ],
+          "japaneseHint": "日本語の「ア」より口を横にも開き、明るく短く発音します。",
+          "mouthTip": "Lower the jaw, spread the lips slightly, and keep the tongue low and forward.",
+          "practiceWords": [
+            "cap",
+            "jam",
+            "flag",
+            "stand"
+          ],
+          "practiceSentence": "A black cat sat on the mat.",
+          "audioUSVoice": "Ava",
+          "audioUKVoice": "Libby"
+        }
+      ]
+    },
+    {
+      "level": 6,
+      "items": [
+        {
+          "id": "phonics-l06",
+          "level": 6,
+          "phonicsTarget": "Short i in closed syllables",
+          "sound": "/ɪ/",
+          "examples": [
+            "sit",
+            "fish",
+            "milk",
+            "ring"
+          ],
+          "japaneseHint": "「イー」と伸ばさず、力を抜いた短い「イ」にします。",
+          "mouthTip": "Keep the jaw relaxed and the tongue high but loose. End quickly without smiling too widely.",
+          "practiceWords": [
+            "pin",
+            "ship",
+            "gift",
+            "swim"
+          ],
+          "practiceSentence": "Six fish swim in the river.",
+          "audioUSVoice": "Ava",
+          "audioUKVoice": "Libby"
+        }
+      ]
+    },
+    {
+      "level": 7,
+      "items": [
+        {
+          "id": "phonics-l07",
+          "level": 7,
+          "phonicsTarget": "Short o in closed syllables",
+          "sound": "/ɒ/ (UK), /ɑ/ (US)",
+          "examples": [
+            "hot",
+            "box",
+            "clock",
+            "stop"
+          ],
+          "japaneseHint": "UKでは唇を少し丸めた短い音、USでは口を大きく開く音になりやすいです。",
+          "mouthTip": "Drop the jaw and keep the sound short. Use slightly rounder lips for the common UK pronunciation.",
+          "practiceWords": [
+            "log",
+            "shop",
+            "rock",
+            "pond"
+          ],
+          "practiceSentence": "Tom drops the box by the clock.",
+          "audioUSVoice": "Ava",
+          "audioUKVoice": "Libby"
+        }
+      ]
+    },
+    {
+      "level": 8,
+      "items": [
+        {
+          "id": "phonics-l08",
+          "level": 8,
+          "phonicsTarget": "Short e in closed syllables",
+          "sound": "/e/ or /ɛ/",
+          "examples": [
+            "bed",
+            "pen",
+            "head",
+            "step"
+          ],
+          "japaneseHint": "「イ」にならないよう、口を少し開けて短い「エ」にします。",
+          "mouthTip": "Keep the tongue at mid height and the lips relaxed. Do not glide toward /iː/.",
+          "practiceWords": [
+            "red",
+            "desk",
+            "left",
+            "next"
+          ],
+          "practiceSentence": "Meg left her red pen on the desk.",
+          "audioUSVoice": "Ava",
+          "audioUKVoice": "Libby"
+        }
+      ]
+    },
+    {
+      "level": 9,
+      "items": [
+        {
+          "id": "phonics-l09",
+          "level": 9,
+          "phonicsTarget": "Short u in closed syllables",
+          "sound": "/ʌ/",
+          "examples": [
+            "sun",
+            "cup",
+            "bus",
+            "lunch"
+          ],
+          "japaneseHint": "口を丸めず、のどの中央から短く「ア」に近い音を出します。",
+          "mouthTip": "Relax the lips and jaw. Keep the tongue central and avoid rounding as for /uː/.",
+          "practiceWords": [
+            "run",
+            "jump",
+            "duck",
+            "brush"
+          ],
+          "practiceSentence": "The duck runs under the bus.",
+          "audioUSVoice": "Ava",
+          "audioUKVoice": "Libby"
+        }
+      ]
+    },
+    {
+      "level": 10,
+      "items": [
+        {
+          "id": "phonics-l10",
+          "level": 10,
+          "phonicsTarget": "CVC blending and clear final consonants",
+          "sound": "consonant + short vowel + consonant",
+          "examples": [
+            "map",
+            "sit",
+            "bed",
+            "hot",
+            "cup"
+          ],
+          "japaneseHint": "3つの音を切り離さずにつなぎ、最後の子音の後に母音を足さない練習です。",
+          "mouthTip": "Stretch the first two sounds just enough to connect them, then stop cleanly on the final consonant.",
+          "practiceWords": [
+            "tap",
+            "win",
+            "red",
+            "hop",
+            "sun"
+          ],
+          "practiceSentence": "Kim can hop and run.",
+          "audioUSVoice": "Ava",
+          "audioUKVoice": "Libby"
+        }
+      ]
+    },
+    {
+      "level": 11,
+      "items": [
+        {
+          "id": "phonics-l11",
+          "level": 11,
+          "phonicsTarget": "L-blends at the beginning",
+          "sound": "/bl/, /cl/, /fl/, /gl/, /pl/, /sl/",
+          "examples": [
+            "blue",
+            "clap",
+            "flag",
+            "glad",
+            "plant",
+            "sleep"
+          ],
+          "japaneseHint": "最初の2子音の間に「ウ」や「オ」を入れず、一息でつなぎます。",
+          "mouthTip": "Make the first consonant briefly, then move the tongue tip directly to /l/ without releasing a vowel.",
+          "practiceWords": [
+            "black",
+            "clock",
+            "flower",
+            "glass",
+            "plane",
+            "slow"
+          ],
+          "practiceSentence": "The blue flag flies above the plane.",
+          "audioUSVoice": "Ava",
+          "audioUKVoice": "Libby"
+        }
+      ]
+    },
+    {
+      "level": 12,
+      "items": [
+        {
+          "id": "phonics-l12",
+          "level": 12,
+          "phonicsTarget": "R-blends at the beginning",
+          "sound": "/br/, /cr/, /dr/, /fr/, /gr/, /pr/, /tr/",
+          "examples": [
+            "brown",
+            "crab",
+            "dress",
+            "frog",
+            "green",
+            "press",
+            "tree"
+          ],
+          "japaneseHint": "子音の直後に英語のrへ移動します。間に日本語の母音を入れません。",
+          "mouthTip": "Keep the tongue tip away from the roof of the mouth for /r/ and move into the following vowel smoothly.",
+          "practiceWords": [
+            "bread",
+            "cry",
+            "drink",
+            "fresh",
+            "grass",
+            "prize",
+            "train"
+          ],
+          "practiceSentence": "A green frog rests by the tree.",
+          "audioUSVoice": "Ava",
+          "audioUKVoice": "Libby"
+        }
+      ]
+    },
+    {
+      "level": 13,
+      "items": [
+        {
+          "id": "phonics-l13",
+          "level": 13,
+          "phonicsTarget": "S-blends and three-consonant starts",
+          "sound": "/sp/, /st/, /sk/, /sm/, /sn/, /sw/, /str/",
+          "examples": [
+            "spin",
+            "stop",
+            "skin",
+            "smile",
+            "snow",
+            "swim",
+            "street"
+          ],
+          "japaneseHint": "sの後に母音を入れず、次の子音へすぐ移ります。streetは3子音を一続きにします。",
+          "mouthTip": "Hold a thin /s/ airflow, shape the next consonant immediately, and release into the vowel only once.",
+          "practiceWords": [
+            "space",
+            "star",
+            "school",
+            "small",
+            "snake",
+            "sweet",
+            "strong"
+          ],
+          "practiceSentence": "The strong swimmer starts slowly.",
+          "audioUSVoice": "Ava",
+          "audioUKVoice": "Libby"
+        }
+      ]
+    },
+    {
+      "level": 14,
+      "items": [
+        {
+          "id": "phonics-l14",
+          "level": 14,
+          "phonicsTarget": "Digraphs sh and ch",
+          "sound": "/ʃ/ and /tʃ/",
+          "examples": [
+            "ship",
+            "fish",
+            "chair",
+            "lunch"
+          ],
+          "japaneseHint": "shは息だけの「シュ」、chは最初に舌で空気を止めてから出す「チュ」に近い音です。",
+          "mouthTip": "Round the lips slightly for both. For /tʃ/, briefly block the air before releasing it; for /ʃ/, let air flow continuously.",
+          "practiceWords": [
+            "shop",
+            "brush",
+            "chat",
+            "beach"
+          ],
+          "practiceSentence": "She chose fresh fish for lunch.",
+          "audioUSVoice": "Ava",
+          "audioUKVoice": "Libby"
+        }
+      ]
+    },
+    {
+      "level": 15,
+      "items": [
+        {
+          "id": "phonics-l15",
+          "level": 15,
+          "phonicsTarget": "Voiceless and voiced th",
+          "sound": "/θ/ and /ð/",
+          "examples": [
+            "think",
+            "bath",
+            "this",
+            "mother"
+          ],
+          "japaneseHint": "舌先を歯の間に軽く出します。thinkは息だけ、thisは喉を震わせます。",
+          "mouthTip": "Place the tongue tip gently between the teeth. Blow air for /θ/ and add voice for /ð/ without pulling the tongue back.",
+          "practiceWords": [
+            "three",
+            "mouth",
+            "that",
+            "weather"
+          ],
+          "practiceSentence": "Those three paths are narrow.",
+          "audioUSVoice": "Ava",
+          "audioUKVoice": "Libby"
+        }
+      ]
+    },
+    {
+      "level": 16,
+      "items": [
+        {
+          "id": "phonics-l16",
+          "level": 16,
+          "phonicsTarget": "Digraphs wh, ph, and ng",
+          "sound": "/w/, /f/, /ŋ/",
+          "examples": [
+            "when",
+            "phone",
+            "sing"
+          ],
+          "japaneseHint": "whは多くの話者でw、phはf、ngは舌先を上につけず鼻へ抜く1つの音です。",
+          "mouthTip": "Round the lips for /w/. Touch upper teeth to lower lip for /f/. For /ŋ/, lift the back of the tongue and keep the tip down.",
+          "practiceWords": [
+            "whale",
+            "photo",
+            "graph",
+            "long",
+            "singer"
+          ],
+          "practiceSentence": "When will Phil sing that long song?",
+          "audioUSVoice": "Ava",
+          "audioUKVoice": "Libby"
+        }
+      ]
+    },
+    {
+      "level": 17,
+      "items": [
+        {
+          "id": "phonics-l17",
+          "level": 17,
+          "phonicsTarget": "Silent e makes long a",
+          "sound": "/eɪ/ in a_e",
+          "examples": [
+            "cake",
+            "name",
+            "late",
+            "game"
+          ],
+          "japaneseHint": "最後のeは読まず、その前のaを文字名の/eɪ/に変えます。",
+          "mouthTip": "Begin with a mid-front vowel and glide upward. Keep the final consonant clear; do not pronounce the final e.",
+          "practiceWords": [
+            "lake",
+            "same",
+            "gate",
+            "plane"
+          ],
+          "practiceSentence": "Jake made a cake by the lake.",
+          "audioUSVoice": "Ava",
+          "audioUKVoice": "Libby"
+        }
+      ]
+    },
+    {
+      "level": 18,
+      "items": [
+        {
+          "id": "phonics-l18",
+          "level": 18,
+          "phonicsTarget": "Silent e makes long i",
+          "sound": "/aɪ/ in i_e",
+          "examples": [
+            "bike",
+            "time",
+            "five",
+            "smile"
+          ],
+          "japaneseHint": "最後のeは無音で、iは/aɪ/になります。短いiのsitと比べます。",
+          "mouthTip": "Start with an open vowel and glide toward /ɪ/. Stop on the final consonant without sounding the e.",
+          "practiceWords": [
+            "kite",
+            "line",
+            "drive",
+            "white"
+          ],
+          "practiceSentence": "Mike rides his bike at five.",
+          "audioUSVoice": "Ava",
+          "audioUKVoice": "Libby"
+        }
+      ]
+    },
+    {
+      "level": 19,
+      "items": [
+        {
+          "id": "phonics-l19",
+          "level": 19,
+          "phonicsTarget": "Silent e makes long o",
+          "sound": "/oʊ/ in o_e",
+          "examples": [
+            "home",
+            "note",
+            "rose",
+            "stone"
+          ],
+          "japaneseHint": "最後のeは読まず、oを滑らかな/oʊ/にします。hopとhopeを聞き分けます。",
+          "mouthTip": "Begin with relaxed lips, then round them as the vowel glides. Keep the last consonant distinct.",
+          "practiceWords": [
+            "hope",
+            "rope",
+            "close",
+            "phone"
+          ],
+          "practiceSentence": "Rose wrote a note at home.",
+          "audioUSVoice": "Ava",
+          "audioUKVoice": "Libby"
+        }
+      ]
+    },
+    {
+      "level": 20,
+      "items": [
+        {
+          "id": "phonics-l20",
+          "level": 20,
+          "phonicsTarget": "Silent e patterns with u and e",
+          "sound": "/juː/ or /uː/ in u_e; /iː/ in e_e",
+          "examples": [
+            "cube",
+            "June",
+            "rule",
+            "theme"
+          ],
+          "japaneseHint": "u_eは/juː/または/uː/、e_eは/iː/になります。最後のeは発音しません。",
+          "mouthTip": "For /juː/, begin with a light y sound before rounded /uː/. For /iː/, keep the tongue high and smile slightly.",
+          "practiceWords": [
+            "cute",
+            "tune",
+            "flute",
+            "these"
+          ],
+          "practiceSentence": "June chose a cute theme for the flute show.",
+          "audioUSVoice": "Ava",
+          "audioUKVoice": "Libby"
+        }
+      ]
+    },
+    {
+      "level": 21,
+      "items": [
+        {
+          "id": "phonics-l21",
+          "level": 21,
+          "phonicsTarget": "Long a vowel teams ai and ay",
+          "sound": "/eɪ/",
+          "examples": [
+            "rain",
+            "train",
+            "day",
+            "play"
+          ],
+          "japaneseHint": "aiは語の中、ayは語末に多く、どちらも/eɪ/を表すことが多いです。",
+          "mouthTip": "Start at a clear mid vowel and glide upward. Keep it one syllable rather than separating e and i.",
+          "practiceWords": [
+            "mail",
+            "paint",
+            "stay",
+            "today"
+          ],
+          "practiceSentence": "We may take the train on a rainy day.",
+          "audioUSVoice": "Ava",
+          "audioUKVoice": "Libby"
+        }
+      ]
+    },
+    {
+      "level": 22,
+      "items": [
+        {
+          "id": "phonics-l22",
+          "level": 22,
+          "phonicsTarget": "Long e vowel teams ee and ea",
+          "sound": "/iː/",
+          "examples": [
+            "green",
+            "sleep",
+            "read",
+            "team"
+          ],
+          "japaneseHint": "eeとeaは長い/iː/になることが多いですが、headやbreadのeaは短い/e/です。",
+          "mouthTip": "Keep the tongue high and front with lightly spread lips. Hold the sound without adding a second vowel.",
+          "practiceWords": [
+            "feet",
+            "street",
+            "clean",
+            "speak"
+          ],
+          "practiceSentence": "The team reads beneath the green tree.",
+          "audioUSVoice": "Ava",
+          "audioUKVoice": "Libby"
+        }
+      ]
+    },
+    {
+      "level": 23,
+      "items": [
+        {
+          "id": "phonics-l23",
+          "level": 23,
+          "phonicsTarget": "Long o vowel teams oa and ow",
+          "sound": "/oʊ/",
+          "examples": [
+            "boat",
+            "road",
+            "snow",
+            "window"
+          ],
+          "japaneseHint": "oaは語の中、owは語末に多く、滑らかな/oʊ/になります。ただしcowのowは/aʊ/です。",
+          "mouthTip": "Glide from a neutral rounded vowel to tighter lips. Do not split the vowel team into two syllables.",
+          "practiceWords": [
+            "coat",
+            "toast",
+            "grow",
+            "yellow"
+          ],
+          "practiceSentence": "The yellow boat moves slowly down the road.",
+          "audioUSVoice": "Ava",
+          "audioUKVoice": "Libby"
+        }
+      ]
+    },
+    {
+      "level": 24,
+      "items": [
+        {
+          "id": "phonics-l24",
+          "level": 24,
+          "phonicsTarget": "Two common sounds of oo",
+          "sound": "/uː/ and /ʊ/",
+          "examples": [
+            "moon",
+            "food",
+            "book",
+            "good"
+          ],
+          "japaneseHint": "moonのooは長い/uː/、bookのooは短い/ʊ/です。つづりだけでは判断できない語もあります。",
+          "mouthTip": "Round the lips for both. Hold /uː/ longer with a tenser tongue; keep /ʊ/ short and relaxed.",
+          "practiceWords": [
+            "room",
+            "spoon",
+            "cook",
+            "foot"
+          ],
+          "practiceSentence": "The cook put good food in the cool room.",
+          "audioUSVoice": "Ava",
+          "audioUKVoice": "Libby"
+        }
+      ]
+    },
+    {
+      "level": 25,
+      "items": [
+        {
+          "id": "phonics-l25",
+          "level": 25,
+          "phonicsTarget": "R-controlled vowels ar and or",
+          "sound": "/ɑr/ and /ɔr/ in US English",
+          "examples": [
+            "car",
+            "star",
+            "fork",
+            "short"
+          ],
+          "japaneseHint": "US英語では母音からrへ滑らかにつなぎます。UK英語では後ろに母音がなければrを発音しないことがあります。",
+          "mouthTip": "For US /r/, pull the tongue slightly back without touching the roof. Avoid adding a Japanese vowel after r.",
+          "practiceWords": [
+            "park",
+            "farm",
+            "storm",
+            "morning"
+          ],
+          "practiceSentence": "A short storm passed over the farm.",
+          "audioUSVoice": "Ava",
+          "audioUKVoice": "Libby"
+        }
+      ]
+    },
+    {
+      "level": 26,
+      "items": [
+        {
+          "id": "phonics-l26",
+          "level": 26,
+          "phonicsTarget": "R-controlled spellings er, ir, and ur",
+          "sound": "/ɝ/ or /ɜː/",
+          "examples": [
+            "her",
+            "bird",
+            "turn",
+            "first"
+          ],
+          "japaneseHint": "er・ir・urは多くの語で似た音になります。USではrを響かせ、UKでは長い中央母音になります。",
+          "mouthTip": "Keep the lips relaxed. In US English, curl or bunch the tongue without touching the roof; in UK English, sustain the central vowel.",
+          "practiceWords": [
+            "term",
+            "shirt",
+            "nurse",
+            "Thursday"
+          ],
+          "practiceSentence": "The first bird returned on Thursday.",
+          "audioUSVoice": "Ava",
+          "audioUKVoice": "Libby"
+        }
+      ]
+    },
+    {
+      "level": 27,
+      "items": [
+        {
+          "id": "phonics-l27",
+          "level": 27,
+          "phonicsTarget": "Diphthong oi and oy",
+          "sound": "/ɔɪ/",
+          "examples": [
+            "coin",
+            "voice",
+            "boy",
+            "enjoy"
+          ],
+          "japaneseHint": "唇を丸めた音から短い「イ」へ、1音節の中で滑らかに移動します。",
+          "mouthTip": "Begin with rounded lips, then relax and raise the tongue toward /ɪ/. Do not make two separate beats.",
+          "practiceWords": [
+            "point",
+            "choice",
+            "toy",
+            "annoy"
+          ],
+          "practiceSentence": "The boy enjoyed choosing a shiny coin.",
+          "audioUSVoice": "Ava",
+          "audioUKVoice": "Libby"
+        }
+      ]
+    },
+    {
+      "level": 28,
+      "items": [
+        {
+          "id": "phonics-l28",
+          "level": 28,
+          "phonicsTarget": "Diphthong ou and ow",
+          "sound": "/aʊ/",
+          "examples": [
+            "house",
+            "cloud",
+            "cow",
+            "town"
+          ],
+          "japaneseHint": "大きく開いた音から唇を丸める方向へ移動します。snowのowは/oʊ/なので注意します。",
+          "mouthTip": "Drop the jaw for the first part, then lift it while rounding the lips. Keep the glide within one syllable.",
+          "practiceWords": [
+            "sound",
+            "round",
+            "brown",
+            "flower"
+          ],
+          "practiceSentence": "A brown cow walked around the town.",
+          "audioUSVoice": "Ava",
+          "audioUKVoice": "Libby"
+        }
+      ]
+    },
+    {
+      "level": 29,
+      "items": [
+        {
+          "id": "phonics-l29",
+          "level": 29,
+          "phonicsTarget": "Common spelling choices: c, k, ck, soft c, soft g, and dge",
+          "sound": "/k/, /s/, /g/, /dʒ/",
+          "examples": [
+            "cat",
+            "kite",
+            "back",
+            "city",
+            "giant",
+            "bridge"
+          ],
+          "japaneseHint": "cはe・i・yの前で/s/になりやすく、gも同じ位置で/dʒ/になることがあります。短母音の後の/k/はckが多いです。",
+          "mouthTip": "Use the back of the tongue for /k/ and /g/. For /dʒ/, briefly stop the air, then release it with voice.",
+          "practiceWords": [
+            "coat",
+            "skin",
+            "clock",
+            "cent",
+            "gem",
+            "badge"
+          ],
+          "practiceSentence": "The giant placed a badge beside the city clock.",
+          "audioUSVoice": "Ava",
+          "audioUKVoice": "Libby"
+        }
+      ]
+    },
+    {
+      "level": 30,
+      "items": [
+        {
+          "id": "phonics-l30",
+          "level": 30,
+          "phonicsTarget": "Pronouncing plural -s and past -ed endings",
+          "sound": "-s: /s/, /z/, /ɪz/; -ed: /t/, /d/, /ɪd/",
+          "examples": [
+            "cats",
+            "dogs",
+            "buses",
+            "washed",
+            "played",
+            "wanted"
+          ],
+          "japaneseHint": "語尾はつづりではなく直前の音で変わります。余分な音節を足すのは/ɪz/と/ɪd/の場合だけです。",
+          "mouthTip": "Keep voicing on for /z/ and /d/ endings. Add a full extra syllable only after sibilants for -es or after /t, d/ for -ed.",
+          "practiceWords": [
+            "books",
+            "pens",
+            "classes",
+            "looked",
+            "cleaned",
+            "needed"
+          ],
+          "practiceSentence": "She washed the cups, cleaned the trays, and packed the boxes.",
+          "audioUSVoice": "Ava",
+          "audioUKVoice": "Libby"
+        }
+      ]
+    },
+    {
+      "level": 31,
+      "items": [
+        {
+          "id": "phonics-l31",
+          "level": 31,
+          "phonicsTarget": "Word stress, schwa, and r-colored weak vowels",
+          "sound": "/ə/ in unstressed syllables; /ɚ/ in some unstressed US endings",
+          "examples": [
+            "about",
+            "banana",
+            "support",
+            "teacher"
+          ],
+          "japaneseHint": "強勢のない母音は、はっきりしたア・イ・ウではなく、短く弱い/ə/になることがあります。US英語のteacherなどの語末では、rを伴う/ɚ/になることもあります。",
+          "mouthTip": "Relax the jaw and tongue for schwa. Make the stressed syllable longer, clearer, and slightly louder. In US English, keep a light r-color in endings such as “teacher”; UK English commonly uses a non-rhotic weak vowel there.",
+          "practiceWords": [
+            "ago",
+            "today",
+            "computer",
+            "family"
+          ],
+          "practiceSentence": "A computer can support a family project.",
+          "audioUSVoice": "Ava",
+          "audioUKVoice": "Libby"
+        }
+      ]
+    },
+    {
+      "level": 32,
+      "items": [
+        {
+          "id": "phonics-l32",
+          "level": 32,
+          "phonicsTarget": "Sentence rhythm, linking, and reduced function words",
+          "sound": "stressed content words with linked, reduced grammar words",
+          "examples": [
+            "pick it up",
+            "want to go",
+            "a cup of tea",
+            "meet you at eight"
+          ],
+          "japaneseHint": "大切な内容語を強くし、短い機能語は弱くします。単語末の子音を次の母音へつなぐと自然なリズムになります。",
+          "mouthTip": "Tap a steady beat on key words. Let final consonants connect to following vowels, and reduce “to,” “a,” and “of” instead of stressing every word.",
+          "practiceWords": [
+            "pick it up",
+            "turn it on",
+            "send it over",
+            "meet at eight"
+          ],
+          "practiceSentence": "Could you send it over when you arrive?",
+          "audioUSVoice": "Ava",
+          "audioUKVoice": "Libby"
+        }
+      ]
+    }
+  ]
+}

@@ -29,6 +29,7 @@ http
       return;
     }
     if (pathname === "/teacher") pathname = "/teacher.html";
+    if (["/learn", "/words", "/phonics"].includes(pathname)) pathname = "/learn.html";
     if (pathname === "/phrases") pathname = "/phrases.html";
     if (pathname === "/plans") pathname = "/pricing.html";
     if (pathname === "/pricing-layout-preview") pathname = "/pricing-layout-preview.html";

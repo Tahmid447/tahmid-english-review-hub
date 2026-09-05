@@ -3,9 +3,9 @@ import {
   ambientPlaybackStatus,
   setAmbientPlayback,
   syncAmbientFromSettings,
-} from "./audio.js?v=20260828-release4";
-import { getSettings, onSettingsChange, updateSettings } from "./store.js?v=20260828-release4";
-import { installPlayfulInteractions } from "./effects.js?v=20260828-release4";
+} from "./audio.js?v=20260905-natural1";
+import { getSettings, onSettingsChange, updateSettings } from "./store.js?v=20260905-release5";
+import { installPlayfulInteractions } from "./effects.js?v=20260905-release5";
 
 const trackOptions = Object.entries(AMBIENT_TRACKS).map(([key, track]) => (
   `<option value="${key}">${track.name}</option>`

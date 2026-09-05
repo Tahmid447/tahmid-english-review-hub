@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-student-access="pending">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -8,10 +8,10 @@
   <title>Plans · Tahmid English Review Hub</title>
   <link rel="manifest" href="/manifest.webmanifest">
   <script>try{const p=JSON.parse(localStorage.getItem("te-review-hub:theme:v1")||"\"light\"");const c=["system","light","dark"].includes(p)?p:"light";const d=c==="dark"||(c==="system"&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.dataset.themePreference=c;document.documentElement.dataset.theme=d?"dark":"light";document.documentElement.style.colorScheme=d?"dark":"light"}catch{document.documentElement.dataset.themePreference="light";document.documentElement.dataset.theme="light";document.documentElement.style.colorScheme="light"}</script>
-  <link rel="stylesheet" href="/src/styles.css?v=20260828-release4">
+  <link rel="stylesheet" href="/src/styles.css?v=20260905-release5">
   <link rel="icon" type="image/png" sizes="192x192" href="/assets/app-icon-192.png">
 </head>
-<body data-page="pricing">
+<body data-page="pricing" data-access-pending="true">
   <a class="skip-link" href="#plansMain">Skip to plans</a>
   <header class="site-header pricing-header">
     <a class="brand" href="/" aria-label="Tahmid English Club home">
@@ -84,7 +84,7 @@
       <div id="comparisonCards" class="comparison-mobile" aria-label="Mobile plan comparison"></div>
     </section>
 
-    <section class="contact-assurance shell" id="contact">
+    <section class="contact-assurance shell" id="contact" data-student-feature="show_contact_teacher">
       <div class="contact-copy">
         <p class="eyebrow" data-ui-en="Talk to the person who teaches you" data-ui-ja="担当する先生に直接相談">Talk to the person who teaches you / 担当する先生に直接相談</p>
         <h2 data-ui-en="Not sure which plan is right for you? Message me." data-ui-ja="どのプランが合うか迷ったら、お気軽にご相談ください。">Not sure which plan is right for you? Message me. / どのプランが合うか迷ったら、お気軽にご相談ください。</h2>
@@ -114,7 +114,7 @@
     </section>
   </main>
 
-  <dialog class="contact-dialog" id="contactDialog" aria-labelledby="contactDialogHeading">
+  <dialog class="contact-dialog" id="contactDialog" aria-labelledby="contactDialogHeading" data-student-feature="show_contact_teacher">
     <form method="dialog" class="dialog-close-row"><button class="dialog-close" value="cancel" aria-label="Close">×</button></form>
     <p class="eyebrow" data-ui-en="Plan enquiry" data-ui-ja="プラン相談">Plan enquiry / プラン相談</p>
     <h2 id="contactDialogHeading" data-ui-en="Prepare your message" data-ui-ja="問い合わせ文を準備する">Prepare your message / 問い合わせ文を準備する</h2>
@@ -133,8 +133,9 @@
     <p class="contact-status" id="contactStatus" role="status" aria-live="polite"></p>
   </dialog>
 
-  <footer class="site-footer premium-footer"><div class="footer-brand"><img src="/assets/app-icon-192.png" alt="" width="44" height="44"><span><strong>Tahmid English Club</strong><small data-ui-en="Personal English review, built by Tahmid Ahmed." data-ui-ja="Tahmid Ahmedが一人ひとりの復習をサポートします。">Personal English review, built by Tahmid Ahmed.</small></span></div><nav aria-label="Footer"><a href="/" data-ui-en="Lessons" data-ui-ja="レッスン">Lessons</a><a href="/phrases" data-ui-en="Library" data-ui-ja="ライブラリ">Library</a><a href="#plansMain" data-ui-en="Plans" data-ui-ja="料金プラン">Plans</a><a href="#contact" data-ui-en="Contact Tahmid" data-ui-ja="Tahmidに相談">Contact Tahmid</a><a href="/teacher" target="_blank" rel="noopener noreferrer" data-ui-en="Teacher Studio" data-ui-ja="先生用画面">Teacher Studio</a></nav><p>© 2026 Tahmid Ahmed <small class="music-license-line">BGM: Kevin MacLeod · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="license noopener">CC BY 4.0</a> · <a href="/music-credits" aria-label="Study music licence details">Licence details</a></small></p></footer>
-  <script type="module" src="/src/pricing.js?v=20260828-release4"></script>
-  <script type="module" src="/src/study-music.js?v=20260828-release4"></script>
+  <footer class="site-footer premium-footer"><div class="footer-brand"><img src="/assets/app-icon-192.png" alt="" width="44" height="44"><span><strong>Tahmid English Club</strong><small data-ui-en="Personal English review, built by Tahmid Ahmed." data-ui-ja="Tahmid Ahmedが一人ひとりの復習をサポートします。">Personal English review, built by Tahmid Ahmed.</small></span></div><nav aria-label="Footer"><a href="/" data-ui-en="Lessons" data-ui-ja="レッスン">Lessons</a><a href="/learn" data-ui-en="Learning Library" data-ui-ja="教材ライブラリ">Learning Library</a><a href="/phrases" data-ui-en="Lesson Phrasebook" data-ui-ja="レッスン単語帳">Lesson Phrasebook</a><a href="#plansMain" data-ui-en="Plans" data-ui-ja="料金プラン">Plans</a><a href="#contact" data-student-feature="show_contact_teacher" data-ui-en="Contact Tahmid" data-ui-ja="Tahmidに相談">Contact Tahmid</a><a href="/teacher" target="_blank" rel="noopener noreferrer" data-ui-en="Teacher Studio" data-ui-ja="先生用画面">Teacher Studio</a></nav><p>© 2026 Tahmid Ahmed <small class="music-license-line">BGM: Kevin MacLeod · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="license noopener">CC BY 4.0</a> · <a href="/music-credits" aria-label="Study music licence details">Licence details</a></small></p></footer>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js"></script>
+  <script type="module" src="/src/pricing.js?v=20260905-release5"></script>
+  <script type="module" src="/src/study-music.js?v=20260905-release5"></script>
 </body>
 </html>

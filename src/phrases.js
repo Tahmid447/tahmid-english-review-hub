@@ -1,4 +1,4 @@
-import { buildPhraseCatalog } from "./data.js?v=20260828-release4";
+import { buildPhraseCatalog } from "./data.js?v=20260905-release5";
 import {
   applyThemePreference,
   getSettings,
@@ -7,7 +7,7 @@ import {
   safeLocalReturnPath,
   updateSettings,
   watchSystemTheme,
-} from "./store.js?v=20260828-release4";
+} from "./store.js?v=20260905-release5";
 import {
   speechRecognitionSupported,
   setAmbientPlayback,
@@ -16,15 +16,21 @@ import {
   stopAudio,
   stopSpeechPractice,
   syncAmbientFromSettings,
-} from "./audio.js?v=20260828-release4";
+} from "./audio.js?v=20260905-natural1";
 import {
   getStudentClient,
   getStudentSession,
   loadUserSettings,
   saveUserSettings,
-} from "./supabase.js?v=20260828-release4";
-import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js?v=20260828-release4";
-import { celebrate, installPlayfulInteractions } from "./effects.js?v=20260828-release4";
+} from "./supabase.js?v=20260905-release5";
+import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js?v=20260905-release5";
+import { celebrate, installPlayfulInteractions } from "./effects.js?v=20260905-release5";
+import {
+  applyStudentFeatureVisibility,
+  featureAllowed,
+  loadStudentAccess,
+  renderStudentAccessBoundary,
+} from "./student-visibility.js?v=20260905-hub1";
 
 const LEGACY_ACTIVITY_KEY = "teh_phrase_activity_v1";
 const ACTIVITY_KEY_PREFIX = "teh_phrase_activity_v2";
@@ -52,6 +58,7 @@ let activeLibraryKind = "phrase";
 let searchText = "";
 let activeRecognitionId = null;
 let visiblePhraseLimit = PHRASE_PAGE_SIZE;
+let allowedLibraryKinds = new Set(["phrase", "word", "pattern"]);
 
 const routeParams = new URLSearchParams(window.location.search);
 const returnPath = safeLocalReturnPath(routeParams.get("return"), "/");
@@ -1049,6 +1056,7 @@ function bindLoadMore() {
 function bindLibraryTabs() {
   document.querySelectorAll("[data-library-kind]").forEach((button) => {
     button.addEventListener("click", () => {
+      if (!allowedLibraryKinds.has(button.dataset.libraryKind)) return;
       activeLibraryKind = ["phrase", "word", "pattern"].includes(button.dataset.libraryKind)
         ? button.dataset.libraryKind
         : "phrase";
@@ -1066,7 +1074,9 @@ function bindLibraryTabs() {
   });
   document.querySelector(".library-tabs[role='tablist']")?.addEventListener("keydown", (event) => {
     if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
-    const tabs = [...event.currentTarget.querySelectorAll("[role='tab']")];
+    const tabs = [...event.currentTarget.querySelectorAll("[role='tab']")]
+      .filter((tab) => allowedLibraryKinds.has(tab.dataset.libraryKind));
+    if (!tabs.length) return;
     const currentIndex = Math.max(0, tabs.indexOf(document.activeElement));
     const nextIndex = event.key === "Home"
       ? 0
@@ -1123,13 +1133,47 @@ async function initialise() {
   });
   let session = await prepareActivityScope();
   setStorageUser(activeActivityUserId);
+  bindSettings();
   if (!(await syncRemoteSettings(session))) {
     session = normaliseSession(await getStudentSession());
     activateActivityScope(session);
     setStorageUser(activeActivityUserId);
     await syncRemoteSettings(session);
   }
-  bindSettings();
+  const access = await loadStudentAccess({ refresh: true });
+  applyStudentFeatureVisibility(access);
+  const wordsAllowed = featureAllowed(access, "show_words");
+  const phrasesAllowed = featureAllowed(access, "show_phrases");
+  allowedLibraryKinds = new Set([
+    ...(phrasesAllowed ? ["phrase", "pattern"] : []),
+    ...(wordsAllowed ? ["word"] : []),
+  ]);
+  document.querySelectorAll("[data-library-kind]").forEach((tab) => {
+    const hidden = access.authenticated && !allowedLibraryKinds.has(tab.dataset.libraryKind);
+    tab.dataset.studentHidden = String(hidden);
+    tab.setAttribute("aria-hidden", String(hidden));
+  });
+  if (access.authenticated && !allowedLibraryKinds.size) {
+    renderStudentAccessBoundary(document.querySelector("#main"), access.settings.account_enabled === false ? {
+      title: "Your Review Hub access is paused.",
+      titleJa: "Review Hubの利用は一時停止中です。",
+      detail: "No vocabulary or phrase content is being shared with this account right now.",
+      detailJa: "現在、このアカウントには単語・フレーズ教材が公開されていません。",
+    } : {
+      title: "This library is not in your current learning plan.",
+      titleJa: "このライブラリは現在の学習プランには含まれていません。",
+    });
+    return;
+  }
+  if (!allowedLibraryKinds.has(activeLibraryKind)) {
+    activeLibraryKind = allowedLibraryKinds.has("phrase") ? "phrase" : "word";
+  }
+  document.querySelectorAll("[data-library-kind]").forEach((tab) => {
+    const active = tab.dataset.libraryKind === activeLibraryKind;
+    tab.classList.toggle("active", active);
+    tab.setAttribute("aria-selected", String(active));
+    tab.tabIndex = active ? 0 : -1;
+  });
   bindSearch();
   bindLibraryTabs();
   bindLoadMore();

@@ -25,7 +25,18 @@ const corsHeaders = (request: Request) => {
 
 const json = (request: Request, body: unknown, status = 200) => new Response(
   JSON.stringify(body),
-  { status, headers: { ...corsHeaders(request), "Content-Type": "application/json" } },
+  {
+    status,
+    headers: {
+      ...corsHeaders(request),
+      "Cache-Control": "no-store",
+      "Content-Type": "application/json",
+    },
+  },
+);
+
+const isUuid = (value: string) => (
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value)
 );
 
 const sha256 = async (value: string) => {
@@ -138,7 +149,20 @@ Deno.serve(async (request) => {
     if (action === "learner-auth-status") {
       if (!teacherAdmin) return json(request, { error: "Teacher membership actions are not configured." }, 503);
       const learnerId = String(body?.learnerId || "").trim();
-      if (!learnerId) return json(request, { error: "Choose a learner account." }, 400);
+      if (!isUuid(learnerId)) return json(request, { error: "Choose a valid learner account." }, 400);
+      // The service-role client bypasses RLS, so bind this Auth-admin lookup to
+      // the Review Hub ownership map before querying the shared Auth project.
+      // Use the same response for an unassigned UUID and a missing Auth user to
+      // avoid turning the endpoint into an account-existence oracle.
+      const { data: ownership, error: ownershipError } = await teacherAdmin
+        .from("review_teacher_students")
+        .select("student_id")
+        .eq("teacher_id", user.id)
+        .eq("student_id", learnerId)
+        .eq("active", true)
+        .maybeSingle();
+      if (ownershipError) throw ownershipError;
+      if (!ownership) return json(request, { error: "Learner account not found." }, 404);
       const { data, error } = await teacherAdmin.auth.admin.getUserById(learnerId);
       if (error) throw error;
       if (!data?.user) return json(request, { error: "Learner account not found." }, 404);
@@ -168,7 +192,7 @@ Deno.serve(async (request) => {
         : "standard";
       const maxUses = Number(body?.maxUses || 0);
       const validUntil = body?.validUntil ? new Date(String(body.validUntil)) : null;
-      if (!codeId) return json(request, { error: "Choose an access code to edit." }, 400);
+      if (!isUuid(codeId)) return json(request, { error: "Choose a valid access code to edit." }, 400);
       if (!label || label.length > 100) return json(request, { error: "Enter a plan label." }, 400);
       if (!Number.isInteger(durationDays) || durationDays < 1 || durationDays > 730) {
         return json(request, { error: "Duration must be between 1 and 730 days." }, 400);
@@ -183,6 +207,7 @@ Deno.serve(async (request) => {
         .from("review_access_codes")
         .select("id,use_count")
         .eq("id", codeId)
+        .eq("created_by", user.id)
         .maybeSingle();
       if (currentError) throw currentError;
       if (!current) return json(request, { error: "Access code not found." }, 404);
@@ -198,6 +223,7 @@ Deno.serve(async (request) => {
         valid_until: validUntil?.toISOString() || null,
         enabled: body?.enabled !== false,
       }).eq("id", codeId)
+        .eq("created_by", user.id)
         .select("id,label,code_last4,duration_days,access_scope,plan_tier,max_uses,use_count,enabled,valid_until,created_at")
         .single();
       if (error) throw error;
@@ -207,29 +233,34 @@ Deno.serve(async (request) => {
     if (action === "delete") {
       if (!teacherAdmin) return json(request, { error: "Teacher membership actions are not configured." }, 503);
       const codeId = String(body?.codeId || "").trim();
-      if (!codeId) return json(request, { error: "Choose an access code to delete." }, 400);
+      if (!isUuid(codeId)) return json(request, { error: "Choose a valid access code to delete." }, 400);
       const { data: current, error: currentError } = await teacherAdmin
         .from("review_access_codes")
         .select("id,use_count")
         .eq("id", codeId)
+        .eq("created_by", user.id)
         .maybeSingle();
       if (currentError) throw currentError;
       if (!current) return json(request, { error: "Access code not found." }, 404);
       if (Number(current.use_count || 0) > 0) {
         const { error } = await teacherAdmin.from("review_access_codes")
           .update({ enabled: false })
-          .eq("id", codeId);
+          .eq("id", codeId)
+          .eq("created_by", user.id);
         if (error) throw error;
         return json(request, { disposition: "disabled", preservedHistory: true });
       }
-      const { error } = await teacherAdmin.from("review_access_codes").delete().eq("id", codeId);
+      const { error } = await teacherAdmin.from("review_access_codes")
+        .delete()
+        .eq("id", codeId)
+        .eq("created_by", user.id);
       if (error) throw error;
       return json(request, { disposition: "deleted", preservedHistory: false });
     }
 
     if (action === "reissue") {
       const codeId = String(body?.codeId || "").trim();
-      if (!codeId) return json(request, { error: "Choose an access code to reissue." }, 400);
+      if (!isUuid(codeId)) return json(request, { error: "Choose a valid access code to reissue." }, 400);
       const { data: replacementRows, error: reissueError } = await userClient.rpc(
         "review_reissue_access_code",
         { target_code: codeId },
@@ -284,6 +315,8 @@ Deno.serve(async (request) => {
           ["already redeemed", "This account has already used this access code.", "already_redeemed", 409],
           ["conflicts with the active membership", "This code has a different plan or lesson scope from the active membership. Ask the teacher to issue a compatible code or change the current access first.", "active_membership_conflict", 409],
           ["complete the learner profile", "Complete the learner profile before using an access code.", "profile_required", 409],
+          ["owner is not active", "The teacher who issued this code is no longer active. Please ask for a new code.", "inactive_teacher", 409],
+          ["teacher accounts cannot redeem", "Teacher accounts cannot redeem learner access codes.", "teacher_account", 403],
         ] as const;
         const match = known.find(([needle]) => message.toLowerCase().includes(needle));
         if (match) return json(request, { error: match[1], reason: match[2] }, match[3]);

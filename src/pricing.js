@@ -1,12 +1,12 @@
-import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js?v=20260828-release4";
+import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js?v=20260905-release5";
 import {
   applyThemePreference,
   getSettings,
   onSettingsChange,
   updateSettings,
   watchSystemTheme,
-} from "./store.js?v=20260828-release4";
-import "./pwa.js?v=20260828-release4";
+} from "./store.js?v=20260905-release5";
+import "./pwa.js?v=20260905-release5";
 import {
   BILLING_OPTIONS,
   CONTACT_CHANNELS,
@@ -19,7 +19,12 @@ import {
   planPrice,
   planSavings,
   promotionApplies,
-} from "./plans.js?v=20260828-release4";
+} from "./plans.js?v=20260905-release5";
+import {
+  applyStudentFeatureVisibility,
+  enforceStudentFeature,
+  renderStudentAccessBoundary,
+} from "./student-visibility.js?v=20260905-hub1";
 
 const elements = {
   language: document.querySelector("#languageToggle"),
@@ -49,6 +54,11 @@ const elements = {
 let billing = BILLING_OPTIONS.monthly;
 let selectedPlan = PLAN_CATALOG.standard;
 let messageDirty = false;
+let pricingAccess = null;
+
+function applyPricingVisibility() {
+  if (pricingAccess) applyStudentFeatureVisibility(pricingAccess);
+}
 
 const language = () => languageModeFromSettings(getSettings());
 const t = (en, ja) => uiText(en, ja, language());
@@ -168,14 +178,15 @@ function renderPlans() {
           <ul>${plan.features.map((feature) => `<li><span aria-hidden="true">✓</span>${t(feature.en, feature.ja)}</li>`).join("")}</ul>
         </details>
         ${key === "free"
-          ? `<a class="plan-cta secondary-btn" href="/">${t("Try two lessons free", "2レッスンを無料体験")}</a>`
-          : `<button class="plan-cta primary-btn" type="button" data-contact-plan="${plan.key}">${t(`Ask about ${plan.name}`, `${plan.name}について相談`)}</button>`}
+          ? `<a class="plan-cta secondary-btn" href="/" data-student-feature="show_trial_cta">${t("Try two lessons free", "2レッスンを無料体験")}</a>`
+          : `<button class="plan-cta primary-btn" type="button" data-contact-plan="${plan.key}" data-student-feature="show_contact_teacher">${t(`Ask about ${plan.name}`, `${plan.name}について相談`)}</button>`}
       </article>
     `;
   }).join("");
   elements.grid.querySelectorAll("[data-contact-plan]").forEach((button) => {
     button.addEventListener("click", () => openContact(button.dataset.contactPlan));
   });
+  applyPricingVisibility();
 }
 
 function renderComparison() {
@@ -199,13 +210,14 @@ function renderComparison() {
       <header><h3>${PLAN_CATALOG[key].name}</h3>${key === "premium" ? `<span>${t("Recommended", "おすすめ")}</span>` : ""}</header>
       <dl>${PLAN_COMPARISON.map((row) => `<div><dt>${t(row.label, row.labelJa)}</dt><dd>${comparisonValue(row, key)}</dd></div>`).join("")}</dl>
       ${key === "free"
-        ? `<a class="secondary-btn" href="/">${t("Start free", "無料で始める")}</a>`
-        : `<button class="primary-btn" type="button" data-contact-plan="${key}">${t(`Ask about ${PLAN_CATALOG[key].name}`, `${PLAN_CATALOG[key].name}を相談`)}</button>`}
+        ? `<a class="secondary-btn" href="/" data-student-feature="show_trial_cta">${t("Start free", "無料で始める")}</a>`
+        : `<button class="primary-btn" type="button" data-contact-plan="${key}" data-student-feature="show_contact_teacher">${t(`Ask about ${PLAN_CATALOG[key].name}`, `${PLAN_CATALOG[key].name}を相談`)}</button>`}
     </article>
   `).join("");
   elements.comparisonCards.querySelectorAll("[data-contact-plan]").forEach((button) => {
     button.addEventListener("click", () => openContact(button.dataset.contactPlan));
   });
+  applyPricingVisibility();
 }
 
 function renderBillingSummary() {
@@ -320,3 +332,28 @@ onSettingsChange(applySettings);
 setBilling(BILLING_OPTIONS.monthly);
 applySettings();
 watchSystemTheme(() => applyThemePreference(getSettings().theme));
+
+async function initialisePricingAccess() {
+  try {
+    const access = await enforceStudentFeature("show_pricing", document.querySelector("#plansMain"), {
+      title: "Plan information is hidden for your account.",
+      titleJa: "このアカウントでは料金プラン情報は非表示です。",
+      detail: "Your teacher has prepared a focused learning view for you.",
+      detailJa: "担当の先生が、学習に必要な内容だけを表示しています。",
+    });
+    pricingAccess = access;
+    if (access.allowed) applyPricingVisibility();
+  } catch {
+    document.documentElement.dataset.studentAccess = "disabled";
+    renderStudentAccessBoundary(document.querySelector("#plansMain"), {
+      title: "We could not verify access to plan information.",
+      titleJa: "料金プラン情報の利用権限を確認できませんでした。",
+      detail: "Please return to the Review Hub and try again.",
+      detailJa: "Review Hubへ戻り、もう一度お試しください。",
+    });
+  } finally {
+    document.body.dataset.accessPending = "false";
+  }
+}
+
+void initialisePricingAccess();

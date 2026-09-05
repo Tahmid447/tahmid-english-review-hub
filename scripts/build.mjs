@@ -8,6 +8,7 @@ const files = [
   "index.html",
   "teacher.html",
   "lesson.html",
+  "learn.html",
   "phrases.html",
   "pricing.html",
   "pricing-layout-preview.html",
@@ -29,6 +30,13 @@ const publicSourceFiles = [
   "lesson-guides.js",
   "lesson-guide-targets.js",
   "lesson-source.js",
+  "learn.js",
+  "learn.css",
+  "curriculum-visuals.js",
+  "curriculum-visuals.css",
+  "curriculum-api.js",
+  "student-visibility.js",
+  "student-shell.js",
   "phrases.js",
   "plans.js",
   "pricing.js",
@@ -80,7 +88,10 @@ fs.writeFileSync(path.join(dist, "src", "data", "legacy-additions.json"), `${JSO
 
 const assets = path.join(root, "assets");
 if (fs.existsSync(assets)) {
-  fs.cpSync(assets, path.join(dist, "assets"), { recursive: true });
+  fs.cpSync(assets, path.join(dist, "assets"), {
+    recursive: true,
+    filter: (source) => path.basename(source) !== ".DS_Store",
+  });
 }
 
 fs.writeFileSync(
@@ -90,6 +101,9 @@ fs.writeFileSync(
     "/takiwaki.html /?legacy=takiwaki 301!",
     "/teacher /teacher.html 200",
     "/lesson/* /lesson.html?id=:splat 200",
+    "/learn /learn.html 200",
+    "/words /learn.html?category=words 200",
+    "/phonics /learn.html?category=phonics 200",
     "/phrases /phrases.html 200",
     "/plans /pricing.html 200",
     "/pricing-layout-preview /pricing-layout-preview.html 200",
@@ -105,6 +119,8 @@ fs.writeFileSync(
     "  X-Content-Type-Options: nosniff",
     "  Referrer-Policy: strict-origin-when-cross-origin",
     "  Permissions-Policy: microphone=(self)",
+    "  Strict-Transport-Security: max-age=31536000; includeSubDomains",
+    "  Content-Security-Policy: default-src 'self'; base-uri 'self'; frame-ancestors 'none'; object-src 'none'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob: https://ycmybggetemkhorkhfnf.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; worker-src 'self' blob:; manifest-src 'self'; form-action 'self'; upgrade-insecure-requests",
     "",
     "/sw.js",
     "  Cache-Control: no-cache, no-store, must-revalidate",
@@ -120,6 +136,14 @@ fs.writeFileSync(
 const forbiddenPublicFiles = [
   path.join(dist, "src", "data", "notion-drafts.json"),
   path.join(dist, "src", "data", "curriculum.js"),
+  path.join(dist, "demo-data", "curriculum.json"),
+  path.join(dist, "src", "demo-curriculum-api.js"),
+  path.join(dist, "src", "demo-student-visibility.js"),
+  path.join(dist, "src", "demo-shell.js"),
+  path.join(dist, "src", "personas.js"),
+  path.join(dist, "src", "demo-teacher.js"),
+  path.join(dist, "src", "demo-teacher.css"),
+  path.join(dist, "src", "learn-demo.js"),
 ];
 if (forbiddenPublicFiles.some((file) => fs.existsSync(file))) {
   throw new Error("Private authoring data was copied into the public build.");

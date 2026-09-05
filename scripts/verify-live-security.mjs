@@ -33,6 +33,14 @@ const questionTeasers = await readRows(
   "id,lesson_id,position,section,format,required_plan",
 );
 const publicPlans = await readRows("review_plan_catalog", "plan_key,active");
+const publicCurriculumLevels = await readRows(
+  "review_curriculum_levels",
+  "category,level,active,is_preview",
+);
+const publicCurriculumItems = await readRows(
+  "review_curriculum_items",
+  "id,category,level,required_plan,active,is_preview",
+);
 const protectedResources = [
   ["review_profiles", "user_id"],
   ["review_teachers", "user_id"],
@@ -52,6 +60,14 @@ const protectedResources = [
   ["review_premium_tasks", "id"],
   ["review_task_submissions", "id"],
   ["review_submission_feedback", "id"],
+  ["review_teacher_students", "student_id"],
+  ["review_student_hub_settings", "student_id"],
+  ["review_student_curriculum_access", "student_id"],
+  ["review_curriculum_progress", "student_id"],
+  ["review_curriculum_favorites", "student_id"],
+  ["review_announcements", "id"],
+  ["review_announcement_targets", "announcement_id"],
+  ["review_teacher_audit_log", "id"],
 ];
 
 const protectedResults = await Promise.all(
@@ -145,6 +161,45 @@ if (
     }.`,
   );
 }
+const curriculumCategories = ["phonics", "phrases", "words"];
+const previewLevelCategories = Array.isArray(publicCurriculumLevels.rows)
+  ? publicCurriculumLevels.rows.map(({ category }) => category).sort()
+  : [];
+if (
+  publicCurriculumLevels.status !== 200
+  || previewLevelCategories.length !== curriculumCategories.length
+  || previewLevelCategories.some((category, index) => category !== curriculumCategories[index])
+  || publicCurriculumLevels.rows.some((level) => (
+    level.level !== 1 || level.active !== true || level.is_preview !== true
+  ))
+) {
+  failures.push(
+    `Expected exactly one anonymous Level 1 preview for Words, Phrases and Phonics; received status ${publicCurriculumLevels.status} and ${previewLevelCategories.length} rows.`,
+  );
+}
+const expectedPreviewItems = { words: 3, phrases: 3, phonics: 1 };
+const previewItemCounts = Object.fromEntries(Object.keys(expectedPreviewItems).map((category) => [
+  category,
+  Array.isArray(publicCurriculumItems.rows)
+    ? publicCurriculumItems.rows.filter((item) => item.category === category).length
+    : 0,
+]));
+if (
+  publicCurriculumItems.status !== 200
+  || !Array.isArray(publicCurriculumItems.rows)
+  || publicCurriculumItems.rows.length !== 7
+  || Object.entries(expectedPreviewItems).some(([category, count]) => previewItemCounts[category] !== count)
+  || publicCurriculumItems.rows.some((item) => (
+    item.level !== 1
+    || item.active !== true
+    || item.is_preview !== true
+    || item.required_plan !== "free"
+  ))
+) {
+  failures.push(
+    `Expected seven Free anonymous structured-learning preview items (3 Words, 3 Phrases, 1 Phonics); received status ${publicCurriculumItems.status} and ${Array.isArray(publicCurriculumItems.rows) ? publicCurriculumItems.rows.length : "no"} rows.`,
+  );
+}
 for (const result of protectedResults) {
   if (result.status !== 401) {
     failures.push(
@@ -166,6 +221,7 @@ if (failures.length) {
     `  ✓ anonymous full payloads are Free-only; safe teaser view has ${questionTeasers.rows.length} configured rows`,
   );
   console.log("  ✓ public Free, Standard, Premium and Premium+ plan descriptions");
+  console.log("  ✓ only the intended Level 1 structured-learning previews are anonymous");
   console.log(
     `  ✓ ${protectedResults.length} personal/base resources reject anonymous reads`,
   );

@@ -260,6 +260,7 @@ assert.equal(failedProfileWrite.calls.some(([operation]) => operation === "updat
 
 const lessonScript = fs.readFileSync(path.join(root, "src", "lesson.js"), "utf8");
 const lessonPage = fs.readFileSync(path.join(root, "lesson.html"), "utf8");
+const dataScript = fs.readFileSync(path.join(root, "src", "data.js"), "utf8");
 const hubScript = fs.readFileSync(path.join(root, "src", "hub.js"), "utf8");
 const supabaseScript = fs.readFileSync(path.join(root, "src", "supabase.js"), "utf8");
 const homePage = fs.readFileSync(path.join(root, "index.html"), "utf8");
@@ -277,6 +278,18 @@ assert.match(lessonScript, /Check \$\{count\} answered/);
 assert.match(lessonScript, /role="radio" aria-checked=.*tabindex=/);
 assert.match(lessonScript, /bindRovingRadioGroup/);
 assert.match(lessonScript, /queueMicrotask/);
+assert.match(dataScript, /allowOfflinePreview = true/);
+assert.match(dataScript, /!preview\s*&& allowOfflinePreview[\s\S]{0,140}&& localLesson/);
+assert.match(dataScript, /remote\.reason !== "lesson-access-denied"/);
+assert.match(lessonScript, /allowOfflinePreview = !access\.authenticated/,
+  "A hidden Review Lessons surface must not be bypassed by the bundled preview fallback.");
+assert.match(hubScript, /canOpenReviewLesson = featureAllowed\(currentHubAccess, "show_review_lessons"\)/);
+assert.match(hubScript, /Review access is managed by your teacher/,
+  "Progress history must not offer a dead lesson link when Review Lessons are hidden.");
+assert.match(supabaseScript, /rpc\("review_lesson_access_mode"[\s\S]*?accessMode\.data === "block"[\s\S]*?lesson-access-denied/,
+  "An item-specific lesson block must be enforced before the public preview view is used.");
+assert.match(supabaseScript, /rpc\("review_student_hub_feature_enabled"[\s\S]*?requested_feature: "review_lessons"[\s\S]*?lesson-access-denied/,
+  "Hidden Review Lessons must remain hidden when a signed-in learner opens a direct URL.");
 assert.match(homePage, /id="profileGateDialog"/);
 assert.match(hubScript, /isGoogleSession/);
 assert.match(hubScript, /id = "profileCompletionStatus"/);
@@ -296,13 +309,13 @@ assert.equal(
 );
 assert.match(homePage, /id="publishedCount">31</);
 assert.match(homePage, /id="questionCount">1100</);
-assert.match(homePage, /src="\/src\/hub\.js\?v=20260828-release4"/);
-assert.match(lessonPage, /src="\/src\/lesson\.js\?v=20260828-release4"/);
+assert.match(homePage, /src="\/src\/hub\.js\?v=20260905-release5"/);
+assert.match(lessonPage, /src="\/src\/lesson\.js\?v=20260905-release5"/);
 assert.match(homePage, /id="musicStartChip"/);
 assert.match(homePage, /Your lesson does not end when the call ends/);
 assert.match(homePage, /eight-question Quick Practice/);
-assert.match(hubScript, /from "\.\/supabase\.js\?v=20260828-release4"/);
-assert.match(lessonScript, /from "\.\/effects\.js\?v=20260828-release4"/);
+assert.match(hubScript, /from "\.\/supabase\.js\?v=20260905-release5"/);
+assert.match(lessonScript, /from "\.\/effects\.js\?v=20260905-release5"/);
 assert.match(supabaseScript, /signOutStudent[\s\S]*?withOperationTimeout/);
 assert.match(supabaseScript, /removeItem\(STUDENT_AUTH_STORAGE_KEY\)/);
 assert.match(supabaseScript, /studentClient = undefined/);
@@ -318,6 +331,10 @@ assert.match(homePage, /id="retryImprovement"/);
 assert.match(netlify, /from = "\/takiwaki"[\s\S]*?to = "\/\?legacy=takiwaki"[\s\S]*?status = 301/);
 assert.doesNotMatch(buildScript, /"takiwaki\.html",/);
 assert.match(buildScript, /"manifest\.webmanifest"/);
+assert.match(buildScript, /path\.basename\(source\) !== "\.DS_Store"/,
+  "Finder metadata must not be copied into the deploy artifact.");
+assert.match(serviceWorker, /caches\.match\(request, \{ ignoreSearch: true \}\)/,
+  "Versioned module requests need an unversioned precache fallback offline.");
 assert.match(buildScript, /"sw\.js"/);
 assert.match(homePage, /src="\/assets\/app-icon-192\.png"[^>]*width="50"[^>]*height="50"/);
 assert.match(phraseScript, /const PHRASE_PAGE_SIZE = 24/);
@@ -329,8 +346,8 @@ assert.doesNotMatch(phraseScript, /"aria-label": `Play \$\{phrase\.en\}/);
 assert.doesNotMatch(phraseScript, /"aria-label": `Practise saying/);
 assert.match(phrasePage, /id="phraseLoadMore"/);
 assert.match(serviceWorker, /request\.headers\.has\("authorization"\)/);
-assert.match(serviceWorker, /CACHE_NAME = "te-review-public-v18"/);
-assert.match(serviceWorker, /event\.respondWith\(fetch\(request\)[\s\S]*?\.catch\(\(\) => caches\.match\(request\)\)\)/,
+assert.match(serviceWorker, /CACHE_NAME = "te-review-public-v22"/);
+assert.match(serviceWorker, /event\.respondWith\(fetch\(request\)[\s\S]*?\.catch\(\(\) => caches\.match\(request, \{ ignoreSearch: true \}\)\)\)/,
   "Public shell assets refresh from the network and use cache only as an offline fallback.");
 assert.doesNotMatch(serviceWorker, /supabase\.co|\/auth\/v1|\/rest\/v1|\/functions\/v1|\/storage\/v1/);
 assert.match(pwaScript, /updateViaCache: "none"/);

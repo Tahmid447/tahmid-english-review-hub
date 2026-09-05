@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en" data-student-access="pending">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="description" content="A teacher-curated English learning library with words, phrases, phonics, natural audio and personal review progress.">
+  <meta name="theme-color" content="#0b2234">
+  <title>Learning Library · Tahmid English Club</title>
+  <script>if(location.protocol==="file:")document.documentElement.dataset.openedAsFile="true"</script>
+  <style>
+    .learn-file-notice{display:none}
+    html[data-opened-as-file="true"] body{min-height:100vh;margin:0;background:#071b29;color:#edf9f5;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    html[data-opened-as-file="true"] body>:not(.learn-file-notice){display:none!important}
+    html[data-opened-as-file="true"] .learn-file-notice{display:grid;min-height:100vh;place-items:center;padding:24px;box-sizing:border-box;background:radial-gradient(circle at 80% 10%,rgba(94,225,190,.18),transparent 32%),linear-gradient(145deg,#071b29,#0d2a38)}
+    html[data-opened-as-file="true"] .learn-file-card{width:min(620px,100%);padding:clamp(26px,6vw,50px);box-sizing:border-box;border:1px solid rgba(194,245,230,.22);border-radius:28px;background:rgba(12,43,55,.92);box-shadow:0 32px 90px rgba(0,0,0,.34)}
+    html[data-opened-as-file="true"] .learn-file-mark{display:grid;width:58px;height:58px;place-items:center;border-radius:18px;color:#06211c;background:#86e5c6;font-size:19px;font-weight:900;letter-spacing:.04em}
+    html[data-opened-as-file="true"] .learn-file-card h1{margin:22px 0 10px;font-size:clamp(28px,6vw,44px);line-height:1.05;letter-spacing:-.04em}
+    html[data-opened-as-file="true"] .learn-file-card p{color:#c4d9d4;font-size:16px;line-height:1.7}
+    html[data-opened-as-file="true"] .learn-file-card code{display:block;margin:20px 0;padding:15px 17px;border-radius:13px;color:#a8f0d8;background:#06151f;font:700 14px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;overflow-wrap:anywhere}
+    html[data-opened-as-file="true"] .learn-file-card a{display:inline-flex;min-height:46px;align-items:center;padding:0 18px;border-radius:999px;color:#06211c;background:#86e5c6;font-weight:850;text-decoration:none}
+  </style>
+  <link rel="manifest" href="/manifest.webmanifest">
+  <script>try{const p=JSON.parse(localStorage.getItem("te-review-hub:theme:v1")||"\"light\"");const c=["system","light","dark"].includes(p)?p:"light";const d=c==="dark"||(c==="system"&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.dataset.themePreference=c;document.documentElement.dataset.theme=d?"dark":"light";document.documentElement.style.colorScheme=d?"dark":"light"}catch{document.documentElement.dataset.themePreference="light";document.documentElement.dataset.theme="light";document.documentElement.style.colorScheme="light"}</script>
+  <link rel="stylesheet" href="/src/styles.css?v=20260905-release5">
+  <link rel="stylesheet" href="/src/learn.css?v=20260905-library2">
+  <link rel="stylesheet" href="/src/curriculum-visuals.css?v=20260905-art1">
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/app-icon-192.png">
+</head>
+<body class="learn-page">
+  <section class="learn-file-notice" aria-labelledby="fileNoticeTitle">
+    <div class="learn-file-card">
+      <span class="learn-file-mark" aria-hidden="true">TE</span>
+      <h1 id="fileNoticeTitle">Open the Learning Library through Local Preview</h1>
+      <p>This file was opened directly from Finder, so browser security prevents its styles and app modules from loading. Finderから直接開いたため、教材アプリを読み込めません。</p>
+      <code>npm run preview:demo</code>
+      <p>After the command starts, use this local address. コマンド起動後、次のURLを開いてください。</p>
+      <a href="http://127.0.0.1:4174/learn">http://127.0.0.1:4174/learn</a>
+    </div>
+  </section>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="learn-header">
+    <a class="learn-brand" href="/" aria-label="Tahmid English Club home">
+      <img src="/assets/app-icon-192.png" alt="" width="46" height="46">
+      <span><strong>Tahmid English Club</strong><small data-ui-en="Learning Library" data-ui-ja="教材ライブラリ">Learning Library / 教材ライブラリ</small></span>
+    </a>
+    <nav class="learn-header-actions" aria-label="Library settings">
+      <a class="learn-home-link" href="/"><span aria-hidden="true">←</span><span data-ui-en="Review Hub" data-ui-ja="Review Hubへ">Review Hub</span></a>
+      <label class="learn-compact-select">
+        <span data-ui-en="Language" data-ui-ja="表示">Language / 表示</span>
+        <select id="languageToggle" aria-label="Interface language">
+          <option value="en">English</option>
+          <option value="bilingual">English + 日本語</option>
+          <option value="ja">日本語UI</option>
+        </select>
+      </label>
+      <label class="learn-compact-select">
+        <span data-ui-en="Theme" data-ui-ja="外観">Theme / 外観</span>
+        <select id="themeToggle" aria-label="Colour theme">
+          <option value="system">System / 端末設定</option>
+          <option value="light">Light / ライト</option>
+          <option value="dark">Dark / ダーク</option>
+        </select>
+      </label>
+    </nav>
+  </header>
+
+  <main id="main">
+    <div id="learnApp">
+      <section class="learn-hero" aria-labelledby="learnTitle">
+        <div class="learn-hero-copy">
+          <p class="learn-eyebrow" data-ui-en="YOUR TEACHER-CURATED PATHWAY" data-ui-ja="先生が選ぶ、あなた専用の学習ステップ">YOUR TEACHER-CURATED PATHWAY</p>
+          <h1 id="learnTitle" data-ui-en="Small steps. Useful English. Real progress." data-ui-ja="小さな一歩を、使える英語と確かな上達へ。">Small steps. Useful English. Real progress.</h1>
+          <p data-ui-en="Explore only the levels shared with you. Listen in US or UK English, save useful items, and review at your own pace." data-ui-ja="公開されたレベルだけを、安心して学習。米国・英国音声で聞き、お気に入りを保存し、自分のペースで復習できます。">Explore only the levels shared with you. Listen in US or UK English, save useful items, and review at your own pace.</p>
+        </div>
+        <dl class="learn-hero-stats" aria-label="Library summary">
+          <div><dt data-ui-en="Open levels" data-ui-ja="利用可能レベル">Open levels</dt><dd id="openLevelCount">—</dd></div>
+          <div><dt data-ui-en="Learning items" data-ui-ja="学習項目">Learning items</dt><dd id="itemCount">—</dd></div>
+          <div><dt data-ui-en="Ready to review" data-ui-ja="復習する項目">Ready to review</dt><dd id="dueCount">—</dd></div>
+        </dl>
+      </section>
+
+      <section class="learn-categories" aria-labelledby="categoryHeading">
+        <div class="learn-section-intro">
+          <div>
+            <p class="learn-eyebrow" data-ui-en="CHOOSE A SKILL" data-ui-ja="学びたい内容を選ぶ">CHOOSE A SKILL</p>
+            <h2 id="categoryHeading" data-ui-en="What will you practise today?" data-ui-ja="今日は何を練習しますか？">What will you practise today?</h2>
+          </div>
+          <div class="learn-audio-settings" aria-label="Pronunciation settings">
+            <button id="voiceToggle" class="learn-icon-button" type="button" aria-pressed="true" data-ui-en="Voice on" data-ui-ja="音声オン">Voice on / 音声オン</button>
+            <label><span data-ui-en="Default voice" data-ui-ja="標準音声">Default voice / 標準音声</span>
+              <select id="voiceSelect" aria-label="Default English voice"><option value="us">US · Ava</option><option value="gb">UK · Libby</option></select>
+            </label>
+            <label><span data-ui-en="Speed" data-ui-ja="速さ">Speed / 速さ</span>
+              <select id="playbackRate" aria-label="Audio playback speed"><option value="0.5">0.5×</option><option value="1">1×</option><option value="1.5">1.5×</option></select>
+            </label>
+          </div>
+        </div>
+
+        <div class="learn-tablist" id="categoryTabs" role="tablist" aria-label="Learning categories">
+          <button class="learn-tab learn-tab-words" id="categoryWords" type="button" role="tab" aria-controls="libraryPanel" aria-selected="false" tabindex="-1" data-category="words" data-student-feature="show_words">
+            <span class="learn-tab-icon" aria-hidden="true">🍎</span><span><strong data-ui-en="Words" data-ui-ja="単語">Words</strong><small data-ui-en="Meaning · sound · examples" data-ui-ja="意味・音・例文">Meaning · sound · examples</small></span>
+          </button>
+          <button class="learn-tab learn-tab-phrases" id="categoryPhrases" type="button" role="tab" aria-controls="libraryPanel" aria-selected="false" tabindex="-1" data-category="phrases" data-student-feature="show_phrases">
+            <span class="learn-tab-icon" aria-hidden="true">💬</span><span><strong data-ui-en="Phrases" data-ui-ja="フレーズ">Phrases</strong><small data-ui-en="Situations · natural usage" data-ui-ja="場面・自然な使い方">Situations · natural usage</small></span>
+          </button>
+          <button class="learn-tab learn-tab-phonics" id="categoryPhonics" type="button" role="tab" aria-controls="libraryPanel" aria-selected="false" tabindex="-1" data-category="phonics" data-student-feature="show_phonics">
+            <span class="learn-tab-icon" aria-hidden="true">🔤</span><span><strong data-ui-en="Phonics" data-ui-ja="フォニックス">Phonics</strong><small data-ui-en="Sound · mouth · rhythm" data-ui-ja="音・口の形・リズム">Sound · mouth · rhythm</small></span>
+          </button>
+        </div>
+      </section>
+
+      <section class="learn-library" id="libraryPanel" role="tabpanel" aria-labelledby="categoryWords" tabindex="0">
+        <aside class="learn-level-panel" aria-labelledby="levelPickerHeading">
+          <div class="learn-level-heading">
+            <div><p class="learn-eyebrow" data-ui-en="YOUR PATH" data-ui-ja="あなたの学習ステップ">YOUR PATH</p><h2 id="levelPickerHeading" data-ui-en="Levels 1–32" data-ui-ja="レベル 1〜32">Levels 1–32</h2></div>
+            <span class="learn-level-count" id="levelAccessCount">—</span>
+          </div>
+          <div class="learn-level-grid" id="levelGrid" aria-label="Choose a level"></div>
+          <div class="learn-level-legend" aria-label="Level key">
+            <span><i class="is-open" aria-hidden="true"></i><span data-ui-en="Open" data-ui-ja="利用可能">Open</span></span>
+            <span><i class="is-progress" aria-hidden="true"></i><span data-ui-en="In progress" data-ui-ja="学習中">In progress</span></span>
+            <span><i class="is-locked" aria-hidden="true"></i><span data-ui-en="Locked" data-ui-ja="ロック中">Locked</span></span>
+          </div>
+          <p class="learn-private-note"><span aria-hidden="true">🛡️</span><span data-ui-en="Your teacher controls which levels and items you can open." data-ui-ja="表示されるレベルと教材は、担当の先生が設定します。">Your teacher controls which levels and items you can open.</span></p>
+        </aside>
+
+        <div class="learn-content-panel">
+          <section class="learn-level-overview" id="levelOverview" aria-live="polite">
+            <div class="learn-level-symbol" id="levelIcon" aria-hidden="true">✦</div>
+            <div class="learn-level-copy">
+              <p class="learn-eyebrow" id="levelKicker">LEVEL</p>
+              <h2 id="levelTitle" data-ui-en="Choose an open level" data-ui-ja="利用可能なレベルを選んでください">Choose an open level</h2>
+              <p id="levelDescription" data-ui-en="Your learning items will appear here." data-ui-ja="学習項目がここに表示されます。">Your learning items will appear here.</p>
+              <div class="learn-progress-row" id="levelProgressWrap">
+                <div class="learn-progress-track" role="progressbar" aria-label="Level progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="levelProgressBar"></span></div>
+                <strong id="levelProgressLabel">0%</strong>
+              </div>
+            </div>
+            <button class="learn-review-button" id="reviewLevelButton" type="button" disabled><span aria-hidden="true">↻</span><span><strong data-ui-en="Review this level" data-ui-ja="このレベルを復習">Review this level</strong><small data-ui-en="Flash · listen · quiz · rate" data-ui-ja="カード・音声・4択・自己評価">Flash · listen · quiz · rate</small></span></button>
+          </section>
+
+          <div class="learn-toolbar" id="libraryToolbar">
+            <label class="learn-search"><span class="sr-only" data-ui-en="Search this level" data-ui-ja="このレベルを検索">Search this level</span><span aria-hidden="true">⌕</span><input id="librarySearch" type="search" autocomplete="off" data-placeholder-en="Search this level" data-placeholder-ja="このレベルを検索"></label>
+            <div class="learn-filters" id="libraryFilters" role="group" aria-label="Filter learning items">
+              <button type="button" class="is-active" data-filter="all" aria-pressed="true" data-ui-en="All" data-ui-ja="すべて">All</button>
+              <button type="button" data-filter="favorites" aria-pressed="false"><span aria-hidden="true">♥</span> <span data-ui-en="Saved" data-ui-ja="お気に入り">Saved</span></button>
+              <button type="button" data-filter="due" aria-pressed="false" data-progress-filter><span aria-hidden="true">↻</span> <span data-ui-en="Due" data-ui-ja="復習時期">Due</span></button>
+              <button type="button" data-filter="learning" aria-pressed="false" data-progress-filter data-ui-en="Learning" data-ui-ja="学習中">Learning</button>
+            </div>
+            <p class="learn-result-count" id="resultCount" role="status" aria-live="polite"></p>
+          </div>
+
+          <div class="learn-state" id="libraryState" role="status" aria-live="polite">
+            <div class="learn-loader" aria-hidden="true"><span></span><span></span><span></span></div>
+            <h2 data-ui-en="Opening your library…" data-ui-ja="教材ライブラリを準備しています…">Opening your library…</h2>
+            <p data-ui-en="Checking the levels shared with you." data-ui-ja="あなたに公開されたレベルを確認しています。">Checking the levels shared with you.</p>
+          </div>
+          <div class="learn-card-grid" id="itemGrid" aria-live="polite" hidden></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <dialog class="learn-review-dialog" id="reviewDialog" aria-labelledby="reviewTitle">
+    <div class="learn-review-shell">
+      <header class="learn-review-header">
+        <div><p class="learn-eyebrow" id="reviewKicker">REVIEW</p><h2 id="reviewTitle" data-ui-en="Active recall" data-ui-ja="思い出す練習">Active recall</h2></div>
+        <button class="learn-dialog-close" id="closeReviewButton" type="button" aria-label="Close review">×</button>
+      </header>
+      <div class="learn-review-meter"><span id="reviewProgressBar"></span></div>
+      <div class="learn-review-meta"><span id="reviewCounter">1 / 1</span><label><span data-ui-en="Prompt" data-ui-ja="出題方法">Prompt / 出題方法</span><select id="reviewMode" aria-label="Review prompt mode"></select></label></div>
+      <section class="learn-review-card" id="reviewCard" aria-live="polite"></section>
+      <p class="learn-key-hint" id="reviewKeyHint" data-ui-en="Keyboard: Space to reveal · 1 Hard · 2 Good · 3 Easy" data-ui-ja="キーボード：Spaceで答え・1 難しい・2 できた・3 簡単">Keyboard: Space to reveal · 1 Hard · 2 Good · 3 Easy</p>
+    </div>
+  </dialog>
+
+  <div class="learn-toast" id="learnToast" role="status" aria-live="polite"></div>
+
+  <footer class="learn-footer">
+    <p><strong>Tahmid English Club</strong><span data-ui-en="Your real lesson, ready to use." data-ui-ja="実際のレッスンを、使える英語へ。">Your real lesson, ready to use.</span></p>
+    <a href="/" data-ui-en="Back to Review Hub" data-ui-ja="Review Hubへ戻る">Back to Review Hub</a>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js"></script>
+  <script type="module" src="/src/pwa.js?v=20260905-release5"></script>
+  <script type="module" src="/src/learn.js?v=20260905-library2"></script>
+  <script type="module" src="/src/curriculum-visuals.js?v=20260905-art1"></script>
+</body>
+</html>

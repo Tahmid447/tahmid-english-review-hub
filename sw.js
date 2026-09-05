@@ -1,9 +1,10 @@
-const CACHE_NAME = "te-review-public-v18";
+const CACHE_NAME = "te-review-public-v22";
 const OFFLINE_PAGE = "/offline.html";
 const PUBLIC_SHELL = new Set([
   "/",
   "/index.html",
   "/phrases.html",
+  "/learn.html",
   "/pricing.html",
   "/music-credits.html",
   OFFLINE_PAGE,
@@ -11,6 +12,13 @@ const PUBLIC_SHELL = new Set([
   "/src/styles.css",
   "/src/hub.js",
   "/src/phrases.js",
+  "/src/learn.js",
+  "/src/learn.css",
+  "/src/curriculum-visuals.js",
+  "/src/curriculum-visuals.css",
+  "/src/curriculum-api.js",
+  "/src/student-visibility.js",
+  "/src/student-shell.js",
   "/src/pwa.js",
   "/src/store.js",
   "/src/study-music.js",
@@ -26,7 +34,7 @@ const PUBLIC_SHELL = new Set([
   "/src/data/legacy-additions.json",
   "/assets/app-icon-192.png"
 ]);
-const OFFLINE_NAVIGATION = new Set(["/", "/index.html", "/phrases", "/phrases.html", "/plans", "/pricing.html", "/music-credits", "/music-credits.html"]);
+const OFFLINE_NAVIGATION = new Set(["/", "/index.html", "/phrases", "/phrases.html", "/learn", "/learn.html", "/words", "/phonics", "/plans", "/pricing.html", "/music-credits", "/music-credits.html"]);
 
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll([...PUBLIC_SHELL])));
@@ -58,6 +66,7 @@ self.addEventListener("fetch", (event) => {
     event.respondWith(fetch(request).catch(async () => {
       if (OFFLINE_NAVIGATION.has(url.pathname)) {
         const shell = url.pathname === "/phrases" ? "/phrases.html"
+          : ["/learn", "/words", "/phonics"].includes(url.pathname) ? "/learn.html"
           : url.pathname === "/plans" ? "/pricing.html"
             : url.pathname === "/music-credits" ? "/music-credits.html"
             : url.pathname;
@@ -76,5 +85,5 @@ self.addEventListener("fetch", (event) => {
       caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
     }
     return response;
-  }).catch(() => caches.match(request)));
+  }).catch(() => caches.match(request, { ignoreSearch: true })));
 });

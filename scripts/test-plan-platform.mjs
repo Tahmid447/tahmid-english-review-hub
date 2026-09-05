@@ -15,7 +15,7 @@ import {
 } from "../src/plans.js";
 
 const root = new URL("../", import.meta.url);
-const [pricingPage, pricingUi, lessonPage, lessonUi, store, styles, teacherPage, teacherUi, musicCreditsPage, musicUi, pricingLayoutPage, pricingLayoutUi, membershipFunction, migration, build] = await Promise.all([
+const [pricingPage, pricingUi, lessonPage, lessonUi, store, styles, teacherPage, teacherUi, musicCreditsPage, musicUi, pricingLayoutPage, pricingLayoutUi, membershipFunction, migration, build, netlify] = await Promise.all([
   readFile(new URL("pricing.html", root), "utf8"),
   readFile(new URL("src/pricing.js", root), "utf8"),
   readFile(new URL("lesson.html", root), "utf8"),
@@ -31,6 +31,7 @@ const [pricingPage, pricingUi, lessonPage, lessonUi, store, styles, teacherPage,
   readFile(new URL("supabase/functions/membership-access/index.ts", root), "utf8"),
   readFile(new URL("supabase/migrations/202608110014_premium_plus_and_entitlements.sql", root), "utf8"),
   readFile(new URL("scripts/build.mjs", root), "utf8"),
+  readFile(new URL("netlify.toml", root), "utf8"),
 ]);
 
 assert.deepEqual(PLAN_ORDER, ["free", "standard", "premium", "premium_plus"]);
@@ -100,7 +101,7 @@ assert.match(pricingPage, /id="planQuickNav"/);
 assert.match(pricingPage, /te-review-hub:theme:v1/);
 assert.match(pricingUi, /applyThemePreference/);
 assert.match(pricingUi, /watchSystemTheme/);
-assert.match(pricingUi, /import "\.\/pwa\.js\?v=20260828-release4"/);
+assert.match(pricingUi, /import "\.\/pwa\.js\?v=20260905-release5"/);
 assert.match(pricingPage, /id="contactName"/);
 assert.match(pricingPage, /id="resetContactMessage"/);
 assert.doesNotMatch(pricingPage.match(/<textarea id="contactMessage"[^>]*>/)?.[0] || "", /readonly/);
@@ -154,6 +155,16 @@ assert.match(build, /\/pricing-layout-preview \/pricing-layout-preview\.html 200
 assert.match(build, /"plans\.js"/);
 assert.match(build, /"pricing\.js"/);
 assert.match(build, /"study-music\.js"/);
+assert.match(
+  build,
+  /media-src 'self' blob: https:\/\/ycmybggetemkhorkhfnf\.supabase\.co/,
+  "The production CSP permits project-scoped signed recording URLs without widening media access.",
+);
+assert.match(
+  netlify,
+  /media-src 'self' blob: https:\/\/ycmybggetemkhorkhfnf\.supabase\.co/,
+  "Netlify's live security header stays aligned with the generated _headers file.",
+);
 assert.match(pricingLayoutPage, /name="robots" content="noindex,nofollow"/);
 assert.match(pricingLayoutPage, /id="layoutFour"/);
 assert.match(pricingLayoutPage, /id="layoutTwo"/);

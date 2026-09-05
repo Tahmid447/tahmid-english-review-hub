@@ -2,7 +2,7 @@
   "id": "/",
   "name": "Tahmid English Review Hub",
   "short_name": "Review Hub",
-  "description": "Practical English lesson review, listening, speaking and phrase practice.",
+  "description": "Teacher-curated English words, phrases, phonics, lesson review, listening and speaking practice.",
   "lang": "en",
   "start_url": "/",
   "scope": "/",
@@ -29,6 +29,11 @@
       "name": "Lesson library",
       "short_name": "Lessons",
       "url": "/#library"
+    },
+    {
+      "name": "Words, phrases and phonics",
+      "short_name": "Learn",
+      "url": "/learn"
     },
     {
       "name": "Phrases and vocabulary",

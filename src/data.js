@@ -1,11 +1,11 @@
-import { normalizeAnswerText } from "./store.js?v=20260828-release4";
-import { fetchDatabaseLesson, fetchDatabaseLessons } from "./supabase.js?v=20260828-release4";
-import { readHumanText } from "./lesson-guide-targets.js?v=20260828-release4";
+import { normalizeAnswerText } from "./store.js?v=20260905-release5";
+import { fetchDatabaseLesson, fetchDatabaseLessons } from "./supabase.js?v=20260905-release5";
+import { readHumanText } from "./lesson-guide-targets.js?v=20260905-release5";
 import {
   compareLessonSourceOrder,
   sourceSegmentFromLesson,
   sourceSegmentPartIndex,
-} from "./lesson-source.js?v=20260828-release4";
+} from "./lesson-source.js?v=20260905-release5";
 
 const DATA_PATHS = Object.freeze({
   lessons: "/src/data/legacy-lessons.json",
@@ -248,12 +248,18 @@ export async function loadAllPublishedLessons() {
   return loadPublishedLessons({ audience: "all" });
 }
 
-export async function getLessonById(id, { preview = false } = {}) {
+export async function getLessonById(id, { preview = false, allowOfflinePreview = true } = {}) {
   const lessons = await loadPublishedSource();
   const localLesson = lessons.find((lesson) => lesson.id === id) || null;
   const remote = await fetchDatabaseLesson(id, { preview });
   if (remote.lesson) return normalizeLesson(remote.lesson, []);
-  if (!preview && localLesson && OFFLINE_PREVIEW_LESSONS.has(localLesson.id)) {
+  if (
+    !preview
+    && allowOfflinePreview
+    && remote.reason !== "lesson-access-denied"
+    && localLesson
+    && OFFLINE_PREVIEW_LESSONS.has(localLesson.id)
+  ) {
     return { ...localLesson, isPreview: true, locked: false };
   }
   if (preview && remote.reason === "teacher-sign-in-required") {

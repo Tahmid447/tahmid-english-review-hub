@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-student-access="pending">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -8,7 +8,7 @@
   <title>English Lesson Practice</title>
   <link rel="manifest" href="/manifest.webmanifest">
   <script>try{const p=JSON.parse(localStorage.getItem("te-review-hub:theme:v1")||"\"light\"");const c=["system","light","dark"].includes(p)?p:"light";const d=c==="dark"||(c==="system"&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.dataset.themePreference=c;document.documentElement.dataset.theme=d?"dark":"light";document.documentElement.style.colorScheme=d?"dark":"light"}catch{document.documentElement.dataset.themePreference="light";document.documentElement.dataset.theme="light";document.documentElement.style.colorScheme="light"}</script>
-  <link rel="stylesheet" href="/src/styles.css?v=20260828-release4">
+  <link rel="stylesheet" href="/src/styles.css?v=20260905-release5">
   <link rel="icon" type="image/png" sizes="192x192" href="/assets/app-icon-192.png">
 </head>
 <body data-page="lesson">
@@ -18,7 +18,7 @@
       <img class="brand-logo" src="/assets/app-icon-192.png" alt="Tahmid English Club logo" width="50" height="50"><span><strong>Review Hub</strong><small>Back to lessons · レッスン一覧へ</small></span>
     </a>
     <nav class="header-actions">
-      <a class="quiet-btn" href="/plans" target="_blank" rel="noopener" data-ui-en="Plans" data-ui-ja="料金プラン">Plans / 料金プラン</a>
+      <a class="quiet-btn" href="/plans" target="_blank" rel="noopener" data-student-feature="show_pricing" data-ui-en="Plans" data-ui-ja="料金プラン">Plans / 料金プラン</a>
       <button class="quiet-btn settings-open" id="openLessonSettings" type="button" aria-haspopup="dialog"><span aria-hidden="true">⚙</span> <span data-ui-en="Settings" data-ui-ja="設定">Settings / 設定</span></button>
     </nav>
   </header>
@@ -82,7 +82,7 @@
     <section class="locked-question-teasers" id="lockedQuestionTeasers" hidden aria-live="polite"></section>
     <section class="premium-tasks-panel" id="premiumTasksPanel" hidden aria-live="polite"></section>
   </main>
-  <footer class="site-footer premium-footer"><div class="footer-brand"><img src="/assets/app-icon-192.png" alt="" width="44" height="44"><span><strong>Tahmid English Club</strong><small data-ui-en="Personal English review, built by Tahmid Ahmed." data-ui-ja="Tahmid Ahmedが一人ひとりの復習をサポートします。">Personal English review, built by Tahmid Ahmed.</small></span></div><nav aria-label="Footer"><a id="lessonFooterBackLink" href="/" data-ui-en="Lessons" data-ui-ja="レッスン">Lessons</a><a href="/phrases" data-ui-en="Library" data-ui-ja="ライブラリ">Library</a><a href="/plans" data-ui-en="Plans" data-ui-ja="料金プラン">Plans</a><a href="/plans#contact" data-ui-en="Contact Tahmid" data-ui-ja="Tahmidに相談">Contact Tahmid</a></nav><p>© 2026 Tahmid Ahmed <small class="music-license-line">BGM: Kevin MacLeod · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="license noopener">CC BY 4.0</a> · <a href="/music-credits" aria-label="Study music licence details">Licence details</a></small></p></footer>
+  <footer class="site-footer premium-footer"><div class="footer-brand"><img src="/assets/app-icon-192.png" alt="" width="44" height="44"><span><strong>Tahmid English Club</strong><small data-ui-en="Personal English review, built by Tahmid Ahmed." data-ui-ja="Tahmid Ahmedが一人ひとりの復習をサポートします。">Personal English review, built by Tahmid Ahmed.</small></span></div><nav aria-label="Footer"><a id="lessonFooterBackLink" href="/" data-ui-en="Lessons" data-ui-ja="レッスン">Lessons</a><a href="/learn" data-student-feature-any="show_words,show_phrases,show_phonics" data-ui-en="Learning Library" data-ui-ja="教材ライブラリ">Learning Library</a><a href="/phrases" data-student-feature-any="show_words,show_phrases" data-ui-en="Lesson Phrasebook" data-ui-ja="レッスン単語帳">Lesson Phrasebook</a><a href="/plans" data-student-feature="show_pricing" data-ui-en="Plans" data-ui-ja="料金プラン">Plans</a><a href="/plans#contact" data-student-feature="show_contact_teacher" data-ui-en="Contact Tahmid" data-ui-ja="Tahmidに相談">Contact Tahmid</a></nav><p>© 2026 Tahmid Ahmed <small class="music-license-line">BGM: Kevin MacLeod · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="license noopener">CC BY 4.0</a> · <a href="/music-credits" aria-label="Study music licence details">Licence details</a></small></p></footer>
   <dialog class="lesson-settings-dialog" id="lessonSettingsDialog" aria-labelledby="lessonSettingsHeading">
     <form method="dialog"><button class="dialog-close" value="cancel" aria-label="Close settings">×</button></form>
     <p class="eyebrow" data-ui-en="Lesson preferences" data-ui-ja="レッスン設定">Lesson preferences / レッスン設定</p>
@@ -122,7 +122,7 @@
   </dialog>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js"></script>
-  <script type="module" src="/src/pwa.js?v=20260828-release4"></script>
-  <script type="module" src="/src/lesson.js?v=20260828-release4"></script>
+  <script type="module" src="/src/pwa.js?v=20260905-release5"></script>
+  <script type="module" src="/src/lesson.js?v=20260905-release5"></script>
 </body>
 </html>

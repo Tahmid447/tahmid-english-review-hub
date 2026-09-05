@@ -8,8 +8,8 @@ import {
   setStorageUser,
   updateSettings,
   watchSystemTheme,
-} from "./store.js?v=20260828-release4";
-import { loadPublishedLessons } from "./data.js?v=20260828-release4";
+} from "./store.js?v=20260905-release5";
+import { loadPublishedLessons } from "./data.js?v=20260905-release5";
 import {
   getStudentClient,
   getStudentMembership,
@@ -25,11 +25,17 @@ import {
   signInStudentWithGoogle,
   signUpStudent,
   signOutStudent,
-} from "./supabase.js?v=20260828-release4";
-import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js?v=20260828-release4";
-import { installPlayfulInteractions } from "./effects.js?v=20260828-release4";
-import { planFor } from "./plans.js?v=20260828-release4";
-import { setAmbientPlayback, stopAudio, syncAmbientFromSettings } from "./audio.js?v=20260828-release4";
+} from "./supabase.js?v=20260905-release5";
+import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js?v=20260905-release5";
+import { installPlayfulInteractions } from "./effects.js?v=20260905-release5";
+import { planFor } from "./plans.js?v=20260905-release5";
+import { setAmbientPlayback, stopAudio, syncAmbientFromSettings } from "./audio.js?v=20260905-natural1";
+import {
+  applyStudentFeatureVisibility,
+  featureAllowed,
+  loadStudentAccess,
+  renderStudentAnnouncements,
+} from "./student-visibility.js?v=20260905-hub1";
 
 let publishedLessons = [];
 let visibleLessons = [];
@@ -83,6 +89,7 @@ let pendingSettingsLoad = null;
 let pendingSettingsUserId;
 let currentMembership = null;
 let currentProfile = null;
+let currentHubAccess = null;
 
 function element(tag, options = {}, children = []) {
   const node = document.createElement(tag);
@@ -1375,6 +1382,7 @@ function renderHistory() {
     ]));
     return;
   }
+  const canOpenReviewLesson = featureAllowed(currentHubAccess, "show_review_lessons");
   remoteAttempts.slice(0, 6).forEach((attempt) => {
     const lesson = lessonFromAttempt(attempt);
     const { correct, total } = attemptScore(attempt);
@@ -1393,13 +1401,18 @@ function renderHistory() {
       element("p", {
         text: t("This record keeps your official first answer separate from later practice.", "初回答は、その後の練習とは別に記録されます。"),
       }),
-      element("a", {
-        className: "lesson-action",
-        attrs: { href: lesson ? lessonHref(lesson) : "#library" },
-      }, [
-        element("span", { text: t("Review again", "もう一度復習") }),
-        element("span", { text: "→", attrs: { "aria-hidden": "true" } }),
-      ]),
+      canOpenReviewLesson
+        ? element("a", {
+          className: "lesson-action",
+          attrs: { href: lesson ? lessonHref(lesson) : "#library" },
+        }, [
+          element("span", { text: t("Review again", "もう一度復習") }),
+          element("span", { text: "→", attrs: { "aria-hidden": "true" } }),
+        ])
+        : element("p", {
+          className: "lesson-action",
+          text: t("Review access is managed by your teacher", "復習教材の公開範囲は先生が設定します"),
+        }),
     ]));
   });
 }
@@ -1414,13 +1427,29 @@ async function renderLearnerProgress() {
     renderHistory();
     return;
   }
+  const canReviewLessons = featureAllowed(currentHubAccess, "show_review_lessons");
+  const canViewHomework = featureAllowed(currentHubAccess, "show_homework");
+  const canViewProgress = featureAllowed(currentHubAccess, "show_progress");
   const userId = String(authSession.user.id);
-  if (section) section.hidden = false;
+  if (section) section.hidden = !canViewProgress;
+  if (!canReviewLessons && !canViewHomework && !canViewProgress) {
+    remoteAttempts = [];
+    remoteAssignments = [];
+    remotePersonalLessons = [];
+    visibleLessons = [];
+    renderLessonGrid();
+    renderHistory();
+    return;
+  }
   await fetchPersonalRecords();
   if (String(authSession?.user?.id || "") !== userId) return;
-  const assigned = remoteAssignments.map(lessonFromAssignment).filter(Boolean);
-  const merged = new Map(publishedLessons.map((lesson) => [lesson.id, lesson]));
-  remotePersonalLessons
+  const assigned = canViewHomework
+    ? remoteAssignments.map(lessonFromAssignment).filter(Boolean)
+    : [];
+  const merged = new Map(
+    (canReviewLessons ? publishedLessons : []).map((lesson) => [lesson.id, lesson]),
+  );
+  (canReviewLessons ? remotePersonalLessons : [])
     .map(lessonFromDatabase)
     .filter(Boolean)
     .forEach((lesson) => {
@@ -1449,7 +1478,20 @@ async function renderLearnerProgress() {
   renderHistory();
 }
 
+async function refreshStudentVisibility({ refresh = false } = {}) {
+  currentHubAccess = await loadStudentAccess({ refresh });
+  applyStudentFeatureVisibility(currentHubAccess);
+  const announcements = document.querySelector("#studentAnnouncements");
+  if (!currentHubAccess.authenticated || !featureAllowed(currentHubAccess, "show_announcements")) {
+    if (announcements) announcements.hidden = true;
+    return currentHubAccess;
+  }
+  await renderStudentAnnouncements(currentHubAccess, announcements);
+  return currentHubAccess;
+}
+
 async function refreshAuthView() {
+  await refreshStudentVisibility({ refresh: true });
   ensureGeneralLogoutButton();
   await refreshMembershipPanel();
   await refreshProfileCompletion();

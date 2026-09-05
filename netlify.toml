@@ -9,6 +9,8 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "microphone=(self)"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
+    Content-Security-Policy = "default-src 'self'; base-uri 'self'; frame-ancestors 'none'; object-src 'none'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob: https://ycmybggetemkhorkhfnf.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; worker-src 'self' blob:; manifest-src 'self'; form-action 'self'; upgrade-insecure-requests"
 
 [[redirects]]
   from = "/takiwaki"
@@ -30,6 +32,21 @@
 [[redirects]]
   from = "/lesson/:id"
   to = "/lesson.html?id=:id"
+  status = 200
+
+[[redirects]]
+  from = "/learn"
+  to = "/learn.html"
+  status = 200
+
+[[redirects]]
+  from = "/words"
+  to = "/learn.html?category=words"
+  status = 200
+
+[[redirects]]
+  from = "/phonics"
+  to = "/learn.html?category=phonics"
   status = 200
 
 [[redirects]]

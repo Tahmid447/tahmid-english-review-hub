@@ -29,6 +29,13 @@ assert.match(teacher, /lastGeneratedCode/);
 assert.match(teacher, /Copy full code/);
 assert.match(teacher, /last four characters/);
 assert.match(teacher, /Open learner/);
+assert.match(teacher, /function learnerDialogWorkspace\(/);
+for (const section of ["Profile", "Access", "Lessons", "Learning Library", "Progress", "Plan features", "Announcements"]) {
+  assert.match(teacher, new RegExp(`en: "${section.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}"`), `Learner dialog needs a ${section} tab`);
+}
+assert.match(teacher, /role", "tablist"/);
+assert.match(teacher, /ArrowLeft", "ArrowRight", "Home", "End"/);
+assert.match(teacher, /teacherAnnouncementManager\(\{ initialStudentId: current\.user_id \}\)/);
 assert.match(teacher, /Hide this lesson/);
 assert.match(teacher, /Allow this lesson/);
 assert.match(teacher, /Apply to selected/);
@@ -42,6 +49,10 @@ assert.match(teacher, /DELETE \$\{lesson\.slug\}/);
 assert.match(teacher, /Restore/);
 assert.match(teacher, /signInTeacherWithGoogle/);
 assert.match(teacherPage, /id="teacherGoogleSignIn"/);
+assert.match(teacherPage, /id="teacherMobileSettingsToggle"[\s\S]*aria-controls="teacherSiteSettingsControls"/);
+assert.match(teacherPage, /class="header-settings-controls" id="teacherSiteSettingsControls"/);
+assert.match(teacher, /setupTeacherHeaderSettings/);
+assert.match(teacher, /settingsControls\?\.classList\.toggle\("mobile-open"/);
 assert.match(teacherPage, /id="editorIsPreview"/);
 assert.match(teacherPage, /id="questionRequiredPlan"/);
 assert.match(teacherPage, /id="questionLockedDisplay"/);

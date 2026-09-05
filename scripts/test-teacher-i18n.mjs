@@ -9,7 +9,7 @@ const [page, teacher, buildScript] = await Promise.all([
 
 // Teacher Studio uses the shared language helper, persists the selected language,
 // and rerenders dynamic panels so generated labels follow the current selection.
-assert.match(teacher, /import \{ uiText \} from "\.\/i18n\.js\?v=20260828-release4"/);
+assert.match(teacher, /import \{ uiText \} from "\.\/i18n\.js\?v=20260905-release5"/);
 assert.match(teacher, /TEACHER_LANGUAGE_STORAGE_KEY/);
 assert.match(teacher, /localStorage\.setItem\(TEACHER_LANGUAGE_STORAGE_KEY, teacherLanguage\)/);
 assert.match(teacher, /if \(state\.session\) renderActiveTab\(\)/);
