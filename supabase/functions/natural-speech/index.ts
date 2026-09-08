@@ -2,9 +2,9 @@ import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { UniversalEdgeTTS } from "npm:edge-tts-universal@1.4.0";
 
 // Kept in agreement with src/speech-contract.js by npm run verify:voices.
-const speechProfileVersion = "natural-v2";
+const speechProfileVersion = "natural-v3";
 const voiceProfiles = {
-  us: { name: "Ava", voiceId: "en-US-AvaMultilingualNeural", language: "en-US", rate: "-4%", pitch: "+0Hz", volume: "+0%" },
+  us: { name: "Ava", voiceId: "en-US-AvaNeural", language: "en-US", rate: "-4%", pitch: "+0Hz", volume: "+0%" },
   gb: { name: "Libby", voiceId: "en-GB-LibbyNeural", language: "en-GB", rate: "-4%", pitch: "+0Hz", volume: "+0%" },
   ja: { name: "Nanami", voiceId: "ja-JP-NanamiNeural", language: "ja-JP", rate: "-2%", pitch: "+0Hz", volume: "+0%" },
 } as const;
@@ -29,11 +29,15 @@ Deno.serve(async (request) => {
       return new Response("Unsupported natural voice", { status: 400, headers: corsHeaders });
     }
     const accent = body.accent as keyof typeof voiceProfiles;
-    const profile = voiceProfiles[accent];
+    // Preserve an already-open v2 client during the deployment transition.
+    const responseProfile = body.profile === "natural-v2" ? "natural-v2" : speechProfileVersion;
+    const profile = accent === "us" && responseProfile === "natural-v2"
+      ? { ...voiceProfiles.us, voiceId: "en-US-AvaMultilingualNeural" }
+      : voiceProfiles[accent];
     // Older clients provide only an accent. New clients additionally require
     // the complete contract. Arbitrary voice/prosody overrides are not accepted.
     if ((body.voice && body.voice !== profile.voiceId)
-      || (body.profile && body.profile !== speechProfileVersion)) {
+      || (body.profile && body.profile !== responseProfile)) {
       return new Response("Natural voice profile mismatch", { status: 409, headers: corsHeaders });
     }
     // Natural lesson copy legitimately contains punctuation such as colons,
@@ -44,12 +48,28 @@ Deno.serve(async (request) => {
       return new Response("Invalid speech text", { status: 400, headers: corsHeaders });
     }
 
+    // Tokyo's outbound speech connection stalled during release validation;
+    // the project's Mumbai region completed the same requests successfully.
+    // Route already-open clients once as well as the new client URL. Never
+    // relay to a caller-controlled URL or forward user credentials.
+    if (Deno.env.get("SB_REGION") === "ap-northeast-1" && request.headers.get("x-review-relayed") !== "1") {
+      const upstream = await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/natural-speech?forceFunctionRegion=ap-south-1`, {
+        method: "POST", headers: { "Content-Type": "application/json", "x-review-relayed": "1" },
+        body: JSON.stringify({ text, accent, voice: profile.voiceId, profile: responseProfile }),
+        signal: AbortSignal.timeout(15000),
+      });
+      return new Response(upstream.body, { status: upstream.status, headers: upstream.headers });
+    }
     const tts = new UniversalEdgeTTS(text, profile.voiceId, {
       rate: profile.rate,
       volume: profile.volume,
       pitch: profile.pitch,
     });
-    const result = await tts.synthesize();
+    let timeout: ReturnType<typeof setTimeout>;
+    const result = await Promise.race([
+      tts.synthesize(),
+      new Promise<never>((_, reject) => { timeout = setTimeout(() => reject(new Error("Speech provider timed out")), 12000); }),
+    ]).finally(() => clearTimeout(timeout));
     const audio = await result.audio.arrayBuffer();
     return new Response(audio, {
       headers: {
@@ -60,7 +80,7 @@ Deno.serve(async (request) => {
         "Cache-Control": "private, no-store",
         "X-Review-Voice": accent,
         "X-Review-Voice-Id": profile.voiceId,
-        "X-Review-Speech-Profile": speechProfileVersion,
+        "X-Review-Speech-Profile": responseProfile,
         "X-Review-Rate": profile.rate,
         "X-Review-Pitch": profile.pitch,
         "X-Review-Volume": profile.volume,

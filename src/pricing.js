@@ -1,12 +1,14 @@
-import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js?v=20260906-studio1";
+import { loadExperience } from "./experience.js?v=20260908-campaign1";
+import { campaignQuote, deadlineLabel, escapeHtml as escapeCampaign } from "./campaigns.js?v=20260908-campaign1";
+import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js?v=20260908-campaign1";
 import {
   applyThemePreference,
   getSettings,
   onSettingsChange,
   updateSettings,
   watchSystemTheme,
-} from "./store.js?v=20260906-studio1";
-import "./pwa.js?v=20260906-studio1";
+} from "./store.js?v=20260908-campaign1";
+import "./pwa.js?v=20260908-campaign1";
 import {
   BILLING_OPTIONS,
   CONTACT_CHANNELS,
@@ -19,12 +21,12 @@ import {
   planPrice,
   planSavings,
   promotionApplies,
-} from "./plans.js?v=20260906-studio1";
+} from "./plans.js?v=20260908-campaign1";
 import {
   applyStudentFeatureVisibility,
   enforceStudentFeature,
   renderStudentAccessBoundary,
-} from "./student-visibility.js?v=20260906-studio1";
+} from "./student-visibility.js?v=20260908-campaign1";
 
 const elements = {
   language: document.querySelector("#languageToggle"),
@@ -55,6 +57,18 @@ let billing = BILLING_OPTIONS.monthly;
 let selectedPlan = PLAN_CATALOG.standard;
 let messageDirty = false;
 let pricingAccess = null;
+let experience = await loadExperience();
+const quote = plan => campaignQuote(plan, billing, experience.campaign);
+const currentPrice = plan => quote(plan).price;
+const legacyPromotion = plan => !experience.campaign && promotionApplies(plan, billing);
+function campaignBanner() {
+  let banner = document.querySelector("#campaignBanner");
+  if (!banner) { banner = document.createElement("section"); banner.id = "campaignBanner"; banner.className = "campaign-banner shell"; document.querySelector(".pricing-selector")?.before(banner); if (!banner.isConnected) document.querySelector("#planQuickNav")?.before(banner); }
+  const c = experience.campaign;
+  banner.hidden = !c || !quote(PLAN_CATALOG.standard).active || billing !== BILLING_OPTIONS.monthly;
+  if (banner.hidden) return;
+  banner.innerHTML = `<div><p class="campaign-eyebrow">A NEW CHAPTER · 期間限定</p><h2>${escapeCampaign(c.name_en)}</h2><p lang="ja">${escapeCampaign(c.name_ja)}</p></div><div class="campaign-deadline"><span>NEW APPLICATIONS · 新規お申し込み</span><strong>${escapeCampaign(deadlineLabel(c.ends_at))}</strong><small>月額プラン対象・終了後の適用価格との比較<br>Monthly plans · Compared with prices after the offer</small></div>`;
+}
 
 function applyPricingVisibility() {
   if (pricingAccess) applyStudentFeatureVisibility(pricingAccess);
@@ -130,10 +144,10 @@ function renderPlanQuickNav() {
   elements.quickNav.innerHTML = PLAN_ORDER.map((key) => {
     const plan = PLAN_CATALOG[key];
     const [benefitEn, benefitJa] = shortBenefits[key];
-    const currentPrice = formatYen(planPrice(plan, billing));
+    const displayPrice = formatYen(currentPrice(plan));
     return `<a class="plan-quick-link plan-quick-${key}" href="#plan-card-${key}">
       <span class="plan-quick-name">${key === "premium_plus" ? t("Premium+ Coaching", "Premium+ コーチング") : plan.name}</span>
-      <strong>${currentPrice}</strong>
+      <strong>${displayPrice}</strong>
       <small>${billingLabel()} · ${t(benefitEn, benefitJa)}</small>
     </a>`;
   }).join("");
@@ -147,7 +161,7 @@ function renderPlans() {
     const displayName = key === "premium_plus"
       ? localizedHeading("Premium+ Coaching", "Premium+ コーチング")
       : localizedHeading(plan.name, plan.name);
-    const savings = planSavings(plan);
+    const savings = planSavings({ ...plan, monthlyYen: campaignQuote(plan, BILLING_OPTIONS.monthly, experience.campaign).price });
     const sixMonthDetails = billing === BILLING_OPTIONS.sixMonths && plan.monthlyYen
       ? `<div class="plan-saving"><strong>${t(`Save exactly ${formatYen(savings.savedYen)} (${savings.percent}%)`, `${formatYen(savings.savedYen)}お得（${savings.percent}%割引）`)}</strong><span>${t(`${formatYen(plan.sixMonthsYen)} total · normally ${formatYen(savings.monthlyTotal)} · ${formatYen(savings.monthlyEquivalentYen)}/month equivalent`, `6か月合計${formatYen(plan.sixMonthsYen)}・通常${formatYen(savings.monthlyTotal)}・月額換算${formatYen(savings.monthlyEquivalentYen)}`)}</span></div>`
       : billing === BILLING_OPTIONS.sixMonths
@@ -162,9 +176,11 @@ function renderPlans() {
           <p>${t(plan.summary, plan.summaryJa)}</p>
         </div>
         <div class="plan-best-for"><small>${t("BEST FOR", "こんな方に")}</small><strong>${t(plan.bestFor, plan.bestForJa)}</strong></div>
-        <p class="plan-price"><strong>${formatYen(planPrice(plan, billing))}</strong><span>${billingLabel()}</span></p>
+        ${quote(plan).active && quote(plan).saving ? `<div class="campaign-price-reference"><span>${t("After offer", "終了後の価格")} <del>${formatYen(quote(plan).regular)}</del></span><b>${quote(plan).percent}% OFF</b></div>` : ""}
+        <p class="plan-price"><strong>${formatYen(currentPrice(plan))}</strong><span>${billingLabel()}</span></p>
+        ${quote(plan).active && quote(plan).saving ? `<p class="campaign-card-saving">${t(`Save ${formatYen(quote(plan).saving)} per month`, `月額${formatYen(quote(plan).saving)}お得`)}</p>` : ""}
         ${sixMonthDetails}
-        ${promotionApplies(plan, billing) ? `<aside class="premium-promotion" aria-label="${t("New Premium applicant offer", "Premium新規申込キャンペーン")}">
+        ${legacyPromotion(plan) ? `<aside class="premium-promotion" aria-label="${t("New Premium applicant offer", "Premium新規申込キャンペーン")}">
           <span><b class="premium-promotion-gift" aria-hidden="true">🎁</b>${t("NEW PREMIUM APPLICANTS", "PREMIUM 新規申込限定")}</span>
           <div class="premium-promotion-steps">
             <span><small>${t("FIRST 30 DAYS", "最初の30日")}</small><strong>¥0</strong><b>${t("Free", "無料")}</b></span>
@@ -221,17 +237,27 @@ function renderComparison() {
 }
 
 function renderBillingSummary() {
+  campaignBanner();
+  if (experience.campaign && billing === BILLING_OPTIONS.monthly) {
+    elements.billingSummary.textContent = quote(PLAN_CATALOG.standard).active
+      ? t("Current offer prices for new monthly applications. Other offers cannot be combined. Existing agreements are unchanged.", "新規お申し込み用の月額特別価格です。他の特典との併用はありません。既存のご契約は変更しません。")
+      : t("The offer has ended. Current standard prices are shown.", "キャンペーンは終了しました。現在の通常価格を表示しています。");
+    return;
+  }
   elements.billingSummary.textContent = billing === BILLING_OPTIONS.sixMonths
     ? t("Six-month prices are totals. Exact yen savings and monthly equivalents are shown on each plan.", "6か月価格は合計額です。各プランに、正確な割引額と月額換算を表示しています。")
     : t("New Premium monthly applicants can ask about 30 days free and 50% off the second month. Tahmid confirms eligibility personally.", "Premium月額プランへ新規でお申し込みの方は、30日間無料・2か月目50%オフについてご相談いただけます。対象条件はTahmidが個別に確認します。");
 }
 
 function generatedMessage() {
-  return contactMessage(selectedPlan, billing, language(), elements.name.value);
+  if (!experience.campaign || billing !== BILLING_OPTIONS.monthly) return contactMessage(selectedPlan, billing, language(), elements.name.value);
+  const c = experience.campaign, q = quote(selectedPlan);
+  const name = elements.name.value.trim();
+  return `Hi Tahmid, ${name ? `my name is ${name}. ` : ""}I'm interested in ${selectedPlan.name} (${formatYen(q.price)} / month).${q.active ? ` Offer: ${c.name_en}, until ${deadlineLabel(c.ends_at)}.` : ""} Please confirm eligibility, availability and the price before payment.\n\nTahmidさん、${name ? `${name}と申します。` : ""}${selectedPlan.name}（月額${formatYen(q.price)}）に興味があります。${q.active ? `キャンペーン：${c.name_ja}（${deadlineLabel(c.ends_at)}まで）。` : ""}対象条件・空き状況・お支払い前の金額確認をお願いします。`;
 }
 
 function refreshDialog({ forceMessage = false } = {}) {
-  const price = formatYen(planPrice(selectedPlan, billing));
+  const price = formatYen(currentPrice(selectedPlan));
   elements.dialogName.textContent = selectedPlan.name;
   elements.dialogPrice.textContent = `${price} · ${billingLabel()}`;
   if (forceMessage || !messageDirty) elements.message.value = generatedMessage();
@@ -342,7 +368,13 @@ async function initialisePricingAccess() {
       detailJa: "担当の先生が、学習に必要な内容だけを表示しています。",
     });
     pricingAccess = access;
-    if (access.allowed) applyPricingVisibility();
+    if (access.allowed) {
+      applyPricingVisibility();
+      if (experience.unavailable) {
+        elements.grid.hidden = true; elements.quickNav.hidden = true;
+        elements.billingSummary.textContent = "Current prices could not load. Please reload before choosing a plan. / 現在の料金を読み込めません。ページを再読み込みしてください。";
+      }
+    }
   } catch {
     document.documentElement.dataset.studentAccess = "disabled";
     renderStudentAccessBoundary(document.querySelector("#plansMain"), {
@@ -357,3 +389,12 @@ async function initialisePricingAccess() {
 }
 
 void initialisePricingAccess();
+
+// Update expired quotes even when a pricing tab remains open overnight.
+setInterval(() => {
+  if (experience.campaign?.active && Date.now() >= Date.parse(experience.campaign.ends_at)) {
+    experience.campaign.active = false; setBilling(billing);
+    if (elements.dialog.open) refreshDialog({ forceMessage: !messageDirty });
+  }
+}, 1000);
+window.addEventListener("focus", async () => { experience = await loadExperience(); setBilling(billing); if(elements.dialog.open) refreshDialog(); });

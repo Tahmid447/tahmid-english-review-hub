@@ -1,4 +1,4 @@
-import { createCurriculumVisual, visualSpecFor } from './curriculum-visuals.js?v=20260906-studio1';
+import { createCurriculumVisual, visualSpecFor } from './curriculum-visuals.js?v=20260908-campaign1';
 import {
   fetchCurriculumItems,
   fetchStudentLearningPacks,
@@ -6,20 +6,20 @@ import {
   fetchCurriculumProgress,
   saveCurriculumProgress,
   toggleCurriculumFavorite,
-} from "./curriculum-api.js?v=20260906-studio1";
+} from "./curriculum-api.js?v=20260908-campaign1";
 import {
   applyStudentFeatureVisibility,
   featureAllowed,
   loadStudentAccess,
   renderStudentAccessBoundary,
   studentAccessBoundaryCopy,
-} from "./student-visibility.js?v=20260906-studio1";
+} from "./student-visibility.js?v=20260908-campaign1";
 import {
   playAnswerFeedback,
   playCompletionSound,
   speakText,
   stopAudio,
-} from "./audio.js?v=20260906-studio1";
+} from "./audio.js?v=20260908-campaign1";
 import {
   applyThemePreference,
   getSettings,
@@ -27,12 +27,12 @@ import {
   setStorageUser,
   updateSettings,
   watchSystemTheme,
-} from "./store.js?v=20260906-studio1";
-import { loadUserSettings, saveUserSettings } from "./supabase.js?v=20260906-studio1";
-import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js?v=20260906-studio1";
+} from "./store.js?v=20260908-campaign1";
+import { loadUserSettings, saveUserSettings } from "./supabase.js?v=20260908-campaign1";
+import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js?v=20260908-campaign1";
 
-import { curriculumAudioSamples, curriculumPrimaryAudio } from "./curriculum-audio.js?v=20260906-studio1";
-import { VOICE_PROFILES } from "./speech-contract.js?v=20260906-studio1";
+import { curriculumAudioSamples, curriculumPrimaryAudio } from "./curriculum-audio.js?v=20260908-campaign1";
+import { VOICE_PROFILES } from "./speech-contract.js?v=20260908-campaign1";
 
 const CATEGORY_ORDER = Object.freeze(["words", "phrases", "phonics"]);
 const CATEGORY_CONFIG = Object.freeze({

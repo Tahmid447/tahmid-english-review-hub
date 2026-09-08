@@ -1,10 +1,10 @@
-import { normalizeCategoryAccess } from "./curriculum-access.js?v=20260906-studio1";
+import { normalizeCategoryAccess } from "./curriculum-access.js?v=20260908-campaign1";
 import {
   getStudentClient,
   getStudentSession,
   getTeacherClient,
   getTeacherSession,
-} from "./supabase.js?v=20260906-studio1";
+} from "./supabase.js?v=20260908-campaign1";
 
 const CATEGORY_VALUES = new Set(["words", "phrases", "phonics"]);
 const PROGRESS_VALUES = new Set(["not_started", "learning", "reviewed", "mastered"]);
@@ -27,6 +27,7 @@ const BOOLEAN_SETTING_KEYS = Object.freeze([
 ]);
 const SETTING_KEYS = new Set([
   ...BOOLEAN_SETTING_KEYS,
+  "inherit_features",
   "allowed_level_min",
   "allowed_level_max",
   "allowed_levels",
@@ -118,19 +119,7 @@ export async function fetchStudentHubContext() {
   };
   if (auth.reason) return failure(fallback, auth.reason);
 
-  const { data, error } = await auth.client
-    .from("review_student_hub_settings")
-    .select([
-      "student_id",
-      ...BOOLEAN_SETTING_KEYS,
-      "allowed_level_min",
-      "allowed_level_max",
-      "allowed_levels",
-      "category_access",
-      "updated_at",
-    ].join(","))
-    .eq("student_id", auth.session.user.id)
-    .maybeSingle();
+  const { data, error } = await auth.client.rpc("review_my_hub_settings");
 
   if (migrationUnavailable(error)) return unavailable(fallback);
   if (error) return failure(fallback, "hub-settings-query-failed", error);
@@ -300,7 +289,7 @@ const normalizeSettingsPatch = (patch) => {
   const normalized = {};
   for (const [key, value] of Object.entries(patch)) {
     if (!SETTING_KEYS.has(key)) continue;
-    if (BOOLEAN_SETTING_KEYS.includes(key)) {
+    if (BOOLEAN_SETTING_KEYS.includes(key) || key === "inherit_features") {
       if (typeof value !== "boolean") throw new TypeError(`${key} must be true or false.`);
       normalized[key] = value;
       continue;

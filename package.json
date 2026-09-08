@@ -1,6 +1,6 @@
 {
   "name": "tahmid-english-review-hub",
-  "version": "10.0.0",
+  "version": "10.2.0",
   "private": true,
   "type": "module",
   "engines": {
@@ -37,7 +37,8 @@
     "verify:live": "node scripts/verify-live-security.mjs",
     "verify:voices": "node scripts/verify-voices.mjs",
     "verify:voices:live": "node scripts/verify-voices.mjs --live",
-    "test:security": "node scripts/test-personalisation-security.mjs"
+    "test:security": "node scripts/test-personalisation-security.mjs",
+    "test:campaigns": "node scripts/test-campaigns.mjs"
   },
   "devDependencies": {
     "@electric-sql/pglite": "0.5.8",

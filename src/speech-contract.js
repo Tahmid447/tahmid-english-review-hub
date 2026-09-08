@@ -1,8 +1,8 @@
 // Bump when the synthesis voice or prosody changes. A cache entry is valid only
 // for this complete contract, never just the accent or a case-folded sentence.
-export const SPEECH_PROFILE_VERSION = "natural-v2";
+export const SPEECH_PROFILE_VERSION = "natural-v3";
 export const VOICE_PROFILES = Object.freeze({
-  us: Object.freeze({ name: "Ava", voiceId: "en-US-AvaMultilingualNeural", language: "en-US", rate: "-4%", pitch: "+0Hz", volume: "+0%" }),
+  us: Object.freeze({ name: "Ava", voiceId: "en-US-AvaNeural", language: "en-US", rate: "-4%", pitch: "+0Hz", volume: "+0%" }),
   gb: Object.freeze({ name: "Libby", voiceId: "en-GB-LibbyNeural", language: "en-GB", rate: "-4%", pitch: "+0Hz", volume: "+0%" }),
   ja: Object.freeze({ name: "Nanami", voiceId: "ja-JP-NanamiNeural", language: "ja-JP", rate: "-2%", pitch: "+0Hz", volume: "+0%" }),
 });

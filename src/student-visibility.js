@@ -2,8 +2,8 @@ import {
   DEFAULT_HUB_SETTINGS,
   fetchStudentAnnouncements,
   fetchStudentHubContext,
-} from "./curriculum-api.js?v=20260906-studio1";
-import { getStudentSession } from "./supabase.js?v=20260906-studio1";
+} from "./curriculum-api.js?v=20260908-campaign1";
+import { getStudentSession } from "./supabase.js?v=20260908-campaign1";
 
 let accessPromise;
 let accessIdentity;

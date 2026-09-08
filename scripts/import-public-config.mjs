@@ -89,7 +89,7 @@ validatePublicConfig(environmentUrl, environmentAnonKey, "The environment config
 
 const output = `export const SUPABASE_URL = ${JSON.stringify(environmentUrl)};\n` +
   `export const SUPABASE_ANON_KEY = ${JSON.stringify(environmentAnonKey)};\n` +
-  `export const NATURAL_SPEECH_URL = \`\${SUPABASE_URL}/functions/v1/natural-speech\`;\n`;
+  `export const NATURAL_SPEECH_URL = \`\${SUPABASE_URL}/functions/v1/natural-speech?forceFunctionRegion=ap-south-1\`;\n`;
 
 fs.mkdirSync(path.join(root, "src"), { recursive: true });
 fs.writeFileSync(outputPath, output);

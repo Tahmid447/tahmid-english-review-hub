@@ -3,8 +3,8 @@ import {
   getPremiumRecordingUrl,
   savePremiumTextSubmission,
   submitPremiumRecording,
-} from "./supabase.js?v=20260906-studio1";
-import { planMeetsRequirement } from "./plans.js?v=20260906-studio1";
+} from "./supabase.js?v=20260908-campaign1";
+import { planMeetsRequirement } from "./plans.js?v=20260908-campaign1";
 
 const make = (tag, options = {}) => {
   const node = document.createElement(tag);

@@ -1,0 +1,55 @@
+{
+  "humanListening": false,
+  "samples": [
+    {
+      "id": "ren-us",
+      "text": "Hi, I'm Ren.",
+      "status": 200,
+      "bytes": 8640,
+      "milliseconds": 3246,
+      "voice": "en-US-AvaNeural",
+      "profile": "natural-v3",
+      "region": "ap-south-1",
+      "decodePassed": true
+    },
+    {
+      "id": "book-us",
+      "text": "book",
+      "status": 200,
+      "bytes": 6048,
+      "milliseconds": 3088,
+      "voice": "en-US-AvaNeural",
+      "profile": "natural-v3",
+      "region": "ap-south-1",
+      "decodePassed": true
+    },
+    {
+      "id": "phrase-us",
+      "text": "Could you say that again, please?",
+      "status": 200,
+      "bytes": 12096,
+      "milliseconds": 1474,
+      "voice": "en-US-AvaNeural",
+      "profile": "natural-v3",
+      "region": "ap-south-1",
+      "decodePassed": true
+    },
+    {
+      "id": "ren-uk",
+      "text": "Hi, I'm Ren.",
+      "status": 200,
+      "bytes": 13248,
+      "milliseconds": 1466,
+      "voice": "en-GB-LibbyNeural",
+      "profile": "natural-v3",
+      "region": "ap-south-1",
+      "decodePassed": true
+    },
+    {
+      "id": "legacy-tokyo-relay",
+      "status": 200,
+      "profile": "natural-v2",
+      "bytes": 6192
+    }
+  ]
+}

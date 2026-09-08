@@ -1,0 +1,13 @@
+import assert from 'node:assert/strict';
+import { campaignQuote, remainingTime } from '../src/campaigns.js';
+import { PLAN_CATALOG } from '../src/plans.js';
+const campaign={active:true,starts_at:'2026-09-08T00:00:00+09:00',ends_at:'2026-10-01T00:00:00+09:00',prices:{standard:{regular:4980,offer:3980}}};
+const now=Date.parse('2026-09-15T00:00:00+09:00');
+assert.deepEqual(campaignQuote(PLAN_CATALOG.standard,'monthly',campaign,now),{price:3980,regular:4980,saving:1000,percent:20,active:true});
+assert.equal(campaignQuote(PLAN_CATALOG.standard,'six_months',campaign,now).price,20300);
+assert.equal(campaignQuote(PLAN_CATALOG.standard,'monthly',null,now).price,3980);
+assert.equal(campaignQuote(PLAN_CATALOG.standard,'monthly',campaign,Date.parse(campaign.ends_at)).price,4980);
+assert.equal(campaignQuote(PLAN_CATALOG.standard,'monthly',{...campaign,active:false},now).active,false);
+assert.equal(remainingTime(campaign.ends_at,Date.parse(campaign.ends_at)).expired,true);
+assert.equal(remainingTime(campaign.ends_at,now).days,16);
+console.log('Shared campaign quotes, discounts, billing scope and exact expiry passed.');

@@ -1,10 +1,10 @@
-import { SUPABASE_ANON_KEY, SUPABASE_URL } from "./config.js?v=20260906-studio1";
-import { normalizePlanKey, planFor, planMeetsRequirement } from "./plans.js?v=20260906-studio1";
+import { SUPABASE_ANON_KEY, SUPABASE_URL } from "./config.js?v=20260908-campaign1";
+import { normalizePlanKey, planFor, planMeetsRequirement } from "./plans.js?v=20260908-campaign1";
 import {
   compareLessonSourceOrder,
   sourceSegmentFromLesson,
   sourceSegmentPartIndex,
-} from "./lesson-source.js?v=20260906-studio1";
+} from "./lesson-source.js?v=20260908-campaign1";
 
 let studentClient;
 let teacherClient;
@@ -411,6 +411,11 @@ export async function getStudentMembership() {
   const client = getStudentClient();
   const session = await getStudentSession();
   if (!client || !session?.user) return { membership: null, active: false, signedIn: false };
+  const ownerCheck = await client.rpc("review_is_site_owner");
+  if (!ownerCheck.error && ownerCheck.data === true) return {
+    membership: { user_id: session.user.id, status: "active", access_scope: "both", plan_tier: "premium_plus", plan_label: "Owner preview", owner_preview: true },
+    active: true, signedIn: true, error: null,
+  };
   const { data, error } = await client
     .from("review_memberships")
     .select("user_id,status,access_scope,plan_tier,plan_label,starts_at,expires_at,approval_source")
