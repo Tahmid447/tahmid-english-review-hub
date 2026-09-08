@@ -80,8 +80,10 @@ class FakeTTS {
   async synthesize() { return { audio: new Blob([mp3Fixture], { type: "audio/mpeg" }) }; }
 }
 vm.runInNewContext(edgeSource.replace(/^import .*;\n/gm, "")
-  .replaceAll(" as const", "").replaceAll(" as keyof typeof voiceProfiles", ""), {
-  Deno: { serve: (callback) => { handler = callback; } }, UniversalEdgeTTS: FakeTTS,
+  .replaceAll(" as const", "").replaceAll(" as keyof typeof voiceProfiles", "")
+  .replaceAll(": ReturnType<typeof setTimeout>", "").replaceAll("new Promise<never>", "new Promise"), {
+  Deno: { serve: (callback) => { handler = callback; }, env: { get: () => "ap-south-1" } }, UniversalEdgeTTS: FakeTTS,
+  setTimeout, clearTimeout, AbortSignal,
   Request, Response, Blob, Uint8Array,
 });
 const requestToEdge = (body) => handler(new Request("https://example.invalid/functions/v1/natural-speech", {
