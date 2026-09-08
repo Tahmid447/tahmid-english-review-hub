@@ -217,6 +217,7 @@ assert.throws(() => normalizeCategoryAccess({ words: { min: 4, max: 1, unlock: [
 assert.throws(() => normalizeCategoryAccess({ words: { min: 1, max: 4, unlock: ["8"], lock: [] } }), /numbers/);
 await admin("alter table auth.users add column created_at timestamptz default now()");
 await db.exec(await readFile(new URL("20260908080538_experience_campaigns.sql", migrationDir), "utf8"));
+await db.exec(await readFile(new URL("20260908082230_campaign_save_scope.sql", migrationDir), "utf8"));
 await admin(`insert into review_site_owner(user_id) values('${ids.teacherA}');
 update review_student_hub_settings set account_enabled=true,inherit_features=true,show_words=true,show_phrases=true,show_pricing=true,show_announcements=true where student_id='${ids.studentA}';
 update review_site_experience set starts_at=now()-interval '1 day',ends_at=now()+interval '1 day';
@@ -228,6 +229,11 @@ assert.equal(await scalar("select count(*)::int from review_site_experience"),0)
 await rejects("select review_save_experience('{}',array[]::uuid[])",/owner access/);
 await as("teacherA");
 assert.equal(await scalar("select review_is_site_owner()"),true);
+await db.exec(`select review_save_experience((select to_jsonb(c) from review_site_experience c where id),array['${ids.studentA}']::uuid[])`);
+assert.equal(await scalar("select count(*)::int from review_campaign_targets"),1);
+await db.exec(`select review_save_experience((select to_jsonb(c) from review_site_experience c where id),array[]::uuid[])`);
+assert.equal(await scalar("select count(*)::int from review_campaign_targets"),0);
+
 assert.equal(await scalar("select review_my_hub_settings()->>'allowed_level_max'"),'32');
 assert.equal(await scalar("select review_my_hub_settings()->>'owner_preview'"),'true');
 await db.exec(`update review_site_experience set features='{"show_words":false}'`);

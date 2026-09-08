@@ -46,3 +46,9 @@ Four production audio samples were checked: “Hi, I'm Ren.” with Ava and Libb
 - Supabase advisors reviewed: new RPC-only private tables intentionally have no direct policies/grants. Existing security-definer public views retain their explicit access predicates and passed isolation tests. Existing project-wide legacy warnings were not represented as newly resolved issues. [Advisor documentation](https://supabase.com/docs/guides/database/database-linter).
 
 Design references: the user's Higgsfield screenshot and [Higgsfield pricing](https://higgsfield.ai/pricing), plus the clear comparison/plan organization on [Notion pricing](https://www.notion.com/pricing). No brand assets or illustrations were copied or replaced.
+
+## Production completion
+
+Netlify production deployed release 10.2.0 (`680a936c04280d7409416211284ba7ea55d515ff`, public cache v24). The authenticated Teacher Studio successfully loaded and saved the campaign configuration. A production-only safe-update guard required an explicit WHERE predicate for target removal; forward migration `20260908082230_campaign_save_scope.sql` changes replacement to delete only deselected targets and upsert retained/new targets. Save was retried successfully through the actual Teacher Studio UI. No setting was partially saved on the failed attempt because the operation is transactional.
+
+Production browser verification also confirmed the five existing assignment titles, correct pack checkbox/text layout, and the all/individual announcement form. Test pack selection was cleared without saving. Existing learner custom feature choices were preserved. The public pricing page displayed the configured prices and computed discounts. No new student account or real announcement was created for testing.
