@@ -1,4 +1,4 @@
-import { maybeShowWelcomeOffer } from "./experience.js?v=20260910-voice1";
+import { maybeShowWelcomeOffer } from "./experience.js?v=20260910-member1";
 import {
   applyThemePreference,
   getAllLessonProgress,
@@ -9,8 +9,8 @@ import {
   setStorageUser,
   updateSettings,
   watchSystemTheme,
-} from "./store.js?v=20260910-voice1";
-import { loadPublishedLessons } from "./data.js?v=20260910-voice1";
+} from "./store.js?v=20260910-member1";
+import { loadPublishedLessons } from "./data.js?v=20260910-member1";
 import {
   getStudentClient,
   getStudentMembership,
@@ -26,17 +26,17 @@ import {
   signInStudentWithGoogle,
   signUpStudent,
   signOutStudent,
-} from "./supabase.js?v=20260910-voice1";
-import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js?v=20260910-voice1";
-import { installPlayfulInteractions } from "./effects.js?v=20260910-voice1";
-import { planFor } from "./plans.js?v=20260910-voice1";
-import { setAmbientPlayback, stopAudio, syncAmbientFromSettings } from "./audio.js?v=20260910-voice1";
+} from "./supabase.js?v=20260910-member1";
+import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js?v=20260910-member1";
+import { installPlayfulInteractions } from "./effects.js?v=20260910-member1";
+import { planFor } from "./plans.js?v=20260910-member1";
+import { setAmbientPlayback, stopAudio, syncAmbientFromSettings } from "./audio.js?v=20260910-member1";
 import {
   applyStudentFeatureVisibility,
   featureAllowed,
   loadStudentAccess,
   renderStudentAnnouncements,
-} from "./student-visibility.js?v=20260910-voice1";
+} from "./student-visibility.js?v=20260910-member1";
 
 let publishedLessons = [];
 let visibleLessons = [];
@@ -907,8 +907,10 @@ function bindAuth() {
   accountButton?.addEventListener("click", openDialog);
   signInGateButton?.addEventListener("click", openDialog);
 
-  onStudentAuthChange(async (...args) => {
-    authSession = normaliseSession(args[1]) || normaliseSession(args[0]);
+  onStudentAuthChange(async (session, event) => {
+    if (event === "INITIAL_SESSION") return;
+    if (session?.user?.id === authSession?.user?.id && event !== "SIGNED_OUT") return;
+    authSession = normaliseSession(session);
     if (authSession) await ensureStudentProfile(authSession);
     const scopeReady = await activateStorageScope(authSession);
     if (!scopeReady) return;
@@ -977,6 +979,9 @@ async function refreshProfileCompletion() {
   }
   const result = await getStudentProfile();
   currentProfile = result.profile;
+  const greeting = document.querySelector("#homeGreeting");
+  if (greeting && currentProfile) greeting.textContent = t(`Welcome back, ${currentProfile.first_name || currentProfile.display_name}.`, `${currentProfile.first_name || currentProfile.display_name}さん、おかえりなさい。`);
+  document.querySelectorAll('[data-my-page-link]').forEach(link => { link.href = "/my-page"; });
   const required = ["first_name", "last_name", "age_group", "native_language", "english_level"];
   const incomplete = required.some((key) => !String(currentProfile?.[key] || "").trim());
   const requiresGoogleGate = incomplete && isGoogleSession(authSession);
@@ -1017,17 +1022,17 @@ async function fetchPersonalRecords() {
     const [attemptResult, assignmentResult, lessonResult] = await Promise.all([
       client
         .from("review_attempts")
-        .select("*, lesson:review_lessons(slug,title_en,title_ja,lesson_date)")
+        .select("id,client_attempt_id:client_attempt_key,lesson_id,first_score,max_score,started_at,completed_at,answers:answer_snapshot, lesson:review_lessons(slug,title_en,title_ja,lesson_date)")
         .order("started_at", { ascending: false })
         .limit(200),
       client
         .from("review_assignments")
-        .select("*, lesson:review_lessons(*)")
+        .select("id,lesson_id,student_id,status,note,created_at, lesson:review_lessons(slug,title_en,title_ja,lesson_date)")
         .order("created_at", { ascending: false })
         .limit(100),
       client
         .from("review_lessons")
-        .select("slug,lesson_date,title_en,title_ja,summary_en,summary_ja,status,audience,content")
+        .select("slug,lesson_date,title_en,title_ja,summary_en,summary_ja,status,audience")
         .eq("status", "published")
         .order("lesson_date", { ascending: false })
         .limit(100),
@@ -1351,7 +1356,7 @@ function updateContinueCard(local, latestDate) {
   if (!lesson) {
     cardTitle.textContent = t("No lesson assigned yet", "割り当てレッスンはまだありません");
     cardMeta.textContent = t("A new lesson will appear here when it is ready.", "新しいレッスンの準備ができると、ここに表示されます。");
-    cardLink.href = "#library";
+    cardLink.href = "/lessons";
     cardLink.textContent = t("Check lessons", "レッスンを見る");
     return;
   }
@@ -1494,15 +1499,19 @@ async function refreshStudentVisibility({ refresh = false } = {}) {
 async function refreshAuthView() {
   await refreshStudentVisibility({ refresh: true });
   ensureGeneralLogoutButton();
-  await refreshMembershipPanel();
-  await refreshProfileCompletion();
-  await renderLearnerProgress();
+  await Promise.allSettled([refreshMembershipPanel(), refreshProfileCompletion(), renderLearnerProgress()]);
+  const requestedReturn = new URLSearchParams(window.location.search).get("return");
+  const destination = safeLocalReturnPath(requestedReturn, "");
+  if (authSession && destination && destination !== "/" && !document.querySelector("#profileGateDialog")?.open) {
+    window.location.replace(destination); return;
+  }
   void maybeShowWelcomeOffer().catch(()=>{});
 }
 
 async function reloadLessons() {
+  if (!document.querySelector("#lessonGrid")) return;
   publishedLessons = (await loadPublishedLessons({
-    audience: "all",
+    audience: "all", includeQuestions: false,
   })).filter((lesson) => lesson.status === "published");
   visibleLessons = publishedLessons;
   const publishedCount = document.querySelector("#publishedCount");

@@ -16,10 +16,10 @@
   <title>Tahmid English Review Hub</title>
   <link rel="manifest" href="/manifest.webmanifest">
   <script>try{const p=JSON.parse(localStorage.getItem("te-review-hub:theme:v1")||"\"light\"");const c=["system","light","dark"].includes(p)?p:"light";const d=c==="dark"||(c==="system"&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.dataset.themePreference=c;document.documentElement.dataset.theme=d?"dark":"light";document.documentElement.style.colorScheme=d?"dark":"light"}catch{document.documentElement.dataset.themePreference="light";document.documentElement.dataset.theme="light";document.documentElement.style.colorScheme="light"}</script>
-  <link rel="stylesheet" href="/src/styles.css?v=20260910-voice1">
+  <link rel="stylesheet" href="/src/styles.css?v=20260910-member1">
   <link rel="icon" type="image/png" sizes="192x192" href="/assets/app-icon-192.png">
 </head>
-<body data-page="general">
+<body data-page="general" class="home-portal">
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header">
     <a class="brand" href="/" aria-label="Tahmid English Club home">
@@ -28,6 +28,7 @@
     </a>
     <nav class="header-actions" id="siteSettings" aria-label="Site settings">
       <button class="quiet-btn mobile-settings-toggle" id="mobileSettingsToggle" type="button" aria-expanded="false" aria-controls="siteSettingsControls" data-ui-en="Settings" data-ui-ja="設定">Settings / 設定</button>
+      <a class="quiet-btn" href="/lessons" target="_blank" rel="noopener" data-student-feature-any="show_review_lessons,show_homework">Lessons · レッスン一覧</a><a class="quiet-btn my-page-nav" href="/my-page" data-my-page-link>My Page · マイページ</a>
       <span class="header-settings-controls" id="siteSettingsControls">
       <a class="quiet-btn" href="/learn" data-student-feature-any="show_words,show_phrases,show_phonics" data-ui-en="Learning Library" data-ui-ja="教材ライブラリ">Learning Library / 教材</a>
       <a class="quiet-btn" href="/plans" data-student-feature="show_pricing" data-ui-en="Plans" data-ui-ja="料金プラン">Plans / 料金プラン</a>
@@ -68,14 +69,14 @@
 
   <main id="main">
     <section class="hero hero-arrival shell" data-student-feature="show_dashboard">
-      <div class="hero-copy">
-        <p class="eyebrow hero-reveal hero-reveal-1" data-ui-en="Your real lesson. Your focused review. Your confident English." data-ui-ja="実際のレッスンを、あなただけの復習と自信へ。">Your real lesson. Your focused review. Your confident English.</p>
-        <h1 class="ui-en-heading hero-wordmark" aria-label="Understand it. Hear it. Say it. Use it."><span class="hero-word hero-word-1">Understand it.</span><br><span class="hero-word hero-word-2">Hear it.</span> <span class="hero-word hero-word-3">Say it.</span> <span class="hero-word hero-word-4">Use it.</span></h1>
-        <h1 class="ui-ja-heading hero-wordmark" lang="ja" aria-label="意味をつかむ。聞く・話す・使ってみる。"><span class="hero-word hero-word-1">意味をつかむ。</span><br><span class="hero-word hero-word-2">聞く。</span><span class="hero-word hero-word-3">話す。</span><span class="hero-word hero-word-4">使ってみる。</span></h1>
+      <div class="hero-copy"><p class="home-greeting" id="homeGreeting">YOUR ENGLISH, EVERY DAY · 今日も、英語を少しずつ。</p>
+
+        <h1 class="ui-en-heading hero-wordmark">A little practice.<br><em>A lot more confidence.</em></h1>
+        <h1 class="ui-ja-heading hero-wordmark" lang="ja">今日のひと練習が、<br><em>明日の「話せた！」に。</em></h1>
         <p class="hero-lead en hero-reveal hero-reveal-2">Review the English from your actual lessons, practise for five minutes or go deeper, and get personal feedback when you need it.</p>
         <p class="hero-lead jp hero-reveal hero-reveal-2" lang="ja">実際に習った英語を、5分のショート練習でも、じっくり復習でも。必要なときはTahmidの個別添削まで、一つの場所で続けられます。</p>
         <div class="hero-actions">
-          <a class="primary-btn feature-link" href="#library" data-student-feature="show_trial_cta"><span class="feature-icon" aria-hidden="true">▶</span><span><b data-ui-en="Try two lessons free" data-ui-ja="2レッスンを無料体験">Try two lessons free</b><small data-ui-en="No payment needed" data-ui-ja="支払い不要">No payment needed</small></span></a>
+          <a class="primary-btn feature-link" href="/lessons" target="_blank" rel="noopener" data-student-feature="show_trial_cta"><span class="feature-icon" aria-hidden="true">▶</span><span><b data-ui-en="Try two lessons free" data-ui-ja="2レッスンを無料体験">Try two lessons free</b><small data-ui-en="No payment needed" data-ui-ja="支払い不要">No payment needed</small></span></a>
           <a class="hero-tertiary-link" href="/learn" data-student-feature-any="show_words,show_phrases,show_phonics"><span data-ui-en="Open your Learning Library" data-ui-ja="自分の教材ライブラリを開く">Open your Learning Library</span><span aria-hidden="true">→</span></a>
           <a class="hero-tertiary-link phrase-library-link" href="/phrases" data-student-feature-any="show_words,show_phrases"><span data-ui-en="Open your lesson phrasebook" data-ui-ja="レッスン単語帳を開く">Open your lesson phrasebook</span><span aria-hidden="true">→</span></a>
         </div>
@@ -91,6 +92,11 @@
       </div>
     </section>
 
+    <section class="home-destinations shell" aria-label="Start learning">
+      <a class="destination-card destination-lessons" href="/lessons" target="_blank" rel="noopener" data-student-feature-any="show_review_lessons,show_homework"><span class="destination-number">01 / LESSONS</span><h2>Real lessons.<br><em>Ready to revisit.</em></h2><p>実際に学んだ英語を、もう一度。<br>レッスン一覧から今日の復習を選びましょう。</p><span class="destination-link">レッスン一覧を開く <b>↗</b></span></a>
+      <a class="destination-card destination-phrasebook" href="/phrases" data-student-feature-any="show_words,show_phrases"><span class="destination-number">02 / PHRASEBOOK</span><h2>The words<br><em>you want to keep.</em></h2><p>レッスン単語帳で、覚えたい英語を探す。<br>発音を聞いて、お気に入りに保存。</p><span class="destination-link">レッスン単語帳を開く <b>→</b></span></a>
+      <a class="destination-card destination-personal" href="/my-page" data-my-page-link><span class="destination-number">03 / MY PAGE</span><h2>Your space.<br><em>Your progress.</em></h2><p>プロフィール、お気に入り、先生のお知らせ。<br>あなたの学習を、一つの場所に。</p><span class="destination-link">マイページを開く <b>→</b></span></a>
+    </section>
     <section class="metrics shell" aria-label="Library summary" data-student-feature="show_dashboard" data-reveal>
       <article><strong id="publishedCount">31</strong><span data-ui-en="Published lessons" data-ui-ja="公開レッスン">Published lessons</span></article>
       <article><strong id="questionCount">1100</strong><span data-ui-en="Practice questions" data-ui-ja="練習問題">Practice questions</span></article>
@@ -116,20 +122,6 @@
 
     <section class="shell announcement-banner" id="studentAnnouncements" data-student-feature="show_announcements" hidden aria-live="polite"></section>
 
-    <section class="value-story shell" aria-labelledby="valueStoryHeading" data-student-feature="show_dashboard" data-reveal>
-      <div class="value-story-heading">
-        <p class="eyebrow" data-ui-en="Why this Review Hub feels personal" data-ui-ja="一人ひとりの学習につながる理由">Why this Review Hub feels personal</p>
-        <h2 id="valueStoryHeading" data-ui-en="Your lesson does not end when the call ends." data-ui-ja="レッスンが終わっても、学びはそこで終わりません。">Your lesson does not end when the call ends.</h2>
-        <p data-ui-en="Generic apps make everyone practise the same English. Here, the language from your real lesson becomes the next practice you can actually use." data-ui-ja="一般的なアプリでは全員が同じ内容を練習します。ここでは、実際に習った英語が、次に使える自分専用の復習になります。">Generic apps make everyone practise the same English. Here, the language from your real lesson becomes the next practice you can actually use.</p>
-      </div>
-      <div class="value-story-grid">
-        <article data-reveal><span aria-hidden="true">01</span><strong data-ui-en="Built from real lessons" data-ui-ja="実レッスンから作成">Built from real lessons</strong><p data-ui-en="Review the exact phrases, grammar and situations you studied with Tahmid." data-ui-ja="Tahmidと学んだフレーズ・文法・場面を、そのまま復習できます。">Review the exact phrases, grammar and situations you studied with Tahmid.</p></article>
-        <article data-reveal><span aria-hidden="true">05</span><strong data-ui-en="Quick or complete" data-ui-ja="5分でも、しっかりでも">Quick or complete</strong><p data-ui-en="Choose an eight-question Quick Practice or complete every activity in the full lesson." data-ui-ja="8問のショート練習、または全問題のフルレッスンから選べます。">Choose an eight-question Quick Practice or complete every activity in the full lesson.</p></article>
-        <article data-reveal><span aria-hidden="true">T</span><strong data-ui-en="A real teacher can respond" data-ui-ja="先生本人からの添削">A real teacher can respond</strong><p data-ui-en="Premium adds personal speaking and writing feedback—not automatic AI grading." data-ui-ja="Premiumでは、自動AI採点ではなく、スピーキングと英作文をTahmidが個別添削します。">Premium adds personal speaking and writing feedback—not automatic AI grading.</p></article>
-      </div>
-      <div class="value-story-cta"><a class="primary-btn" href="#library" data-student-feature="show_review_lessons" data-ui-en="Choose your first free lesson" data-ui-ja="最初の無料レッスンを選ぶ">Choose your first free lesson</a><a class="secondary-btn" href="/plans" data-student-feature="show_pricing" data-ui-en="Compare support plans" data-ui-ja="サポートプランを比較">Compare support plans</a></div>
-    </section>
-
     <section class="section shell learner-progress" id="learningProgress" hidden aria-labelledby="learningProgressHeading" data-student-feature="show_progress" data-reveal>
       <div class="section-heading">
         <div><p class="eyebrow" data-ui-en="Your learning progress" data-ui-ja="学習の進み方">Your learning progress</p><h2 id="learningProgressHeading" data-ui-en="A clear view of steady improvement" data-ui-ja="継続と上達を、分かりやすく確認">A clear view of steady improvement</h2><p class="jp" lang="ja">初回の実力と、その後の再挑戦による上達を分けて確認できます。</p></div>
@@ -139,7 +131,7 @@
         <p class="panel-kicker" data-ui-en="CONTINUE" data-ui-ja="続きから">CONTINUE</p>
         <h3 id="continueTitle">Choose a lesson to begin</h3>
         <p id="continueMeta">Your saved place will appear here.</p>
-        <a class="primary-btn" id="continueLink" href="#library" data-student-feature-any="show_review_lessons,show_homework">View lessons / レッスンを見る</a>
+        <a class="primary-btn" id="continueLink" href="/lessons" target="_blank" rel="noopener" data-student-feature-any="show_review_lessons,show_homework">View lessons / レッスンを見る</a>
       </div>
       <div class="dashboard-shell" id="learnerDashboard">
         <article class="dashboard-card"><span data-ui-en="Study streak" data-ui-ja="連続学習">Study streak</span><strong id="streakCount">0 days</strong></article>
@@ -153,23 +145,6 @@
         <div><p class="eyebrow" data-ui-en="Recent official attempts" data-ui-ja="最近の初回答記録">Recent official attempts</p><p class="form-status" id="personalDataStatus" role="status"></p></div>
       </div>
       <div class="lesson-grid" id="historyList"></div>
-    </section>
-
-    <section class="section shell" id="library" data-student-feature-any="show_review_lessons,show_homework" data-reveal>
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow" data-ui-en="Practice Library" data-ui-ja="練習ライブラリ">Practice Library</p>
-          <h2 data-ui-en="Choose what you want to review" data-ui-ja="復習するレッスンを選びましょう">Choose what you want to review</h2>
-          <p class="jp" lang="ja">復習したいレッスンを選んでください。</p>
-        </div>
-        <div class="filter-row" role="group" aria-label="Lesson filters">
-          <button class="filter-chip active" data-filter="all" type="button" aria-pressed="true" data-ui-en="All" data-ui-ja="すべて">All</button>
-          <button class="filter-chip" data-filter="conversation" type="button" aria-pressed="false" data-ui-en="Conversation practice" data-ui-ja="会話練習">Conversation practice</button>
-          <button class="filter-chip" data-filter="grammar" type="button" aria-pressed="false" data-ui-en="Grammar focus" data-ui-ja="文法">Grammar focus</button>
-          <button class="filter-chip" data-filter="listening" type="button" aria-pressed="false" data-ui-en="Listen &amp; Speak" data-ui-ja="聞く・話す">Listen &amp; Speak</button>
-        </div>
-      </div>
-      <div class="lesson-grid" id="lessonGrid" aria-live="polite"></div>
     </section>
 
     <section class="section shell split-promo" id="account" data-reveal>
@@ -216,13 +191,13 @@
 
   <footer class="site-footer premium-footer">
     <div class="footer-brand"><img src="/assets/app-icon-192.png" alt="" width="44" height="44"><span><strong>Tahmid English Club</strong><small data-ui-en="Personal English review, built by Tahmid Ahmed." data-ui-ja="Tahmid Ahmedが一人ひとりの復習をサポートします。">Personal English review, built by Tahmid Ahmed.</small></span></div>
-    <nav aria-label="Footer"><a href="#library" data-student-feature-any="show_review_lessons,show_homework" data-ui-en="Lessons" data-ui-ja="レッスン">Lessons</a><a href="/learn" data-student-feature-any="show_words,show_phrases,show_phonics" data-ui-en="Learning Library" data-ui-ja="教材ライブラリ">Learning Library</a><a class="phrase-library-link" href="/phrases" data-student-feature-any="show_words,show_phrases" data-ui-en="Lesson Phrasebook" data-ui-ja="レッスン単語帳">Lesson Phrasebook</a><a href="/plans" data-student-feature="show_pricing" data-ui-en="Plans" data-ui-ja="料金プラン">Plans</a><a href="/plans#contact" data-student-feature="show_contact_teacher" data-ui-en="Contact Tahmid" data-ui-ja="Tahmidに相談">Contact Tahmid</a><a href="/teacher" target="_blank" rel="noopener" data-ui-en="Teacher Studio" data-ui-ja="先生用画面">Teacher Studio</a></nav>
+    <nav aria-label="Footer"><a href="/lessons" target="_blank" rel="noopener" data-student-feature-any="show_review_lessons,show_homework" data-ui-en="Lessons" data-ui-ja="レッスン">Lessons</a><a href="/learn" data-student-feature-any="show_words,show_phrases,show_phonics" data-ui-en="Learning Library" data-ui-ja="教材ライブラリ">Learning Library</a><a class="phrase-library-link" href="/phrases" data-student-feature-any="show_words,show_phrases" data-ui-en="Lesson Phrasebook" data-ui-ja="レッスン単語帳">Lesson Phrasebook</a><a href="/plans" data-student-feature="show_pricing" data-ui-en="Plans" data-ui-ja="料金プラン">Plans</a><a href="/plans#contact" data-student-feature="show_contact_teacher" data-ui-en="Contact Tahmid" data-ui-ja="Tahmidに相談">Contact Tahmid</a><a href="/teacher" target="_blank" rel="noopener" data-ui-en="Teacher Studio" data-ui-ja="先生用画面">Teacher Studio</a></nav>
     <p>© 2026 Tahmid Ahmed <small class="music-license-line">BGM: Kevin MacLeod · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="license noopener">CC BY 4.0</a> · <a href="/music-credits" aria-label="Study music licence details">Licence details</a></small></p>
     <a href="/illustration-credits.html">Illustration credits / 教材画像のクレジット</a>
   </footer>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js"></script>
-  <script type="module" src="/src/pwa.js?v=20260910-voice1"></script>
-  <script type="module" src="/src/hub.js?v=20260910-voice1"></script>
+  <script src="/assets/vendor/supabase-2.57.4.min.js"></script>
+  <script type="module" src="/src/pwa.js?v=20260910-member1"></script>
+  <script type="module" src="/src/hub.js?v=20260910-member1"></script>
 </body>
 </html>

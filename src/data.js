@@ -1,11 +1,11 @@
-import { normalizeAnswerText } from "./store.js?v=20260910-voice1";
-import { fetchDatabaseLesson, fetchDatabaseLessons } from "./supabase.js?v=20260910-voice1";
-import { readHumanText } from "./lesson-guide-targets.js?v=20260910-voice1";
+import { normalizeAnswerText } from "./store.js?v=20260910-member1";
+import { fetchDatabaseLesson, fetchDatabaseLessons } from "./supabase.js?v=20260910-member1";
+import { readHumanText } from "./lesson-guide-targets.js?v=20260910-member1";
 import {
   compareLessonSourceOrder,
   sourceSegmentFromLesson,
   sourceSegmentPartIndex,
-} from "./lesson-source.js?v=20260910-voice1";
+} from "./lesson-source.js?v=20260910-member1";
 
 const DATA_PATHS = Object.freeze({
   lessons: "/src/data/legacy-lessons.json",
@@ -222,9 +222,9 @@ const audienceAllows = (lessonAudience, requestedAudience) => {
   return lessonAudience === requestedAudience;
 };
 
-export async function loadPublishedLessons({ audience = "general" } = {}) {
+export async function loadPublishedLessons({ audience = "general", includeQuestions = true } = {}) {
   try {
-    const remote = await fetchDatabaseLessons({ audience });
+    const remote = await fetchDatabaseLessons({ audience, includeQuestions });
     if (Array.isArray(remote.lessons) && remote.lessons.length) {
       return remote.lessons
         .map((lesson) => normalizeLesson(lesson, []))
@@ -249,10 +249,10 @@ export async function loadAllPublishedLessons() {
 }
 
 export async function getLessonById(id, { preview = false, allowOfflinePreview = true } = {}) {
-  const lessons = await loadPublishedSource();
-  const localLesson = lessons.find((lesson) => lesson.id === id) || null;
   const remote = await fetchDatabaseLesson(id, { preview });
   if (remote.lesson) return normalizeLesson(remote.lesson, []);
+  const lessons = allowOfflinePreview ? await loadPublishedSource() : [];
+  const localLesson = lessons.find((lesson) => lesson.id === id) || null;
   if (
     !preview
     && allowOfflinePreview
@@ -416,8 +416,8 @@ const collectQuestionPhrases = (question) => {
   return [];
 };
 
-export async function buildPhraseCatalog({ audience = "all", includeDrafts = false } = {}) {
-  const published = await loadPublishedLessons({ audience });
+export async function buildPhraseCatalog({ audience = "all", includeDrafts = false, lessons: suppliedLessons = null } = {}) {
+  const published = suppliedLessons || await loadPublishedLessons({ audience });
   const lessons = includeDrafts ? [...published, ...(await loadDraftLessons())] : published;
   const phrases = [];
   const seen = new Set();
@@ -441,6 +441,7 @@ export async function buildPhraseCatalog({ audience = "all", includeDrafts = fal
         topic: String(topic || "Everyday English"),
         note: String(note || ""),
         lessonId: lesson.id,
+        databaseLessonId: lesson.databaseLessonId || null,
         lessonTitle: lesson.title,
         lessonDate: lesson.lessonDate,
         status: lesson.status,

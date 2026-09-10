@@ -31,3 +31,29 @@ This is the existing Tahmid English Review Hub, NOT a new project.
 - Existing avatar_url profile column, curriculum favorites and phrasebook favorites can be reused without merging unrelated student identities.
 
 Update this document at implementation/deployment checkpoints. Final release notes must distinguish technical audio checks from human listening and actual UI playback.
+
+
+## Sep 10 implementation checkpoint — 10.4.0 prepared
+
+- The initial audio hotfix 10.3.0 / `9a16ec1ae1b707d4e040352e359e528d9017d168` is already live. US and UK Netlify requests returned 200 and actual production UI playback reached completion for both voices.
+- Current work adds a lighter homepage, `/lessons` (31 metadata-only cards), `/my-page`, editable names/private compact avatar, announcement detail, categorized/searchable favorites including lesson/question references, and personal teacher practice cards.
+- Additional user requests: remember BGM on/off/track/volume on reload, relogin and other signed-in browsers; softer click/correct/retry/completion sounds; show and support choice pronunciation in both lesson settings panels.
+- Latest added user request: teacher-created words, phrases, sentences and notes for one learner, optional US Ava / UK Libby audio, student favorites and filters. Teacher Studio → Learners → select learner → Personal cards. My Page → For you.
+- `20260910070630_learner_my_page.sql` **has been applied to production**, with matching Supabase migration ledger entry. Do not apply it again. Adds private `review-avatars` bucket (one WebP ≤100KB/account), lesson/question favorites, personal cards/favorites, verified owner self-settings and curriculum preview activity permissions.
+- Backup before the migration: `/Users/tahmidahmed/Documents/Codex/private-backups/2026-09-10-my-page/before.json` (private, outside Git).
+- Live database size verified 19MB. No learner progress was deleted; no recurring purge was installed. Monthly bandwidth/invocation quotas were not measured and are not reset by deleting records.
+- New SQL test `scripts/test-my-page.mjs` passes actual PostgreSQL/PGlite migrations and tests student separation, assigned teacher access, avatar restrictions, valid question references, personal card visibility/favorites, revocation and owner settings persistence.
+- Full existing test suite and production build passed. Browser checked 31 catalogue entries, no horizontal overflow at desktop, both lesson settings toggles, Japanese choice text, and US/UK actual playback. Remaining release checks: production logged-in My Page, profile/favorite round-trip, personal card controls, mobile layout, final deploy identity.
+- User has been asked to log into the production learner site with their usual checking account; reply pending. Never request their password.
+
+### Performance and audio architecture
+
+- Browser calls `/.netlify/functions/natural-speech` (pinned Node Edge TTS) on the existing Netlify site. Old Supabase speech function remains deployed as historical compatibility endpoint, but current frontend uses Netlify. Contract identities: US en-US-AvaNeural; UK en-GB-LibbyNeural; JP Nanami. No device-voice substitution.
+- Safari reuses a speech element unlocked by the actual tap; clips cache per account/voice/text for up to 7 days, capped at 8MB/160 entries. Long passages split into bounded chunks. Audio content is not placed in shared service worker/CDN caches.
+- Home no longer downloads all lesson questions. Catalogue requests only metadata; an opened lesson fetches only its own questions, and guide phrase extraction uses that lesson.
+- Supabase SDK 2.57.4 is served locally from `assets/vendor/`, with its MIT licence. Service worker prefetch is minimal and only versioned public code is cached for instant reuse. Private data/images remain outside that cache. Local dev registration is retired to avoid stale edits.
+- Final asset query is `20260910-member1`, public cache v26, package version 10.4.0. Bump these again for a later release; preserve historical hotfix notes.
+
+- Teacher Studio includes an explicit `/my-page?owner_preview=1` link. Only this route mode reuses the existing teacher session, and `review_is_site_owner` must confirm the owner before returning a learner session. Own-profile/settings/favorites use the real owner UUID and RLS. Preview links carry the mode through supported learning pages; normal student sessions remain separate. No credential is copied or minted.
+
+- Additional checks passed: settings pending-save recovery, remote on/off/track/volume, auth-change guards and owner-preview denial for a non-owner; phone-width lesson settings and plan cards; Japanese choices stay visible even with English UI. Local US and UK choice-click audio both reached "Ready to play again". A 31-row public catalogue metadata request was 14,329 bytes and returned in 665ms in one sample (not a general speed guarantee).

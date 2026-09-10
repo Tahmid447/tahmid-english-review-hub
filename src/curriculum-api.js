@@ -1,10 +1,10 @@
-import { normalizeCategoryAccess } from "./curriculum-access.js?v=20260910-voice1";
+import { normalizeCategoryAccess } from "./curriculum-access.js?v=20260910-member1";
 import {
   getStudentClient,
   getStudentSession,
   getTeacherClient,
   getTeacherSession,
-} from "./supabase.js?v=20260910-voice1";
+} from "./supabase.js?v=20260910-member1";
 
 const CATEGORY_VALUES = new Set(["words", "phrases", "phonics"]);
 const PROGRESS_VALUES = new Set(["not_started", "learning", "reviewed", "mastered"]);

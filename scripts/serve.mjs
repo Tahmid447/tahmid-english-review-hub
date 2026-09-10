@@ -40,6 +40,7 @@ http
       response.end();
       return;
     }
+    if (["/lessons", "/my-page"].includes(pathname)) pathname += ".html";
     if (pathname === "/teacher") pathname = "/teacher.html";
     if (["/learn", "/words", "/phonics"].includes(pathname)) pathname = "/learn.html";
     if (pathname === "/phrases") pathname = "/phrases.html";

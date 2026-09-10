@@ -1,3 +1,5 @@
+> **Resuming work / 作業を再開する方へ:** Start with [the working handoff](docs/WORKING_HANDOFF.md) and [AGENTS.md](AGENTS.md). The project can be resumed from this repository without old Codex sessions.
+
 # Tahmid English Review Hub
 
 Private development repository for the Tahmid English Review Hub learner

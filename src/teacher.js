@@ -1,4 +1,6 @@
-import { renderExperienceStudio } from "./experience-studio.js?v=20260910-voice1";
+import { displayProfileAvatar } from './profile-api.js?v=20260910-member1';
+import { mountPersonalCardStudio } from './personal-cards.js?v=20260910-member1';
+import { renderExperienceStudio } from "./experience-studio.js?v=20260910-member1";
 import {
   createTeacherAccessCode,
   deleteTeacherAccessCode,
@@ -13,15 +15,15 @@ import {
   signInTeacherWithGoogle,
   signOutTeacher,
   updateTeacherAccessCode,
-} from "./supabase.js?v=20260910-voice1";
-import { planFor } from "./plans.js?v=20260910-voice1";
-import { uiText } from "./i18n.js?v=20260910-voice1";
-import { readHumanText } from "./lesson-guide-targets.js?v=20260910-voice1";
+} from "./supabase.js?v=20260910-member1";
+import { planFor } from "./plans.js?v=20260910-member1";
+import { uiText } from "./i18n.js?v=20260910-member1";
+import { readHumanText } from "./lesson-guide-targets.js?v=20260910-member1";
 import {
   sourceSegmentFromLesson,
   sourceSegmentIsValid,
   sourceSegmentPartIndex,
-} from "./lesson-source.js?v=20260910-voice1";
+} from "./lesson-source.js?v=20260910-member1";
 import {
   DEFAULT_HUB_SETTINGS,
   fetchTeacherHubSettings,
@@ -29,9 +31,9 @@ import {
   saveTeacherHubSettings,
   assignTeacherLearningPack,
   setTeacherLearningPackActive,
-} from "./curriculum-api.js?v=20260910-voice1";
+} from "./curriculum-api.js?v=20260910-member1";
 
-import { normalizeCategoryAccess, categoryVisibleLevels } from "./curriculum-access.js?v=20260910-voice1";
+import { normalizeCategoryAccess, categoryVisibleLevels } from "./curriculum-access.js?v=20260910-member1";
 
 const client = getTeacherClient();
 
@@ -1144,7 +1146,7 @@ async function refreshDashboard() {
       fetchAll("review_lessons", "*, review_questions(count)", {
         order: { column: "lesson_date", ascending: false },
       }),
-      fetchAll("review_profiles", "user_id, display_name, first_name, last_name, contact_email, age_group, native_language, english_level, learning_goal, locale, access_scope, created_at"),
+      fetchAll("review_profiles", "user_id, display_name, avatar_url, first_name, last_name, contact_email, age_group, native_language, english_level, learning_goal, locale, access_scope, created_at"),
       fetchAll("review_teachers", "user_id, active"),
       fetchAll(
         "review_attempts",
@@ -3164,6 +3166,9 @@ function openLearnerDialog(profile) {
   elements.learnerDialogHeading.textContent = profileName(current.user_id);
 
   const profileCard = make("section", { className: "learner-profile-card" });
+  const avatar = make("div", { className: "profile-avatar teacher-profile-avatar" });
+  profileCard.append(avatar);
+  void displayProfileAvatar(avatar, current, getTeacherClient());
   const authStatus = make("p", { text: teacherText("Loading secure account status…", "安全なアカウント情報を読み込んでいます…") });
   profileCard.append(
     make("div", { text: current.contact_email || teacherText("No email recorded", "メール未登録") }),
@@ -3248,10 +3253,13 @@ function openLearnerDialog(profile) {
     timeline.append(list);
   }
 
+  const personalCards = make("section");
+  mountPersonalCardStudio(personalCards, { client: getTeacherClient(), teacherId: state.session.user.id, studentId: current.user_id });
   elements.learnerDialogContent.replaceChildren(learnerDialogWorkspace([
     { key: "profile", en: "Profile", ja: "プロフィール", nodes: [profileCard, metrics, assignedSummary(current)] },
     { key: "access", en: "Access", ja: "アカウント", nodes: [access] },
     { key: "lessons", en: "Lessons", ja: "レッスン", nodes: [learnerLessonControls(current)] },
+    { key: "personal", en: "Personal cards", ja: "個別の復習カード", nodes: [personalCards] },
     { key: "library", en: "Learning Library", ja: "教材ライブラリ", nodes: [learnerStructuredHubControls(current)] },
     { key: "progress", en: "Progress", ja: "進捗", nodes: [timeline] },
     { key: "commercial", en: "Plan features", ja: "プラン機能", nodes: [learnerFeatureControls(current)] },

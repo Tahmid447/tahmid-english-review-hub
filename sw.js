@@ -1,4 +1,4 @@
-const CACHE_NAME = "te-review-public-v25";
+const CACHE_NAME = "te-review-public-v26";
 const OFFLINE_PAGE = "/offline.html";
 const PUBLIC_SHELL = new Set([
   "/",
@@ -11,6 +11,12 @@ const PUBLIC_SHELL = new Set([
   "/manifest.webmanifest",
   "/src/styles.css",
   "/src/hub.js",
+  "/src/lessons.js",
+  "/src/my-page.js",
+  "/src/member-pages.css",
+  "/src/profile-api.js",
+  "/src/personal-cards.js",
+  "/src/saved-learning.js",
   "/src/phrases.js",
   "/src/learn.js",
   "/src/learn.css",
@@ -22,6 +28,8 @@ const PUBLIC_SHELL = new Set([
   "/src/pwa.js",
   "/src/store.js",
   "/src/study-music.js",
+  "/src/member-preferences.js",
+  "/assets/vendor/supabase-2.57.4.min.js",
   "/src/data.js",
   "/src/lesson-source.js",
   "/src/lesson-guide-targets.js",
@@ -44,7 +52,7 @@ const PUBLIC_SHELL = new Set([
 const OFFLINE_NAVIGATION = new Set(["/", "/index.html", "/phrases", "/phrases.html", "/learn", "/learn.html", "/words", "/phonics", "/plans", "/pricing.html", "/music-credits", "/music-credits.html"]);
 
 self.addEventListener("install", (event) => {
-  event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll([...PUBLIC_SHELL])));
+  event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll([OFFLINE_PAGE, "/assets/app-icon-192.png"])));
   self.skipWaiting();
 });
 
@@ -86,6 +94,18 @@ self.addEventListener("fetch", (event) => {
   }
 
   if (!isPublicStaticRequest(request, url)) return;
+  // Versioned public code can be reused immediately. Authenticated API
+  // responses and private images never enter this shell cache.
+  if (url.searchParams.has("v") && isPublicStaticRequest(request, url)) {
+    event.respondWith(caches.open(CACHE_NAME).then(async cache => {
+      const cached = await cache.match(request);
+      if (cached) return cached;
+      const response = await fetch(request);
+      if (response.ok && response.type === "basic") await cache.put(request, response.clone());
+      return response;
+    }));
+    return;
+  }
   event.respondWith(fetch(request).then((response) => {
     if (response.ok && response.type === "basic") {
       const copy = response.clone();

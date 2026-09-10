@@ -1,14 +1,14 @@
-import { loadExperience } from "./experience.js?v=20260910-voice1";
-import { campaignQuote, deadlineLabel, escapeHtml as escapeCampaign } from "./campaigns.js?v=20260910-voice1";
-import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js?v=20260910-voice1";
+import { loadExperience } from "./experience.js?v=20260910-member1";
+import { campaignQuote, deadlineLabel, escapeHtml as escapeCampaign } from "./campaigns.js?v=20260910-member1";
+import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js?v=20260910-member1";
 import {
   applyThemePreference,
   getSettings,
   onSettingsChange,
   updateSettings,
   watchSystemTheme,
-} from "./store.js?v=20260910-voice1";
-import "./pwa.js?v=20260910-voice1";
+} from "./store.js?v=20260910-member1";
+import "./pwa.js?v=20260910-member1";
 import {
   BILLING_OPTIONS,
   CONTACT_CHANNELS,
@@ -21,12 +21,12 @@ import {
   planPrice,
   planSavings,
   promotionApplies,
-} from "./plans.js?v=20260910-voice1";
+} from "./plans.js?v=20260910-member1";
 import {
   applyStudentFeatureVisibility,
   enforceStudentFeature,
   renderStudentAccessBoundary,
-} from "./student-visibility.js?v=20260910-voice1";
+} from "./student-visibility.js?v=20260910-member1";
 
 const elements = {
   language: document.querySelector("#languageToggle"),
@@ -176,7 +176,7 @@ function renderPlans() {
           <p>${t(plan.summary, plan.summaryJa)}</p>
         </div>
         <div class="plan-best-for"><small>${t("BEST FOR", "こんな方に")}</small><strong>${t(plan.bestFor, plan.bestForJa)}</strong></div>
-        ${quote(plan).active && quote(plan).saving ? `<div class="campaign-price-reference"><span>${t("After offer", "終了後の価格")} <del>${formatYen(quote(plan).regular)}</del></span><b>${quote(plan).percent}% OFF</b></div>` : ""}
+        ${quote(plan).active && quote(plan).saving ? `<div class="campaign-price-reference"><span>${t("After the offer", "キャンペーン終了後")}<del>${formatYen(quote(plan).regular)}</del></span><b>${quote(plan).percent}% OFF</b></div>` : ""}
         <p class="plan-price"><strong>${formatYen(currentPrice(plan))}</strong><span>${billingLabel()}</span></p>
         ${quote(plan).active && quote(plan).saving ? `<p class="campaign-card-saving">${t(`Save ${formatYen(quote(plan).saving)} per month`, `月額${formatYen(quote(plan).saving)}お得`)}</p>` : ""}
         ${sixMonthDetails}

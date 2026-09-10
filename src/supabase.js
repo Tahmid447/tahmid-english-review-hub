@@ -1,14 +1,24 @@
-import { SUPABASE_ANON_KEY, SUPABASE_URL } from "./config.js?v=20260910-voice1";
-import { normalizePlanKey, planFor, planMeetsRequirement } from "./plans.js?v=20260910-voice1";
+import { SUPABASE_ANON_KEY, SUPABASE_URL } from "./config.js?v=20260910-member1";
+import { normalizePlanKey, planFor, planMeetsRequirement } from "./plans.js?v=20260910-member1";
 import {
   compareLessonSourceOrder,
   sourceSegmentFromLesson,
   sourceSegmentPartIndex,
-} from "./lesson-source.js?v=20260910-voice1";
+} from "./lesson-source.js?v=20260910-member1";
 
 let studentClient;
 let teacherClient;
 const userSettingsWriteQueues = new Map();
+const pendingSettingsKey = userId => `te-review:pending-settings:${encodeURIComponent(userId)}`;
+const pendingSettings = userId => {
+  try { return JSON.parse(window.localStorage.getItem(pendingSettingsKey(userId)) || "null"); } catch { return null; }
+};
+export function rememberPendingUserSettings(userId, settings) {
+  if (!userId) return null;
+  const entry = { id: `${Date.now()}:${Math.random()}`, at: Date.now(), settings: { ...settings } };
+  try { window.localStorage.setItem(pendingSettingsKey(userId), JSON.stringify(entry)); } catch {}
+  return entry;
+}
 const AUTH_OPERATION_TIMEOUT_MS = 15000;
 const STUDENT_AUTH_STORAGE_KEY = "te-review-hub-student-auth";
 const TEACHER_AUTH_STORAGE_KEY = "te-review-hub-teacher-auth";
@@ -154,6 +164,11 @@ const createBrowserClient = (storageKey) => {
     return null;
   }
   return window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+    global: { fetch: (input, init = {}) => {
+      const settingsWrite = String(input).includes("/rest/v1/review_user_settings")
+        && init.method === "POST" && typeof init.body === "string" && init.body.length < 16000;
+      return fetch(input, settingsWrite ? { ...init, keepalive: true } : init);
+    } },
     auth: {
       storageKey,
       persistSession: true,
@@ -163,7 +178,28 @@ const createBrowserClient = (storageKey) => {
   });
 };
 
+const ownerPreviewRoute = pathname => /^\/(?:my-page|lessons|learn|phrases|words|phonics)(?:\.html)?\/?$/.test(pathname) || /^\/lesson(?:\.html|\/[^/]+)$/.test(pathname);
+const ownerPreviewRequested = () => typeof window !== "undefined"
+  && ownerPreviewRoute(window.location.pathname)
+  && new URLSearchParams(window.location.search).get("owner_preview") === "1";
+const ownerPreviewChecks = new Map();
+let ownerPreviewNavigationInstalled = false;
+function installOwnerPreviewNavigation() {
+  if (ownerPreviewNavigationInstalled || typeof document === "undefined") return;
+  ownerPreviewNavigationInstalled = true;
+  const badge = document.createElement("a"); badge.href = "/teacher"; badge.className = "owner-preview-badge";
+  badge.textContent = "Teacher preview · 先生ご本人のプレビュー — Return to Studio / 先生画面へ";
+  document.body.prepend(badge);
+  document.addEventListener("click", event => {
+    const anchor = event.target.closest?.("a[href]"); if (!anchor) return;
+    const url = new URL(anchor.href, window.location.origin);
+    if (url.origin === window.location.origin && ownerPreviewRoute(url.pathname)) {
+      url.searchParams.set("owner_preview", "1"); anchor.href = url.href;
+    }
+  }, true);
+}
 export function getStudentClient() {
+  if (ownerPreviewRequested()) return getTeacherClient();
   if (!studentClient) studentClient = createBrowserClient(STUDENT_AUTH_STORAGE_KEY);
   return studentClient;
 }
@@ -195,6 +231,12 @@ export async function getStudentSession() {
   if (!client) return null;
   const { data, error } = await getBoundedSession(client);
   if (error) return null;
+  if (data.session?.user && ownerPreviewRequested()) {
+    const id = data.session.user.id;
+    if (!ownerPreviewChecks.has(id)) ownerPreviewChecks.set(id, Promise.resolve(client.rpc("review_is_site_owner")).then(result => !result.error && result.data === true).catch(() => false));
+    if (!await ownerPreviewChecks.get(id)) return null;
+    installOwnerPreviewNavigation();
+  }
   return data.session || null;
 }
 
@@ -864,7 +906,7 @@ const fetchAllQueryRows = async (createQuery) => {
   }
 };
 
-export async function fetchDatabaseLessons({ audience = "general" } = {}) {
+export async function fetchDatabaseLessons({ audience = "general", includeQuestions = true } = {}) {
   const client = getStudentClient();
   if (!client) return { lessons: null, reason: "client-unavailable" };
   const authenticated = Boolean((await getStudentSession())?.user);
@@ -873,13 +915,13 @@ export async function fetchDatabaseLessons({ audience = "general" } = {}) {
   if (audience !== "takiwaki") {
     const { data, error } = await client
       .from("review_public_lessons")
-      .select("id,slug,lesson_date,title_en,title_ja,summary_en,summary_ja,status,audience,content_version,content,is_preview,question_count,source_segment")
+      .select(`id,slug,lesson_date,title_en,title_ja,summary_en,summary_ja,status,audience,content_version,is_preview,question_count,source_segment${includeQuestions ? ",content" : ""}`)
       .eq("status", "published")
       .order("lesson_date", { ascending: true })
       .order("slug", { ascending: true });
     if (error) return { lessons: null, reason: "lesson-query-failed", error };
     publicRows = data || [];
-    if (publicRows.length) {
+    if (publicRows.length && includeQuestions) {
       const result = await fetchAllQueryRows(() => client
         .from("review_public_questions")
         .select("id,lesson_id,stable_key,position,section,format,payload,is_original,points,required_plan,locked_display")
@@ -897,7 +939,7 @@ export async function fetchDatabaseLessons({ audience = "general" } = {}) {
   if (authenticated) {
     let query = client
       .from("review_lessons")
-      .select("id,slug,lesson_date,title_en,title_ja,summary_en,summary_ja,status,audience,source_type,source_notion_page_id,source_notion_url,source_segment,content_version,content,is_preview")
+      .select(`id,slug,lesson_date,title_en,title_ja,summary_en,summary_ja,status,audience,source_type,source_notion_page_id,source_notion_url,source_segment,content_version,is_preview${includeQuestions ? ",content" : ""}`)
       .eq("status", "published")
       .order("lesson_date", { ascending: true })
       .order("slug", { ascending: true });
@@ -905,7 +947,7 @@ export async function fetchDatabaseLessons({ audience = "general" } = {}) {
     if (audience === "general") query = query.in("audience", ["general", "both"]);
     const result = await query;
     if (!result.error) privateRows = result.data || [];
-    if (privateRows.length) {
+    if (privateRows.length && includeQuestions) {
       const questionResult = await fetchAllQueryRows(() => client
         .from("review_questions")
         .select("id,lesson_id,stable_key,position,section,format,payload,is_original,points,required_plan,locked_display")
@@ -1399,6 +1441,12 @@ export async function loadUserSettings(expectedUserId = null) {
     .eq("user_id", userId)
     .maybeSingle();
   if (error) return { loaded: false, reason: "query-failed", error, settings: null };
+  const pending = pendingSettings(userId);
+  if (pending?.settings && Number(pending.at) > (Date.parse(data?.updated_at || "") || 0)) {
+    // Recover a preference changed just before navigation or while offline.
+    void saveUserSettings(pending.settings, { expectedUserId: userId });
+    return { loaded: true, settings: pending.settings, userId, updatedAt: new Date(pending.at).toISOString() };
+  }
   const settings = data?.settings && typeof data.settings === "object" && !Array.isArray(data.settings)
     ? data.settings
     : null;
@@ -1436,10 +1484,17 @@ export function saveUserSettings(settings = {}, { expectedUserId = null } = {}) 
   const snapshot = settings && typeof settings === "object" && !Array.isArray(settings)
     ? { ...settings }
     : {};
+  const pending = expectedUserId ? rememberPendingUserSettings(expectedUserId, snapshot) : null;
   const previous = userSettingsWriteQueues.get(queueKey) || Promise.resolve();
   const task = previous
     .catch(() => {})
-    .then(() => saveUserSettingsNow(snapshot, expectedUserId));
+    .then(() => saveUserSettingsNow(snapshot, expectedUserId))
+    .then(result => {
+      if ((result.saved || result.reason === "auth-changed") && pending && pendingSettings(expectedUserId)?.id === pending.id) {
+        try { window.localStorage.removeItem(pendingSettingsKey(expectedUserId)); } catch {}
+      }
+      return result;
+    });
   userSettingsWriteQueues.set(queueKey, task);
   task.finally(() => {
     if (userSettingsWriteQueues.get(queueKey) === task) {

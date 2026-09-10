@@ -21,9 +21,9 @@
   </style>
   <link rel="manifest" href="/manifest.webmanifest">
   <script>try{const p=JSON.parse(localStorage.getItem("te-review-hub:theme:v1")||"\"light\"");const c=["system","light","dark"].includes(p)?p:"light";const d=c==="dark"||(c==="system"&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.dataset.themePreference=c;document.documentElement.dataset.theme=d?"dark":"light";document.documentElement.style.colorScheme=d?"dark":"light"}catch{document.documentElement.dataset.themePreference="light";document.documentElement.dataset.theme="light";document.documentElement.style.colorScheme="light"}</script>
-  <link rel="stylesheet" href="/src/styles.css?v=20260910-voice1">
-  <link rel="stylesheet" href="/src/learn.css?v=20260910-voice1">
-  <link rel="stylesheet" href="/src/curriculum-visuals.css?v=20260910-voice1">
+  <link rel="stylesheet" href="/src/styles.css?v=20260910-member1">
+  <link rel="stylesheet" href="/src/learn.css?v=20260910-member1">
+  <link rel="stylesheet" href="/src/curriculum-visuals.css?v=20260910-member1">
   <link rel="icon" type="image/png" sizes="192x192" href="/assets/app-icon-192.png">
 </head>
 <body class="learn-page">
@@ -44,7 +44,7 @@
       <img src="/assets/app-icon-192.png" alt="" width="46" height="46">
       <span><strong>Tahmid English Club</strong><small data-ui-en="Learning Library" data-ui-ja="教材ライブラリ">Learning Library / 教材ライブラリ</small></span>
     </a>
-    <nav class="learn-header-actions" aria-label="Library settings">
+    <nav class="learn-header-actions" aria-label="Library settings"><a class="quiet-btn" href="/my-page">My Page · マイページ</a>
       <a class="learn-home-link" href="/"><span aria-hidden="true">←</span><span data-ui-en="Review Hub" data-ui-ja="Review Hubへ">Review Hub</span></a>
       <label class="learn-compact-select">
         <span data-ui-en="Language" data-ui-ja="表示">Language / 表示</span>
@@ -183,9 +183,9 @@
     <a href="/illustration-credits.html">Illustration credits / 教材画像のクレジット</a>
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js"></script>
-  <script type="module" src="/src/pwa.js?v=20260910-voice1"></script>
-  <script type="module" src="/src/learn.js?v=20260910-voice1"></script>
-  <script type="module" src="/src/curriculum-visuals.js?v=20260910-voice1"></script>
+  <script src="/assets/vendor/supabase-2.57.4.min.js"></script>
+  <script type="module" src="/src/pwa.js?v=20260910-member1"></script>
+  <script type="module" src="/src/learn.js?v=20260910-member1"></script>
+  <script type="module" src="/src/curriculum-visuals.js?v=20260910-member1"></script>
 </body>
 </html>

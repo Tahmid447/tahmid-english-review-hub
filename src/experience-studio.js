@@ -1,6 +1,6 @@
-import { PLAN_CATALOG, formatYen } from './plans.js?v=20260910-voice1';
-import { campaignQuote, deadlineLabel, escapeHtml as e } from './campaigns.js?v=20260910-voice1';
-import { welcomeContent } from './experience.js?v=20260910-voice1';
+import { PLAN_CATALOG, formatYen } from './plans.js?v=20260910-member1';
+import { campaignQuote, deadlineLabel, escapeHtml as e } from './campaigns.js?v=20260910-member1';
+import { welcomeContent } from './experience.js?v=20260910-member1';
 const features = [['dashboard','Dashboard','ダッシュボード'],['words','Words','単語'],['phrases','Phrases','フレーズ'],['phonics','Phonics','フォニックス'],['review_lessons','Lessons','レッスン'],['homework','Homework','宿題'],['progress','Progress','学習記録'],['pricing','Pricing','料金プラン'],['contact_teacher','Contact','先生への相談'],['trial_cta','Trial','無料体験'],['payment_plan','Payment plan','支払いプラン'],['announcements','Announcements','お知らせ']];
 const localDate = iso => { const d=new Date(iso); return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,16); };
 export async function renderExperienceStudio(container,{client,profiles=[],onDefaults=()=>{}}) {

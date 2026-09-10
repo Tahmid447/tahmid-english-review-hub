@@ -8,7 +8,7 @@
   <title>English Lesson Practice</title>
   <link rel="manifest" href="/manifest.webmanifest">
   <script>try{const p=JSON.parse(localStorage.getItem("te-review-hub:theme:v1")||"\"light\"");const c=["system","light","dark"].includes(p)?p:"light";const d=c==="dark"||(c==="system"&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.dataset.themePreference=c;document.documentElement.dataset.theme=d?"dark":"light";document.documentElement.style.colorScheme=d?"dark":"light"}catch{document.documentElement.dataset.themePreference="light";document.documentElement.dataset.theme="light";document.documentElement.style.colorScheme="light"}</script>
-  <link rel="stylesheet" href="/src/styles.css?v=20260910-voice1">
+  <link rel="stylesheet" href="/src/styles.css?v=20260910-member1">
   <link rel="icon" type="image/png" sizes="192x192" href="/assets/app-icon-192.png">
 </head>
 <body data-page="lesson">
@@ -17,7 +17,7 @@
     <a class="brand" id="hubBackLink" href="/">
       <img class="brand-logo" src="/assets/app-icon-192.png" alt="Tahmid English Club logo" width="50" height="50"><span><strong>Review Hub</strong><small>Back to lessons · レッスン一覧へ</small></span>
     </a>
-    <nav class="header-actions">
+    <nav class="header-actions"><a class="quiet-btn" href="/my-page">My Page · マイページ</a>
       <a class="quiet-btn" href="/plans" target="_blank" rel="noopener" data-student-feature="show_pricing" data-ui-en="Plans" data-ui-ja="料金プラン">Plans / 料金プラン</a>
       <button class="quiet-btn settings-open" id="openLessonSettings" type="button" aria-haspopup="dialog"><span aria-hidden="true">⚙</span> <span data-ui-en="Settings" data-ui-ja="設定">Settings / 設定</span></button>
     </nav>
@@ -32,7 +32,7 @@
         <p class="jp" id="lessonSummaryJa"></p>
         <p class="practice-entry-note" id="practiceEntryNote">Full Lesson / フルレッスン</p>
       </div>
-      <div class="lesson-mode">
+      <div class="lesson-mode"><button type="button" class="quiet-btn save-learning-btn" id="saveLesson" aria-pressed="false" disabled>♡ Save lesson · レッスンを保存</button>
         <label><span data-ui-en="Practice set" data-ui-ja="練習セット">Practice set / 練習セット</span><select id="practiceMode"><option value="quick">Quick Practice / ショート練習</option><option value="all">All questions / 全問題</option><option value="original">Original Review / 元の復習</option><option value="extra">Listen & Speak / 聞く・話す</option><option value="wrong">Mistakes only / 間違いだけ</option><option value="unanswered">Unanswered only / 未回答だけ</option></select></label>
         <label><span data-ui-en="Question type" data-ui-ja="問題タイプ">Question type / 問題タイプ</span><select id="questionTypeFilter"><option value="all">All types / 全タイプ</option></select></label>
         <button class="secondary-btn" id="shuffleQuestions" type="button" data-ui-en="Shuffle again" data-ui-ja="もう一度シャッフル">Shuffle again / もう一度シャッフル</button>
@@ -54,8 +54,8 @@
     <nav class="question-nav" id="questionNav" aria-label="Question numbers"></nav>
 
     <section class="question-stage">
-      <div class="question-topline"><span id="questionType">Question</span><span id="questionCounter">1 / 1</span></div>
-      <article id="questionCard" class="question-card" aria-live="polite"></article>
+      <div class="question-topline"><span id="questionType">Question</span><button type="button" class="quiet-btn save-learning-btn" id="saveQuestion" aria-pressed="false" disabled>♡ Save question · この問題を保存</button><span id="questionCounter">1 / 1</span></div>
+      <p id="choiceSpeechStatus" class="choice-speech-status" role="status" aria-live="polite"></p><article id="questionCard" class="question-card" aria-live="polite"></article>
       <details class="hint-box" id="hintBox">
         <summary><span data-ui-en="Hint" data-ui-ja="ヒント">Hint / ヒント</span><span class="hint-countdown" id="hintCountdown"></span></summary>
         <div id="hintContent"></div>
@@ -95,7 +95,7 @@
         <label><span data-ui-en="English voice" data-ui-ja="英語音声">English voice / 英語音声</span><select id="voiceSelect"><option value="us">US · Ava</option><option value="gb">UK · Libby</option></select></label>
         <label class="settings-global-only"><span data-ui-en="Playback speed" data-ui-ja="再生速度">Playback speed / 再生速度</span><select id="playbackRate"><option value="0.5">0.5×</option><option value="1">1×</option><option value="1.5">1.5×</option></select></label>
         <label class="settings-global-only"><span data-ui-en="Voice volume" data-ui-ja="ボイス音量">Voice volume / ボイス音量</span><input id="voiceVolume" type="range" min="0" max="100" step="5" value="100"></label>
-        <label class="settings-check"><input id="autoPronounceChoices" type="checkbox"> <span><b data-ui-en="Pronounce selected English choices" data-ui-ja="選んだ英語の選択肢を発音">Pronounce selected English choices / 選んだ英語の選択肢を発音</b><small data-ui-en="On by default; plays once after selection" data-ui-ja="初期設定はオン・選択後に1回だけ再生">On by default; plays once after selection / 初期設定はオン・選択後に1回だけ再生</small></span></label>
+        <label class="settings-check pronunciation-setting"><input id="autoPronounceChoices" type="checkbox"> <span><b data-ui-en="Pronounce selected English choices" data-ui-ja="選んだ英語の選択肢を発音">Pronounce selected English choices / 選んだ英語の選択肢を発音</b><small data-ui-en="On by default; plays once after selection" data-ui-ja="初期設定はオン・選択後に1回だけ再生">On by default; plays once after selection / 初期設定はオン・選択後に1回だけ再生</small></span></label>
       </div>
     </section>
     <section class="settings-group settings-global-only" aria-labelledby="sfxSettingsHeading"><h3 id="sfxSettingsHeading" data-ui-en="Sound Effects" data-ui-ja="効果音">Sound Effects / 効果音</h3><div class="settings-grid"><button class="quiet-btn" id="sfxToggle" type="button" aria-pressed="true" data-ui-en="SFX On" data-ui-ja="効果音 オン">SFX On / 効果音 オン</button><label><span data-ui-en="SFX volume" data-ui-ja="効果音の音量">SFX volume / 効果音の音量</span><input id="sfxVolume" type="range" min="0" max="100" step="5" value="35"></label></div><p class="settings-note" data-ui-en="Warm, distinct click, correct, try-again and completion cues. Voice remains independent." data-ui-ja="クリック・正解・もう一度・完了を、聞き分けやすい心地よい音で知らせます。ボイス設定とは別に管理されます。">Warm, distinct click, correct, try-again and completion cues. Voice remains independent.</p></section>
@@ -121,8 +121,8 @@
     <form method="dialog"><button class="primary-btn full-width" value="done" data-ui-en="Done" data-ui-ja="完了">Done / 完了</button></form>
   </dialog>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js"></script>
-  <script type="module" src="/src/pwa.js?v=20260910-voice1"></script>
-  <script type="module" src="/src/lesson.js?v=20260910-voice1"></script>
+  <script src="/assets/vendor/supabase-2.57.4.min.js"></script>
+  <script type="module" src="/src/pwa.js?v=20260910-member1"></script>
+  <script type="module" src="/src/lesson.js?v=20260910-member1"></script>
 </body>
 </html>

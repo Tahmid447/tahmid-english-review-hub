@@ -1,7 +1,7 @@
-import { readSpeechClip, saveSpeechClip } from "./speech-cache.js?v=20260910-voice1";
-import { NATURAL_SPEECH_URL, SUPABASE_ANON_KEY } from "./config.js?v=20260910-voice1";
-import { AMBIENT_TRACK_KEYS, getSettings, getStorageScope, normalizeAnswerText } from "./store.js?v=20260910-voice1";
-import { VOICE_PROFILES, createSpeechRequest, speechCacheKey, validateSpeechResponse } from "./speech-contract.js?v=20260910-voice1";
+import { readSpeechClip, saveSpeechClip } from "./speech-cache.js?v=20260910-member1";
+import { NATURAL_SPEECH_URL, SUPABASE_ANON_KEY } from "./config.js?v=20260910-member1";
+import { AMBIENT_TRACK_KEYS, getSettings, getStorageScope, normalizeAnswerText } from "./store.js?v=20260910-member1";
+import { VOICE_PROFILES, createSpeechRequest, speechCacheKey, validateSpeechResponse } from "./speech-contract.js?v=20260910-member1";
 
 const AUDIO_CACHE_LIMIT = 40;
 let speechPlayer = null;
@@ -367,34 +367,22 @@ const audioContextConstructor = () => (typeof window !== "undefined"
   ? (window.AudioContext || window.webkitAudioContext)
   : null);
 
+// Short, light cues: the click has no low bass "pop", and retry is a
+// neutral invitation to continue. Speech remains the prominent sound.
 const sfxNotes = Object.freeze({
-  click: Object.freeze([
-    Object.freeze({ frequency: 392, offset: 0, duration: 0.075, gain: 0.084, type: "sine" }),
-    Object.freeze({ frequency: 587.33, offset: 0.008, duration: 0.068, gain: 0.044, type: "triangle" }),
-    Object.freeze({ frequency: 783.99, offset: 0.018, duration: 0.052, gain: 0.022, type: "sine" }),
-  ]),
-  correct: Object.freeze([
-    Object.freeze({ frequency: 523.25, offset: 0, duration: 0.28, gain: 0.13, type: "sine" }),
-    Object.freeze({ frequency: 659.25, offset: 0.09, duration: 0.32, gain: 0.112, type: "sine" }),
-    Object.freeze({ frequency: 783.99, offset: 0.18, duration: 0.38, gain: 0.1, type: "sine" }),
-    Object.freeze({ frequency: 1046.5, offset: 0.205, duration: 0.35, gain: 0.044, type: "triangle" }),
-    Object.freeze({ frequency: 1318.51, offset: 0.24, duration: 0.27, gain: 0.022, type: "sine" }),
-  ]),
-  retry: Object.freeze([
-    Object.freeze({ frequency: 440, offset: 0, duration: 0.24, gain: 0.096, type: "sine" }),
-    Object.freeze({ frequency: 392, offset: 0.105, duration: 0.26, gain: 0.082, type: "triangle" }),
-    Object.freeze({ frequency: 349.23, offset: 0.2, duration: 0.25, gain: 0.064, type: "sine" }),
-    Object.freeze({ frequency: 523.25, offset: 0.32, duration: 0.26, gain: 0.04, type: "sine" }),
-  ]),
-  completion: Object.freeze([
-    Object.freeze({ frequency: 392, offset: 0, duration: 0.3, gain: 0.09, type: "sine" }),
-    Object.freeze({ frequency: 523.25, offset: 0.1, duration: 0.36, gain: 0.112, type: "sine" }),
-    Object.freeze({ frequency: 659.25, offset: 0.22, duration: 0.44, gain: 0.108, type: "sine" }),
-    Object.freeze({ frequency: 783.99, offset: 0.35, duration: 0.52, gain: 0.088, type: "triangle" }),
-    Object.freeze({ frequency: 1046.5, offset: 0.43, duration: 0.45, gain: 0.046, type: "sine" }),
-    Object.freeze({ frequency: 1567.98, offset: 0.48, duration: 0.32, gain: 0.02, type: "sine" }),
-  ]),
+  click: [{ frequency: 2100, offset: 0, duration: 0.026, gain: 0.035, type: "sine" },
+          { frequency: 3150, offset: 0.002, duration: 0.018, gain: 0.009, type: "sine" }],
+  correct: [{ frequency: 880, offset: 0, duration: 0.16, gain: 0.09, type: "sine" },
+            { frequency: 1174.66, offset: 0.065, duration: 0.25, gain: 0.07, type: "sine" },
+            { frequency: 1760, offset: 0.08, duration: 0.19, gain: 0.016, type: "sine" }],
+  retry: [{ frequency: 659.25, offset: 0, duration: 0.16, gain: 0.055, type: "sine" },
+          { frequency: 587.33, offset: 0.06, duration: 0.19, gain: 0.038, type: "sine" }],
+  completion: [{ frequency: 659.25, offset: 0, duration: 0.23, gain: 0.07, type: "sine" },
+               { frequency: 880, offset: 0.1, duration: 0.25, gain: 0.08, type: "sine" },
+               { frequency: 1174.66, offset: 0.21, duration: 0.36, gain: 0.065, type: "sine" },
+               { frequency: 1760, offset: 0.23, duration: 0.3, gain: 0.017, type: "sine" }],
 });
+let lastClickAt = -Infinity;
 
 const ANSWER_COACHING = Object.freeze({
   correct: Object.freeze([
@@ -432,6 +420,11 @@ export async function playInterfaceSound(kind = "click") {
     if (feedbackAudioContext.state === "suspended") {
       await feedbackAudioContext.resume();
     }
+  if (kind === "click") {
+    const now = Date.now();
+    if (now - lastClickAt < 55) return { played: false, reason: "coalesced" };
+    lastClickAt = now;
+  }
     const startAt = feedbackAudioContext.currentTime + 0.01;
     const notes = sfxNotes[kind] || sfxNotes.click;
     const volume = Math.max(0, Math.min(1, Number(settings.sfxVolume ?? 0.34)));

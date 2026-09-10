@@ -1,11 +1,12 @@
+import { initialiseMemberPreferences } from './member-preferences.js?v=20260910-member1';
 import {
   AMBIENT_TRACKS,
   ambientPlaybackStatus,
   setAmbientPlayback,
   syncAmbientFromSettings,
-} from "./audio.js?v=20260910-voice1";
-import { getSettings, onSettingsChange, updateSettings } from "./store.js?v=20260910-voice1";
-import { installPlayfulInteractions } from "./effects.js?v=20260910-voice1";
+} from "./audio.js?v=20260910-member1";
+import { getSettings, onSettingsChange, updateSettings } from "./store.js?v=20260910-member1";
+import { installPlayfulInteractions } from "./effects.js?v=20260910-member1";
 
 const trackOptions = Object.entries(AMBIENT_TRACKS).map(([key, track]) => (
   `<option value="${key}">${track.name}</option>`
@@ -93,5 +94,6 @@ function bindControls(root) {
 const roots = [...document.querySelectorAll("[data-study-music-controls]")];
 roots.forEach(bindControls);
 onSettingsChange((settings) => roots.forEach((root) => applyControls(root, settings)));
-void syncAmbientFromSettings().finally(() => roots.forEach((root) => applyControls(root)));
+const preferencesReady = document.body.dataset.page === "teacher" ? Promise.resolve() : initialiseMemberPreferences();
+void preferencesReady.then(() => syncAmbientFromSettings()).finally(() => roots.forEach((root) => applyControls(root)));
 installPlayfulInteractions();

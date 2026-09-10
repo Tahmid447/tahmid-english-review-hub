@@ -6,7 +6,7 @@ import { execFileSync } from "node:child_process";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const dist = path.join(root, "dist");
 const files = [
-  "index.html",
+  "index.html", "lessons.html", "my-page.html",
   "teacher.html",
   "lesson.html",
   "learn.html",
@@ -30,7 +30,7 @@ const publicSourceFiles = [
   "config.js",
   "data.js",
   "effects.js",
-  "hub.js",
+  "hub.js", "lessons.js", "my-page.js", "member-preferences.js", "profile-api.js", "personal-cards.js", "saved-learning.js", "member-pages.css",
   "i18n.js",
   "lesson.js",
   "lesson-grading.js",
@@ -62,7 +62,7 @@ const offlinePreviewIds = new Set(["june-28", "june-29"]);
 fs.rmSync(dist, { recursive: true, force: true });
 fs.mkdirSync(dist, { recursive: true });
 const commit = process.env.COMMIT_REF || execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim();
-fs.writeFileSync(path.join(dist, 'release.json'), JSON.stringify({ version: '10.3.0', commit, builtAt: new Date().toISOString(), cache: 'te-review-public-v25' }, null, 2) + '\n');
+fs.writeFileSync(path.join(dist, 'release.json'), JSON.stringify({ version: '10.4.0', commit, builtAt: new Date().toISOString(), cache: 'te-review-public-v26' }, null, 2) + '\n');
 
 for (const file of files) {
   const source = path.join(root, file);
@@ -109,6 +109,8 @@ fs.writeFileSync(
     "/takiwaki /?legacy=takiwaki 301!",
     "/takiwaki.html /?legacy=takiwaki 301!",
     "/teacher /teacher.html 200",
+    "/lessons /lessons.html 200",
+    "/my-page /my-page.html 200",
     "/lesson/* /lesson.html?id=:splat 200",
     "/learn /learn.html 200",
     "/words /learn.html?category=words 200",
@@ -129,7 +131,7 @@ fs.writeFileSync(
     "  Referrer-Policy: strict-origin-when-cross-origin",
     "  Permissions-Policy: microphone=(self)",
     "  Strict-Transport-Security: max-age=31536000; includeSubDomains",
-    "  Content-Security-Policy: default-src 'self'; base-uri 'self'; frame-ancestors 'none'; object-src 'none'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob: https://ycmybggetemkhorkhfnf.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; worker-src 'self' blob:; manifest-src 'self'; form-action 'self'; upgrade-insecure-requests",
+    "  Content-Security-Policy: default-src 'self'; base-uri 'self'; frame-ancestors 'none'; object-src 'none'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://ycmybggetemkhorkhfnf.supabase.co; media-src 'self' blob: https://ycmybggetemkhorkhfnf.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; worker-src 'self' blob:; manifest-src 'self'; form-action 'self'; upgrade-insecure-requests",
     "",
     "/sw.js",
     "  Cache-Control: no-cache, no-store, must-revalidate",

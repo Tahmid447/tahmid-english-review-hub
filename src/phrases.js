@@ -1,4 +1,4 @@
-import { buildPhraseCatalog } from "./data.js?v=20260910-voice1";
+import { buildPhraseCatalog } from "./data.js?v=20260910-member1";
 import {
   applyThemePreference,
   getSettings,
@@ -7,7 +7,7 @@ import {
   safeLocalReturnPath,
   updateSettings,
   watchSystemTheme,
-} from "./store.js?v=20260910-voice1";
+} from "./store.js?v=20260910-member1";
 import {
   speechRecognitionSupported,
   setAmbientPlayback,
@@ -16,22 +16,22 @@ import {
   stopAudio,
   stopSpeechPractice,
   syncAmbientFromSettings,
-} from "./audio.js?v=20260910-voice1";
+} from "./audio.js?v=20260910-member1";
 import {
   getStudentClient,
   getStudentSession,
   loadUserSettings,
   saveUserSettings,
-} from "./supabase.js?v=20260910-voice1";
-import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js?v=20260910-voice1";
-import { celebrate, installPlayfulInteractions } from "./effects.js?v=20260910-voice1";
+} from "./supabase.js?v=20260910-member1";
+import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js?v=20260910-member1";
+import { celebrate, installPlayfulInteractions } from "./effects.js?v=20260910-member1";
 import {
   applyStudentFeatureVisibility,
   featureAllowed,
   loadStudentAccess,
   renderStudentAccessBoundary,
   studentAccessBoundaryCopy,
-} from "./student-visibility.js?v=20260910-voice1";
+} from "./student-visibility.js?v=20260910-member1";
 
 const LEGACY_ACTIVITY_KEY = "teh_phrase_activity_v1";
 const ACTIVITY_KEY_PREFIX = "teh_phrase_activity_v2";
@@ -55,8 +55,8 @@ let activity = {};
 let activityStorageKey = null;
 let activeActivityUserId = null;
 let activeCategory = "all";
-let activeLibraryKind = "phrase";
-let searchText = "";
+let activeLibraryKind = ["word","phrase","pattern"].includes(new URLSearchParams(window.location.search).get("kind")) ? new URLSearchParams(window.location.search).get("kind") : "phrase";
+let searchText = new URLSearchParams(window.location.search).get("search") || "";
 let activeRecognitionId = null;
 let visiblePhraseLimit = PHRASE_PAGE_SIZE;
 let allowedLibraryKinds = new Set(["phrase", "word", "pattern"]);
@@ -610,7 +610,7 @@ async function mergeRemoteActivity(session) {
         lastDate: [local.lastDate, record.last_practiced_at, record.lastPracticedAt]
           .filter(Boolean)
           .sort((a, b) => new Date(b) - new Date(a))[0] || null,
-        favorite: Boolean(local.favorite || record.is_favorite || record.isFavorite),
+        favorite: Boolean(record.is_favorite ?? record.isFavorite),
       };
     });
     saveActivity();
@@ -632,6 +632,7 @@ async function syncRemoteActivity(id) {
     await client.from("review_phrase_activity").upsert({
       user_id: session.user.id,
       phrase_id: id,
+      lesson_id: catalog.find(phrase => phrase.id === id)?.databaseLessonId || null,
       practice_count: Number(record.count || 0),
       last_practiced_at: record.lastDate || null,
       is_favorite: Boolean(record.favorite),

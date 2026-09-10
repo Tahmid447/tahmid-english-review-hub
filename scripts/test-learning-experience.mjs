@@ -68,6 +68,14 @@ assert.equal(store.getSettings().voiceEnabled, false);
 assert.equal(store.getSettings().sfxEnabled, false, "The SFX toggle persists independently.");
 assert.equal(store.getSettings().sound, false, "The legacy sound alias follows Voice only.");
 
+store.updateSettings({ ambientEnabled:false, ambientTrack:"rainy_desk", ambientVolume:0.11 });
+store.setStorageUser("student-b");
+assert.equal(store.getSettings().ambientEnabled,true,"A new account has its own music default.");
+store.setStorageUser("student-a");
+assert.equal(store.getSettings().ambientEnabled,false,"Music off survives re-entering the same account.");
+assert.equal(store.getSettings().ambientTrack,"rainy_desk");
+assert.equal(store.getSettings().ambientVolume,0.11);
+store.updateSettings({ambientEnabled:true,ambientTrack:"night_focus"});
 store.setStorageUser("student-b");
 assert.equal(
   store.getLessonProgress("june-28"),
@@ -468,7 +476,7 @@ class FakeAudioContext {
 globalThis.window = { AudioContext: FakeAudioContext };
 const enhancedClick = await playInterfaceSound("click");
 assert.equal(enhancedClick.played, true);
-assert.equal(scheduledSfxNotes, 3, "The click sound uses a clear three-note tactile chime.");
+assert.equal(scheduledSfxNotes, 2, "The short click uses two quiet high-frequency partials without a bass pop.");
 if (originalWindow === undefined) delete globalThis.window;
 else globalThis.window = originalWindow;
 

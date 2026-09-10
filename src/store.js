@@ -122,7 +122,11 @@ export function getSettings() {
   const legacySound = saved?.sound !== false && saved?.soundEnabled !== false;
   const voiceEnabled = typeof saved?.voiceEnabled === "boolean" ? saved.voiceEnabled : legacySound;
   const sfxEnabled = typeof saved?.sfxEnabled === "boolean" ? saved.sfxEnabled : legacySound;
-  const ambientPreferenceCurrent = Number(saved?.ambientPreferenceVersion) === 2;
+  const ambient = activeStorageScope === "anonymous" ? { ...saved,
+    ...(typeof deviceAmbient.enabled === "boolean" ? { ambientEnabled: deviceAmbient.enabled } : {}),
+    ...(deviceAmbient.track ? { ambientTrack: deviceAmbient.track } : {}),
+    ...(deviceAmbient.volume != null ? { ambientVolume: deviceAmbient.volume } : {}),
+  } : saved;
   const clampVolume = (value, fallback) => Number.isFinite(Number(value))
     ? Math.max(0, Math.min(1, Number(value)))
     : fallback;
@@ -146,20 +150,12 @@ export function getSettings() {
     sfxEnabled,
     sfxVolume: clampVolume(saved?.sfxVolume, 0.34),
     ambientPreferenceVersion: 2,
-    // Study music is a device-level listening preference so it follows the
-    // learner between public, plan, credit and teacher pages even when those
-    // pages do not load a learner session.
-    ambientEnabled: typeof deviceAmbient.enabled === "boolean"
-      ? deviceAmbient.enabled
-      : ambientPreferenceCurrent ? saved?.ambientEnabled !== false : true,
-    ambientTrack: AMBIENT_TRACK_KEYS.includes(deviceAmbient.track)
-      ? deviceAmbient.track
-      : AMBIENT_TRACK_KEYS.includes(saved?.ambientTrack)
-        ? saved.ambientTrack
-      : "calm_focus",
-    ambientVolume: Number.isFinite(Number(deviceAmbient.volume))
-      ? clampVolume(deviceAmbient.volume, 0.18)
-      : ambientPreferenceCurrent ? clampVolume(saved?.ambientVolume, 0.18) : 0.18,
+    // Signed-in preferences belong to this account. The last device choice
+    // also follows public pages, but must never override another account.
+    // Preserve an explicit off value from every older settings version.
+    ambientEnabled: ambient?.ambientEnabled !== false,
+    ambientTrack: AMBIENT_TRACK_KEYS.includes(ambient?.ambientTrack) ? ambient.ambientTrack : "calm_focus",
+    ambientVolume: clampVolume(ambient?.ambientVolume, 0.18),
     // Choices are always shuffled for a new practice run. Keep this field for
     // backward-compatible remote settings without allowing an old unchecked
     // preference to disable the learning safeguard.
@@ -266,6 +262,7 @@ export function safeLocalReturnPath(value, fallback = "/", origin) {
       /^\/index\.html$/,
       /^\/phrases(?:\.html)?\/?$/,
       /^\/lesson\.html$/,
+      /^\/(?:lessons|my-page|learn|words|phonics)(?:\.html)?\/?$/,
       /^\/lesson\/[^/]+\/?$/,
       /^\/pricing\.html$/,
       /^\/plans\/?$/,

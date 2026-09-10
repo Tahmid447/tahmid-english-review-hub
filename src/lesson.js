@@ -1,4 +1,5 @@
-import { buildPhraseCatalog, getLessonById, normalizeJapaneseMeaning } from "./data.js?v=20260910-voice1";
+import { renderLessonSaveControls } from './saved-learning.js?v=20260910-member1';
+import { buildPhraseCatalog, getLessonById, normalizeJapaneseMeaning } from "./data.js?v=20260910-member1";
 import {
   applyThemePreference,
   escapeHTML,
@@ -10,7 +11,7 @@ import {
   shuffleArray,
   updateSettings,
   watchSystemTheme,
-} from "./store.js?v=20260910-voice1";
+} from "./store.js?v=20260910-member1";
 import {
   answerCoachingFeedback,
   playAnswerFeedback,
@@ -22,7 +23,7 @@ import {
   stopAudio,
   stopSpeechPractice,
   syncAmbientFromSettings,
-} from "./audio.js?v=20260910-voice1";
+} from "./audio.js?v=20260910-member1";
 import {
   getStudentSession,
   loadUserSettings,
@@ -30,20 +31,20 @@ import {
   saveAttempt,
   saveSpeakingActivity,
   saveUserSettings,
-} from "./supabase.js?v=20260910-voice1";
-import { applyLanguageMode, languageModeFromSettings, learningText, uiText } from "./i18n.js?v=20260910-voice1";
-import { DEEP_LESSON_GUIDES } from "./lesson-guides.js?v=20260910-voice1";
-import { buildPracticeMapTargets } from "./lesson-guide-targets.js?v=20260910-voice1";
-import { animateAnswerFeedback, installPlayfulInteractions } from "./effects.js?v=20260910-voice1";
-import { renderPremiumLessonTasks } from "./premium-tasks.js?v=20260910-voice1";
-import { planFor } from "./plans.js?v=20260910-voice1";
+} from "./supabase.js?v=20260910-member1";
+import { applyLanguageMode, languageModeFromSettings, learningText, uiText } from "./i18n.js?v=20260910-member1";
+import { DEEP_LESSON_GUIDES } from "./lesson-guides.js?v=20260910-member1";
+import { buildPracticeMapTargets } from "./lesson-guide-targets.js?v=20260910-member1";
+import { animateAnswerFeedback, installPlayfulInteractions } from "./effects.js?v=20260910-member1";
+import { renderPremiumLessonTasks } from "./premium-tasks.js?v=20260910-member1";
+import { planFor } from "./plans.js?v=20260910-member1";
 import {
   applyStudentFeatureVisibility,
   featureAllowed,
   loadStudentAccess,
   renderStudentAccessBoundary,
   studentAccessBoundaryCopy,
-} from "./student-visibility.js?v=20260910-voice1";
+} from "./student-visibility.js?v=20260910-member1";
 import {
   answerExists as answerValueExists,
   calculateOfficialTotals,
@@ -53,7 +54,7 @@ import {
   preserveFirstResult,
   selectQuickPracticeIds,
   storyboardPanelLayout,
-} from "./lesson-grading.js?v=20260910-voice1";
+} from "./lesson-grading.js?v=20260910-member1";
 
 const $ = (selector) => document.querySelector(selector);
 
@@ -115,7 +116,8 @@ const params = new URLSearchParams(window.location.search);
 const lessonPathMatch = window.location.pathname.match(/^\/lesson\/([^/]+)\/?$/);
 const lessonId = params.get("id") || decodeURIComponent(lessonPathMatch?.[1] || "");
 const isTeacherPreview = params.get("preview") === "1";
-const requestedPractice = ["quick", "full"].includes(params.get("practice"))
+const requestedQuestion = params.get("question") || "";
+const requestedPractice = requestedQuestion ? "full" : ["quick", "full"].includes(params.get("practice"))
   ? params.get("practice")
   : "";
 const legacyReturn = params.get("from") === "takiwaki" ? "/#account" : "/";
@@ -189,11 +191,17 @@ const queueFeedbackSpeech = (items = []) => {
   void (async () => {
     for (const item of speechItems) {
       if (generation !== feedbackSpeechGeneration) return;
-      await speakText(item.text, {
+      const result = await speakText(item.text, {
         voice: state.settings.voice,
         language: item.language || "en",
         rate: state.settings.playbackRate,
+        onStatus: ({ messageEn, messageJa }) => {
+          if (generation !== feedbackSpeechGeneration) return;
+          const output = document.querySelector("#choiceSpeechStatus");
+          if (output) output.textContent = t(messageEn, messageJa);
+        },
       });
+      if (result.cancelled) return;
     }
   })();
 };
@@ -953,7 +961,7 @@ const renderLessonGuide = async () => {
   let phrases = Array.isArray(state.lesson.phrases) ? state.lesson.phrases : [];
   if (!phrases.length) {
     try {
-      phrases = (await buildPhraseCatalog()).filter((phrase) => phrase.lessonId === state.lesson.id);
+      phrases = (await buildPhraseCatalog({ lessons: [state.lesson] })).filter((phrase) => phrase.lessonId === state.lesson.id);
     } catch {
       phrases = [];
     }
@@ -1484,9 +1492,13 @@ const attachQuestionHandlers = (question) => {
 };
 
 const renderQuestion = () => {
+  feedbackSpeechGeneration += 1;
+  const choiceStatus = document.querySelector("#choiceSpeechStatus");
+  if (choiceStatus) choiceStatus.textContent = "";
   stopAudio();
   stopSpeechPractice();
   const question = state.visibleQuestions[state.currentIndex];
+  renderLessonSaveControls({ lesson: state.lesson, question, userId: activeStudentUserId, showMessage: showToast });
   if (!question) {
     clearHintTimer();
     hintQuestionId = "";
@@ -1894,7 +1906,7 @@ const initialiseLesson = async () => {
     if (!selected.length) state.practiceMode = "all";
     state.visibleQuestions = selectQuestionSet(state.practiceMode);
     if (!state.hasPersistedRunState) state.requireRunChecks = state.practiceMode === "wrong";
-    const savedLast = getLessonProgress(lessonId)?.lastQuestionId;
+    const savedLast = requestedQuestion || getLessonProgress(lessonId)?.lastQuestionId;
     const savedIndex = state.visibleQuestions.findIndex((question) => question.id === savedLast);
     state.currentIndex = savedIndex >= 0 ? savedIndex : 0;
     saveLocalState();
