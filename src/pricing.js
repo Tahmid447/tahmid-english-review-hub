@@ -1,14 +1,14 @@
-import { loadExperience } from "./experience.js?v=20260910-member1";
-import { campaignQuote, deadlineLabel, escapeHtml as escapeCampaign } from "./campaigns.js?v=20260910-member1";
-import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js?v=20260910-member1";
+import { loadExperience } from "./experience.js?v=20260910-member2";
+import { campaignQuote, deadlineLabel, escapeHtml as escapeCampaign } from "./campaigns.js?v=20260910-member2";
+import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js?v=20260910-member2";
 import {
   applyThemePreference,
   getSettings,
   onSettingsChange,
   updateSettings,
   watchSystemTheme,
-} from "./store.js?v=20260910-member1";
-import "./pwa.js?v=20260910-member1";
+} from "./store.js?v=20260910-member2";
+import "./pwa.js?v=20260910-member2";
 import {
   BILLING_OPTIONS,
   CONTACT_CHANNELS,
@@ -21,12 +21,12 @@ import {
   planPrice,
   planSavings,
   promotionApplies,
-} from "./plans.js?v=20260910-member1";
+} from "./plans.js?v=20260910-member2";
 import {
   applyStudentFeatureVisibility,
   enforceStudentFeature,
   renderStudentAccessBoundary,
-} from "./student-visibility.js?v=20260910-member1";
+} from "./student-visibility.js?v=20260910-member2";
 
 const elements = {
   language: document.querySelector("#languageToggle"),

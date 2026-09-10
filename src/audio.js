@@ -1,7 +1,7 @@
-import { readSpeechClip, saveSpeechClip } from "./speech-cache.js?v=20260910-member1";
-import { NATURAL_SPEECH_URL, SUPABASE_ANON_KEY } from "./config.js?v=20260910-member1";
-import { AMBIENT_TRACK_KEYS, getSettings, getStorageScope, normalizeAnswerText } from "./store.js?v=20260910-member1";
-import { VOICE_PROFILES, createSpeechRequest, speechCacheKey, validateSpeechResponse } from "./speech-contract.js?v=20260910-member1";
+import { readSpeechClip, saveSpeechClip } from "./speech-cache.js?v=20260910-member2";
+import { NATURAL_SPEECH_URL, SUPABASE_ANON_KEY } from "./config.js?v=20260910-member2";
+import { AMBIENT_TRACK_KEYS, getSettings, getStorageScope, normalizeAnswerText } from "./store.js?v=20260910-member2";
+import { VOICE_PROFILES, createSpeechRequest, speechCacheKey, validateSpeechResponse } from "./speech-contract.js?v=20260910-member2";
 
 const AUDIO_CACHE_LIMIT = 40;
 let speechPlayer = null;

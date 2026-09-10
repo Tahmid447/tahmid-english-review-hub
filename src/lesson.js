@@ -1,5 +1,5 @@
-import { renderLessonSaveControls } from './saved-learning.js?v=20260910-member1';
-import { buildPhraseCatalog, getLessonById, normalizeJapaneseMeaning } from "./data.js?v=20260910-member1";
+import { renderLessonSaveControls } from './saved-learning.js?v=20260910-member2';
+import { buildPhraseCatalog, getLessonById, normalizeJapaneseMeaning } from "./data.js?v=20260910-member2";
 import {
   applyThemePreference,
   escapeHTML,
@@ -11,7 +11,7 @@ import {
   shuffleArray,
   updateSettings,
   watchSystemTheme,
-} from "./store.js?v=20260910-member1";
+} from "./store.js?v=20260910-member2";
 import {
   answerCoachingFeedback,
   playAnswerFeedback,
@@ -23,7 +23,7 @@ import {
   stopAudio,
   stopSpeechPractice,
   syncAmbientFromSettings,
-} from "./audio.js?v=20260910-member1";
+} from "./audio.js?v=20260910-member2";
 import {
   getStudentSession,
   loadUserSettings,
@@ -31,20 +31,20 @@ import {
   saveAttempt,
   saveSpeakingActivity,
   saveUserSettings,
-} from "./supabase.js?v=20260910-member1";
-import { applyLanguageMode, languageModeFromSettings, learningText, uiText } from "./i18n.js?v=20260910-member1";
-import { DEEP_LESSON_GUIDES } from "./lesson-guides.js?v=20260910-member1";
-import { buildPracticeMapTargets } from "./lesson-guide-targets.js?v=20260910-member1";
-import { animateAnswerFeedback, installPlayfulInteractions } from "./effects.js?v=20260910-member1";
-import { renderPremiumLessonTasks } from "./premium-tasks.js?v=20260910-member1";
-import { planFor } from "./plans.js?v=20260910-member1";
+} from "./supabase.js?v=20260910-member2";
+import { applyLanguageMode, languageModeFromSettings, learningText, uiText } from "./i18n.js?v=20260910-member2";
+import { DEEP_LESSON_GUIDES } from "./lesson-guides.js?v=20260910-member2";
+import { buildPracticeMapTargets } from "./lesson-guide-targets.js?v=20260910-member2";
+import { animateAnswerFeedback, installPlayfulInteractions } from "./effects.js?v=20260910-member2";
+import { renderPremiumLessonTasks } from "./premium-tasks.js?v=20260910-member2";
+import { planFor } from "./plans.js?v=20260910-member2";
 import {
   applyStudentFeatureVisibility,
   featureAllowed,
   loadStudentAccess,
   renderStudentAccessBoundary,
   studentAccessBoundaryCopy,
-} from "./student-visibility.js?v=20260910-member1";
+} from "./student-visibility.js?v=20260910-member2";
 import {
   answerExists as answerValueExists,
   calculateOfficialTotals,
@@ -54,7 +54,7 @@ import {
   preserveFirstResult,
   selectQuickPracticeIds,
   storyboardPanelLayout,
-} from "./lesson-grading.js?v=20260910-member1";
+} from "./lesson-grading.js?v=20260910-member2";
 
 const $ = (selector) => document.querySelector(selector);
 
@@ -1794,6 +1794,8 @@ const maybeCompleteRun = () => {
 
 const initialiseLesson = async () => {
   elements.hubBackLink.href = returnTo;
+  const backLabel = elements.hubBackLink.querySelector("small");
+  if (backLabel && returnTo.startsWith("/my-page")) backLabel.textContent = "Back to My Page · マイページへ";
   try {
     let allowOfflinePreview = true;
     if (!isTeacherPreview) {
@@ -1816,13 +1818,16 @@ const initialiseLesson = async () => {
         return;
       }
     }
-    await loadScopedSettings();
+    const expectedUser = isTeacherPreview ? null : (await getStudentSession())?.user?.id || null;
+    const [, lesson] = await Promise.all([
+      loadScopedSettings(),
+      getLessonById(lessonId, { preview: isTeacherPreview, allowOfflinePreview }),
+    ]);
+    if (!isTeacherPreview && ((await getStudentSession())?.user?.id || null) !== expectedUser) {
+      window.location.reload(); return;
+    }
     syncAmbientFromSettings();
     lessonScopeReady = true;
-    const lesson = await getLessonById(lessonId, {
-      preview: isTeacherPreview,
-      allowOfflinePreview,
-    });
     if (!lesson) throw new Error("This lesson could not be found.");
     state.lesson = lesson;
     state.masterQuestions = lesson.questions;

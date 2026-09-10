@@ -1,6 +1,6 @@
-import { displayProfileAvatar } from './profile-api.js?v=20260910-member1';
-import { mountPersonalCardStudio } from './personal-cards.js?v=20260910-member1';
-import { renderExperienceStudio } from "./experience-studio.js?v=20260910-member1";
+import { displayProfileAvatar } from './profile-api.js?v=20260910-member2';
+import { mountPersonalCardStudio } from './personal-cards.js?v=20260910-member2';
+import { renderExperienceStudio } from "./experience-studio.js?v=20260910-member2";
 import {
   createTeacherAccessCode,
   deleteTeacherAccessCode,
@@ -15,15 +15,15 @@ import {
   signInTeacherWithGoogle,
   signOutTeacher,
   updateTeacherAccessCode,
-} from "./supabase.js?v=20260910-member1";
-import { planFor } from "./plans.js?v=20260910-member1";
-import { uiText } from "./i18n.js?v=20260910-member1";
-import { readHumanText } from "./lesson-guide-targets.js?v=20260910-member1";
+} from "./supabase.js?v=20260910-member2";
+import { planFor } from "./plans.js?v=20260910-member2";
+import { uiText } from "./i18n.js?v=20260910-member2";
+import { readHumanText } from "./lesson-guide-targets.js?v=20260910-member2";
 import {
   sourceSegmentFromLesson,
   sourceSegmentIsValid,
   sourceSegmentPartIndex,
-} from "./lesson-source.js?v=20260910-member1";
+} from "./lesson-source.js?v=20260910-member2";
 import {
   DEFAULT_HUB_SETTINGS,
   fetchTeacherHubSettings,
@@ -31,9 +31,9 @@ import {
   saveTeacherHubSettings,
   assignTeacherLearningPack,
   setTeacherLearningPackActive,
-} from "./curriculum-api.js?v=20260910-member1";
+} from "./curriculum-api.js?v=20260910-member2";
 
-import { normalizeCategoryAccess, categoryVisibleLevels } from "./curriculum-access.js?v=20260910-member1";
+import { normalizeCategoryAccess, categoryVisibleLevels } from "./curriculum-access.js?v=20260910-member2";
 
 const client = getTeacherClient();
 

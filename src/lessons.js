@@ -1,8 +1,8 @@
-import { fetchDatabaseLessons } from './supabase.js?v=20260910-member1';
-import { loadStudentAccess, applyStudentFeatureVisibility, featureAllowed, renderStudentAccessBoundary } from './student-visibility.js?v=20260910-member1';
-import { initialiseMemberPreferences } from './member-preferences.js?v=20260910-member1';
-import { escapeHTML as e, getSettings, updateSettings } from './store.js?v=20260910-member1';
-import './study-music.js?v=20260910-member1';
+import { fetchDatabaseLessons } from './supabase.js?v=20260910-member2';
+import { loadStudentAccess, applyStudentFeatureVisibility, featureAllowed, renderStudentAccessBoundary } from './student-visibility.js?v=20260910-member2';
+import { initialiseMemberPreferences } from './member-preferences.js?v=20260910-member2';
+import { escapeHTML as e, getSettings, updateSettings } from './store.js?v=20260910-member2';
+import './study-music.js?v=20260910-member2';
 const grid = document.querySelector('#catalogueGrid');
 const status = document.querySelector('#catalogueStatus');
 const search = document.querySelector('#catalogueSearch');

@@ -1,10 +1,10 @@
-import { SUPABASE_ANON_KEY, SUPABASE_URL } from "./config.js?v=20260910-member1";
-import { normalizePlanKey, planFor, planMeetsRequirement } from "./plans.js?v=20260910-member1";
+import { SUPABASE_ANON_KEY, SUPABASE_URL } from "./config.js?v=20260910-member2";
+import { normalizePlanKey, planFor, planMeetsRequirement } from "./plans.js?v=20260910-member2";
 import {
   compareLessonSourceOrder,
   sourceSegmentFromLesson,
   sourceSegmentPartIndex,
-} from "./lesson-source.js?v=20260910-member1";
+} from "./lesson-source.js?v=20260910-member2";
 
 let studentClient;
 let teacherClient;
@@ -180,6 +180,7 @@ const createBrowserClient = (storageKey) => {
 
 const ownerPreviewRoute = pathname => /^\/(?:my-page|lessons|learn|phrases|words|phonics)(?:\.html)?\/?$/.test(pathname) || /^\/lesson(?:\.html|\/[^/]+)$/.test(pathname);
 const ownerPreviewRequested = () => typeof window !== "undefined"
+  && Boolean(window.location)
   && ownerPreviewRoute(window.location.pathname)
   && new URLSearchParams(window.location.search).get("owner_preview") === "1";
 const ownerPreviewChecks = new Map();
@@ -1023,6 +1024,7 @@ export async function fetchDatabaseLesson(lessonSlug, { preview = false } = {}) 
   if (!client) return { lesson: null, reason: "client-unavailable" };
   let authenticated = false;
   let profileIncomplete = false;
+  let profileGate = Promise.resolve({ data: true, error: null });
   if (preview) {
     const session = await getTeacherSession();
     if (!session?.user) return { lesson: null, reason: "teacher-sign-in-required" };
@@ -1093,10 +1095,8 @@ export async function fetchDatabaseLesson(lessonSlug, { preview = false } = {}) 
   } else {
     authenticated = Boolean((await getStudentSession())?.user);
     if (authenticated) {
-      const { data: complete, error: profileGateError } = await client.rpc(
-        "review_profile_is_complete",
-      );
-      profileIncomplete = !profileGateError && complete === false;
+      profileGate = Promise.resolve(client.rpc("review_profile_is_complete"))
+        .catch(error => ({ data: null, error }));
     }
   }
 
@@ -1159,19 +1159,17 @@ export async function fetchDatabaseLesson(lessonSlug, { preview = false } = {}) 
     .eq("lesson_id", lesson.id);
   if (questionTable === "review_questions") questionQuery = questionQuery.eq("active", true);
   questionQuery = questionQuery.order("position", { ascending: true });
-  const { data: questions, error: questionError } = await questionQuery;
-  if (questionError) {
-    return { lesson: null, reason: "question-query-failed", error: questionError };
-  }
-
-  const { data: lockedQuestions, error: teaserError } = await client
-    .from("review_question_teasers")
-    .select("id,position,section,format,required_plan")
-    .eq("lesson_id", lesson.id)
-    .order("position", { ascending: true });
-  if (teaserError) {
-    return { lesson: null, reason: "question-teaser-query-failed", error: teaserError };
-  }
+  const [questionResult, teaserResult, profileResult] = await Promise.all([
+    questionQuery,
+    client.from("review_question_teasers").select("id,position,section,format,required_plan")
+      .eq("lesson_id", lesson.id).order("position", { ascending: true }),
+    profileGate,
+  ]);
+  const { data: questions, error: questionError } = questionResult;
+  const { data: lockedQuestions, error: teaserError } = teaserResult;
+  profileIncomplete = !profileResult.error && profileResult.data === false;
+  if (questionError) return { lesson: null, reason: "question-query-failed", error: questionError };
+  if (teaserError) return { lesson: null, reason: "question-teaser-query-failed", error: teaserError };
 
   const content = lesson.content && typeof lesson.content === "object" && !Array.isArray(lesson.content)
     ? lesson.content
