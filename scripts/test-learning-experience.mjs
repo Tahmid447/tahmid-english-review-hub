@@ -303,6 +303,7 @@ const { VOICE_PROFILES, SPEECH_PROFILE_VERSION } = await import("../src/speech-c
 const originalAudio = globalThis.Audio;
 const originalFetch = globalThis.fetch;
 const audioInstances = [];
+const playedRates = [];
 const speechRequests = [];
 class FakeAudio {
   static hangNext = false;
@@ -324,6 +325,7 @@ class FakeAudio {
   load() {}
 
   play() {
+    playedRates.push(this.playbackRate);
     this.paused = false;
     if (FakeAudio.hangNext) {
       FakeAudio.hangNext = false;
@@ -392,7 +394,8 @@ const mixedVoice = await speakText(
 );
 assert.equal(mixedVoice.played, true);
 assert.equal(mixedVoice.rate, 1.5);
-assert(audioInstances.slice(-3).every(({ playbackRate }) => playbackRate === 1.5));
+assert(playedRates.slice(-3).every(rate => rate === 1.5));
+assert.equal(audioInstances.filter(a => a.source === "/assets/audio/silence.wav").length, 1, "Speech reuses the element unlocked by the learner gesture.");
 assert.deepEqual(
   speechRequests.slice(-3).map(({ accent }) => accent),
   ["ja", "us", "ja"],

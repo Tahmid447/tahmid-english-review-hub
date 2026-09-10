@@ -16,13 +16,25 @@ const types = {
   ".webp": "image/webp",
   ".svg": "image/svg+xml",
   ".mp3": "audio/mpeg",
+  ".wav": "audio/wav",
   ".m4a": "audio/mp4",
 };
 
 http
-  .createServer((request, response) => {
+  .createServer(async (request, response) => {
     const url = new URL(request.url, `http://${request.headers.host}`);
     let pathname = decodeURIComponent(url.pathname);
+    if (pathname === "/.netlify/functions/natural-speech") {
+      try {
+        const { default: handler } = await import("../netlify/functions/natural-speech.mjs");
+        const chunks = []; for await (const chunk of request) chunks.push(chunk);
+        const result = await handler(new Request(url, { method: request.method, headers: request.headers,
+          ...(["GET", "HEAD"].includes(request.method) ? {} : { body: Buffer.concat(chunks) }) }));
+        response.writeHead(result.status, Object.fromEntries(result.headers));
+        response.end(Buffer.from(await result.arrayBuffer()));
+      } catch { response.writeHead(502); response.end("Speech unavailable"); }
+      return;
+    }
     if (pathname === "/takiwaki" || pathname === "/takiwaki.html") {
       response.writeHead(302, { location: "/?legacy=takiwaki" });
       response.end();

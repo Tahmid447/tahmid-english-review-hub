@@ -20,7 +20,8 @@ const sources = Object.fromEntries(await Promise.all(categories.map(async (categ
 const [audioSource, edgeSource, learnSource] = await Promise.all([
   "src/audio.js", "supabase/functions/natural-speech/index.ts", "src/learn.js",
 ].map((file) => readFile(new URL(file, root), "utf8")));
-assert.equal(new URL(NATURAL_SPEECH_URL).pathname, "/functions/v1/natural-speech");
+const speechEndpoint = new URL(NATURAL_SPEECH_URL, "https://tahmid-english-review-hub.netlify.app").href;
+assert.equal(new URL(speechEndpoint).pathname, "/.netlify/functions/natural-speech");
 assert.doesNotMatch(audioSource, /speechSynthesis|SpeechSynthesisUtterance/, "No browser TTS fallback is allowed.");
 assert.match(audioSource, /validateSpeechResponse\(response, voiceCode\)/, "Playback verifies the response before caching it.");
 assert.match(learnSource, /curriculumAudioSamples\(state.category, item\)/, "The UI uses the audited sample builder.");
@@ -128,7 +129,7 @@ for (const [name, body, expectedStatus] of [
   ["mismatched-profile", { text: "Hello", accent: "us", profile: "old" }, 409],
   ["empty-text", { text: "", accent: "us" }, 400],
 ]) {
-  const response = await fetch(NATURAL_SPEECH_URL, {
+  const response = await fetch(speechEndpoint, {
     method: "POST", headers: { "Content-Type": "application/json", apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` },
     body: JSON.stringify(body), cache: "no-store", signal: AbortSignal.timeout(30000),
   });
@@ -158,7 +159,7 @@ const jobs = [
 ].flatMap((entry) => accents.map((accent) => ({ ...entry, accent })));
 const rows = [];
 for (const job of jobs) {
-  const response = await fetch(NATURAL_SPEECH_URL, {
+  const response = await fetch(speechEndpoint, {
     method: "POST",
     headers: { "Content-Type": "application/json", apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` },
     body: JSON.stringify(createSpeechRequest(job.text, job.accent)),

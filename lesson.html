@@ -8,7 +8,7 @@
   <title>English Lesson Practice</title>
   <link rel="manifest" href="/manifest.webmanifest">
   <script>try{const p=JSON.parse(localStorage.getItem("te-review-hub:theme:v1")||"\"light\"");const c=["system","light","dark"].includes(p)?p:"light";const d=c==="dark"||(c==="system"&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.dataset.themePreference=c;document.documentElement.dataset.theme=d?"dark":"light";document.documentElement.style.colorScheme=d?"dark":"light"}catch{document.documentElement.dataset.themePreference="light";document.documentElement.dataset.theme="light";document.documentElement.style.colorScheme="light"}</script>
-  <link rel="stylesheet" href="/src/styles.css?v=20260908-campaign1">
+  <link rel="stylesheet" href="/src/styles.css?v=20260910-voice1">
   <link rel="icon" type="image/png" sizes="192x192" href="/assets/app-icon-192.png">
 </head>
 <body data-page="lesson">
@@ -106,7 +106,7 @@
         <button class="active" data-check="manual" type="button" data-ui-en="Manual Check" data-ui-ja="自分で確認">Manual Check / 自分で確認</button>
         <button data-check="instant" type="button" data-ui-en="Instant Check" data-ui-ja="すぐ採点">Instant Check / すぐ採点</button>
       </div>
-      <label class="settings-check settings-global-only"><input id="showChoiceTranslations" type="checkbox"> <span><b data-ui-en="Show Japanese under choices" data-ui-ja="選択肢の日本語を表示">Show Japanese under choices / 選択肢の日本語を表示</b><small data-ui-en="Leave off for a harder challenge" data-ui-ja="難しくしたいときはオフ">Leave off for a harder challenge / 難しくしたいときはオフ</small></span></label>
+      <label class="settings-check translation-setting"><input id="showChoiceTranslations" type="checkbox"> <span><b data-ui-en="Show Japanese under choices" data-ui-ja="選択肢の日本語を表示">Show Japanese under choices / 選択肢の日本語を表示</b><small data-ui-en="Leave off for a harder challenge" data-ui-ja="難しくしたいときはオフ">Leave off for a harder challenge / 難しくしたいときはオフ</small></span></label>
       <div class="segmented hint-mode-toggle" role="group" aria-label="Hint behaviour">
         <button class="active" data-hint-mode="auto" type="button" data-ui-en="Hints auto-close" data-ui-ja="ヒントを自動で閉じる">Hints auto-close / ヒントを自動で閉じる</button>
         <button data-hint-mode="manual" type="button" data-ui-en="Keep hints open" data-ui-ja="ヒントを開いたまま">Keep hints open / ヒントを開いたまま</button>
@@ -122,7 +122,7 @@
   </dialog>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js"></script>
-  <script type="module" src="/src/pwa.js?v=20260908-campaign1"></script>
-  <script type="module" src="/src/lesson.js?v=20260908-campaign1"></script>
+  <script type="module" src="/src/pwa.js?v=20260910-voice1"></script>
+  <script type="module" src="/src/lesson.js?v=20260910-voice1"></script>
 </body>
 </html>

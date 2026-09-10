@@ -1,4 +1,4 @@
-import { renderExperienceStudio } from "./experience-studio.js?v=20260908-campaign1";
+import { renderExperienceStudio } from "./experience-studio.js?v=20260910-voice1";
 import {
   createTeacherAccessCode,
   deleteTeacherAccessCode,
@@ -13,15 +13,15 @@ import {
   signInTeacherWithGoogle,
   signOutTeacher,
   updateTeacherAccessCode,
-} from "./supabase.js?v=20260908-campaign1";
-import { planFor } from "./plans.js?v=20260908-campaign1";
-import { uiText } from "./i18n.js?v=20260908-campaign1";
-import { readHumanText } from "./lesson-guide-targets.js?v=20260908-campaign1";
+} from "./supabase.js?v=20260910-voice1";
+import { planFor } from "./plans.js?v=20260910-voice1";
+import { uiText } from "./i18n.js?v=20260910-voice1";
+import { readHumanText } from "./lesson-guide-targets.js?v=20260910-voice1";
 import {
   sourceSegmentFromLesson,
   sourceSegmentIsValid,
   sourceSegmentPartIndex,
-} from "./lesson-source.js?v=20260908-campaign1";
+} from "./lesson-source.js?v=20260910-voice1";
 import {
   DEFAULT_HUB_SETTINGS,
   fetchTeacherHubSettings,
@@ -29,9 +29,9 @@ import {
   saveTeacherHubSettings,
   assignTeacherLearningPack,
   setTeacherLearningPackActive,
-} from "./curriculum-api.js?v=20260908-campaign1";
+} from "./curriculum-api.js?v=20260910-voice1";
 
-import { normalizeCategoryAccess, categoryVisibleLevels } from "./curriculum-access.js?v=20260908-campaign1";
+import { normalizeCategoryAccess, categoryVisibleLevels } from "./curriculum-access.js?v=20260910-voice1";
 
 const client = getTeacherClient();
 

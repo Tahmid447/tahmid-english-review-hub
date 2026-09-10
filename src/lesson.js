@@ -1,4 +1,4 @@
-import { buildPhraseCatalog, getLessonById, normalizeJapaneseMeaning } from "./data.js?v=20260908-campaign1";
+import { buildPhraseCatalog, getLessonById, normalizeJapaneseMeaning } from "./data.js?v=20260910-voice1";
 import {
   applyThemePreference,
   escapeHTML,
@@ -10,7 +10,7 @@ import {
   shuffleArray,
   updateSettings,
   watchSystemTheme,
-} from "./store.js?v=20260908-campaign1";
+} from "./store.js?v=20260910-voice1";
 import {
   answerCoachingFeedback,
   playAnswerFeedback,
@@ -22,7 +22,7 @@ import {
   stopAudio,
   stopSpeechPractice,
   syncAmbientFromSettings,
-} from "./audio.js?v=20260908-campaign1";
+} from "./audio.js?v=20260910-voice1";
 import {
   getStudentSession,
   loadUserSettings,
@@ -30,20 +30,20 @@ import {
   saveAttempt,
   saveSpeakingActivity,
   saveUserSettings,
-} from "./supabase.js?v=20260908-campaign1";
-import { applyLanguageMode, languageModeFromSettings, learningText, uiText } from "./i18n.js?v=20260908-campaign1";
-import { DEEP_LESSON_GUIDES } from "./lesson-guides.js?v=20260908-campaign1";
-import { buildPracticeMapTargets } from "./lesson-guide-targets.js?v=20260908-campaign1";
-import { animateAnswerFeedback, installPlayfulInteractions } from "./effects.js?v=20260908-campaign1";
-import { renderPremiumLessonTasks } from "./premium-tasks.js?v=20260908-campaign1";
-import { planFor } from "./plans.js?v=20260908-campaign1";
+} from "./supabase.js?v=20260910-voice1";
+import { applyLanguageMode, languageModeFromSettings, learningText, uiText } from "./i18n.js?v=20260910-voice1";
+import { DEEP_LESSON_GUIDES } from "./lesson-guides.js?v=20260910-voice1";
+import { buildPracticeMapTargets } from "./lesson-guide-targets.js?v=20260910-voice1";
+import { animateAnswerFeedback, installPlayfulInteractions } from "./effects.js?v=20260910-voice1";
+import { renderPremiumLessonTasks } from "./premium-tasks.js?v=20260910-voice1";
+import { planFor } from "./plans.js?v=20260910-voice1";
 import {
   applyStudentFeatureVisibility,
   featureAllowed,
   loadStudentAccess,
   renderStudentAccessBoundary,
   studentAccessBoundaryCopy,
-} from "./student-visibility.js?v=20260908-campaign1";
+} from "./student-visibility.js?v=20260910-voice1";
 import {
   answerExists as answerValueExists,
   calculateOfficialTotals,
@@ -53,7 +53,7 @@ import {
   preserveFirstResult,
   selectQuickPracticeIds,
   storyboardPanelLayout,
-} from "./lesson-grading.js?v=20260908-campaign1";
+} from "./lesson-grading.js?v=20260910-voice1";
 
 const $ = (selector) => document.querySelector(selector);
 
@@ -1103,7 +1103,7 @@ const renderChoiceQuestion = (question, selectedAnswer = state.answers[question.
         <div class="choice-audio-row">
           <button class="choice-option ${String(selectedAnswer) === String(choice.id) ? "selected" : ""}" data-choice="${escapeHTML(choice.id)}" type="button" role="radio" aria-checked="${String(String(selectedAnswer) === String(choice.id))}" tabindex="${String(selectedAnswer) === String(choice.id) || (!hasSelection && index === 0) ? "0" : "-1"}">
             <span class="letter">${String.fromCharCode(65 + index)}</span>
-            <span>${escapeHTML(choice.en)}${state.settings.showJapanese && state.settings.showChoiceTranslations && choice.jp ? `<small>${escapeHTML(choice.jp)}</small>` : ""}</span>
+            <span>${escapeHTML(choice.en)}${state.settings.showChoiceTranslations && choice.jp ? `<small>${escapeHTML(choice.jp)}</small>` : ""}</span>
           </button>
           ${renderTextAudioButton(choice.en, t(`Listen to choice ${String.fromCharCode(65 + index)}`, `選択肢${String.fromCharCode(65 + index)}を聞く`))}
         </div>

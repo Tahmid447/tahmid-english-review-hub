@@ -1,4 +1,4 @@
-import { maybeShowWelcomeOffer } from "./experience.js?v=20260908-campaign1";
+import { maybeShowWelcomeOffer } from "./experience.js?v=20260910-voice1";
 import {
   applyThemePreference,
   getAllLessonProgress,
@@ -9,8 +9,8 @@ import {
   setStorageUser,
   updateSettings,
   watchSystemTheme,
-} from "./store.js?v=20260908-campaign1";
-import { loadPublishedLessons } from "./data.js?v=20260908-campaign1";
+} from "./store.js?v=20260910-voice1";
+import { loadPublishedLessons } from "./data.js?v=20260910-voice1";
 import {
   getStudentClient,
   getStudentMembership,
@@ -26,17 +26,17 @@ import {
   signInStudentWithGoogle,
   signUpStudent,
   signOutStudent,
-} from "./supabase.js?v=20260908-campaign1";
-import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js?v=20260908-campaign1";
-import { installPlayfulInteractions } from "./effects.js?v=20260908-campaign1";
-import { planFor } from "./plans.js?v=20260908-campaign1";
-import { setAmbientPlayback, stopAudio, syncAmbientFromSettings } from "./audio.js?v=20260908-campaign1";
+} from "./supabase.js?v=20260910-voice1";
+import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js?v=20260910-voice1";
+import { installPlayfulInteractions } from "./effects.js?v=20260910-voice1";
+import { planFor } from "./plans.js?v=20260910-voice1";
+import { setAmbientPlayback, stopAudio, syncAmbientFromSettings } from "./audio.js?v=20260910-voice1";
 import {
   applyStudentFeatureVisibility,
   featureAllowed,
   loadStudentAccess,
   renderStudentAnnouncements,
-} from "./student-visibility.js?v=20260908-campaign1";
+} from "./student-visibility.js?v=20260910-voice1";
 
 let publishedLessons = [];
 let visibleLessons = [];

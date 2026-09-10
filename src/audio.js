@@ -1,8 +1,18 @@
-import { NATURAL_SPEECH_URL, SUPABASE_ANON_KEY } from "./config.js?v=20260908-campaign1";
-import { AMBIENT_TRACK_KEYS, getSettings, normalizeAnswerText } from "./store.js?v=20260908-campaign1";
-import { VOICE_PROFILES, createSpeechRequest, speechCacheKey, validateSpeechResponse } from "./speech-contract.js?v=20260908-campaign1";
+import { readSpeechClip, saveSpeechClip } from "./speech-cache.js?v=20260910-voice1";
+import { NATURAL_SPEECH_URL, SUPABASE_ANON_KEY } from "./config.js?v=20260910-voice1";
+import { AMBIENT_TRACK_KEYS, getSettings, getStorageScope, normalizeAnswerText } from "./store.js?v=20260910-voice1";
+import { VOICE_PROFILES, createSpeechRequest, speechCacheKey, validateSpeechResponse } from "./speech-contract.js?v=20260910-voice1";
 
-const AUDIO_CACHE_LIMIT = 24;
+const AUDIO_CACHE_LIMIT = 40;
+let speechPlayer = null;
+// Safari grants playback to the element touched during a user gesture. Reuse
+// that element after synthesis instead of creating a new, unpermitted one.
+const unlockSpeechPlayer = () => {
+  if (speechPlayer || typeof Audio === "undefined") return;
+  speechPlayer = new Audio("/assets/audio/silence.wav");
+  speechPlayer.playsInline = true;
+  speechPlayer.play().catch(() => {});
+};
 const remoteAudioCache = new Map();
 let activeAudio = null;
 let activeAudioFinish = null;
@@ -139,7 +149,8 @@ const playBlobSource = (source, onStatus, token, rate = 1, { finalSegment = true
     return;
   }
   cancelPlayingAudio();
-  const audio = new Audio(source);
+  const audio = speechPlayer || new Audio();
+  audio.src = source;
   audio.preload = "auto";
   audio.volume = Math.max(0, Math.min(1, Number(getSettings().voiceVolume ?? 1)));
   const playbackRate = normalizePlaybackRate(rate);
@@ -237,19 +248,39 @@ export async function speakText(text, { voice, language, rate, onStatus } = {}) 
   }
 
   stopAudio();
+  unlockSpeechPlayer();
   const token = requestGeneration;
   const segments = splitSpeechSegments(cleanText, defaultVoiceCode === "ja" ? "ja" : "en")
     .map((segment) => ({
       ...segment,
       voiceCode: segment.language === "ja" ? "ja" : englishVoiceCode,
     }));
+  // Long guide passages are split at sentence/word boundaries, avoiding the
+  // provider's 500-character limit while retaining the selected accent.
+  const chunks = segments.flatMap(segment => {
+    const pieces = []; let rest = segment.text;
+    while (rest.length > 480) {
+      const sample = rest.slice(0, 480);
+      const sentence = Math.max(sample.lastIndexOf(". "), sample.lastIndexOf("? "), sample.lastIndexOf("。"));
+      const cut = sentence > 120 ? sentence + 1 : Math.max(sample.lastIndexOf(" "), 1);
+      const end = cut > 1 ? cut : 480;
+      pieces.push({ ...segment, text: rest.slice(0, end).trim() }); rest = rest.slice(end).trim();
+    }
+    if (rest) pieces.push({ ...segment, text: rest }); return pieces;
+  });
+  segments.splice(0, segments.length, ...chunks);
   let playedSegments = 0;
   try {
     for (let segmentIndex = 0; segmentIndex < segments.length; segmentIndex += 1) {
       const segment = segments[segmentIndex];
       const { voiceCode } = segment;
-      const cacheKey = speechCacheKey(segment.text, voiceCode, NATURAL_SPEECH_URL);
+      const cacheKey = `${getStorageScope()}:${speechCacheKey(segment.text, voiceCode, NATURAL_SPEECH_URL)}`;
       let source = remoteAudioCache.get(cacheKey);
+      if (!source) {
+        const saved = await readSpeechClip(cacheKey);
+        if (token !== requestGeneration) return { played: false, cancelled: true };
+        if (saved) { source = URL.createObjectURL(saved); cacheAudio(cacheKey, source); }
+      }
       if (!source && NATURAL_SPEECH_URL && SUPABASE_ANON_KEY && typeof fetch === "function") {
         const voiceName = VOICE_PROFILES[voiceCode].name;
         report(
@@ -263,14 +294,13 @@ export async function speakText(text, { voice, language, rate, onStatus } = {}) 
         for (let attempt = 0; attempt < 2 && !source; attempt += 1) {
           const controller = new AbortController();
           activeRequest = controller;
-          const timeout = setTimeout(() => controller.abort(), attempt === 0 ? 12000 : 16000);
+          const timeout = setTimeout(() => controller.abort(), 11500);
           try {
             const response = await fetch(NATURAL_SPEECH_URL, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
-                apikey: SUPABASE_ANON_KEY,
-                Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+                ...(NATURAL_SPEECH_URL.startsWith("https://") ? { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` } : {}),
               },
               body: JSON.stringify(createSpeechRequest(segment.text, voiceCode)),
               signal: controller.signal,
@@ -284,6 +314,7 @@ export async function speakText(text, { voice, language, rate, onStatus } = {}) 
             if (token !== requestGeneration) return { played: false, cancelled: true };
             source = URL.createObjectURL(blob);
             cacheAudio(cacheKey, source);
+            void saveSpeechClip(cacheKey, blob);
           } catch (error) {
             lastError = error;
             if (error?.name === "AbortError" && token !== requestGeneration) throw error;
