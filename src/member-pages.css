@@ -1,5 +1,12 @@
 .member-page { background:var(--paper); }
 .member-page *, .home-destinations * { box-sizing:border-box; }
+/* This header contains navigation rows, unlike the fixed-height quiz header. */
+body.member-page .site-header.member-header { position:relative!important; top:auto!important; height:auto!important; min-height:0; max-height:none!important; width:100%; flex-wrap:wrap; }
+body.member-page .my-page-hero > div:not(.profile-avatar) { min-width:0; overflow-wrap:anywhere; }
+body.member-page .member-header .brand { min-width:0; flex-shrink:0; }
+body.member-page .member-header nav { min-width:0; }
+body.member-page .member-header nav a { min-height:44px; display:flex; align-items:center; }
+@media(max-width:600px) { body.member-page .member-header { flex-direction:column; align-items:stretch; gap:12px; } body.member-page .member-header nav { display:grid; grid-template-columns:1fr 1fr; gap:0 12px; } body.member-page .member-header nav a { font-size:.75rem; } }
 .member-header { position:relative; box-shadow:none; border-bottom:1px solid var(--line); border-radius:0; max-width:none; padding:22px max(24px,calc((100vw - 1280px)/2)); margin:0; gap:30px; }
 .member-header nav { display:flex; flex-wrap:wrap; gap:10px 24px; align-items:center; }
 .member-header nav a { text-decoration:none; color:var(--ink-soft); font-size:.8rem; font-weight:650; }

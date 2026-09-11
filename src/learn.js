@@ -392,9 +392,10 @@ function renderLevelGrid() {
     }
     refs.levelGrid.append(button);
   }
-  window.requestAnimationFrame(() => {
-    refs.levelGrid.querySelector('[aria-current="true"]')?.scrollIntoView({ block: "nearest", inline: "center" });
-  });
+  // Center only the horizontal strip. scrollIntoView also moved the document
+  // back to the top whenever a learner rated an item further down the page.
+  const selected = refs.levelGrid.querySelector('[aria-current="true"]');
+  if (selected) refs.levelGrid.scrollLeft = selected.offsetLeft - refs.levelGrid.clientWidth / 2 + selected.offsetWidth / 2;
 }
 
 function renderLevelOverview() {
@@ -649,7 +650,7 @@ async function saveRating(itemId, rating, { fromReview = false } = {}) {
   renderSummary();
   renderLevelGrid();
   renderLevelOverview();
-  if (!fromReview) renderItems();
+  if (!fromReview) refreshItemProgress(itemId);
   return true;
 }
 
@@ -697,7 +698,7 @@ function createProgressFooter(item) {
     button.addEventListener("click", async () => {
       [...rating.querySelectorAll("button")].forEach((control) => { control.disabled = true; });
       const saved = await saveRating(item.id, value);
-      if (!saved && rating.isConnected) {
+      if (rating.isConnected) {
         [...rating.querySelectorAll("button")].forEach((control) => { control.disabled = false; });
       }
     });
@@ -709,6 +710,20 @@ function createProgressFooter(item) {
 
 function domId(value) {
   return `curriculum-${String(value).replace(/[^a-zA-Z0-9_-]/g, "-")}`;
+}
+
+function refreshItemProgress(itemId) {
+  const card = document.getElementById(domId(itemId));
+  const progress = itemProgress(itemId);
+  if (card) {
+    const status = card.querySelector('.learn-card-progress .learn-status-pill');
+    if (status) { status.textContent = progressLabel(progress); status.dataset.status = progress.status; status.title = relativeDueLabel(progress) || ''; }
+    card.querySelectorAll('.learn-card-rating button').forEach((button, index) => {
+      button.setAttribute('aria-pressed', String(Object.keys(RATING_LABELS)[index] === progress.self_rating));
+    });
+  }
+  // Preserve the current card, its open examples and the learner's position.
+  // A changed filter is applied when the learner next selects/searches it.
 }
 
 function createItemCard(item) {

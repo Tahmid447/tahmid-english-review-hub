@@ -539,7 +539,7 @@ export async function fetchPremiumLessonTasks(databaseLessonId) {
   if (submissionIds.length) {
     const { data, error } = await client
       .from("review_submission_feedback")
-      .select("id,submission_id,score,rubric,feedback_en,feedback_ja,ai_assisted,published_at,created_at,updated_at")
+      .select("id,submission_id,score,rubric,feedback_en,feedback_ja,audio_object_path,audio_duration_seconds,ai_assisted,published_at,created_at,updated_at")
       .in("submission_id", submissionIds);
     if (error) return { plan, tasks: tasks || [], submissions: submissions || [], feedback: [], signedIn: true, error };
     feedback = data || [];
@@ -753,12 +753,20 @@ export async function saveTeacherSubmissionReview({
   score = null,
   feedbackEn = null,
   feedbackJa = null,
+  audio,
 }) {
   const client = getTeacherClient();
   const session = await getTeacherSession();
   if (!client || !session?.user) {
     return { data: null, error: new Error("Teacher sign-in is required to review a submission.") };
   }
+  if (audio !== undefined) return client.rpc("review_save_submission_review_with_audio", {
+    target_submission: String(submissionId || ""), review_action: String(action || ""),
+    review_score: score === "" || score == null ? null : Number(score),
+    review_feedback_en: String(feedbackEn || "").trim() || null,
+    review_feedback_ja: String(feedbackJa || "").trim() || null,
+    review_audio_path: audio?.path || null, review_audio_duration: audio?.duration ?? null,
+  });
   return client.rpc("review_save_submission_review", {
     target_submission: String(submissionId || ""),
     review_action: String(action || ""),

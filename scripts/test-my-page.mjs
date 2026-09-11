@@ -1,4 +1,4 @@
-process.on("uncaughtException", (error) => { console.error(error.message, error.query || ""); process.exit(1); });
+process.on("uncaughtException", (error) => { console.error(error.stack, error.query || ""); process.exit(1); });
 import assert from "node:assert/strict";
 import { readFile, readdir } from "node:fs/promises";
 
@@ -92,4 +92,60 @@ await as('teacher');await db.exec(`update review_student_hub_settings set show_r
 await as('student');assert.equal(await scalar("select review_save_learning('june-28','',false)"),false);
 await assert.rejects(db.exec("select review_save_learning('june-28','',true)"),/access required/);
 console.log('My Page SQL passed: private avatars, profile isolation, lesson/question saves, personal cards, assigned teachers, hidden content and removal after revocation.');
+
+// September 11: JPEG profile uploads and atomic private/published voice reviews.
+await as('teacher');await db.exec(`update review_student_hub_settings set show_homework=true,updated_by='${ids.teacher}' where student_id='${ids.student}'`);
+await as('student');
+await db.exec(`insert into storage.objects(bucket_id,name) values('review-avatars','${ids.student}/avatar.jpg')`);
+assert.equal(await scalar(`select count(*)::int from storage.objects where bucket_id='review-avatars'`),2);
+await assert.rejects(db.exec(`insert into storage.objects(bucket_id,name) values('review-avatars','${ids.other}/avatar.jpg')`),/row-level security/);
+await as('otherTeacher');assert.equal(await scalar(`select count(*)::int from storage.objects where bucket_id='review-avatars'`),0);
+await db.exec('reset role');
+const task=await scalar(`insert into review_premium_tasks(lesson_id,stable_key,task_type,title_en,title_ja,prompt_en,prompt_ja,target_seconds,created_by) values('${lesson}','voice-feedback-test','speaking','Speaking test','スピーキング','Say hello.','挨拶してください。',60,'${ids.teacher}') returning id`);
+const submitted='30000000-0000-4000-8000-000000000001';
+const second='30000000-0000-4000-8000-000000000002';
+const privateDraft='30000000-0000-4000-8000-000000000003';
+await db.exec(`alter table review_task_submissions disable trigger user;
+ insert into review_task_submissions(id,task_id,user_id,attempt_number,status,transcript) values
+ ('${submitted}','${task}','${ids.student}',1,'submitted','Learner speaking test'),
+ ('${second}','${task}','${ids.student}',2,'submitted','Second test'),
+ ('${privateDraft}','${task}','${ids.other}',1,'draft','Private draft');
+ alter table review_task_submissions enable trigger user;`);
+const audioPath=`${ids.teacher}/${submitted}/40000000-0000-4000-8000-000000000001.mp4`;
+await as('teacher');
+await db.exec(`insert into storage.objects(bucket_id,name) values('review-feedback-recordings','${audioPath}')`);
+await assert.rejects(db.exec(`insert into storage.objects(bucket_id,name) values('review-feedback-recordings','${ids.teacher}/${privateDraft}/40000000-0000-4000-8000-000000000001.mp4')`),/row-level security/);
+await assert.rejects(db.exec(`select review_save_submission_review_with_audio('${second}','draft',null,null,null,'${audioPath}',4)`),/belong/);
+await assert.rejects(db.exec(`select review_save_submission_review_with_audio('${submitted}','draft',null,null,null,'${audioPath}',181)`),/3 minutes/);
+await db.exec(`select review_save_submission_review_with_audio('${submitted}','draft',null,null,null,'${audioPath}',4)`);
+await as('student');
+assert.equal(await scalar(`select count(*)::int from storage.objects where bucket_id='review-feedback-recordings'`),0,'Unpublished feedback audio stays private.');
+assert.equal(await scalar(`select count(*)::int from review_submission_feedback where submission_id='${submitted}'`),0);
+await assert.rejects(db.exec(`select review_save_submission_review_with_audio('${submitted}','publish',null,'Forged',null,null,null)`),/Teacher authorisation/);
+await as('otherTeacher');
+assert.equal(await scalar(`select count(*)::int from storage.objects where bucket_id='review-feedback-recordings'`),0);
+await assert.rejects(db.exec(`select review_save_submission_review_with_audio('${submitted}','publish',null,'Wrong teacher',null,null,null)`),/cannot be reviewed/);
+await as('teacher');
+await db.exec(`select review_save_submission_review_with_audio('${submitted}','publish',80,null,null,'${audioPath}',4)`);
+assert.deepEqual(await rows(`delete from storage.objects where bucket_id='review-feedback-recordings' and name='${audioPath}' returning name`),[],'Attached audio cannot be deleted or silently overwritten.');
+assert.deepEqual(await rows(`update storage.objects set metadata='{}' where bucket_id='review-feedback-recordings' and name='${audioPath}' returning name`),[]);
+await as('student');
+assert.equal(await scalar(`select count(*)::int from storage.objects where bucket_id='review-feedback-recordings'`),1);
+assert.equal(await scalar(`select audio_object_path from review_submission_feedback where submission_id='${submitted}'`),audioPath);
+await as('other');assert.equal(await scalar(`select count(*)::int from storage.objects where bucket_id='review-feedback-recordings'`),0);
+await as('teacher');
+const replacement=`${ids.teacher}/${submitted}/40000000-0000-4000-8000-000000000002.webm`;
+await db.exec(`insert into storage.objects(bucket_id,name) values('review-feedback-recordings','${replacement}')`);
+await db.exec(`select review_save_submission_review_with_audio('${submitted}','publish',90,'Listen to the stress.',null,'${replacement}',3)`);
+assert.equal((await rows(`delete from storage.objects where bucket_id='review-feedback-recordings' and name='${audioPath}' returning name`)).length,1);
+await db.exec(`select review_save_submission_review_with_audio('${submitted}','publish',90,'Written feedback only.',null,null,null)`);
+assert.equal((await rows(`delete from storage.objects where bucket_id='review-feedback-recordings' and name='${replacement}' returning name`)).length,1);
+const returnedPath=`${ids.teacher}/${second}/40000000-0000-4000-8000-000000000003.mp4`;
+await db.exec(`insert into storage.objects(bucket_id,name) values('review-feedback-recordings','${returnedPath}');
+ select review_save_submission_review_with_audio('${second}','return',null,null,null,'${returnedPath}',2);`);
+await as('student');assert.equal(await scalar(`select status from review_task_submissions where id='${second}'`),'returned');
+assert.equal(await scalar(`select count(*)::int from storage.objects where name='${returnedPath}'`),1);
+await as(null);await assert.rejects(db.exec(`select review_save_submission_review_with_audio('${submitted}','publish',null,'Anonymous',null,null,null)`),/permission denied/);
+console.log('JPEG/voice SQL passed: own uploads, assigned teachers, private drafts, atomic publish/return, immutable audio, cross-account denial, replacement and cleanup.');
+
 await db.close();

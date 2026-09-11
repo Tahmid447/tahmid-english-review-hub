@@ -4588,6 +4588,20 @@ body[data-page=pricing] .plan-card.featured { box-shadow:0 24px 64px -38px #1b62
 @media(max-height:800px) { .welcome-offer { padding-top:24px; }.welcome-emblem { width:34px;height:34px;font-size:23px;margin-bottom:10px; }.welcome-offer h2 { font-size:2rem;margin:12px 0 6px; }.welcome-offer p { margin:8px 0; }.welcome-value { margin:14px 0 8px; }.welcome-value > strong { font-size:3.2rem; }.welcome-prices { margin-top:12px;padding:10px 5px; }.welcome-offer .campaign-terms { margin:10px 0; }.welcome-offer .preview-ribbon { padding-bottom:8px; } }
 
 /* A calm front door: navigation appears immediately, with no delayed reveal. */
+.private-recording-player { display:grid; gap:10px; padding:16px; background:var(--cream); border:1px solid var(--line); border-radius:14px; }
+.private-recording-player audio,.voice-feedback-editor audio { width:100%; min-width:0; }
+.recording-status { min-height:1.5em; margin:0; font-size:.75rem; line-height:1.6; color:var(--ink-soft); }
+.voice-feedback-editor { grid-column:1/-1; padding:20px; border:1px solid var(--line); border-radius:16px; background:var(--cream); display:grid; gap:12px; }
+.voice-feedback-editor h4,.voice-feedback-editor p { margin:0; }.voice-feedback-editor>p{font-size:.75rem;line-height:1.7;}
+.audio-upload-label { position:relative; display:inline-flex; align-items:center; cursor:pointer; overflow:hidden; }
+.audio-upload-label input[type=file] { position:absolute; inset:0; width:100%; opacity:0; cursor:pointer; }
+.submission-filters { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; margin:20px 0; }
+.submission-filters label { display:grid; gap:7px; font-size:.76rem; font-weight:700; }.submission-filters select{width:100%;min-height:44px;}
+.premium-task-management>summary { cursor:pointer; padding:22px; border:1px solid var(--line); border-radius:16px; font-weight:800; }
+.premium-task-management[open]>summary { margin-bottom:18px; }
+.teacher-tabs button[data-teacher-tab=submissions] { position:relative; padding-right:38px; }
+.submission-count { position:absolute; right:10px; top:12px; background:var(--teal); color:white; border-radius:20px; min-width:23px; text-align:center; padding:3px; font-size:.65rem; }
+@media(max-width:600px) { .submission-filters{grid-template-columns:1fr;} .voice-feedback-editor{padding:14px;} .premium-review-card .premium-task-actions{display:flex;flex-wrap:wrap;} .premium-review-card .premium-task-actions>button,.audio-upload-label{min-height:44px;flex:1 1 140px;justify-content:center;} }
 .home-portal .site-header { max-width:1280px; margin:18px auto 0; gap:22px; align-items:center; position:relative; }
 .home-portal .header-actions { position:relative; flex-wrap:wrap; }
 .home-portal .mobile-settings-toggle { display:inline-flex; order:5; }

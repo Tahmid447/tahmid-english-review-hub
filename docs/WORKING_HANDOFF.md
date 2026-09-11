@@ -1,3 +1,20 @@
+# September 11 work in progress — resume here
+
+The user authorized continuing after a credit/account interruption. The SIX current requests are: mobile My Page header overlap, failed photo uploads, teacher playback blocked by popups, accessible submission queue, rating-induced scroll jumps, and recorded teacher voice feedback.
+
+- Production is still **10.4.1 / 55a4b63747caaa62e203c8485c5fc4f83df7bdf1**; September 11 changes are local and not deployed yet.
+- Implemented: responsive member header; JPEG avatar compression with legacy WebP reads; rating updates preserve card DOM and level strip scroll stays horizontal; inline private audio players; queue first with status/learner/type filters and early navigation tab; 3-minute teacher recorder + file attachment, private draft/publish/return voice feedback.
+- New migration `20260911081000_mobile_profiles_and_voice_feedback.sql` **NOT applied live yet**. It extends avatar MIME/path policies and adds private feedback storage plus validated atomic review RPC. Existing migration files untouched.
+- Private backup: `/Users/tahmidahmed/Documents/Codex/private-backups/2026-09-11-voice-feedback/before.json`. Management helper syntax is `--out=/absolute/path.json` (with equals).
+- PostgreSQL/PGlite tests passed, including draft privacy, cross-account rejection, publish/return, replacement and cleanup. Full suite passed before the final photo URL-race cleanup; `scripts/test-profile-photos.mjs` passes the JPEG compatibility case. Need final build and checks.
+- Mobile local My Page checked at 390px: no horizontal overflow; header ends 178px, avatar begins 213px.
+- `scripts/qa-mobile-feedback.html` is a LOOPBACK-ONLY development fixture, excluded from the build. Its microphone returns generated audio and its upload client is in-memory; it never records the user's microphone. Browser test started but the temporary tab disappeared when a new user message arrived. Reopen and finish record/stop/preview/upload/dispose, plus photo conversion.
+- Teacher own production preview photo was temporarily set to the public site logo, then removed. Verify it remains cleared. No student progress or submissions were changed during QA.
+- User was asked to log into the in-app production browser as the test learner. Reply pending. Teacher preview login remains available; do not request passwords or copy session credentials.
+- Remaining: finish component/browser checks; apply ONLY the new migration with matching ledger row; bump cache/query/version; build; commit/push working + production branch; verify `/release.json`; check live teacher recording and upload/profile on mobile. Never publish a fake feedback message or test audio to a real learner.
+
+---
+
 # Working handoff — 2026-09-10
 
 This is the existing Tahmid English Review Hub. Read this file before continuing in a new Codex chat. Do not recreate the site or replay historical migrations.

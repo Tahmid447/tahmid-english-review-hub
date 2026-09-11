@@ -1,6 +1,8 @@
+import { privateRecordingPlayer, FEEDBACK_BUCKET } from './private-recordings.js?v=20260910-member2';
 import {
   fetchPremiumLessonTasks,
   getPremiumRecordingUrl,
+  getStudentClient,
   savePremiumTextSubmission,
   submitPremiumRecording,
 } from "./supabase.js?v=20260910-member2";
@@ -141,6 +143,7 @@ const appendFeedback = (card, submission, feedbackRows, showJapanese) => {
     make("strong", { text: feedback.score == null ? "Reviewed" : `${feedback.score}/100` }),
   );
   box.append(heading);
+  if (feedback.audio_object_path) box.append(privateRecordingPlayer({client:getStudentClient(),bucket:FEEDBACK_BUCKET,path:feedback.audio_object_path,label:'Listen to teacher feedback / 先生の音声フィードバックを聞く'}));
   if (feedback.feedback_en) box.append(make("p", { text: feedback.feedback_en }));
   if (showJapanese && feedback.feedback_ja) box.append(make("p", { className: "jp", text: feedback.feedback_ja }));
   box.append(make("small", { text: "Personally reviewed and published by Tahmid. / Tahmidが確認して返却しました。" }));

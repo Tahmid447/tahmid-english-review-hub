@@ -1,3 +1,4 @@
+import { privateRecordingPlayer, voiceFeedbackEditor, FEEDBACK_BUCKET } from './private-recordings.js?v=20260910-member2';
 import { displayProfileAvatar } from './profile-api.js?v=20260910-member2';
 import { mountPersonalCardStudio } from './personal-cards.js?v=20260910-member2';
 import { renderExperienceStudio } from "./experience-studio.js?v=20260910-member2";
@@ -151,6 +152,8 @@ const state = {
   learnerPlanFilter: "all",
   learnerStatusFilter: "all",
   submissionStatusFilter: "waiting",
+  submissionLearnerFilter: "all",
+  submissionTypeFilter: "all",
   lastGeneratedCode: null,
   learnerAuthStatus: {},
   learnerAuthStatusRequests: {},
@@ -1089,6 +1092,7 @@ async function verifyTeacher(session) {
 }
 
 function showLogin(message = "") {
+  disposeReviewEditors();
   state.session = null;
   state.teacher = null;
   state.learnerAuthStatus = {};
@@ -1210,7 +1214,7 @@ async function refreshDashboard() {
       ),
       fetchOptional(
         "review_submission_feedback",
-        "id,submission_id,teacher_id,score,rubric,feedback_en,feedback_ja,ai_assisted,published_at,created_at,updated_at",
+        "id,submission_id,teacher_id,score,rubric,feedback_en,feedback_ja,audio_object_path,audio_duration_seconds,ai_assisted,published_at,created_at,updated_at",
         { order: { column: "updated_at", ascending: false } },
       ),
     ]);
@@ -3196,6 +3200,10 @@ function openLearnerDialog(profile) {
     card.append(make("span", { text: label }), make("strong", { text: value }));
     metrics.append(card);
   });
+  const openReviews=makeAction(teacherText('Open this learner’s submissions','この生徒の提出・添削を開く'),()=>{
+    elements.learnerDialog.close();state.submissionLearnerFilter=current.user_id;state.submissionStatusFilter='all';state.tab='submissions';renderActiveTab();elements.panel.scrollIntoView({block:'start'});
+  });
+  profileCard.append(openReviews);
 
   const access = make("section", { className: "learner-control-section" });
   access.append(
@@ -4515,42 +4523,35 @@ async function deletePremiumTask(task, button) {
   await refreshDashboard();
 }
 
-async function openTeacherRecording(path, button) {
-  button.disabled = true;
-  const { data, error } = await client.storage
-    .from("review-premium-recordings")
-    .createSignedUrl(path, 900);
-  button.disabled = false;
-  if (error || !data?.signedUrl) {
-    showToast(readableError(error, "The private recording could not be opened."), "error");
-    return;
-  }
-  window.open(data.signedUrl, "_blank", "noopener,noreferrer");
-}
+const reviewEditors = new Set();
+function disposeReviewEditors() { for (const editor of reviewEditors) editor.dispose(); reviewEditors.clear(); }
+window.addEventListener('pagehide', disposeReviewEditors);
 
 async function saveSubmissionFeedback(submission, values, action, button) {
-  if (!values.feedbackEn.trim() && !values.feedbackJa.trim()) {
-    showToast("Add English or Japanese feedback before saving.", "error");
-    return;
+  const editor = values.voiceEditor;
+  if (editor?.isRecording()) { showToast(teacherText("Stop recording before saving.", "録音を停止してから保存してください。"), "error"); return; }
+  if (!values.feedbackEn.trim() && !values.feedbackJa.trim() && !editor?.hasAudio()) {
+    showToast(teacherText("Add written or voice feedback before saving.", "文章または音声のフィードバックを追加してください。"), "error"); return;
   }
-  button.disabled = true;
-  const { error } = await saveTeacherSubmissionReview({
-    submissionId: submission.id,
-    action,
-    score: values.score === "" ? null : Math.max(0, Math.min(100, Number(values.score))),
-    feedbackEn: values.feedbackEn,
-    feedbackJa: values.feedbackJa,
-  });
-  if (error) {
+  const buttons = [...button.closest('.premium-feedback-editor').querySelectorAll('button')];
+  const states = buttons.map(control=>control.disabled);
+  buttons.forEach(control=>control.disabled=true); editor?.setBusy(true);
+  let audio;
+  try {
+    audio = editor ? await editor.prepare() : {path:null,duration:null};
+    const { error } = await saveTeacherSubmissionReview({
+      submissionId: submission.id, action,
+      score: values.score === "" ? null : Math.max(0, Math.min(100, Number(values.score))),
+      feedbackEn: values.feedbackEn, feedbackJa: values.feedbackJa, audio,
+    });
+    if (error) throw error;
+    await editor?.saved(audio);
+    showToast(action === "publish" ? "Feedback published to the learner." : action === "return" ? "Submission returned with feedback." : "Private feedback draft saved; learner cannot see it yet.", "success");
+    await refreshDashboard();
+  } catch (error) {
+    await editor?.discardUploaded(audio);
     showToast(readableError(error, "The review could not be saved."), "error");
-    button.disabled = false;
-    return;
-  }
-  showToast(
-    action === "publish" ? "Feedback published to the learner." : action === "return" ? "Submission returned with feedback." : "Private feedback draft saved; learner cannot see it yet.",
-    "success",
-  );
-  await refreshDashboard();
+  } finally { buttons.forEach((control,index)=>control.disabled=states[index]); editor?.setBusy(false); }
 }
 
 function premiumTaskBuilder() {
@@ -4662,7 +4663,9 @@ function premiumTaskList() {
 
 function premiumSubmissionQueue() {
   const section = make("section", { className: "premium-admin-section" });
-  const visibleSubmissions = teacherVisibleSubmissions();
+  const visibleSubmissions = teacherVisibleSubmissions().filter(item =>
+    (state.submissionLearnerFilter === 'all' || item.user_id === state.submissionLearnerFilter)
+    && (state.submissionTypeFilter === 'all' || state.premiumTasks.find(task=>task.id===item.task_id)?.task_type === state.submissionTypeFilter));
   const waitingStatuses = new Set(["submitted", "in_review"]);
   const submissions = state.submissionStatusFilter === "all"
     ? visibleSubmissions
@@ -4695,7 +4698,15 @@ function premiumSubmissionQueue() {
     state.submissionStatusFilter = filter.value;
     renderPremium();
   });
-  section.append(filter);
+  const filters = make('div', {className:'submission-filters'});
+  const statusLabel=make('label',{text:teacherText('Status','状態')}); statusLabel.append(filter);
+  const learnerLabel=make('label',{text:teacherText('Learner','生徒')}); const learner=make('select');
+  [["all",teacherText("All learners","すべての生徒")],...[...new Set(teacherVisibleSubmissions().map(item=>item.user_id))].map(id=>[id,profileName(id)])].forEach(([value,label])=>{const option=make('option',{text:label});option.value=value;learner.append(option);});
+  learner.value=state.submissionLearnerFilter; learner.onchange=()=>{state.submissionLearnerFilter=learner.value;renderPremium();};learnerLabel.append(learner);
+  const typeLabel=make('label',{text:teacherText('Work type','課題の種類')});const type=make('select');
+  [['all',teacherText('All work','すべて')],['speaking',teacherText('Speaking','スピーキング')],['essay',teacherText('Writing','英作文')]].forEach(([value,label])=>{const option=make('option',{text:label});option.value=value;type.append(option);});
+  type.value=state.submissionTypeFilter;type.onchange=()=>{state.submissionTypeFilter=type.value;renderPremium();};typeLabel.append(type);
+  filters.append(statusLabel,learnerLabel,typeLabel);section.append(filters);
   if (!submissions.length) {
     section.append(make("p", { text: visibleSubmissions.length
       ? teacherText("No submissions match this filter.", "この条件に一致する提出はありません。")
@@ -4730,14 +4741,18 @@ function premiumSubmissionQueue() {
       card.append(response);
     }
     if (submission.audio_object_path) {
-      const play = makeAction("Open private recording", () => openTeacherRecording(submission.audio_object_path, play));
-      card.append(play);
+      card.append(privateRecordingPlayer({client,bucket:'review-premium-recordings',path:submission.audio_object_path,label:teacherText('Play learner recording','生徒の録音を再生'),text:teacherText}));
     }
     const review = make("div", { className: "premium-feedback-editor" });
     const score = make("input"); score.type = "number"; score.min = "0"; score.max = "100"; score.value = feedback?.score ?? ""; score.placeholder = teacherText("Score / 100", "スコア／100");
     const feedbackEn = make("textarea"); feedbackEn.rows = 4; feedbackEn.value = feedback?.feedback_en || ""; feedbackEn.placeholder = teacherText("Feedback in English", "英語フィードバック");
     const feedbackJa = make("textarea"); feedbackJa.rows = 4; feedbackJa.value = feedback?.feedback_ja || ""; feedbackJa.placeholder = teacherText("Feedback in Japanese", "日本語フィードバック");
-    const values = () => ({ score: score.value, feedbackEn: feedbackEn.value, feedbackJa: feedbackJa.value });
+    score.setAttribute('aria-label',teacherText('Score / 100','スコア／100'));
+    feedbackEn.setAttribute('aria-label',teacherText('Feedback in English','英語フィードバック'));
+    feedbackJa.setAttribute('aria-label',teacherText('Feedback in Japanese','日本語フィードバック'));
+    const voiceEditor=voiceFeedbackEditor({client,teacherId:state.session.user.id,submissionId:submission.id,feedback,text:teacherText});
+    reviewEditors.add(voiceEditor);
+    const values = () => ({ score: score.value, feedbackEn: feedbackEn.value, feedbackJa: feedbackJa.value, voiceEditor });
     const actions = make("div", { className: "premium-task-actions" });
     const save = makeAction("Save private draft", () => saveSubmissionFeedback(submission, values(), "draft", save));
     const publish = makeAction("Publish feedback", () => {
@@ -4748,7 +4763,7 @@ function premiumSubmissionQueue() {
       if (window.confirm(teacherText("Return this work so the learner can revise and resubmit it?", "生徒が修正して再提出できるよう、この課題を差し戻しますか？"))) saveSubmissionFeedback(submission, values(), "return", returnWork);
     });
     actions.append(save, publish, returnWork);
-    review.append(score, feedbackEn, feedbackJa, actions);
+    review.append(score, feedbackEn, feedbackJa, voiceEditor.root, actions);
     card.append(review);
     list.append(card);
   });
@@ -4757,13 +4772,16 @@ function premiumSubmissionQueue() {
 }
 
 function renderPremium() {
+  disposeReviewEditors();
   const wrap = make("div", { className: "premium-admin" });
   if (!state.premiumSchemaReady) {
     wrap.append(make("p", { className: "control-warning", text: "Apply the Premium database migration before using review tasks." }));
     elements.panel.replaceChildren(wrap);
     return;
   }
-  wrap.append(premiumTaskBuilder(), premiumTaskList(), premiumSubmissionQueue());
+  const management=make('details',{className:'premium-task-management'});
+  management.append(make('summary',{text:teacherText('Manage review tasks · create / edit','添削課題の管理・作成・編集')}),premiumTaskBuilder(),premiumTaskList());
+  wrap.append(premiumSubmissionQueue(),management);
   elements.panel.replaceChildren(wrap);
 }
 
@@ -4903,6 +4921,9 @@ function renderDashboard() {
 }
 
 function renderActiveTab() {
+  disposeReviewEditors();
+  const counter=document.querySelector('#submissionWaitingCount');
+  if(counter)counter.textContent=String(teacherVisibleSubmissions().filter(item=>['submitted','in_review'].includes(item.status)).length);
   for (const button of elements.tabs) {
     button.classList.toggle("active", button.dataset.teacherTab === state.tab);
   }

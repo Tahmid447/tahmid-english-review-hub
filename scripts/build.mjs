@@ -30,7 +30,7 @@ const publicSourceFiles = [
   "config.js",
   "data.js",
   "effects.js",
-  "hub.js", "lessons.js", "my-page.js", "member-preferences.js", "profile-api.js", "personal-cards.js", "saved-learning.js", "member-pages.css",
+  "hub.js", "lessons.js", "my-page.js", "member-preferences.js", "profile-api.js", "private-recordings.js", "personal-cards.js", "saved-learning.js", "member-pages.css",
   "i18n.js",
   "lesson.js",
   "lesson-grading.js",

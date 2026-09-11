@@ -1,0 +1,14 @@
+<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="/src/styles.css"><title>Local feedback checks</title></head><body><main class="shell"><h1>Local component checks</h1><p>This test page uses generated tones and an in-memory upload store. It never uses your microphone or Supabase.</p><section id="fixture"></section><button id="prepare">Check upload</button><output id="result"></output><label>Photo test<input id="photo" type="file" accept="image/*"></label><output id="photoResult"></output><img id="photoPreview" width="96" height="96"><p><button id="dispose">Leave editor</button></p></main><script type="module">
+if(!['localhost','127.0.0.1'].includes(location.hostname))throw new Error('Local only');
+const {voiceFeedbackEditor}=await import('/src/private-recordings.js');
+const {compactAvatar}=await import('/src/profile-api.js');
+const output=document.querySelector('#result');
+const client={storage:{from(){return {async upload(path,blob,options){output.textContent=JSON.stringify({bytes:blob.size,type:blob.type,upsert:options.upsert});return {error:null};},async remove(){return {error:null};}};}}};
+let context,stream;
+navigator.mediaDevices.getUserMedia=async()=>{context=new AudioContext();await context.resume();const source=context.createOscillator();const gain=context.createGain();gain.gain.value=.01;source.connect(gain);const destination=context.createMediaStreamDestination();gain.connect(destination);source.start();stream=destination.stream;return stream;};
+const editor=voiceFeedbackEditor({client,teacherId:'10000000-0000-4000-8000-000000000001',submissionId:'30000000-0000-4000-8000-000000000001'});
+document.querySelector('#fixture').append(editor.root);
+document.querySelector('#prepare').onclick=async()=>{const audio=await editor.prepare();output.textContent+=' '+JSON.stringify(audio);};
+document.querySelector('#dispose').onclick=()=>{editor.dispose();output.textContent='Tracks: '+(stream?.getTracks().map(x=>x.readyState).join(',') || 'none');void context?.close();};
+document.querySelector('#photo').onchange=async e=>{try{const blob=await compactAvatar(e.target.files[0]);document.querySelector('#photoPreview').src=URL.createObjectURL(blob);document.querySelector('#photoResult').textContent=blob.type+' '+blob.size+' bytes';}catch(error){document.querySelector('#photoResult').textContent=error.message;}};
+</script></body></html>

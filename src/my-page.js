@@ -4,7 +4,7 @@ import { initialiseMemberPreferences } from './member-preferences.js?v=20260910-
 import { getSettings, updateSettings, onSettingsChange, escapeHTML as e } from './store.js?v=20260910-member2';
 import { loadStudentAccess, applyStudentFeatureVisibility, featureAllowed } from './student-visibility.js?v=20260910-member2';
 import { fetchStudentAnnouncements, toggleCurriculumFavorite } from './curriculum-api.js?v=20260910-member2';
-import { AVATAR_BUCKET, avatarReference, compactAvatar, displayProfileAvatar } from './profile-api.js?v=20260910-member2';
+import { AVATAR_BUCKET, avatarPath, avatarReference, compactAvatar, displayProfileAvatar } from './profile-api.js?v=20260910-member2';
 import { personalCardMarkup, bindPersonalAudio } from './personal-cards.js?v=20260910-member2';
 import { buildPhraseCatalog } from './data.js?v=20260910-member2';
 import './study-music.js?v=20260910-member2';
@@ -137,15 +137,16 @@ async function saveAvatar(reference) {
   const {data,error}=await client.from('review_profiles').update({avatar_url:reference}).eq('user_id',session.user.id).select('*').single();if(error)throw error;profile=data;void displayProfileAvatar($('#profileAvatar'),profile,client);
 }
 $('#profilePhoto').onchange=async event=>{
-  const file=event.target.files?.[0];if(!file)return;event.target.disabled=true;$('#photoStatus').textContent='Preparing your photo… · 写真を準備しています…';
+  const file=event.target.files?.[0];if(!file)return;event.target.disabled=true;$('#removePhoto').disabled=true;$('#photoStatus').textContent='Preparing your photo… · 写真を準備しています…';
   try{
-    const blob=await compactAvatar(file);const {error}=await client.storage.from(AVATAR_BUCKET).upload(`${session.user.id}/avatar.webp`,blob,{upsert:true,contentType:'image/webp',cacheControl:'0'});if(error)throw error;
+    const blob=await compactAvatar(file);const {error}=await client.storage.from(AVATAR_BUCKET).upload(avatarPath(session.user.id),blob,{upsert:true,contentType:blob.type,cacheControl:'0'});if(error)throw error;
     await saveAvatar(avatarReference(session.user.id));$('#photoStatus').textContent='Photo saved. · 写真を保存しました。';
-  }catch(error){$('#photoStatus').textContent=error.message || 'Could not save photo. · 写真を保存できませんでした。';}finally{event.target.disabled=false;event.target.value='';}
+    await client.storage.from(AVATAR_BUCKET).remove([`${session.user.id}/avatar.webp`]);
+  }catch(error){$('#photoStatus').textContent=error.message || 'Could not save photo. · 写真を保存できませんでした。';}finally{event.target.disabled=false;$('#removePhoto').disabled=false;event.target.value='';}
 };
 $('#removePhoto').onclick=async()=>{
   $('#removePhoto').disabled=true;
-  try{await saveAvatar(null);const {error}=await client.storage.from(AVATAR_BUCKET).remove([`${session.user.id}/avatar.webp`]);if(error)throw error;$('#photoStatus').textContent='Photo removed. · 写真を削除しました。';}
+  try{await saveAvatar(null);const {error}=await client.storage.from(AVATAR_BUCKET).remove([avatarPath(session.user.id),`${session.user.id}/avatar.webp`]);if(error)throw error;$('#photoStatus').textContent='Photo removed. · 写真を削除しました。';}
   catch{$('#photoStatus').textContent='Could not finish removing the photo. Please try again. · 写真の削除を完了できませんでした。もう一度お試しください。';}finally{$('#removePhoto').disabled=false;}
 };
 function renderAnnouncements(notices) {
