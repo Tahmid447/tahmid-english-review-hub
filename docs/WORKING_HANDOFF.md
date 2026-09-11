@@ -1,87 +1,69 @@
-# September 11 work in progress — resume here
+# Working handoff — 2026-09-11 complete
 
-The user authorized continuing after a credit/account interruption. The SIX current requests are: mobile My Page header overlap, failed photo uploads, teacher playback blocked by popups, accessible submission queue, rating-induced scroll jumps, and recorded teacher voice feedback.
+This is the existing Tahmid English Review Hub. Read this file and `AGENTS.md` before continuing. Do not recreate the site, reset branches, force-push or replay historical migrations.
 
-- Production is still **10.4.1 / 55a4b63747caaa62e203c8485c5fc4f83df7bdf1**; September 11 frontend changes are local and not deployed yet; the additive database migration is now live.
-- Implemented: responsive member header; JPEG avatar compression with legacy WebP reads; rating updates preserve card DOM and level strip scroll stays horizontal; inline private audio players; queue first with status/learner/type filters and early navigation tab; 3-minute teacher recorder + file attachment, private draft/publish/return voice feedback.
-- New migration `20260911081000_mobile_profiles_and_voice_feedback.sql` **APPLIED LIVE with matching ledger entry**. It extends avatar MIME/path policies and adds private feedback storage plus validated atomic review RPC. Existing migration files untouched.
-- Private backup: `/Users/tahmidahmed/Documents/Codex/private-backups/2026-09-11-voice-feedback/before.json`. Management helper syntax is `--out=/absolute/path.json` (with equals).
-- PostgreSQL/PGlite tests passed, including draft privacy, cross-account rejection, publish/return, replacement and cleanup. Full suite passed before the final photo URL-race cleanup; `scripts/test-profile-photos.mjs` passes the JPEG compatibility case. Need final build and checks.
-- Mobile local My Page checked at 390px: no horizontal overflow; header ends 178px, avatar begins 213px.
-- `scripts/qa-mobile-feedback.html` is a LOOPBACK-ONLY development fixture, excluded from the build. Its microphone returns generated audio and its upload client is in-memory; it never records the user's microphone. Browser test started but the temporary tab disappeared when a new user message arrived. Reopen and finish record/stop/preview/upload/dispose, plus photo conversion.
-- Teacher own production preview photo was temporarily set to the public site logo, then removed. Verify it remains cleared. No student progress or submissions were changed during QA.
-- User was asked to log into the in-app production browser as the test learner. Reply pending. Teacher preview login remains available; do not request passwords or copy session credentials.
-- Component checks now passed: native MediaRecorder record/stop, actual preview playback, private upload payload, track shutdown and 17,600-byte JPEG photo conversion. Explicit AAC advertised support produced empty recordings in Chromium; the implementation now uses each browser’s native/default encoder.
-- Prepared release: version 10.5.0, query 20260911-mobile1, cache v28.
-- Remaining: finish build; commit/push working + production branch; verify `/release.json`; check live teacher recording and upload/profile on mobile. Never publish a fake feedback message or test audio to a real learner.
-
----
-
-# Working handoff — 2026-09-10
-
-This is the existing Tahmid English Review Hub. Read this file before continuing in a new Codex chat. Do not recreate the site or replay historical migrations.
-
-## Source, production and recovery
+## Verified production and recovery
 
 - Repository: https://github.com/Tahmid447/tahmid-english-review-hub
 - Working branch: `codex/structured-learning-hub`
-- Production branch: `upgrade/review-hub-v9-final-product` (Netlify builds pushes)
-- Site: https://tahmid-english-review-hub.netlify.app
-- Netlify site ID: `f30d0264-70d0-4234-83ec-c717fa428f99`, team `tahmidbdjp`
-- Supabase: `ycmybggetemkhorkhfnf`
-- Release sequence: 10.2.0 `95fc29ab62f1015fa4a6bcdb3d644293fcfda107` → audio hotfix 10.3.0 `9a16ec1ae1b707d4e040352e359e528d9017d168` → member features 10.4.0 `a29dbf753b900c9cb14cc018baff9c23465589db` → final loading refinement 10.4.1 in this checkpoint.
-- Check production `/release.json` for the exact deployed SHA. Final assets: `20260910-member2`, cache `te-review-public-v27`, package 10.4.1.
-- User authorized this Sep 10 implementation and production publishing. Future permissions must come from the new conversation. Never force-push/reset or create another Netlify site.
-- Existing Netlify CLI login can belong to a different account. Use the established Git production branch.
-- Codex account/session changes do not delete this checkout or GitHub history. Logins may need renewal. Inspect Git status before resuming; preserve uncommitted work.
-- Credentials and private backups stay outside Git.
+- Netlify production branch: `upgrade/review-hub-v9-final-product`
+- Production: https://tahmid-english-review-hub.netlify.app
+- **Verified release 10.5.1: `abf447a1c547b5a65b829a8678d58572cdd546c5`**; built 2026-09-11T08:47:44.837Z. `/release.json` confirms the source. Asset query `20260911-mobile2`, cache `te-review-public-v29`.
+- Working branch may contain this final documentation checkpoint beyond the deployed source. No runtime changes are in that documentation-only commit.
+- Netlify site `f30d0264-70d0-4234-83ec-c717fa428f99`, team `tahmidbdjp`; Supabase `ycmybggetemkhorkhfnf`.
+- Deploy through the existing Git production branch. The Netlify CLI can be logged into a different account; do not relink/create a site.
+- Codex account/credit interruptions did not remove the checkout. A recovery checkpoint was pushed before finishing. Inspect Git status and this handoff in a new chat; logins may need renewal, but never copy/mint session credentials to impersonate another user.
+- The user authorized this work and public deployment. Future changes need authorization from their own conversation.
 
-## Completed requests
+## September 11 — all six requested changes implemented
 
-- [x] Reliable US Ava / UK Libby endpoint; actual browser playback completion checked for both.
-- [x] Japanese choices and click-to-pronounce controls in BOTH lesson settings panels, independent of interface language.
-- [x] Clear red reference-price and discount badges on all paid plans. Reference is accurately labelled as the post-campaign price, not an invented past selling price.
-- [x] Lighter home portal and `/lessons` with 31 metadata-only cards; home link opens a new tab.
-- [x] `/my-page`: name/goal edits, compact private photo visible to assigned teacher, announcements/detail, personal cards and searchable categorized favorites.
-- [x] Favorites: Words, Phrases, Phonics, phrasebook, whole lessons, exact questions and teacher personal cards.
-- [x] Teacher personal words/phrases/sentences/notes for one learner; optional US/UK audio; edit/hide/re-show without leaving the learner dialog.
-- [x] BGM on/off/track/volume account persistence, pending-save recovery, explicit OFF preserved; new accounts default ON subject to browser gesture requirements.
-- [x] Softer click/correct/retry/completion sounds.
-- [x] Server-verified owner preview from Teacher Studio, without copying credentials or expanding other teachers' access.
-- [x] Reduced data transfer, inspected DB size, retained all learner progress.
-- [x] GitHub recovery instructions, full tests/build and live browser verification.
+1. **Mobile My Page overlap:** shared fixed/sticky header height overrode member styles. Member headers now have natural height and a two-column mobile nav; photos stay below the navigation. Desktop layout remains flexible.
+2. **Photo uploads:** new photos encode as JPEG, not a required WebP encoder. Up to 20MB input, square crop up to 384px, max 100KB output. Legacy WebP references still work. Native HEIC decoding is accepted where available; unreadable formats show JPEG/PNG guidance. Render identity prevents an older image request from replacing a newer/removed photo.
+3. **Teacher recording playback:** inline private audio player replaces asynchronous `window.open`, which Safari blocked as a popup. User can replay or renew the signed URL in the same page.
+4. **Clearer submissions:** Submissions is near the start of navigation with a waiting count; queue appears before collapsed task management. Filters: status, learner, speaking/writing. Learner details link directly to that learner's queue. Filter label text is in leaf spans so teacher-language rendering cannot erase the select controls.
+5. **Rating scroll:** level strip scroll is horizontal only. Hard/Good/Easy update the existing card rather than replacing it; open examples and current position persist. Applies to the shared Words/Phrases/Phonics interface.
+6. **Teacher voice feedback:** record, stop, preview, re-record/remove or choose an audio file. Limit 180 seconds / 5MB. Voice-only or combined text/voice review; private drafts stay private, Publish/Return makes it available to the intended learner. The learner hears it in the original lesson's feedback area. Page changes/sign-out release recording tracks. Native browser encoder is used: forcing advertised AAC support produced empty recordings in the Chromium test environment.
 
-## Database — already applied; do not replay
+Guide: `docs/RELEASE_2026-09-11.md`.
 
-Ledger: 001–027, `20260908080538_experience_campaigns`, `20260908082230_campaign_save_scope`, **`20260910070630_learner_my_page`**. Last migration applied live with its matching ledger entry on Sep 10. Do not edit the applied file.
+## Database — already applied; never replay
 
-Adds private `review-avatars` policies, validated lesson/question favorites, personal cards/favorites, immutable student/teacher targets and verified-owner own settings/preview activity permissions. Avatar uses one fixed WebP path per account, max 100KB, short-lived signed reads.
+**`20260911081000_mobile_profiles_and_voice_feedback.sql` is APPLIED LIVE with matching migration-ledger entry.** Do not edit the applied file.
 
-Private backup: `/Users/tahmidahmed/Documents/Codex/private-backups/2026-09-10-my-page/before.json`.
+Adds JPEG avatar paths/MIME alongside WebP, feedback audio path/duration columns, private `review-feedback-recordings` storage and `review_save_submission_review_with_audio`. Audio is bound to an active assigned teacher and exact submitted work. No overwrite of an existing audio object; deleting attached audio is denied. Published audio is readable only by the intended learner with homework enabled. Uploads are capped at 4 stored objects per teacher/submission; the UI cleans superseded/uncommitted files. Existing six-argument text-review RPC remains compatible.
 
-Live DB measured **19MB**. Monthly transfer/invocation usage was not measured; deleting records does not reset those quotas. No progress deletion or recurring purge was installed. Sep 10 both existing paid learners had 31 assignments and all 12 feature flags; their active memberships were preserved. Older Sep 6 summaries with fewer assignments/features are stale; never restore them automatically.
+The previous **`20260910070630_learner_my_page.sql`** is also already applied. It added avatars, lesson/question favorites, individual practice cards and owner preview permissions. Historical repository migrations precede those, including campaign migrations `20260908080538` and `20260908082230`. The live ledger uses a consolidated history: inspect the live versions instead of assuming every old repository file has a ledger row.
 
-`scripts/admin-query.mjs` uses the existing Supabase CLI owner's macOS keychain login in memory, read-only by default. SQL file required; `--out` writes chmod-600 results; `--write` is an explicit production mutation. Management API returns only the final SQL statement result. `supabase db query --linked` was unusable due to create-login-role privileges; do not repeat it as the migration strategy.
+Private backups, outside Git:
+- `/Users/tahmidahmed/Documents/Codex/private-backups/2026-09-11-voice-feedback/before.json`
+- `/Users/tahmidahmed/Documents/Codex/private-backups/2026-09-11-voice-feedback/after.json`
+- Previous: `/Users/tahmidahmed/Documents/Codex/private-backups/2026-09-10-my-page/before.json`
 
-## Audio, performance and preferences
+Before/after comparison confirmed all original fields of **2 learner submissions and 1 feedback row unchanged**. No learner progress was modified or erased. The owner preview's temporary public-logo photo was removed; final avatar object count was zero. No sample voice feedback or announcement was sent to real learners.
 
-- Current browser speech: `/.netlify/functions/natural-speech`, pinned `edge-tts-universal` 1.4.0. Historical Supabase endpoint produced 502 after ~12.8s and remains untouched; current code uses Netlify.
-- Exact voices: US `en-US-AvaNeural`, UK `en-GB-LibbyNeural`, JP `ja-JP-NanamiNeural`. No device voice substitution. Safari reuses a tap-unlocked audio element. Long-text chunking, bounded timeout/retry, account/voice/text cache: 7 days, 8MB/160 clips.
-- No Supabase authorization is sent to the Netlify speech endpoint; response is private/no-store. Signed photos and private API/audio responses are excluded from public service worker caches.
-- Catalogue fetches only metadata; opened lesson fetches only its own questions. Independent profile/question/teaser and preference/content reads run concurrently with auth-change guards.
-- One public metadata sample: 31 rows, 14,329 bytes, 665ms. Not a universal loading-time guarantee.
-- Supabase SDK 2.57.4 served locally with MIT licence. Minimal service worker prefetch; local dev unregisters stale workers.
-- Account preferences use pending-save recovery and small settings POST keepalive to survive fast navigation/offline retries. Remote preferences sync other signed-in browsers.
-- `/my-page?owner_preview=1` reuses the teacher session only on supported learning routes after `review_is_site_owner` confirms identity. Normal Home/student auth stays separate. Internal supported links carry the preview flag.
+`scripts/admin-query.mjs` uses the existing Supabase CLI keychain login in memory. Read-only by default. Syntax: `node scripts/admin-query.mjs /tmp/query.sql [--write] [--out=/private/result.json]`; use the equals sign for `--out` to suppress data output. It does not create parent directories. Only `--write` permits mutations. Management API returns the final SQL statement result. Do not retry `supabase db query --linked`, which previously failed create-login-role privileges.
 
-## Verification and practical limits
+## Verification
 
-- `npm test` passed: content/teacher/learner regression checks, real PostgreSQL/PGlite access policy tests, pending preference recovery and owner identity tests.
-- `npm run build` passed. `npm run verify:voices` checked 480 curriculum items and 2,112 audio payload contracts.
-- Production browser: US/UK library audio completed; owner My Page loaded; unchanged profile saved; existing announcement detail opened; lesson/question favorites saved and exact question reopened. Both temporary owner favorites were removed. No test card or announcement was sent to real learners.
-- Local browser: both lesson settings panels, Japanese choices with English UI, US/UK choice playback completion, OFF/track after reload, desktop and phone layouts.
-- Production BGM OFF and a changed track survived reload; original Windswept/OFF selection restored afterwards.
-- Teacher personal-card controls inspected live without console errors. Card create/edit/hide/favorite, learner isolation and avatar policies tested in isolated PostgreSQL.
-- Fresh real-student login and actual photo upload round-trip were not performed. Owner preview supplied signed-in UI checks. Playback completion/exact identities were verified, not human listening-quality certification.
+- Full `npm test` passed, including PostgreSQL/PGlite access boundaries, voice draft/publish/return/replace/cleanup, photo encoder behavior and existing learning/teacher regressions. Final filter patch additionally passed teacher i18n, learner platform and demo checks. Production build passed.
+- Live owner-preview photo upload stored a 384px JPEG; image rendered, persisted after reload, then was removed to restore the account.
+- Live teacher player finished the existing 7.937-second learner recording, `ended=true`, without a popup or console error.
+- Live status/type filters changed results correctly and were restored to Waiting for review / All work.
+- Member layout at 390px had no horizontal overflow; navigation bottom was above header bottom and avatar began 35px after the header. Desktop 1280px layout had a 1180px main region and correctly separated profile columns.
+- Local generated-audio fixture confirmed real MediaRecorder recording, preview playback, bounded upload metadata and track shutdown. It never accessed the physical microphone or Supabase. Native recording output was WebM/Opus in this browser.
+- Local isolated learner demo confirmed Hard and Easy updates with the card top unchanged at -617.078px and examples still open. Demo data adapters mean no production progress was written.
+- **Limits:** no actual teacher microphone speech was recorded/published and no fresh real-student login or physical iPhone test was performed. The user was asked to log into the in-app browser as the test learner; no reply received. Signed-in production checks used the server-verified owner preview; student boundaries were exercised in PostgreSQL tests.
 
-User guide: `docs/RELEASE_2026-09-10.md`.
+Development-only `scripts/qa-mobile-feedback.html` uses generated tones and an in-memory upload store, restricted to localhost and excluded from the public build. `demo/student-visibility.js` now exports the boundary copy expected by the current shared learner page. Temporary QA tabs can be closed. Reset viewport overrides before handoff.
+
+## Prior September 10 features retained
+
+Guide: `docs/RELEASE_2026-09-10.md`. Home portal, 31-lesson metadata catalogue, categorized favorites including exact questions, profile/announcements, teacher personal cards with optional Ava/Libby voice, campaign display, Japanese lesson choices, choice pronunciation and account-persistent BGM remain.
+
+Speech uses the existing Netlify `/.netlify/functions/natural-speech` with pinned `edge-tts-universal` 1.4.0. US Ava `en-US-AvaNeural`, UK Libby `en-GB-LibbyNeural`, Japanese Nanami; no device-voice substitution. Safari reuses a tap-unlocked element. Bounded chunking/timeouts and per-account/voice/text cache (7 days, 8MB/160 clips). The historical Supabase speech endpoint remains deployed but is no longer used by the current frontend. The September 11 work did not change TTS synthesis.
+
+Catalogue is metadata-only; individual lessons load only their own content with concurrent independent reads and identity guards. SDK is locally served. Public service-worker cache excludes private APIs, photos and audio responses. BGM settings have cloud persistence and pending-save recovery; explicit OFF is retained. New accounts default ON subject to browser gesture rules.
+
+Owner preview: `/my-page?owner_preview=1`, backed by the existing teacher session and `review_is_site_owner`. Supported learning links retain the flag. Normal student/Home authentication remains separate. No session credentials are copied.
+
+Sep 10 database footprint was 19MB; monthly transfer/invocation quotas were not measured. No recurring purge exists; deleting progress does not reset monthly quotas. Existing membership/assignment/visibility settings were preserved. Do not restore stale Sep 6 learner access values from old notes.
