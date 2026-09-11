@@ -1,4 +1,4 @@
-import { buildPhraseCatalog } from "./data.js?v=20260910-member2";
+import { buildPhraseCatalog } from "./data.js?v=20260911-mobile1";
 import {
   applyThemePreference,
   getSettings,
@@ -7,7 +7,7 @@ import {
   safeLocalReturnPath,
   updateSettings,
   watchSystemTheme,
-} from "./store.js?v=20260910-member2";
+} from "./store.js?v=20260911-mobile1";
 import {
   speechRecognitionSupported,
   setAmbientPlayback,
@@ -16,22 +16,22 @@ import {
   stopAudio,
   stopSpeechPractice,
   syncAmbientFromSettings,
-} from "./audio.js?v=20260910-member2";
+} from "./audio.js?v=20260911-mobile1";
 import {
   getStudentClient,
   getStudentSession,
   loadUserSettings,
   saveUserSettings,
-} from "./supabase.js?v=20260910-member2";
-import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js?v=20260910-member2";
-import { celebrate, installPlayfulInteractions } from "./effects.js?v=20260910-member2";
+} from "./supabase.js?v=20260911-mobile1";
+import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js?v=20260911-mobile1";
+import { celebrate, installPlayfulInteractions } from "./effects.js?v=20260911-mobile1";
 import {
   applyStudentFeatureVisibility,
   featureAllowed,
   loadStudentAccess,
   renderStudentAccessBoundary,
   studentAccessBoundaryCopy,
-} from "./student-visibility.js?v=20260910-member2";
+} from "./student-visibility.js?v=20260911-mobile1";
 
 const LEGACY_ACTIVITY_KEY = "teh_phrase_activity_v1";
 const ACTIVITY_KEY_PREFIX = "teh_phrase_activity_v2";

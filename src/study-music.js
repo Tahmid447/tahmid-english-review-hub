@@ -1,12 +1,12 @@
-import { initialiseMemberPreferences } from './member-preferences.js?v=20260910-member2';
+import { initialiseMemberPreferences } from './member-preferences.js?v=20260911-mobile1';
 import {
   AMBIENT_TRACKS,
   ambientPlaybackStatus,
   setAmbientPlayback,
   syncAmbientFromSettings,
-} from "./audio.js?v=20260910-member2";
-import { getSettings, onSettingsChange, updateSettings } from "./store.js?v=20260910-member2";
-import { installPlayfulInteractions } from "./effects.js?v=20260910-member2";
+} from "./audio.js?v=20260911-mobile1";
+import { getSettings, onSettingsChange, updateSettings } from "./store.js?v=20260911-mobile1";
+import { installPlayfulInteractions } from "./effects.js?v=20260911-mobile1";
 
 const trackOptions = Object.entries(AMBIENT_TRACKS).map(([key, track]) => (
   `<option value="${key}">${track.name}</option>`

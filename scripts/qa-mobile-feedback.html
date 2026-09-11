@@ -3,6 +3,7 @@ if(!['localhost','127.0.0.1'].includes(location.hostname))throw new Error('Local
 const {voiceFeedbackEditor}=await import('/src/private-recordings.js');
 const {compactAvatar}=await import('/src/profile-api.js');
 const output=document.querySelector('#result');
+const NativeRecorder=MediaRecorder;window.MediaRecorder=class extends NativeRecorder{constructor(...args){super(...args);this.addEventListener('dataavailable',e=>{output.textContent='Recorded type='+e.data.type+' bytes='+e.data.size;});}};
 const client={storage:{from(){return {async upload(path,blob,options){output.textContent=JSON.stringify({bytes:blob.size,type:blob.type,upsert:options.upsert});return {error:null};},async remove(){return {error:null};}};}}};
 let context,stream;
 navigator.mediaDevices.getUserMedia=async()=>{context=new AudioContext();await context.resume();const source=context.createOscillator();const gain=context.createGain();gain.gain.value=.01;source.connect(gain);const destination=context.createMediaStreamDestination();gain.connect(destination);source.start();stream=destination.stream;return stream;};

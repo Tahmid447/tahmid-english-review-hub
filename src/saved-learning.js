@@ -1,4 +1,4 @@
-import { getStudentClient } from './supabase.js?v=20260910-member2';
+import { getStudentClient } from './supabase.js?v=20260911-mobile1';
 const saves = new Map();
 let current;
 export function renderLessonSaveControls({ lesson, question, userId, showMessage }) {

@@ -29,9 +29,10 @@ export function privateRecordingPlayer({ client, bucket, path, label, text=(en,j
   wrap.append(button,audio,status); return wrap;
 }
 
+const AUDIO_EXTENSIONS = {'audio/mp4':'mp4','audio/webm':'webm','audio/ogg':'ogg','audio/wav':'wav','audio/x-wav':'wav','audio/mpeg':'mp3'};
 const audioType = type => {
   const mime=String(type || '').split(';')[0].toLowerCase();
-  return ({'audio/mp4':'mp4','audio/webm':'webm','audio/ogg':'ogg','audio/wav':'wav','audio/x-wav':'wav','audio/mpeg':'mp3'})[mime] ? {mime,extension:({'audio/mp4':'mp4','audio/webm':'webm','audio/ogg':'ogg','audio/wav':'wav','audio/x-wav':'wav','audio/mpeg':'mp3'})[mime]} : null;
+  return AUDIO_EXTENSIONS[mime] ? {mime,extension:AUDIO_EXTENSIONS[mime]} : null;
 };
 export function voiceFeedbackEditor({client, teacherId, submissionId, feedback, text=(en,ja)=>`${en} / ${ja}`, onDirty=()=>{}}) {
   const root=node('section','voice-feedback-editor');
@@ -43,23 +44,27 @@ export function voiceFeedbackEditor({client, teacherId, submissionId, feedback, 
   const file=node('input');file.type='file';file.accept='audio/mp4,audio/webm,audio/ogg,audio/wav,audio/mpeg,.m4a';choose.append(file);
   const remove=node('button','quiet-btn',text('Remove voice','音声を外す'));remove.type='button';
   const preview=node('audio');preview.controls=true;preview.hidden=true;preview.preload='metadata';
+  const previewPlay=node('button','secondary-btn',text('Listen to this take','今回の録音を聞く'));previewPlay.type='button';previewPlay.hidden=true;
+  previewPlay.onclick=()=>{void preview.play().catch(()=>{status.textContent=text('Press play in the audio controls.','音声プレーヤーの再生を押してください。');});};
   const existing=node('div');
   let value={path:feedback?.audio_object_path || null,duration:feedback?.audio_duration_seconds || null};
   if(value.path)existing.append(privateRecordingPlayer({client,bucket:FEEDBACK_BUCKET,path:value.path,label:text('Listen to saved feedback','保存済みフィードバックを聞く'),text}));
   const status=node('p','recording-status');status.setAttribute('role','status');
   const time=node('strong','','0:00');
-  let blob=null, objectUrl='', recorder=null,stream=null,timer=null,started=0,seconds=0, disposed=false, requesting=false, locked=false;
+  let blob=null, objectUrl='', recorder=null,stream=null,timer=null,started=0,seconds=0, disposed=false, requesting=false, locked=false, preparingFile=false;
   const tracksOff=()=>{stream?.getTracks().forEach(track=>track.stop());stream=null;clearInterval(timer);};
   const revoke=()=>{preview.pause();if(objectUrl)URL.revokeObjectURL(objectUrl);objectUrl='';};
   const showBlob=(data,duration)=>{
-    if(!audioType(data.type) || !data.size || data.size>5242880 || !Number.isFinite(duration) || duration<=0 || duration>180) throw new Error(text('Choose an audio recording up to 3 minutes and 5 MB.','3分・5MB以下の音声を選んでください。'));
-    revoke();blob=data;seconds=duration;objectUrl=URL.createObjectURL(blob);preview.src=objectUrl;preview.hidden=false;existing.hidden=true;onDirty();
+    if(!audioType(data.type)) throw new Error(text('This audio format is not supported. Choose an M4A, MP3, WAV or WebM recording.','この音声形式は利用できません。M4A・MP3・WAV・WebMの音声を選んでください。'));
+    if(!data.size) throw new Error(text('The recording was empty. Please record again.','録音が空でした。もう一度録音してください。'));
+    if(data.size>5242880 || !Number.isFinite(duration) || duration<=0 || duration>180) throw new Error(text('Choose an audio recording up to 3 minutes and 5 MB.','3分・5MB以下の音声を選んでください。'));
+    revoke();blob=data;seconds=duration;objectUrl=URL.createObjectURL(blob);preview.src=objectUrl;preview.hidden=false;previewPlay.hidden=false;existing.hidden=true;onDirty();
     status.textContent=text('Ready to listen. Save a private draft, publish, or return with feedback below.','聞き直せます。下のボタンから下書き保存・公開・修正依頼を選んでください。');
   };
   const controls=()=>{
-    const busy=requesting || recorder?.state==='recording';
+    const busy=requesting || preparingFile || recorder?.state==='recording';
     record.disabled=locked || busy || !globalThis.MediaRecorder || !navigator.mediaDevices?.getUserMedia;
-    file.disabled=locked || busy;remove.disabled=locked || busy || !(blob || value.path);stop.disabled=locked || !busy;
+    previewPlay.disabled=busy;file.disabled=locked || busy;remove.disabled=locked || busy || !(blob || value.path);stop.disabled=locked || recorder?.state!=='recording';
   };
   record.onclick=async()=>{
     requesting=true;controls(); status.textContent=text('Allow microphone access to record.','マイクを許可すると録音が始まります。');
@@ -67,13 +72,14 @@ export function voiceFeedbackEditor({client, teacherId, submissionId, feedback, 
       const acquired=await navigator.mediaDevices.getUserMedia({audio:true});
       if(disposed){acquired.getTracks().forEach(track=>track.stop());return;}
       stream=acquired;
-      const mime=['audio/mp4','audio/webm;codecs=opus','audio/webm','audio/ogg;codecs=opus'].find(type=>MediaRecorder.isTypeSupported(type));
-      recorder=new MediaRecorder(stream,{...(mime?{mimeType:mime}:{}),audioBitsPerSecond:64000});
+      // Use the browser's native encoder: Safari selects AAC/MP4 and Chromium
+      // selects WebM/Opus. isTypeSupported can advertise an unavailable encoder.
+      recorder=new MediaRecorder(stream,{audioBitsPerSecond:64000});
       const chunks=[];recorder.ondataavailable=e=>{if(e.data?.size)chunks.push(e.data);};
       recorder.onstop=()=>{
         const duration=Math.min(180,Math.max(.1,(Date.now()-started)/1000));tracksOff();
         if(disposed)return;
-        try{showBlob(new Blob(chunks,{type:recorder.mimeType || mime || 'audio/webm'}),duration);}catch(error){status.textContent=error.message;}
+        try{showBlob(new Blob(chunks,{type:recorder.mimeType || 'audio/webm'}),duration);}catch(error){status.textContent=error.message;}
         controls();
       };
       recorder.onerror=()=>{tracksOff();status.textContent=text('Recording failed. Please try again.','録音できませんでした。もう一度お試しください。');controls();};
@@ -85,20 +91,20 @@ export function voiceFeedbackEditor({client, teacherId, submissionId, feedback, 
   stop.onclick=()=>{if(recorder?.state==='recording')recorder.stop();};
   file.onchange=async()=>{
     const selected=file.files?.[0];if(!selected)return;
-    let probeUrl='';file.disabled=true;
+    let probeUrl='';preparingFile=true;controls();
     try{
       const kind=audioType(selected.type) || (/\.m4a$/i.test(selected.name)?audioType('audio/mp4'):null);
       if(!kind || selected.size>5242880)throw new Error(text('Choose a supported audio file up to 5 MB.','5MB以下の音声ファイルを選んでください。'));
       const probe=node('audio');probe.preload='metadata';probeUrl=URL.createObjectURL(selected);
       const duration=await new Promise((resolve,reject)=>{const timeout=setTimeout(()=>reject(new Error(text('Could not read audio length.','音声の長さを読み取れませんでした。'))),10000);probe.onloadedmetadata=()=>{clearTimeout(timeout);resolve(probe.duration);};probe.onerror=()=>{clearTimeout(timeout);reject(new Error(text('Could not read this audio file.','この音声を読み取れませんでした。')));};probe.src=probeUrl;});
       if(!disposed)showBlob(new Blob([selected],{type:kind.mime}),duration);
-    }catch(error){status.textContent=error.message;}finally{if(probeUrl)URL.revokeObjectURL(probeUrl);file.value='';controls();}
+    }catch(error){status.textContent=error.message;}finally{if(probeUrl)URL.revokeObjectURL(probeUrl);file.value='';preparingFile=false;controls();}
   };
-  remove.onclick=()=>{revoke();blob=null;value={path:null,duration:null};preview.hidden=true;existing.hidden=true;onDirty();status.textContent=text('Voice removed from this draft. Save below to apply.','下書きから音声を外しました。下の保存ボタンで確定してください。');controls();};
-  actions.append(record,stop,choose,remove);root.append(actions,time,existing,preview,status);controls();
+  remove.onclick=()=>{revoke();blob=null;value={path:null,duration:null};preview.hidden=true;previewPlay.hidden=true;existing.hidden=true;onDirty();status.textContent=text('Voice removed from this draft. Save below to apply.','下書きから音声を外しました。下の保存ボタンで確定してください。');controls();};
+  actions.append(record,stop,choose,remove);root.append(actions,time,existing,previewPlay,preview,status);controls();
   return {root,
     hasAudio:()=>Boolean(blob || value.path),
-    isRecording:()=>requesting || recorder?.state==='recording',
+    isRecording:()=>requesting || preparingFile || recorder?.state==='recording',
     setBusy:busy=>{locked=busy;controls();},
     async prepare(){
       if(!blob)return value;

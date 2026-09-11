@@ -1,7 +1,7 @@
-import { privateRecordingPlayer, voiceFeedbackEditor, FEEDBACK_BUCKET } from './private-recordings.js?v=20260910-member2';
-import { displayProfileAvatar } from './profile-api.js?v=20260910-member2';
-import { mountPersonalCardStudio } from './personal-cards.js?v=20260910-member2';
-import { renderExperienceStudio } from "./experience-studio.js?v=20260910-member2";
+import { privateRecordingPlayer, voiceFeedbackEditor, FEEDBACK_BUCKET } from './private-recordings.js?v=20260911-mobile1';
+import { displayProfileAvatar } from './profile-api.js?v=20260911-mobile1';
+import { mountPersonalCardStudio } from './personal-cards.js?v=20260911-mobile1';
+import { renderExperienceStudio } from "./experience-studio.js?v=20260911-mobile1";
 import {
   createTeacherAccessCode,
   deleteTeacherAccessCode,
@@ -16,15 +16,15 @@ import {
   signInTeacherWithGoogle,
   signOutTeacher,
   updateTeacherAccessCode,
-} from "./supabase.js?v=20260910-member2";
-import { planFor } from "./plans.js?v=20260910-member2";
-import { uiText } from "./i18n.js?v=20260910-member2";
-import { readHumanText } from "./lesson-guide-targets.js?v=20260910-member2";
+} from "./supabase.js?v=20260911-mobile1";
+import { planFor } from "./plans.js?v=20260911-mobile1";
+import { uiText } from "./i18n.js?v=20260911-mobile1";
+import { readHumanText } from "./lesson-guide-targets.js?v=20260911-mobile1";
 import {
   sourceSegmentFromLesson,
   sourceSegmentIsValid,
   sourceSegmentPartIndex,
-} from "./lesson-source.js?v=20260910-member2";
+} from "./lesson-source.js?v=20260911-mobile1";
 import {
   DEFAULT_HUB_SETTINGS,
   fetchTeacherHubSettings,
@@ -32,9 +32,9 @@ import {
   saveTeacherHubSettings,
   assignTeacherLearningPack,
   setTeacherLearningPackActive,
-} from "./curriculum-api.js?v=20260910-member2";
+} from "./curriculum-api.js?v=20260911-mobile1";
 
-import { normalizeCategoryAccess, categoryVisibleLevels } from "./curriculum-access.js?v=20260910-member2";
+import { normalizeCategoryAccess, categoryVisibleLevels } from "./curriculum-access.js?v=20260911-mobile1";
 
 const client = getTeacherClient();
 

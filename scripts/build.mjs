@@ -62,7 +62,7 @@ const offlinePreviewIds = new Set(["june-28", "june-29"]);
 fs.rmSync(dist, { recursive: true, force: true });
 fs.mkdirSync(dist, { recursive: true });
 const commit = process.env.COMMIT_REF || execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim();
-fs.writeFileSync(path.join(dist, 'release.json'), JSON.stringify({ version: '10.4.1', commit, builtAt: new Date().toISOString(), cache: 'te-review-public-v27' }, null, 2) + '\n');
+fs.writeFileSync(path.join(dist, 'release.json'), JSON.stringify({ version: '10.5.0', commit, builtAt: new Date().toISOString(), cache: 'te-review-public-v28' }, null, 2) + '\n');
 
 for (const file of files) {
   const source = path.join(root, file);

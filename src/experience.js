@@ -1,6 +1,6 @@
-import { getStudentClient, getStudentSession } from './supabase.js?v=20260910-member2';
-import { campaignQuote, deadlineLabel, remainingTime, escapeHtml as e } from './campaigns.js?v=20260910-member2';
-import { PLAN_CATALOG, formatYen } from './plans.js?v=20260910-member2';
+import { getStudentClient, getStudentSession } from './supabase.js?v=20260911-mobile1';
+import { campaignQuote, deadlineLabel, remainingTime, escapeHtml as e } from './campaigns.js?v=20260911-mobile1';
+import { PLAN_CATALOG, formatYen } from './plans.js?v=20260911-mobile1';
 let popupIdentity = '';
 export async function loadExperience() {
   const client = getStudentClient();

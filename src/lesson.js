@@ -1,5 +1,5 @@
-import { renderLessonSaveControls } from './saved-learning.js?v=20260910-member2';
-import { buildPhraseCatalog, getLessonById, normalizeJapaneseMeaning } from "./data.js?v=20260910-member2";
+import { renderLessonSaveControls } from './saved-learning.js?v=20260911-mobile1';
+import { buildPhraseCatalog, getLessonById, normalizeJapaneseMeaning } from "./data.js?v=20260911-mobile1";
 import {
   applyThemePreference,
   escapeHTML,
@@ -11,7 +11,7 @@ import {
   shuffleArray,
   updateSettings,
   watchSystemTheme,
-} from "./store.js?v=20260910-member2";
+} from "./store.js?v=20260911-mobile1";
 import {
   answerCoachingFeedback,
   playAnswerFeedback,
@@ -23,7 +23,7 @@ import {
   stopAudio,
   stopSpeechPractice,
   syncAmbientFromSettings,
-} from "./audio.js?v=20260910-member2";
+} from "./audio.js?v=20260911-mobile1";
 import {
   getStudentSession,
   loadUserSettings,
@@ -31,20 +31,20 @@ import {
   saveAttempt,
   saveSpeakingActivity,
   saveUserSettings,
-} from "./supabase.js?v=20260910-member2";
-import { applyLanguageMode, languageModeFromSettings, learningText, uiText } from "./i18n.js?v=20260910-member2";
-import { DEEP_LESSON_GUIDES } from "./lesson-guides.js?v=20260910-member2";
-import { buildPracticeMapTargets } from "./lesson-guide-targets.js?v=20260910-member2";
-import { animateAnswerFeedback, installPlayfulInteractions } from "./effects.js?v=20260910-member2";
-import { renderPremiumLessonTasks } from "./premium-tasks.js?v=20260910-member2";
-import { planFor } from "./plans.js?v=20260910-member2";
+} from "./supabase.js?v=20260911-mobile1";
+import { applyLanguageMode, languageModeFromSettings, learningText, uiText } from "./i18n.js?v=20260911-mobile1";
+import { DEEP_LESSON_GUIDES } from "./lesson-guides.js?v=20260911-mobile1";
+import { buildPracticeMapTargets } from "./lesson-guide-targets.js?v=20260911-mobile1";
+import { animateAnswerFeedback, installPlayfulInteractions } from "./effects.js?v=20260911-mobile1";
+import { renderPremiumLessonTasks } from "./premium-tasks.js?v=20260911-mobile1";
+import { planFor } from "./plans.js?v=20260911-mobile1";
 import {
   applyStudentFeatureVisibility,
   featureAllowed,
   loadStudentAccess,
   renderStudentAccessBoundary,
   studentAccessBoundaryCopy,
-} from "./student-visibility.js?v=20260910-member2";
+} from "./student-visibility.js?v=20260911-mobile1";
 import {
   answerExists as answerValueExists,
   calculateOfficialTotals,
@@ -54,7 +54,7 @@ import {
   preserveFirstResult,
   selectQuickPracticeIds,
   storyboardPanelLayout,
-} from "./lesson-grading.js?v=20260910-member2";
+} from "./lesson-grading.js?v=20260911-mobile1";
 
 const $ = (selector) => document.querySelector(selector);
 
