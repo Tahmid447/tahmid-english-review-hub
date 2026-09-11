@@ -16,6 +16,12 @@ export const featureAllowed = (access, feature) => (
   access?.settings?.account_enabled !== false && access?.settings?.[feature] !== false
 );
 
+export function studentAccessBoundaryCopy(access, copy = {}) {
+  return access?.settings?.account_enabled === false
+    ? { title: 'This demo account is paused', titleJa: 'このデモアカウントは利用停止中です', detail: 'Choose another learner persona above.', detailJa: '上部で別の生徒設定を選んでください。' }
+    : copy;
+}
+
 export function applyStudentFeatureVisibility(access, root = document) {
   const settings = access?.settings || {};
   root.querySelectorAll?.("[data-student-feature]").forEach((node) => {

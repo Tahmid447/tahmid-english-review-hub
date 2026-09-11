@@ -1,4 +1,4 @@
-import { phonicsVisualTree, phonicsVisualMetadata } from './phonics-visuals.js?v=20260911-mobile1';
+import { phonicsVisualTree, phonicsVisualMetadata } from './phonics-visuals.js?v=20260911-mobile2';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 function contentFor(item) {

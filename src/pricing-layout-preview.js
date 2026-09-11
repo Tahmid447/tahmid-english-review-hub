@@ -1,7 +1,7 @@
-import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js?v=20260911-mobile1";
-import { applyThemePreference, getSettings, onSettingsChange, updateSettings, watchSystemTheme } from "./store.js?v=20260911-mobile1";
-import { formatYen, PLAN_CATALOG, PLAN_ORDER, PREMIUM_PROMOTION } from "./plans.js?v=20260911-mobile1";
-import { installPlayfulInteractions } from "./effects.js?v=20260911-mobile1";
+import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js?v=20260911-mobile2";
+import { applyThemePreference, getSettings, onSettingsChange, updateSettings, watchSystemTheme } from "./store.js?v=20260911-mobile2";
+import { formatYen, PLAN_CATALOG, PLAN_ORDER, PREMIUM_PROMOTION } from "./plans.js?v=20260911-mobile2";
+import { installPlayfulInteractions } from "./effects.js?v=20260911-mobile2";
 
 const elements = {
   language: document.querySelector("#languageToggle"),

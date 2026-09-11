@@ -1,6 +1,6 @@
-import { getStudentSession, loadUserSettings, saveUserSettings, rememberPendingUserSettings, onStudentAuthChange } from './supabase.js?v=20260911-mobile1';
-import { getSettings, setStorageUser, updateSettings, onSettingsChange, applyThemePreference } from './store.js?v=20260911-mobile1';
-import { applyLanguageMode } from './i18n.js?v=20260911-mobile1';
+import { getStudentSession, loadUserSettings, saveUserSettings, rememberPendingUserSettings, onStudentAuthChange } from './supabase.js?v=20260911-mobile2';
+import { getSettings, setStorageUser, updateSettings, onSettingsChange, applyThemePreference } from './store.js?v=20260911-mobile2';
+import { applyLanguageMode } from './i18n.js?v=20260911-mobile2';
 let initialising;
 export function initialiseMemberPreferences() {
   return initialising ||= (async () => {

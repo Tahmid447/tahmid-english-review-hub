@@ -1,7 +1,7 @@
-import { privateRecordingPlayer, voiceFeedbackEditor, FEEDBACK_BUCKET } from './private-recordings.js?v=20260911-mobile1';
-import { displayProfileAvatar } from './profile-api.js?v=20260911-mobile1';
-import { mountPersonalCardStudio } from './personal-cards.js?v=20260911-mobile1';
-import { renderExperienceStudio } from "./experience-studio.js?v=20260911-mobile1";
+import { privateRecordingPlayer, voiceFeedbackEditor, FEEDBACK_BUCKET } from './private-recordings.js?v=20260911-mobile2';
+import { displayProfileAvatar } from './profile-api.js?v=20260911-mobile2';
+import { mountPersonalCardStudio } from './personal-cards.js?v=20260911-mobile2';
+import { renderExperienceStudio } from "./experience-studio.js?v=20260911-mobile2";
 import {
   createTeacherAccessCode,
   deleteTeacherAccessCode,
@@ -16,15 +16,15 @@ import {
   signInTeacherWithGoogle,
   signOutTeacher,
   updateTeacherAccessCode,
-} from "./supabase.js?v=20260911-mobile1";
-import { planFor } from "./plans.js?v=20260911-mobile1";
-import { uiText } from "./i18n.js?v=20260911-mobile1";
-import { readHumanText } from "./lesson-guide-targets.js?v=20260911-mobile1";
+} from "./supabase.js?v=20260911-mobile2";
+import { planFor } from "./plans.js?v=20260911-mobile2";
+import { uiText } from "./i18n.js?v=20260911-mobile2";
+import { readHumanText } from "./lesson-guide-targets.js?v=20260911-mobile2";
 import {
   sourceSegmentFromLesson,
   sourceSegmentIsValid,
   sourceSegmentPartIndex,
-} from "./lesson-source.js?v=20260911-mobile1";
+} from "./lesson-source.js?v=20260911-mobile2";
 import {
   DEFAULT_HUB_SETTINGS,
   fetchTeacherHubSettings,
@@ -32,9 +32,9 @@ import {
   saveTeacherHubSettings,
   assignTeacherLearningPack,
   setTeacherLearningPackActive,
-} from "./curriculum-api.js?v=20260911-mobile1";
+} from "./curriculum-api.js?v=20260911-mobile2";
 
-import { normalizeCategoryAccess, categoryVisibleLevels } from "./curriculum-access.js?v=20260911-mobile1";
+import { normalizeCategoryAccess, categoryVisibleLevels } from "./curriculum-access.js?v=20260911-mobile2";
 
 const client = getTeacherClient();
 
@@ -4699,11 +4699,11 @@ function premiumSubmissionQueue() {
     renderPremium();
   });
   const filters = make('div', {className:'submission-filters'});
-  const statusLabel=make('label',{text:teacherText('Status','状態')}); statusLabel.append(filter);
-  const learnerLabel=make('label',{text:teacherText('Learner','生徒')}); const learner=make('select');
+  const statusLabel=make('label'); statusLabel.append(make('span',{text:teacherText('Status','状態')}),filter);
+  const learnerLabel=make('label');learnerLabel.append(make('span',{text:teacherText('Learner','生徒')})); const learner=make('select');
   [["all",teacherText("All learners","すべての生徒")],...[...new Set(teacherVisibleSubmissions().map(item=>item.user_id))].map(id=>[id,profileName(id)])].forEach(([value,label])=>{const option=make('option',{text:label});option.value=value;learner.append(option);});
   learner.value=state.submissionLearnerFilter; learner.onchange=()=>{state.submissionLearnerFilter=learner.value;renderPremium();};learnerLabel.append(learner);
-  const typeLabel=make('label',{text:teacherText('Work type','課題の種類')});const type=make('select');
+  const typeLabel=make('label');typeLabel.append(make('span',{text:teacherText('Work type','課題の種類')}));const type=make('select');
   [['all',teacherText('All work','すべて')],['speaking',teacherText('Speaking','スピーキング')],['essay',teacherText('Writing','英作文')]].forEach(([value,label])=>{const option=make('option',{text:label});option.value=value;type.append(option);});
   type.value=state.submissionTypeFilter;type.onchange=()=>{state.submissionTypeFilter=type.value;renderPremium();};typeLabel.append(type);
   filters.append(statusLabel,learnerLabel,typeLabel);section.append(filters);

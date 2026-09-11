@@ -1,4 +1,4 @@
-import { normalizeAnswerText } from "./store.js?v=20260911-mobile1";
+import { normalizeAnswerText } from "./store.js?v=20260911-mobile2";
 
 export const QUESTION_FORMATS = Object.freeze([
   "mcq",

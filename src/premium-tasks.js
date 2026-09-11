@@ -1,12 +1,12 @@
-import { privateRecordingPlayer, FEEDBACK_BUCKET } from './private-recordings.js?v=20260911-mobile1';
+import { privateRecordingPlayer, FEEDBACK_BUCKET } from './private-recordings.js?v=20260911-mobile2';
 import {
   fetchPremiumLessonTasks,
   getPremiumRecordingUrl,
   getStudentClient,
   savePremiumTextSubmission,
   submitPremiumRecording,
-} from "./supabase.js?v=20260911-mobile1";
-import { planMeetsRequirement } from "./plans.js?v=20260911-mobile1";
+} from "./supabase.js?v=20260911-mobile2";
+import { planMeetsRequirement } from "./plans.js?v=20260911-mobile2";
 
 const make = (tag, options = {}) => {
   const node = document.createElement(tag);

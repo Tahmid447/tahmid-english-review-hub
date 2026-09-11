@@ -1,11 +1,11 @@
-import { normalizeAnswerText } from "./store.js?v=20260911-mobile1";
-import { fetchDatabaseLesson, fetchDatabaseLessons } from "./supabase.js?v=20260911-mobile1";
-import { readHumanText } from "./lesson-guide-targets.js?v=20260911-mobile1";
+import { normalizeAnswerText } from "./store.js?v=20260911-mobile2";
+import { fetchDatabaseLesson, fetchDatabaseLessons } from "./supabase.js?v=20260911-mobile2";
+import { readHumanText } from "./lesson-guide-targets.js?v=20260911-mobile2";
 import {
   compareLessonSourceOrder,
   sourceSegmentFromLesson,
   sourceSegmentPartIndex,
-} from "./lesson-source.js?v=20260911-mobile1";
+} from "./lesson-source.js?v=20260911-mobile2";
 
 const DATA_PATHS = Object.freeze({
   lessons: "/src/data/legacy-lessons.json",

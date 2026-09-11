@@ -1,5 +1,5 @@
-import { escapeHTML as e } from './store.js?v=20260911-mobile1';
-import { speakText } from './audio.js?v=20260911-mobile1';
+import { escapeHTML as e } from './store.js?v=20260911-mobile2';
+import { speakText } from './audio.js?v=20260911-mobile2';
 export const PERSONAL_CATEGORIES = Object.freeze({ words:'Words · 単語', phrases:'Phrases · フレーズ', sentences:'Sentences · 文章', notes:'Notes · メモ' });
 export function personalCardMarkup(card, {saved=false, controls=true}={}) {
   return `<article class="personal-card" data-card-id="${e(card.id)}"><p class="eyebrow">FOR YOU · ${e(PERSONAL_CATEGORIES[card.category] || '')}</p><h3>${e(card.text_en || card.text_ja)}</h3>${card.text_en && card.text_ja ? `<p lang="ja">${e(card.text_ja)}</p>` : ''}${card.teacher_note ? `<p class="personal-teacher-note">${e(card.teacher_note)}</p>` : ''}<div class="personal-card-actions">${card.audio_enabled && card.text_en ? `<button type="button" class="secondary-btn" data-personal-voice="us">▶ US · Ava</button><button type="button" class="secondary-btn" data-personal-voice="gb">▶ UK · Libby</button>` : ''}${controls ? `<button type="button" class="quiet-btn personal-save" aria-pressed="${saved}">${saved?'♥ Saved · 保存済み':'♡ Save · お気に入り'}</button>` : ''}</div><p class="personal-card-status" role="status"></p></article>`;
