@@ -27,9 +27,13 @@ Relevant release checks: `npm test`, `npm run verify:voices`, then `npm run buil
 
 The existing Supabase project supplies Google/email authentication, database, private recordings, learner access and membership functions. Student identities, data and migration history are preserved. Public assets are explicitly allowlisted by the build; private APIs and recordings are excluded from the service-worker cache.
 
-`src/config.js` contains the public Supabase project URL and anon key only. Cloudflare needs no private build variables. If overriding the public configuration, set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` together in Cloudflare Pages → Settings → Variables and secrets. The importer rejects service-role and secret keys. Private backend secrets stay in Supabase or Netlify.
+`src/config.js` contains the public Supabase project URL and anon key only. Cloudflare needs no private build variables. If overriding the public configuration, set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` together in Cloudflare Pages → Settings → Variables and secrets. The importer rejects service-role and secret keys. Private backend secrets stay in the service that needs them; pronunciation requires no private API key.
 
-**Keep Netlify running.** https://tahmid-english-review-hub.netlify.app remains the original website and the required pronunciation backend for Ava, Libby and Nanami. Its production branch is still `upgrade/review-hub-v9-final-product`. Cloudflare frontend requests speech directly without sending a Supabase key or user session to Netlify.
+Pronunciation runs on Cloudflare Worker **tahmid-english-speech** at `https://speech.tahmidenglishhub.dpdns.org/api/natural-speech`, preserving Ava, Libby and Nanami. It connects directly to the existing Microsoft Edge speech provider without Netlify, Supabase credentials or user sessions. Requests are bounded, limited to 120 per minute per client IP per Cloudflare location, and audio responses are private/no-store. This is a free-plan service subject to Cloudflare and upstream availability/limits.
+
+Both Pages and the speech Worker are connected to this repository's `main`. The Worker build runs `npm run test:speech:cloudflare`; deployment runs `npm run deploy:speech` from the repository root. Worker preview builds are disabled so branches cannot replace the production audio service. For local speech testing use `npx wrangler dev --config workers/speech/wrangler.jsonc`.
+
+The old Netlify site and its original source branch remain available as an optional historical backup. The live Cloudflare website makes no requests to Netlify, including social preview images.
 
 ## Important pages
 

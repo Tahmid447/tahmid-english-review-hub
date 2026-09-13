@@ -1,5 +1,5 @@
 import { readFile, writeFile } from "node:fs/promises";
-import { NATURAL_SPEECH_URL, SUPABASE_ANON_KEY } from "../src/config.js";
+import { NATURAL_SPEECH_URL } from "../src/config.js";
 
 const root = new URL("../", import.meta.url);
 const readJSON = async (path) => JSON.parse(await readFile(new URL(path, root), "utf8"));
@@ -17,7 +17,7 @@ if (!lessons.length) throw new Error("No authored lessons were available for the
 if (new Set(lessons.map(({ id }) => id)).size !== lessons.length) {
   throw new Error("Lesson IDs must be unique before running the live audio audit.");
 }
-if (!NATURAL_SPEECH_URL || !SUPABASE_ANON_KEY) throw new Error("Public natural-speech configuration is missing.");
+if (!NATURAL_SPEECH_URL) throw new Error("Public natural-speech configuration is missing.");
 
 const bilingualPart = (value, language) => {
   if (value && typeof value === "object") return String(value[language] || value[language === "jp" ? "ja" : "english"] || "");
@@ -36,8 +36,6 @@ const testSpeech = async (text, accent) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        apikey: SUPABASE_ANON_KEY,
-        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
       },
       body: JSON.stringify({ text, accent }),
       signal: controller.signal,

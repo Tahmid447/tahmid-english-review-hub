@@ -48,7 +48,7 @@ for (const mode of ['complete','malformed','early-close','timeout']) {
   assert.equal(options.redirect,'manual');
   return {status:101,webSocket:socket};
  };
- const result=synthesize('student <voice> & text',VOICE_PROFILES.us,{fetcher,timeoutMs:30});
+ const result=synthesize('student <voice> & text',VOICE_PROFILES.us,{fetcher,timeoutMs:mode==='timeout'?30:1000});
  if(mode==='complete'){assert.equal((await result).length,256);assert(socket.sent[1].includes('student &lt;voice&gt; &amp; text'));}
  else await assert.rejects(result);
  assert(socket.closed,`${mode}: release socket`);

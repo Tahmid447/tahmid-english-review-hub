@@ -1,6 +1,6 @@
 # Cloudflare Pages deployment — September 13, 2026
 
-The existing website is live at https://tahmidenglishhub.dpdns.org with HTTPS. GitHub integration builds the existing repository. Supabase and the Netlify pronunciation backend are retained.
+The existing website is live at https://tahmidenglishhub.dpdns.org with HTTPS. GitHub integration builds the existing repository. Supabase is retained. Pronunciation now runs on Cloudflare Workers; the live website has no Netlify dependency.
 
 ## Project and publishing
 
@@ -35,11 +35,19 @@ The deployed `membership-access` source was downloaded privately and compared by
 
 `src/config.js` contains the public Supabase URL and anon key only. No private Cloudflare build variables are required. Optional overrides are `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`, supplied together under Pages Settings → Variables and secrets. The importer rejects service-role/secret keys. Never put private keys, database passwords or login tokens into frontend files, logs, or Git.
 
-## Keep the Netlify speech service
+## Cloudflare pronunciation service
 
-The Cloudflare build uses `https://tahmid-english-review-hub.netlify.app/.netlify/functions/natural-speech`. Direct browser requests preserve Netlify's per-client rate limiting and send the speech text and fixed voice profile, without a Supabase key, user session or cookie. Audio responses remain private/no-store and play through Blob URLs.
+Worker `tahmid-english-speech` serves `https://speech.tahmidenglishhub.dpdns.org/api/natural-speech`. Its native WebSocket transport connects directly to the same Microsoft Edge speech provider, preserving US Ava, UK Libby, Japanese Nanami and their exact rate/pitch/volume. No Netlify proxy, fallback, account credentials or Supabase API keys are involved.
 
-**Netlify remains required for pronunciation as well as rollback.** Do not remove it. Moving the Node/WebSocket speech service is separate work requiring live Ava, Libby and Nanami verification. The historical Supabase speech function remains unused.
+Source: `workers/speech/index.js` and `synthesize.js`; configuration: `workers/speech/wrangler.jsonc`. The pinned existing `edge-tts-universal` dependency supplies the protocol's hash helper; the Node socket implementation is not bundled. The upstream public client identifier is not a private account credential.
+
+The service accepts bounded JSON POST requests, validates fixed voice profiles, escapes XML, caps output at 1MB, requires a complete audio turn, and closes sockets on success/failure/10-second timeout. Speech text never goes in a URL, application log or shared cache. Responses are private/no-store. CORS permits only the production site, Pages and its previews. The native `SPEECH_LIMITER` binding allows 120 requests per minute per client IP per Cloudflare location (eventually consistent, not a billing counter). Missing bindings fail closed. Runtime logs/traces are disabled.
+
+Workers Builds uses the existing GitHub repository, production branch `main`, root `/`, build `npm run test:speech:cloudflare`, deploy `npm run deploy:speech`. Non-production Worker builds are disabled. Cloudflare manages the build authorization token; no private token was copied into the repository. Pages and the Worker deploy independently after a push; keep interface changes backward compatible. No paid plan was activated.
+
+The Free plan's request/CPU/build quotas and upstream speech availability still apply. This removes Netlify, not the external voice provider. Local smoke tests and deployed HTTPS MP3/voice-contract tests passed for all three voices, including longer sentences and XML punctuation. Tests also cover input/CORS rejection, rate limiting, interrupted audio, malformed frames and socket cleanup.
+
+The old Netlify website remains an optional historical backup. Its code/function can remain there without being used by the live site. No Netlify deletion was performed. Public build checks reject Netlify endpoint/asset URLs. Social sharing image/URL metadata now uses the custom production domain.
 
 ## Verification and limits
 
@@ -60,6 +68,6 @@ The Cloudflare build uses `https://tahmid-english-review-hub.netlify.app/.netlif
 
 The original Netlify website remains https://tahmid-english-review-hub.netlify.app at commit `abf447a1c547b5a65b829a8678d58572cdd546c5`; its source branch is unchanged. A verified full-history Git bundle, original auth URLs, deployed membership-function body/source and aggregate data baseline are stored privately outside Git in the migration workspace's `private-backup` directory. These are not a full database backup. The existing Netlify account could read site/deployment metadata but not every environment detail; no secret values were copied.
 
-For a bad frontend update, revert the relevant Git commit on `main` and push, or use a known successful Pages deployment rollback. Keep the old Netlify auth redirects and speech function. Database rollback is neither needed nor included in this frontend migration.
+For a bad frontend update, revert the relevant Git commit on `main` and push, or use a known successful Pages deployment rollback. The old Netlify auth redirects remain for its optional historical backup. Database rollback is neither needed nor included in this frontend migration.
 
 To edit: change the file → commit and push to `main` → Cloudflare builds and publishes automatically. No ZIP upload. Future development should start from current `main`, preserve the existing Supabase project, and use its own user authorization.
