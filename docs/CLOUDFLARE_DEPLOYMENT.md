@@ -45,7 +45,7 @@ Before going live, add the exact Pages test origin and new production origin to 
 
 Inspect DigitalPlat DNS/delegation and Cloudflare's custom-domain requirements before selecting nameservers. Attach the custom domain in Pages before pointing DNS to it. Verify HTTPS, nested lesson refreshes, OAuth returns including query parameters, real reads/writes and logout.
 
-`/release.json` records the source commit and hosting platform with no-cache delivery. Confirm automatic deployment by committing a harmless visible change to the eventual production branch, observing the Cloudflare deployment, and checking that the custom domain serves that commit and change.
+`/release.json` records the source commit and hosting platform with no-cache delivery. Each Cloudflare build stamps the service worker's public cache with the source commit so an update invalidates old code. Confirm automatic deployment by committing a harmless visible change to the eventual production branch, observing the Cloudflare deployment, and checking that the custom domain serves that commit and change.
 
 ## Future edits
 

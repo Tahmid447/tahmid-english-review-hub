@@ -39,5 +39,13 @@ const releasePath = new URL("release.json", dist);
 const release = JSON.parse(fs.readFileSync(releasePath, "utf8"));
 release.hosting = "cloudflare-pages";
 release.speechBackend = "existing-netlify-function";
+// Existing modules have versioned URLs and are cached by the service worker.
+// Change its cache namespace on every source commit so a normal Git deployment
+// also invalidates old code without a separate manual cache-version edit.
+release.cache = `te-review-public-cf-${release.commit.slice(0, 12)}`;
+const workerPath = new URL("sw.js", dist);
+const worker = fs.readFileSync(workerPath, "utf8");
+if (!/const CACHE_NAME = "[^"]+";/.test(worker)) throw new Error("Missing public cache version.");
+fs.writeFileSync(workerPath, worker.replace(/const CACHE_NAME = "[^"]+";/, `const CACHE_NAME = ${JSON.stringify(release.cache)};`));
 fs.writeFileSync(releasePath, `${JSON.stringify(release, null, 2)}\n`);
 console.log("Cloudflare Pages output prepared; existing Netlify speech service retained.");

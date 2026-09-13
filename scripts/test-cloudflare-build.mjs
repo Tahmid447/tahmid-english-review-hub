@@ -9,6 +9,8 @@ const read = (file) => fs.readFileSync(path.join(dist, file), "utf8");
 const release = JSON.parse(read("release.json"));
 assert.equal(release.hosting, "cloudflare-pages", "Run build:cloudflare first.");
 assert.match(release.commit, /^[a-f0-9]{40}$/);
+assert.equal(release.cache, `te-review-public-cf-${release.commit.slice(0, 12)}`);
+assert(read("sw.js").includes(`const CACHE_NAME = ${JSON.stringify(release.cache)};`));
 
 // A real Pages runtime/browser smoke test additionally verifies canonical
 // redirects, nested refreshes, asset loading, queries and OAuth returns.
