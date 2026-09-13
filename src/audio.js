@@ -1,5 +1,5 @@
 import { readSpeechClip, saveSpeechClip } from "./speech-cache.js?v=20260911-mobile2";
-import { NATURAL_SPEECH_URL, SUPABASE_ANON_KEY } from "./config.js?v=20260911-mobile2";
+import { NATURAL_SPEECH_URL, SUPABASE_URL, SUPABASE_ANON_KEY } from "./config.js?v=20260911-mobile2";
 import { AMBIENT_TRACK_KEYS, getSettings, getStorageScope, normalizeAnswerText } from "./store.js?v=20260911-mobile2";
 import { VOICE_PROFILES, createSpeechRequest, speechCacheKey, validateSpeechResponse } from "./speech-contract.js?v=20260911-mobile2";
 
@@ -300,7 +300,7 @@ export async function speakText(text, { voice, language, rate, onStatus } = {}) 
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
-                ...(NATURAL_SPEECH_URL.startsWith("https://") ? { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` } : {}),
+                ...(NATURAL_SPEECH_URL.startsWith(`${SUPABASE_URL}/functions/`) ? { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` } : {}),
               },
               body: JSON.stringify(createSpeechRequest(segment.text, voiceCode)),
               signal: controller.signal,

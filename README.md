@@ -2,8 +2,10 @@
 
 # Tahmid English Review Hub
 
-Private development repository for the Tahmid English Review Hub learner
+Source repository for the Tahmid English Review Hub learner
 platform and Teacher Studio.
+
+The Cloudflare migration is in progress. See [Cloudflare deployment](docs/CLOUDFLARE_DEPLOYMENT.md) for current commands, build settings, environment-variable handling and the retained pronunciation backend. The historical release notes below do not establish the current deployment status; use the working handoff.
 
 The structured-learning v10 work is developed on
 `codex/structured-learning-hub`. It adds teacher-owned learner controls and an

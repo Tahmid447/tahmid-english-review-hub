@@ -11,3 +11,10 @@ test-results/
 *.dump
 *.backup
 *.sql.gz
+.wrangler/
+.dev.vars
+.dev.vars.*
+*.pem
+*.key
+private-backups/
+outputs/
