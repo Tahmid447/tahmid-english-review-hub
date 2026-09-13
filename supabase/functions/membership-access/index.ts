@@ -2,6 +2,8 @@ import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 
 const allowedOrigins = new Set([
+  "https://tahmidenglishhub.dpdns.org",
+  "https://tahmid-english-hub.pages.dev",
   "https://tahmid-english-review-hub.netlify.app",
   "https://tahmid-english-review-hub-v9-release.netlify.app",
   "https://jocular-chaja-86e78d.netlify.app",
