@@ -26,10 +26,11 @@ assert(routes.some(([from, to]) => from === "/lesson/*" && to === "/lesson"));
 for (const page of ["index", "lessons", "my-page", "teacher", "lesson", "learn", "phrases", "pricing", "404"]) {
   assert(fs.existsSync(path.join(dist, `${page}.html`)), `Missing ${page}`);
 }
+assert.equal(release.speechBackend, "cloudflare-workers");
 const config = read("src/config.js");
-assert(config.includes('NATURAL_SPEECH_URL = "https://tahmid-english-review-hub.netlify.app/.netlify/functions/natural-speech"'));
+assert(config.includes('NATURAL_SPEECH_URL = "https://speech.tahmidenglishhub.dpdns.org/api/natural-speech"'));
 assert(config.includes("https://ycmybggetemkhorkhfnf.supabase.co"));
-assert(read("_headers").includes("connect-src 'self' https://tahmid-english-review-hub.netlify.app"));
+assert(read("_headers").includes("connect-src 'self' https://speech.tahmidenglishhub.dpdns.org"));
 assert(read("src/audio.js").includes('NATURAL_SPEECH_URL.startsWith(`${SUPABASE_URL}/functions/`)'));
 assert(read("src/lesson.js").includes("lessonPathMatch"), "Nested lessons must read the displayed route.");
 assert(read("src/learn.js").includes('path === "/words"'), "Words alias must survive an internal rewrite.");
@@ -45,6 +46,7 @@ function scan(dir) {
     if (!/\.(?:js|json|html|css|webmanifest)$/.test(entry.name)) continue;
     checked++;
     const text = fs.readFileSync(file, "utf8");
+    assert(!/https?:\/\/[^\s"\'<>]*netlify\.app|\/\.netlify\/functions\//i.test(text), `Netlify dependency in ${path.relative(dist, file)}`);
     assert(!/sb_secret_[\w-]{20,}|sbp_[a-f0-9]{30,}|-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/.test(text), `Secret pattern in ${path.relative(dist, file)}`);
     for (const match of text.matchAll(/eyJ[\w-]+\.[\w-]+\.[\w-]+/g)) {
       const payload = JSON.parse(Buffer.from(match[0].split(".")[1], "base64url"));

@@ -1,13 +1,11 @@
 import fs from "node:fs";
 
 const dist = new URL("../dist/", import.meta.url);
-const speechOrigin = "https://tahmid-english-review-hub.netlify.app";
-const speechEndpoint = `${speechOrigin}/.netlify/functions/natural-speech`;
+const speechOrigin = "https://speech.tahmidenglishhub.dpdns.org";
+const speechEndpoint = `${speechOrigin}/api/natural-speech`;
 
-// Keep the proven Node speech backend during migration. The browser connects
-// directly, preserving per-client Netlify rate limiting and avoiding a shared
-// proxy IP. No Supabase credentials are sent to this endpoint. Retiring Netlify
-// requires a separately verified migration of this backend.
+// The speech Worker is deployed from this same repository. No Netlify fallback
+// or account credentials are used by pronunciation requests.
 const configPath = new URL("src/config.js", dist);
 let config = fs.readFileSync(configPath, "utf8");
 const endpointDeclaration = /export const NATURAL_SPEECH_URL = [^;]+;/;
@@ -38,7 +36,7 @@ fs.writeFileSync(headersPath, headers);
 const releasePath = new URL("release.json", dist);
 const release = JSON.parse(fs.readFileSync(releasePath, "utf8"));
 release.hosting = "cloudflare-pages";
-release.speechBackend = "existing-netlify-function";
+release.speechBackend = "cloudflare-workers";
 // Existing modules have versioned URLs and are cached by the service worker.
 // Change its cache namespace on every source commit so a normal Git deployment
 // also invalidates old code without a separate manual cache-version edit.
@@ -48,4 +46,4 @@ const worker = fs.readFileSync(workerPath, "utf8");
 if (!/const CACHE_NAME = "[^"]+";/.test(worker)) throw new Error("Missing public cache version.");
 fs.writeFileSync(workerPath, worker.replace(/const CACHE_NAME = "[^"]+";/, `const CACHE_NAME = ${JSON.stringify(release.cache)};`));
 fs.writeFileSync(releasePath, `${JSON.stringify(release, null, 2)}\n`);
-console.log("Cloudflare Pages output prepared; existing Netlify speech service retained.");
+console.log("Cloudflare Pages output prepared; pronunciation runs on Cloudflare Workers.");

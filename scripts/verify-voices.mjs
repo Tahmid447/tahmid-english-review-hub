@@ -2,10 +2,10 @@ import assert from "node:assert/strict";
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { resolve } from "node:path";
 import { createHash } from "node:crypto";
-import vm from "node:vm";
+import { handleSpeech } from "../workers/speech/index.js";
 import { curriculumAudioSamples, curriculumPrimaryAudio } from "../src/curriculum-audio.js";
 import { SPEECH_PROFILE_VERSION, VOICE_PROFILES, createSpeechRequest, speechCacheKey, validateSpeechResponse } from "../src/speech-contract.js";
-import { NATURAL_SPEECH_URL, SUPABASE_ANON_KEY } from "../src/config.js";
+import { NATURAL_SPEECH_URL } from "../src/config.js";
 
 const root = new URL("../", import.meta.url);
 const categories = ["words", "phrases", "phonics"];
@@ -17,16 +17,16 @@ const outputDirectory = outputArgument ? resolve(outputArgument.split("=").slice
 const sources = Object.fromEntries(await Promise.all(categories.map(async (category) => [category,
   JSON.parse(await readFile(new URL(`curriculum/${category}.json`, root), "utf8")),
 ])));
-const [audioSource, edgeSource, learnSource] = await Promise.all([
-  "src/audio.js", "supabase/functions/natural-speech/index.ts", "src/learn.js",
+const [audioSource, packageSource, learnSource] = await Promise.all([
+  "src/audio.js", "package.json", "src/learn.js",
 ].map((file) => readFile(new URL(file, root), "utf8")));
-const speechEndpoint = new URL(NATURAL_SPEECH_URL, "https://tahmid-english-review-hub.netlify.app").href;
-assert.equal(new URL(speechEndpoint).pathname, "/.netlify/functions/natural-speech");
+const speechEndpoint = new URL(NATURAL_SPEECH_URL).href;
+assert.equal(new URL(speechEndpoint).pathname, "/api/natural-speech");
 assert.doesNotMatch(audioSource, /speechSynthesis|SpeechSynthesisUtterance/, "No browser TTS fallback is allowed.");
 assert.match(audioSource, /validateSpeechResponse\(response, voiceCode\)/, "Playback verifies the response before caching it.");
 assert.match(learnSource, /curriculumAudioSamples\(state.category, item\)/, "The UI uses the audited sample builder.");
 assert.match(learnSource, /curriculumPrimaryAudio\(state.category, item\)/, "Review uses the audited primary builder.");
-assert.match(edgeSource, /edge-tts-universal@1\.4\.0"/, "The speech provider dependency is pinned.");
+assert.equal(JSON.parse(packageSource).dependencies["edge-tts-universal"], "1.4.0", "The speech protocol dependency is pinned.");
 assert.notEqual(speechCacheKey("US", "us"), speechCacheKey("us", "us"), "Cache must preserve pronunciation-sensitive case.");
 assert.notEqual(speechCacheKey("Hello", "us"), speechCacheKey("Hello", "gb"));
 assert.notEqual(speechCacheKey("Hello", "us", "old"), speechCacheKey("Hello", "us", "new"));
@@ -70,24 +70,15 @@ for (const accent of accents) {
   assert(canonicalRequests.every((request) => JSON.stringify(request) === JSON.stringify(canonicalRequests[0])), "Category cannot change the canonical voice request.");
 }
 
-// Execute the actual Edge handler against an instrumented provider, including
-// malformed requests. This catches response/contract drift without TTS costs.
-let handler;
+// Execute the production Cloudflare handler with an instrumented synthesizer.
 let synthesis;
 const mp3Fixture = new Uint8Array(512);
 mp3Fixture.set([0x49, 0x44, 0x33]);
-class FakeTTS {
-  constructor(text, voice, options) { synthesis = { text, voice, options }; }
-  async synthesize() { return { audio: new Blob([mp3Fixture], { type: "audio/mpeg" }) }; }
-}
-vm.runInNewContext(edgeSource.replace(/^import .*;\n/gm, "")
-  .replaceAll(" as const", "").replaceAll(" as keyof typeof voiceProfiles", "")
-  .replaceAll(": ReturnType<typeof setTimeout>", "").replaceAll("new Promise<never>", "new Promise"), {
-  Deno: { serve: (callback) => { handler = callback; }, env: { get: () => "ap-south-1" } }, UniversalEdgeTTS: FakeTTS,
-  setTimeout, clearTimeout, AbortSignal,
-  Request, Response, Blob, Uint8Array,
+const handler = request => handleSpeech(request, { SPEECH_LIMITER: { limit: async () => ({ success: true }) } }, async (text, profile) => {
+  synthesis = { text, voice: profile.voiceId, options: { rate: profile.rate, volume: profile.volume, pitch: profile.pitch } };
+  return mp3Fixture;
 });
-const requestToEdge = (body) => handler(new Request("https://example.invalid/functions/v1/natural-speech", {
+const requestToEdge = (body) => handler(new Request("https://example.invalid/api/natural-speech", {
   method: "POST", body: JSON.stringify(body), headers: { "content-type": "application/json" },
 }));
 for (const accent of [...accents, "ja"]) {
@@ -112,8 +103,8 @@ assert.equal((await requestToEdge({ text: "Hello", accent: "us", voice: VOICE_PR
 assert.equal((await requestToEdge({ text: "Hello", accent: "us", profile: "old" })).status, 409);
 assert.equal((await requestToEdge({ text: "a".repeat(501), accent: "us" })).status, 400);
 assert.equal((await requestToEdge({ text: "bad\ntext", accent: "us" })).status, 400);
-assert.equal((await handler(new Request("https://example.invalid", { method: "GET" }))).status, 405);
-assert.equal((await handler(new Request("https://example.invalid", { method: "OPTIONS" }))).status, 200);
+assert.equal((await handler(new Request("https://example.invalid/api/natural-speech", { method: "GET" }))).status, 405);
+assert.equal((await handler(new Request("https://example.invalid/api/natural-speech", { method: "OPTIONS" }))).status, 204);
 
 console.log(`Voice consistency passed: ${itemCount} items, ${payloadCount} exact UI payloads, all 32 phonics levels, strict Edge identity/prosody and negative checks.`);
 
@@ -121,7 +112,6 @@ if (!live) {
   console.log("Live playback was not tested. Run npm run verify:voices -- --live --output-dir=/tmp/tahmid-voice-qa for MP3 evidence and a listening checklist.");
   process.exit(0);
 }
-if (!SUPABASE_ANON_KEY) throw new Error("Public natural-speech configuration is missing.");
 const rejectionChecks = [];
 for (const [name, body, expectedStatus] of [
   ["unsupported-accent", { text: "Hello", accent: "unexpected" }, 400],
@@ -130,7 +120,7 @@ for (const [name, body, expectedStatus] of [
   ["empty-text", { text: "", accent: "us" }, 400],
 ]) {
   const response = await fetch(speechEndpoint, {
-    method: "POST", headers: { "Content-Type": "application/json", apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` },
+    method: "POST", headers: { "Content-Type": "application/json", Origin: "https://tahmidenglishhub.dpdns.org" },
     body: JSON.stringify(body), cache: "no-store", signal: AbortSignal.timeout(30000),
   });
   assert.equal(response.status, expectedStatus, `Live Edge must reject ${name}.`);
@@ -161,7 +151,7 @@ const rows = [];
 for (const job of jobs) {
   const response = await fetch(speechEndpoint, {
     method: "POST",
-    headers: { "Content-Type": "application/json", apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` },
+    headers: { "Content-Type": "application/json", Origin: "https://tahmidenglishhub.dpdns.org" },
     body: JSON.stringify(createSpeechRequest(job.text, job.accent)),
     cache: "no-store", signal: AbortSignal.timeout(30000),
   });

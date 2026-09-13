@@ -89,7 +89,7 @@ validatePublicConfig(environmentUrl, environmentAnonKey, "The environment config
 
 const output = `export const SUPABASE_URL = ${JSON.stringify(environmentUrl)};\n` +
   `export const SUPABASE_ANON_KEY = ${JSON.stringify(environmentAnonKey)};\n` +
-  `export const NATURAL_SPEECH_URL = "/.netlify/functions/natural-speech";\n`;
+  `export const NATURAL_SPEECH_URL = "https://speech.tahmidenglishhub.dpdns.org/api/natural-speech";\n`;
 
 fs.mkdirSync(path.join(root, "src"), { recursive: true });
 fs.writeFileSync(outputPath, output);
