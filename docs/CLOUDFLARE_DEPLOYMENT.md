@@ -62,7 +62,7 @@ The old Netlify website remains an optional historical backup. Its code/function
 - Aggregate data counts and migration ledger matched the pre-migration baseline after deployment. Only the reversible owner profile test was written; no student submission/feedback was edited.
 - Initial automatic-update proof: commit `c569b0b1de14af4b69b5ba83b6c808303620a0f8` created deployment `e1f3ee05-d77e-4564-bf14-ae396c98eaf7`, and its new footer text and release ID appeared on the custom domain. The final `main` publishing configuration is also verified before task completion.
 
-`/release.json` records the actual source commit and hosting platform. Every build stamps the public service-worker cache with the commit so normal updates invalidate cached code. The build preserves clean multi-page routes and required aliases without a blanket single-page fallback.
+`/release.json` records the actual source commit and hosting platform. Every build stamps both the public service-worker cache and the full JS/CSS module URL graph with the commit. This prevents a returning browser from using an old cached speech endpoint under the new page security policy while the service worker updates. The build preserves clean multi-page routes and required aliases without a blanket single-page fallback.
 
 ## Recovery and future work
 

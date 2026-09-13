@@ -45,5 +45,20 @@ const workerPath = new URL("sw.js", dist);
 const worker = fs.readFileSync(workerPath, "utf8");
 if (!/const CACHE_NAME = "[^"]+";/.test(worker)) throw new Error("Missing public cache version.");
 fs.writeFileSync(workerPath, worker.replace(/const CACHE_NAME = "[^"]+";/, `const CACHE_NAME = ${JSON.stringify(release.cache)};`));
+// A returning browser may still be controlled by the previous service worker
+// while the new one installs. Version the entire module graph as well as its
+// cache, so fresh HTML cannot combine a new CSP with an old speech endpoint.
+release.assetVersion = `cf-${release.commit.slice(0, 12)}`;
+function stampPublicAssets(directory) {
+  for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
+    const file = new URL(entry.name + (entry.isDirectory() ? "/" : ""), directory);
+    if (entry.isDirectory()) { stampPublicAssets(file); continue; }
+    if (!/\.(?:html|js|css)$/.test(entry.name)) continue;
+    const text = fs.readFileSync(file, "utf8");
+    const stamped = text.replace(/(\.(?:js|css)\?v=)[A-Za-z0-9._-]+/g, `$1${release.assetVersion}`);
+    if (stamped !== text) fs.writeFileSync(file, stamped);
+  }
+}
+stampPublicAssets(dist);
 fs.writeFileSync(releasePath, `${JSON.stringify(release, null, 2)}\n`);
 console.log("Cloudflare Pages output prepared; pronunciation runs on Cloudflare Workers.");
