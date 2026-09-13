@@ -6,7 +6,7 @@ import { execFileSync } from "node:child_process";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const dist = path.join(root, "dist");
 const files = [
-  "index.html", "lessons.html", "my-page.html",
+  "index.html", "lessons.html", "my-page.html", "reset-password.html",
   "teacher.html",
   "lesson.html",
   "learn.html",
@@ -21,7 +21,7 @@ const files = [
   "sw.js",
 ];
 const publicSourceFiles = [
-  "campaigns.js", "experience.js", "experience-studio.js",
+  "campaigns.js", "experience.js", "experience-studio.js", "password-recovery.js", "reset-password.js", "reset-password.css",
   "audio.js",
   "speech-contract.js", "speech-cache.js",
   "curriculum-audio.js",
@@ -109,6 +109,7 @@ fs.writeFileSync(
     "/takiwaki /?legacy=takiwaki 301!",
     "/takiwaki.html /?legacy=takiwaki 301!",
     "/teacher /teacher.html 200",
+    "/reset-password /reset-password.html 200",
     "/lessons /lessons.html 200",
     "/my-page /my-page.html 200",
     "/lesson/* /lesson.html?id=:splat 200",
@@ -132,6 +133,14 @@ fs.writeFileSync(
     "  Permissions-Policy: microphone=(self)",
     "  Strict-Transport-Security: max-age=31536000; includeSubDomains",
     "  Content-Security-Policy: default-src 'self'; base-uri 'self'; frame-ancestors 'none'; object-src 'none'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://ycmybggetemkhorkhfnf.supabase.co; media-src 'self' blob: https://ycmybggetemkhorkhfnf.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; worker-src 'self' blob:; manifest-src 'self'; form-action 'self'; upgrade-insecure-requests",
+    "",
+    "/reset-password",
+    "  Cache-Control: no-store",
+    "  Referrer-Policy: no-referrer",
+    "",
+    "/reset-password.html",
+    "  Cache-Control: no-store",
+    "  Referrer-Policy: no-referrer",
     "",
     "/sw.js",
     "  Cache-Control: no-cache, no-store, must-revalidate",

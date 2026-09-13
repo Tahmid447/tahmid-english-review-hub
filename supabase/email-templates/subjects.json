@@ -1,0 +1,15 @@
+{
+  "confirmation": "Welcome — confirm your Tahmid English Hub account",
+  "recovery": "Reset your Tahmid English Hub password",
+  "magic_link": "Your Tahmid English Hub sign-in link",
+  "email_change": "Confirm your new Tahmid English Hub email",
+  "invite": "You’re invited to Tahmid English Hub",
+  "reauthentication": "Your Tahmid English Hub verification code",
+  "password_changed_notification": "Your Tahmid English Hub password was changed",
+  "email_changed_notification": "Your Tahmid English Hub email was changed",
+  "phone_changed_notification": "Your Tahmid English Hub phone number was changed",
+  "mfa_factor_enrolled_notification": "Security method added to Tahmid English Hub",
+  "mfa_factor_unenrolled_notification": "Security method removed from Tahmid English Hub",
+  "identity_linked_notification": "Sign-in method connected to Tahmid English Hub",
+  "identity_unlinked_notification": "Sign-in method disconnected from Tahmid English Hub"
+}

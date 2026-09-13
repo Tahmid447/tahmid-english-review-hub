@@ -1,5 +1,17 @@
 # Working handoff — September 13, 2026
 
+## September 13 — professional email setup
+
+The user authorized a free professional email system for the existing domain, including live configuration and signup/password-reset tests. Cloudflare Email Routing is active for `hello@tahmidenglishhub.dpdns.org` and `support@tahmidenglishhub.dpdns.org`; both route to the owner's verified private inbox (kept outside Git). Catch-all remains disabled. Resend domain `daece08f-2f31-43f0-9d7e-355c8b2e5898` is verified in Tokyo. Its Free plan allows 100 emails/day and 3,000/month, with paid overages disabled.
+
+Custom SMTP is active in the same Supabase project: `smtp.resend.com:465`, username `resend`, sender `Tahmid English Hub <support@tahmidenglishhub.dpdns.org>`. The domain-restricted sending key is stored only by Supabase. Auth email cap is 30/hour; per-user interval 60 seconds. All 13 existing email template types are branded; source lives in `supabase/email-templates/`, excluded from the website build. Confirmation, Google login, Site URL and redirects remain enabled/unchanged.
+
+The new `/reset-password` page supports email requests and a validated recovery-link password form. Recovery uses a separate in-memory Supabase client, never the learner or teacher persistent session. Passwords are only updated following `PASSWORD_RECOVERY` and a fresh matching server identity check. The page has no analytics or third-party scripts and removes auth URL fragments after consumption. Student and teacher login forms link to it. `npm run test:password-recovery` checks the delayed SDK event, identity changes, validation, expired sessions and cleanup.
+
+At this implementation checkpoint: full existing tests, new recovery tests and Cloudflare build checks passed; public DNS resolves all mail records, and the existing website remains HTTPS 200. Real signup/reset delivery, forwarding receipt and professional replies still require end-to-end verification. No production database migration or user/password write has occurred in this email phase. Do not mark the email task complete on this checkpoint alone.
+
+Google's current official notice says third-party Gmail Send-as ends January 2027 (new configurations may be restricted earlier), while forwarding into Gmail continues. See `https://support.google.com/mail/answer/17101213?hl=en`. Do not promise permanent professional replies through Gmail. Private email audit/rollback files are outside Git in the migration workspace's `email-private-backup` directory.
+
 ## September 13 — pronunciation migration
 
 The user explicitly requested removing the Netlify dependency. The native speech transport is in `workers/speech/`, uses Cloudflare WebSocket upgrade, and shares the existing voice contract. The custom endpoint is `https://speech.tahmidenglishhub.dpdns.org/api/natural-speech`. Cloudflare Worker Builds is connected to this same repository/main, with `npm run test:speech:cloudflare` and `npm run deploy:speech`. Preview Worker builds are disabled; Pages preview builds remain enabled. No Supabase changes or database writes are needed for this phase. See `docs/CLOUDFLARE_DEPLOYMENT.md`.
