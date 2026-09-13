@@ -1,0 +1,29 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "tahmid-english-speech",
+  "main": "index.js",
+  "compatibility_date": "2026-09-13",
+  "workers_dev": true,
+  "observability": {
+    "enabled": false
+  },
+  "ratelimits": [
+    {
+      "name": "SPEECH_LIMITER",
+      "namespace_id": "2026091301",
+      "simple": {
+        "limit": 120,
+        "period": 60
+      }
+    }
+  ],
+  "routes": [
+    {
+      "pattern": "speech.tahmidenglishhub.dpdns.org",
+      "custom_domain": true
+    }
+  ],
+  "version_metadata": {
+    "binding": "SPEECH_VERSION"
+  }
+}

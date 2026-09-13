@@ -41,11 +41,14 @@
     "verify:voices:live": "node scripts/verify-voices.mjs --live",
     "test:security": "node scripts/test-personalisation-security.mjs",
     "test:my-page": "node scripts/test-my-page.mjs",
-    "test:campaigns": "node scripts/test-campaigns.mjs"
+    "test:campaigns": "node scripts/test-campaigns.mjs",
+    "test:speech:cloudflare": "node scripts/test-cloudflare-speech.mjs",
+    "deploy:speech": "wrangler deploy --config workers/speech/wrangler.jsonc"
   },
   "devDependencies": {
     "@electric-sql/pglite": "0.5.8",
-    "sharp": "0.35.4"
+    "sharp": "0.35.4",
+    "wrangler": "4.131.1"
   },
   "dependencies": {
     "edge-tts-universal": "1.4.0"
