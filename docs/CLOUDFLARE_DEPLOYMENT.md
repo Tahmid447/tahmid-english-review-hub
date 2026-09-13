@@ -1,52 +1,65 @@
-# Cloudflare Pages deployment
+# Cloudflare Pages deployment — September 13, 2026
 
-Status: migration prepared and locally tested; GitHub connection, hosted deployment, domain and signed-in verification are still pending.
+The existing website is live at https://tahmidenglishhub.dpdns.org with HTTPS. GitHub integration builds the existing repository. Supabase and the Netlify pronunciation backend are retained.
 
-## Project and source
-
-Tahmid English Review Hub is a static HTML/CSS/JavaScript application with a custom Node build. Supabase continues to provide Google/email sign-in, Postgres, private storage and membership functions.
+## Project and publishing
 
 - Repository: https://github.com/Tahmid447/tahmid-english-review-hub
-- Intended production URL: https://tahmidenglishhub.dpdns.org
-- Existing production and rollback: https://tahmid-english-review-hub.netlify.app
-- Migration branch: `codex/cloudflare-pages-migration`
-- Current production source branch: `upgrade/review-hub-v9-final-product`
-- `main` is historical. Do not deploy that old version.
+- Production branch: `main`; automatic production deployments enabled.
+- Cloudflare Pages project: `tahmid-english-hub`.
+- Pages address: https://tahmid-english-hub.pages.dev
+- Dashboard: https://dash.cloudflare.com/e8f1eea5d1c73f3cbc307d71f0a98ca9/pages/view/tahmid-english-hub
+- Framework: None; root: repository root; build: `npm run build:cloudflare`; output: `dist`; Node: 22 via `.node-version`.
+- Cloudflare account and domain use Free plans. No paid service was purchased.
 
-## Local development and verification
+`main` was advanced normally from the original baseline to the verified current source, preserving every ancestor. No branch reset or force-push was used. The preparation branch `codex/cloudflare-pages-migration` remains available. The old Netlify production branch `upgrade/review-hub-v9-final-product` is unchanged.
 
-Use Node 22, run `npm ci`, then `npm run dev`.
+The user authorized and completed the official Cloudflare Workers and Pages GitHub App installation with all-repository access. This Pages project selects only `Tahmid447/tahmid-english-review-hub` as its build source.
 
-For a Cloudflare build, run `npm run build:cloudflare`. The output directory is `dist`. Run `npm test`, `npm run verify:voices`, and, after the Cloudflare build, `npm run test:cloudflare`.
+## Domain and HTTPS
 
-`npx wrangler pages dev dist --port 8788` serves the output using the Pages runtime for clean-route and redirect verification. `npm run build` continues to create the original Netlify output. Neither command applies database migrations.
+DigitalPlat remains the registrar for `tahmidenglishhub.dpdns.org`. Cloudflare Pages explicitly required Cloudflare DNS for this registered apex domain. DigitalPlat had no website or email records to preserve. Its external nameservers are now:
 
-## Cloudflare build settings
+- `kolton.ns.cloudflare.com`
+- `sue.ns.cloudflare.com`
 
-- Connect the existing GitHub repository using the official Cloudflare Workers and Pages GitHub App, restricted to this repository.
-- Framework preset: None.
-- Build command: `npm run build:cloudflare`.
-- Build output: `dist`.
-- Node: 22, also specified in `.node-version`.
-- Select the verified current source branch explicitly; do not accept `main` by default.
-- Production branch and the assigned Pages URL must be recorded after the project is created.
+Cloudflare zone `7128466a332f4e64f5be0dc9914713f9` contains a proxied root CNAME to `tahmid-english-hub.pages.dev`. The Pages custom domain is attached. Both Google and Cloudflare public DNS returned the assigned nameservers, and the custom URL passed HTTPS certificate validation and returned the expected release. Domain registration currently expires September 12, 2027; DigitalPlat states free renewal is available within 120 days of expiry.
 
-The committed `src/config.js` contains only the existing public Supabase URL and anon key. Optional build overrides are `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`; set both together in Cloudflare's environment settings. The importer rejects service-role/secret keys. Never add private Supabase keys, database passwords or login tokens to the frontend, repository or build output.
+## Supabase and secrets
 
-## Pronunciation audio remains on Netlify
+The existing project `ycmybggetemkhorkhfnf` remains authoritative for users, Google/email authentication, Postgres, private storage, membership and progress. No database migrations were applied and no users or student records were removed.
 
-The Cloudflare build uses the existing `https://tahmid-english-review-hub.netlify.app/.netlify/functions/natural-speech` endpoint. Direct browser requests preserve Netlify's per-client rate limiting. The browser sends speech text and the fixed voice profile; it sends no Supabase key, user session or cookie to this endpoint. Audio uses a Blob URL and private/no-store responses.
+The Site URL is `https://tahmidenglishhub.dpdns.org`. Added `https://tahmidenglishhub.dpdns.org/**` and `https://tahmid-english-hub.pages.dev/**` to allowed redirects, preserving every previous entry. The Google callback remains `https://ycmybggetemkhorkhfnf.supabase.co/auth/v1/callback`; no Google OAuth client replacement was needed.
 
-Netlify must remain available both as the original website and as this pronunciation backend. Migrating that Node/WebSocket service is a separate step requiring live Ava, Libby and Nanami verification. Do not remove Netlify merely because the new homepage works.
+The deployed `membership-access` source was downloaded privately and compared byte-for-byte with the repository before changing it. Only the two new exact origins were added to its CORS allowlist. It was deployed to the same project, retaining its existing JWT configuration and explicit server-side identity/teacher checks. Old Netlify origins still work; an unrelated origin is not permitted.
 
-## Authentication and domain checklist
+`src/config.js` contains the public Supabase URL and anon key only. No private Cloudflare build variables are required. Optional overrides are `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`, supplied together under Pages Settings → Variables and secrets. The importer rejects service-role/secret keys. Never put private keys, database passwords or login tokens into frontend files, logs, or Git.
 
-Before going live, add the exact Pages test origin and new production origin to Supabase's allowed redirects, retaining the Netlify entries. Add those exact origins to the existing membership function's CORS allowlist after inspecting its deployed source. Set the new Supabase Site URL only once the new domain is ready. Keep the existing Supabase project and Google callback.
+## Keep the Netlify speech service
 
-Inspect DigitalPlat DNS/delegation and Cloudflare's custom-domain requirements before selecting nameservers. Attach the custom domain in Pages before pointing DNS to it. Verify HTTPS, nested lesson refreshes, OAuth returns including query parameters, real reads/writes and logout.
+The Cloudflare build uses `https://tahmid-english-review-hub.netlify.app/.netlify/functions/natural-speech`. Direct browser requests preserve Netlify's per-client rate limiting and send the speech text and fixed voice profile, without a Supabase key, user session or cookie. Audio responses remain private/no-store and play through Blob URLs.
 
-`/release.json` records the source commit and hosting platform with no-cache delivery. Each Cloudflare build stamps the service worker's public cache with the source commit so an update invalidates old code. Confirm automatic deployment by committing a harmless visible change to the eventual production branch, observing the Cloudflare deployment, and checking that the custom domain serves that commit and change.
+**Netlify remains required for pronunciation as well as rollback.** Do not remove it. Moving the Node/WebSocket speech service is separate work requiring live Ava, Libby and Nanami verification. The historical Supabase speech function remains unused.
 
-## Future edits
+## Verification and limits
 
-Once the migration is verified: edit the file, commit and push to the configured production branch, and Cloudflare will build and publish it automatically. A ZIP upload is not part of this workflow.
+- Full local application tests, voice-contract checks, Cloudflare build/output checks and local Pages routing checks passed.
+- Live HTTPS, homepage layout/assets, lessons, My Page, teacher login, aliases, nested lesson refreshes and query-preserving Google returns passed. Unknown routes return a real 404.
+- Google login with the existing owner account succeeded on both Pages and the custom domain. The final-domain Teacher Studio loaded its existing learners, 31 lessons, 24 phrase repetitions and two reviewed submissions. A private learner recording played to `ended=true` at 7.937 seconds.
+- Pronunciation playback completed through the live UI. US Ava, UK Libby and Japanese Nanami service responses had already passed live voice-contract/MP3 checks.
+- The user selected owner preview for practice testing. A one-question exercise scored 1/1 and survived reload. A temporary learning-goal change saved to Supabase, survived reload, and was restored to its original empty value. A read-only server query confirmed restoration.
+- Owner preview cannot persist official student attempts: existing database policies intentionally exclude teachers from those writes. No fresh real-student login or official student-result write was attempted. This is a verification limit, not evidence of a new migration failure. Existing learner data remains available.
+- Logout returned to the protected sign-in form. The tested production pages had no captured browser warning/error logs.
+- Live anonymous-access checks passed: 31 lesson metadata rows, two free previews, expected free activities, and 28 protected resources rejecting anonymous reads.
+- Aggregate data counts and migration ledger matched the pre-migration baseline after deployment. Only the reversible owner profile test was written; no student submission/feedback was edited.
+- Initial automatic-update proof: commit `c569b0b1de14af4b69b5ba83b6c808303620a0f8` created deployment `e1f3ee05-d77e-4564-bf14-ae396c98eaf7`, and its new footer text and release ID appeared on the custom domain. The final `main` publishing configuration is also verified before task completion.
+
+`/release.json` records the actual source commit and hosting platform. Every build stamps the public service-worker cache with the commit so normal updates invalidate cached code. The build preserves clean multi-page routes and required aliases without a blanket single-page fallback.
+
+## Recovery and future work
+
+The original Netlify website remains https://tahmid-english-review-hub.netlify.app at commit `abf447a1c547b5a65b829a8678d58572cdd546c5`; its source branch is unchanged. A verified full-history Git bundle, original auth URLs, deployed membership-function body/source and aggregate data baseline are stored privately outside Git in the migration workspace's `private-backup` directory. These are not a full database backup. The existing Netlify account could read site/deployment metadata but not every environment detail; no secret values were copied.
+
+For a bad frontend update, revert the relevant Git commit on `main` and push, or use a known successful Pages deployment rollback. Keep the old Netlify auth redirects and speech function. Database rollback is neither needed nor included in this frontend migration.
+
+To edit: change the file → commit and push to `main` → Cloudflare builds and publishes automatically. No ZIP upload. Future development should start from current `main`, preserve the existing Supabase project, and use its own user authorization.

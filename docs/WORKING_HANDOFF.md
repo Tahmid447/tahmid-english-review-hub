@@ -1,4 +1,22 @@
-# Working handoff — 2026-09-11 complete
+# Working handoff — September 13, 2026
+
+## Current production
+
+The existing website has moved to **https://tahmidenglishhub.dpdns.org**, hosted on Cloudflare Pages project **tahmid-english-hub**. **`main` is now the source and automatic production branch.** Start new work from current `main`; the historical branch names below describe earlier releases.
+
+Read [Cloudflare deployment](CLOUDFLARE_DEPLOYMENT.md) for exact build settings, DNS, authentication, recovery and verification limits. Build command `npm run build:cloudflare`, output `dist`, Node 22. `/release.json` identifies the live source commit and public cache version.
+
+GitHub history was preserved by fast-forwarding the old `main` baseline. The original checkout on `codex/structured-learning-hub` and Netlify production branch `upgrade/review-hub-v9-final-product` were retained. Netlify still serves the unchanged old site and is required for the three pronunciation voices. Do not delete it.
+
+Supabase project, identities, data and migration ledger remain unchanged. Only auth Site URL/redirect additions and the two exact membership CORS origins changed. Google login, teacher reads, private recording playback, logout and a reversible owner-profile database save were tested on the new domain. User chose owner preview for practice: grading/reload passed, but existing teacher-exclusion policies prevent official student-attempt writes from owner preview. Do not claim a new real-student result write was verified.
+
+All prior local tests plus live anonymous-access protection passed. No production database migration was run. Owner profile test text was restored. No student result, submission or feedback was edited.
+
+The user authorized this migration and public deployment in this conversation. Future tasks require their own scope and authorization.
+
+---
+
+# Historical handoff — September 11 release
 
 This is the existing Tahmid English Review Hub. Read this file and `AGENTS.md` before continuing. Do not recreate the site, reset branches, force-push or replay historical migrations.
 
