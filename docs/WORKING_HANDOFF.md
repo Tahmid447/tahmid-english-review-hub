@@ -1,5 +1,15 @@
 # Working handoff — September 15, 2026
 
+## September 15 — Lesson Notes practice upgrade, verification checkpoint
+
+Active branch `codex/lesson-note-practice`, based on `origin/main` `fd27885`. User requested the new practice/progress spec plus image uploads/full-image display, student formatting, cover controls, archive/Trash, read/review undo and concrete in-site notifications. Implementation is present; **migration `20260915190000` is APPLIED LIVE with its matching ledger; frontend publication is the next step**. Existing real notes/images must remain intact; local QA uses separate synthetic accounts only.
+
+Guide: [Lesson Notes practice 10.7](LESSON_NOTE_PRACTICE.md). New forward SQL `20260915190000_note_practice_and_updates.sql`; never replay prior notebook/email SQL. The live ledger now has 13 entries. Private preflight/backup directory `/Users/tahmidahmed/Documents/Codex/private-backups/2026-09-15-note-practice` (never commit its contents). Current code version 10.7.0. Full test suite, 86 original + 68 new notebook assertions, build and voice contract have passed; final small UI changes require syntax/build verification. Browser tests passed import, four practice types, persisted progress, rich annotations, image upload/contain/zoom, cover toggle, teacher details, review/read undo and recoverable Trash restoration. Remaining: push main, verify Cloudflare release and real signed-in teacher controls, finish backup comparisons and record final evidence.
+
+The email integration below is complete and must not be changed by this feature. The historical notebook release section further below is superseded by this new checkpoint.
+
+---
+
 ## September 15 — free email system in service; final integration checkpoint
 
 **This section supersedes all earlier email “pending” statements.** Free-only decision retained; no purchase or paid trial. Incoming domain aliases remain on Cloudflare; outgoing/auth mail uses the owner's selected genuine Gmail with display name `Tahmid English Hub`. Domain From delivery remains unreliable and is intentionally not claimed fixed. Full operating guide: [free email operation](FREE_EMAIL_CONTINUATION.md); implementation: [owner Worker](../workers/email-alerts/README.md). Exact inbox addresses, credentials and beginner Japanese guide are outside Git.

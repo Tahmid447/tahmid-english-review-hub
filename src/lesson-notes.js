@@ -1,12 +1,14 @@
+import {watchNoteUpdates} from './note-updates.js?v=20260915-practice';
 import { getStudentClient } from './supabase.js?v=20260911-mobile2';
 import { initialiseMemberPreferences } from './member-preferences.js?v=20260911-mobile2';
 import { loadStudentAccess, applyStudentFeatureVisibility, featureAllowed } from './student-visibility.js?v=20260911-mobile2';
-import { createNoteApi, noteError } from './lesson-note-api.js?v=20260914-notes';
-import { cardMarkup, mountNoteView, lazyPrivateImages, noteButton } from './lesson-note-view.js?v=20260914-notes';
+import { createNoteApi, noteError } from './lesson-note-api.js?v=20260915-practice';
+import { cardMarkup, mountNoteView, lazyPrivateImages, noteButton } from './lesson-note-view.js?v=20260915-practice';
 import { escapeHTML as e } from './store.js?v=20260911-mobile2';
-import { searchText } from './lesson-note-model.js?v=20260914-notes';
+import { searchText } from './lesson-note-model.js?v=20260915-practice';
 import './study-music.js?v=20260911-mobile2';
 const root=document.querySelector('#notesWorkspace'),api=createNoteApi(getStudentClient());
+let stopUpdates=()=>{},lastChange='';
 let session,view,imagesDispose=()=>{},rows=[],offset=0,loading=false;
 const beforeUnload=event=>{if(view?.dirty()){event.preventDefault();event.returnValue='';}};
 window.addEventListener('beforeunload',beforeUnload);
@@ -45,5 +47,11 @@ try {
   const access=await loadStudentAccess();applyStudentFeatureVisibility(access);
   if(!featureAllowed(access,'show_homework'))throw new Error('Your teacher has hidden this learning area. · この学習エリアは先生の設定で非表示になっています。');
   const id=idFromPath();if(id)await openNote(id);else await index();
+  stopUpdates=watchNoteUpdates(api.client,session.user.id,async()=>{try{const notices=await api.notifications({unreadOnly:false}),stamp=notices.filter(n=>!id||n.note_id===id).map(n=>n.updated_at).sort().at(-1)||'';if(stamp===lastChange||!stamp)return;lastChange=stamp;
+   if(id){if(view?.dirty()){if(!root.querySelector('[data-new-version]')){const bar=document.createElement('div');bar.dataset.newVersion='';bar.className='ln-live-update';bar.textContent='Your teacher updated this notebook. Save your work, then reopen it. · 先生から更新が届きました。回答やメモを保存してから開き直してください。';root.prepend(bar);}return;}const y=window.scrollY;view?.dispose();await openNote(id);window.scrollTo({top:y,behavior:'instant'});}
+   else {rows=[];offset=0;await index();}
+  }catch{}},{noteId:id});
  }
 }catch(error){errorView(error);}
+
+window.addEventListener('pagehide',()=>{stopUpdates();view?.dispose();imagesDispose();},{once:true});

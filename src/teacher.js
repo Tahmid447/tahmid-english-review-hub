@@ -1,4 +1,4 @@
-import { mountLessonNoteStudio } from './lesson-note-studio.js?v=20260914-notes';
+import { mountLessonNoteStudio } from './lesson-note-studio.js?v=20260915-practice';
 import { privateRecordingPlayer, voiceFeedbackEditor, FEEDBACK_BUCKET } from './private-recordings.js?v=20260911-mobile2';
 import { displayProfileAvatar } from './profile-api.js?v=20260911-mobile2';
 import { mountPersonalCardStudio } from './personal-cards.js?v=20260911-mobile2';
@@ -42,6 +42,7 @@ let lessonNoteStudio = null;
 let noteStudentFilter = "";
 let noteRouteId = new URLSearchParams(location.search).get('studio') === 'notes' ? new URLSearchParams(location.search).get('note') || '' : '';
 let noteInboxFetchedAt = 0;
+window.addEventListener('lesson-note-inbox',event=>{const badge=document.querySelector('#noteActivityCount');if(badge)badge.textContent=event.detail.count||'';});
 function refreshNoteInboxCount() {
   if (!state.session || Date.now() - noteInboxFetchedAt < 30000) return;
   noteInboxFetchedAt = Date.now();

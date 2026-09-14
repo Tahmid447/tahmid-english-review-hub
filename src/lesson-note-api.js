@@ -1,4 +1,4 @@
-import { notePayload, validateNote, clone } from './lesson-note-model.js?v=20260914-notes';
+import { notePayload, validateNote, clone } from './lesson-note-model.js?v=20260915-practice';
 export const NOTE_BUCKET='review-lesson-note-assets';
 const PREFIX='review_lesson_note';
 export function noteError(error) {
@@ -17,23 +17,29 @@ export function createNoteApi(client) {
   client,rpc,note,
   async list({studentId,status,offset=0,limit=30}={}) {
    // List deliberately excludes the large structured document and full-resolution images.
-   let q=client.from('review_lesson_notes').select('id,student_id,teacher_id,lesson_date,title,summary,tags,status,version,cover_asset_id,published_at,updated_at,created_at,assets:review_lesson_note_assets!review_lesson_note_assets_note_id_fkey(id,state,uploader_role,thumbnail_path),seen:review_lesson_note_review_status(viewed_version,reviewed_version)')
+   let q=client.from('review_lesson_notes').select('id,deleted_at,student_id,teacher_id,lesson_date,title,summary,tags,status,version,cover_asset_id,published_at,updated_at,created_at,assets:review_lesson_note_assets!review_lesson_note_assets_note_id_fkey(id,state,uploader_role,thumbnail_path),seen:review_lesson_note_review_status(viewed_version,reviewed_version)')
     .order('lesson_date',{ascending:false}).order('created_at',{ascending:false}).range(offset,offset+limit-1);
-   if(studentId)q=q.eq('student_id',studentId);if(status&&status!=='all')q=q.eq('status',status);
+   if(studentId)q=q.eq('student_id',studentId);if(status==='trash')q=q.not('deleted_at','is',null);else{q=q.is('deleted_at',null);if(status&&status!=='all')q=q.eq('status',status);}
    return result(q);
   },
   async detail(id,{teacher=false}={}) {
    const data=await note(id);
-   const values=await Promise.all(['annotations','suggestions','comments','assets','review_status',...(teacher?['activity','revisions']:[])].map(table=>{
+   const values=await Promise.all(['annotations','suggestions','comments','assets','review_status','practice_attempts',...(teacher?['activity','revisions']:[])].map(table=>{
     // Review status has no created_at; revisions list does not transfer all snapshots.
+    if(table==='practice_attempts')return result(client.from(`${PREFIX}_${table}`).select('*').eq('note_id',id).order('updated_at',{ascending:false}));
     if(table==='review_status')return result(client.from(`${PREFIX}_${table}`).select('*').eq('note_id',id));
     if(table==='revisions')return result(client.from(`${PREFIX}_${table}`).select('id,note_id,changed_by,change_type,affected_blocks,created_at').eq('note_id',id).order('created_at',{ascending:false}).limit(100));
     return related(table,id);
    }));
    const saved=teacher?[]:await result(client.from('review_personal_cards').select('id,source_block_id,favorites:review_personal_card_favorites!inner(card_id)').eq('student_id',data.student_id).eq('source_note_id',id).eq('active',true));
-   return {note:data,saved_phrases:saved,...Object.fromEntries(['annotations','suggestions','comments','assets','review_status',...(teacher?['activity','revisions']:[])].map((key,i)=>[key,values[i]]))};
+   return {note:data,saved_phrases:saved,...Object.fromEntries(['annotations','suggestions','comments','assets','review_status','practice_attempts',...(teacher?['activity','revisions']:[])].map((key,i)=>[key,values[i]]))};
   },
   save: n=>{validateNote(n);return rpc('save',{target_note:n.id,target_student:n.student_id,expected_version:n.version,payload:notePayload(n)});},
+  annotateRich:(id,block,body,format,version)=>rpc('annotate_rich',{target_note:id,target_block:block,body_text:body,format_json:format,expected_version:version}),
+  practice:(id,block,question,action,response,version)=>rpc('practice',{target_note:id,target_block:block,expected_question:question,action,response,expected_version:version}),
+  setReviewed:(id,reviewed,version)=>rpc('set_reviewed',{target_note:id,reviewed,expected_version:version}),
+  setRead:(id,unread)=>rpc('set_read',{target_note:id,make_unread:unread}),
+  trash:(id,restore,version)=>rpc('trash',{target_note:id,restore_note:restore,expected_version:version}),
   annotate:(id,block,body,version)=>rpc('annotate',{target_note:id,target_block:block,body_text:body,expected_version:version}),
   suggest:(id,block,changes)=>rpc('suggest',{target_note:id,target_block:block,changes}),
   reviewSuggestion:(id,decision,version)=>rpc('review_suggestion',{target_suggestion:id,decision,expected_version:version}),
@@ -41,7 +47,7 @@ export function createNoteApi(client) {
   comment:(id,body)=>rpc('comment',{target_note:id,body_text:body}),
   mark:(id,reviewed,version)=>rpc('mark',{target_note:id,reviewed,expected_version:version}),
   savePhrase:(id,block)=>rpc('save_phrase',{target_note:id,target_block:block}),
-  notifications:()=>result(client.from(`${PREFIX}_notifications`).select('*,note:review_lesson_notes(title,lesson_date,student_id)').eq('unread',true).order('updated_at',{ascending:false}).limit(100)),
+  notifications:({unreadOnly=true}={})=>{let q=client.from(`${PREFIX}_notifications`).select('*,note:review_lesson_notes(title,lesson_date,student_id)').order('updated_at',{ascending:false}).limit(100);if(unreadOnly)q=q.eq('unread',true);return result(q);},
   acknowledge:id=>rpc('acknowledge',{target_note:id}),
   revision:id=>result(client.from(`${PREFIX}_revisions`).select('*').eq('id',id).single()),
   restore:(id,version)=>rpc('restore',{target_revision:id,expected_version:version}),

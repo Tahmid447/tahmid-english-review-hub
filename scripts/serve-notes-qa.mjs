@@ -6,7 +6,7 @@ import path from 'node:path';
 import {db,ids,as} from './helpers/lesson-note-test-db.mjs';
 const port=4176,root=path.resolve('.'),images=new Map();let queue=Promise.resolve();
 const roles=new Set(['teacher','student','other','otherTeacher']);
-const tables=new Set(['review_lesson_notes','review_personal_cards','review_personal_card_favorites',...['annotations','suggestions','comments','assets','review_status','revisions','activity','notifications'].map(k=>`review_lesson_note_${k}`)]);
+const tables=new Set(['review_lesson_notes','review_personal_cards','review_personal_card_favorites',...['annotations','suggestions','comments','assets','review_status','revisions','activity','notifications','practice_attempts'].map(k=>`review_lesson_note_${k}`)]);
 const types={'.html':'text/html','.js':'text/javascript','.css':'text/css','.png':'image/png','.svg':'image/svg+xml','.jpg':'image/jpeg','.webp':'image/webp','.mp3':'audio/mpeg','.woff2':'font/woff2'};
 const json=(response,data,status=200)=>{response.writeHead(status,{'Content-Type':'application/json','Cache-Control':'no-store'});response.end(JSON.stringify(data));};
 async function api(payload){
@@ -19,7 +19,7 @@ async function api(payload){
  if(payload.op==='query'){
   if(!tables.has(payload.table))throw new Error('Invalid fixture table');
   const params=[],where=[];
-  for(const [key,value] of payload.filters||[]){if(!/^[a-z_]+$/.test(key))throw new Error('Invalid column');params.push(value);where.push(`${key}=$${params.length}`);}
+  for(const [key,value,op] of payload.filters||[]){if(!/^[a-z_]+$/.test(key))throw new Error('Invalid column');if(value===null&&['is','not'].includes(op)){where.push(`${key} is ${op==='not'?'not ':''}null`);continue;}params.push(value);where.push(`${key}=$${params.length}`);}
   const order=(payload.orders||[]).map(([key,ascending])=>{if(!/^[a-z_]+$/.test(key))throw new Error('Invalid order');return `${key} ${ascending?'asc':'desc'}`;}).join(',');
   const sql=`select * from public.${payload.table}${where.length?' where '+where.join(' and '):''}${order?' order by '+order:''} limit ${Math.min(1000,payload.limit||1000)} offset ${Math.max(0,payload.offset||0)}`;
   const data=(await db.query(sql,params)).rows.map(row=>({...row,...row.lesson_date?{lesson_date:new Date(row.lesson_date).toISOString().slice(0,10)}:{}}));

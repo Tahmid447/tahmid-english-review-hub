@@ -1,6 +1,6 @@
-import {mountLessonNoteStudio} from '/src/lesson-note-studio.js?v=20260914-notes';
-import {mountNoteView,cardMarkup} from '/src/lesson-note-view.js?v=20260914-notes';
-import {createNoteApi} from '/src/lesson-note-api.js?v=20260914-notes';
+import {mountLessonNoteStudio} from '/src/lesson-note-studio.js?v=20260915-practice';
+import {mountNoteView,cardMarkup} from '/src/lesson-note-view.js?v=20260915-practice';
+import {createNoteApi} from '/src/lesson-note-api.js?v=20260915-practice';
 import {escapeHTML as e} from '/src/store.js?v=20260911-mobile2';
 if(location.hostname!=='127.0.0.1')throw new Error('Loopback fixture only');
 const ids={teacher:'10000000-0000-4000-8000-000000000001',student:'20000000-0000-4000-8000-000000000001',other:'20000000-0000-4000-8000-000000000002'};
@@ -8,7 +8,7 @@ const root=document.querySelector('#qaRoot');let role='teacher',view;
 const request=async payload=>(await fetch('/__notes_qa',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...payload,role})})).json();
 const client={
  rpc:(name,args)=>request({op:'rpc',name,args}),
- from(table){const p={op:'query',table,filters:[],orders:[]};const builder={select(columns){p.columns=columns;return builder;},eq(key,value){p.filters.push([key,value]);return builder;},order(key,{ascending=true}={}){p.orders.push([key,ascending]);return builder;},range(start,end){p.offset=start;p.limit=end-start+1;return builder;},limit(limit){p.limit=limit;return builder;},single(){p.single=true;return builder;},then(resolve,reject){return request(p).then(resolve,reject);}};return builder;},
+ from(table){const p={op:'query',table,filters:[],orders:[]};const builder={select(columns){p.columns=columns;return builder;},is(key,value){p.filters.push([key,value,"is"]);return builder;},not(key,op,value){p.filters.push([key,value,"not"]);return builder;},eq(key,value){p.filters.push([key,value]);return builder;},order(key,{ascending=true}={}){p.orders.push([key,ascending]);return builder;},range(start,end){p.offset=start;p.limit=end-start+1;return builder;},limit(limit){p.limit=limit;return builder;},single(){p.single=true;return builder;},then(resolve,reject){return request(p).then(resolve,reject);}};return builder;},
  storage:{from(){return {createSignedUrl:path=>request({op:'signed',path}),async upload(path,blob){const bytes=new Uint8Array(await blob.arrayBuffer());let binary='';for(let i=0;i<bytes.length;i+=8192)binary+=String.fromCharCode(...bytes.subarray(i,i+8192));return request({op:'upload',path,type:blob.type,bytes:btoa(binary)});},remove:paths=>request({op:'remove',paths}),async download(path){const response=await request({op:'signed',path});if(response.error)return response;return {data:await(await fetch(response.data.signedUrl)).blob(),error:null};}};}}
 };
 const api=createNoteApi(client);

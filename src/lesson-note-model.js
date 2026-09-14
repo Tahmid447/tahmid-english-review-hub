@@ -1,3 +1,4 @@
+import { PRACTICE_TYPES, isPractice, practiceSectionType } from './note-practice-model.js?v=20260915-practice';
 /** Portable, English-first teaching blocks. No HTML or editor-vendor document format. */
 export const BLOCK_TYPES = Object.freeze({
  heading: ['Heading · 見出し','neutral','H'], paragraph: ['Paragraph · 本文','neutral','¶'],
@@ -11,6 +12,7 @@ export const BLOCK_TYPES = Object.freeze({
  example: ['Example · 例文','blue','↳'], comparison: ['Compare · 違いを比べる','amber','⇄'],
  quick_practice: ['Quick practice · 使ってみよう','teal','✓'], callout: ['Remember · 覚えておこう','blue','★'],
  collapsible_section: ['Section · 開閉できるセクション','neutral','▤'], image: ['Image · 画像','neutral','▧'], divider: ['Divider · 区切り','neutral','—'],
+ ...PRACTICE_TYPES,
 });
 export const PHRASE_TYPES = new Set(['useful_phrase','vocabulary','japanese_to_english','natural_english_upgrade','example','pronunciation','comparison']);
 export const PERMISSIONS = Object.freeze({
@@ -36,7 +38,7 @@ export function editableTextFields(block) {
 export const newId = () => crypto.randomUUID();
 export function newBlock(type='paragraph') {
  if (!BLOCK_TYPES[type]) throw new Error('Unknown teaching block');
- return {id:newId(),type,englishText:'',japaneseSupport:'',japaneseSupportMode:'none',examples:[],explanation:'',tags:[],
+ return {id:newId(),...(PRACTICE_TYPES[type]&&type!=='quick_practice_group'?{questionId:newId(),choices:[],acceptedAnswers:[],hint:'',answerKey:'',difficulty:''}:{}),type,englishText:'',japaneseSupport:'',japaneseSupportMode:'none',examples:[],explanation:'',tags:[],
   pronunciation:{enabled:PHRASE_TYPES.has(type)},displayOptions:{studentEditable:false,keyPhrase:type==='useful_phrase',collapsed:false}};
 }
 export function newNote(studentId='') {
@@ -56,6 +58,11 @@ export function validateNote(note) {
   throw new Error('Use up to 150 blocks / 220KB per note. · 長い教材はノートを分けてください。');
  if(note.status==='published' && (!note.focus.trim() || !note.content_json.blocks.length))
   throw new Error('Add Today’s Focus and at least one teaching block before publishing. · 今日のポイントと教材を入力してください。');
+ if(note.status==='published')for(const b of note.content_json.blocks.filter(isPractice)) {
+  if(!(b.englishText||'').trim())throw new Error('Add a prompt to each practice question. · 練習問題の設問を入力してください。');
+  if(b.type==='multiple_choice'&&(b.choices||[]).length<2)throw new Error('Add at least two choices. · 選択肢を2つ以上入力してください。');
+  if(b.type==='sentence_reorder'&&(b.items||[]).length<2)throw new Error('Add at least two reorder items. · 並び替えの語句を2つ以上入力してください。');
+ }
  return note;
 }
 export function moveItem(items,id,direction) {
@@ -100,7 +107,7 @@ export function importLessonText(input) {
  if(text!==input.replace(/\r\n?/g,'\n'))warnings.push('Embedded HTML and link destinations were removed. Text remains editable. · HTMLやリンク先を除去しました。内容を確認してください。');
  const blocks=[];let current=null,kind='paragraph',field='englishText',title='',sectionTitle='';
  const flush=()=>{
-  if(current && Object.entries(current).some(([k,v])=>['englishText','japaneseSupport','originalText','explanation','comparisonText','items','correctOptions'].includes(k) && (Array.isArray(v)?v.length:String(v).trim()))) {
+  if(current && Object.entries(current).some(([k,v])=>['englishText','japaneseSupport','originalText','explanation','comparisonText','items','correctOptions','answerKey'].includes(k) && (Array.isArray(v)?v.length:String(v).trim()))) {
    if(current.japaneseSupport)current.japaneseSupportMode=['grammar_point','nuance','natural_english_upgrade'].includes(current.type)?'explanation':'short';
    blocks.push(current);
   }
@@ -109,8 +116,12 @@ export function importLessonText(input) {
  const ensure=()=>current ||= newBlock(kind);
  for(const line of text.split('\n')) {
   const heading=line.match(/^\s*(#{1,6})\s+(.+)$/);
+  const practiceKind=practiceSectionType(heading?.[2]||line);
   const semantic=sections.find(([pattern])=>pattern.test(heading?.[2] || (/^[^:：]{2,70}$/.test(line)?line:'')));
   if(heading?.[1]==='#' && !title){title=heading[2].trim();continue;}
+  if(practiceKind){flush();kind=practiceKind;ensure();if(kind==='quick_practice_group'){current.englishText=heading?.[2]||line;flush();kind='paragraph';}continue;}
+  if(heading && /quick\s*practice/i.test(heading[2]) && /(?:###\s*(?:Multiple Choice|Fill in|Error Correction|Short Answer|Self Check|Japanese.*Practice|Sentence Reorder))/i.test(text)){flush();kind='quick_practice_group';ensure();current.englishText=heading[2];flush();kind='paragraph';continue;}
+  if(heading && /^(?:images?|infographics?|画像|図解)(?:\s|$)/i.test(heading[2])){flush();kind='image';ensure();current.title=heading[2];current.englishText=heading[2];continue;}
   if((heading && heading[1].length<=2) || (!heading && semantic)) {
    flush(); sectionTitle=heading?.[2] || line; kind=semantic?.[1] || 'paragraph';
    if(!semantic)blocks.push({...newBlock('heading'),englishText:sectionTitle});
@@ -119,14 +130,17 @@ export function importLessonText(input) {
   if(heading){flush();ensure();if(kind==='japanese_to_english')current.japaneseSupport=heading[2];else current.title=heading[2];continue;}
   if(!line.trim())continue;
   const label=line.match(/^\s*([A-Za-z ]+|日本語)[:：]\s*(.*)$/);
-  const mapped=label && fieldNames[label[1].trim().toLowerCase()];
+  const labelName=label?.[1].trim().toLowerCase();
+  const practiceField=isPractice(current||{type:kind})&&({question:'englishText',prompt:'englishText',answer:'answerKey','answer key':'answerKey','accepted answers':'acceptedAnswers',hint:'hint',difficulty:'difficulty',items:'items',words:'items',options:'choices',choices:'choices'})[labelName];
+  const choiceLabel=isPractice(current||{type:kind})&&/^[a-z]$/.test(labelName||'')?labelName:null;
+  const mapped=choiceLabel?'choices':practiceField||(label && fieldNames[labelName]);
   if(mapped){
    if(mapped==='englishText' && current?.englishText && !current.originalText)flush();
    ensure();field=mapped;if(!label[2])continue;
   }
   const value=(mapped?label[2]:line).replace(/^\s*[-*•]\s+/,'').trim();
   if(!value)continue;ensure();
-  if(['examples','correctOptions','tags'].includes(field))current[field]=[...(current[field]||[]),value];
+  if(['examples','correctOptions','tags','choices','acceptedAnswers','items'].includes(field))current[field]=[...(current[field]||[]),value];
   else current[field]=[current[field]||'',value].filter(Boolean).join('\n');
  }
  flush();
