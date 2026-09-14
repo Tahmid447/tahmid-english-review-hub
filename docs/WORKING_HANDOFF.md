@@ -1,5 +1,28 @@
 # Working handoff — September 13, 2026
 
+## Resume checkpoint — 2026-09-14T18:57:22+09:00
+
+The user asked to save a durable handoff before switching Codex accounts because usage may run out. Preserve this checkout and continue the existing email task; do not recreate the site or accounts.
+
+**Verified live source: `42a589540cc525358025411d9e5394aec8a3a601` on `main`.** Cloudflare production deployment `d32b1104-45d5-4a6b-8be8-22a6351da4c9` succeeded at 18:53 JST. Public `/release.json`, `/src/teacher.js`, `/src/reset-password.js`, and `/reset-password` were fetched after deployment: the new commit, corrected reset target, request-accepted copy and recovery form are present. Full tests/build/Cloudflare-output/voice-contract checks passed. Current source has no uncommitted runtime work.
+
+The `codex/support-recovery-fix` branch also carries this handoff update after the deployed source commit. Documentation-only checkpoint commits do not mean another runtime fix is pending. Begin future code work from current remote `main` as AGENTS.md requires; read this handoff first.
+
+### What remains, in order
+
+1. **Paid-domain decision is pending, not approved.** User originally requires free services and explicit approval before purchases. An asynchronous question proposed available `tahmidenglishhub.com` at Cloudflare's displayed USD 10.46 initial / USD 10.46 per year renewal (taxes not checked at checkout). No purchase, checkout, paid plan or domain migration has occurred. The user instead requested this checkpoint. Do not interpret prior “full access” or elapsed time as purchase approval. A new domain removes the shared-parent dependency but does not guarantee Gmail delivery.
+2. Main Gmail: review only relevant Resend, SMTP2GO and DigitalPlat responses since the latest audit. There was no new human remediation in the last checked threads. Incoming `hello@` and `support@` works. Latest support reply to a different owner Gmail still bounced. SMTP2GO remains suspended and unconnected to production; never bypass the suspension or retry sends through it.
+3. If the domain is approved, verify registrar pricing/renewal and prepare DNS, sending identity, Supabase origins and safe migration/rollback using existing services. Check the Resend Free domain allowance before attempting to add a second domain; never silently upgrade. Keep old inbound aliases and existing website/users accessible during any transition. Use exact provider DNS records and validate real Gmail receipt before claiming resolution.
+4. Signup and password-reset Gmail delivery is still unresolved. Earlier links worked via the authorized Resend preview, not a received Gmail message. The new teacher-triggered redirect is covered by the actual-action regression test and public-source verification, but a fresh signed-in teacher UI send has not been performed: the newly opened `/teacher` tab showed the login screen. Do not request/reset an actual student's password. Use only the existing owner-controlled test student for real tests.
+5. Automatic owner notifications for signup/reset/delivery events are **not configured**. Design separate notifications without confirmation/reset links or passwords. Auth links must go only to the account's owner. Existing Teacher Studio account-status views do not constitute email notifications.
+6. Once a sending remedy exists, verify all four routes: external sender → professional alias → main Gmail; support reply → other owner Gmail; new signup → actual received email → correct verification page; existing test student's reset → actual received email → password change → successful sign-in. Preserve owner Google login and all learner data. Stop repeating identical bounced tests without a changed condition.
+
+The last read-only data check returned users 6, profiles 4, attempts 1, submissions 2, feedback 2, lessons 31. Migration ledger has 9 entries ending `20260911081000`. No database/user/password writes occurred during this evening audit. The plus-address test student routes to the owner's main inbox but is a separate Supabase identity; another owner Gmail also bounced, so shared inbox use is not the diagnosed cause.
+
+Browser sessions may need renewal after an account switch. Use current browser inventory and authenticated UI; do not reuse old tab handles or obtain/copy hidden session tokens. Main mailbox is accessible through `https://mail.google.com/mail/u/1/` when the signed-in ordering matches; verify account identity. `English Hub` is the saved Gmail label/filter for the two professional recipients. Only labeling was enabled, including 9 existing conversations; no spam bypass, deletion, archive or mark-read action.
+
+Full private continuation evidence and credentials are outside Git in `../email-private-backup`. The newest `resume-evening-20260914.json` and the first section of `EMAIL-SETUP-STATUS.md` supersede older checkpoints. Read only what is needed; never print private credentials. The original user request is in `/Users/tahmidahmed/.codex/attachments/74e6f956-4a34-4a38-bef5-25bdaf99ddc9/pasted-text.txt`; its Gmail typo was explicitly corrected to the destination in the private checkpoint.
+
 ## September 14 evening — receiving verified; outgoing Gmail still blocked
 
 This section supersedes older email status below. The email task is **not complete**. Cloudflare still receives `hello@` and `support@`; production Supabase and Gmail Send-as still use Resend. SMTP2GO is **not** connected to production.
