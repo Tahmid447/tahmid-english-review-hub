@@ -1,31 +1,33 @@
-# Free email continuation
+# Free email operation — verified 15 September 2026
 
-The user declined a paid domain on 14 September 2026. Keep the existing Cloudflare website, Supabase project, professional incoming aliases and private owner inbox. Current `support@` sending through Resend is authenticated but Gmail rejects it. Do not mark the task complete or retry unchanged failing messages.
+The owner declined a paid domain and selected an existing additional Gmail, then enabled its 2-Step Verification. The free setup is now in service. This replaces earlier pending-provider instructions. Exact private inbox/account details and the beginner guide are outside Git in `../email-private-backup/EMAIL_GUIDE_JA.md`.
 
-## Evidence for a free alternative
+| Function | Current service and behavior |
+| --- | --- |
+| Incoming `hello@tahmidenglishhub.dpdns.org` and `support@tahmidenglishhub.dpdns.org` | Cloudflare Email Routing forwards to the verified private main Gmail; Inbox receipt tested separately for both aliases. Catch-all remains off. |
+| Signup, reset and other configured auth mail | Existing Supabase project uses genuine selected Gmail through `smtp.gmail.com:465`, display name `Tahmid English Hub`. Branded templates and redirects are preserved. |
+| Reply destination | Selected Gmail forwards all new mail to the main Gmail, keeping its own Inbox copy. User delegated this choice after disclosure that the account has other uses. |
+| Manual sending/replies | Open the selected Gmail account and send as that account. Its Gmail sending display name is `Tahmid English Hub`. Main Gmail Send-as was removed after a real test exposed the private main in Return-Path. |
+| Owner signup/reset notices | Private outbox → Supabase Cron every five minutes → Cloudflare Worker → Gmail SMTP → main Inbox. No auth passwords/tokens/links are copied. |
 
-An owner Gmail sent one diagnostic to the owner's main Gmail at 21:05 JST. It reached Inbox with the existing website URL and support address in its body. This supports testing a dedicated Gmail sender. It does not validate a new account, SMTP connection, Supabase mail, or delivery to every recipient.
+**Domain addresses are currently receive-only.** Resend domain-origin mail to Gmail was authenticated but rejected; SMTP2GO was suspended. Parent `dpdns.org` reputation evidence does not prove the exact Gmail classifier or a site compromise. No support response, new paid domain, repeated unchanged retry, or suspension evasion is required by the working Gmail route. Do not disguise Gmail mail as the domain address. Do not restore the failed Resend Send-as entry.
 
-The dedicated Gmail address is **not yet selected**. Ask for the existing English Hub address or arrange a new free Google account. Do not publish either personal owner Gmail by assumption. The sender would visibly be the dedicated `@gmail.com`, with display name `Tahmid English Hub`; do not disguise it as the domain address.
+To reply to mail originally addressed to the selected Gmail, open that original message in the selected mailbox. Domain-address mail arrives only in the main mailbox: copy the customer's email address, switch to the selected sender account, and compose the response there. Pressing Reply from the main account would expose its address. No forwarding from main back to the selected account was added, avoiding a loop.
 
-## Remaining work
+## Verified evidence
 
-1. User signs into or creates the dedicated Google account. Pause at personal password, CAPTCHA, OTP, 2FA or Google authorization screens as the original request requires. Do not invent birth date, phone number or other personal details.
-2. Enable user-controlled 2-Step Verification and obtain a separate app password for `English Hub Supabase SMTP` if the account supports app passwords. Supabase custom SMTP uses password authentication; the ordinary Google password must not be used. Keep the secret in the existing private backup directory and Supabase only; never log it.
-3. Verify a direct SMTP test to the owner before changing production. Use `smtp.gmail.com`, port 465 with SSL (or 587 with STARTTLS), full dedicated Gmail address as username, its app password, and the same Gmail as the sender. Do not use the Workspace-only SMTP relay. If Google blocks authentication, retain the existing configuration and inspect that exact error rather than weakening account security.
-4. Back up current Supabase auth settings privately. Change only the SMTP fields after the direct test passes: host, port, username, password, sender email/name, preserving current rate caps and all other auth settings. Keep confirmations and Google login enabled. Do not remove redirect URLs or change user identities. Keep existing website links initially: the Google diagnostic containing them delivered; a website migration is not established as necessary.
-5. Verify actual signup and recovery emails through the existing site and owner-controlled test accounts, their sender, Inbox/Spam placement, links, password change and subsequent sign-in. Earlier Resend-preview link success is not inbox receipt. Preserve the dedicated test student's identity and learning data; do not reset a real student's password or copy secrets to the owner.
-6. Set up the dedicated Gmail's incoming forwarding to the private main Gmail, verify it, and choose a safe reply workflow that sends from the dedicated account. Preserve domain `hello@`/`support@` reception. Verify any optional Gmail Send-as capability against Google's current policy, rather than promising its permanence.
-7. Add separate owner event notifications only once their sending route works. They may summarize signup/reset/delivery events; they must not contain students' verification/reset URLs, tokens or passwords. Do not call a disabled diagnostic Worker or Teacher Studio status view an implemented email notification system.
-8. Save source/configuration evidence and update `WORKING_HANDOFF.md` and the private resume memo. Report remaining failures honestly.
+- Support/hello Inbox receipts: 14 September 18:36 and 18:44 JST.
+- Supabase Gmail SMTP: direct diagnostic Inbox 22:53; actual password reset Inbox/link/save/API login/UI login at 22:56 onward; actual new signup Inbox/link/UI login 23:07. Reset used the custom-domain page; signup and password login UI used the production Pages origin with the same backend, keeping the owner Google session separate. Only owner-controlled fixtures were used; test sessions were signed out.
+- Forwarding: confirmation completed; exact saved setting re-read; mail remained in selected Inbox and reached main Inbox at 00:01 on 15 September.
+- Manual Gmail UI send: received self-plus copy at 00:01; original headers did not contain the main address. Gmail internal self-delivery did not include SPF/DKIM/DMARC result headers, so do not claim those were measured on this specific message. An earlier Gmail Send-as test passed SPF/DKIM/DMARC for gmail.com but leaked the main Return-Path, hence removal.
+- Owner-only SMTP threaded reply reached the main Inbox at 00:27. This verified threading/SMTP delivery, not a Gmail UI Reply-button action.
+- Owner notices: two-event manual digest Inbox 23:42; **automatic Supabase Cron** digest Inbox 00:10, with cron success, pg_net HTTP 200, one accepted event, and final pending count zero. Cloudflare Cron was not proven to run and was removed.
+- Existing owner Google session still renders the production site. Fresh Google OAuth reauthentication was not repeated. Website, reset route and HTTPS return 200; no learning data was edited by this email continuation.
 
-Gmail's published personal-account sending limit is generally 500 emails per day, and accounts may be restricted for excessive failures or unusual activity. This is a small-volume free fallback, not a bulk-mail service or a delivery guarantee. Retain Supabase's current lower 30/hour cap while testing and do not activate paid capacity.
+## Cost and maintenance
 
-## Primary references
+No purchase, credit card, auto-renewing trial or paid capacity was enabled. Gmail personal-account limits are generally 500 emails/day and shared with this account's other use; Supabase's existing 30 auth emails/hour cap remains. Owner notices use the same Gmail allowance. This is a small-volume free configuration; capacity, recipient filtering and Google restrictions can interrupt delivery. Do not promise unlimited service or permanent Inbox placement.
 
-- [Google app passwords and 2-Step Verification](https://support.google.com/accounts/answer/185833?hl=en)
-- [Gmail sending limits](https://support.google.com/mail/answer/22839?hl=en)
-- [Supabase custom SMTP](https://supabase.com/docs/guides/auth/auth-smtp)
-- [Supabase Google SMTP troubleshooting](https://supabase.com/docs/guides/troubleshooting/using-google-smtp-with-supabase-custom-smtp-ZZzU4Y) — Workspace examples; personal-account behavior still requires a real test.
+Keep the selected Gmail signed in when replying, keep 2-Step Verification enabled, and keep its app password active. Changing the Google password may revoke app passwords; if necessary, create a replacement and update both Supabase SMTP and the owner Worker. Inspect the separate owner queue if notifications stop. Protect the local private backups. A future preference for a domain From address or larger volume requires a fresh decision and actual delivery tests; no paid upgrade is authorized by this checkpoint.
 
-Supabase's built-in SMTP is not an all-user free replacement: it restricts mail to project-team addresses and is not intended for production use.
+[Google app passwords](https://support.google.com/accounts/answer/185833?hl=en), [Gmail sending limits](https://support.google.com/mail/answer/22839?hl=en), [Gmail Send-as and original-address disclosure](https://support.google.com/mail/answer/22370?hl=en), [Supabase custom SMTP](https://supabase.com/docs/guides/auth/auth-smtp). Technical owner-notification guide: [Worker README](../workers/email-alerts/README.md).

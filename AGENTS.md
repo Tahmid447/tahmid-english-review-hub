@@ -15,3 +15,5 @@ This repository is the existing Tahmid English Review Hub, hosted on Cloudflare 
 - Supabase browser configuration is public; account passwords, service-role keys, personal backups and access tokens must stay outside Git.
 - `scripts/admin-query.mjs` uses the existing owner Supabase CLI login in memory. It defaults to read-only and fixes the production project ID deliberately. Treat `--write` as an explicit production operation.
 - Keep `docs/WORKING_HANDOFF.md` current at release checkpoints so another chat can resume without Codex's session files.
+
+- Current email system: Cloudflare receives domain aliases; genuine Gmail SMTP sends auth mail and private owner notices. Read `docs/FREE_EMAIL_CONTINUATION.md` and `workers/email-alerts/README.md`. Native Supabase Cron is active; Cloudflare Cron is absent. Never restore the historical failed Resend sender from old handoff sections. The two owner-email migrations are already applied and immutable.
