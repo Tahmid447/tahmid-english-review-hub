@@ -1,0 +1,14 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "tahmid-email-alerts",
+  "account_id": "e8f1eea5d1c73f3cbc307d71f0a98ca9",
+  "main": "index.js",
+  "compatibility_date": "2026-09-14",
+  "workers_dev": true,
+  "observability": { "enabled": false },
+  "send_email": [{ "name": "NOTIFY_OWNER" }],
+  "vars": {
+    "SENDER_EMAIL": "support@tahmidenglishhub.dpdns.org",
+    "SEND_ENABLED": "false"
+  }
+}
