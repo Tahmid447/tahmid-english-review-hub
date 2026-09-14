@@ -7,7 +7,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const dist = path.join(root, "dist");
 const files = [
   "index.html", "lessons.html", "my-page.html", "reset-password.html",
-  "teacher.html",
+  "teacher.html", "lesson-notes.html",
   "lesson.html",
   "learn.html",
   "phrases.html",
@@ -21,6 +21,7 @@ const files = [
   "sw.js",
 ];
 const publicSourceFiles = [
+  "lesson-note-model.js", "lesson-note-api.js", "lesson-note-view.js", "lesson-note-studio.js", "lesson-notes.js", "lesson-notes.css",
   "campaigns.js", "experience.js", "experience-studio.js", "password-recovery.js", "reset-password.js", "reset-password.css",
   "audio.js",
   "speech-contract.js", "speech-cache.js",
@@ -62,7 +63,7 @@ const offlinePreviewIds = new Set(["june-28", "june-29"]);
 fs.rmSync(dist, { recursive: true, force: true });
 fs.mkdirSync(dist, { recursive: true });
 const commit = process.env.CF_PAGES_COMMIT_SHA || process.env.COMMIT_REF || execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim();
-fs.writeFileSync(path.join(dist, 'release.json'), JSON.stringify({ version: '10.5.1', commit, builtAt: new Date().toISOString(), cache: 'te-review-public-v29' }, null, 2) + '\n');
+fs.writeFileSync(path.join(dist, 'release.json'), JSON.stringify({ version: JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8')).version, commit, builtAt: new Date().toISOString(), cache: 'te-review-public-v29' }, null, 2) + '\n');
 
 for (const file of files) {
   const source = path.join(root, file);
@@ -112,6 +113,8 @@ fs.writeFileSync(
     "/reset-password /reset-password.html 200",
     "/lessons /lessons.html 200",
     "/my-page /my-page.html 200",
+    "/my-page/notes /lesson-notes.html 200",
+    "/my-page/notes/* /lesson-notes.html 200",
     "/lesson/* /lesson.html?id=:splat 200",
     "/learn /learn.html 200",
     "/words /learn.html?category=words 200",
