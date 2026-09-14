@@ -12,7 +12,7 @@ The current application is **not Next.js**. It uses HTML multi-page routes, nati
 
 The source of production is GitHub `main`, deployed to Cloudflare Pages project `tahmid-english-hub` with `npm run build:cloudflare`, output `dist`, Node 22. Domain: `https://tahmidenglishhub.dpdns.org`. Pronunciation runs on the existing Cloudflare Worker at `https://speech.tahmidenglishhub.dpdns.org/api/natural-speech`. Netlify is not used for this feature.
 
-The implementation branch began at verified live/main `42a589540cc525358025411d9e5394aec8a3a601`. Old Netlify-era source was not used as the baseline. Existing email work and its delivery problem are separate; no mail settings, DNS, domains or credentials are changed here.
+The implementation branch began at verified live/main `42a589540cc525358025411d9e5394aec8a3a601`. Old Netlify-era source was not used as the baseline. Existing email work and its delivery problem are separate; no mail settings, DNS, domains or credentials are changed here. During final verification a separate email task added migration `20260914144000_owner_email_notifications`; it is not part of the notebook implementation and was preserved.
 
 ## 3. Reused systems
 
@@ -163,7 +163,7 @@ HTMLの埋め込み要素やリンク先は除去します。表示は常にエ�
 
 先生のノート通知数と **Activity inbox** に、生徒・ノートごとにまとめて表示します。メモ2件、画像1件、提案1件といった内訳を確認し、対象ノートの更新画面へ進めます。メモの同一項目への自動保存は30分単位でまとめ、入力文字ごとの通知を作りません。先生は確認済みにでき、ノートごとに通知OFFも可能です。
 
-通知とは別に、作成・公開・更新・画像変更・提案の判断・直接編集・復元を監査履歴に残します。既存の監査表は先生IDを前提とするため、生徒の操作と集約されたイベントは専用のノート操作履歴に保存します。既存のメール環境に配信の未解決事項があるため、この機能からメールは送信しません。新しいメールプロバイダーや送信費用は追加しません。
+通知とは別に、作成・公開・更新・画像変更・提案の判断・直接編集・復元を監査履歴に残します。既存の監査表は先生IDを前提とするため、生徒の操作と集約されたイベントは専用のノート操作履歴に保存します。このノート機能からメールは送信しません。別作業で追加されたオーナー向けメール機能とも、ノート通知は未接続です。新しいメールプロバイダーや送信費用は追加しません。
 
 ## 23. Save to My Phrases
 
@@ -192,9 +192,10 @@ Private parent-note ownership is checked for every dependent operation. Concurre
 - [x] 390px page width equals document scroll width; fullscreen image viewer and 150% zoom work.
 - [x] EN preview hides Japanese, EN+JP restores it without dirtying saved content.
 - [x] Explicitly permitted block editing records the student actor/time and previous content, inspectable by the teacher. Restore is verified in PostgreSQL tests; the optional browser restore click was stopped by a native confirmation/automation issue.
-- [ ] Final live domain/teacher integration and speech verification — record completion in handoff.
+- [x] Live Cloudflare custom domain and authenticated Teacher Studio: real private draft save/reload, no console errors, US Ava and UK Libby playback complete, then guarded QA draft cleanup.
+- [x] Live anonymous REST protection (401), index/detail route refresh, My Page link, and unchanged existing learner data checked.
 
-Tests use synthetic learners and local PostgreSQL; no fabricated lesson or comment is sent to a real learner for these scenarios. A physical iPhone is not emulated by viewport resizing.
+Student interaction tests use synthetic learners and local PostgreSQL. The live save check used a never-published draft for the existing owner-controlled Email Test account; it was backed up and removed. No fabricated lesson or comment was sent to a real learner. A physical iPhone is not emulated by viewport resizing.
 
 ## 28. Checks
 
@@ -206,7 +207,7 @@ The project has no configured lint or TypeScript typecheck. It remains JavaScrip
 - `npm run verify:voices`: existing fixed voice contract.
 - `node --check`: changed JavaScript syntax.
 
-See `WORKING_HANDOFF.md` for final run results and release SHA; intermediate successes are not a final release certification.
+All listed tests/build checks passed for the published 10.6.0 runtime. Live release: `2468b2313012e22dc07747bcc35eed5fd9da0fe1`. See `WORKING_HANDOFF.md` for the verification evidence and limits.
 
 ## 29. Limits
 
