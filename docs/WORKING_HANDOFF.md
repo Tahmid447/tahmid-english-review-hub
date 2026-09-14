@@ -1,5 +1,27 @@
 # Working handoff — September 13, 2026
 
+## September 14 evening — receiving verified; outgoing Gmail still blocked
+
+This section supersedes older email status below. The email task is **not complete**. Cloudflare still receives `hello@` and `support@`; production Supabase and Gmail Send-as still use Resend. SMTP2GO is **not** connected to production.
+
+- Fresh owner-controlled incoming tests on September 14 reached the main Gmail Inbox: support at 18:36 JST and hello at 18:44 JST. The main inbox now has an `English Hub` label and a filter applying it to either professional recipient, including the nine matching existing conversations. The filter only labels; it does not archive, delete, mark read or disable spam checks.
+- Fresh Gmail support reply at 18:42 JST used the correct verified professional sender but bounced at the alternate owner Gmail. Resend event `50eb4a89-afc4-4eb5-8696-48b6ad3a138b`, SMTP `550 5.7.1` likely unsolicited mail, sending IP `23.251.234.56`. Gmail's Sent folder is not evidence of delivery.
+- Sending is not universally broken: event `53b74c3f-c69a-4e99-a643-27567743caba` to the SMTP2GO ticket mailbox was **delivered**. The previous signup/reset Gmail events remain bounced. Repeated unchanged tests will not repair recipient filtering.
+- Spamhaus's official checker reported a DBL listing of the shared parent **dpdns.org**. The SMTP2GO mail-tester result `https://mail-tester.com/test-hnmnhy0bl` was 5.1/10, with SPF/DKIM/DMARC and reverse DNS passing, and DBL botnet/phishing URI penalties. These are evidence of a parent reputation problem, not proof that this user's site is compromised or that this is Gmail's exact classifier or SMTP2GO's suspension trigger. Cloudflare's shared website IP is not the SMTP sending IP; do not purchase IP delisting.
+- SMTP2GO account 925988 was activated after the user handled verification. Three diagnostic messages preceded its 16:20 JST unusual-activity suspension. No sends after suspension. The provider changed its outbound IP between the two Gmail rejections; neither delivered. The third diagnostic reached mail-tester. The account is on Free (1,000/month, 200/hour per Rick's ticket response), not the earlier unverified 200/day note.
+- Existing SMTP2GO ticket 407446 contains the actual bounce/authentication evidence and the 18:24 JST suspension-review request. Sarah's onboarding email and DigitalPlat contact were followed up; Resend already has the support report. Latest mailbox review found acknowledgments but no human remediation. Never evade the suspension or create another SMTP2GO account.
+- Independently managed `tahmidenglishhub.com` was available in the logged-in Cloudflare registrar at USD 10.46 initial and USD 10.46/year renewal. No checkout/purchase. User approval is pending because the original request forbids paid purchases without explicit permission. A new domain would remove the shared parent dependency; delivery must still be tested. Keep email providers free and do not migrate DNS or auth origins until the domain decision.
+
+### Teacher-triggered password recovery correction
+
+The teacher's learner reset action incorrectly targeted `/`; it now targets the existing isolated `/reset-password` page. Rejected network requests release the button and report an error. Teacher and learner success copy reports request acceptance without promising inbox delivery. No password, account, auth configuration, migration or learner progress change is involved. Regression coverage executes the real teacher action and checks redirect parity with the learner route, failure cleanup, cancellation and missing email.
+
+Validation: full `npm test`, `npm run build:cloudflare`, `npm run test:cloudflare`, and `npm run verify:voices` passed. Deployment verification follows the source commit. The live database ledger remains nine entries, ending `20260911081000`; do not replay it.
+
+The dedicated test student is an owner-controlled plus-address that reaches the owner's main Gmail. This is appropriate for testing and is not evidence of the delivery failure; another owner Gmail was also rejected. Auth links belong only to the account owner. Do not CC signup/reset secrets to the site owner. Any future owner email notifications must be separate events without those links; automatic event notifications are not yet configured.
+
+Private continuation files, outside Git: `../email-private-backup/email-resume-checkpoint.json`, `EMAIL-SETUP-STATUS.md`, `auth-audit-20260914-evening.json` and `smtp2go-auth-secret.json`. Never print or commit their secret values. The earlier real signup/reset link tests proved application behavior through the authorized provider preview, not Gmail receipt. Preserve the dedicated test user and existing Google owner session.
+
 ## September 13 — professional email setup
 
 The user authorized a free professional email system for the existing domain, including live configuration and signup/password-reset tests. Cloudflare Email Routing is active for `hello@tahmidenglishhub.dpdns.org` and `support@tahmidenglishhub.dpdns.org`; both route to the owner's verified private inbox (kept outside Git). Catch-all remains disabled. Resend domain `daece08f-2f31-43f0-9d7e-355c8b2e5898` is verified in Tokyo. Its Free plan allows 100 emails/day and 3,000/month, with paid overages disabled.

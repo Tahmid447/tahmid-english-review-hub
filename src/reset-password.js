@@ -44,7 +44,7 @@ requestForm.addEventListener("submit", async event => {
   try {
     const { error } = await recovery.request(document.querySelector("#resetEmail").value);
     if (error) throw error;
-    showStatus("If an account uses this email, a reset link will arrive shortly. Check your inbox and spam folder. · 登録済みの場合、再設定メールが届きます。迷惑メールもご確認ください。");
+    showStatus("Request accepted. If an account uses this email, check your inbox and spam folder for the reset link. Delivery may take a few minutes. · 申請を受け付けました。登録済みの場合は、受信箱と迷惑メールで再設定リンクをご確認ください。到着まで数分かかる場合があります。");
   } catch {
     showStatus("We could not send the email. Please wait a minute and try again. · 送信できませんでした。1分ほど待ってから再度お試しください。");
   } finally { button.disabled = false; }

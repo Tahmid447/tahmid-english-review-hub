@@ -417,7 +417,7 @@ const TEACHER_JAPANESE_COPY = Object.freeze({
   "The learner-specific lesson access could not be changed.": "生徒ごとのレッスン利用設定を変更できませんでした。",
   "No account email is recorded for this learner.": "この生徒にはアカウント用メールアドレスが登録されていません。",
   "The password-reset email could not be sent.": "パスワード再設定メールを送信できませんでした。",
-  "Password-reset email sent. Passwords are never visible to the teacher.": "パスワード再設定メールを送信しました。先生にはパスワードは表示されません。",
+  "Reset request accepted. Ask the learner to check their inbox and spam folder; delivery is not yet confirmed. Passwords stay private.": "再設定の送信要求を受け付けました。生徒本人に受信箱と迷惑メールの確認をお願いしてください。到着はまだ確認されていません。パスワードは本人だけが設定します。",
   "Follow plan": "プラン設定に従う",
   "Allow this lesson": "このレッスンを利用可能にする",
   "Hide this lesson": "このレッスンを非表示にする",
@@ -2117,14 +2117,16 @@ async function sendPasswordReset(profile, button) {
     `${email}へ安全なパスワード再設定メールを送信しますか？`,
   ))) return;
   button.disabled = true;
-  const redirectTo = new URL("/", window.location.origin).href;
-  const { error } = await client.auth.resetPasswordForEmail(email, { redirectTo });
-  button.disabled = false;
-  if (error) {
+  const redirectTo = new URL("/reset-password", window.location.origin).href;
+  try {
+    const { error } = await client.auth.resetPasswordForEmail(email, { redirectTo });
+    if (error) throw error;
+    showToast("Reset request accepted. Ask the learner to check their inbox and spam folder; delivery is not yet confirmed. Passwords stay private.", "success");
+  } catch (error) {
     showToast(readableError(error, "The password-reset email could not be sent."), "error");
-    return;
+  } finally {
+    button.disabled = false;
   }
-  showToast("Password-reset email sent. Passwords are never visible to the teacher.", "success");
 }
 
 function learnerActivity(profile) {

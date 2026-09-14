@@ -1,4 +1,6 @@
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
+import vm from "node:vm";
 import { createPasswordRecovery } from "../src/password-recovery.js";
 
 function fixture({ event = null, user = { id: "test-user", email: "learner@example.test" }, updateError = null, cleanupError = false } = {}) {
@@ -65,4 +67,40 @@ const cleanup = fixture({ event: "PASSWORD_RECOVERY", cleanupError: true });
 await cleanup.recovery.initialize();
 await cleanup.recovery.update("Password123", "Password123");
 assert.equal(cleanup.states.at(-1).kind, "complete", "Cleanup network failure cannot misreport an already saved password.");
+
+// Exercise the actual teacher action without booting its unrelated dashboard.
+// A teacher-issued link must open the same isolated form as a learner request.
+const teacherSource = await readFile(new URL("../src/teacher.js", import.meta.url), "utf8");
+const teacherResetAction = teacherSource.slice(
+  teacherSource.indexOf("async function sendPasswordReset("),
+  teacherSource.indexOf("\nfunction learnerActivity("),
+);
+const teacherRequests = [], teacherNotices = [];
+let accepted = true, transportError = null;
+const context = vm.createContext({
+  URL,
+  window: { location: { origin: "https://example.test" }, confirm: () => accepted },
+  teacherText: english => english,
+  readableError: (_error, fallback) => fallback,
+  showToast: (message, kind) => teacherNotices.push({ message, kind }),
+  client: { auth: { async resetPasswordForEmail(email, options) {
+    teacherRequests.push({ email, ...options });
+    if (transportError) throw transportError;
+    return { error: null };
+  } } },
+});
+vm.runInContext(teacherResetAction, context);
+const resetButton = { disabled: false };
+await context.sendPasswordReset({ contact_email: " learner@example.test " }, resetButton);
+assert.deepEqual(teacherRequests, empty.requests, "Teacher-issued reset must use the learner recovery URL, never the home page or teacher sign-in.");
+assert.equal(resetButton.disabled, false);
+assert.equal(teacherNotices.at(-1).kind, "success");
+transportError = new Error("offline");
+await context.sendPasswordReset({ contact_email: "learner@example.test" }, resetButton);
+assert.equal(resetButton.disabled, false, "A rejected network request must release the reset button.");
+assert.equal(teacherNotices.at(-1).kind, "error", "A transport failure must not report successful sending.");
+accepted = false;
+await context.sendPasswordReset({ contact_email: "learner@example.test" }, resetButton);
+await context.sendPasswordReset({ contact_email: "" }, resetButton);
+assert.equal(teacherRequests.length, 2, "Cancelled requests and missing email must not send anything.");
 console.log("Password recovery passed: delayed SDK event, isolated sessions, credential validation, identity changes, expired links and cleanup.");
