@@ -26,7 +26,7 @@ export function createNoteApi(client) {
    const data=await note(id);
    const values=await Promise.all(['annotations','suggestions','comments','assets','review_status','practice_attempts',...(teacher?['activity','revisions']:[])].map(table=>{
     // Review status has no created_at; revisions list does not transfer all snapshots.
-    if(table==='practice_attempts')return result(client.from(`${PREFIX}_${table}`).select('*').eq('note_id',id).order('updated_at',{ascending:false}));
+    if(table==='practice_attempts')return result(client.from(`${PREFIX}_${table}`).select('id,note_id,student_id,block_id,question_id,question_snapshot,response_json,is_correct,completed,self_check_status,opened_at,answered_at,updated_at,answer_revealed,version').eq('note_id',id).order('updated_at',{ascending:false}));
     if(table==='review_status')return result(client.from(`${PREFIX}_${table}`).select('*').eq('note_id',id));
     if(table==='revisions')return result(client.from(`${PREFIX}_${table}`).select('id,note_id,changed_by,change_type,affected_blocks,created_at').eq('note_id',id).order('created_at',{ascending:false}).limit(100));
     return related(table,id);
