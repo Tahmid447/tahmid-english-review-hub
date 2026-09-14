@@ -1,33 +1,46 @@
-import assert from "node:assert/strict";
-import worker from "../workers/email-alerts/index.js";
+import assert from 'node:assert/strict';
+import { createHandler } from '../workers/email-alerts/router.js';
+import { sendGoogleMail } from '../workers/email-alerts/smtp.js';
+const env = { ADMIN_TOKEN: 'a'.repeat(64), SEND_ENABLED: 'true', SMTP_USER: 'sender@gmail.com', SMTP_PASSWORD: 'secret-app-pass', OWNER_EMAIL: 'owner@gmail.com' };
+let sent;
+const handle = createHandler(async mail => { sent = mail; return { accepted: true }; });
+const request = (path='/test', token=env.ADMIN_TOKEN) => new Request('https://test.invalid'+path, {method:'POST',headers:{Authorization:`Bearer ${token}`},body:JSON.stringify({to:'attacker@example.com'})});
+assert.equal((await handle(new Request('https://test.invalid/health'),env)).status,200);
+assert.equal((await handle(request('/test','wrong'),env)).status,401);
+assert.equal((await handle(request(),{...env, SEND_ENABLED:'false'})).status,409);
+assert.equal(sent,undefined);
+assert.equal((await handle(request(),env)).status,200);
+assert.equal(sent.to,env.OWNER_EMAIL);
+assert.equal(sent.user,env.SMTP_USER);
+assert.equal((await handle(request('/unknown'),env)).status,404);
+const bad = createHandler(async()=>{throw new Error(env.SMTP_PASSWORD);});
+assert.ok(!(await (await bad(request(),env)).text()).includes(env.SMTP_PASSWORD));
 
-const token = "private-test-token-".repeat(4);
-const sent = [];
-const env = {
-  ADMIN_TOKEN: token, OWNER_EMAIL: "owner@example.test", SENDER_EMAIL: "support@example.test",
-  SEND_ENABLED: "true", NOTIFY_OWNER: { async send(message) { sent.push(message); return { messageId: "test-id" }; } },
-};
-const request = (authorization, body) => new Request("https://example.test/test", {
-  method: "POST", headers: authorization ? { Authorization: authorization } : {},
-  ...(body ? { body: JSON.stringify(body) } : {}),
-});
-assert.equal((await worker.fetch(request(), env)).status, 401);
-assert.equal((await worker.fetch(request("Bearer wrong"), env)).status, 401);
-assert.equal((await worker.fetch(request(`Bearer ${token}`), { ...env, ADMIN_TOKEN: "" })).status, 401);
-assert.equal((await worker.fetch(request(`Bearer ${token}`), { ...env, SEND_ENABLED: "false" })).status, 409);
-assert.equal(sent.length, 0, "Unauthorized or disabled requests must never send email.");
-const success = await worker.fetch(request(`Bearer ${token}`, {
-  to: "attacker@example.test", from: "forged@example.test", text: "private-reset-link", subject: "forged",
-}), env);
-assert.equal(success.status, 200);
-assert.equal(sent[0].to, env.OWNER_EMAIL, "Request bodies cannot change the fixed verified destination.");
-assert.equal(sent[0].from.email, env.SENDER_EMAIL);
-assert.ok(!sent[0].text.includes("private-reset-link"), "Caller-controlled content cannot be relayed.");
-const failed = await worker.fetch(request(`Bearer ${token}`), {
-  ...env, NOTIFY_OWNER: { async send() { throw Object.assign(new Error("permanent delivery failure"), { code: "E_DELIVERY_FAILED" }); } },
-});
-assert.equal(failed.status, 502);
-assert.equal((await failed.json()).code, "E_DELIVERY_FAILED");
-assert.equal((await worker.fetch(new Request("https://example.test/health"), env)).status, 200);
-assert.equal((await worker.fetch(new Request("https://example.test/test"), env)).status, 404);
-console.log("Email diagnostic passed: authenticated owner-only sending, disabled state, no content relay, and honest delivery errors.");
+function fakeConnect({authReject=false, quitDrop=false}={}) {
+  const transcript=[]; let controller;
+  const push = text => { const bytes=new TextEncoder().encode(text); for(let i=0;i<bytes.length;i+=7) controller.enqueue(bytes.slice(i,i+7)); };
+  let step=0, closed=false;
+  const readable = new ReadableStream({start(c){controller=c;push('220 smtp.gmail.com ready\r\n');}});
+  const writable = new WritableStream({write(bytes){
+    const text=new TextDecoder().decode(bytes); transcript.push(text);
+    const replies=['250-smtp.gmail.com\r\n250 AUTH LOGIN\r\n','334 VXNlcg==\r\n','334 UGFzcw==\r\n',authReject?'535 auth failed\r\n':'235 authenticated\r\n','250 sender\r\n','250 recipient\r\n','354 send data\r\n','250 accepted\r\n','221 goodbye\r\n'];
+    if(quitDrop && step===8){controller.close();closed=true;step++;return;}
+    push(replies[step++]);
+  }});
+  return {transcript, connect(address,options){
+    assert.deepEqual(address,{hostname:'smtp.gmail.com',port:465});assert.equal(options.secureTransport,'on');
+    return {readable,writable,opened:Promise.resolve(),closed:Promise.resolve(),async close(){if(!closed){controller.close();closed=true;}}};
+  }};
+}
+const mail={user:env.SMTP_USER,password:env.SMTP_PASSWORD,to:env.OWNER_EMAIL,subject:'English Hub check',text:'日本語 notification\nNo links.'};
+for(const quitDrop of [false,true]) {
+ const mock=fakeConnect({quitDrop}); const result=await sendGoogleMail(mock.connect,mail);
+ assert.equal(result.accepted,true);assert.ok(mock.transcript[7].includes('From: Tahmid English Hub <sender@gmail.com>'));
+ assert.ok(mock.transcript[7].includes('Content-Transfer-Encoding: base64'));
+ assert.ok(!mock.transcript[7].includes(env.SMTP_PASSWORD));
+}
+const rejected=fakeConnect({authReject:true});
+await assert.rejects(()=>sendGoogleMail(rejected.connect,mail),{code:'SMTP_535'});
+assert.equal(rejected.transcript.length,4);
+await assert.rejects(()=>sendGoogleMail(()=>assert.fail(),{...mail,to:'x@gmail.com\r\nBcc: victim@gmail.com'}),{code:'INVALID_CONFIGURATION'});
+console.log('PASS: fixed recipient/auth guards, fragmented SMTPS, TLS, auth failures, header injection and accepted DATA handling');
