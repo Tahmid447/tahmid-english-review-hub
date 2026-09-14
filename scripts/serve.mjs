@@ -41,6 +41,7 @@ http
       return;
     }
     if (["/lessons", "/my-page", "/reset-password"].includes(pathname)) pathname += ".html";
+    if (pathname === "/my-page/notes" || pathname.startsWith("/my-page/notes/")) pathname = "/lesson-notes.html";
     if (pathname === "/teacher") pathname = "/teacher.html";
     if (["/learn", "/words", "/phonics"].includes(pathname)) pathname = "/learn.html";
     if (pathname === "/phrases") pathname = "/phrases.html";

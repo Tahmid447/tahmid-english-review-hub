@@ -23,6 +23,8 @@ fs.writeFileSync(new URL("_redirects", dist), [
   "/phonics /learn 200",
   "/plans /pricing 200",
   "/lesson/* /lesson 200",
+  "/my-page/notes /lesson-notes 200",
+  "/my-page/notes/* /lesson-notes 200",
   "",
 ].join("\n"));
 

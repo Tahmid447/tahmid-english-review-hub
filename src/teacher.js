@@ -1,3 +1,4 @@
+import { mountLessonNoteStudio } from './lesson-note-studio.js?v=20260914-notes';
 import { privateRecordingPlayer, voiceFeedbackEditor, FEEDBACK_BUCKET } from './private-recordings.js?v=20260911-mobile2';
 import { displayProfileAvatar } from './profile-api.js?v=20260911-mobile2';
 import { mountPersonalCardStudio } from './personal-cards.js?v=20260911-mobile2';
@@ -37,6 +38,17 @@ import {
 import { normalizeCategoryAccess, categoryVisibleLevels } from "./curriculum-access.js?v=20260911-mobile2";
 
 const client = getTeacherClient();
+let lessonNoteStudio = null;
+let noteStudentFilter = "";
+let noteRouteId = new URLSearchParams(location.search).get('studio') === 'notes' ? new URLSearchParams(location.search).get('note') || '' : '';
+let noteInboxFetchedAt = 0;
+function refreshNoteInboxCount() {
+  if (!state.session || Date.now() - noteInboxFetchedAt < 30000) return;
+  noteInboxFetchedAt = Date.now();
+  void client.from('review_lesson_note_notifications').select('note_id').eq('unread',true).then(({data,error})=>{
+    if (!error && state.session) { const badge=document.querySelector('#noteActivityCount');if(badge)badge.textContent=data?.length || ''; }
+  }).catch(()=>{});
+}
 
 const elements = {
   loginPanel: document.querySelector("#teacherLoginPanel"),
@@ -123,7 +135,7 @@ const elements = {
 const state = {
   session: null,
   teacher: null,
-  tab: "dashboard",
+  tab: new URLSearchParams(location.search).get("studio") === "notes" ? "notes" : "dashboard",
   lessons: [],
   profiles: [],
   memberships: [],
@@ -1092,6 +1104,7 @@ async function verifyTeacher(session) {
 }
 
 function showLogin(message = "") {
+  lessonNoteStudio?.dispose(); lessonNoteStudio = null;
   disposeReviewEditors();
   state.session = null;
   state.teacher = null;
@@ -3206,6 +3219,9 @@ function openLearnerDialog(profile) {
     elements.learnerDialog.close();state.submissionLearnerFilter=current.user_id;state.submissionStatusFilter='all';state.tab='submissions';renderActiveTab();elements.panel.scrollIntoView({block:'start'});
   });
   profileCard.append(openReviews);
+  profileCard.append(makeAction(teacherText("Lesson notes for this learner", "この生徒の個別レッスンノート"), () => {
+    elements.learnerDialog.close(); noteStudentFilter = current.user_id; state.tab = "notes"; renderActiveTab();
+  }));
 
   const access = make("section", { className: "learner-control-section" });
   access.append(
@@ -4923,7 +4939,12 @@ function renderDashboard() {
 }
 
 function renderActiveTab() {
+  if (lessonNoteStudio) {
+    if (!lessonNoteStudio.canLeave()) { state.tab = "notes"; return; }
+    lessonNoteStudio.dispose(); lessonNoteStudio = null;
+  }
   disposeReviewEditors();
+  refreshNoteInboxCount();
   const counter=document.querySelector('#submissionWaitingCount');
   if(counter)counter.textContent=String(teacherVisibleSubmissions().filter(item=>['submitted','in_review'].includes(item.status)).length);
   for (const button of elements.tabs) {
@@ -4935,6 +4956,11 @@ function renderActiveTab() {
   if (state.tab === "learners") renderStudents();
   if (state.tab === "codes") renderAccessCodes();
   if (state.tab === "submissions") renderPremium();
+  if (state.tab === "notes") {
+    const notesRoot = document.createElement("div"); elements.panel.replaceChildren(notesRoot);
+    lessonNoteStudio = mountLessonNoteStudio(notesRoot, { client, teacherId: state.session.user.id, profiles: state.profiles, studentId: noteStudentFilter, noteId: noteRouteId, initialTab: new URLSearchParams(location.search).get('view') === 'activity' ? 'activity' : 'content', onCount: count => { const badge = document.querySelector("#noteActivityCount"); if (badge) badge.textContent = count || ""; } });
+    noteRouteId = "";
+  }
   if (state.tab === "sources") renderSources();
   if (state.tab === "insights") renderActivity();
   applyTeacherLanguage(elements.panel);

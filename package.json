@@ -1,6 +1,6 @@
 {
   "name": "tahmid-english-review-hub",
-  "version": "10.5.1",
+  "version": "10.6.0",
   "private": true,
   "type": "module",
   "engines": {
@@ -28,7 +28,7 @@
     "build:demo": "npm run build && node scripts/build-demo.mjs",
     "preview": "node scripts/serve.mjs dist",
     "preview:demo": "npm run build:demo && node scripts/serve-demo.mjs",
-    "test": "node scripts/validate-content.mjs && node scripts/audit-question-quality.mjs && node scripts/audit-lesson-guide-coverage.mjs && node scripts/verify-ambient-audio.mjs && node scripts/test-learning-experience.mjs && node scripts/test-learner-platform.mjs && node scripts/test-visual-storyboards.mjs && node scripts/test-curriculum-visuals.mjs && node scripts/test-teacher-controls.mjs && node scripts/test-teacher-i18n.mjs && node scripts/validate-premium-schema.mjs && node scripts/test-premium-topics.mjs && node scripts/test-plan-platform.mjs && node scripts/test-teacher-workflows-v15.mjs && node scripts/test-source-segments.mjs && node scripts/test-forward-migrations.mjs && node scripts/test-existing-notion-parity-migration.mjs && node scripts/test-structured-learning-schema.mjs && node scripts/test-demo-preview.mjs && node scripts/test-my-page.mjs && node scripts/test-member-preferences.mjs && node scripts/test-profile-photos.mjs && node scripts/test-password-recovery.mjs && npm run test:email-alerts",
+    "test": "node scripts/validate-content.mjs && node scripts/audit-question-quality.mjs && node scripts/audit-lesson-guide-coverage.mjs && node scripts/verify-ambient-audio.mjs && node scripts/test-learning-experience.mjs && node scripts/test-learner-platform.mjs && node scripts/test-visual-storyboards.mjs && node scripts/test-curriculum-visuals.mjs && node scripts/test-teacher-controls.mjs && node scripts/test-teacher-i18n.mjs && node scripts/validate-premium-schema.mjs && node scripts/test-premium-topics.mjs && node scripts/test-plan-platform.mjs && node scripts/test-teacher-workflows-v15.mjs && node scripts/test-source-segments.mjs && node scripts/test-forward-migrations.mjs && node scripts/test-existing-notion-parity-migration.mjs && node scripts/test-structured-learning-schema.mjs && node scripts/test-demo-preview.mjs && node scripts/test-my-page.mjs && node scripts/test-member-preferences.mjs && node scripts/test-profile-photos.mjs && node scripts/test-password-recovery.mjs && npm run test:lesson-notes && npm run test:email-alerts",
     "test:demo": "node scripts/test-demo-preview.mjs",
     "test:curriculum-visuals": "node scripts/test-curriculum-visuals.mjs",
     "test:learner-platform": "node scripts/test-learner-platform.mjs",
@@ -45,6 +45,7 @@
     "test:speech:cloudflare": "node scripts/test-cloudflare-speech.mjs",
     "deploy:speech": "wrangler deploy --config workers/speech/wrangler.jsonc",
     "test:password-recovery": "node scripts/test-password-recovery.mjs",
+    "test:lesson-notes": "node scripts/test-lesson-notes.mjs",
     "test:email-alerts": "node scripts/test-email-alerts.mjs && node scripts/test-owner-email-queue.mjs && node scripts/test-owner-email-schedule.mjs",
     "deploy:email-alerts": "wrangler deploy --config workers/email-alerts/wrangler.jsonc"
   },
