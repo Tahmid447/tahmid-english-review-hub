@@ -1,4 +1,20 @@
-# Working handoff — September 13, 2026
+# Working handoff — September 14, 2026
+
+## Interactive Personal Lesson Notes — release candidate
+
+This section is the current notebook task checkpoint; the independent email issue below remains open. Implemented on `codex/interactive-lesson-notes` from verified Cloudflare/main `42a589540cc525358025411d9e5394aec8a3a601`. Runtime checkpoint `596205a`, version **10.6.0**. Full 30-point implementation/operation guide: [Interactive Personal Lesson Notes](INTERACTIVE_LESSON_NOTES.md).
+
+**Migration `20260914130000_interactive_lesson_notes.sql` is APPLIED LIVE**, with matching ledger row. Read-only inspection confirmed `review_lesson_notes` exists and `review-lesson-note-assets` is private. This is the tenth live ledger entry. Never edit/replay this applied migration; use a new forward migration for any database correction. Existing historical sections mentioning nine entries describe earlier checkpoints.
+
+Private backup: `/Users/tahmidahmed/Documents/Codex/private-backups/2026-09-14-lesson-notes/before.json`. It includes existing profiles, memberships, assignments, personal cards/favorites, 2 submissions and 2 feedback rows plus progress counts, buckets and ledger. New tables contain no real learner test content. The user authorized implementing and publishing this feature to the existing Cloudflare site and supplied a logged-in owner Teacher Studio session.
+
+Validation passed: full `npm test`; the new real PostgreSQL/PGlite suite covers 86 explicit assertions; `npm run build:cloudflare`; `npm run test:cloudflare`; `npm run verify:voices` (480 items, 2112 exact payloads, 32 phonics levels); changed-JavaScript syntax and whitespace checks. No lint/TypeScript configuration exists, so neither is claimed. Cloudflare preview `06af1a5f-749c-4c1b-9669-a1959037aa98` built runtime checkpoint `596205a`.
+
+Local browser QA used synthetic accounts and isolated PostgreSQL/storage only: teacher import/save draft/publish; learner draft invisibility, annotation autosave, existing favorites, proposed correction accepted by teacher, actual multiple-image JPEG/thumbnail uploads, student image attribution, batched teacher inbox, desktop/390px layout, fullscreen image zoom, EN/EN+JP preview, explicitly permitted student block edit and teacher inspection of its previous version with student actor/time/affected block. Restore/reorder/replace/cross-student denial also passed database tests. The native browser confirmation stalled the automation during an optional restore UI check; restore is not claimed as completed through the browser. No physical iPhone or new live student login has been tested.
+
+Next: fast-forward source main without force, verify Cloudflare release SHA, signed-in teacher list/editor and both pronunciation buttons, anonymous notes protection, compare private before/after backups, and record final production verification here. Do not send fabricated content, feedback, comments or notifications to real learners.
+
+---
 
 ## September 14 evening — receiving verified; outgoing Gmail still blocked
 

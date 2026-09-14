@@ -163,7 +163,7 @@ HTMLの埋め込み要素やリンク先は除去します。表示は常にエ�
 
 先生のノート通知数と **Activity inbox** に、生徒・ノートごとにまとめて表示します。メモ2件、画像1件、提案1件といった内訳を確認し、対象ノートの更新画面へ進めます。メモの同一項目への自動保存は30分単位でまとめ、入力文字ごとの通知を作りません。先生は確認済みにでき、ノートごとに通知OFFも可能です。
 
-通知とは別に、作成・公開・更新・画像変更・提案の判断・直接編集・復元を監査履歴に残します。既存のメール環境に配信の未解決事項があるため、この機能からメールは送信しません。新しいメールプロバイダーや送信費用は追加しません。
+通知とは別に、作成・公開・更新・画像変更・提案の判断・直接編集・復元を監査履歴に残します。既存の監査表は先生IDを前提とするため、生徒の操作と集約されたイベントは専用のノート操作履歴に保存します。既存のメール環境に配信の未解決事項があるため、この機能からメールは送信しません。新しいメールプロバイダーや送信費用は追加しません。
 
 ## 23. Save to My Phrases
 
@@ -191,6 +191,7 @@ Private parent-note ownership is checked for every dependent operation. Concurre
 - [x] Teacher inbox groups annotation, suggestion and image into one entry.
 - [x] 390px page width equals document scroll width; fullscreen image viewer and 150% zoom work.
 - [x] EN preview hides Japanese, EN+JP restores it without dirtying saved content.
+- [x] Explicitly permitted block editing records the student actor/time and previous content, inspectable by the teacher. Restore is verified in PostgreSQL tests; the optional browser restore click was stopped by a native confirmation/automation issue.
 - [ ] Final live domain/teacher integration and speech verification — record completion in handoff.
 
 Tests use synthetic learners and local PostgreSQL; no fabricated lesson or comment is sent to a real learner for these scenarios. A physical iPhone is not emulated by viewport resizing.
