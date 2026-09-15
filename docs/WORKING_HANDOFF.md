@@ -1,5 +1,13 @@
 # Working handoff — September 16, 2026
 
+## September 16 - Authorized 10.8 release in progress
+
+The user approved production publication after reviewing the local workflow preview. No feature changes were requested. Release metadata is 10.8.0; the implementation remains `ac1e41e`. The new `20260915230000_note_workflow_overview` migration is APPLIED LIVE, atomically with its matching ledger statement. The ledger has 14 entries. Existing 50 table fingerprints, user identities, RLS flags and policies matched exactly before/after. A current private row checkpoint (about 0.7MB) is in `/Users/tahmidahmed/Documents/Codex/private-backups/2026-09-16-workflow-release`, alongside preflight/verification evidence; it complements the existing Git/deployment recovery checkpoint and is not a fresh full storage backup. No existing rows or storage objects were changed.
+
+Publication follows the existing `main` GitHub integration into Cloudflare Pages `tahmid-english-hub`. Heavy tests and local browser QA from `ac1e41e` are reused; only release build/output checks and requested production smoke checks are needed. Do not replay any applied migration. Final deployment verification follows this checkpoint.
+
+---
+
 ## September 16 - Lesson workflow clarity, verified locally; NOT deployed
 
 Current work: `codex/lesson-workflow-clarity`, created from `origin/main` / `b44322687f37c6d97fc5b54ec5a15a06d82705c9`. This is the EXISTING project at `/Users/tahmidahmed/Documents/Codex/2026-09-14/interactive-lesson-notes`, not the separate New project folder. Read [weekly progress](WEEKLY_PROGRESS.md) and [workflow report](LESSON_WORKFLOW.md) for the concise status and requested 14-point report.

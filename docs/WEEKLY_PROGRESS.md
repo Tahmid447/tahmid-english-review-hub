@@ -11,8 +11,8 @@
 - Real PostgreSQL/RLS regression tests and isolated browser QA, including profile/settings and archive/Trash restoration.
 
 ## In Progress
-- Workflow upgrade is on `codex/lesson-workflow-clarity`; it is NOT deployed.
-- New migration `20260915230000_note_workflow_overview.sql` is local only. Deployment needs the current user's publishing decision, private backup, ledger entry and post-release verification.
+- User approved publication after local preview review. Workflow upgrade 10.8 is being released through existing main/Cloudflare Pages.
+- New migration `20260915230000_note_workflow_overview.sql` is APPLIED LIVE with its matching ledger entry. Private checkpoint and unchanged-data/RLS comparison passed; frontend publication and minimal smoke checks follow.
 
 ## Next
 1. Release the verified workflow changes when authorized; check the real teacher and student journeys afterward.
