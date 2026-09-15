@@ -1,14 +1,18 @@
 # Working handoff — September 16, 2026
 
-## September 16 - Authorized 10.8 release in progress
+## September 16 - Lesson workflow 10.8 published and smoke-verified
 
-The user approved production publication after reviewing the local workflow preview. No feature changes were requested. Release metadata is 10.8.0; the implementation remains `ac1e41e`. The new `20260915230000_note_workflow_overview` migration is APPLIED LIVE, atomically with its matching ledger statement. The ledger has 14 entries. Existing 50 table fingerprints, user identities, RLS flags and policies matched exactly before/after. A current private row checkpoint (about 0.7MB) is in `/Users/tahmidahmed/Documents/Codex/private-backups/2026-09-16-workflow-release`, alongside preflight/verification evidence; it complements the existing Git/deployment recovery checkpoint and is not a fresh full storage backup. No existing rows or storage objects were changed.
+**Complete and live:** 10.8.0, runtime commit `24417f3e0daef754a6997ec9d51469971b5aa91a`, existing Cloudflare Pages production deployment `65aa899d-3bb0-4b1c-a190-7033dd197dfa`. Custom-domain `/release.json` matches, built `2026-09-15T17:38:31.993Z`. The user explicitly approved publication after reviewing the local preview. The implementation remains `ac1e41e`; subsequent runtime-checkpoint changes are documentation and release version only. `main` advanced normally from `b443226` with all history preserved. No force push or hosting/auth/DNS/email configuration change.
 
-Publication follows the existing `main` GitHub integration into Cloudflare Pages `tahmid-english-hub`. Heavy tests and local browser QA from `ac1e41e` are reused; only release build/output checks and requested production smoke checks are needed. Do not replay any applied migration. Final deployment verification follows this checkpoint.
+**Migration `20260915230000_note_workflow_overview` is APPLIED LIVE**, atomically with its exact source in the ledger; ledger count 14. Security-invoker and authenticated-only execution are verified. All 50 existing public review/storage table fingerprints matched before migration, after migration and after production smoke; user identities, RLS flags and policies are unchanged. Current private row checkpoint (about 0.7MB, 48 collections) and evidence: `/Users/tahmidahmed/Documents/Codex/private-backups/2026-09-16-workflow-release`. This complements existing Git/deployment recovery records; it is not a fresh full storage backup. No existing row or image was changed. Never replay this or any prior applied migration.
+
+Reused successful full tests/local QA/voice contract for `ac1e41e`. Ran only the release build and 85-public-text-asset Cloudflare output check, migration/data comparisons, and requested production smoke. Homepage, Teacher, My Page and Notes HTTP 200; authenticated Teacher dashboard, note list, Quick Import dialog and owner My Page overview render. Import was opened/cancelled only, with no save. Anonymous profiles/notes/practice/assets/personal cards and overview RPC all return 401. Actual production My Page/Teacher at 390px had document width 390px; captured console errors are empty. No repeated all-voice/practice/archive/Favorites walkthrough.
+
+Limits retained: My Page smoke uses existing owner preview, not a fresh real-student login; no physical iPhone test. Announcement/For You acknowledgements remain browser-local. The 45-second foreground notification fallback remains. Final documentation-only commit uses the supported `[CI Skip]` prefix to avoid a redundant Pages build; production runtime remains the SHA above. Read [weekly progress](WEEKLY_PROGRESS.md) and [workflow report](LESSON_WORKFLOW.md) for functional details.
 
 ---
 
-## September 16 - Lesson workflow clarity, verified locally; NOT deployed
+## Historical checkpoint - Lesson workflow verified locally before publication
 
 Current work: `codex/lesson-workflow-clarity`, created from `origin/main` / `b44322687f37c6d97fc5b54ec5a15a06d82705c9`. This is the EXISTING project at `/Users/tahmidahmed/Documents/Codex/2026-09-14/interactive-lesson-notes`, not the separate New project folder. Read [weekly progress](WEEKLY_PROGRESS.md) and [workflow report](LESSON_WORKFLOW.md) for the concise status and requested 14-point report.
 

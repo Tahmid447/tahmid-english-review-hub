@@ -1,6 +1,6 @@
 # Lesson Workflow Improvement Report
 
-Status: implemented and verified locally on 2026-09-16 JST; NOT deployed. Branch: `codex/lesson-workflow-clarity`, based on production/main `b44322687f37c6d97fc5b54ec5a15a06d82705c9` (10.7.0).
+Status: published and smoke-verified on 2026-09-16 JST as 10.8.0, runtime `24417f3e0daef754a6997ec9d51469971b5aa91a`, deployment `65aa899d-3bb0-4b1c-a190-7033dd197dfa`. Implementation `ac1e41e` was merged by fast-forward into existing production/main from `b44322687f37c6d97fc5b54ec5a15a06d82705c9`. No new hosting environment.
 
 ## 1. Inspected
 Existing source, AGENTS and handoff, prior task history, production Teacher Studio/My Page/notes, semantic importer, note versions/status RPCs, practice snapshots, personal-card source metadata, notification flow, public build allowlist and live migration/RLS/storage state.
@@ -36,7 +36,7 @@ Suggestions, unread learner activity, then unfinished note drafts, with direct a
 Existing Open editor plus contextual Preview and Archive. Archived notes offer Restore as draft and Move to Trash. Trash offers Restore as draft. State changes require confirmation and existing optimistic versions/RPCs. Archive hides the note from the learner; restore never silently republishes it. No permanent-delete operation was introduced.
 
 ## 10. Handoff
-[WEEKLY_PROGRESS.md](WEEKLY_PROGRESS.md) is the concise current-week summary. [WORKING_HANDOFF.md](WORKING_HANDOFF.md) begins with this local checkpoint and preserves earlier production history. Future work must update both status distinctions at release.
+[WEEKLY_PROGRESS.md](WEEKLY_PROGRESS.md) is the concise current-week summary. [WORKING_HANDOFF.md](WORKING_HANDOFF.md) begins with the verified 10.8 production release and preserves earlier checkpoints as history.
 
 ## 11. Files and Schema
 - `src/lesson-note-model.js`, `lesson-note-studio.js`, `lesson-note-view.js`, `lesson-note-api.js`, `lesson-notes.css`: importer, preview, actions and exact block navigation.
@@ -56,7 +56,9 @@ Existing Open editor plus contextual Preview and Archive. Archived notes offer R
 Local actual-page QA: `NOTE_QA_PORT=4177 NOTE_QA_WORKFLOW=1 node scripts/serve-notes-qa.mjs`. Open `http://127.0.0.1:4177/my-page` or `/teacher`; `?qa_role=other` selects the isolated other student. The loopback-only database is synthetic/in-memory; restarting it resets fixtures. It never writes production.
 
 ## 13. Limits and Release
-Not deployed. New overview UI needs the forward RPC migration before frontend publication. Recheck live ledger, take a private backup, apply only the new reviewed migration and record it, then deploy with a fresh cache/release version and verify real routes. Do not replay historical SQL or assume old publishing authorization applies.
+Published with explicit current-conversation approval. Only `20260915230000_note_workflow_overview.sql` was applied, atomically with its matching ledger source, before the existing main/Cloudflare deployment. Ledger count is 14; never replay it. A small current-row checkpoint was saved privately, complementing the existing recovery baseline. All 50 existing table fingerprints and existing RLS/policies matched after migration and after final production smoke. Auth/email/DNS/hosting configuration and speech implementation are unchanged.
+
+Production smoke: main routes 200; existing teacher session opens Dashboard, Notes and Quick Import (cancelled without saving); owner My Page shows next actions; anonymous private reads and overview return 401; actual My Page and Teacher at 390px have no horizontal document overflow; no captured console errors. Existing full automated/local/voice QA was reused, not repeated. Release build and output checks passed for 10.8.
 
 Physical iPhone and fresh actual-student production login remain untested. Announcement/card acknowledgements are browser-local; those lists refresh on page load, while notebook summaries reuse existing notification events. Overview bounds the response, but aggregation still examines the caller's visible notes; revisit query cost with real scale rather than claiming constant-time performance. Import suggestions are conservative, not human-level topic inference.
 
