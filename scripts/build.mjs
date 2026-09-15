@@ -21,7 +21,7 @@ const files = [
   "sw.js",
 ];
 const publicSourceFiles = [
-  "lesson-note-model.js", "lesson-note-api.js", "lesson-note-view.js", "lesson-note-studio.js", "lesson-notes.js", "lesson-notes.css",
+  "lesson-note-model.js", "lesson-note-api.js", "lesson-note-view.js", "lesson-note-studio.js", "lesson-notes.js", "lesson-notes.css", "learning-overview.js", "learning-overview.css",
   "note-practice-model.js", "note-practice-view.js", "note-rich-text.js", "note-dialog.js", "note-updates.js", "note-notifications.js", "note-notifications.css",
   "campaigns.js", "experience.js", "experience-studio.js", "password-recovery.js", "reset-password.js", "reset-password.css",
   "audio.js",

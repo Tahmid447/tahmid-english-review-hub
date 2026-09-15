@@ -5,7 +5,7 @@ import {richTextMarkup} from './note-rich-text.js?v=20260915-practice';
 import {confirmNoteAction} from './note-dialog.js?v=20260915-practice';
 import { escapeHTML as e } from './store.js?v=20260911-mobile2';
 import { createNoteApi, noteError } from './lesson-note-api.js?v=20260915-practice';
-import { BLOCK_TYPES, PERMISSIONS, newBlock, newNote, moveItem, clone, importLessonText, dateLabel } from './lesson-note-model.js?v=20260915-practice';
+import { BLOCK_TYPES, PERMISSIONS, METADATA_FIELDS, applyLessonImport, newBlock, newNote, moveItem, clone, importLessonText, dateLabel } from './lesson-note-model.js?v=20260915-practice';
 import { mountNoteView, contentMarkup, cardMarkup, changeSnapshot, lazyPrivateImages, noteButton as button, noteStatus as statusMarkup, openImageViewer } from './lesson-note-view.js?v=20260915-practice';
 
 const inputField=(key,label,value='',{rows=0,type='text',max=6000,scope='note'}={})=>`<label>${e(label)}${rows?`<textarea data-${scope}-field="${key}" rows="${rows}" maxlength="${max}">${e(value)}</textarea>`:`<input data-${scope}-field="${key}" type="${type}" value="${e(value)}" maxlength="${max}">`}</label>`;
@@ -14,6 +14,12 @@ const lines=value=>value.split('\n').map(v=>v.trim()).filter(Boolean);
 const selectField=(key,label,value,options,scope='block')=>`<label>${e(label)}<select data-${scope}-field="${key}">${options.map(([v,name])=>`<option value="${v}" ${v===value?'selected':''}>${e(name)}</option>`).join('')}</select></label>`;
 const checkbox=(key,label,value,scope='block')=>`<label class="ln-check"><input type="checkbox" data-${scope}-field="${key}" ${value?'checked':''}><span>${e(label)}</span></label>`;
 const time=value=>new Date(value).toLocaleString();
+function readBlockField(block,control) {
+ const key=control.dataset.blockField,value=control.type==='checkbox'?control.checked:control.value;
+ if(key==='audio')block.pronunciation={...block.pronunciation,enabled:value};
+ else if(['studentEditable','keyPhrase','collapsed'].includes(key))block.displayOptions={...block.displayOptions,[key]:value};
+ else block[key]=['examples','correctOptions','items','tags','choices','acceptedAnswers'].includes(key)?lines(value):value;
+}
 
 function editorBlock(b,index,assets) {
  const [label,tone]=BLOCK_TYPES[b.type];
@@ -37,7 +43,7 @@ function editorBlock(b,index,assets) {
  return `<details class="ln-editor-block ln-tone-${tone}" data-editor-block="${e(b.id)}" open><summary><strong>${index+1}. ${e(label)}</strong><small data-block-summary>${e((b.englishText||b.originalText||'Add your teaching point · 教えたいポイントを入力').slice(0,90))}</small></summary><div class="ln-block-fields">${fields}</div><div class="ln-block-tools">${button('↑ Move up · 上へ',`data-move-block="-1" ${index===0?'disabled':''}`)}${button('↓ Move down · 下へ','data-move-block="1"')}${button('Duplicate · 複製','data-duplicate-block')}${button('Remove · 外す','data-remove-block')}</div></details>`;
 }
 
-export function mountLessonNoteStudio(root,{client,teacherId,profiles=[],studentId='',noteId='',initialTab='content',onCount=()=>{}}) {
+export function mountLessonNoteStudio(root,{client,teacherId,profiles=[],studentId='',noteId='',initialTab='content',createNew=false,onCount=()=>{}}) {
  const api=createNoteApi(client);let disposed=false,request=0,note=null,detail=null,dirty=false,saving=false,busy=false,view=null,imagesDispose=()=>{},activeTab=initialTab,filterStudent=studentId,filterStatus='all',filterQuery='',offset=0,rows=[],dialogs=[],undoBlock=null;const assetDrafts=new Map();
  let lastNotice='';
  const stopUpdates=watchNoteUpdates(client,teacherId,async()=>{
@@ -53,7 +59,7 @@ export function mountLessonNoteStudio(root,{client,teacherId,profiles=[],student
  const clearViews=()=>{view?.dispose();view=null;imagesDispose();imagesDispose=()=>{};};
  const canLeave=()=>!saving&&!busy&&((!dirty&&!assetDrafts.size)||confirm('You have unsaved changes. Leave without saving? · 未保存の変更があります。保存せずに移動しますか？'));
  const setDirty=()=>{dirty=true;const s=root.querySelector('[data-save-status]');if(s)s.textContent='Unsaved changes · 未保存の変更';};
- const rememberRoute=(id='',activity=false)=>{if(!location.pathname.startsWith('/teacher'))return;const url=new URL(location.href);url.searchParams.set('studio','notes');if(id)url.searchParams.set('note',id);else url.searchParams.delete('note');if(activity)url.searchParams.set('view','activity');else url.searchParams.delete('view');history.replaceState(null,'',url.pathname+url.search);};
+ const rememberRoute=(id='',activity=false)=>{if(!location.pathname.startsWith('/teacher'))return;const url=new URL(location.href);url.searchParams.set('studio','notes');url.searchParams.delete('create');if(id)url.searchParams.set('note',id);else url.searchParams.delete('note');if(activity)url.searchParams.set('view','activity');else url.searchParams.delete('view');history.replaceState(null,'',url.pathname+url.search);};
  const showError=error=>{const status=root.querySelector('[data-save-status]')||root.querySelector('[data-studio-status]');if(status)status.textContent=noteError(error);};
  const lock=value=>{busy=value;root.setAttribute('aria-busy',String(value));root.querySelectorAll('button,input,textarea,select').forEach(control=>{if(value){if(!control.hasAttribute('data-note-disabled'))control.dataset.noteDisabled=String(control.disabled);control.disabled=true;}else if(control.hasAttribute('data-note-disabled')){control.disabled=control.dataset.noteDisabled==='true';delete control.dataset.noteDisabled;}});};
  const run=async(target,fn)=>{if(busy)return;lock(true);try{await fn();}catch(error){showError(error);}finally{lock(false);}};
@@ -66,7 +72,7 @@ export function mountLessonNoteStudio(root,{client,teacherId,profiles=[],student
  async function library({append=false}={}) {
   if(!append&&!canLeave())return;const token=++request;clearViews();note=null;detail=null;dirty=false;assetDrafts.clear();rememberRoute();
   if(!append){offset=0;rows=[];root.innerHTML=`<div class="ln-studio-heading"><div><p class="ln-kicker">YOUR TEACHING, MADE PERSONAL</p><h2>Lesson Notes · 個別レッスンノート</h2><p>Turn today’s lesson into something your learner can return to.</p></div><div class="ln-actions">${button('Activity inbox · 更新通知','data-inbox')}${button('+ Create lesson note · 作成','data-create class="ln-primary"')}</div></div><div class="ln-filter-bar">${selectField('student','Learner · 生徒',filterStudent,[['','All learners · すべての生徒'],...profiles.map(p=>[p.user_id,person(p.user_id)])],'filter')}${selectField('status','Status · 状態',filterStatus,[['all','All notes · すべて'],['draft','Drafts · 下書き'],['published','Published · 公開中'],['archived','Archived · 保管中'],['trash','Trash · ゴミ箱']],'filter')}<label>Search loaded notes · 読み込んだノートを検索<input data-search-note type="search" value="${e(filterQuery)}" placeholder="Title, topic or summary · タイトル・テーマ"></label></div><p role="status" data-studio-status>Loading… · 読み込み中…</p><div class="ln-cards" data-notes-list></div>${button('Load more · さらに表示','data-load-more hidden')}`;
-   root.querySelector('[data-create]').onclick=()=>{note=newNote(filterStudent);detail={assets:[],annotations:[],suggestions:[],comments:[],revisions:[],activity:[],review_status:[]};activeTab='content';renderEditor();};
+   root.querySelector('[data-create]').onclick=startNote;
    root.querySelector('[data-inbox]').onclick=()=>void inbox();
    root.querySelector('[data-filter-field=student]').onchange=event=>{filterStudent=event.target.value;void library();};root.querySelector('[data-filter-field=status]').onchange=event=>{filterStatus=event.target.value;void library();};
    root.querySelector('[data-search-note]').oninput=event=>{filterQuery=event.target.value;drawCards();};
@@ -80,8 +86,21 @@ export function mountLessonNoteStudio(root,{client,teacherId,profiles=[],student
   const list=root.querySelector('[data-notes-list]');if(!list)return;imagesDispose();
   const query=filterQuery.toLowerCase(),filtered=rows.filter(n=>[n.title,n.summary,...n.tags,person(n.student_id)].join(' ').toLowerCase().includes(query));
   list.innerHTML=filtered.map(n=>cardMarkup(n,{teacher:true,name:person(n.student_id)})).join('') || '<div class="ln-empty ln-wide"><h2>A notebook for every learner.</h2><p>Create a note, add the moments that mattered, and publish when it is ready.<br>生徒を選んで、今日のレッスンをノートに残しましょう。</p></div>';
-  list.querySelectorAll('[data-open-note]').forEach(btn=>btn.onclick=()=>{activeTab='content';void open(btn.dataset.openNote);});imagesDispose=lazyPrivateImages(list,api);
+  list.querySelectorAll('[data-open-note]').forEach(btn=>btn.onclick=()=>{activeTab='content';void open(btn.dataset.openNote);});
+  list.querySelectorAll('[data-note-action]').forEach(btn=>btn.onclick=()=>void run(btn,async()=>{
+   const selected=rows.find(n=>n.id===btn.dataset.noteId),action=btn.dataset.noteAction;if(!selected)return;
+   if(action==='preview'){activeTab='preview';await open(selected.id,{skipGuard:true});return;}
+   const messages={archive:'Archive this note? It will be hidden from the learner. · このノートを保管して生徒画面から非表示にしますか？',restore:'Restore this note as a private draft? · このノートを下書きに戻しますか？',trash:'Move this archived note to Trash? It can be restored later. · ゴミ箱へ移動しますか？後から復元できます。'};
+   if(!await confirmNoteAction(`${selected.title}\n\n${messages[action]}`))return;
+   if(action==='trash'||selected.deleted_at)await api.trash(selected.id,action==='restore',selected.version);
+   else {const latest=await api.note(selected.id);if(latest.version!==selected.version)throw new Error('NOTE_CONFLICT');await api.save({...latest,status:action==='archive'?'archived':'draft'});}
+   const updated=await api.list({studentId:filterStudent,status:filterStatus,limit:offset});rows=updated;offset=updated.length;drawCards();
+   root.querySelector('[data-studio-status]').textContent=action==='archive'?'Archived · 保管しました':action==='trash'?'Moved to Trash · ゴミ箱へ移動しました':'Restored as draft · 下書きに戻しました';
+  }));
+  list.querySelectorAll('[data-note-menu]').forEach(menu=>{menu.ontoggle=()=>{if(menu.open)list.querySelectorAll('[data-note-menu]').forEach(other=>{if(other!==menu)other.open=false;});};menu.onkeydown=event=>{if(event.key==='Escape'){menu.open=false;menu.querySelector('summary').focus();}};});
+  imagesDispose=lazyPrivateImages(list,api);
  }
+ function startNote(){note=newNote(filterStudent);detail={assets:[],annotations:[],suggestions:[],comments:[],revisions:[],activity:[],review_status:[],practice_attempts:[]};activeTab='content';renderEditor();}
  function renderEditor(){
   clearViews();
   root.innerHTML=`<div class="ln-editor-heading"><div><p class="ln-kicker">PRIVATE TEACHING NOTEBOOK</p><h2>${note.id?e(note.title):'Create a lesson note · ノートを作成'}</h2></div>${button('← All notes · 一覧へ','data-back-list')}</div><div class="ln-editor-toolbar"><span class="ln-state">${e(note.deleted_at?'TRASH · ゴミ箱':note.status.toUpperCase())} · ${note.id?`v${note.version}`:'New'}</span><div class="ln-actions">${button(note.status==='published'?'Unpublish to draft · 公開を取り下げる':'Save draft · 下書き保存','data-save="draft"')}${button(note.status==='published'?'Update published note · 公開内容を更新':'Publish · 生徒に公開','data-save="published"')}${button('Student View · 生徒プレビュー','data-editor-tab="preview"')}</div><p class="ln-status" role="status" data-save-status>${dirty?'Unsaved changes · 未保存の変更':note.id?'All changes saved · 保存済み':'Only the selected learner can see a published note. · 公開後、選択した生徒だけに表示されます。'}</p></div><nav class="ln-studio-nav" aria-label="Lesson note editor sections">${[['content','Content · 教材'],['media','Images · 画像'],['preview','Preview · 表示確認'],['activity','Student activity · 生徒の更新'],['history','History · 履歴']].map(([key,name])=>button(name,`data-editor-tab="${key}" aria-pressed="${activeTab===key}"`)).join('')}</nav><div data-editor-panel></div>`;
@@ -122,10 +141,7 @@ export function mountLessonNoteStudio(root,{client,teacherId,profiles=[],student
   list.querySelectorAll('[data-editor-block]').forEach(element=>{
    const id=element.dataset.editorBlock,block=note.content_json.blocks.find(b=>b.id===id);
    element.querySelectorAll('[data-block-field]').forEach(control=>control.oninput=()=>{
-    const key=control.dataset.blockField,value=control.type==='checkbox'?control.checked:control.value;
-    if(key==='audio')block.pronunciation={...block.pronunciation,enabled:value};
-    else if(['studentEditable','keyPhrase','collapsed'].includes(key))block.displayOptions={...block.displayOptions,[key]:value};
-    else block[key]=['examples','correctOptions','items','tags','choices','acceptedAnswers'].includes(key)?lines(value):value;
+    const key=control.dataset.blockField;readBlockField(block,control);
     if(key==='assetId')paintBlockImage(element,block);
     element.querySelector('[data-block-summary]').textContent=(block.englishText||block.originalText||'Teaching block').slice(0,90);setDirty();
    });
@@ -150,12 +166,28 @@ export function mountLessonNoteStudio(root,{client,teacherId,profiles=[],student
   const dialog=document.createElement('dialog');dialog.className='ln-modal';let imported=null;
   dialog.innerHTML=`<h2>Quick Import · 一括取り込み</h2><p>Paste Markdown or structured lesson text. Check the preview, then add editable blocks.<br>Markdownやレッスンメモを貼り付け、内容を確認してから追加します。</p><label>Lesson text · レッスンテキスト<textarea class="ln-import-text" maxlength="180000" placeholder="## Japanese → English&#10;English: refund&#10;Japanese: 返金&#10;Example: I'd like a full refund."></textarea></label><div class="ln-actions">${button('Preview import · 取り込みを確認','data-parse')}${button('Add these blocks · この内容を追加','data-apply disabled')}${button('Cancel · キャンセル','data-close')}</div>${statusMarkup()}<div class="ln-import-preview ln-notebook"></div>`;
   document.body.append(dialog);dialogs.push(dialog);dialog.onclose=()=>dialog.remove();dialog.querySelector('[data-close]').onclick=()=>dialog.close();
-  dialog.querySelector('textarea').oninput=()=>{imported=null;dialog.querySelector('[data-apply]').disabled=true;};
+  dialog.querySelector('.ln-import-text').oninput=()=>{imported=null;dialog.querySelector('[data-apply]').disabled=true;dialog.querySelector('.ln-import-preview').replaceChildren();};
   dialog.querySelector('[data-parse]').onclick=()=>{
-   try{imported=importLessonText(dialog.querySelector('textarea').value);dialog.querySelector('[role=status]').textContent=`${imported.blocks.length} editable blocks · 編集可能なブロック\n${imported.warnings.join('\n')}`;dialog.querySelector('.ln-import-preview').innerHTML=contentMarkup({...newNote(),title:imported.title,content_json:{schemaVersion:1,blocks:imported.blocks}},{mode:'support',controls:false});dialog.querySelector('[data-apply]').disabled=!imported.blocks.length;}
+   try{
+    imported=importLessonText(dialog.querySelector('.ln-import-text').value);
+    const preview=dialog.querySelector('.ln-import-preview'),practice=imported.blocks.filter(isPractice).length;
+    dialog.querySelector('[role=status]').textContent=`${imported.blocks.length-practice} teaching blocks · 教材 / ${practice} practice questions · 練習問題\n${imported.warnings.join('\n')}`;
+    preview.innerHTML=`<h3>Lesson details · レッスンの概要</h3><div class="ln-import-meta">${Object.entries(METADATA_FIELDS).map(([key,[label,max]])=>{
+     const existing=Array.isArray(note[key])?note[key].join(', '):note[key]||'',value=Array.isArray(imported.metadata[key])?imported.metadata[key].join(', '):imported.metadata[key];
+     return `<div>${inputField(key,label,value,{scope:'import',rows:key==='summary'||key==='focus'?2:0,max})}<small>${imported.explicitFields.includes(key)?'From pasted text · 入力テキストより':'Suggested from lesson · 教材から作成'}</small>${existing.trim()?`<p class="ln-import-current">Current · 現在：${e(existing)}</p>${checkbox(key,'Replace this field · この項目を置き換える',false,'replace')}`:''}</div>`;
+    }).join('')}</div><h3>Content & practice · 教材と練習</h3><div data-import-content></div><details><summary>Edit imported blocks · 取り込むブロックを編集</summary><div data-import-edit>${imported.blocks.map((b,i)=>editorBlock(b,i,[])).join('')}</div></details>`;
+    const paint=()=>{preview.querySelector('[data-import-content]').innerHTML=contentMarkup({...newNote(),...imported.metadata,content_json:{schemaVersion:1,blocks:imported.blocks}},{mode:'support',controls:false});};paint();
+    preview.querySelectorAll('[data-import-field]').forEach(control=>control.oninput=()=>{const key=control.dataset.importField;imported.metadata[key]=key==='tags'?control.value.split(/[,、]/).map(t=>t.trim()).filter(Boolean):control.value;paint();});
+    preview.querySelectorAll('[data-editor-block]').forEach(el=>{
+     const block=imported.blocks.find(b=>b.id===el.dataset.editorBlock);el.open=false;
+     el.querySelector('.ln-block-tools').remove();el.querySelectorAll('[data-block-image-file],[data-block-image-alt],[data-block-image-upload]').forEach(c=>c.closest('label')?.remove()||c.remove());
+     el.querySelectorAll('[data-block-field]').forEach(control=>control.oninput=()=>{readBlockField(block,control);paint();});
+    });
+    dialog.querySelector('[data-apply]').disabled=!imported.blocks.length;
+   }
    catch(error){dialog.querySelector('[role=status]').textContent=noteError(error);}
   };
-  dialog.querySelector('[data-apply]').onclick=()=>{if(!imported)return;if(note.content_json.blocks.length+imported.blocks.length>150){dialog.querySelector('[role=status]').textContent='Maximum 150 blocks per note. · 1ノート150ブロックまでです。';return;}note.content_json.blocks.push(...clone(imported.blocks));if(!note.title&&imported.title)note.title=imported.title.slice(0,180);setDirty();dialog.close();renderEditor();};dialog.showModal();
+  dialog.querySelector('[data-apply]').onclick=()=>{if(!imported)return;try{note=applyLessonImport(note,imported,[...dialog.querySelectorAll('[data-replace-field]:checked')].map(c=>c.dataset.replaceField));setDirty();dialog.close();renderEditor();}catch(error){dialog.querySelector('[role=status]').textContent=noteError(error);}};dialog.showModal();
  }
  function renderPreview(){
   const panel=root.querySelector('[data-editor-panel]');let mode='support',mobile=false;
@@ -216,6 +248,6 @@ export function mountLessonNoteStudio(root,{client,teacherId,profiles=[],student
   catch(error){if(!disposed)showError(error);}
  }
  const beforeUnload=event=>{if(dirty||saving||busy||assetDrafts.size){event.preventDefault();event.returnValue='';}};window.addEventListener('beforeunload',beforeUnload);
- if(noteId)void open(noteId,{skipGuard:true});else void library();
+ if(noteId)void open(noteId,{skipGuard:true});else if(createNew)startNote();else void library();
  return {dirty:()=>dirty||saving||busy||assetDrafts.size>0,canLeave,dispose(){disposed=true;stopUpdates();request++;clearViews();dialogs.forEach(d=>{if(d.open)d.close();else d.remove();});window.removeEventListener('beforeunload',beforeUnload);}};
 }

@@ -76,6 +76,11 @@ export function noteState(note,seen) {
  if(seen.viewed_version<note.version)return 'updated';
  return 'opened';
 }
+export function noteListActions(note) {
+ if(note.deleted_at)return [['restore','Restore from Trash · ゴミ箱から下書きに戻す']];
+ return [['preview','Preview Student View · 生徒表示を確認'],...(note.status==='archived'?
+  [['restore','Restore from Archive · 保管から下書きに戻す'],['trash','Move to Trash · ゴミ箱へ移動']]:[['archive','Archive · 保管する']])];
+}
 export const dateLabel = value => new Date(`${value}T12:00:00`).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
 export const searchText = note => [note.title,note.summary,...note.tags,note.focus||''].join(' ').toLocaleLowerCase();
 
@@ -103,8 +108,9 @@ export function safeImportedText(value) {
 }
 export function importLessonText(input) {
  if(new TextEncoder().encode(input).length>180000)throw new Error('Import up to 180KB at once. · 長い教材は分けて取り込んでください。');
- const text=safeImportedText(input),warnings=[];
- if(text!==input.replace(/\r\n?/g,'\n'))warnings.push('Embedded HTML and link destinations were removed. Text remains editable. · HTMLやリンク先を除去しました。内容を確認してください。');
+ const clean=safeImportedText(input),warnings=[];
+ const extracted=extractLessonMetadata(clean),text=extracted.content;
+ if(clean!==input.replace(/\r\n?/g,'\n'))warnings.push('Embedded HTML and link destinations were removed. Text remains editable. · HTMLやリンク先を除去しました。内容を確認してください。');
  const blocks=[];let current=null,kind='paragraph',field='englishText',title='',sectionTitle='';
  const flush=()=>{
   if(current && Object.entries(current).some(([k,v])=>['englishText','japaneseSupport','originalText','explanation','comparisonText','items','correctOptions','answerKey'].includes(k) && (Array.isArray(v)?v.length:String(v).trim()))) {
@@ -146,5 +152,55 @@ export function importLessonText(input) {
  flush();
  if(blocks.length>150)throw new Error('This import has more than 150 blocks. Split it into two notes.');
  if(!blocks.length && text.trim())blocks.push({...newBlock(),englishText:text.trim()});
- return {title,blocks,warnings};
+ const metadata=lessonMetadata(blocks,{...extracted.metadata,...!extracted.metadata.title&&title?{title}:{}});
+ return {title:metadata.title,metadata,explicitFields:extracted.fields,blocks,warnings};
+}
+
+export const METADATA_FIELDS = Object.freeze({
+ title:['Lesson Title · レッスンタイトル',180],summary:['Short Introduction · 短い概要',1200],
+ focus:["Today's Focus · 今日のポイント",2000],tags:['Topics · テーマ',600],
+});
+const metadataLabels={'lesson title':'title','short introduction':'summary','a short introduction':'summary',"today's focus":'focus','todays focus':'focus',topics:'tags'};
+function extractLessonMetadata(text) {
+ const metadata={},fields=[],content=[];let active='';
+ for(const line of text.split('\n')) {
+  const unstyled=line.replace(/^\s*#{1,6}\s+/,'').replace(/\*\*/g,'').replace(/[’‘]/g,"'");
+  const match=unstyled.match(/^\s*([A-Za-z' ]+)[:：]\s*(.*)$/),key=metadataLabels[match?.[1].trim().toLowerCase()];
+  if(key){active=key;if(!fields.includes(key))fields.push(key);metadata[key]=match[2].trim();continue;}
+  if(active&&!line.trim()&&metadata[active]){active='';continue;}
+  // A content heading or block field ends a multiline metadata value.
+  if(/^\s*#/.test(line)||/^\s*[A-Za-z ]+[:：]/.test(line)||practiceSectionType(line)||/^\s*(?:Grammar|Vocabulary|Natural English|Common Mistakes?|Pronunciation|Useful Phrases?|Quick Practice)\s*$/i.test(line))active='';
+  if(active){if(active==='tags'&&!line.trim()){active='';continue;}metadata[active]=[metadata[active],line.replace(/^\s*[-*•]\s+/,'').trim()].filter(Boolean).join('\n');}
+  else content.push(line);
+ }
+ if('tags' in metadata)metadata.tags=metadata.tags.split(/[,、\n]/).map(t=>t.trim()).filter(Boolean);
+ return {metadata,fields,content:content.join('\n')};
+}
+const compact=(value,max)=>{const text=String(value||'').replace(/\s+/g,' ').trim();if(text.length<=max)return text;const end=text.slice(0,max-1);return end.slice(0,end.lastIndexOf(' ')>max/2?end.lastIndexOf(' '):end.length)+'…';};
+export function lessonMetadata(blocks,explicit={}) {
+ const topics={japanese_to_english:'Japanese to English',natural_english_upgrade:'Natural English',common_mistake:'Common Mistakes',grammar_point:'Grammar',nuance:'Nuance',pronunciation:'Pronunciation',useful_phrase:'Useful Phrases',vocabulary:'Vocabulary',comparison:'Comparisons'};
+ const teaching=blocks.filter(b=>!isPractice(b)&&!['image','divider','heading','collapsible_section','quick_practice_group'].includes(b.type));
+ const tags=[...new Set(teaching.map(b=>topics[b.type]).filter(Boolean))].slice(0,6);
+ const heading=blocks.find(b=>['heading','collapsible_section'].includes(b.type))?.englishText;
+ const first=teaching[0],example=first?.englishText||first?.correctOptions?.[0]||'';
+ const topicText=tags.length?tags.join(', '):compact(heading||first?.title||example,90);
+ const title=compact(heading||first?.title||tags.slice(0,3).join(' & ')||example||'Lesson Review',180);
+ const summary=topicText?`Review ${topicText.charAt(0).toLowerCase()+topicText.slice(1)}${blocks.some(isPractice)?' and practise with the lesson questions':''}.`:blocks.some(isPractice)?'Work through the practice questions from this lesson.':'';
+ const focus=example?`Review this expression: ${compact(example,150)}`:heading?`Review ${compact(heading,150)}.`:tags.length?`Focus on ${tags.join(', ').toLowerCase()}.`:blocks.some(isPractice)?'Complete the practice questions and check your answers.':'';
+ return {title,summary,focus,tags,...explicit};
+}
+export function applyLessonImport(note,imported,replaceFields=[]) {
+ const copy=clone(note);
+ if(copy.content_json.blocks.length+imported.blocks.length>150)throw new Error('Maximum 150 blocks per note. · 1ノート150ブロックまでです。');
+ for(const [key,[,limit]] of Object.entries(METADATA_FIELDS)) {
+  const value=imported.metadata[key];
+  if(Array.isArray(copy[key])?copy[key].length&&!replaceFields.includes(key):String(copy[key]||'').trim()&&!replaceFields.includes(key))continue;
+  if(key==='tags'){
+   if(!Array.isArray(value)||value.length>12||value.some(t=>typeof t!=='string'||t.length>80))throw new Error('Use up to 12 topics, 80 characters each. · テーマは12個、各80文字までです。');
+  }else if(typeof value!=='string'||value.length>limit)throw new Error(`${METADATA_FIELDS[key][0]}: maximum ${limit} characters. · 文字数を確認してください。`);
+  copy[key]=clone(value);
+ }
+ copy.content_json.blocks.push(...clone(imported.blocks));
+ if(new TextEncoder().encode(JSON.stringify(copy.content_json)).length>220000)throw new Error('Use up to 220KB per note. · 長い教材はノートを分けてください。');
+ return copy;
 }

@@ -7,13 +7,18 @@ import { fetchStudentAnnouncements, toggleCurriculumFavorite } from './curriculu
 import { AVATAR_BUCKET, avatarPath, avatarReference, compactAvatar, displayProfileAvatar } from './profile-api.js?v=20260911-mobile2';
 import { personalCardMarkup, bindPersonalAudio } from './personal-cards.js?v=20260911-mobile2';
 import { buildPhraseCatalog } from './data.js?v=20260911-mobile2';
+import { createNoteApi } from './lesson-note-api.js?v=20260915-practice';
+import { createSectionAwareness, learnerNextActions, nextActionsMarkup } from './learning-overview.js';
 import './study-music.js?v=20260911-mobile2';
 const $ = selector => document.querySelector(selector);
+const nextHost=document.createElement('section');nextHost.id='memberNext';nextHost.className='hub-next';nextHost.setAttribute('aria-label','Continue your learning · 次の学習');$('.member-tabs').after(nextHost);
+for(const [selector,id] of [['.member-note-tab','noteCount'],['[data-panel=personal]','personalCount']]){const badge=document.createElement('span');badge.id=id;badge.className='hub-section-count';$(selector).append(badge);}
 const client = getStudentClient();
 let session, profile, access;
 let favoriteCategory = 'words';
 let favoriteRows = [], personalCards = [], personalSaved = new Set();
 let favoriteLoad, phraseLoad, favoriteGeneration = 0;
+let awareness, announcements=[],noteOverview={notes:[]},overviewLoading=false,overviewError=false,sourcesLoaded=false,sourcesError=false;
 const categoryLabels = {words:'Words · 単語',phrases:'Phrases · フレーズ',phonics:'Phonics · フォニックス',lessons:'Lessons · レッスン',questions:'Questions · 問題',phrasebook:'Lesson phrasebook · レッスン単語帳',sentences:'Sentences · 文章',notes:'Notes · メモ'};
 const toText = value => typeof value === 'string' ? value : value?.en || value?.jp || value?.ja || '';
 const empty = '<div class="member-empty"><h3>Your next discovery belongs here.<br>気になる英語を見つけたら、♡を押してみましょう。</h3><p>保存した教材がここに並びます。</p><a href="/learn">Explore learning library · 教材を探す →</a></div>';
@@ -35,10 +40,13 @@ function showPanel(key) {
   if (!document.querySelector(`[data-panel="${key}"]`) || document.querySelector(`[data-panel="${key}"]`).hidden) key='profile';
   document.querySelectorAll('[data-panel]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.panel===key)));
   document.querySelectorAll('.member-panel').forEach(panel=>panel.hidden=panel.id!==`panel-${key}`);
+  nextHost.hidden=key!=='profile';
   history.replaceState(null,'',`#${key}`);
   if(key==='favorites') void renderFavorites();
+  if(key==='personal'&&awareness)markVisiblePersonal();
 }
 document.querySelectorAll('[data-panel]').forEach(button=>button.onclick=()=>showPanel(button.dataset.panel));
+window.addEventListener('hashchange',()=>{const key=location.hash.slice(1);if(['profile','announcements','favorites','settings','personal'].includes(key))showPanel(key);});
 document.querySelectorAll('[data-category]').forEach(button=>button.onclick=()=>{
   favoriteCategory=button.dataset.category;
   document.querySelectorAll('[data-category]').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));
@@ -117,7 +125,30 @@ function renderPersonal() {
   const cards=personalCards.filter(card=>(category==='all'||card.category===category) && `${card.text_en} ${card.text_ja} ${card.teacher_note}`.toLowerCase().includes(query));
   $('#personalList').innerHTML=cards.map(card=>personalCardMarkup(card,{saved:personalSaved.has(card.id)})).join('') || '<p class="member-empty">Cards from your teacher will appear here. · 先生から届いた復習カードがここに表示されます。</p>';
   bindStudentPersonalCards($('#personalList'),cards);
+  if(!$('#panel-personal').hidden)markVisiblePersonal(cards);
 }
+function markVisiblePersonal(cards) {
+ if(!awareness)return;
+ const visibleIds=new Set([...$('#personalList').querySelectorAll('[data-card-id]')].map(el=>el.dataset.cardId));
+ awareness.mark('personal',(cards||personalCards).filter(c=>!c.source_note_id&&visibleIds.has(c.id)));renderNext();
+}
+function renderNext() {
+ if(!awareness)return;
+ const notices=announcements.filter(n=>awareness.unread('announcements',n));
+ const cards=featureAllowed(access,'show_homework')?personalCards.filter(c=>!c.source_note_id&&awareness.unread('personal',c)):[];
+ const counts={noticeCount:notices.length,personalCount:cards.length,noteCount:Number(noteOverview.new_notes||0)+Number(noteOverview.updated_notes||0)};
+ for(const [id,count] of Object.entries(counts)){const badge=$(`#${id}`);if(badge){badge.hidden=!count;badge.textContent=count?String(count):'';badge.setAttribute('aria-label',`${count} new or updated · 新着・更新`);}}
+ const actions=learnerNextActions({notes:noteOverview.notes,announcements:notices,cards}),host=$('#memberNext');
+ host.innerHTML=`<div class="hub-next-heading"><h2>Continue your learning · 次の学習</h2></div>${nextActionsMarkup(actions)}${!actions.length?`<p class="hub-next-empty">${!sourcesLoaded||overviewLoading?'Loading updates… · 更新を読み込み中…':overviewError||sourcesError?'Some updates could not load. · 一部の更新を読み込めませんでした。':'Your learning space is up to date. · 新しい更新はありません。'}</p>`:''}${overviewError?'<p class="ln-status" role="status">Lesson updates could not load. · ノートの更新を取得できませんでした。 <button type="button" data-retry-overview>Retry · 再試行</button></p>':''}`;
+ host.querySelector('[data-retry-overview]')?.addEventListener('click',()=>void refreshOverview());
+ host.querySelectorAll('[data-next-notice]').forEach(link=>link.onclick=event=>{event.preventDefault();showPanel('announcements');openAnnouncement(link.dataset.nextNotice);});
+}
+async function refreshOverview() {
+ if(overviewLoading||!session?.user||!featureAllowed(access,'show_homework'))return;
+ overviewLoading=true;
+ try{noteOverview=await createNoteApi(client).overview();overviewError=false;}catch{overviewError=true;}finally{overviewLoading=false;renderNext();}
+}
+window.addEventListener('lesson-note-inbox',()=>void refreshOverview());
 function renderProfile() {
   const name=profile.display_name || [profile.first_name,profile.last_name].filter(Boolean).join(' ') || 'Learner';
   $('#profileGreeting').textContent=name;
@@ -150,13 +181,16 @@ $('#removePhoto').onclick=async()=>{
   catch{$('#photoStatus').textContent='Could not finish removing the photo. Please try again. · 写真の削除を完了できませんでした。もう一度お試しください。';}finally{$('#removePhoto').disabled=false;}
 };
 function renderAnnouncements(notices) {
-  $('#noticeCount').textContent=notices.length || '';
+  announcements=notices;
   $('#announcementList').innerHTML=notices.map(notice=>`<button class="notice-preview" type="button" data-notice="${e(notice.id)}"><span class="eyebrow">${notice.audience==='targeted'?'JUST FOR YOU · あなた宛て':'CLUB NEWS · 全体のお知らせ'}</span><strong>${e(notice.title_ja || notice.title_en)}</strong><span>${e((notice.body_ja || notice.body_en || '').slice(0,95))}</span><small>${new Date(notice.starts_at).toLocaleDateString('ja-JP')} <b>Read more · 詳しく見る →</b></small></button>`).join('') || '<p class="member-empty">No new announcements. · 現在、新しいお知らせはありません。</p>';
-  document.querySelectorAll('[data-notice]').forEach(button=>button.onclick=()=>{
-    const notice=notices.find(item=>item.id===button.dataset.notice);const root=$('#noticeDetail');root.replaceChildren();
+  document.querySelectorAll('[data-notice]').forEach(button=>button.onclick=()=>openAnnouncement(button.dataset.notice));
+  renderNext();
+}
+function openAnnouncement(id) {
+    const notice=announcements.find(item=>item.id===id);if(!notice)return;const root=$('#noticeDetail');root.replaceChildren();
     for(const [tag,text] of [['h2',notice.title_ja],['h3',notice.title_en],['p',notice.body_ja],['p',notice.body_en]]){if(!text)continue;const node=document.createElement(tag);node.textContent=text;root.append(node);}
     $('#noticeDialog').showModal();
-  });
+    awareness?.mark('announcements',[notice]);renderNext();
 }
 $('#closeNotice').onclick=()=>$('#noticeDialog').close();
 $('#favoriteSearch').oninput=()=>void renderFavorites();$('#personalSearch').oninput=renderPersonal;$('#personalCategory').onchange=renderPersonal;
@@ -166,13 +200,15 @@ try {
   else{
     const results=await Promise.all([getStudentProfile(),getStudentMembership(),loadStudentAccess()]);
     if(results[0].error || !results[0].profile)throw new Error('Please complete your profile on Home. · ホームでプロフィールを入力してください。');
-    profile=results[0].profile;access=results[2];applyStudentFeatureVisibility(access);
+    profile=results[0].profile;access=results[2];awareness=createSectionAwareness(session.user.id);applyStudentFeatureVisibility(access);
     $('#memberPlan').textContent=`${planFor(results[1].membership?.plan_tier || 'free').name} · Your learning space · あなたの学習スペース`;
     renderProfile();$('#memberWorkspace').hidden=false;$('#memberStatus').textContent='';renderPreferences();
     showPanel(['profile','announcements','favorites','settings','personal'].includes(location.hash.slice(1))?location.hash.slice(1):'profile');
+    void refreshOverview();
     const [notices,cards,saved]=await Promise.all([featureAllowed(access,'show_announcements')?fetchStudentAnnouncements():Promise.resolve({data:[]}),client.from('review_personal_cards').select('*').eq('student_id',session.user.id).eq('active',true).order('created_at',{ascending:false}),client.from('review_personal_card_favorites').select('card_id').eq('student_id',session.user.id)]);
+    sourcesLoaded=true;sourcesError=Boolean(notices.error||cards.error||saved.error);
     if(notices.error)$('#announcementList').textContent='Please reload to view announcements. · お知らせは再読み込みしてご確認ください。';else renderAnnouncements(notices.data || []);
     if(cards.error || saved.error)$('#personalList').textContent='Please reload to view your practice cards. · 復習カードは再読み込みしてご確認ください。';
-    else{personalCards=cards.data || [];personalSaved=new Set((saved.data || []).map(row=>row.card_id));renderPersonal();if(!$('#panel-favorites').hidden)void renderFavorites();}
+    else{personalCards=cards.data || [];personalSaved=new Set((saved.data || []).map(row=>row.card_id));renderPersonal();if(!$('#panel-favorites').hidden)void renderFavorites();}renderNext();
   }
 }catch(error){$('#memberStatus').textContent=error.message || 'Could not load My Page. Please reload. · マイページを読み込めませんでした。再読み込みしてください。';}

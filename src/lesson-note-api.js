@@ -15,6 +15,7 @@ export function createNoteApi(client) {
  const related=(table,id)=>result(client.from(`${PREFIX}_${table}`).select('*').eq('note_id',id).order('created_at',{ascending:false}));
  const api={
   client,rpc,note,
+  overview:({teacher=false}={})=>rpc('overview',{max_notes:30,for_teacher:teacher}),
   async list({studentId,status,offset=0,limit=30}={}) {
    // List deliberately excludes the large structured document and full-resolution images.
    let q=client.from('review_lesson_notes').select('id,deleted_at,student_id,teacher_id,lesson_date,title,summary,tags,status,version,cover_asset_id,published_at,updated_at,created_at,assets:review_lesson_note_assets!review_lesson_note_assets_note_id_fkey(id,state,uploader_role,thumbnail_path),seen:review_lesson_note_review_status(viewed_version,reviewed_version)')

@@ -4,7 +4,7 @@ import {practiceMarkup,mountPractice,progressMarkup} from './note-practice-view.
 import {richTextMarkup,cleanMarks,moveMarks,applyMark} from './note-rich-text.js?v=20260915-practice';
 import { escapeHTML as e } from './store.js?v=20260911-mobile2';
 import { speakText } from './audio.js?v=20260911-mobile2';
-import { BLOCK_TYPES, PHRASE_TYPES, dateLabel, noteState, editableTextFields } from './lesson-note-model.js?v=20260915-practice';
+import { BLOCK_TYPES, PHRASE_TYPES, dateLabel, noteState, noteListActions, editableTextFields } from './lesson-note-model.js?v=20260915-practice';
 import { noteError } from './lesson-note-api.js?v=20260915-practice';
 export const noteButton=(label,attrs='')=>{const extra=attrs.match(/class="([^"]*)"/)?.[1]||'';return `<button type="button" class="ln-button ${extra}" ${attrs.replace(/class="[^"]*"/,'')}>${label}</button>`;};
 export const noteStatus=()=>'<p class="ln-status" role="status" aria-live="polite"></p>';
@@ -48,11 +48,12 @@ export function contentMarkup(note,options={}) {
  return `<section class="ln-focus"><span class="ln-micro">TODAY’S FOCUS · 今日のポイント</span><p>${e(note.focus||'A clear next step for your English.')}</p></section>${keyBlocks.length?`<section class="ln-key-phrases"><h2>Words to take with you.<small>今日から使いたい表現</small></h2>${keyBlocks.map(b=>blockMarkup(b,{...options,permissions:note})).join('')}</section>`:''}<section class="ln-teaching"><h2 class="ln-main-heading">Your lesson, in detail.<small>レッスンを振り返ろう</small></h2>${main || '<p>Teaching material will appear here.</p>'}</section>`;
 }
 export function cardMarkup(note,{teacher=false,name=''}={}) {
- const state=teacher?note.status:noteState(note,note.seen?.[0]);
- const labels={new:'NEW · 新着',updated:'UPDATED · 更新あり',reviewed:'✓ REVIEWED · 復習済み',opened:'IN YOUR NOTEBOOK',draft:'DRAFT · 下書き',published:'PUBLISHED · 公開中',archived:'ARCHIVED · 保管中'};
+ const state=teacher?(note.deleted_at?'trash':note.status):noteState(note,note.seen?.[0]);
+ const labels={new:'NEW · 新着',updated:'UPDATED · 更新あり',reviewed:'✓ REVIEWED · 復習済み',opened:'IN YOUR NOTEBOOK',draft:'DRAFT · 下書き',published:'PUBLISHED · 公開中',archived:'ARCHIVED · 保管中',trash:'TRASH · ゴミ箱'};
  const assets=(note.assets||[]).filter(a=>a.state==='ready'&&a.uploader_role==='teacher');
  const cover=assets.find(a=>a.id===note.cover_asset_id);
- return `<article class="ln-note-card">${cover?`<div class="ln-card-image"><img data-private-thumb="${e(cover.thumbnail_path)}" alt="" loading="lazy" width="400" height="180"></div>`:''}<div class="ln-card-body"><div class="ln-card-top"><time datetime="${e(note.lesson_date)}">${e(dateLabel(note.lesson_date))}</time><span class="ln-state ln-state-${e(state)}">${labels[state]||e(state)}</span></div>${name?`<p class="ln-micro">${e(name)}</p>`:''}<h2>${e(note.title)}</h2>${text(note.summary,'ln-summary')}<div class="ln-tags">${note.tags.map(tag=>`<span>${e(tag)}</span>`).join('')}</div><div class="ln-card-bottom"><span>${assets.length} visual${assets.length===1?'':'s'} · 画像</span>${teacher?noteButton('Open editor · 編集する →',`data-open-note="${e(note.id)}"`):`<a class="ln-button" href="/my-page/notes/${e(note.id)}">Open Lesson Note · ノートを開く →</a>`}</div></div></article>`;
+ const menu=teacher?`<details class="ln-card-menu" data-note-menu><summary aria-label="Actions for ${e(note.title)} · ノートの操作" title="Note actions · ノートの操作">⋯</summary><div>${noteButton('Open / Edit · 開く・編集',`data-open-note="${e(note.id)}"`)}${noteListActions(note).map(([action,label])=>noteButton(label,`data-note-action="${action}" data-note-id="${e(note.id)}"`)).join('')}</div></details>`:'';
+ return `<article class="ln-note-card">${cover?`<div class="ln-card-image"><img data-private-thumb="${e(cover.thumbnail_path)}" alt="" loading="lazy" width="400" height="180"></div>`:''}<div class="ln-card-body"><div class="ln-card-top"><time datetime="${e(note.lesson_date)}">${e(dateLabel(note.lesson_date))}</time><span class="ln-state ln-state-${e(state)}">${labels[state]||e(state)}</span>${menu}</div>${name?`<p class="ln-micro">${e(name)}</p>`:''}<h2>${e(note.title)}</h2>${text(note.summary,'ln-summary')}<div class="ln-tags">${note.tags.map(tag=>`<span>${e(tag)}</span>`).join('')}</div><div class="ln-card-bottom"><span>${assets.length} visual${assets.length===1?'':'s'} · 画像</span>${teacher?noteButton('Open editor · 編集する →',`data-open-note="${e(note.id)}"`):`<a class="ln-button" href="/my-page/notes/${e(note.id)}">Open Lesson Note · ノートを開く →</a>`}</div></div></article>`;
 }
 export function lazyPrivateImages(root,api) {
  let disposed=false;
@@ -123,10 +124,20 @@ function editDialog(block,{direct=false,onSave}) {
  dialog.showModal();return dialog;
 }
 
+export function focusNoteTarget(root,hash=location.hash) {
+ let id;try{id=decodeURIComponent(hash.replace(/^#/,''));}catch{return;}
+ const target=[...root.querySelectorAll('[id]')].find(el=>el.id===id);if(!target)return;
+ for(let parent=target.parentElement;parent&&parent!==root;parent=parent.parentElement)if(parent.tagName==='DETAILS')parent.open=true;
+ target.tabIndex=-1;target.focus({preventScroll:true});target.scrollIntoView({block:'start'});
+}
 export function mountNoteView(root,{detail,api,student=true,userId='',mode='support',onRefresh=()=>{},teacherName='Your English teacher'}) {
  const n=detail.note,controllers=[],dialogs=[];let disposed=false;
  root.classList.add('ln-notebook');
  root.innerHTML=`<header class="ln-lesson-header"><p class="ln-kicker">PERSONAL LESSON NOTES · あなたのレッスンノート</p><time datetime="${e(n.lesson_date)}">${e(dateLabel(n.lesson_date))}</time><h1>${e(n.title||'Your lesson notebook')}</h1>${text(n.summary,'ln-lede')}<div class="ln-header-meta">${student?`<a class="ln-my-notes-jump" href="#lesson-my-notes">✎ My notes · 自分のメモ</a>`:""}<span>Prepared by ${e(teacherName)}</span><div class="ln-tags">${n.tags.map(tag=>`<span>${e(tag)}</span>`).join('')}</div></div></header><div class="ln-reader-layout"><div class="ln-reader-main">${contentMarkup(n,{mode,student,assets:detail.assets})}<section class="ln-practice-summary" data-practice-summary></section><section class="ln-gallery-section"><h2>A different way to remember.<small>画像でレッスンを振り返ろう</small></h2><p class="ln-micro">TEACHER MATERIAL · 先生の教材</p><div class="ln-gallery" data-teacher-gallery></div></section><section class="ln-student-attachments" data-student-attachments><h2>From your notebook.<small>生徒の添付画像</small></h2><div class="ln-gallery" data-student-gallery></div>${student&&n.allow_student_images?`<form class="ln-upload-form"><label>Add an image · 画像を追加<input type="file" accept="image/png,image/jpeg,image/webp" required></label><label>Caption · メモ<input name="caption" maxlength="2000"></label><label>Image description · 画像の説明<input name="alt_text" maxlength="500" required></label><button type="submit" class="ln-button">Upload privately · 非公開で追加</button>${noteStatus()}</form>`:''}</section><section class="ln-comments" data-comments></section>${student?`<section class="ln-review-finish"><span aria-hidden="true">✧</span><h2>A little review. A lasting difference.</h2><p>Make these expressions part of your English.<br>今日の表現を、あなたの英語に。</p>${noteButton(detail.review_status?.[0]?.reviewed_version>=n.version?'✓ Reviewed — undo · 復習済みを取り消す':'Mark as reviewed · 復習済みにする','data-mark-reviewed class="ln-primary"')}${noteStatus()}</section>`:''}</div><aside class="ln-my-notes" id="lesson-my-notes"><div class="ln-note-pad"><p class="ln-kicker">MAKE IT YOURS · 自分の言葉で</p><h2>My notes.</h2><p>Personal reminders, separate from your teacher’s lesson.<br>先生の教材とは別に、自分のメモを残せます。</p><div data-lesson-annotation></div></div><a href="/my-page#favorites" class="ln-saved-link">♡ My Phrases · 保存した表現 →</a></aside></div>`;
+ const focus=root.querySelector('.ln-focus');focus.id='lesson-focus';
+ const firstPractice=n.content_json.blocks.find(isPractice),jumps=document.createElement('nav');jumps.className='ln-reader-jumps';jumps.setAttribute('aria-label','Lesson sections · レッスン内の移動');
+ jumps.innerHTML=`<a href="#lesson-focus">Today's Focus · 今日のポイント</a>${firstPractice?`<a href="#block-${e(firstPractice.id)}">Practice · 練習</a>`:''}${student?'<a href="#lesson-my-notes">My notes · 自分のメモ</a>':''}`;
+ root.querySelector('.ln-lesson-header').after(jumps);
  if(!student)root.querySelector('.ln-my-notes').hidden=true;
  const attempts=[...(detail.practice_attempts||[])],summary=root.querySelector('[data-practice-summary]');root.querySelector('.ln-focus').after(summary);
  const updateProgress=()=>{summary.innerHTML=progressMarkup(practiceSummary(n.content_json.blocks,attempts));summary.hidden=!n.content_json.blocks.some(isPractice);};updateProgress();
@@ -189,5 +200,8 @@ export function mountNoteView(root,{detail,api,student=true,userId='',mode='supp
   comments.querySelector('form').onsubmit=async event=>{event.preventDefault();const button=event.currentTarget.querySelector('button');button.disabled=true;try{if(controllers.some(c=>c.dirty())||uploadDraft())throw new Error('Save your other work first. · 回答・メモ・画像を先に保存してください。');await api.comment(n.id,event.currentTarget.querySelector('textarea').value);comments.querySelector('textarea').value='';onRefresh();}catch(error){comments.querySelector('[role=status]').textContent=noteError(error);button.disabled=false;}};
  }
  let reviewed=detail.review_status?.[0]?.reviewed_version>=n.version;const mark=root.querySelector('[data-mark-reviewed]');if(mark)mark.onclick=async()=>{mark.disabled=true;try{await api.setReviewed(n.id,!reviewed,n.version);reviewed=!reviewed;mark.textContent=reviewed?'✓ Reviewed — undo · 復習済みを取り消す':'Mark as reviewed · 復習済みにする';mark.setAttribute('aria-pressed',String(reviewed));}catch(error){mark.parentElement.querySelector('[role=status]').textContent=noteError(error);}finally{mark.disabled=false;}};
- return {dirty:()=>controllers.some(c=>c.dirty())||commentDraft()||uploadDraft(),dispose(){disposed=true;controllers.forEach(c=>c.dispose());disposeImages();dialogs.forEach(d=>{if(d.open)d.close();else d.remove();});}};
+ const followHash=()=>focusNoteTarget(root);window.addEventListener('hashchange',followHash);
+ jumps.querySelectorAll('a').forEach(link=>link.onclick=event=>{event.preventDefault();history.replaceState(null,'',link.hash);followHash();});
+ if(student)followHash();
+ return {dirty:()=>controllers.some(c=>c.dirty())||commentDraft()||uploadDraft(),dispose(){disposed=true;window.removeEventListener('hashchange',followHash);controllers.forEach(c=>c.dispose());disposeImages();dialogs.forEach(d=>{if(d.open)d.close();else d.remove();});}};
 }

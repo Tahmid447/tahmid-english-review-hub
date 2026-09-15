@@ -1,4 +1,6 @@
 import { mountLessonNoteStudio } from './lesson-note-studio.js?v=20260915-practice';
+import { createNoteApi } from './lesson-note-api.js?v=20260915-practice';
+import { teacherNoteActions, nextActionsMarkup } from './learning-overview.js';
 import { privateRecordingPlayer, voiceFeedbackEditor, FEEDBACK_BUCKET } from './private-recordings.js?v=20260911-mobile2';
 import { displayProfileAvatar } from './profile-api.js?v=20260911-mobile2';
 import { mountPersonalCardStudio } from './personal-cards.js?v=20260911-mobile2';
@@ -39,10 +41,11 @@ import { normalizeCategoryAccess, categoryVisibleLevels } from "./curriculum-acc
 
 const client = getTeacherClient();
 let lessonNoteStudio = null;
-let noteStudentFilter = "";
+let noteStudentFilter = new URLSearchParams(location.search).get('student') || "";
+let noteCreateNew = new URLSearchParams(location.search).get('create') === '1';
 let noteRouteId = new URLSearchParams(location.search).get('studio') === 'notes' ? new URLSearchParams(location.search).get('note') || '' : '';
 let noteInboxFetchedAt = 0;
-window.addEventListener('lesson-note-inbox',event=>{const badge=document.querySelector('#noteActivityCount');if(badge)badge.textContent=event.detail.count||'';});
+window.addEventListener('lesson-note-inbox',event=>{const badge=document.querySelector('#noteActivityCount');if(badge)badge.textContent=event.detail.count||'';const host=document.querySelector('[data-dashboard-note-priorities]');if(host)void refreshDashboardNotes(host);});
 function refreshNoteInboxCount() {
   if (!state.session || Date.now() - noteInboxFetchedAt < 30000) return;
   noteInboxFetchedAt = Date.now();
@@ -136,7 +139,7 @@ const elements = {
 const state = {
   session: null,
   teacher: null,
-  tab: new URLSearchParams(location.search).get("studio") === "notes" ? "notes" : "dashboard",
+  tab: ['dashboard','notes','submissions','learners','codes','lessons','sources','insights'].includes(new URLSearchParams(location.search).get('studio')) ? new URLSearchParams(location.search).get('studio') : 'dashboard',
   lessons: [],
   profiles: [],
   memberships: [],
@@ -3223,6 +3226,9 @@ function openLearnerDialog(profile) {
   profileCard.append(makeAction(teacherText("Lesson notes for this learner", "この生徒の個別レッスンノート"), () => {
     elements.learnerDialog.close(); noteStudentFilter = current.user_id; state.tab = "notes"; renderActiveTab();
   }));
+  profileCard.append(makeAction(teacherText('Create Lesson Note','レッスンノートを作成'),()=>{
+    elements.learnerDialog.close();startLearnerNote(current.user_id);
+  }));
 
   const access = make("section", { className: "learner-control-section" });
   access.append(
@@ -3724,6 +3730,7 @@ function renderStudents() {
       open.className = "secondary-btn";
       const actionCell = make("td");
       actionCell.append(open);
+      actionCell.append(makeAction(teacherText('Create Lesson Note','ノートを作成'),()=>startLearnerNote(profile.user_id)));
       const learnerCell = make("td");
       learnerCell.append(
         make("strong", { text: profileName(profile.user_id) }),
@@ -4740,6 +4747,7 @@ function premiumSubmissionQueue() {
       : null;
     const feedback = state.submissionFeedback.find((item) => item.submission_id === submission.id);
     const card = make("article", { className: "premium-review-card" });
+    card.id = `submission-${submission.id}`;
     card.append(
       make("span", { text: `${submissionStatusLabel(submission.status)} · ${formatDate(submission.submitted_at || submission.created_at, true)}` }),
       make("h3", { text: `${profileName(submission.user_id)} · ${teacherLanguage === "ja" ? task?.title_ja || task?.title_en || "Premium課題" : task?.title_en || "Premium task"}` }),
@@ -4858,6 +4866,19 @@ function renderSources() {
   elements.panel.replaceChildren(wrap);
 }
 
+function startLearnerNote(studentId='') {
+  noteStudentFilter=studentId;noteRouteId='';noteCreateNew=true;state.tab='notes';renderActiveTab();
+}
+async function refreshDashboardNotes(host) {
+  if(host.dataset.loading==='true')return;host.dataset.loading='true';
+  try {
+    const result=await createNoteApi(client).overview({teacher:true});if(!host.isConnected)return;
+    const actions=teacherNoteActions(result.notes).map(action=>({...action,title:`${profileName(action.studentId)} · ${action.title}`}));
+    host.innerHTML=actions.length?nextActionsMarkup(actions):'<p class="hub-next-empty">No pending notebook work. · ノートの未対応項目はありません。</p>';
+  }catch {
+    if(host.isConnected){host.replaceChildren(make('p',{text:teacherText('Notebook updates could not load.','ノートの更新を取得できませんでした。')}));host.append(makeAction(teacherText('Retry','再試行'),()=>void refreshDashboardNotes(host)));}
+  }finally{delete host.dataset.loading;}
+}
 function renderDashboard() {
   const wrap = make("div", { className: "teacher-list-view" });
   const now = Date.now();
@@ -4911,22 +4932,25 @@ function renderDashboard() {
     );
     learnerOverview.append(card);
   });
-  const heading = make("div", { className: "teacher-panel-heading" });
-  heading.append(
-    make("div", { text: teacherText("What needs attention", "今必要な作業") }),
-    make("p", { text: teacherText(
-      "Open a card to continue the most common teacher jobs.",
-      "カードを開いて、よく使う先生の作業を続けられます。",
-    ) }),
-  );
-  wrap.append(overviewHeading, learnerOverview, heading);
+  const priorities=make('section',{className:'hub-next'});
+  priorities.append(make('h2',{text:teacherText('What needs attention','今必要な作業')}));
+  const quickActions=make('div',{className:'ln-actions'});
+  quickActions.append(makeAction(teacherText('Create Lesson Note','レッスンノートを作成'),()=>startLearnerNote()));
+  const submission=teacherVisibleSubmissions().filter(item=>['submitted','in_review'].includes(item.status)).sort((a,b)=>String(a.submitted_at||a.created_at).localeCompare(String(b.submitted_at||b.created_at)))[0];
+  if(submission)quickActions.append(makeAction(teacherText(`Review ${profileName(submission.user_id)}'s submission (${waiting} waiting)`,`${profileName(submission.user_id)}の提出を確認（${waiting}件待ち）`),()=>{
+    state.submissionLearnerFilter=submission.user_id;state.submissionStatusFilter='waiting';state.submissionTypeFilter='all';state.tab='submissions';renderActiveTab();document.getElementById(`submission-${submission.id}`)?.scrollIntoView({block:'start'});
+  }));
+  priorities.append(quickActions);
+  const notePriorities=make('div');notePriorities.dataset.dashboardNotePriorities='';notePriorities.textContent=teacherText('Loading notebook updates…','ノートの更新を確認中…');priorities.append(notePriorities);
+  wrap.append(priorities);
+  const overview=make('details');overview.append(make('summary',{text:teacherText('Learner overview','生徒の概要')}),overviewHeading,learnerOverview);
   const jobs = make("section", { className: "dashboard-shell" });
   [
     ["submissions", waiting, teacherText("Submissions waiting", "添削待ちの提出")],
     ["lessons", draftCount, teacherText("Drafts to finish", "未完成の下書き")],
     ["learners", expiringSoon, teacherText("Access ending in 14 days", "14日以内に期限終了")],
-    ["codes", state.accessCodes.filter((code) => accessCodeStatus(code).key === "unused").length, teacherText("Unused access codes", "未使用アクセスコード")],
   ].forEach(([tab, value, label]) => {
+    if(!value)return;
     const card = make("button", { className: "dashboard-card", type: "button" });
     card.append(make("span", { text: label }), make("strong", { text: value }));
     card.addEventListener("click", () => {
@@ -4935,8 +4959,9 @@ function renderDashboard() {
     });
     jobs.append(card);
   });
-  wrap.append(jobs);
+  wrap.append(jobs,overview);
   elements.panel.replaceChildren(wrap);
+  void refreshDashboardNotes(notePriorities);
 }
 
 function renderActiveTab() {
@@ -4944,6 +4969,9 @@ function renderActiveTab() {
     if (!lessonNoteStudio.canLeave()) { state.tab = "notes"; return; }
     lessonNoteStudio.dispose(); lessonNoteStudio = null;
   }
+  const route=new URL(location.href);route.searchParams.set('studio',state.tab);
+  if(state.tab!=='notes')for(const key of ['note','view','student','create'])route.searchParams.delete(key);
+  history.replaceState(null,'',route.pathname+route.search+route.hash);
   disposeReviewEditors();
   refreshNoteInboxCount();
   const counter=document.querySelector('#submissionWaitingCount');
@@ -4951,7 +4979,7 @@ function renderActiveTab() {
   for (const button of elements.tabs) {
     button.classList.toggle("active", button.dataset.teacherTab === state.tab);
   }
-  if (elements.dashboardMetrics) elements.dashboardMetrics.hidden = state.tab !== "dashboard";
+  if (elements.dashboardMetrics) elements.dashboardMetrics.hidden = true;
   if (state.tab === "dashboard") renderDashboard();
   if (state.tab === "lessons") renderLessons("lessons");
   if (state.tab === "learners") renderStudents();
@@ -4959,8 +4987,8 @@ function renderActiveTab() {
   if (state.tab === "submissions") renderPremium();
   if (state.tab === "notes") {
     const notesRoot = document.createElement("div"); elements.panel.replaceChildren(notesRoot);
-    lessonNoteStudio = mountLessonNoteStudio(notesRoot, { client, teacherId: state.session.user.id, profiles: state.profiles, studentId: noteStudentFilter, noteId: noteRouteId, initialTab: new URLSearchParams(location.search).get('view') === 'activity' ? 'activity' : 'content', onCount: count => { const badge = document.querySelector("#noteActivityCount"); if (badge) badge.textContent = count || ""; } });
-    noteRouteId = "";
+    lessonNoteStudio = mountLessonNoteStudio(notesRoot, { client, teacherId: state.session.user.id, profiles: state.profiles, studentId: noteStudentFilter, noteId: noteRouteId, createNew:noteCreateNew, initialTab: new URLSearchParams(location.search).get('view') === 'activity' ? 'activity' : 'content', onCount: count => { const badge = document.querySelector("#noteActivityCount"); if (badge) badge.textContent = count || ""; } });
+    noteRouteId = "";noteCreateNew=false;
   }
   if (state.tab === "sources") renderSources();
   if (state.tab === "insights") renderActivity();

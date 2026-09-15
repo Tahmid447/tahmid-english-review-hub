@@ -1,4 +1,16 @@
-# Working handoff — September 15, 2026
+# Working handoff — September 16, 2026
+
+## September 16 - Lesson workflow clarity, verified locally; NOT deployed
+
+Current work: `codex/lesson-workflow-clarity`, created from `origin/main` / `b44322687f37c6d97fc5b54ec5a15a06d82705c9`. This is the EXISTING project at `/Users/tahmidahmed/Documents/Codex/2026-09-14/interactive-lesson-notes`, not the separate New project folder. Read [weekly progress](WEEKLY_PROGRESS.md) and [workflow report](LESSON_WORKFLOW.md) for the concise status and requested 14-point report.
+
+Implemented locally: complete protected/editable Quick Import metadata, note-list management, exact source/practice links, My Page next actions and meaningful badges, teacher priorities/learner-specific creation, compact mobile navigation. Existing data models, private storage, auth/email and pronunciation are preserved. Tests/build/voice contract and isolated browser workflows pass.
+
+**Production remains 10.7.0 / b44322687f37c6d97fc5b54ec5a15a06d82705c9.** No production writes, push or deployment in this checkpoint. Live ledger has 13 entries through `20260915190000`, with RLS enabled and image bucket private. New `20260915230000_note_workflow_overview.sql` is local only; it adds one read-only security-invoker RPC, no tables/policies. Publishing requires a current-conversation decision, private backup, matching forward ledger entry and post-deploy checks. Never replay historical migrations.
+
+Announcement/For You acknowledgements are browser-local and user-scoped, not synced receipts or learning completion. Actual notebook progress remains server-backed. Physical iPhone and fresh real-student production login are not verified. The previous Codex task's history is readable despite the reported `thread_not_found` when starting its next turn; exact underlying service cause is not established.
+
+---
 
 ## September 15 — Lesson Notes practice 10.7 published and verified
 

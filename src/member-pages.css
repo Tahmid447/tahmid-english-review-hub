@@ -1,3 +1,4 @@
+@import url('./learning-overview.css');
 .member-page { background:var(--paper); }
 .member-page *, .home-destinations * { box-sizing:border-box; }
 /* This header contains navigation rows, unlike the fixed-height quiz header. */
@@ -61,3 +62,18 @@ body.member-page .member-header nav a { min-height:44px; display:flex; align-ite
 @media(max-width:600px){.member-main{width:calc(100% - 32px);}.member-header{gap:16px;padding:16px;}.member-header nav{gap:14px;}.member-header nav a{font-size:.65rem;}.catalogue-grid,.favorite-grid,.member-preference-grid{grid-template-columns:1fr;}.catalogue-card{padding:22px;}.member-hero h1{font-size:2.3rem;}.my-page-hero{flex-wrap:wrap;gap:15px;}.my-page-hero h1{font-size:1.6rem;}.my-page-hero .primary-btn{margin-left:0;}.member-tabs button{padding:12px 10px;font-size:.69rem;}.member-form{padding:20px;grid-template-columns:1fr;}.member-hero .profile-avatar{width:70px;height:70px;}.member-preference-grid>label{grid-column:1/-1;}.notice-preview{padding:20px;}}
 
 .member-tabs a.member-note-tab{display:inline-flex;align-items:center;padding:15px 17px;color:var(--teal);font-size:.78rem;font-weight:750;text-decoration:none;min-height:44px;border-bottom:3px solid transparent;}.member-tabs a.member-note-tab:hover{border-bottom-color:var(--teal);}
+.hub-section-count,.member-tabs a .hub-section-count { display:inline-block; margin-left:6px; padding:2px 6px; border-radius:4px; background:var(--teal-soft); color:var(--ink); font-size:.65rem; }
+.hub-section-count:empty { display:none; }
+.member-tabs a.member-note-tab { font-weight:700; color:var(--ink); }
+.my-page-hero h1 { font-size:2rem; letter-spacing:0; }
+@media(max-width:600px) {
+ .member-tabs { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); }
+ .member-tabs button,.member-tabs a.member-note-tab { padding:12px 8px; font-size:.73rem; min-width:0; overflow-wrap:anywhere; text-align:left; }
+ .my-page-hero h1 { font-size:1.6rem; }
+ .my-page-hero { display:grid; grid-template-columns:56px minmax(0,1fr); gap:12px; padding:24px 0; margin-bottom:18px; }
+ .member-hero.my-page-hero .profile-avatar { width:56px; height:56px; }
+ .my-page-hero h1 { font-size:1.4rem; }
+ .my-page-hero p { font-size:.72rem; }
+ .my-page-hero .eyebrow { font-size:.62rem; }
+ .my-page-hero .primary-btn { grid-column:2; justify-self:start; margin:0; }
+}

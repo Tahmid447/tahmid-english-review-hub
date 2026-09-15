@@ -82,3 +82,20 @@ body:has(.ln-lightbox[open]){overflow:hidden;}.ln-image-pan{overscroll-behavior:
 @media(max-width:700px){.ln-image-open img{height:240px;}.ln-progress-stats{gap:8px 16px;}.ln-practice .ln-button{font-size:12px;}.ln-choice-list label{padding:13px;}.ln-asset-editor>img{height:220px;}.ln-rich-preview{font-size:14px;}}
 
 @media(max-width:700px){.ln-gallery{grid-template-columns:minmax(0,1fr);}.ln-gallery figure{min-width:0;}}
+.ln-card-top { position:relative; flex-wrap:wrap; }
+.ln-card-menu { margin-left:auto; position:relative; }
+.ln-card-menu>summary { display:grid; place-items:center; width:44px; height:44px; font-size:1.7rem; cursor:pointer; list-style:none; border-radius:6px; border:1px solid var(--ln-line,var(--line)); }
+.ln-card-menu>summary::-webkit-details-marker { display:none; }
+.ln-card-menu>div { position:absolute; right:0; top:48px; z-index:5; display:grid; gap:4px; width:260px; max-width:calc(100vw - 60px); padding:8px; background:var(--paper); border:1px solid var(--line); border-radius:6px; box-shadow:0 6px 18px #0002; }
+.ln-card-menu .ln-button { text-align:left; justify-content:flex-start; white-space:normal; overflow-wrap:anywhere; width:100%; }
+.ln-note-card:has(.ln-card-menu[open]) { overflow:visible; z-index:6; }
+.ln-import-meta { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; margin-bottom:24px; }
+.ln-import-meta label { display:grid; gap:8px; }
+.ln-import-meta .ln-check { display:flex; }
+.ln-import-meta input:not([type=checkbox]),.ln-import-meta textarea { width:100%; min-width:0; }
+.ln-import-current { white-space:pre-wrap; overflow-wrap:anywhere; font-size:.8rem; padding:8px 0; border-bottom:1px solid var(--line); }
+.ln-import-meta small { color:var(--ink-soft); font-size:.72rem; }
+.ln-reader-jumps { display:flex; flex-wrap:wrap; gap:8px 20px; padding:12px 0; border-block:1px solid var(--line); margin-bottom:22px; }
+.ln-reader-jumps a { font-size:.8rem; min-height:44px; display:flex; align-items:center; color:var(--teal); }
+.ln-notebook [id^=block-],.ln-notebook #lesson-focus { scroll-margin-top:90px; }
+@media(max-width:600px) { .ln-import-meta { grid-template-columns:1fr; } }
