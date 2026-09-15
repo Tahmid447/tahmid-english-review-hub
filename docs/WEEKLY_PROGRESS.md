@@ -35,7 +35,7 @@
 - See [workflow report](LESSON_WORKFLOW.md) for scope and verification details.
 
 ## Last Verified
-- 2026-09-16 JST; local branch based on `b44322687f37c6d97fc5b54ec5a15a06d82705c9`.
+- 2026-09-16 JST; verified local implementation commit `ac1e41e05a00f221887f4b093479d2bfa36550cd`, based on `b44322687f37c6d97fc5b54ec5a15a06d82705c9`.
 - Production: https://tahmidenglishhub.dpdns.org, 10.7.0, the same baseline commit.
 - Live ledger: 13 entries through `20260915190000`; note/practice/notification RLS enabled and image bucket private.
 - This work has not written to production or changed existing learner records.
