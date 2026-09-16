@@ -2,7 +2,7 @@
 
 ## September 16 - Import / image publication blockers
 
-Release preparation on `codex/import-publish-blockers`, based on verified GitHub main `35a4f81`. Existing production runtime is `232bd6540e647a6bec70a39297ac3eb4753950b0`, deployment `4604f8d7-45cf-4b84-8494-be3f255c09c3`. Use the existing main-to-Cloudflare Pages flow only.
+**Complete and live:** `be0301e5f40f10a620203257864921cd2db96876`, Cloudflare production deployment `de79a0a8-4ed8-4c7c-924b-94dcdca99ca5`, built `2026-09-16T13:48:40.538Z`. Branch `codex/import-publish-blockers` fast-forwarded existing main from `35a4f81`; no force push or alternate deployment flow. Previous runtime `232bd65` / deployment `4604f8d7-45cf-4b84-8494-be3f255c09c3` remains available for frontend rollback.
 
 Actual production reproduction: a saved Draft ignored explicit imported September 13 because opening it marked its date as manually touched. Editing two image captions caused each Save to reject the other pending image, blocking cover/publication; switching tabs incorrectly said all changes were saved. The owner-controlled Email Gmail Test fixture is `01b966af-aa48-4fff-a4bf-c976bcf974f3`, still a private Draft. No real learner note was edited.
 
@@ -14,7 +14,23 @@ Passed notebook/practice/workflow/duplicate PostgreSQL/RLS and reading/import su
 
 No migration, SQL write, auth/RLS, DNS, email, voice or hosting change. Fresh pre-QA private row checkpoint: `/Users/tahmidahmed/Documents/Codex/private-backups/2026-09-16-import-publish-fix/before.json`; existing storage/deployment recovery remains. After publication, run exact A-K on an owner-controlled test learner and compare all original rows to this snapshot. Local isolated preview is http://127.0.0.1:4180/teacher?studio=notes (PID 49496, /tmp/tahmid-import-fix-qa.log).
 
-Production release identity and final A-K results will be recorded after deployment.
+Exact production A-K passed on owner-controlled Email Gmail Test, final note `ed9cb108-20a5-40fb-af42-d4e35da4bd6a`:
+- A: Saved September 16 Draft reopened; Preview recognized "Lesson Date: September 13, 2026", showed Current September 16 / Imported September 13 and checked date replacement automatically.
+- B: Apply set editor date to 2026-09-13, preserving existing title/focus.
+- C/D: Image chooser visible inside Quick Import; two images received lesson-title/alt, Infographic, blank captions and first-image cover selection.
+- E: Save Draft completed all uploads (v6).
+- F: Edited both images before saving either; first title/caption/alt/type saved while second title stayed pending, then saved second. Ordinary reload retained all fields, including the second blank caption.
+- G: Changed cover to second image, immediate star/save status; ordinary reload retained it.
+- H: Student Preview had one initially closed Practice group and two questions directly visible after opening, no extra question toggles. Open/Close all worked. Both teacher images loaded with object-fit: contain.
+- I: Publish succeeded (v10), with no image-details guard. Normal existing test-student login opened the note through My Page. Learner used the existing Pages production alias to isolate login from the owner's custom-domain Teacher session; both /release.json responses match exactly.
+- J: Actual 390px production Quick Import, Images, Preview and learner detail had document width 390px; import dialog 352px, question cards 336px. Screenshots checked; click disclosure opened/closed correctly.
+- K: Captured successful-flow error logs were empty in Teacher and both learner tabs, with no captured failed-resource errors. All save/upload/publish/load operations completed; a full network HAR was not collected.
+
+Requested production HTML and seven JS/CSS files, plus learning-overview.css, returned 200 and matched local SHA-256 byte-for-byte for this runtime. teacher.html loads cf-be0301e5f40f module URLs after ordinary reload. Production HTML is no-store. Pages serves /src as no-cache, while the existing custom-domain edge policy still returns max-age=14400; release-hashed URLs ensure the changed modules do not reuse prior URLs. No zone/cache infrastructure setting was changed, and already-open unsaved editors are not forcibly reloaded.
+
+Private before/after row snapshots compared 48 collections: all 588 pre-existing rows are exactly unchanged, including storage metadata, progress, profiles and migration ledger. Additions are only 2 owner-QA notes, 4 image assets / 8 full-thumbnail objects, 15 activity rows, 13 revisions, 1 test-learner notification and 1 test-note review-status row. Baseline reproduction note remains Draft, verified note remains Published only to the test learner; neither was deleted. Anonymous profiles, notes, note assets, practice attempts and personal cards returned 401. Migration ledger remains 14; no migration applied.
+
+Limits: no physical-device test, no AI image analysis and no full-network HAR. Existing unsaved import-file queue has no cross-session recovery. No remaining publication blocker was found. Final handoff/weekly update uses [CI Skip] so this exact runtime remains deployed.
 
 ---
 

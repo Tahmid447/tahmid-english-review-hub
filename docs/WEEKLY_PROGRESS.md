@@ -4,6 +4,7 @@
 2026-09-14 to 2026-09-20
 
 ## Completed
+- Published import/image blocker fix (`be0301e`): saved-Draft explicit date applies automatically unless manually edited; simultaneous image edits save independently; inline Saved/error state and persistent cover; lesson-based optional image metadata; one-level Practice disclosure; complete release-hash module/CSS stamping. Exact production A-K passed on an owner-controlled test learner.
 - Published reading/import UX (`232bd65`): full-width card covers, protected editable lesson dates, staged image import, priority-based disclosures, section jumps/back-to-top, practice state and clearer student/teacher shortcuts. Relevant tests and isolated desktop/390px QA pass.
 - Published Duplicate for learner (`5b8c5d6`): list/editor action, destination selector, editable independent draft, fresh block/question IDs, private teacher-image copies and no learner activity transfer.
 - Existing 10.7 production: interactive notebook practice, stored progress, recoverable Trash, private images and in-site updates.
@@ -13,10 +14,10 @@
 - Real PostgreSQL/RLS regression tests and isolated browser QA, including profile/settings and archive/Trash restoration.
 
 ## In Progress
-- Import/image publication blocker fixes: reproduced saved-Draft date rejection and the two-image save deadlock in production. Focused fixes and isolated exact A-K browser flow passed; deploying through existing main/Cloudflare next, followed by exact production QA. No database migration.
+- None for this request. Blocker fixes are deployed and exact production QA is complete; no database migration.
 
 ## Next
-1. Validate on a physical iPhone and fresh actual-student login during normal acceptance testing.
+1. Validate on a physical iPhone during normal acceptance testing. A normal login of the existing owner-controlled test student passed production QA; no real student's credentials were used.
 2. Consider cross-device announcement/card acknowledgements if real usage warrants a persistent model.
 3. Design a persisted teacher-review state before stronger free-response review queues.
 
@@ -36,11 +37,12 @@
 - Full `npm test`, Cloudflare build/output checks and voice contract passed. No lint or TypeScript configuration exists.
 - Desktop and 390px browser checks passed for the changed student/teacher surfaces; no horizontal document overflow found.
 - Production Teacher/Notes/Quick Import/owner My Page and new overview rendering pass; HTTP routes return 200, anonymous private reads/RPC return 401, no captured console errors, My Page/Teacher document width 390px at 390px.
-- Physical iPhone and fresh real-student production login remain unverified. Full local QA was reused rather than repeated in production.
+- Physical iPhone remains unverified. Exact import-to-publish flow was additionally tested in production with the existing owner-controlled test-student account for the blocker fix. Successful-flow console logs were empty; full network HAR was not collected.
 - Existing 45-second foreground notification fallback remains; do not promise instant or OS push notifications.
 - See [workflow report](LESSON_WORKFLOW.md) for scope and verification details.
 
 ## Last Verified
+- Blocker fix production: `be0301e5f40f10a620203257864921cd2db96876`, deployment `de79a0a8-4ed8-4c7c-924b-94dcdca99ca5`, built `2026-09-16T13:48:40.538Z`. Requested HTML/modules/CSS match local build byte-for-byte; normal reload loads release hashes. A-K passed, including two simultaneous image edits, reload persistence, cover, Publish, actual test-student access and 390px. All 588 original rows across 48 collections unchanged; only owner-QA fixtures/related records added. Anonymous private reads denied; no SQL/auth/RLS/DNS change. See current handoff for evidence, fixture IDs and cache-header qualification.
 - Reading/import production deployment: `4604f8d7-45cf-4b84-8494-be3f255c09c3`, runtime `232bd6540e647a6bec70a39297ac3eb4753950b0`, built `2026-09-16T11:56:55.041Z`. Custom domain and browser modules match. HTTP 200, live cover images/progress/Quick Import/date/reader/My Page shortcuts, 390px and clean console checks passed. Anonymous private reads/RPC denied (401). All 50 review/storage table fingerprints match before/after; no database/storage writes or migration. Existing backup/previous Pages release retained. Final docs use `[CI Skip]`.
 - Production duplicate deployment: `dc88a141-e149-4b4a-91b1-be1ef4fb3df7`, exact runtime commit `5b8c5d67b4b299b0668571df92ddc671be072734`, built `2026-09-16T08:55:20.894Z`; existing Cloudflare/GitHub main flow. Custom-domain release matches; Teacher duplicate selector opens/cancels normally, fresh tab console errors empty, HTTP routes 200. No DB/storage write or migration. Prior local tests/build reused.
 - Duplicate feature local checkpoint: `5b8c5d67b4b299b0668571df92ddc671be072734`, `codex/duplicate-for-learner` from main `12e5c29`; desktop and 390px checks, no captured console errors. Isolated preview http://127.0.0.1:4178/teacher?studio=notes . No push/deployment.
