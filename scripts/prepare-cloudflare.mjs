@@ -32,7 +32,8 @@ const headersPath = new URL("_headers", dist);
 let headers = fs.readFileSync(headersPath, "utf8");
 if (!headers.includes("connect-src 'self'")) throw new Error("Missing connection policy.");
 headers = headers.replace("connect-src 'self'", `connect-src 'self' ${speechOrigin}`);
-headers += "\n/release.json\n  Cache-Control: no-store\n\n/src/config.js\n  Cache-Control: no-cache\n";
+headers += "\n/release.json\n  Cache-Control: no-store\n\n/src/*\n  Cache-Control: no-cache\n";
+for (const route of ['/teacher','/teacher.html','/my-page','/my-page/*','/my-page.html','/lesson-notes','/lesson-notes.html']) headers += `\n${route}\n  Cache-Control: no-store\n`;
 fs.writeFileSync(headersPath, headers);
 
 const releasePath = new URL("release.json", dist);
@@ -51,13 +52,23 @@ fs.writeFileSync(workerPath, worker.replace(/const CACHE_NAME = "[^"]+";/, `cons
 // while the new one installs. Version the entire module graph as well as its
 // cache, so fresh HTML cannot combine a new CSP with an old speech endpoint.
 release.assetVersion = `cf-${release.commit.slice(0, 12)}`;
+const stampReference = reference => {
+  const url = new URL(reference, 'https://build.invalid/');
+  url.searchParams.set('v', release.assetVersion);
+  return reference.split(/[?#]/)[0] + url.search + url.hash;
+};
 function stampPublicAssets(directory) {
   for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
     const file = new URL(entry.name + (entry.isDirectory() ? "/" : ""), directory);
     if (entry.isDirectory()) { stampPublicAssets(file); continue; }
     if (!/\.(?:html|js|css)$/.test(entry.name)) continue;
     const text = fs.readFileSync(file, "utf8");
-    const stamped = text.replace(/(\.(?:js|css)\?v=)[A-Za-z0-9._-]+/g, `$1${release.assetVersion}`);
+    let stamped = text.replace(/(\.(?:js|css)\?v=)[A-Za-z0-9._-]+/g, `$1${release.assetVersion}`);
+    // Include new imports/styles that have no handwritten version query yet.
+    // Do not stamp ordinary path constants such as the service worker allowlist.
+    if (/\.(?:js|html)$/.test(entry.name)) stamped = stamped.replace(/(\bfrom\s*|\bimport\s*(?:\(\s*)?)(['"])((?:\.{1,2}\/|\/)[^'"\s]+\.js(?:\?[^'"\s]*)?)\2/g, (_, prefix, quote, reference) => prefix + quote + stampReference(reference) + quote);
+    if (entry.name.endsWith('.html')) stamped = stamped.replace(/((?:src|href)=)(['"])((?:\.{1,2}\/|\/)[^'"\s]+\.(?:js|css)(?:\?[^'"\s]*)?)\2/g, (_, prefix, quote, reference) => prefix + quote + stampReference(reference) + quote);
+    if (entry.name.endsWith('.css')) stamped = stamped.replace(/(@import\s+)(['"])((?:\.{1,2}\/|\/)[^'"\s]+\.css(?:\?[^'"\s]*)?)\2/g, (_, prefix, quote, reference) => prefix + quote + stampReference(reference) + quote);
     if (stamped !== text) fs.writeFileSync(file, stamped);
   }
 }

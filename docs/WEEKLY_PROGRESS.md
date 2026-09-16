@@ -13,7 +13,7 @@
 - Real PostgreSQL/RLS regression tests and isolated browser QA, including profile/settings and archive/Trash restoration.
 
 ## In Progress
-- None for this request. Reading/import improvements are published and production smoke is complete; no database migration.
+- Import/image publication blocker fixes: reproduced saved-Draft date rejection and the two-image save deadlock in production. Focused fixes and isolated exact A-K browser flow passed; deploying through existing main/Cloudflare next, followed by exact production QA. No database migration.
 
 ## Next
 1. Validate on a physical iPhone and fresh actual-student login during normal acceptance testing.

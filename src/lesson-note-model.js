@@ -178,6 +178,7 @@ export const METADATA_FIELDS = Object.freeze({
  title:['Lesson Title · レッスンタイトル',180],summary:['Short Introduction · 短い概要',1200],
  focus:["Today's Focus · 今日のポイント",2000],tags:['Topics · テーマ',600],
 });
+export const autoImportLessonDate=(note,imported,manuallyChanged=false)=>!manuallyChanged&&Boolean(imported.metadata.lesson_date)&&(!note.id||imported.explicitFields.includes('lesson_date'));
 const metadataLabels={'lesson date':'lesson_date',date:'lesson_date','レッスン日':'lesson_date','日付':'lesson_date','lesson title':'title','short introduction':'summary','a short introduction':'summary',"today's focus":'focus','todays focus':'focus',topics:'tags'};
 export function parseLessonDate(value,referenceDate=newNote().lesson_date) {
  const source=String(value||'').trim(),year=Number(referenceDate.slice(0,4));let y,m,d;

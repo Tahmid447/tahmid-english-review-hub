@@ -36,20 +36,28 @@ export function blockMarkup(block,{mode='support',student=false,permissions={},c
 }
 export function readingBlockMarkup(block,options={}) {
  const markup=blockMarkup(block,options);
+ if(isPractice(block)&&options.practiceSection&&!block.displayOptions?.collapsed)return markup;
  if(!isPractice(block)&&!['teacher_tip','example','comparison','nuance','collapsible_section'].includes(block.type)&&!block.displayOptions?.collapsed)return markup;
  const label=BLOCK_TYPES[block.type]?.[0]||'More · 補足',preview=block.title||block.englishText||block.originalText||'';
  return `<details class="ln-reading-block" data-reading-detail><summary><span>${e(label)}</span><strong>${e(preview.slice(0,180))}</strong></summary>${markup}</details>`;
 }
 export function contentMarkup(note,options={}) {
  const blocks=note.content_json.blocks,keyBlocks=blocks.filter(b=>b.type==='useful_phrase'&&b.displayOptions?.keyPhrase!==false);
- let main='',openSection=false;
+ let main='',openSection=false,practiceSection=false,implicitPractice=false;
  for(const block of blocks) {
   if(keyBlocks.includes(block))continue;
-  if(['collapsible_section','quick_practice_group'].includes(block.type)) {
+  const practiceHeading=block.type==='heading'&&/^(?:quick\s*practice|practice(?:\s*section)?|練習(?:問題|セクション)?)(?:\s|$)/i.test(block.englishText.trim());
+  if(implicitPractice&&!isPractice(block)){main+='</div></details>';implicitPractice=false;}
+  if(['collapsible_section','quick_practice_group'].includes(block.type)||practiceHeading) {
    if(openSection)main+='</div></details>';
-   main+=`<details class="ln-section" id="block-${e(block.id)}" data-reading-detail data-section-id="${e(block.id)}" ${block.displayOptions?.collapsed||block.type==='quick_practice_group'?'':'open'}><summary><h2>${e(block.englishText||block.title||'Lesson section')}</h2></summary><div>${text(block.explanation,'ln-explanation')}`;openSection=true;
-  } else main+=readingBlockMarkup(block,{...options,permissions:note});
+   practiceSection=block.type==='quick_practice_group'||practiceHeading;
+   main+=`<details class="ln-section" id="block-${e(block.id)}" data-reading-detail data-section-id="${e(block.id)}" ${practiceSection?'data-practice-section':''} ${block.displayOptions?.collapsed||practiceSection?'':'open'}><summary><h2>${e(block.englishText||block.title||'Lesson section')}</h2></summary><div>${text(block.explanation,'ln-explanation')}`;openSection=true;
+  } else {
+   if(isPractice(block)&&!practiceSection&&!implicitPractice){main+='<details class="ln-section" data-reading-detail data-practice-section><summary><h2>Quick Practice · 練習</h2></summary><div>';implicitPractice=true;}
+   main+=readingBlockMarkup(block,{...options,permissions:note,practiceSection:practiceSection||implicitPractice});
+  }
  }
+ if(implicitPractice)main+='</div></details>';
  if(openSection)main+='</div></details>';
  return `<section class="ln-focus"><span class="ln-micro">TODAY’S FOCUS · 今日のポイント</span><p>${e(note.focus||'A clear next step for your English.')}</p></section>${keyBlocks.length?`<section class="ln-key-phrases"><h2>Words to take with you.<small>今日から使いたい表現</small></h2>${keyBlocks.map(b=>blockMarkup(b,{...options,permissions:note})).join('')}</section>`:''}<section class="ln-teaching"><h2 class="ln-main-heading">Your lesson, in detail.<small>レッスンを振り返ろう</small></h2>${main || '<p>Teaching material will appear here.</p>'}</section>`;
 }
@@ -185,6 +193,7 @@ export function mountNoteView(root,{detail,api,student=true,userId='',mode='supp
   }}));
  });
  root.querySelectorAll('[data-section-id]').forEach(section=>{
+  if(section.hasAttribute('data-practice-section'))return;
   const key=`te-note-sections:${userId}:${n.id}:${section.dataset.sectionId}`;
   try{const value=localStorage.getItem(key);if(value!==null)section.open=value==='open';}catch{}
   section.ontoggle=()=>{try{localStorage.setItem(key,section.open?'open':'closed');}catch{}};

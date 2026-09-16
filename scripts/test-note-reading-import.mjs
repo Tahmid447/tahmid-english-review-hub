@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {newNote,newBlock,importLessonText,applyLessonImport,parseLessonDate} from '../src/lesson-note-model.js';
+import {newNote,newBlock,importLessonText,applyLessonImport,parseLessonDate,autoImportLessonDate} from '../src/lesson-note-model.js';
 import {blockMarkup,readingBlockMarkup,contentMarkup,cardMarkup} from '../src/lesson-note-view.js';
 import {createImportImageQueue,importImageMetadata} from '../src/note-import-images.js';
 import {learnerNextActions} from '../src/learning-overview.js';
@@ -16,6 +16,10 @@ assert.equal(importLessonText('## Grammar\nEnglish: Hello.',{referenceDate}).met
 assert.equal(importLessonText('Lesson title: Sep 10 - Everyday English\nHello.',{referenceDate}).metadata.lesson_date,'2026-09-10');
 assert.ok(importLessonText(text.replace('September 13, 2026','09/10/2026'),{referenceDate}).warnings.length);
 const original={...newNote('learner'),lesson_date:'2026-08-30',title:'Manual title',focus:'Keep this focus'};
+assert.equal(autoImportLessonDate({...original,id:'saved-draft'},imported),true,'Explicit date replaces a saved draft default');
+assert.equal(autoImportLessonDate({...original,id:'saved-draft'},imported,true),false,'Session manual date stays protected');
+assert.equal(autoImportLessonDate({...original,id:'saved-draft'},importLessonText('Hello.',{referenceDate})),false,'Do not replace saved dates with guesses');
+assert.equal(autoImportLessonDate(original,imported),true);
 assert.equal(applyLessonImport(original,imported).lesson_date,original.lesson_date);
 const applied=applyLessonImport(original,imported,['lesson_date']);assert.equal(applied.lesson_date,'2026-09-13');assert.equal(applied.title,'Manual title');assert.equal(applied.focus,'Keep this focus');
 assert.equal(original.content_json.blocks.length,0);assert.equal(applied.content_json.blocks.length,6);
@@ -28,6 +32,12 @@ assert.doesNotMatch(readingBlockMarkup(imported.blocks[1]),/^<details/,'Importan
 assert.doesNotMatch(readingBlockMarkup({...newBlock('common_mistake'),englishText:'Correction'}),/^<details/);
 for(const type of ['teacher_tip','example','comparison','nuance'])assert.match(readingBlockMarkup(newBlock(type)),/^<details/);
 assert.match(contentMarkup(applied),/ln-key-phrases/);assert.match(contentMarkup(applied),/data-practice-block/);
+const grouped={...newNote(),content_json:{schemaVersion:1,blocks:[{...newBlock('quick_practice_group'),englishText:'Quick Practice'},...imported.blocks.filter(b=>b.questionId)]}};
+const groupedBefore=JSON.stringify(grouped),groupMarkup=contentMarkup(grouped);
+assert.match(groupMarkup,/data-practice-section/);assert.doesNotMatch(groupMarkup,/ln-reading-block/,'Practice section opens directly to questions without nested default toggles');
+assert.equal(JSON.stringify(grouped),groupedBefore,'Rendering must not change question snapshots');
+assert.match(contentMarkup({...grouped,content_json:{schemaVersion:1,blocks:grouped.content_json.blocks.slice(1)}}),/data-practice-section/,'Legacy ungrouped questions receive one reading section');
+assert.equal((contentMarkup(applied).match(/data-practice-section/g)||[]).length,1);
 const cover={id:'cover',state:'ready',uploader_role:'teacher',thumbnail_path:'private/thumb.jpg'};
 const card=cardMarkup({...applied,id:'note',status:'published',cover_asset_id:'cover',assets:[cover]},{teacher:true,overview:{practice_total:4,practice_completed:2,practice_review:1,unread_activity:1}});
 assert.match(card,/ln-card-image/);assert.match(card,/2 \/ 4 completed/);assert.match(card,/1 to review/);
@@ -41,6 +51,8 @@ assert.match(learnerNextActions({notes:[{...visible,practice_review:0,practice_c
 assert.match(learnerNextActions({notes:[{...visible,practice_review:0,next_block:null}]})[0].label,/latest/);
 assert.equal(learnerNextActions({notes:[{...visible,status:'draft'}]}).length,0);
 const revoked=[],queue=createImportImageQueue({createURL:file=>'blob:'+file.name,revokeURL:url=>revoked.push(url)});
+assert.deepEqual(importImageMetadata('Visual 1.png','Health English'),{title:'Health English',caption:'',alt_text:'Health English lesson infographic',asset_type:'infographic'});
+assert.deepEqual(importImageMetadata('file.png',''),{title:'Lesson infographic',caption:'',alt_text:'Lesson infographic',asset_type:'infographic'});
 const file=name=>new File(['local image bytes'],name,{type:'image/jpeg'});
 queue.add([file('first-image.jpg'),file('second-image.jpg')],'Health English');
 assert.deepEqual(queue.items[0].metadata,importImageMetadata('first-image.jpg','Health English',1));

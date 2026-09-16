@@ -1,5 +1,23 @@
 # Working handoff — September 16, 2026
 
+## September 16 - Import / image publication blockers
+
+Release preparation on `codex/import-publish-blockers`, based on verified GitHub main `35a4f81`. Existing production runtime is `232bd6540e647a6bec70a39297ac3eb4753950b0`, deployment `4604f8d7-45cf-4b84-8494-be3f255c09c3`. Use the existing main-to-Cloudflare Pages flow only.
+
+Actual production reproduction: a saved Draft ignored explicit imported September 13 because opening it marked its date as manually touched. Editing two image captions caused each Save to reject the other pending image, blocking cover/publication; switching tabs incorrectly said all changes were saved. The owner-controlled Email Gmail Test fixture is `01b966af-aa48-4fff-a4bf-c976bcf974f3`, still a private Draft. No real learner note was edited.
+
+Focused fixes: protect dates only after manual edits in the current editor session; show Current/Imported dates. Save one image independently while preserving other pending edits and display save/error status beside the image. Default image title/alt to the lesson title, type Infographic and caption blank, with optional Edit image details. Quick Practice is one initially closed group with directly visible questions when expanded, retaining original block IDs/question snapshots and Open/Close all.
+
+Production already had hash-stamped entry modules and the image chooser was visible in the reproduced session; the historical missing chooser is not independently reproduced. Confirmed cache gaps were bare imports such as note-import-images.js and learning-overview.css. Build now stamps all local module/HTML JS/CSS references and CSS imports with the release SHA. Revalidate /src assets and do not store protected HTML. Normal navigation/reload receives the release; do not forcibly reload an editor with unsaved work.
+
+Passed notebook/practice/workflow/duplicate PostgreSQL/RLS and reading/import suites, syntax, Cloudflare build and all 86 public-text-asset checks. Isolated browser A-K passed: saved Draft date import, two queued images/defaults/cover, Save Draft, simultaneous image edits saved individually and persisted after reload, cover persisted, folded practice/full images, Publish and actual synthetic Student B view, 390px no overflow, clean successful-flow console. Manual-date protection and a deliberate two-tab NOTE_CONFLICT also passed: error is inline and pending input is retained.
+
+No migration, SQL write, auth/RLS, DNS, email, voice or hosting change. Fresh pre-QA private row checkpoint: `/Users/tahmidahmed/Documents/Codex/private-backups/2026-09-16-import-publish-fix/before.json`; existing storage/deployment recovery remains. After publication, run exact A-K on an owner-controlled test learner and compare all original rows to this snapshot. Local isolated preview is http://127.0.0.1:4180/teacher?studio=notes (PID 49496, /tmp/tahmid-import-fix-qa.log).
+
+Production release identity and final A-K results will be recorded after deployment.
+
+---
+
 ## September 16 - Reading and Quick Import improvements published
 
 **Complete and live:** runtime commit `232bd6540e647a6bec70a39297ac3eb4753950b0`, existing Cloudflare Pages production deployment `4604f8d7-45cf-4b84-8494-be3f255c09c3`, built `2026-09-16T11:56:55.041Z`. Custom-domain `/release.json` and loaded JS module versions match. Branch `codex/lesson-reading-import` fast-forwarded existing GitHub main from `afa3cd6`, preserving prior releases. The user explicitly authorized implementation and publication in this task. No new hosting, database migration, auth, email, DNS or voice change was made.

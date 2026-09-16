@@ -1,7 +1,6 @@
 export function importImageMetadata(fileName,lessonTitle,index=1) {
- const name=fileName.replace(/\.[^.]+$/,'').replace(/[_-]+/g,' ').trim();
- const title=(name||`Lesson image ${index}`).slice(0,180);
- return {title,caption:(lessonTitle?`${lessonTitle} · ${index}`:title).slice(0,2000),alt_text:title.slice(0,500),asset_type:'teacher_attachment'};
+ const title=(lessonTitle?.trim()||'Lesson infographic').slice(0,180);
+ return {title,caption:'',alt_text:lessonTitle?.trim()?`${title} lesson infographic`:'Lesson infographic',asset_type:'infographic'};
 }
 
 // Keep local files until the user saves. Completed uploads are never uploaded again on retry.
