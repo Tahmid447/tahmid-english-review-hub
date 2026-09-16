@@ -9,7 +9,7 @@ const roles=new Set(['teacher','student','other','otherTeacher']);
 const tables=new Set(['review_lesson_notes','review_personal_cards','review_personal_card_favorites',...['annotations','suggestions','comments','assets','review_status','revisions','activity','notifications','practice_attempts'].map(k=>`review_lesson_note_${k}`)]);
 for(const row of (await db.query("select tablename from pg_tables where schemaname='public' and tablename like 'review_%'")).rows)tables.add(row.tablename);
 const exportedServices=[...fs.readFileSync(path.join(root,'src/supabase.js'),'utf8').matchAll(/^export (?:async )?(?:function|const) (\w+)/gm)].map(m=>m[1]);
-if(process.env.NOTE_QA_WORKFLOW==='1')await (await import('./helpers/seed-workflow-qa.mjs')).seedWorkflowQA(db,ids,as);
+if(process.env.NOTE_QA_WORKFLOW==='1')await (await import('./helpers/seed-workflow-qa.mjs')).seedWorkflowQA(db,ids,as,images);
 const types={'.html':'text/html','.js':'text/javascript','.css':'text/css','.png':'image/png','.svg':'image/svg+xml','.jpg':'image/jpeg','.webp':'image/webp','.mp3':'audio/mpeg','.woff2':'font/woff2'};
 const json=(response,data,status=200)=>{response.writeHead(status,{'Content-Type':'application/json','Cache-Control':'no-store'});response.end(JSON.stringify(data));};
 async function api(payload){

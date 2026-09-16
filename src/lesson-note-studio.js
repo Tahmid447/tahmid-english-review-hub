@@ -5,7 +5,7 @@ import {richTextMarkup} from './note-rich-text.js?v=20260915-practice';
 import {confirmNoteAction} from './note-dialog.js?v=20260915-practice';
 import { escapeHTML as e } from './store.js?v=20260911-mobile2';
 import { createNoteApi, noteError } from './lesson-note-api.js?v=20260915-practice';
-import { BLOCK_TYPES, PERMISSIONS, METADATA_FIELDS, applyLessonImport, newBlock, newNote, moveItem, clone, importLessonText, dateLabel } from './lesson-note-model.js?v=20260915-practice';
+import { BLOCK_TYPES, PERMISSIONS, METADATA_FIELDS, applyLessonImport, duplicateNoteDraft, newBlock, newNote, moveItem, clone, importLessonText, dateLabel } from './lesson-note-model.js?v=20260915-practice';
 import { mountNoteView, contentMarkup, cardMarkup, changeSnapshot, lazyPrivateImages, noteButton as button, noteStatus as statusMarkup, openImageViewer } from './lesson-note-view.js?v=20260915-practice';
 
 const inputField=(key,label,value='',{rows=0,type='text',max=6000,scope='note'}={})=>`<label>${e(label)}${rows?`<textarea data-${scope}-field="${key}" rows="${rows}" maxlength="${max}">${e(value)}</textarea>`:`<input data-${scope}-field="${key}" type="${type}" value="${e(value)}" maxlength="${max}">`}</label>`;
@@ -45,7 +45,8 @@ function editorBlock(b,index,assets) {
 
 export function mountLessonNoteStudio(root,{client,teacherId,profiles=[],studentId='',noteId='',initialTab='content',createNew=false,onCount=()=>{}}) {
  const api=createNoteApi(client);let disposed=false,request=0,note=null,detail=null,dirty=false,saving=false,busy=false,view=null,imagesDispose=()=>{},activeTab=initialTab,filterStudent=studentId,filterStatus='all',filterQuery='',offset=0,rows=[],dialogs=[],undoBlock=null;const assetDrafts=new Map();
- let lastNotice='';
+ let lastNotice='',duplicateSourceTitle='';
+ const emptyDetail=(assets=[])=>({assets,annotations:[],suggestions:[],comments:[],revisions:[],activity:[],review_status:[],practice_attempts:[]});
  const stopUpdates=watchNoteUpdates(client,teacherId,async()=>{
   try{const notices=await api.notifications({unreadOnly:false});if(disposed)return;onCount(notices.filter(n=>n.unread).length);
    if(!note?.id||!root.querySelector('[data-editor-panel]'))return;
@@ -66,11 +67,11 @@ export function mountLessonNoteStudio(root,{client,teacherId,profiles=[],student
  async function refreshInboxCount(){try{const notifications=await api.notifications();if(!disposed)onCount(notifications.length);}catch{/* Existing Studio remains available during a transient note inbox failure. */}}
  async function open(id,{skipGuard=false}={}) {
   if(!skipGuard&&!canLeave())return;const token=++request;clearViews();root.innerHTML='<p class="ln-status" role="status">Opening the private notebook… · ノートを読み込み中…</p>';
-  try{const data=await api.detail(id,{teacher:true});if(disposed||token!==request)return;detail=data;note=clone(data.note);dirty=false;assetDrafts.clear();rememberRoute(id,activeTab==='activity');renderEditor();}
+  try{const data=await api.detail(id,{teacher:true});if(disposed||token!==request)return;detail=data;note=clone(data.note);dirty=false;duplicateSourceTitle='';assetDrafts.clear();rememberRoute(id,activeTab==='activity');renderEditor();}
   catch(error){if(!disposed&&token===request)root.innerHTML=`<p class="ln-error" data-studio-status role="status">${e(noteError(error))}</p>${button('Back to notes · 一覧へ','data-back-list')}`;root.querySelector('[data-back-list]')?.addEventListener('click',()=>void library());}
  }
  async function library({append=false}={}) {
-  if(!append&&!canLeave())return;const token=++request;clearViews();note=null;detail=null;dirty=false;assetDrafts.clear();rememberRoute();
+  if(!append&&!canLeave())return;const token=++request;clearViews();note=null;detail=null;dirty=false;duplicateSourceTitle='';assetDrafts.clear();rememberRoute();
   if(!append){offset=0;rows=[];root.innerHTML=`<div class="ln-studio-heading"><div><p class="ln-kicker">YOUR TEACHING, MADE PERSONAL</p><h2>Lesson Notes · 個別レッスンノート</h2><p>Turn today’s lesson into something your learner can return to.</p></div><div class="ln-actions">${button('Activity inbox · 更新通知','data-inbox')}${button('+ Create lesson note · 作成','data-create class="ln-primary"')}</div></div><div class="ln-filter-bar">${selectField('student','Learner · 生徒',filterStudent,[['','All learners · すべての生徒'],...profiles.map(p=>[p.user_id,person(p.user_id)])],'filter')}${selectField('status','Status · 状態',filterStatus,[['all','All notes · すべて'],['draft','Drafts · 下書き'],['published','Published · 公開中'],['archived','Archived · 保管中'],['trash','Trash · ゴミ箱']],'filter')}<label>Search loaded notes · 読み込んだノートを検索<input data-search-note type="search" value="${e(filterQuery)}" placeholder="Title, topic or summary · タイトル・テーマ"></label></div><p role="status" data-studio-status>Loading… · 読み込み中…</p><div class="ln-cards" data-notes-list></div>${button('Load more · さらに表示','data-load-more hidden')}`;
    root.querySelector('[data-create]').onclick=startNote;
    root.querySelector('[data-inbox]').onclick=()=>void inbox();
@@ -89,6 +90,7 @@ export function mountLessonNoteStudio(root,{client,teacherId,profiles=[],student
   list.querySelectorAll('[data-open-note]').forEach(btn=>btn.onclick=()=>{activeTab='content';void open(btn.dataset.openNote);});
   list.querySelectorAll('[data-note-action]').forEach(btn=>btn.onclick=()=>void run(btn,async()=>{
    const selected=rows.find(n=>n.id===btn.dataset.noteId),action=btn.dataset.noteAction;if(!selected)return;
+   if(action==='duplicate'){await prepareDuplicate(selected.id);return;}
    if(action==='preview'){activeTab='preview';await open(selected.id,{skipGuard:true});return;}
    const messages={archive:'Archive this note? It will be hidden from the learner. · このノートを保管して生徒画面から非表示にしますか？',restore:'Restore this note as a private draft? · このノートを下書きに戻しますか？',trash:'Move this archived note to Trash? It can be restored later. · ゴミ箱へ移動しますか？後から復元できます。'};
    if(!await confirmNoteAction(`${selected.title}\n\n${messages[action]}`))return;
@@ -100,21 +102,50 @@ export function mountLessonNoteStudio(root,{client,teacherId,profiles=[],student
   list.querySelectorAll('[data-note-menu]').forEach(menu=>{menu.ontoggle=()=>{if(menu.open)list.querySelectorAll('[data-note-menu]').forEach(other=>{if(other!==menu)other.open=false;});};menu.onkeydown=event=>{if(event.key==='Escape'){menu.open=false;menu.querySelector('summary').focus();}};});
   imagesDispose=lazyPrivateImages(list,api);
  }
- function startNote(){note=newNote(filterStudent);detail={assets:[],annotations:[],suggestions:[],comments:[],revisions:[],activity:[],review_status:[],practice_attempts:[]};activeTab='content';renderEditor();}
+ function startNote(){note=newNote(filterStudent);detail=emptyDetail();duplicateSourceTitle='';undoBlock=null;activeTab='content';renderEditor();}
+ async function prepareDuplicate(id){
+  cleanRequired();
+  const source=await api.duplicateSource(id);if(disposed)return;
+  if(source.note.deleted_at)throw new Error('Restore this note from Trash before copying. · 先にゴミ箱から復元してください。');
+  const dialog=document.createElement('dialog');dialog.className='ln-modal ln-confirm';
+  dialog.innerHTML=`<h2>Duplicate for learner · 別の生徒用に複製</h2><p>${e(source.note.title)}</p><form>${selectField('destination','Destination learner · 複製先の生徒','',[['','Choose learner · 生徒を選んでください'],...profiles.map(p=>[p.user_id,person(p.user_id)])],'copy')}<div class="ln-actions"><button type="submit" class="ln-button ln-primary">Open draft copy · 下書きのコピーを開く</button>${button('Cancel · キャンセル','data-cancel-copy')}</div></form>`;
+  dialog.querySelector('select').required=true;document.body.append(dialog);dialogs.push(dialog);
+  const destination=await new Promise(resolve=>{let selected='';dialog.querySelector('form').onsubmit=event=>{event.preventDefault();selected=dialog.querySelector('select').value;dialog.close();};dialog.querySelector('[data-cancel-copy]').onclick=()=>dialog.close();dialog.onclose=()=>{dialog.remove();resolve(selected);};dialog.showModal();});
+  if(!destination||disposed)return;
+  const copy=duplicateNoteDraft(source.note,destination,source.assets);
+  ++request;clearViews();note=copy.note;detail=emptyDetail(copy.assets);duplicateSourceTitle=source.note.title;
+  dirty=true;undoBlock=null;assetDrafts.clear();activeTab='content';rememberRoute();renderEditor();
+ }
  function renderEditor(){
   clearViews();
   root.innerHTML=`<div class="ln-editor-heading"><div><p class="ln-kicker">PRIVATE TEACHING NOTEBOOK</p><h2>${note.id?e(note.title):'Create a lesson note · ノートを作成'}</h2></div>${button('← All notes · 一覧へ','data-back-list')}</div><div class="ln-editor-toolbar"><span class="ln-state">${e(note.deleted_at?'TRASH · ゴミ箱':note.status.toUpperCase())} · ${note.id?`v${note.version}`:'New'}</span><div class="ln-actions">${button(note.status==='published'?'Unpublish to draft · 公開を取り下げる':'Save draft · 下書き保存','data-save="draft"')}${button(note.status==='published'?'Update published note · 公開内容を更新':'Publish · 生徒に公開','data-save="published"')}${button('Student View · 生徒プレビュー','data-editor-tab="preview"')}</div><p class="ln-status" role="status" data-save-status>${dirty?'Unsaved changes · 未保存の変更':note.id?'All changes saved · 保存済み':'Only the selected learner can see a published note. · 公開後、選択した生徒だけに表示されます。'}</p></div><nav class="ln-studio-nav" aria-label="Lesson note editor sections">${[['content','Content · 教材'],['media','Images · 画像'],['preview','Preview · 表示確認'],['activity','Student activity · 生徒の更新'],['history','History · 履歴']].map(([key,name])=>button(name,`data-editor-tab="${key}" aria-pressed="${activeTab===key}"`)).join('')}</nav><div data-editor-panel></div>`;
   root.querySelector('[data-back-list]').onclick=()=>void library();
+  if(duplicateSourceTitle&&note.status==='draft'){
+   const notice=document.createElement('p');notice.className='ln-status';notice.setAttribute('role','status');notice.dataset.copyNotice='';
+   notice.textContent=copyNotice();
+   root.querySelector('.ln-editor-toolbar').after(notice);
+  }
   root.querySelectorAll('[data-save]').forEach(btn=>btn.onclick=()=>void run(btn,()=>save(btn.dataset.save)));
   root.querySelectorAll('[data-editor-tab]').forEach(btn=>btn.onclick=()=>{activeTab=btn.dataset.editorTab;renderEditor();});
   if(activeTab==='content')renderContent();if(activeTab==='preview')renderPreview();if(activeTab==='media')renderMedia();if(activeTab==='activity')renderActivity();if(activeTab==='history')renderHistory();
   if(note.deleted_at){root.querySelectorAll('[data-save]').forEach(b=>b.disabled=true);root.querySelector('[data-editor-panel]').innerHTML=`<div class="ln-empty"><h2>In Trash · ゴミ箱にあります</h2><p>This note is hidden from the learner. Its content and history are retained. · 内容と履歴は保持されています。</p>${button('Restore as draft · 下書きに戻す','data-restore-trash')}</div>`;root.querySelector('[data-restore-trash]').onclick=event=>void run(event.target,async()=>{await api.trash(note.id,true,note.version);await reloadDetail();});}
   if(busy)lock(true);
  }
+ function copyNotice(){return `Copied from “${duplicateSourceTitle}” for ${person(note.student_id)}. Review before publishing. · ${person(note.student_id)}用のコピーです。公開前に確認してください。`;}
  async function save(status){
   if(saving)return;if(assetDrafts.size)throw new Error('Save image details in the Images tab first. · 画像タブで説明の変更を先に保存してください。');saving=true;const before=note.status;note.status=status;
-  try{const saved=await api.save(note);note=clone(saved);dirty=false;detail.note=saved;rememberRoute(note.id,activeTab==='activity');root.querySelector('[data-save-status]').textContent='Saved · 保存しました';renderEditor();}
-  catch(error){note.status=before;throw error;}finally{saving=false;}
+  try{
+   let copied=false;
+   if(!note.id&&duplicateSourceTitle){
+    const id=await api.duplicate(note,detail.assets,message=>root.querySelector('[data-save-status]').textContent=message);
+    // Retain the new ID even if loading the saved draft fails; retry must not create another copy.
+    note={...note,id,status:'draft'};rememberRoute(id);
+    detail=await api.detail(id,{teacher:true});note=clone(detail.note);copied=true;
+   }
+   const saved=copied&&status==='draft'?note:await api.save({...note,status});
+   note=clone(saved);dirty=false;detail.note=saved;rememberRoute(note.id,activeTab==='activity');root.querySelector('[data-save-status]').textContent='Saved · 保存しました';renderEditor();
+  }
+  catch(error){note.status=before;if(error.copyId){note={...note,id:error.copyId,status:'draft'};rememberRoute(note.id);await open(note.id,{skipGuard:true});}throw error;}finally{saving=false;}
  }
  function renderContent(){
   const panel=root.querySelector('[data-editor-panel]');
@@ -122,15 +153,14 @@ export function mountLessonNoteStudio(root,{client,teacherId,profiles=[],student
   const student=panel.querySelector('[data-note-field=student_id]');student.disabled=Boolean(note.id);
   panel.querySelectorAll('[data-note-field]').forEach(control=>control.oninput=()=>{
    const key=control.dataset.noteField;note[key]=control.type==='checkbox'?control.checked:key==='tags'?control.value.split(',').map(s=>s.trim()).filter(Boolean).slice(0,12):control.value;setDirty();
+   if(key==='student_id'&&root.querySelector('[data-copy-notice]'))root.querySelector('[data-copy-notice]').textContent=copyNotice();
   });
   panel.querySelector('[data-trash-note]')?.addEventListener('click',event=>void run(event.target,async()=>{cleanRequired();if(!await confirmNoteAction('Move this archived note to Trash? You can restore it later. · ゴミ箱へ移動しますか？後から復元できます。'))return;await api.trash(note.id,false,note.version);await reloadDetail();}));
   drawBlocks();panel.querySelector('[data-add-block]').onclick=()=>{const b=newBlock(panel.querySelector('[data-block-type]').value);note.content_json.blocks.push(b);setDirty();drawBlocks();panel.querySelector(`[data-editor-block="${b.id}"]`)?.querySelector('textarea,select')?.focus();};
   panel.querySelector('[data-undo]').onclick=()=>{if(undoBlock){note.content_json.blocks.splice(undoBlock.index,0,undoBlock.block);undoBlock=null;setDirty();renderEditor();}};
   panel.querySelector('[data-import]').onclick=quickImport;
-  panel.querySelector('[data-duplicate-note]')?.addEventListener('click',event=>void run(event.target,async()=>{
-   if(dirty)throw new Error('Save your changes before duplicating. · 先に変更を保存してください。');
-   const id=await api.duplicate(note,detail.assets,message=>root.querySelector('[data-save-status]').textContent=message);await open(id,{skipGuard:true});
-  }));
+  const duplicate=panel.querySelector('[data-duplicate-note]');
+  if(duplicate){duplicate.textContent='Duplicate for learner · 別の生徒用に複製';duplicate.onclick=event=>void run(event.target,()=>prepareDuplicate(note.id));}
   panel.querySelector('[data-archive-note]')?.addEventListener('click',event=>void run(event.target,async()=>{
    if(!await confirmNoteAction('Archive this note? It will be hidden from the learner and retained with its history. · 生徒画面から非表示にし、履歴とともに保管しますか？'))return;
    await save('archived');
@@ -199,8 +229,24 @@ export function mountLessonNoteStudio(root,{client,teacherId,profiles=[],student
  function requireSaved(panel){if(!note.id){panel.innerHTML='<div class="ln-empty"><h2>Give this lesson a home.</h2><p>Choose a learner and save a draft first. · 生徒を選び、先に下書きを保存してください。</p></div>';return false;}return true;}
  async function reloadDetail(){const data=await api.detail(note.id,{teacher:true});if(disposed)return;detail=data;note=clone(data.note);dirty=false;renderEditor();}
  function cleanRequired(assetId=''){if(dirty)throw new Error('Save the text and permission changes first. · 教材と権限の変更を先に保存してください。');if([...assetDrafts.keys()].some(id=>id!==assetId))throw new Error('Save the other image details first. · 他の画像の説明を先に保存してください。');}
+ function renderCopyImages(panel){
+  const assets=detail.assets;
+  panel.innerHTML=`<h3>Images in this copy · コピーする画像</h3><div>${assets.map(a=>`<article class="ln-asset-editor" data-copy-asset="${e(a.id)}"><img data-private-thumb="${e(a.thumbnail_path)}" alt="${e(a.alt_text)}" loading="lazy"><div class="ln-asset-fields">${inputField('title','Title · 画像タイトル',a.title,{scope:'copy',max:180})}${inputField('caption','Caption · 説明',a.caption,{scope:'copy',rows:2,max:2000})}${inputField('alt_text','Alt text · 画像の説明',a.alt_text,{scope:'copy',max:500})}<div class="ln-actions">${button(note.cover_asset_id===a.id?'★ Remove cover · 表紙を解除':'☆ Set cover · 表紙にする','data-copy-cover')}${button('Open · 拡大','data-copy-open')}${button('Remove from copy · コピーから外す','data-copy-remove')}</div></div></article>`).join('')||'<p class="ln-empty-small">No images · 画像なし</p>'}</div>`;
+  panel.querySelectorAll('[data-copy-asset]').forEach(el=>{
+   const asset=assets.find(a=>a.id===el.dataset.copyAsset);
+   el.querySelectorAll('[data-copy-field]').forEach(control=>control.oninput=()=>{asset[control.dataset.copyField]=control.value;setDirty();});
+   el.querySelector('[data-copy-open]').onclick=()=>dialogs.push(openImageViewer(assets,assets.indexOf(asset),api));
+   el.querySelector('[data-copy-cover]').onclick=()=>{note.cover_asset_id=note.cover_asset_id===asset.id?null:asset.id;setDirty();renderEditor();};
+   el.querySelector('[data-copy-remove]').onclick=()=>{
+    detail.assets=assets.filter(a=>a.id!==asset.id);if(note.cover_asset_id===asset.id)note.cover_asset_id=null;
+    note.content_json.blocks.forEach(block=>{if(block.assetId===asset.id)block.assetId='';});setDirty();renderEditor();
+   };
+  });imagesDispose=lazyPrivateImages(panel,api);
+ }
  function renderMedia(){
-  const panel=root.querySelector('[data-editor-panel]');if(!requireSaved(panel))return;
+  const panel=root.querySelector('[data-editor-panel]');
+  if(!note.id&&duplicateSourceTitle){renderCopyImages(panel);return;}
+  if(!requireSaved(panel))return;
   const assets=detail.assets.filter(a=>a.state==='ready'&&a.uploader_role==='teacher').sort((a,b)=>a.display_order-b.display_order);
   panel.innerHTML=`<h3>Visual review materials · 画像で復習する教材</h3><p class="ln-status">Upload infographics, worksheets or reference images. Files stay private; replacing an image keeps its previous version in history.<br>画像は非公開で保存し、差し替え前の版も履歴に残します。</p><form class="ln-upload-form"><label>Choose images — multiple files supported · 複数の画像を選択<input type="file" accept="image/png,image/jpeg,image/webp" multiple required></label><label>Image description · 画像の説明<input name="alt_text" maxlength="450" placeholder="What should the learner notice? · どんな教材ですか？" required></label><label>Caption · 共通の説明<input name="caption" maxlength="2000"></label>${selectField('asset_type','Material type · 画像の種類','infographic',[['infographic','Infographic · 図解'],['worksheet','Worksheet · ワークシート'],['reference','Reference · 参考資料'],['teacher_attachment','Teacher attachment · 先生の添付']],'upload')}<button class="ln-button ln-primary" type="submit">Upload materials · 教材をアップロード</button><p class="ln-status">PNG / JPEG / WebP · up to 20MB each. Optimized full image + small preview. · 1枚20MBまで、自動最適化します。</p>${statusMarkup()}</form><div data-pending-uploads></div><div data-asset-list>${assets.map((original,i)=>{const a={...original,...assetDrafts.get(original.id)};return `<article class="ln-asset-editor" data-asset-id="${e(a.id)}"><img data-private-thumb="${e(a.thumbnail_path)}" alt="${e(a.alt_text)}" loading="lazy"><div class="ln-asset-fields">${inputField('title','Title · 画像タイトル',a.title,{scope:'asset',max:180})}${inputField('caption','Caption · 説明',a.caption,{scope:'asset',rows:2,max:2000})}${inputField('alt_text','Alt text · 画像の説明',a.alt_text,{scope:'asset',max:500})}${selectField('asset_type','Type · 種類',a.asset_type,[['infographic','Infographic'],['worksheet','Worksheet'],['reference','Reference'],['teacher_attachment','Teacher attachment']],'asset')}<div class="ln-actions">${button('Save image details · 説明を保存','data-save-asset')}${button(note.cover_asset_id===a.id?'★ Remove cover · 表紙を解除':'☆ Set cover · 表紙にする','data-set-cover')}${button('↑','data-move-asset="-1" aria-label="Move image up" '+(i===0?'disabled':''))}${button('↓','data-move-asset="1" aria-label="Move image down" '+(i===assets.length-1?'disabled':''))}${button('Open · 拡大','data-open-asset')}${button('Replace · 差し替え','data-replace-asset')}${button('Archive image · 画像を保管','data-archive-asset')}</div><input type="file" accept="image/png,image/jpeg,image/webp" data-replacement hidden><small class="ln-asset-meta">TEACHER MATERIAL · ${e(time(a.created_at))}</small></div></article>`;}).join('')}</div>`;
   const upload=panel.querySelector('form');upload.onsubmit=async event=>{event.preventDefault();const btn=upload.querySelector('[type=submit]'),status=upload.querySelector('[role=status]');if(busy)return;lock(true);

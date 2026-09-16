@@ -50,6 +50,20 @@ export function notePayload(note) {
  const keys=['lesson_date','title','summary','focus','tags','status','content_json',...Object.keys(PERMISSIONS)];
  return Object.fromEntries(keys.map(key=>[key,clone(note[key])]));
 }
+export function duplicateNoteDraft(original,studentId,assets=[]) {
+ const note=newNote(studentId),payload=notePayload(original);
+ for(const key of ['title','summary','focus','tags','content_json',...Object.keys(PERMISSIONS)])note[key]=payload[key];
+ const images=clone(assets.filter(a=>a.note_id===original.id&&a.uploader_role==='teacher'&&a.state==='ready')).sort((a,b)=>a.display_order-b.display_order);
+ const imageIds=new Set(images.map(a=>a.id));
+ note.content_json.blocks=note.content_json.blocks.map(block=>{
+  const copy={...block,id:newId()};
+  if(block.questionId||isPractice(block))copy.questionId=newId();
+  if('assetId' in copy&&!imageIds.has(copy.assetId))copy.assetId='';
+  return copy;
+ });
+ note.cover_asset_id=imageIds.has(original.cover_asset_id)?original.cover_asset_id:null;
+ return {note,assets:images};
+}
 export function validateNote(note) {
  if(!note.student_id)throw new Error('Choose a learner. · 生徒を選んでください。');
  if(!note.title.trim())throw new Error('Add a lesson title. · タイトルを入力してください。');
@@ -78,7 +92,7 @@ export function noteState(note,seen) {
 }
 export function noteListActions(note) {
  if(note.deleted_at)return [['restore','Restore from Trash · ゴミ箱から下書きに戻す']];
- return [['preview','Preview Student View · 生徒表示を確認'],...(note.status==='archived'?
+ return [['preview','Preview Student View · 生徒表示を確認'],['duplicate','Duplicate for learner · 別の生徒用に複製'],...(note.status==='archived'?
   [['restore','Restore from Archive · 保管から下書きに戻す'],['trash','Move to Trash · ゴミ箱へ移動']]:[['archive','Archive · 保管する']])];
 }
 export const dateLabel = value => new Date(`${value}T12:00:00`).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});

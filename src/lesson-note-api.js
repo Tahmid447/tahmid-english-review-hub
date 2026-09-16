@@ -3,6 +3,7 @@ export const NOTE_BUCKET='review-lesson-note-assets';
 const PREFIX='review_lesson_note';
 export function noteError(error) {
  const message=error?.message || String(error);
+ if(error?.copyId)return message;
  if(message.includes('NOTE_CONFLICT'))return 'This changed in another session. Your text is still here; reload the latest version before saving. · 別の画面で更新されています。入力内容を控えてから最新版を読み込んでください。';
  if(/permission|authoris|not allowed|unavailable|JWT|expired/i.test(message))return 'Access changed or your session expired. Reload and sign in again. · 権限またはログイン状態を確認し、再読み込みしてください。';
  if(/fetch|network/i.test(message))return 'Connection lost. Your text is still here; please retry. · 接続できません。入力内容は残っています。もう一度お試しください。';
@@ -13,6 +14,18 @@ export function createNoteApi(client) {
  const rpc=async(name,args)=>{const data=await result(client.rpc(`review_note_${name}`,args));return Array.isArray(data)&&data.length===1?data[0]:data;};
  const note=id=>result(client.from('review_lesson_notes').select('*').eq('id',id).single());
  const related=(table,id)=>result(client.from(`${PREFIX}_${table}`).select('*').eq('note_id',id).order('created_at',{ascending:false}));
+ const uploadPrepared=async(id,{full,thumbnail},metadata,replaceId,onStatus)=>{
+  const asset=await rpc('asset_reserve',{target_note:id,asset_metadata:{...metadata,mime_type:full.type}});
+  try {
+   onStatus('Uploading privately… · 非公開でアップロード中…');
+   await result(client.storage.from(NOTE_BUCKET).upload(asset.storage_path,full,{contentType:full.type,upsert:false,cacheControl:'0'}));
+   await result(client.storage.from(NOTE_BUCKET).upload(asset.thumbnail_path,thumbnail,{contentType:'image/jpeg',upsert:false,cacheControl:'0'}));
+   return await rpc('asset_finish',{target_asset:asset.id,replace_asset:replaceId});
+  }catch(error){
+   try{await api.cancelUpload(asset);}catch{/* Pending entry remains visible with an explicit retry/remove control. */}
+   throw error;
+  }
+ };
  const api={
   client,rpc,note,
   overview:({teacher=false}={})=>rpc('overview',{max_notes:30,for_teacher:teacher}),
@@ -36,6 +49,9 @@ export function createNoteApi(client) {
    return {note:data,saved_phrases:saved,...Object.fromEntries(['annotations','suggestions','comments','assets','review_status','practice_attempts',...(teacher?['activity','revisions']:[])].map((key,i)=>[key,values[i]]))};
   },
   save: n=>{validateNote(n);return rpc('save',{target_note:n.id,target_student:n.student_id,expected_version:n.version,payload:notePayload(n)});},
+  async duplicateSource(id){
+   return {note:await note(id),assets:await result(client.from(`${PREFIX}_assets`).select('*').eq('note_id',id).eq('uploader_role','teacher').eq('state','ready').order('display_order',{ascending:true}))};
+  },
   annotateRich:(id,block,body,format,version)=>rpc('annotate_rich',{target_note:id,target_block:block,body_text:body,format_json:format,expected_version:version}),
   practice:(id,block,question,action,response,version)=>rpc('practice',{target_note:id,target_block:block,expected_question:question,action,response,expected_version:version}),
   setReviewed:(id,reviewed,version)=>rpc('set_reviewed',{target_note:id,reviewed,expected_version:version}),
@@ -60,38 +76,36 @@ export function createNoteApi(client) {
    return rpc('asset_cancel',{target_asset:asset.id});
   },
   async upload(id,file,metadata,{replaceId=null,onStatus=()=>{}}={}) {
-   onStatus('Preparing image… · 画像を最適化中…');const {full,thumbnail}=await prepareNoteImage(file);
-   const asset=await rpc('asset_reserve',{target_note:id,asset_metadata:{...metadata,mime_type:full.type}});
-   try {
-    onStatus('Uploading privately… · 非公開でアップロード中…');
-    await result(client.storage.from(NOTE_BUCKET).upload(asset.storage_path,full,{contentType:full.type,upsert:false,cacheControl:'0'}));
-    await result(client.storage.from(NOTE_BUCKET).upload(asset.thumbnail_path,thumbnail,{contentType:'image/jpeg',upsert:false,cacheControl:'0'}));
-    return await rpc('asset_finish',{target_asset:asset.id,replace_asset:replaceId});
-   }catch(error){
-    try{await api.cancelUpload(asset);}catch{/* Pending entry remains visible with an explicit retry/remove control. */}
-    throw error;
-   }
+   onStatus('Preparing image… · 画像を最適化中…');
+   return uploadPrepared(id,await prepareNoteImage(file),metadata,replaceId,onStatus);
   },
-  async duplicate(original,assets,onStatus=()=>{}) {
-   const copy=clone(original);copy.id=null;copy.version=0;copy.status='draft';copy.title=`${copy.title.slice(0,165)} (copy)`;
-   const created=await api.save(copy),assetIds=new Map();
+  async duplicate(draft,assets,onStatus=()=>{}) {
+   if(draft.id)throw new Error('Prepare a new draft before copying.');
+   validateNote(draft);
+   const copy=clone(draft),assetIds=new Map();copy.status='draft';
+   const remap=()=>({...clone(copy.content_json),blocks:copy.content_json.blocks.map(b=>'assetId' in b?{...b,assetId:assetIds.get(b.assetId)||''}:clone(b))});
+   // Never persist references to the source note's images, even in a partial draft.
+   const created=await api.save({...copy,content_json:remap()});
    try {
     for(const asset of assets.filter(a=>a.uploader_role==='teacher'&&a.state==='ready').sort((a,b)=>a.display_order-b.display_order)) {
      onStatus('Copying private images… · 画像を複製中…');
-     const blob=await result(client.storage.from(NOTE_BUCKET).download(asset.storage_path));
-     const extension=({'image/jpeg':'jpg','image/png':'png','image/webp':'webp'})[asset.mime_type];
-     const next=await api.upload(created.id,new File([blob],`image.${extension}`,{type:asset.mime_type}),asset);
+     const full=await result(client.storage.from(NOTE_BUCKET).download(asset.storage_path));
+     const thumbnail=await result(client.storage.from(NOTE_BUCKET).download(asset.thumbnail_path));
+     const metadata=Object.fromEntries(['title','caption','alt_text','asset_type'].map(key=>[key,asset[key]]));
+     const next=await uploadPrepared(created.id,{full,thumbnail},metadata,null,onStatus);
      assetIds.set(asset.id,next.id);
-     if(original.cover_asset_id===asset.id)created.cover_asset_id=next.id;
     }
-    const detail=await api.detail(created.id,{teacher:true});
-    if(copy.content_json.blocks.some(b=>b.type==='image'&&assetIds.has(b.assetId))) {
-     detail.note.content_json.blocks=detail.note.content_json.blocks.map(b=>b.type==='image'&&assetIds.has(b.assetId)?{...b,assetId:assetIds.get(b.assetId)}:b);
-     detail.note=await api.save(detail.note);
+    if(assetIds.size){
+     const latest=await api.note(created.id);
+     if(latest.version!==created.version+assetIds.size)throw new Error('NOTE_CONFLICT');
+     const saved=await api.save({...latest,content_json:remap()});
+     await api.order(created.id,[...assetIds.values()],assetIds.get(copy.cover_asset_id)||null,saved.version);
     }
-    await api.order(created.id,detail.assets.filter(a=>a.state==='ready').sort((a,b)=>a.display_order-b.display_order).map(a=>a.id),created.cover_asset_id||null,detail.note.version);
     return created.id;
-   }catch(error){throw new Error(`Draft copy saved; some images need another upload. Open it from the list. · 下書きは複製済みです。一覧から開き、未完了の画像を追加してください。 ${noteError(error)}`);}
+   }catch(error){
+    const failure=new Error(`Draft saved, but image copying did not finish. Review Images before publishing. · 下書きは保存済みですが、画像の複製が未完了です。公開前に画像を確認してください。 ${noteError(error)}`);
+    failure.copyId=created.id;throw failure;
+   }
   },
  };
  return api;

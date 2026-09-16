@@ -53,8 +53,8 @@ assert.equal(applyLessonImport(newNote(ids.student),imported).title,imported.met
 assert.throws(()=>applyLessonImport(newNote(ids.student),{...imported,metadata:{...imported.metadata,tags:Array(13).fill('x')}}),/12 topics/);
 assert.throws(()=>applyLessonImport({...original,content_json:{schemaVersion:1,blocks:Array(149).fill(imported.blocks[0])}},imported),/150/);
 assert.doesNotMatch(JSON.stringify(importLessonText('Lesson Title: <script>alert(1)</script>Safe\n'+content)),/<script>/);
-assert.deepEqual(noteListActions({status:'published'}).map(a=>a[0]),['preview','archive']);
-assert.deepEqual(noteListActions({status:'archived'}).map(a=>a[0]),['preview','restore','trash']);
+assert.deepEqual(noteListActions({status:'published'}).map(a=>a[0]),['preview','duplicate','archive']);
+assert.deepEqual(noteListActions({status:'archived'}).map(a=>a[0]),['preview','duplicate','restore','trash']);
 assert.deepEqual(noteListActions({status:'archived',deleted_at:'now'}).map(a=>a[0]),['restore']);
 assert.doesNotMatch(JSON.stringify(noteListActions({deleted_at:'now'})),/permanent|purge/i);
 const storage=new Map(),adapter={getItem:k=>storage.get(k),setItem:(k,v)=>storage.set(k,v)};
