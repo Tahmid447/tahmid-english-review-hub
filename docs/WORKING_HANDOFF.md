@@ -1,6 +1,16 @@
 # Working handoff — September 16, 2026
 
-## September 16 - Duplicate for learner verified locally, not published
+## September 16 - Duplicate for learner published
+
+User-approved production deployment is complete. Exact runtime/implementation commit `5b8c5d67b4b299b0668571df92ddc671be072734` was fast-forwarded from `12e5c29` onto the existing GitHub `main`. Existing Cloudflare Pages project `tahmid-english-hub` built production deployment `dc88a141-e149-4b4a-91b1-be1ef4fb3df7`; custom-domain `/release.json` matches this exact SHA, built `2026-09-16T08:55:20.894Z`. Version remains 10.8.0; no implementation or release metadata was changed before publishing.
+
+Reused all successful local tests/build/browser checks below. Only production release identity, deployment status and lightweight live smoke were checked: home, Teacher Notes and learner Notes HTTP 200; signed-in Teacher Notes list, Duplicate for learner and destination selector render. Dialog cancelled without preparing or saving a copy. Fresh production tab has no captured console errors. The pre-existing tab had old-release refresh/network errors at navigation; these were not reproduced in the fresh release tab.
+
+No database/storage write, migration, learner-state mutation, auth/email/DNS/hosting change or force push was performed. Existing private checkpoint remains readable and prior successful Pages deployment remains available for frontend recovery. Public verification URL: https://tahmidenglishhub.dpdns.org/teacher?studio=notes . New docs-only checkpoint uses `[CI Skip]`; runtime stays the exact implementation SHA above.
+
+---
+
+## Historical checkpoint - Duplicate for learner verified locally before publication
 
 Focused implementation commit: `5b8c5d67b4b299b0668571df92ddc671be072734`, branch `codex/duplicate-for-learner`, based on current `origin/main` / `12e5c29`. No push, deployment or production write. Production remains the 10.8.0 release below. The latest request authorized this enhancement, not another production deployment.
 
