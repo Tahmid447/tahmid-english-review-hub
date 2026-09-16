@@ -4,7 +4,7 @@
 2026-09-14 to 2026-09-20
 
 ## Completed
-- Implemented reading/import UX: full-width card covers, protected editable lesson dates, staged image import, priority-based disclosures, section jumps/back-to-top, practice state and clearer student/teacher shortcuts. Relevant tests and isolated desktop/390px QA pass.
+- Published reading/import UX (`232bd65`): full-width card covers, protected editable lesson dates, staged image import, priority-based disclosures, section jumps/back-to-top, practice state and clearer student/teacher shortcuts. Relevant tests and isolated desktop/390px QA pass.
 - Published Duplicate for learner (`5b8c5d6`): list/editor action, destination selector, editable independent draft, fresh block/question IDs, private teacher-image copies and no learner activity transfer.
 - Existing 10.7 production: interactive notebook practice, stored progress, recoverable Trash, private images and in-site updates.
 - Published 10.8 workflow upgrade: editable Quick Import metadata and blocks; preserve existing metadata unless explicitly replaced.
@@ -13,7 +13,7 @@
 - Real PostgreSQL/RLS regression tests and isolated browser QA, including profile/settings and archive/Trash restoration.
 
 ## In Progress
-- Publishing the user-approved reading/import improvements through existing GitHub main / Cloudflare Pages, followed by minimal production smoke. No database migration is needed.
+- None for this request. Reading/import improvements are published and production smoke is complete; no database migration.
 
 ## Next
 1. Validate on a physical iPhone and fresh actual-student login during normal acceptance testing.
@@ -41,6 +41,7 @@
 - See [workflow report](LESSON_WORKFLOW.md) for scope and verification details.
 
 ## Last Verified
+- Reading/import production deployment: `4604f8d7-45cf-4b84-8494-be3f255c09c3`, runtime `232bd6540e647a6bec70a39297ac3eb4753950b0`, built `2026-09-16T11:56:55.041Z`. Custom domain and browser modules match. HTTP 200, live cover images/progress/Quick Import/date/reader/My Page shortcuts, 390px and clean console checks passed. Anonymous private reads/RPC denied (401). All 50 review/storage table fingerprints match before/after; no database/storage writes or migration. Existing backup/previous Pages release retained. Final docs use `[CI Skip]`.
 - Production duplicate deployment: `dc88a141-e149-4b4a-91b1-be1ef4fb3df7`, exact runtime commit `5b8c5d67b4b299b0668571df92ddc671be072734`, built `2026-09-16T08:55:20.894Z`; existing Cloudflare/GitHub main flow. Custom-domain release matches; Teacher duplicate selector opens/cancels normally, fresh tab console errors empty, HTTP routes 200. No DB/storage write or migration. Prior local tests/build reused.
 - Duplicate feature local checkpoint: `5b8c5d67b4b299b0668571df92ddc671be072734`, `codex/duplicate-for-learner` from main `12e5c29`; desktop and 390px checks, no captured console errors. Isolated preview http://127.0.0.1:4178/teacher?studio=notes . No push/deployment.
 - 2026-09-16 JST; verified local implementation commit `ac1e41e05a00f221887f4b093479d2bfa36550cd`, based on `b44322687f37c6d97fc5b54ec5a15a06d82705c9`.

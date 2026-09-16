@@ -1,8 +1,10 @@
 # Working handoff — September 16, 2026
 
-## September 16 - Reading and Quick Import improvements ready to publish
+## September 16 - Reading and Quick Import improvements published
 
-Current branch `codex/lesson-reading-import`, based on current production/main history `afa3cd6`. The current user explicitly requests implementation and production publication in this same task. Use the existing GitHub main / Cloudflare Pages flow; no new hosting, database migration, auth, email, DNS or voice change is needed.
+**Complete and live:** runtime commit `232bd6540e647a6bec70a39297ac3eb4753950b0`, existing Cloudflare Pages production deployment `4604f8d7-45cf-4b84-8494-be3f255c09c3`, built `2026-09-16T11:56:55.041Z`. Custom-domain `/release.json` and loaded JS module versions match. Branch `codex/lesson-reading-import` fast-forwarded existing GitHub main from `afa3cd6`, preserving prior releases. The user explicitly authorized implementation and publication in this task. No new hosting, database migration, auth, email, DNS or voice change was made.
+
+Production smoke passed: home/Teacher/My Page/Notes HTTP 200; signed-in Teacher cards show actual private cover images at full card width, progress counts and existing notes; Quick Import image input and editable parsed date render with all existing-field overwrite checkboxes OFF. Cancelled without applying/saving/uploading. Existing note Student View renders section navigation and folded support/practice content. Owner My Page renders saved-phrase/Notes shortcuts; Teacher and My Page at 390px have no horizontal overflow. Captured production console errors are empty. Anonymous profiles/notes/practice/assets/personal-card queries and overview RPC all return 401. Read-only fingerprints of **all 50 existing review/storage tables match exactly before and after publication/smoke**. No production data or storage write was performed. Final documentation-only checkpoint uses `[CI Skip]`; runtime remains the implementation SHA above.
 
 Implemented full-width 16:9 cover images on note cards while retaining whole-image detail/zoom; editable Quick Import lesson-date extraction (ISO, Japanese and English dates; ambiguous numeric dates require review); existing/manual metadata remains protected by per-field overwrite choices. The untouched default date of a new draft accepts the imported date. Existing deterministic title/introduction/focus/topics suggestions and block editing remain. Practice import recognizes natural-English correction, short free response and self-check aliases.
 
