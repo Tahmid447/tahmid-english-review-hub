@@ -4,6 +4,7 @@
 2026-09-14 to 2026-09-20
 
 ## Completed
+- Locally implemented Duplicate for learner (`5b8c5d6`): list/editor action, destination selector, editable independent draft, fresh block/question IDs, private teacher-image copies and no learner activity transfer. Not yet published.
 - Existing 10.7 production: interactive notebook practice, stored progress, recoverable Trash, private images and in-site updates.
 - Published 10.8 workflow upgrade: editable Quick Import metadata and blocks; preserve existing metadata unless explicitly replaced.
 - Published teacher improvements: note-list contextual actions, actionable dashboard priorities, learner-specific note creation.
@@ -11,7 +12,7 @@
 - Real PostgreSQL/RLS regression tests and isolated browser QA, including profile/settings and archive/Trash restoration.
 
 ## In Progress
-- None for this release. User-approved publication and requested smoke checks are complete.
+- Duplicate feature implementation and focused QA are complete locally; production publication is a separate next decision. The previously approved 10.8 release remains live.
 
 ## Next
 1. Validate on a physical iPhone and fresh actual-student login during normal acceptance testing.
@@ -27,6 +28,8 @@
 - Auth, email, pronunciation, storage privacy and original learning models are unchanged.
 
 ## QA / Known Issues
+- Duplicate feature: focused notebook/practice/workflow/new-copy suites, Cloudflare build/output check and local browser A-to-B draft/image/edit/publish checks passed. Source/activity stays unchanged; cross-account and anonymous reads are denied. No new migration or production write.
+- Before the first copy save, learner/date/content and staged image metadata/removal are editable. Normal image upload/replacement follows the existing saved-draft flow. A failed image copy leaves a clearly flagged partial draft for manual image repair; no automatic cross-session resume or persisted source-note link.
 - Full `npm test`, Cloudflare build/output checks and voice contract passed. No lint or TypeScript configuration exists.
 - Desktop and 390px browser checks passed for the changed student/teacher surfaces; no horizontal document overflow found.
 - Production Teacher/Notes/Quick Import/owner My Page and new overview rendering pass; HTTP routes return 200, anonymous private reads/RPC return 401, no captured console errors, My Page/Teacher document width 390px at 390px.
@@ -35,6 +38,7 @@
 - See [workflow report](LESSON_WORKFLOW.md) for scope and verification details.
 
 ## Last Verified
+- Duplicate feature local checkpoint: `5b8c5d67b4b299b0668571df92ddc671be072734`, `codex/duplicate-for-learner` from main `12e5c29`; desktop and 390px checks, no captured console errors. Isolated preview http://127.0.0.1:4178/teacher?studio=notes . No push/deployment.
 - 2026-09-16 JST; verified local implementation commit `ac1e41e05a00f221887f4b093479d2bfa36550cd`, based on `b44322687f37c6d97fc5b54ec5a15a06d82705c9`.
 - Production: https://tahmidenglishhub.dpdns.org, 10.8.0 / `24417f3e0daef754a6997ec9d51469971b5aa91a`; deployment `65aa899d-3bb0-4b1c-a190-7033dd197dfa`.
 - Live ledger: 14 entries through newly applied `20260915230000`; authenticated-only, read-only RPC. RLS/policies unchanged and image bucket private.

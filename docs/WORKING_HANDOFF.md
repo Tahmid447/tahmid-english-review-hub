@@ -1,5 +1,21 @@
 # Working handoff — September 16, 2026
 
+## September 16 - Duplicate for learner verified locally, not published
+
+Focused implementation commit: `5b8c5d67b4b299b0668571df92ddc671be072734`, branch `codex/duplicate-for-learner`, based on current `origin/main` / `12e5c29`. No push, deployment or production write. Production remains the 10.8.0 release below. The latest request authorized this enhancement, not another production deployment.
+
+List contextual menu and saved-note editor now offer **Duplicate for learner**. Choose an authorized learner, then review a new unsaved draft in the existing editor. Learner and lesson date remain editable before its first save; date defaults to today. Metadata, all teaching/practice definitions, formatting/order, permissions and ready teacher images are copied. Blocks/questions receive new IDs. No source note/student identity, publication state, learner activity, personal cards, student attachments, notifications or history are copied. New save/image operations create their own normal audit rows.
+
+On first Save Draft or Publish, the existing RPC creates a private draft and existing asset reserve/upload/finish/order APIs copy the original full image and thumbnail bytes to new learner/note-specific private paths. Cover/block references are remapped. No source asset IDs enter persisted copy content, even on image failure. Publication occurs only after copying finishes. The staged Images tab allows caption/title/alt/cover edits and removal; normal upload/replace controls are available after the first draft save. If a copy fails, its partial draft is opened with an explicit warning; inspect/re-upload missing images and reselect them before publishing. There is no automatic cross-session image-copy resume. The copied-from notice is transient; no source-reference schema was added.
+
+**No migration needed.** Read-only live check: 14 ledger entries, latest `20260915230000` recorded source MD5 `70ebb592a797d05b5a9cf0febea64c97`; overview remains security-invoker, authenticated allowed and anonymous denied. Existing SQL, policies, storage bucket, auth/email/voice and production data are unchanged.
+
+Passed `npm run test:lesson-notes` (86 original checks, 68 practice checks, workflow and new duplicate suite), changed JS syntax, `git diff --check`, `npm run build:cloudflare`, and `npm run test:cloudflare` (85 public text assets). New API tests use the unchanged migrations/RPCs with real PostgreSQL/PGlite and RLS: A-to-B draft/edit/publish, all model block/practice definitions and fresh IDs, exact unchanged source/detail/activity, student attachment exclusion, private full/thumbnail bytes and paths, order/cover/block remapping, cross-account/anonymous denial, upload failure cleanup and text-only copies. Reused prior whole-site/voice QA; no exhaustive repetition.
+
+Local browser smoke passed list action, learner switch, unsaved draft, title/caption editing, first save, teacher-image display from destination path, editor action/cancel, publish and Student View. At 390px, dialog width 366px and document width 390px; captured console errors empty. Physical phone/new production student login were not tested. Synthetic QA preview: http://127.0.0.1:4178/teacher?studio=notes (detached PID 35437, log `/tmp/tahmid-duplicate-qa.log`); restart with `NOTE_QA_PORT=4178 NOTE_QA_WORKFLOW=1 node scripts/serve-notes-qa.mjs`. It uses an isolated in-memory database/images, never production. The older user preview on 4177 was left running.
+
+---
+
 ## September 16 - Lesson workflow 10.8 published and smoke-verified
 
 **Complete and live:** 10.8.0, runtime commit `24417f3e0daef754a6997ec9d51469971b5aa91a`, existing Cloudflare Pages production deployment `65aa899d-3bb0-4b1c-a190-7033dd197dfa`. Custom-domain `/release.json` matches, built `2026-09-15T17:38:31.993Z`. The user explicitly approved publication after reviewing the local preview. The implementation remains `ac1e41e`; subsequent runtime-checkpoint changes are documentation and release version only. `main` advanced normally from `b443226` with all history preserved. No force push or hosting/auth/DNS/email configuration change.
