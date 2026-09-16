@@ -1,5 +1,5 @@
 import {confirmNoteAction} from './note-dialog.js?v=20260915-practice';
-import {isPractice,practiceSummary,questionId} from './note-practice-model.js?v=20260915-practice';
+import {isPractice,practiceSummary,questionId,sameQuestion} from './note-practice-model.js?v=20260915-practice';
 import {practiceMarkup,mountPractice,progressMarkup} from './note-practice-view.js?v=20260915-practice';
 import {richTextMarkup,cleanMarks,moveMarks,applyMark} from './note-rich-text.js?v=20260915-practice';
 import { escapeHTML as e } from './store.js?v=20260911-mobile2';
@@ -25,14 +25,20 @@ export function blockMarkup(block,{mode='support',student=false,permissions={},c
  else body=primary+text(block.ipa,'ln-ipa');
  let japanese='';
  if(mode==='support' && block.japaneseSupport && block.japaneseSupportMode!=='none') {
-  japanese=block.japaneseSupportMode==='explanation'?`<details class="ln-jp-support"><summary>日本語サポート</summary><p lang="ja">${e(block.japaneseSupport)}</p></details>`:`<p class="ln-japanese" lang="ja">${e(block.japaneseSupport)}</p>`;
+  japanese=`<details class="ln-jp-support" data-reading-detail><summary>日本語サポート</summary><p lang="ja">${e(block.japaneseSupport)}</p></details>`;
  }
  const voice=controls&&block.pronunciation?.enabled&&block.englishText?noteButton('▶ US · Ava','data-note-voice="us"')+noteButton('▶ UK · Libby','data-note-voice="gb"'):'';
  const save=student&&PHRASE_TYPES.has(block.type)&&block.englishText?noteButton('♡ Save to My Phrases · 表現を保存','data-save-phrase aria-pressed="false"'):'';
  const annotate=student&&permissions.allow_student_annotations?'<details class="ln-block-annotation"><summary>✎ My note · 自分のメモ</summary><div data-annotation-host></div></details>':'';
  const change=student&&permissions.allow_student_suggestions?noteButton('Suggest an edit · 修正を提案','data-suggest-edit'):'';
  const direct=student&&permissions.allow_direct_student_edit&&block.displayOptions?.studentEditable?noteButton('Edit this block · この部分を編集','data-direct-edit'):'';
- return `<article class="ln-block ln-tone-${tone}" id="block-${e(block.id)}" data-block-id="${e(block.id)}"><div class="ln-block-label"><span class="ln-block-icon" aria-hidden="true">${icon}</span><span>${e(label)}</span></div>${block.title?`<h3>${e(block.title)}</h3>`:''}${body}${japanese}${text(block.explanation,'ln-explanation')}${block.examples?.length?`<div class="ln-examples"><span class="ln-micro">In context · 例文</span>${list(block.examples)}</div>`:''}${block.type==='quick_practice'?`<label class="ln-practice-label">Try it in your own words · 自分の言葉で<textarea rows="3" aria-label="Practice response · 練習の回答" placeholder="Your practice stays on this page."></textarea></label>${block.answer?`<details class="ln-answer"><summary>See a model answer · 回答例</summary>${text(block.answer)}</details>`:''}`:''}${block.tags?.length?`<div class="ln-tags">${block.tags.map(tag=>`<span>${e(tag)}</span>`).join('')}</div>`:''}<div class="ln-actions">${voice}${save}${change}${direct}</div>${voice||save?noteStatus():''}${annotate}</article>`;
+ return `<article class="ln-block ln-tone-${tone}" id="block-${e(block.id)}" data-block-id="${e(block.id)}"><div class="ln-block-label"><span class="ln-block-icon" aria-hidden="true">${icon}</span><span>${e(label)}</span></div>${block.title?`<h3>${e(block.title)}</h3>`:''}${body}${japanese}${text(block.explanation,'ln-explanation')}${block.examples?.length?`<details class="ln-examples" data-reading-detail><summary>In context · 例文</summary>${list(block.examples)}</details>`:''}${block.type==='quick_practice'?`<label class="ln-practice-label">Try it in your own words · 自分の言葉で<textarea rows="3" aria-label="Practice response · 練習の回答" placeholder="Your practice stays on this page."></textarea></label>${block.answer?`<details class="ln-answer"><summary>See a model answer · 回答例</summary>${text(block.answer)}</details>`:''}`:''}${block.tags?.length?`<div class="ln-tags">${block.tags.map(tag=>`<span>${e(tag)}</span>`).join('')}</div>`:''}<div class="ln-actions">${voice}${save}${change}${direct}</div>${voice||save?noteStatus():''}${annotate}</article>`;
+}
+export function readingBlockMarkup(block,options={}) {
+ const markup=blockMarkup(block,options);
+ if(!isPractice(block)&&!['teacher_tip','example','comparison','nuance','collapsible_section'].includes(block.type)&&!block.displayOptions?.collapsed)return markup;
+ const label=BLOCK_TYPES[block.type]?.[0]||'More · 補足',preview=block.title||block.englishText||block.originalText||'';
+ return `<details class="ln-reading-block" data-reading-detail><summary><span>${e(label)}</span><strong>${e(preview.slice(0,180))}</strong></summary>${markup}</details>`;
 }
 export function contentMarkup(note,options={}) {
  const blocks=note.content_json.blocks,keyBlocks=blocks.filter(b=>b.type==='useful_phrase'&&b.displayOptions?.keyPhrase!==false);
@@ -41,19 +47,20 @@ export function contentMarkup(note,options={}) {
   if(keyBlocks.includes(block))continue;
   if(['collapsible_section','quick_practice_group'].includes(block.type)) {
    if(openSection)main+='</div></details>';
-   main+=`<details class="ln-section" data-section-id="${e(block.id)}" ${block.displayOptions?.collapsed?'':'open'}><summary><h2>${e(block.englishText||block.title||'Lesson section')}</h2></summary><div>${text(block.explanation,'ln-explanation')}`;openSection=true;
-  } else main+=blockMarkup(block,{...options,permissions:note});
+   main+=`<details class="ln-section" id="block-${e(block.id)}" data-reading-detail data-section-id="${e(block.id)}" ${block.displayOptions?.collapsed||block.type==='quick_practice_group'?'':'open'}><summary><h2>${e(block.englishText||block.title||'Lesson section')}</h2></summary><div>${text(block.explanation,'ln-explanation')}`;openSection=true;
+  } else main+=readingBlockMarkup(block,{...options,permissions:note});
  }
  if(openSection)main+='</div></details>';
  return `<section class="ln-focus"><span class="ln-micro">TODAY’S FOCUS · 今日のポイント</span><p>${e(note.focus||'A clear next step for your English.')}</p></section>${keyBlocks.length?`<section class="ln-key-phrases"><h2>Words to take with you.<small>今日から使いたい表現</small></h2>${keyBlocks.map(b=>blockMarkup(b,{...options,permissions:note})).join('')}</section>`:''}<section class="ln-teaching"><h2 class="ln-main-heading">Your lesson, in detail.<small>レッスンを振り返ろう</small></h2>${main || '<p>Teaching material will appear here.</p>'}</section>`;
 }
-export function cardMarkup(note,{teacher=false,name=''}={}) {
+export function cardMarkup(note,{teacher=false,name='',overview}={}) {
  const state=teacher?(note.deleted_at?'trash':note.status):noteState(note,note.seen?.[0]);
  const labels={new:'NEW · 新着',updated:'UPDATED · 更新あり',reviewed:'✓ REVIEWED · 復習済み',opened:'IN YOUR NOTEBOOK',draft:'DRAFT · 下書き',published:'PUBLISHED · 公開中',archived:'ARCHIVED · 保管中',trash:'TRASH · ゴミ箱'};
  const assets=(note.assets||[]).filter(a=>a.state==='ready'&&a.uploader_role==='teacher');
  const cover=assets.find(a=>a.id===note.cover_asset_id);
+ const progress=teacher&&overview?`<div class="ln-card-progress">${overview.practice_total?`<span>${e(overview.practice_completed)} / ${e(overview.practice_total)} completed · 練習完了</span>`:''}${overview.practice_review?`<strong>${e(overview.practice_review)} to review · 要復習</strong>`:''}${overview.unread_activity?'<strong>New activity · 生徒の更新あり</strong>':''}${overview.pending_suggestions?`<strong>${e(overview.pending_suggestions)} suggestions · 提案</strong>`:''}</div>`:'';
  const menu=teacher?`<details class="ln-card-menu" data-note-menu><summary aria-label="Actions for ${e(note.title)} · ノートの操作" title="Note actions · ノートの操作">⋯</summary><div>${noteButton('Open / Edit · 開く・編集',`data-open-note="${e(note.id)}"`)}${noteListActions(note).map(([action,label])=>noteButton(label,`data-note-action="${action}" data-note-id="${e(note.id)}"`)).join('')}</div></details>`:'';
- return `<article class="ln-note-card">${cover?`<div class="ln-card-image"><img data-private-thumb="${e(cover.thumbnail_path)}" alt="" loading="lazy" width="400" height="180"></div>`:''}<div class="ln-card-body"><div class="ln-card-top"><time datetime="${e(note.lesson_date)}">${e(dateLabel(note.lesson_date))}</time><span class="ln-state ln-state-${e(state)}">${labels[state]||e(state)}</span>${menu}</div>${name?`<p class="ln-micro">${e(name)}</p>`:''}<h2>${e(note.title)}</h2>${text(note.summary,'ln-summary')}<div class="ln-tags">${note.tags.map(tag=>`<span>${e(tag)}</span>`).join('')}</div><div class="ln-card-bottom"><span>${assets.length} visual${assets.length===1?'':'s'} · 画像</span>${teacher?noteButton('Open editor · 編集する →',`data-open-note="${e(note.id)}"`):`<a class="ln-button" href="/my-page/notes/${e(note.id)}">Open Lesson Note · ノートを開く →</a>`}</div></div></article>`;
+ return `<article class="ln-note-card">${cover?`<div class="ln-card-image"><img data-private-thumb="${e(cover.thumbnail_path)}" alt="" loading="lazy" width="400" height="180"></div>`:''}<div class="ln-card-body"><div class="ln-card-top"><time datetime="${e(note.lesson_date)}">${e(dateLabel(note.lesson_date))}</time><span class="ln-state ln-state-${e(state)}">${labels[state]||e(state)}</span>${menu}</div>${name?`<p class="ln-micro">${e(name)}</p>`:''}<h2>${e(note.title)}</h2>${text(note.summary,'ln-summary')}<div class="ln-tags">${note.tags.map(tag=>`<span>${e(tag)}</span>`).join('')}</div>${progress}<div class="ln-card-bottom"><span>${assets.length} visual${assets.length===1?'':'s'} · 画像</span>${teacher?noteButton('Open editor · 編集する →',`data-open-note="${e(note.id)}"`):`<a class="ln-button" href="/my-page/notes/${e(note.id)}">Open Lesson Note · ノートを開く →</a>`}</div></div></article>`;
 }
 export function lazyPrivateImages(root,api) {
  let disposed=false;
@@ -127,6 +134,7 @@ function editDialog(block,{direct=false,onSave}) {
 export function focusNoteTarget(root,hash=location.hash) {
  let id;try{id=decodeURIComponent(hash.replace(/^#/,''));}catch{return;}
  const target=[...root.querySelectorAll('[id]')].find(el=>el.id===id);if(!target)return;
+ if(target.tagName==='DETAILS')target.open=true;
  for(let parent=target.parentElement;parent&&parent!==root;parent=parent.parentElement)if(parent.tagName==='DETAILS')parent.open=true;
  target.tabIndex=-1;target.focus({preventScroll:true});target.scrollIntoView({block:'start'});
 }
@@ -136,11 +144,15 @@ export function mountNoteView(root,{detail,api,student=true,userId='',mode='supp
  root.innerHTML=`<header class="ln-lesson-header"><p class="ln-kicker">PERSONAL LESSON NOTES · あなたのレッスンノート</p><time datetime="${e(n.lesson_date)}">${e(dateLabel(n.lesson_date))}</time><h1>${e(n.title||'Your lesson notebook')}</h1>${text(n.summary,'ln-lede')}<div class="ln-header-meta">${student?`<a class="ln-my-notes-jump" href="#lesson-my-notes">✎ My notes · 自分のメモ</a>`:""}<span>Prepared by ${e(teacherName)}</span><div class="ln-tags">${n.tags.map(tag=>`<span>${e(tag)}</span>`).join('')}</div></div></header><div class="ln-reader-layout"><div class="ln-reader-main">${contentMarkup(n,{mode,student,assets:detail.assets})}<section class="ln-practice-summary" data-practice-summary></section><section class="ln-gallery-section"><h2>A different way to remember.<small>画像でレッスンを振り返ろう</small></h2><p class="ln-micro">TEACHER MATERIAL · 先生の教材</p><div class="ln-gallery" data-teacher-gallery></div></section><section class="ln-student-attachments" data-student-attachments><h2>From your notebook.<small>生徒の添付画像</small></h2><div class="ln-gallery" data-student-gallery></div>${student&&n.allow_student_images?`<form class="ln-upload-form"><label>Add an image · 画像を追加<input type="file" accept="image/png,image/jpeg,image/webp" required></label><label>Caption · メモ<input name="caption" maxlength="2000"></label><label>Image description · 画像の説明<input name="alt_text" maxlength="500" required></label><button type="submit" class="ln-button">Upload privately · 非公開で追加</button>${noteStatus()}</form>`:''}</section><section class="ln-comments" data-comments></section>${student?`<section class="ln-review-finish"><span aria-hidden="true">✧</span><h2>A little review. A lasting difference.</h2><p>Make these expressions part of your English.<br>今日の表現を、あなたの英語に。</p>${noteButton(detail.review_status?.[0]?.reviewed_version>=n.version?'✓ Reviewed — undo · 復習済みを取り消す':'Mark as reviewed · 復習済みにする','data-mark-reviewed class="ln-primary"')}${noteStatus()}</section>`:''}</div><aside class="ln-my-notes" id="lesson-my-notes"><div class="ln-note-pad"><p class="ln-kicker">MAKE IT YOURS · 自分の言葉で</p><h2>My notes.</h2><p>Personal reminders, separate from your teacher’s lesson.<br>先生の教材とは別に、自分のメモを残せます。</p><div data-lesson-annotation></div></div><a href="/my-page#favorites" class="ln-saved-link">♡ My Phrases · 保存した表現 →</a></aside></div>`;
  const focus=root.querySelector('.ln-focus');focus.id='lesson-focus';
  const firstPractice=n.content_json.blocks.find(isPractice),jumps=document.createElement('nav');jumps.className='ln-reader-jumps';jumps.setAttribute('aria-label','Lesson sections · レッスン内の移動');
- jumps.innerHTML=`<a href="#lesson-focus">Today's Focus · 今日のポイント</a>${firstPractice?`<a href="#block-${e(firstPractice.id)}">Practice · 練習</a>`:''}${student?'<a href="#lesson-my-notes">My notes · 自分のメモ</a>':''}`;
+ const phrases=root.querySelector('.ln-key-phrases'),grammar=n.content_json.blocks.find(b=>b.type==='grammar_point'),correction=n.content_json.blocks.find(b=>['natural_english_upgrade','common_mistake'].includes(b.type)),hasImages=detail.assets.some(a=>a.state==='ready'&&a.uploader_role==='teacher');
+ if(phrases)phrases.id='lesson-phrases';root.querySelector('.ln-gallery-section').id='lesson-images';root.querySelector('.ln-gallery-section').hidden=!hasImages;
+ root.querySelector('.ln-lesson-header').id='lesson-top';
+ jumps.innerHTML=`<a href="#lesson-focus">Focus · 今日のポイント</a>${phrases?'<a href="#lesson-phrases">Phrases · 表現</a>':''}${correction?`<a href="#block-${e(correction.id)}">Corrections · 修正</a>`:''}${grammar?`<a href="#block-${e(grammar.id)}">Grammar · 文法</a>`:''}${firstPractice?`<a href="#block-${e(firstPractice.id)}">Practice · 練習</a>`:''}${hasImages?'<a href="#lesson-images">Images · 画像</a>':''}${student?'<a href="#lesson-my-notes">My notes · 自分のメモ</a>':''}<div class="ln-reading-controls">${noteButton('Open all · すべて開く','data-reading-open')}${noteButton('Close all · 閉じる','data-reading-close')}</div>`;
  root.querySelector('.ln-lesson-header').after(jumps);
  if(!student)root.querySelector('.ln-my-notes').hidden=true;
  const attempts=[...(detail.practice_attempts||[])],summary=root.querySelector('[data-practice-summary]');root.querySelector('.ln-focus').after(summary);
- const updateProgress=()=>{summary.innerHTML=progressMarkup(practiceSummary(n.content_json.blocks,attempts));summary.hidden=!n.content_json.blocks.some(isPractice);};updateProgress();
+ const reviewBlock=()=>n.content_json.blocks.find(b=>isPractice(b)&&attempts.some(a=>a.question_id===questionId(b)&&sameQuestion(a.question_snapshot,b)&&(a.is_correct===false||a.self_check_status==='review')));
+ const updateProgress=()=>{summary.innerHTML=progressMarkup(practiceSummary(n.content_json.blocks,attempts));summary.hidden=!n.content_json.blocks.some(isPractice);const review=reviewBlock();if(review)summary.insertAdjacentHTML('beforeend',`<a class="ln-button" data-practice-review href="#block-${e(review.id)}">Review weak points · 復習が必要な問題へ →</a>`);summary.querySelector('[data-practice-review]')?.addEventListener('click',event=>{event.preventDefault();focusNoteTarget(root,event.currentTarget.hash);});};updateProgress();
  root.querySelectorAll('[data-practice-block]').forEach(el=>{const block=n.content_json.blocks.find(b=>b.id===el.dataset.practiceBlock);controllers.push(mountPractice(el,{block,attempt:attempts.find(a=>a.question_id===questionId(block)),api,noteId:n.id,preview:!student,onChange:a=>{const index=attempts.findIndex(v=>v.question_id===a.question_id);if(index<0)attempts.push(a);else attempts[index]=a;updateProgress();}}));});
  const galleryAssets=detail.assets.filter(a=>a.state==='ready').sort((a,b)=>a.display_order-b.display_order);
  for(const role of ['teacher','student']) {
@@ -200,8 +212,13 @@ export function mountNoteView(root,{detail,api,student=true,userId='',mode='supp
   comments.querySelector('form').onsubmit=async event=>{event.preventDefault();const button=event.currentTarget.querySelector('button');button.disabled=true;try{if(controllers.some(c=>c.dirty())||uploadDraft())throw new Error('Save your other work first. · 回答・メモ・画像を先に保存してください。');await api.comment(n.id,event.currentTarget.querySelector('textarea').value);comments.querySelector('textarea').value='';onRefresh();}catch(error){comments.querySelector('[role=status]').textContent=noteError(error);button.disabled=false;}};
  }
  let reviewed=detail.review_status?.[0]?.reviewed_version>=n.version;const mark=root.querySelector('[data-mark-reviewed]');if(mark)mark.onclick=async()=>{mark.disabled=true;try{await api.setReviewed(n.id,!reviewed,n.version);reviewed=!reviewed;mark.textContent=reviewed?'✓ Reviewed — undo · 復習済みを取り消す':'Mark as reviewed · 復習済みにする';mark.setAttribute('aria-pressed',String(reviewed));}catch(error){mark.parentElement.querySelector('[role=status]').textContent=noteError(error);}finally{mark.disabled=false;}};
- const followHash=()=>focusNoteTarget(root);window.addEventListener('hashchange',followHash);
+ const followHash=()=>focusNoteTarget(root,location.hash==='#lesson-review'?`#block-${reviewBlock()?.id||firstPractice?.id}`:location.hash);window.addEventListener('hashchange',followHash);
  jumps.querySelectorAll('a').forEach(link=>link.onclick=event=>{event.preventDefault();history.replaceState(null,'',link.hash);followHash();});
+ jumps.querySelector('[data-reading-open]').onclick=()=>root.querySelectorAll('[data-reading-detail]').forEach(el=>el.open=true);
+ jumps.querySelector('[data-reading-close]').onclick=()=>root.querySelectorAll('[data-reading-detail]').forEach(el=>el.open=false);
+ const top=document.createElement('button');top.type='button';top.className='ln-back-top';top.title='Back to top · 先頭へ';top.setAttribute('aria-label',top.title);top.textContent='↑';top.hidden=true;root.append(top);
+ const scrollState=()=>{const bounds=root.getBoundingClientRect();top.hidden=!(bounds.top < -600&&bounds.bottom>0);};
+ top.onclick=()=>focusNoteTarget(root,'#lesson-top');window.addEventListener('scroll',scrollState,{passive:true});scrollState();
  if(student)followHash();
- return {dirty:()=>controllers.some(c=>c.dirty())||commentDraft()||uploadDraft(),dispose(){disposed=true;window.removeEventListener('hashchange',followHash);controllers.forEach(c=>c.dispose());disposeImages();dialogs.forEach(d=>{if(d.open)d.close();else d.remove();});}};
+ return {dirty:()=>controllers.some(c=>c.dirty())||commentDraft()||uploadDraft(),dispose(){disposed=true;window.removeEventListener('hashchange',followHash);window.removeEventListener('scroll',scrollState);controllers.forEach(c=>c.dispose());disposeImages();dialogs.forEach(d=>{if(d.open)d.close();else d.remove();});}};
 }

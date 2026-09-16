@@ -45,7 +45,7 @@
     "test:speech:cloudflare": "node scripts/test-cloudflare-speech.mjs",
     "deploy:speech": "wrangler deploy --config workers/speech/wrangler.jsonc",
     "test:password-recovery": "node scripts/test-password-recovery.mjs",
-    "test:lesson-notes": "node scripts/test-lesson-notes.mjs && node scripts/test-note-practice.mjs && node scripts/test-note-workflow.mjs && node scripts/test-note-duplicate.mjs",
+    "test:lesson-notes": "node scripts/test-lesson-notes.mjs && node scripts/test-note-practice.mjs && node scripts/test-note-workflow.mjs && node scripts/test-note-duplicate.mjs && node scripts/test-note-reading-import.mjs",
     "test:email-alerts": "node scripts/test-email-alerts.mjs && node scripts/test-owner-email-queue.mjs && node scripts/test-owner-email-schedule.mjs",
     "deploy:email-alerts": "wrangler deploy --config workers/email-alerts/wrangler.jsonc"
   },

@@ -19,9 +19,12 @@ export function learnerNextActions({notes=[],announcements=[],cards=[]}={}) {
  const updated=visible.find(n=>Number(n.viewed_version||0)<n.version);
  if(updated)actions.push({kind:'note',title:updated.title,detail:updated.viewed_version?'Updated by your teacher · 先生が更新':'New lesson note · 新しいレッスンノート',href:noteHref(updated.id),label:'Open note · ノートを開く'});
  const practice=visible.find(n=>n.id!==updated?.id&&n.next_block&&(n.practice_completed<n.practice_total||n.practice_review>0));
- if(practice)actions.push({kind:'practice',title:practice.title,detail:`${practice.practice_completed} of ${practice.practice_total} completed · 練習の進捗`,href:noteHref(practice.id,practice.next_block),label:'Continue practice · 練習を続ける'});
+ const weak=visible.filter(n=>n.practice_review>0).sort((a,b)=>b.practice_review-a.practice_review)[0];
+ if(weak)actions.push({kind:'review',title:weak.title,detail:`${weak.practice_review} questions to revisit · 復習が必要な問題`,href:noteHref(weak.id)+'#lesson-review',label:'Review weak points · 苦手を復習'});
+ if(practice&&practice.id!==weak?.id)actions.push({kind:'practice',title:practice.title,detail:`${practice.practice_completed} of ${practice.practice_total} completed · 練習の進捗`,href:noteHref(practice.id,practice.next_block),label:'Continue where you left off · 続きから学ぶ'});
  if(announcements.length)actions.push({kind:'announcement',title:announcements[0].title_en||announcements[0].title_ja,detail:'From your teacher · 先生からのお知らせ',href:'#announcements',noticeId:announcements[0].id,label:'Read announcement · お知らせを読む'});
  if(cards.length)actions.push({kind:'personal',title:cards[0].text_en||cards[0].text_ja,detail:`${cards.length} new / updated personal cards · 新着・更新の復習カード`,href:'#personal',label:'Review cards · カードを復習'});
+ if(!actions.length&&visible.length){const latest=[...visible].sort((a,b)=>String(b.lesson_date).localeCompare(String(a.lesson_date))||String(b.updated_at).localeCompare(String(a.updated_at)))[0];actions.push({kind:'note',title:latest.title,detail:'Latest lesson note · 最新のレッスンノート',href:noteHref(latest.id),label:'Open latest note · 最新ノートを開く'});}
  return actions.slice(0,3);
 }
 export function teacherNoteActions(notes=[]) {

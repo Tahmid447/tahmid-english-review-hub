@@ -92,7 +92,7 @@ export function noteState(note,seen) {
 }
 export function noteListActions(note) {
  if(note.deleted_at)return [['restore','Restore from Trash · ゴミ箱から下書きに戻す']];
- return [['preview','Preview Student View · 生徒表示を確認'],['duplicate','Duplicate for learner · 別の生徒用に複製'],...(note.status==='archived'?
+ return [['preview','Preview Student View · 生徒表示を確認'],['activity','Progress & activity · 進捗・更新'],['media','Images · 画像'],['duplicate','Duplicate for learner · 別の生徒用に複製'],...(note.status==='archived'?
   [['restore','Restore from Archive · 保管から下書きに戻す'],['trash','Move to Trash · ゴミ箱へ移動']]:[['archive','Archive · 保管する']])];
 }
 export const dateLabel = value => new Date(`${value}T12:00:00`).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
@@ -120,7 +120,7 @@ export function safeImportedText(value) {
   .replace(/<[^>]*>/g,'').replace(/!?(\[([^\]]*)\])\([^)]*\)/g,'$2')
   .replace(/\u0000/g,'');
 }
-export function importLessonText(input) {
+export function importLessonText(input,{referenceDate=newNote().lesson_date}={}) {
  if(new TextEncoder().encode(input).length>180000)throw new Error('Import up to 180KB at once. · 長い教材は分けて取り込んでください。');
  const clean=safeImportedText(input),warnings=[];
  const extracted=extractLessonMetadata(clean),text=extracted.content;
@@ -167,19 +167,41 @@ export function importLessonText(input) {
  if(blocks.length>150)throw new Error('This import has more than 150 blocks. Split it into two notes.');
  if(!blocks.length && text.trim())blocks.push({...newBlock(),englishText:text.trim()});
  const metadata=lessonMetadata(blocks,{...extracted.metadata,...!extracted.metadata.title&&title?{title}:{}});
+ const suppliedDate=extracted.metadata.lesson_date;
+ metadata.lesson_date=parseLessonDate(suppliedDate||metadata.title,referenceDate)||(!suppliedDate?referenceDate:'');
+ if(suppliedDate&&!metadata.lesson_date)warnings.push('Check the lesson date. Use YYYY-MM-DD for an unambiguous date. · レッスン日を確認し、YYYY-MM-DD形式で入力してください。');
  return {title:metadata.title,metadata,explicitFields:extracted.fields,blocks,warnings};
 }
 
 export const METADATA_FIELDS = Object.freeze({
+ lesson_date:['Lesson date · レッスン日',10],
  title:['Lesson Title · レッスンタイトル',180],summary:['Short Introduction · 短い概要',1200],
  focus:["Today's Focus · 今日のポイント",2000],tags:['Topics · テーマ',600],
 });
-const metadataLabels={'lesson title':'title','short introduction':'summary','a short introduction':'summary',"today's focus":'focus','todays focus':'focus',topics:'tags'};
+const metadataLabels={'lesson date':'lesson_date',date:'lesson_date','レッスン日':'lesson_date','日付':'lesson_date','lesson title':'title','short introduction':'summary','a short introduction':'summary',"today's focus":'focus','todays focus':'focus',topics:'tags'};
+export function parseLessonDate(value,referenceDate=newNote().lesson_date) {
+ const source=String(value||'').trim(),year=Number(referenceDate.slice(0,4));let y,m,d;
+ let match=source.match(/^(\d{4})[-/.年](\d{1,2})[-/.月](\d{1,2})(?:日|\b)/);
+ if(match)[,y,m,d]=match;
+ else {
+  const months=['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
+  match=source.match(/^([A-Za-z]+)\s+(\d{1,2})(?:st|nd|rd|th)?(?:,?\s+(\d{4}))?\b/i);
+  if(match&&months.includes(match[1].slice(0,3).toLowerCase()))[y,m,d]=[match[3]||year,months.indexOf(match[1].slice(0,3).toLowerCase())+1,match[2]];
+  else {
+   match=source.match(/^(\d{1,2})\s+([A-Za-z]+)(?:\s+(\d{4}))?\b/i);
+   if(match&&months.includes(match[2].slice(0,3).toLowerCase()))[y,m,d]=[match[3]||year,months.indexOf(match[2].slice(0,3).toLowerCase())+1,match[1]];
+   else {match=source.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);if(match&&Number(match[2])>12)[y,m,d]=[match[3],match[1],match[2]];else if(match&&Number(match[1])>12)[y,m,d]=[match[3],match[2],match[1]];}
+  }
+ }
+ if(!y||!m||!d)return '';
+ const date=new Date(Date.UTC(Number(y),Number(m)-1,Number(d)));
+ return date.getUTCFullYear()===Number(y)&&date.getUTCMonth()+1===Number(m)&&date.getUTCDate()===Number(d)?`${String(y).padStart(4,'0')}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`:'';
+}
 function extractLessonMetadata(text) {
  const metadata={},fields=[],content=[];let active='';
  for(const line of text.split('\n')) {
   const unstyled=line.replace(/^\s*#{1,6}\s+/,'').replace(/\*\*/g,'').replace(/[’‘]/g,"'");
-  const match=unstyled.match(/^\s*([A-Za-z' ]+)[:：]\s*(.*)$/),key=metadataLabels[match?.[1].trim().toLowerCase()];
+  const match=unstyled.match(/^\s*([A-Za-z' ]+|レッスン日|日付)[:：]\s*(.*)$/),key=metadataLabels[match?.[1].trim().toLowerCase()];
   if(key){active=key;if(!fields.includes(key))fields.push(key);metadata[key]=match[2].trim();continue;}
   if(active&&!line.trim()&&metadata[active]){active='';continue;}
   // A content heading or block field ends a multiline metadata value.
@@ -212,6 +234,7 @@ export function applyLessonImport(note,imported,replaceFields=[]) {
   if(key==='tags'){
    if(!Array.isArray(value)||value.length>12||value.some(t=>typeof t!=='string'||t.length>80))throw new Error('Use up to 12 topics, 80 characters each. · テーマは12個、各80文字までです。');
   }else if(typeof value!=='string'||value.length>limit)throw new Error(`${METADATA_FIELDS[key][0]}: maximum ${limit} characters. · 文字数を確認してください。`);
+  if(key==='lesson_date'&&parseLessonDate(value)!==value)throw new Error('Choose a valid lesson date. · 正しいレッスン日を入力してください。');
   copy[key]=clone(value);
  }
  copy.content_json.blocks.push(...clone(imported.blocks));

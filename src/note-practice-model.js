@@ -25,9 +25,9 @@ export const practiceSectionType = title => {
  const clean=title.replace(/^[^\p{L}]+/u,'').trim();
  return [
   [/^multiple\s*choice|選択問題/i,'multiple_choice'],[/^fill\s*in\s*(?:the\s*)?blank|穴埋め/i,'fill_in_blank'],
-  [/^error\s*correction|誤りを直す/i,'error_correction'],[/^sentence\s*reorder|並び替え/i,'sentence_reorder'],
+  [/^(?:error\s*correction|natural\s*english\s*correction)|誤りを直す/i,'error_correction'],[/^sentence\s*reorder|並び替え/i,'sentence_reorder'],
   [/^japanese\s*(?:→|->|to)\s*english\s*practice|英作文練習/i,'japanese_to_english_practice'],
-  [/^short\s*answer|自由回答/i,'short_answer'],[/^self\s*check|理解を確認/i,'self_check'],
+  [/^short\s*(?:answer|free\s*response)|自由回答/i,'short_answer'],[/^self[-\s]*check|理解を確認/i,'self_check'],
   [/^remember\s*(?:&|and)?\s*review|覚えて復習/i,'remember_review'],
   [/^(?:quick\s*practice\s*group|practice\s*section)|練習セクション/i,'quick_practice_group'],
  ].find(([p])=>p.test(clean))?.[1];

@@ -4,6 +4,7 @@
 2026-09-14 to 2026-09-20
 
 ## Completed
+- Implemented reading/import UX: full-width card covers, protected editable lesson dates, staged image import, priority-based disclosures, section jumps/back-to-top, practice state and clearer student/teacher shortcuts. Relevant tests and isolated desktop/390px QA pass.
 - Published Duplicate for learner (`5b8c5d6`): list/editor action, destination selector, editable independent draft, fresh block/question IDs, private teacher-image copies and no learner activity transfer.
 - Existing 10.7 production: interactive notebook practice, stored progress, recoverable Trash, private images and in-site updates.
 - Published 10.8 workflow upgrade: editable Quick Import metadata and blocks; preserve existing metadata unless explicitly replaced.
@@ -12,7 +13,7 @@
 - Real PostgreSQL/RLS regression tests and isolated browser QA, including profile/settings and archive/Trash restoration.
 
 ## In Progress
-- None for this request. User-approved Duplicate for learner production deployment and minimal live smoke are complete.
+- Publishing the user-approved reading/import improvements through existing GitHub main / Cloudflare Pages, followed by minimal production smoke. No database migration is needed.
 
 ## Next
 1. Validate on a physical iPhone and fresh actual-student login during normal acceptance testing.
@@ -28,6 +29,8 @@
 - Auth, email, pronunciation, storage privacy and original learning models are unchanged.
 
 ## QA / Known Issues
+- Quick Import image defaults are editable templates, not AI analysis. Files upload only on Save/Publish; keep the page open to retry partial uploads. Already successful uploads are reused. Unsaved local files have no cross-session resume.
+- New reading/import tests cover date parsing/ambiguity/manual-value protection, practice aliases, cover/detail sizing, default disclosures, next actions and image validation/retry. Existing notebook/practice/workflow/duplicate and My Page tests passed; browser import-to-publish with six practice types and image, weak-point review, answer-preserving disclosures, 390px and console checks passed.
 - Duplicate feature: focused notebook/practice/workflow/new-copy suites, Cloudflare build/output check and local browser A-to-B draft/image/edit/publish checks passed. Source/activity stays unchanged; cross-account and anonymous reads are denied. No new migration or production write.
 - Before the first copy save, learner/date/content and staged image metadata/removal are editable. Normal image upload/replacement follows the existing saved-draft flow. A failed image copy leaves a clearly flagged partial draft for manual image repair; no automatic cross-session resume or persisted source-note link.
 - Full `npm test`, Cloudflare build/output checks and voice contract passed. No lint or TypeScript configuration exists.
