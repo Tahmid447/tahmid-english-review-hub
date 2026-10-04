@@ -4,12 +4,12 @@ import {escapeHTML as e} from './store.js?v=20260911-mobile2';
 import {eventLabels,watchNoteUpdates} from './note-updates.js?v=20260915-practice';
 const teacher=location.pathname.startsWith('/teacher')||new URLSearchParams(location.search).get('owner_preview')==='1';
 const client=teacher?getTeacherClient():getStudentClient();
-let account='',dispose=()=>{},root,dialog,items=[],generation=0,loading=false,marking=false,refreshAgain=false;
+let account='',dispose=()=>{},root,dialog,items=[],generation=0,loading=false,marking=false,refreshAgain=false,unreadCount=0;
 const api=client&&createNoteApi(client);
-function clear(){generation++;dispose();dispose=()=>{};root?.remove();dialog?.close();dialog?.remove();root=dialog=null;items=[];account='';loading=false;marking=false;refreshAgain=false;}
+function clear(){generation++;dispose();dispose=()=>{};root?.remove();dialog?.close();dialog?.remove();root=dialog=null;items=[];account='';loading=false;marking=false;refreshAgain=false;unreadCount=0;}
 function drawDialog(){
  if(!dialog?.open)return;
- const all=dialog.querySelector('[data-read-all]');all.disabled=marking||!items.some(n=>n.unread);all.textContent=marking?'Marking read... · 既読にしています':'Read all · すべて既読';
+ const all=dialog.querySelector('[data-read-all]');all.disabled=marking||!unreadCount;all.textContent=marking?'Marking read... · 既読にしています':'Read all · すべて既読';
  const list=dialog.querySelector('[data-notice-list]');
  list.innerHTML=items.map(n=>`<article class="note-notice ${n.unread?'is-unread':''}"><span>${n.unread?'● Unread · 未読':'Read · 確認済み'}</span><h3><a data-open-notice="${e(n.note_id)}" href="${teacher?`/teacher?studio=notes&note=${encodeURIComponent(n.note_id)}&view=activity`:`/my-page/notes/${encodeURIComponent(n.note_id)}`}">${e(n.note?.title||'Lesson note · レッスンノート')}</a></h3><p>${Object.entries(n.counts).map(([key,count])=>`${e(eventLabels[key]||key)} × ${count}`).join(' · ')}</p><small>${e(new Date(n.updated_at).toLocaleString())}</small><button type="button" data-read-notice="${e(n.note_id)}" data-unread="${!n.unread}">${n.unread?'Mark read · 確認済みに':'Mark unread · 未読に戻す'}</button></article>`).join('')||'<p class="note-inbox-empty">You’re up to date. Important lesson updates will appear here.<br>今は新しい通知がありません。ノートやコメントなどの更新をお知らせします。</p>';
  list.querySelectorAll('[data-read-notice]').forEach(btn=>btn.onclick=async()=>{btn.disabled=true;try{await api.setRead(btn.dataset.readNotice,btn.dataset.unread==='true');await refresh();}catch(error){dialog.querySelector('[role=status]').textContent=noteError(error);btn.disabled=false;}});
@@ -17,8 +17,8 @@ function drawDialog(){
 }
 async function refresh(){
  if(!account)return;if(loading){refreshAgain=true;return;}loading=true;const token=generation;
- try{const next=await api.notifications({unreadOnly:false});if(token!==generation)return;items=next;const count=items.filter(n=>n.unread).length;
-  root.querySelector('button').textContent=`🔔 Notifications · お知らせ${count?` (${count})`:''}`;
+ try{const next=await api.notifications({unreadOnly:false}),unread=await api.notifications({unreadOnly:true});if(token!==generation)return;items=next;const count=unreadCount=unread.length;
+  root.querySelector('button').textContent=`🔔 Notifications · お知らせ${count?` (${count===100?'100+':count})`:''}`;
   root.querySelector('button').setAttribute('aria-label',`Notifications · お知らせ ${count} unread · 未読`);
   root.querySelector('[role=status]').textContent=count?`${count} unread lesson updates · 未読のノート更新`:'';
   window.dispatchEvent(new CustomEvent('lesson-note-inbox',{detail:{count}}));drawDialog();
