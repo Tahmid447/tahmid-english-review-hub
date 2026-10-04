@@ -55,6 +55,7 @@ const publicSourceFiles = [
   "pwa.js",
   "store.js",
   "study-music.js",
+  "music-policy.js",
   "styles.css",
   "supabase.js",
   "teacher.js",
