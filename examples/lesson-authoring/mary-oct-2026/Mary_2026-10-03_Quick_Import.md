@@ -26,7 +26,7 @@ Explanation: The original is grammatical. This version makes the comparison with
 English: I need some time to reflect on who I am.
 Japanese: 自分と向き合って考える時間が必要です。
 Explanation: Reflect on means think carefully about something.
-Example: I care about the people around me.
+Example: Sometimes I need quiet time to reflect on who I am.
 
 ## Comparison
 Word A: sacrifice
