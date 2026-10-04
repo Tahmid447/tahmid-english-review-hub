@@ -1,5 +1,26 @@
 # Working handoff — October 4, 2026
 
+## October 4 - Notification inbox, learner previews and practice appearance
+
+**Live:** runtime `50ba2ff99247622fdbc01bfe069b876a01caea7d`, built `2026-10-04T12:34:45.601Z`, Cloudflare production deployment `88dff703-6e00-4f1a-924d-8b7b5954f2f6`. Implementation `defc26d` plus `50ba2ff` keeps bulk-read available when older unread notifications are outside the latest 100 displayed items. Existing main/GitHub/Pages flow; no infrastructure changes.
+
+- Notifications: Read all beside Close, busy/empty states, recipient-scoped existing RPC, paged processing beyond 100 and retry after partial failure. Unread query is separate from the displayed recent inbox; count is capped at 100+.
+- Teacher learner list, profile and saved library settings have real authenticated preview links: `/teacher?studio=learners&preview_student=<id>`. Preview reloads saved global/individual feature settings, displays actual published note cards/private covers and opens the existing note/practice renderer with preview-only responses. Desktop/820px Tablet-iPad/390px Mobile widths do not remount answers. Existing owner My Page preview remains separate; public-page link added to global settings.
+- Practice styles Classic / Color / Focus in ordinary lessons and Lesson Notes, with original style available in one click. Changing appearance does not remount answer controls. Store preference uses existing settings JSON; no schema change. Color uses restrained jade/rose/cyan accents and clearer selected choices. Notes use container-responsive reading layouts; tablet touch actions remain usable.
+- Quick Import adds a copyable Quick Prompt using supported metadata labels and six practical practice formats; it does not send content to an AI service. Existing import preview/manual-field protection and image flow remain.
+
+Focused automated learning-display test passed: 205-notification paging, future notification preservation, partial failure/retry, cancellation, inheritance/global music OFF and six-format prompt parsing. Existing focused reading/import test passed. Changed JS syntax checked. Final Cloudflare build/output check passed (90 public text assets); new modules/styles are explicitly included in build source list. Builds were rerun only after identified source corrections, not as whole-suite rechecks.
+
+Isolated real-browser Student A bulk read changed two notifications to read with success text; Color/Focus switch retained an entered answer. Mobile 390px frame and tablet frame showed no horizontal overflow and no captured runtime errors. Local isolated preview: `http://127.0.0.1:4182/teacher?studio=learners&preview_student=20000000-0000-4000-8000-000000000001`, PID 9490, log /tmp/tahmid-learning-preview.log.
+
+Production owner Teacher Studio loaded; learner links and saved individual/global settings loaded. Email Gmail Test correctly had no published notes. Tahmid Ahmed preview showed actual published cards/covers; its lesson opened, Color controls displayed, 820px frame had no overflow, with no captured errors. Final runtime notification dialog has enabled Read all and no captured errors. Production notifications were NOT marked read for QA; no learner answer/review/content was written. Screenshot of the unchanged practice view from the initial implementation release: `/Users/tahmidahmed/Documents/Codex/private-backups/2026-10-04-learning-preview.jpg`.
+
+No new migration or production database write from this task. Ledger remains 15 entries, latest `20261004120000`; BGM global OFF remains false. Existing same-day private backup is readable and reused. Before/after release aggregate counts: profiles 5 -> 5, lesson notes 23 -> 23, note assets 35 -> 36. One asset was added concurrently outside this task; do not revert it or claim an exact all-row comparison was performed. Anonymous profiles, lesson notes and note practice attempts each rejected reads with 401.
+
+Limits: learner preview covers saved feature availability and published Lesson Notes, not full student impersonation, every My Page section or unsaved teacher form values. It requires teacher authentication and an accessible profile; no public sharing of private previews. Real physical iPad testing was not performed. Notification batches use the existing per-note RPC and can take longer for a very large inbox; failures preserve completed items for retry. Reuse existing tests for unchanged functions.
+
+---
+
 ## October 4 - Global music OFF correction
 
 User reported that a first-use device still offered/played music after teacher global OFF, and a test learner still saw music settings. Confirmed production anonymous `review_my_experience` returns `show_music:false`. Previous client ignored global defaults for anonymous visits and allowed individual ON to override global OFF. Previous release verification did not cover these two cases and was incomplete.

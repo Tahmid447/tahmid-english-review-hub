@@ -1,5 +1,10 @@
 # Tahmid English Hub - Weekly Progress
 
+## October 4 - Learning experience and previews
+- Published `50ba2ff` on existing main/Cloudflare Pages, deployment `88dff703-6e00-4f1a-924d-8b7b5954f2f6`: notifications Read all (including older unread items), authenticated saved-setting learner previews with actual published note cards/images, and Desktop/Tablet-iPad/Mobile preview widths.
+- Added reversible Classic/Color/Focus practice appearance without clearing answers and a copyable six-format Quick Prompt in Quick Import. No AI-service dependency, database migration, data reset, authentication or infrastructure changes; global BGM OFF retained.
+- Scoped unit/import checks, required production build/output checks and targeted browser smoke passed. Production preview loaded real cards/lesson, 820px had no overflow, and final inbox control had no errors. Local 390px and bulk-read checks passed. Same-day private backup reused; original data counts did not decrease, and one image asset was added by concurrent activity. Preview is read-only and limited to saved features/published notes; no physical iPad claim. See handoff.
+
 ## October 4 - Music controls
 - Corrected global OFF scope in live runtime `495e26e`: disables BGM for visitors and all learner accounts regardless of individual ON, and hides controls/prompt while policy loads. Production signed-out home and test-learner My Page show no BGM controls/prompt/audio under the owner's saved OFF. No database changes. Focused regression and corrected build/output check passed.
 - Published `3a97dde` through existing main/Cloudflare Pages (`9d2ed288-a2b4-4eb8-9473-5d5dd6e1bff8`): learner BGM OFF persists across preference loading and account scope changes; delayed OFF stops actual audio. Added Study music to existing global and individual learner feature controls. Teacher ON does not override personal OFF; speech and sound effects remain independent.
