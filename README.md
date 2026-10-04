@@ -44,6 +44,12 @@ The old Netlify site and its original source branch remain available as an optio
 - `/plans` — membership information
 - `/teacher` — protected Teacher Studio
 
+## Lesson authoring
+
+Teachers and AI assistants preparing Lesson Notes should start with the [authoring workflow](docs/WORKFLOW_FOR_CHATGPT.md), [Lesson Note standard](docs/LESSON_NOTE_STANDARD.md) and [cover image standard](docs/COVER_IMAGE_STANDARD.md).
+
+Use the [Quick Import template](templates/LESSON_NOTE_TEMPLATE.md) and [new lesson prompt](prompts/CREATE_NEW_LESSON_PROMPT.md), with the [Mary gold examples](examples/lesson-authoring/mary-oct-2026/) as references, not content to copy. Inspect Preview Import before publishing. This reference system does not change the in-app Quick Prompt or authorize production changes.
+
 ## Continuing work
 
 Read [AGENTS.md](AGENTS.md), [working handoff](docs/WORKING_HANDOFF.md) and [Cloudflare deployment](docs/CLOUDFLARE_DEPLOYMENT.md) before changing the app. Future work needs authorization from its own conversation. Never reset the database, replay historical migrations, reset branches or force-push.
