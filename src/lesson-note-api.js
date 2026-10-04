@@ -56,6 +56,15 @@ export function createNoteApi(client) {
   practice:(id,block,question,action,response,version)=>rpc('practice',{target_note:id,target_block:block,expected_question:question,action,response,expected_version:version}),
   setReviewed:(id,reviewed,version)=>rpc('set_reviewed',{target_note:id,reviewed,expected_version:version}),
   setRead:(id,unread)=>rpc('set_read',{target_note:id,make_unread:unread}),
+  async markAllRead({isCurrent=()=>true}={}) {
+   const before=new Date().toISOString();let count=0;
+   while(isCurrent()) {
+    const rows=await result(client.from(`${PREFIX}_notifications`).select('note_id').eq('unread',true).lte('updated_at',before).order('updated_at',{ascending:true}).limit(100));
+    if(!rows.length)return count;
+    for(const row of rows){if(!isCurrent())return count;await api.setRead(row.note_id,false);count++;}
+   }
+   return count;
+  },
   trash:(id,restore,version)=>rpc('trash',{target_note:id,restore_note:restore,expected_version:version}),
   annotate:(id,block,body,version)=>rpc('annotate',{target_note:id,target_block:block,body_text:body,expected_version:version}),
   suggest:(id,block,changes)=>rpc('suggest',{target_note:id,target_block:block,changes}),

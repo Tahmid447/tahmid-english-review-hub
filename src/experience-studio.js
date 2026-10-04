@@ -24,6 +24,8 @@ export async function renderExperienceStudio(container,{client,profiles=[],onDef
   <div class="studio-step"><span>04</span><div><h4>Global learner features / 生徒全体の表示設定</h4><p class="studio-hint">「全体設定を使う」の生徒と新規登録者に反映します。「個別設定」の生徒はその設定を優先します。個別設定は「生徒を開く → 教材ライブラリ」で変更できます。</p><div class="studio-feature-grid">${features.map(([key,en,ja])=>`<label><input type="checkbox" name="show_${key}" ${config.features['show_'+key]!==false?'checked':''}><span>${en}<small>${ja}</small></span></label>`).join('')}</div></div></div>
   <div class="studio-footer"><button type="submit" class="primary-btn">Save & publish settings · 設定を保存して反映</button><button type="button" class="secondary-btn" data-preview-offer>Preview welcome · 特典のプレビュー</button><a href="/plans" target="_blank" rel="noopener">Open plans · 料金ページ ↗</a><p role="status" class="studio-status">設定変更は保存後に反映されます。 / Changes apply after saving.</p></div></form></details>`;
   const form=container.querySelector('form'),status=form.querySelector('[role=status]');
+  const publicPreview=document.createElement('a');publicPreview.href='/';publicPreview.target='_blank';publicPreview.rel='noopener';publicPreview.textContent='Open public page · 公開ページ';
+  form.querySelector('.studio-footer').insertBefore(publicPreview,status);
   form.elements.audience.value=config.audience;
   const values=()=>{
     const prices=Object.fromEntries(['standard','premium','premium_plus'].map(k=>[k,{regular:Number(form.elements[k+'_regular'].value),offer:Number(form.elements[k+'_offer'].value)}]));

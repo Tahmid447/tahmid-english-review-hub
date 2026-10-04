@@ -29,7 +29,7 @@ async function api(payload){
  if(payload.op==='query'){
   if(!tables.has(payload.table))throw new Error('Invalid fixture table');
   const params=[],where=[];
-  for(const [key,value,op] of payload.filters||[]){if(!/^[a-z_]+$/.test(key))throw new Error('Invalid column');if(value===null&&['is','not'].includes(op)){where.push(`${key} is ${op==='not'?'not ':''}null`);continue;}params.push(value);where.push(`${key}${op==='in'?`=any($${params.length})`:`=$${params.length}`}`);}
+  for(const [key,value,op] of payload.filters||[]){if(!/^[a-z_]+$/.test(key))throw new Error('Invalid column');if(value===null&&['is','not'].includes(op)){where.push(`${key} is ${op==='not'?'not ':''}null`);continue;}params.push(value);where.push(`${key}${op==='in'?`=any($${params.length})`:`${op==='lte'?'<=':'='}$${params.length}`}`);}
   const order=(payload.orders||[]).map(([key,ascending])=>{if(!/^[a-z_]+$/.test(key))throw new Error('Invalid order');return `${key} ${ascending?'asc':'desc'}`;}).join(',');
   const sql=`select * from public.${payload.table}${where.length?' where '+where.join(' and '):''}${order?' order by '+order:''} limit ${Math.min(1000,payload.limit||1000)} offset ${Math.max(0,payload.offset||0)}`;
   const data=(await db.query(sql,params)).rows.map(row=>({...row,...row.lesson_date?{lesson_date:new Date(row.lesson_date).toISOString().slice(0,10)}:{}}));

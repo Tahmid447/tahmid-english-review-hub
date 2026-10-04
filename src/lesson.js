@@ -1,3 +1,4 @@
+import {mountExerciseDisplay} from './exercise-display.js';
 import { renderLessonSaveControls } from './saved-learning.js?v=20260911-mobile2';
 import { buildPhraseCatalog, getLessonById, normalizeJapaneseMeaning } from "./data.js?v=20260911-mobile2";
 import {
@@ -2115,5 +2116,6 @@ window.addEventListener("keydown", (event) => {
 });
 
 installPlayfulInteractions();
+mountExerciseDisplay(document.querySelector('.quiz-toolbar'),{onSelect:style=>persistSettings({exerciseStyle:style})});
 watchSystemTheme(() => applyThemePreference(state.settings.theme));
 initialiseLesson();

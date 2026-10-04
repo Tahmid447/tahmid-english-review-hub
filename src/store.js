@@ -34,6 +34,7 @@ export const DEFAULT_SETTINGS = Object.freeze({
   shuffleChoices: true,
   hintMode: "auto",
   theme: "light",
+  exerciseStyle: "color",
   weeklyGoal: 3,
 });
 
@@ -133,6 +134,7 @@ export function getSettings() {
   return {
     ...DEFAULT_SETTINGS,
     ...savedSettings,
+    exerciseStyle: ["classic","color","focus"].includes(saved?.exerciseStyle)?saved.exerciseStyle:"color",
     voice: saved?.voice === "gb" ? "gb" : "us",
     languageMode,
     playbackRate,
@@ -168,6 +170,7 @@ export function getSettings() {
 
 export function updateSettings(patch = {}) {
   const next = { ...getSettings(), ...patch };
+  next.exerciseStyle=["classic","color","focus"].includes(next.exerciseStyle)?next.exerciseStyle:"color";
   if (Object.hasOwn(patch, "sound") && !Object.hasOwn(patch, "voiceEnabled")) {
     next.voiceEnabled = patch.sound !== false;
   }

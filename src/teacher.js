@@ -1,3 +1,4 @@
+import {openLearnerPreview,learnerPreviewUrl} from './learner-preview.js';
 import { mountLessonNoteStudio } from './lesson-note-studio.js?v=20260915-practice';
 import { createNoteApi } from './lesson-note-api.js?v=20260915-practice';
 import { teacherNoteActions, nextActionsMarkup } from './learning-overview.js';
@@ -45,6 +46,7 @@ let noteStudentFilter = new URLSearchParams(location.search).get('student') || "
 let noteCreateNew = new URLSearchParams(location.search).get('create') === '1';
 let noteRouteId = new URLSearchParams(location.search).get('studio') === 'notes' ? new URLSearchParams(location.search).get('note') || '' : '';
 let noteInboxFetchedAt = 0;
+let previewRouteStudent=new URLSearchParams(location.search).get('preview_student');
 window.addEventListener('lesson-note-inbox',event=>{const badge=document.querySelector('#noteActivityCount');if(badge)badge.textContent=event.detail.count||'';const host=document.querySelector('[data-dashboard-note-priorities]');if(host)void refreshDashboardNotes(host);});
 function refreshNoteInboxCount() {
   if (!state.session || Date.now() - noteInboxFetchedAt < 30000) return;
@@ -1261,6 +1263,12 @@ async function refreshDashboard() {
     state.premiumSchemaReady = premiumTasks.available && taskSubmissions.available && submissionFeedback.available;
     updateMetrics();
     renderActiveTab();
+    const previewId=previewRouteStudent;previewRouteStudent=null;
+    if(previewId){
+      const profile=state.profiles.find(p=>p.user_id===previewId);
+      if(profile)openLearnerPreview({client,profile,teacherId:state.session.user.id});
+      else showToast(teacherText('Learner preview unavailable for this account.','このアカウントでは生徒をプレビューできません。'),'error');
+    }
   } catch (error) {
     elements.panel.replaceChildren(
       make("p", { text: readableError(error, "The dashboard could not be loaded.") }),
@@ -3058,6 +3066,7 @@ function renderStructuredHubControls(profile, container, output) {
   container.replaceChildren(
     summary,
     structuredHubProgressSummary(profile),
+    learnerPreviewLink(profile),
     form,
     structuredHubItemAccess(profile, settings, refreshSummary),
     structuredHubPersonalPacks(profile, refreshSummary),
@@ -3170,6 +3179,12 @@ function learnerDialogWorkspace(entries, initialKey = "profile") {
   return workspace;
 }
 
+function learnerPreviewLink(profile) {
+  const link=make('a',{text:teacherText('Preview learner page','生徒ページをプレビュー'),className:'secondary-btn'});
+  link.href=learnerPreviewUrl(profile.user_id);
+  link.onclick=event=>{if(event.ctrlKey||event.metaKey||event.shiftKey||event.altKey)return;event.preventDefault();openLearnerPreview({client,profile,teacherId:state.session.user.id});};
+  return link;
+}
 function openLearnerDialog(profile) {
   if (!elements.learnerDialog || !elements.learnerDialogContent) return;
   const sameLearner = elements.learnerDialog.dataset.learnerId === profile.user_id;
@@ -3224,6 +3239,7 @@ function openLearnerDialog(profile) {
     elements.learnerDialog.close();state.submissionLearnerFilter=current.user_id;state.submissionStatusFilter='all';state.tab='submissions';renderActiveTab();elements.panel.scrollIntoView({block:'start'});
   });
   profileCard.append(openReviews);
+  profileCard.append(learnerPreviewLink(current));
   profileCard.append(makeAction(teacherText("Lesson notes for this learner", "この生徒の個別レッスンノート"), () => {
     elements.learnerDialog.close(); noteStudentFilter = current.user_id; state.tab = "notes"; renderActiveTab();
   }));
@@ -3730,7 +3746,7 @@ function renderStudents() {
       );
       open.className = "secondary-btn";
       const actionCell = make("td");
-      actionCell.append(open);
+      actionCell.append(open,learnerPreviewLink(profile));
       actionCell.append(makeAction(teacherText('Create Lesson Note','ノートを作成'),()=>startLearnerNote(profile.user_id)));
       const learnerCell = make("td");
       learnerCell.append(

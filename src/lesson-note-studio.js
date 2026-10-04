@@ -1,3 +1,4 @@
+import {lessonQuickPrompt} from './lesson-note-model.js';
 import {watchNoteUpdates,eventLabels} from './note-updates.js?v=20260915-practice';
 import {createImportImageQueue,importImageMetadata} from './note-import-images.js';
 import {PRACTICE_TYPES,isPractice} from './note-practice-model.js?v=20260915-practice';
@@ -221,6 +222,10 @@ export function mountLessonNoteStudio(root,{client,teacherId,profiles=[],student
   const dialog=document.createElement('dialog');dialog.className='ln-modal ln-import-dialog';let imported=null,transferred=false,importDateEdited=false;const staged=createImportImageQueue();
   dialog.innerHTML=`<h2>Quick Import · 一括取り込み</h2><p>Paste Markdown or structured lesson text. Check the preview, then add editable blocks.<br>Markdownやレッスンメモを貼り付け、内容を確認してから追加します。</p><label>Lesson text · レッスンテキスト<textarea class="ln-import-text" maxlength="180000" placeholder="## Japanese → English&#10;English: refund&#10;Japanese: 返金&#10;Example: I'd like a full refund."></textarea></label><div class="ln-actions">${button('Preview import · 取り込みを確認','data-parse')}${button('Add these blocks · この内容を追加','data-apply disabled')}${button('Cancel · キャンセル','data-close')}</div>${statusMarkup()}<div class="ln-import-preview ln-notebook"></div>`;
   const images=document.createElement('section');images.className='ln-import-upload';images.innerHTML='<h3>Add images to this lesson · このレッスンに画像を追加</h3><label>Choose images · 画像を選ぶ<input type="file" accept="image/png,image/jpeg,image/webp" multiple data-import-files></label><div data-import-images></div>';
+  const prompt=document.createElement('details');prompt.className='ln-quick-prompt';
+  prompt.innerHTML=`<summary>Quick Prompt · 教材作成プロンプト</summary><textarea aria-label="Quick Prompt" rows="10" readonly>${e(lessonQuickPrompt(note))}</textarea>${button('Copy Quick Prompt · コピー','data-copy-prompt')}`;
+  dialog.querySelector('.ln-import-text').closest('label').before(prompt);
+  prompt.querySelector('button').onclick=async()=>{try{await navigator.clipboard.writeText(prompt.querySelector('textarea').value);dialog.querySelector('[role=status]').textContent='Prompt copied. · プロンプトをコピーしました。';}catch{prompt.querySelector('textarea').select();dialog.querySelector('[role=status]').textContent='Select and copy the prompt. · プロンプトを選択してコピーしてください。';}};
   dialog.querySelector('.ln-import-preview').before(images);
   const actions=dialog.querySelector('.ln-actions');actions.classList.add('ln-import-actions');dialog.append(actions);
   images.querySelector('input').onchange=event=>{try{staged.add([...event.target.files],imported?.metadata.title||note.title);renderImportImages(images.querySelector('[data-import-images]'),staged,()=>{});}catch(error){dialog.querySelector('[role=status]').textContent=noteError(error);}finally{event.target.value='';}};
@@ -255,11 +260,13 @@ export function mountLessonNoteStudio(root,{client,teacherId,profiles=[],student
   }catch(error){dialog.querySelector('[role=status]').textContent=noteError(error);}};dialog.showModal();
  }
  function renderPreview(){
-  const panel=root.querySelector('[data-editor-panel]');let mode='support',mobile=false;
+  const panel=root.querySelector('[data-editor-panel]');let mode='support',size='desktop';
   panel.innerHTML=`<p class="ln-status">Preview of your current edits. These display switches do not change stored content.<br>未保存の変更も確認できます。表示の切り替えは教材の保存内容を変更しません。</p><div class="ln-preview-controls">${button('EN Primary','data-preview-mode="english" aria-pressed="false"')}${button('EN + JP Support','data-preview-mode="support" aria-pressed="true"')}${button('Desktop · パソコン','data-preview-size="desktop" aria-pressed="true"')}${button('Mobile · スマホ','data-preview-size="mobile" aria-pressed="false"')}</div><div class="ln-preview-frame" data-preview-view></div>`;
-  const draw=()=>{view?.dispose();const frame=panel.querySelector('[data-preview-view]');frame.classList.toggle('is-mobile',mobile);view=mountNoteView(frame,{detail:{...detail,note},api,student:false,mode,teacherName:'Your English teacher'});};
+  const tablet=document.createElement('button');tablet.type='button';tablet.className='ln-button';tablet.dataset.previewSize='tablet';tablet.textContent='Tablet / iPad';tablet.setAttribute('aria-pressed','false');panel.querySelector('[data-preview-size=mobile]').before(tablet);
+  const resize=()=>{const frame=panel.querySelector('[data-preview-view]');frame.classList.toggle('is-mobile',size==='mobile');frame.classList.toggle('is-tablet',size==='tablet');};
+  const draw=()=>{view?.dispose();const frame=panel.querySelector('[data-preview-view]');resize();view=mountNoteView(frame,{detail:{...detail,note},api,student:false,mode,teacherName:'Your English teacher'});};
   panel.querySelectorAll('[data-preview-mode]').forEach(btn=>btn.onclick=()=>{mode=btn.dataset.previewMode;panel.querySelectorAll('[data-preview-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b===btn)));draw();});
-  panel.querySelectorAll('[data-preview-size]').forEach(btn=>btn.onclick=()=>{mobile=btn.dataset.previewSize==='mobile';panel.querySelectorAll('[data-preview-size]').forEach(b=>b.setAttribute('aria-pressed',String(b===btn)));draw();});draw();
+  panel.querySelectorAll('[data-preview-size]').forEach(btn=>btn.onclick=()=>{size=btn.dataset.previewSize;panel.querySelectorAll('[data-preview-size]').forEach(b=>b.setAttribute('aria-pressed',String(b===btn)));resize();});draw();
  }
  function requireSaved(panel){if(!note.id){panel.innerHTML='<div class="ln-empty"><h2>Give this lesson a home.</h2><p>Choose a learner and save a draft first. · 生徒を選び、先に下書きを保存してください。</p></div>';return false;}return true;}
  async function reloadDetail(){const data=await api.detail(note.id,{teacher:true});if(disposed)return;detail=data;note=clone(data.note);dirty=false;renderEditor();}

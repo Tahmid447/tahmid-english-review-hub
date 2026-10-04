@@ -113,6 +113,68 @@ const fieldNames = {
  example:'examples',examples:'examples',explanation:'explanation',ipa:'ipa',answer:'answer',tags:'tags',
  'word a':'englishText','word b':'comparisonText',
 };
+export function lessonQuickPrompt(note) {
+ return `Create adult-friendly personal English lesson notes from the lesson material I will paste below. Return only plain Markdown; no JSON, HTML, tables or code fences.
+Use the exact labels and section headings below. Preserve dates and factual details from my material. If no lesson date is given, use ${note.lesson_date}. Suggest a concise title, short introduction, three practical focus points and 3-6 topics. Keep explanations brief and encouraging. Never invent personal information.
+Include practical, varied practice: Fill in the Blank, Multiple Choice, Japanese to English Practice, Error Correction, Short Answer and Self Check where they fit the material. Start with an achievable question, then a realistic situation. Give an explicit answer, useful hint and brief explanation; open-ended questions should use a model answer, not claim that it is the only correct response.
+Repeat each practice heading for each separate question. Each choice needs its own A:, B:, C: line. Use only easy, medium or challenging for Difficulty. Japanese support should be short. Omit irrelevant sections.
+
+Lesson Date: ${note.lesson_date}
+Lesson Title: ${note.title||'[suggest from the lesson]'}
+Short Introduction: [one or two sentences]
+Today's Focus: [three practical points]
+Topics: [comma-separated topics]
+
+## Useful Phrases
+English: [useful phrase]
+Japanese: [short meaning]
+Example: [real-life example]
+
+## Natural English
+Original: [original expression]
+English: [natural expression]
+Explanation: [brief reason]
+
+## Grammar
+English: [key pattern]
+Explanation: [short explanation]
+Example: [example]
+
+## Quick Practice
+### Fill in the Blank
+Question: [sentence with one blank]
+Answer: [missing word or words]
+Hint: [a useful clue]
+Difficulty: easy
+
+### Multiple Choice
+Question: [realistic situation]
+A: [choice]
+B: [choice]
+C: [choice]
+Answer: [exact text of the correct choice]
+Explanation: [why]
+
+### Japanese to English Practice
+Question: [ask the learner to say the Japanese sentence in English]
+Japanese: [sentence]
+Answer: [natural English model]
+
+### Error Correction
+Question: [sentence to correct]
+Answer: [corrected sentence]
+Explanation: [why]
+
+### Short Answer
+Question: [personal but non-sensitive real-life question]
+Answer: [one possible model answer]
+
+### Self Check
+Question: [can-do reflection]
+
+LESSON MATERIAL:
+[Paste the actual lesson material here]`;
+}
 export function safeImportedText(value) {
  // Import produces plain text, never an HTML fragment. Unknown text is retained.
  return String(value).replace(/\r\n?/g,'\n')
