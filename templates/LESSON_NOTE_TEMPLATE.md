@@ -1,7 +1,5 @@
 # Lesson Note Quick Import Template
 
-> Authoring template only. Replace all placeholders and delete unused sections before importing.
-
 Lesson Date: YYYY-MM-DD
 Lesson Title: Student | Short Lesson Title
 Short Introduction: One short sentence describing what the student practised.
