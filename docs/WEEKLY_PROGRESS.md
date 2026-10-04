@@ -1,8 +1,8 @@
 # Tahmid English Hub - Weekly Progress
 
 ## October 4 - Music controls
-- Ready for publication: learner BGM OFF persists across preference loading and account scope changes; delayed OFF stops actual audio. Added Study music to existing global and individual learner feature controls. Teacher ON does not override personal OFF; speech and sound effects remain independent.
-- Relevant automated tests, isolated actual browser playback/OFF/reload/global-control checks and Cloudflare build pass. One additive migration is prepared; private existing-row checkpoint is readable. Production release verification pending.
+- Published `3a97dde` through existing main/Cloudflare Pages (`9d2ed288-a2b4-4eb8-9473-5d5dd6e1bff8`): learner BGM OFF persists across preference loading and account scope changes; delayed OFF stops actual audio. Added Study music to existing global and individual learner feature controls. Teacher ON does not override personal OFF; speech and sound effects remain independent.
+- Relevant automated tests, isolated actual browser playback/OFF/reload/global-control checks and Cloudflare build pass. Forward migration `20261004120000` applied once with exact ledger source. Production actual BGM pause and OFF after logout/login/My Page verified on owner-managed test account; Teacher checkbox visible. Global defaults unchanged. Existing rows/content preserved; only test preference timestamp and additive ledger entry changed. See working handoff for evidence and verification limits.
 
 ## Current Week
 2026-09-14 to 2026-09-20
