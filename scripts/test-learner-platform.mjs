@@ -268,6 +268,8 @@ assert.equal(failedProfileWrite.calls.some(([operation]) => operation === "updat
 // responses. The client fixture is local: no learner account or network call.
 const previousWindow = globalThis.window;
 const previousDocument = globalThis.document;
+const previousFetch = globalThis.fetch;
+let globalMusicEnabled = true;
 let accessFixture = { session: { user: { id: "access-message-fixture" } } };
 const settingsQueries = [];
 const visibilityNode = { dataset: { studentFeature: "show_words" }, setAttribute() {}, contains: () => false };
@@ -277,6 +279,7 @@ const fakeElement = (tagName) => ({
   replaceChildren(...children) { this.children = children; },
 });
 try {
+  globalThis.fetch = async () => ({ ok: true, json: async () => ({ features: { show_music: globalMusicEnabled } }) });
   globalThis.window = { supabase: { createClient: () => ({
     auth: { getSession: async () => {
       if (accessFixture.sessionError) throw accessFixture.sessionError;
@@ -336,9 +339,21 @@ try {
   const anonymous = await loadStudentAccess({ refresh: true });
   assert.equal(anonymous.authenticated, false);
   assert.equal(featureAllowed(anonymous, "show_words"), true, "Signed-out public preview behavior is preserved.");
+  globalMusicEnabled = false;
+  assert.equal(featureAllowed(await loadStudentAccess({ refresh: true }), "show_music"), false,
+    "Teacher global OFF disables music on a fresh signed-out device.");
+  accessFixture.session = { user: { id: "access-message-fixture" } };
+  accessFixture.settingsResult = { data: { account_enabled: true, inherit_features: false, show_music: true }, error: null };
+  assert.equal(featureAllowed(await loadStudentAccess({ refresh: true }), "show_music"), false,
+    "An individual ON cannot bypass teacher global OFF.");
+  globalMusicEnabled = true;
+  accessFixture.settingsResult.data.show_music = false;
+  assert.equal(featureAllowed(await loadStudentAccess({ refresh: true }), "show_music"), false,
+    "A personal or individual OFF stays OFF when the global feature returns ON.");
   assert(settingsQueries.every((table) => table === "review_my_hub_settings"),
     "The failed-access path reads only settings, with no learning-content query.");
 } finally {
+  globalThis.fetch = previousFetch;
   if (previousWindow === undefined) delete globalThis.window; else globalThis.window = previousWindow;
   if (previousDocument === undefined) delete globalThis.document; else globalThis.document = previousDocument;
 }

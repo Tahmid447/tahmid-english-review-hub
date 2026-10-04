@@ -33,6 +33,7 @@ let ambientPlaybackGeneration = 0;
 
 export function setAmbientAvailability(allowed) {
   ambientAvailable = allowed === true;
+  if (typeof document !== 'undefined') document.documentElement.dataset.musicAvailable = String(ambientAvailable);
   if (!ambientAvailable && (ambientAudioElement || ambientGestureHandler)) void setAmbientPlayback(false);
 }
 
@@ -579,7 +580,7 @@ function ambientStartPrompt() {
 function updateAmbientStartPrompt(result, settings = getSettings()) {
   const prompt = ambientStartPrompt();
   if (!prompt) return;
-  const shouldOffer = settings.ambientEnabled
+  const shouldOffer = ambientAvailable && settings.ambientEnabled
     && result?.played !== true
     && result?.reason === "gesture-required"
     && prompt.dataset.ambientDismissed !== "true";

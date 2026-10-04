@@ -1213,6 +1213,9 @@ html[data-theme="dark"] .premium-footer nav a { color: var(--ink); }
 
 /* 2026-09-05 · teacher-curated structured learning entry */
 [data-student-hidden="true"] { display: none !important; }
+:root:not([data-music-available="true"]) :is([data-study-music-controls], [aria-labelledby="ambientSettingsHeading"], #ambientToggle, #ambientTrack, #ambientVolume, #ambientStartPrompt, #musicStartChip, label:has(> #ambientTrack), label:has(> #ambientVolume)) {
+  display: none !important;
+}
 html[data-student-access="pending"] [data-student-feature],
 html[data-student-access="pending"] [data-student-feature-any] {
   visibility: hidden;

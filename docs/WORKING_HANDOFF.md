@@ -1,5 +1,15 @@
 # Working handoff — October 4, 2026
 
+## October 4 - Global music OFF correction
+
+User reported that a first-use device still offered/played music after teacher global OFF, and a test learner still saw music settings. Confirmed production anonymous `review_my_experience` returns `show_music:false`. Previous client ignored global defaults for anonymous visits and allowed individual ON to override global OFF. Previous release verification did not cover these two cases and was incomplete.
+
+Correction: read global music policy through the existing public RPC with the public anonymous credential, independently of signed-in individual settings. Global OFF disables music for visitors and all learners, including individual ON; individual/personal OFF remains respected when global ON. Fail closed for music on policy-fetch failure. Hide BGM controls/prompt until availability is confirmed, and check availability before offering the prompt. Teacher's own controls are retained. No database/migration/data/infrastructure change.
+
+Focused access-loader regression passed for anonymous OFF, individual ON under global OFF and individual OFF under global ON. One production build; production verification pending at this checkpoint. Reuse earlier tests for unchanged functionality; no whole-site walkthrough.
+
+---
+
 ## October 4 - Learner music preferences and teacher control
 
 **Complete and live:** `3a97dde8a3af842b19d40fcfc535312ae05989cc`, Cloudflare production deployment `9d2ed288-a2b4-4eb8-9473-5d5dd6e1bff8`, built `2026-10-04T11:24:24.747Z`. Existing main fast-forwarded from `e93df88`; custom-domain release.json matches. User requested persistent learner BGM OFF and Study music in the existing global learner features. Delay playback until account preferences/access load; stop actual audio when a later OFF arrives; prevent stale preference reads from overwriting a completed save. Teacher global/individual `show_music` hides and disables BGM, without changing personal OFF, pronunciation or sound effects.

@@ -5,6 +5,7 @@ import {
 } from "./curriculum-api.js?v=20260911-mobile2";
 import { getStudentSession } from "./supabase.js?v=20260911-mobile2";
 import { setAmbientAvailability } from "./audio.js?v=20260911-mobile2";
+import { loadGlobalMusicAvailability } from './music-policy.js?v=20260911-mobile2';
 
 let accessPromise;
 let accessIdentity;
@@ -38,11 +39,12 @@ export async function loadStudentAccess({ refresh = false } = {}) {
     accessPromise = (async () => {
       const session = currentSession;
       accessLoadedAt = Date.now();
+      const musicAvailable = await loadGlobalMusicAvailability({ refresh });
       if (!session?.user) {
         return {
           authenticated: false,
           session: null,
-          settings: normalizedSettings(),
+          settings: normalizedSettings({ show_music: musicAvailable }),
           reason: "anonymous",
         };
       }
@@ -51,10 +53,12 @@ export async function loadStudentAccess({ refresh = false } = {}) {
         if (result?.error || result?.reason || !recordFrom(result, "settings") || result?.data?.migrationReady !== true) {
           throw result.error || new Error(`Student access check failed: ${result.reason}`);
         }
+        const settings = normalizedSettings(recordFrom(result, "settings"));
+        settings.show_music = musicAvailable && settings.show_music !== false;
         return {
           authenticated: true,
           session,
-          settings: normalizedSettings(recordFrom(result, "settings")),
+          settings,
           reason: result?.reason || null,
           error: null,
         };
@@ -112,7 +116,7 @@ export function applyStudentFeatureVisibility(access, root = document) {
   });
   root.querySelectorAll?.("[data-student-feature]").forEach((node) => {
     const key = node.dataset.studentFeature;
-    const hidden = Boolean(access?.authenticated) && (
+    const hidden = key === 'show_music' ? !featureAllowed(access, key) : Boolean(access?.authenticated) && (
       settings.account_enabled === false || settings[key] === false
     );
     node.dataset.studentHidden = String(hidden);
