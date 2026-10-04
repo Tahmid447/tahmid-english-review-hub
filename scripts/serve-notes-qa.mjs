@@ -10,12 +10,12 @@ const tables=new Set(['review_lesson_notes','review_personal_cards','review_pers
 for(const row of (await db.query("select tablename from pg_tables where schemaname='public' and tablename like 'review_%'")).rows)tables.add(row.tablename);
 const exportedServices=[...fs.readFileSync(path.join(root,'src/supabase.js'),'utf8').matchAll(/^export (?:async )?(?:function|const) (\w+)/gm)].map(m=>m[1]);
 if(process.env.NOTE_QA_WORKFLOW==='1')await (await import('./helpers/seed-workflow-qa.mjs')).seedWorkflowQA(db,ids,as,images);
-const types={'.html':'text/html','.js':'text/javascript','.css':'text/css','.png':'image/png','.svg':'image/svg+xml','.jpg':'image/jpeg','.webp':'image/webp','.mp3':'audio/mpeg','.woff2':'font/woff2'};
+const types={'.html':'text/html','.js':'text/javascript','.css':'text/css','.png':'image/png','.svg':'image/svg+xml','.jpg':'image/jpeg','.webp':'image/webp','.mp3':'audio/mpeg','.m4a':'audio/mp4','.woff2':'font/woff2'};
 const json=(response,data,status=200)=>{response.writeHead(status,{'Content-Type':'application/json','Cache-Control':'no-store'});response.end(JSON.stringify(data));};
 async function api(payload){
  if(!roles.has(payload.role))throw new Error('Invalid fixture identity');await as(payload.role);
  if(payload.op==='rpc'){
-  if(!/^review_(?:note_[a-z_]+|my_hub_settings|save_personal_card|set_curriculum_favorite)$/.test(payload.name)||Object.keys(payload.args).some(k=>!/^[a-z_]+$/.test(k)))throw new Error('Invalid fixture RPC');
+  if(!/^review_(?:note_[a-z_]+|my_hub_settings|my_experience|save_experience|save_personal_card|set_curriculum_favorite)$/.test(payload.name)||Object.keys(payload.args).some(k=>!/^[a-z_]+$/.test(k)))throw new Error('Invalid fixture RPC');
   const sql=`select to_jsonb(public.${payload.name}(${Object.keys(payload.args).map((k,i)=>`${k}=>$${i+1}`).join(',')})) as data`;
   return (await db.query(sql,Object.values(payload.args))).rows[0].data;
  }

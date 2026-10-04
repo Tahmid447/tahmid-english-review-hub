@@ -30,7 +30,7 @@ import {
 import { applyLanguageMode, languageModeFromSettings, uiText } from "./i18n.js?v=20260911-mobile2";
 import { installPlayfulInteractions } from "./effects.js?v=20260911-mobile2";
 import { planFor } from "./plans.js?v=20260911-mobile2";
-import { setAmbientPlayback, stopAudio, syncAmbientFromSettings } from "./audio.js?v=20260911-mobile2";
+import { setAmbientPlayback, setAmbientAvailability, stopAudio, syncAmbientFromSettings } from "./audio.js?v=20260911-mobile2";
 import {
   applyStudentFeatureVisibility,
   featureAllowed,
@@ -142,6 +142,7 @@ async function activateStorageScope(session) {
   }
   const generation = ++settingsScopeGeneration;
   const scopeChanged = userId !== activeStorageUserId;
+  setAmbientAvailability(false);
   activeStorageUserId = userId;
   setStorageUser(userId);
 
@@ -175,7 +176,13 @@ async function activateStorageScope(session) {
   pendingSettingsLoad = load;
   pendingSettingsUserId = userId;
   try {
-    return await load;
+    const ready = await load;
+    if (!ready) return false;
+    const access = await loadStudentAccess({ refresh: scopeChanged });
+    if (generation !== settingsScopeGeneration) return false;
+    applyStudentFeatureVisibility(access);
+    void syncAmbientFromSettings();
+    return true;
   } finally {
     if (pendingSettingsLoad === load) {
       pendingSettingsLoad = null;
@@ -339,7 +346,6 @@ function bindSettings() {
     }
   });
   applySettings();
-  void syncAmbientFromSettings();
   watchSystemTheme(() => applyThemePreference(getSettings().theme));
 }
 

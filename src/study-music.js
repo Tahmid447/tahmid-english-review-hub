@@ -4,7 +4,9 @@ import {
   ambientPlaybackStatus,
   setAmbientPlayback,
   syncAmbientFromSettings,
+  setAmbientAvailability,
 } from "./audio.js?v=20260911-mobile2";
+import { loadStudentAccess, applyStudentFeatureVisibility } from './student-visibility.js?v=20260911-mobile2';
 import { getSettings, onSettingsChange, updateSettings } from "./store.js?v=20260911-mobile2";
 import { installPlayfulInteractions } from "./effects.js?v=20260911-mobile2";
 
@@ -95,5 +97,9 @@ const roots = [...document.querySelectorAll("[data-study-music-controls]")];
 roots.forEach(bindControls);
 onSettingsChange((settings) => roots.forEach((root) => applyControls(root, settings)));
 const preferencesReady = document.body.dataset.page === "teacher" ? Promise.resolve() : initialiseMemberPreferences();
-void preferencesReady.then(() => syncAmbientFromSettings()).finally(() => roots.forEach((root) => applyControls(root)));
+void preferencesReady.then(async () => {
+  if (document.body.dataset.page === "teacher") setAmbientAvailability(true);
+  else applyStudentFeatureVisibility(await loadStudentAccess());
+  return syncAmbientFromSettings();
+}).finally(() => roots.forEach((root) => applyControls(root)));
 installPlayfulInteractions();

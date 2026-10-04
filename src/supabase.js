@@ -9,6 +9,7 @@ import {
 let studentClient;
 let teacherClient;
 const userSettingsWriteQueues = new Map();
+const latestUserSettingsWrites = new Map();
 const pendingSettingsKey = userId => `te-review:pending-settings:${encodeURIComponent(userId)}`;
 const pendingSettings = userId => {
   try { return JSON.parse(window.localStorage.getItem(pendingSettingsKey(userId)) || "null"); } catch { return null; }
@@ -1441,12 +1442,18 @@ export async function loadUserSettings(expectedUserId = null) {
   if (expectedUserId && String(expectedUserId) !== userId) {
     return { loaded: false, reason: "auth-changed", settings: null };
   }
+  const writeAtStart = latestUserSettingsWrites.get(userId);
   const { data, error } = await client
     .from("review_user_settings")
     .select("settings,updated_at")
     .eq("user_id", userId)
     .maybeSingle();
   if (error) return { loaded: false, reason: "query-failed", error, settings: null };
+  const latestWrite = latestUserSettingsWrites.get(userId);
+  // A read started before a completed write can still return the old ON value.
+  if (latestWrite && latestWrite !== writeAtStart) {
+    return { loaded: true, settings: latestWrite.settings, userId, updatedAt: new Date(latestWrite.at).toISOString() };
+  }
   const pending = pendingSettings(userId);
   if (pending?.settings && Number(pending.at) > (Date.parse(data?.updated_at || "") || 0)) {
     // Recover a preference changed just before navigation or while offline.
@@ -1491,6 +1498,7 @@ export function saveUserSettings(settings = {}, { expectedUserId = null } = {}) 
     ? { ...settings }
     : {};
   const pending = expectedUserId ? rememberPendingUserSettings(expectedUserId, snapshot) : null;
+  if (pending) latestUserSettingsWrites.set(String(expectedUserId), pending);
   const previous = userSettingsWriteQueues.get(queueKey) || Promise.resolve();
   const task = previous
     .catch(() => {})

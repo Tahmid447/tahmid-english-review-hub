@@ -17,6 +17,7 @@ import {
   playAnswerFeedback,
   playCompletionSound,
   setAmbientPlayback,
+  setAmbientAvailability,
   speakText,
   speechRecognitionSupported,
   startSpeechPractice,
@@ -1826,6 +1827,7 @@ const initialiseLesson = async () => {
     if (!isTeacherPreview && ((await getStudentSession())?.user?.id || null) !== expectedUser) {
       window.location.reload(); return;
     }
+    if (isTeacherPreview) setAmbientAvailability(true);
     syncAmbientFromSettings();
     lessonScopeReady = true;
     if (!lesson) throw new Error("This lesson could not be found.");

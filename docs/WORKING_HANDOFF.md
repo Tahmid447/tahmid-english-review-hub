@@ -1,4 +1,14 @@
-# Working handoff — September 16, 2026
+# Working handoff — October 4, 2026
+
+## October 4 - Learner music preferences and teacher control
+
+Release preparation on `codex/music-preference-controls`, based on current main `e93df88`. User requested persistent learner BGM OFF and Study music in the existing global learner features. Delay playback until account preferences/access load; stop actual audio when a later OFF arrives; prevent stale preference reads from overwriting a completed save. Teacher global/individual `show_music` hides and disables BGM, without changing personal OFF, pronunciation or sound effects.
+
+New additive migration `20261004120000_learner_music_control.sql`: one default-true boolean on existing hub settings plus the existing feature-JSON validator whitelist. No existing rows, auth, RLS, storage or infrastructure changes. Apply only this migration with an atomic ledger entry; never replay historical SQL. Fresh private checkpoint: `/Users/tahmidahmed/Documents/Codex/private-backups/2026-10-04-music-control/before.json` (48 collections, 995 rows, 14 ledger entries). Previous runtime/deployment below remains the frontend recovery point.
+
+Passed music preference/race/audio tests, PostgreSQL global/inheritance/individual policy tests, learner-platform, learning-experience, My Page, campaigns, teacher controls/i18n and Cloudflare build/output checks. Isolated browser actual audio advanced then paused on OFF; OFF survived reload; teacher global OFF hid controls; re-enabling retained personal OFF. No console errors. Local isolated preview `http://127.0.0.1:4181/scripts/qa-music.html?qa_role=teacher`. Production migration, deployment and post-release checks are pending at this checkpoint.
+
+---
 
 ## September 16 - Import / image publication blockers
 

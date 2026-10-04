@@ -203,6 +203,7 @@ const STRUCTURED_HUB_FEATURES = Object.freeze([
   ["show_trial_cta", "Trial call-to-action", "体験案内"],
   ["show_payment_plan", "Payment plan", "支払いプラン"],
   ["show_announcements", "Announcements", "お知らせ"],
+  ["show_music", "Study music", "学習BGM"],
 ]);
 const STRUCTURED_HUB_CATEGORIES = Object.freeze([
   ["words", "Words", "単語"],

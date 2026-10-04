@@ -281,6 +281,7 @@ const {
   normalizePlaybackRate,
   playInterfaceSound,
   setAmbientPlayback,
+  setAmbientAvailability,
   speakText,
   speakingFeedbackForSimilarity,
   speakingFeedbackForTranscript,
@@ -364,6 +365,8 @@ globalThis.fetch = async (_url, options = {}) => {
     },
   });
 };
+assert.equal((await setAmbientPlayback(true)).reason, "ambient-unavailable", "Music waits for learner settings.");
+setAmbientAvailability(true);
 const ambientResult = await setAmbientPlayback(true, {
   ambientEnabled: true,
   ambientTrack: "calm_focus",

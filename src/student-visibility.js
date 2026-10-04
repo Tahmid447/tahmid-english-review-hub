@@ -4,6 +4,7 @@ import {
   fetchStudentHubContext,
 } from "./curriculum-api.js?v=20260911-mobile2";
 import { getStudentSession } from "./supabase.js?v=20260911-mobile2";
+import { setAmbientAvailability } from "./audio.js?v=20260911-mobile2";
 
 let accessPromise;
 let accessIdentity;
@@ -105,6 +106,10 @@ export function studentAccessBoundaryCopy(access, hiddenFeatureCopy = {}) {
 
 export function applyStudentFeatureVisibility(access, root = document) {
   const settings = access?.settings || normalizedSettings();
+  setAmbientAvailability(featureAllowed(access, "show_music"));
+  root.querySelectorAll?.('[data-study-music-controls], [aria-labelledby="ambientSettingsHeading"], #ambientToggle, #ambientTrack, #ambientVolume').forEach(node => {
+    (node.closest('label') || node).dataset.studentFeature = "show_music";
+  });
   root.querySelectorAll?.("[data-student-feature]").forEach((node) => {
     const key = node.dataset.studentFeature;
     const hidden = Boolean(access?.authenticated) && (

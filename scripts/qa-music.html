@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Music settings QA</title>
+<link rel="stylesheet" href="/src/styles.css">
+<body>
+<main class="shell"><h1>Music settings QA</h1><div id="musicQA"></div></main>
+<script type="module">
+if (location.hostname !== '127.0.0.1') throw new Error('Loopback QA only');
+const root = document.querySelector('#musicQA');
+if (new URLSearchParams(location.search).get('qa_role') === 'teacher') {
+  const {renderExperienceStudio} = await import('/src/experience-studio.js');
+  const {client} = await import('/scripts/helpers/notes-qa-client.js');
+  await renderExperienceStudio(root,{client});
+} else {
+  root.innerHTML = '<div data-study-music-controls></div>';
+  await import('/src/study-music.js');
+}
+</script>
+</body>
+</html>

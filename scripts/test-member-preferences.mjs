@@ -3,13 +3,14 @@ const storage = new Map();
 let serverSettings = {settings:{ambientEnabled:true,ambientTrack:'calm_focus'},updated_at:'2026-01-01T00:00:00Z'};
 const saved = [];
 let owner = true;
+let delayedRead;
 const created = [];
 const user = '00000000-0000-4000-8000-000000000010';
 const client = {
   auth:{getSession:async()=>({data:{session:{user:{id:user}}},error:null})},
   rpc:async name=>({data:name==='review_is_site_owner'&&owner,error:null}),
   from:()=>({
-    select(){return this;},eq(){return this;},maybeSingle:async()=>({data:serverSettings,error:null}),
+    select(){return this;},eq(){return this;},maybeSingle:async()=>delayedRead ? delayedRead() : ({data:serverSettings,error:null}),
     upsert:async row=>{saved.push(row);serverSettings={settings:row.settings,updated_at:new Date().toISOString()};return {error:null};},
   }),
 };
@@ -28,6 +29,18 @@ assert.equal(recovered.settings.ambientTrack,'rainy_desk');
 await normal.saveUserSettings(recovered.settings,{expectedUserId:user});
 assert.equal(saved.at(-1).settings.ambientEnabled,false);
 assert.equal((await normal.loadUserSettings(user)).settings.ambientVolume,0.11,'The next browser can load the saved volume.');
+let releaseRead, startedRead;
+const readStarted = new Promise(resolve => { startedRead = resolve; });
+delayedRead = () => new Promise(resolve => {
+  releaseRead = () => resolve({data:{settings:{ambientEnabled:true},updated_at:'2026-01-01T00:00:00Z'},error:null});
+  startedRead();
+});
+const oldRead = normal.loadUserSettings(user);
+await readStarted;
+await normal.saveUserSettings({ambientEnabled:false},{expectedUserId:user});
+releaseRead();
+assert.equal((await oldRead).settings.ambientEnabled,false,'A stale read must not undo a completed music-OFF save.');
+delayedRead = null;
 const before=saved.length;
 const changed=await normal.saveUserSettings({ambientEnabled:true},{expectedUserId:'another-user'});
 assert.equal(changed.reason,'auth-changed');assert.equal(saved.length,before,'Account changes cannot write to a different learner.');

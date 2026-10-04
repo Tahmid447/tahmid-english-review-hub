@@ -24,6 +24,7 @@ const BOOLEAN_SETTING_KEYS = Object.freeze([
   "show_trial_cta",
   "show_payment_plan",
   "show_announcements",
+  "show_music",
 ]);
 const SETTING_KEYS = new Set([
   ...BOOLEAN_SETTING_KEYS,
@@ -48,6 +49,7 @@ export const DEFAULT_HUB_SETTINGS = Object.freeze({
   show_trial_cta: true,
   show_payment_plan: true,
   show_announcements: true,
+  show_music: true,
   allowed_level_min: 1,
   allowed_level_max: 4,
   allowed_levels: Object.freeze([]),

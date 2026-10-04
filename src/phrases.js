@@ -175,6 +175,9 @@ async function refreshActivityScope(sessionValue) {
   renderPhrases();
   const settingsReady = await syncRemoteSettings(session);
   if (!settingsReady || nextUserId !== activeActivityUserId) return;
+  applyStudentFeatureVisibility(await loadStudentAccess({ refresh: true }));
+  if (nextUserId !== activeActivityUserId) return;
+  void syncAmbientFromSettings();
   applySettings(getSettings());
   renderFilters();
   renderPhrases();
@@ -574,7 +577,6 @@ function bindSettings() {
     }
   });
   applySettings();
-  syncAmbientFromSettings();
   watchSystemTheme(() => applyThemePreference(getSettings().theme));
 }
 
@@ -1144,6 +1146,7 @@ async function initialise() {
   }
   const access = await loadStudentAccess({ refresh: true });
   applyStudentFeatureVisibility(access);
+  void syncAmbientFromSettings();
   const wordsAllowed = featureAllowed(access, "show_words");
   const phrasesAllowed = featureAllowed(access, "show_phrases");
   allowedLibraryKinds = new Set([

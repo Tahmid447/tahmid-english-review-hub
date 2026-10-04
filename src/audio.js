@@ -1,6 +1,6 @@
 import { readSpeechClip, saveSpeechClip } from "./speech-cache.js?v=20260911-mobile2";
 import { NATURAL_SPEECH_URL, SUPABASE_URL, SUPABASE_ANON_KEY } from "./config.js?v=20260911-mobile2";
-import { AMBIENT_TRACK_KEYS, getSettings, getStorageScope, normalizeAnswerText } from "./store.js?v=20260911-mobile2";
+import { AMBIENT_TRACK_KEYS, getSettings, getStorageScope, normalizeAnswerText, onSettingsChange } from "./store.js?v=20260911-mobile2";
 import { VOICE_PROFILES, createSpeechRequest, speechCacheKey, validateSpeechResponse } from "./speech-contract.js?v=20260911-mobile2";
 
 const AUDIO_CACHE_LIMIT = 40;
@@ -28,6 +28,18 @@ let ambientFeedbackDucked = false;
 let ambientFeedbackDuckTimer = null;
 let ambientGestureHandler = null;
 let ambientLastError = "";
+let ambientAvailable = false;
+let ambientPlaybackGeneration = 0;
+
+export function setAmbientAvailability(allowed) {
+  ambientAvailable = allowed === true;
+  if (!ambientAvailable && (ambientAudioElement || ambientGestureHandler)) void setAmbientPlayback(false);
+}
+
+onSettingsChange(settings => {
+  if (!settings.ambientEnabled) void setAmbientPlayback(false);
+  else setAmbientVolume(settings);
+});
 let ambientPromptFadeTimer = null;
 let ambientPromptHideTimer = null;
 const AMBIENT_PROMPT_VISIBLE_MS = 4200;
@@ -485,7 +497,7 @@ const publishAmbientState = (state, settings = getSettings()) => {
 
 const setAmbientVolume = (settings = getSettings()) => {
   if (!ambientAudioElement) return;
-  ambientAudioElement.volume = settings.ambientEnabled ? ambientTargetVolume(settings) : 0;
+  ambientAudioElement.volume = ambientAvailable && settings.ambientEnabled ? ambientTargetVolume(settings) : 0;
 };
 
 export function duckAmbient(active) {
@@ -515,6 +527,11 @@ const ensureAmbientAudio = (trackKey, settings = getSettings()) => {
   audio.preload = "metadata";
   audio.playsInline = true;
   audio.onplaying = () => {
+    if (!ambientAvailable || !getSettings().ambientEnabled) {
+      audio.pause();
+      publishAmbientState("off");
+      return;
+    }
     ambientLastError = "";
     publishAmbientState("playing", settings);
     updateAmbientStartPrompt({ played: true }, settings);
@@ -587,13 +604,14 @@ function updateAmbientStartPrompt(result, settings = getSettings()) {
 }
 
 export async function setAmbientPlayback(enabled, options = {}) {
+  const generation = ++ambientPlaybackGeneration;
   const settings = { ...getSettings(), ...options, ambientEnabled: Boolean(enabled) };
-  if (!enabled) {
+  if (!enabled || !ambientAvailable) {
     disarmAmbientGestureStart();
     setAmbientVolume(settings);
     ambientAudioElement?.pause();
     publishAmbientState("off", settings);
-    const result = { played: false, reason: "ambient-off" };
+    const result = { played: false, reason: !ambientAvailable ? "ambient-unavailable" : "ambient-off" };
     updateAmbientStartPrompt(result, settings);
     return result;
   }
@@ -605,6 +623,8 @@ export async function setAmbientPlayback(enabled, options = {}) {
     const audio = ensureAmbientAudio(settings.ambientTrack, settings);
     if (!audio) throw new Error("Ambient audio is unavailable in this browser.");
     if (audio.paused !== false) await audio.play();
+    if (generation !== ambientPlaybackGeneration) return { played: false, reason: "superseded" };
+    if (!ambientAvailable || !getSettings().ambientEnabled) return setAmbientPlayback(false);
     setAmbientVolume(settings);
     disarmAmbientGestureStart();
     publishAmbientState("playing", settings);
@@ -612,6 +632,7 @@ export async function setAmbientPlayback(enabled, options = {}) {
     updateAmbientStartPrompt(result, settings);
     return result;
   } catch (error) {
+    if (generation !== ambientPlaybackGeneration) return { played: false, reason: "superseded" };
     if (error?.name === "NotAllowedError") {
       armAmbientGestureStart();
       publishAmbientState("waiting-for-gesture", settings);
@@ -640,7 +661,7 @@ function armAmbientGestureStart() {
   publishAmbientState("waiting-for-gesture");
   ambientGestureHandler = async () => {
     const latest = getSettings();
-    if (!latest.ambientEnabled) {
+    if (!ambientAvailable || !latest.ambientEnabled) {
       disarmAmbientGestureStart();
       return;
     }
