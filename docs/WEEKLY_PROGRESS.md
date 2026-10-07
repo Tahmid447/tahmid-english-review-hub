@@ -1,5 +1,12 @@
 # Tahmid English Hub - Weekly Progress
 
+## October 7 - Practice collection across skills and levels (published)
+- Published `27ec04806e217e6fa42279eef9100866a71d38f7` via existing main/Cloudflare Pages, deployment `7e34b82e-8255-4e06-9723-460410fd2e23`; Pages/Worker builds and live runtime identity confirmed.
+- Check-in copy is neutral `Saved · 保存しました`. Library Learning now includes all open levels for words, phrases and phonics, with actual level labels and cross-level review.
+- My Page `#practice` displays existing practiced items with images/phonics visuals, examples, audio and All practiced / Hard / Good / Easy filters, category/level/search, Due now and refresh. Uses existing progress and RLS; paginated queries avoid the 1,000-row limit. Source-access checks add explicit Open lesson links to saved personal cards and phrasebook expressions.
+- Focused model/pagination/real RLS test, targeted desktop/390px browser check and required build/output checks passed. Live collection loads, private ratings deny anonymous access (401), public URLs/new assets return 200 and captured errors are empty. No unrelated suite/audio reruns. Latest saved ratings are displayed, not listening-only or every past attempt; physical iPhone not tested.
+- No migration, database write, existing-data reset or infrastructure change. Same-day recoverable private checkpoint reused; ledger unchanged at 16 entries. Handoff updated; release documentation uses `[CI Skip]`.
+
 ## October 7 - Learning point reviews and mobile notebook (published)
 - Implemented on `codex/lesson-review-journey`: per-point Got it / Review again with undo, resume links, accessible lesson review near the top, My Page activity/progress chart, teacher learner filtering and point-level confidence reports.
 - iPhone notes use a contextual sheet with phrase/example/question starters, color swatches, autosave/retry and retained drafts on failures. Desktop annotations and existing practice remain intact.

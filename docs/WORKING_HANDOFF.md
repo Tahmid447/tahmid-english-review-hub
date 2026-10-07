@@ -1,5 +1,22 @@
 # Working handoff — October 7, 2026
 
+## October 7 - Cross-level practice collection and lesson links (published)
+
+**Live:** runtime `27ec04806e217e6fa42279eef9100866a71d38f7`, built `2026-10-07T04:23:34.590Z`, Cloudflare production deployment `7e34b82e-8255-4e06-9723-460410fd2e23`. Branch `codex/practice-collection` fast-forwarded existing main from `0851c57`; Pages and existing speech Worker builds succeeded. No infrastructure or speech implementation change.
+
+- Point check-ins now say `Saved · 保存しました`; teacher reporting remains unchanged.
+- Library Learning has an all-open-level filter for words, phrases and phonics, preserved in the URL. Cards and cross-level review retain their actual level labels.
+- My Page `#practice` collects existing rated/practiced curriculum items across all three skills, with All practiced / Hard / Good / Easy, category, level, search and Due now filters. Existing visuals, examples and US/UK audio are reused; 24-card display pages, refresh/retry and back-navigation refresh are included. Existing query pagination prevents collections silently stopping at 1,000 records.
+- Saved personal/For You cards have an explicit Open lesson link to the source point only when published source access passes existing RLS. Saved phrasebook expressions also link to their accessible source lesson. Failed source lookups hide links without deleting saved cards.
+
+**Data:** no migration, production SQL write, reset, authentication/RLS change or test rating write. Ledger remains 16 entries, latest `20261007025813`; do not replay it. Reused the verified recoverable same-day 52-table checkpoint at `/Users/tahmidahmed/Documents/Codex/private-backups/2026-10-07-learning-journey/` (private readable `before.json`, 5,590,397 bytes). Existing users/content/images/progress/favorites/settings remain stored unchanged by this release.
+
+**Minimal verification:** `node scripts/test-practice-collection.mjs` passed pagination over 1,000 rows, failed-page handling, skills/ratings/levels/search and real isolated PostgreSQL/RLS (other learner/anonymous denial; revoked level hidden, all original progress retained). Targeted browser passed all ratings, phonics/phrase/word visuals, cross-level filtering/reload/review, source lesson navigation, neutral saved copy, no captured page errors and desktop/390px layout. Final small back-cache refresh and locked-level navigation probes passed. Local build/preparation/output checks passed with 97 public text assets. Production release matches runtime; main URLs/new assets return 200, anonymous private curriculum progress returns 401, and existing signed-in student loads the collection without captured errors. No full suite or repeated audio playback tests.
+
+Production 390px check also passed: visible collection and document width 390px, no horizontal overflow. Temporary browser viewport reset.
+
+**Limits:** collection shows latest saved rating/practice state, not an attempt-by-attempt timeline or listening-only history. Inaccessible/inactive curriculum items are hidden without deleting progress. Current live smoke account has no practiced items; nonempty cards/source navigation were verified with synthetic accounts and actual isolated RLS. No physical iPhone test. Isolated local preview: `http://127.0.0.1:4184/my-page#practice`, PID 14602; fixture startup uses `NOTE_QA_PORT=4184 NOTE_QA_WORKFLOW=1 NOTE_QA_PRACTICE=1 node scripts/serve-notes-qa.mjs`. Prior broad checks remain reusable.
+
 ## October 7 - Learning point check-ins and iPhone notebook (published)
 
 **Live:** runtime `5af418f43433afb98e240b2b3cdfee1e4ceb4881`, built `2026-10-07T03:30:58.563Z`, Cloudflare production deployment `db1298fa-c3d5-496b-afed-46a78225f70a`. Feature commit `16f5777` plus standing publishing instruction `5af418f` fast-forwarded from main `cc09ceb` through the existing GitHub/main/Pages flow. Pages and the existing speech Worker build both succeeded. Production `/release.json` matches the exact runtime. Branch `codex/lesson-review-journey` is also pushed. No new hosting, auth, DNS, email or speech implementation change.
