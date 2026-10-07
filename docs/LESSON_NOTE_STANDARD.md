@@ -86,7 +86,10 @@ Topics: topic one, topic two, topic three
 
 ### Metadata style
 
-- `Lesson Title`: short and student-friendly.
+- `Lesson Title`: use `D Mon YYYY | Short Lesson Title`, for example `6 Oct 2026 | Everyday Words & Expressions`.
+- Use the actual lesson date, matching `Lesson Date:`, rather than the creation or publishing date. Include the year; omit ordinal suffixes such as `6th`.
+- Omit the student name from the title by default; the assigned learner and cover header identify the student. Add the name only when the teacher explicitly requests it.
+- Keep the topic after the date short and student-friendly. The cover's large headline may show just the topic because its header already shows the student and date.
 - `Short Introduction`: one sentence.
 - `Today's Focus`: one concise sentence describing the main learning goal.
 - `Topics`: usually 2-5 short tags.
@@ -443,3 +446,5 @@ Their strengths to preserve:
 - mixed question types
 - no padding
 - lesson-specific content
+
+The October 3/4 examples predate the date-first title convention. Follow the current metadata rule above for new lessons, while retaining those examples as content and visual references.

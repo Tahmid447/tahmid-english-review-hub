@@ -44,6 +44,8 @@ Do not pull in unrelated messages from before/after the lesson window.
 
 If the date boundary is genuinely unclear, ask once before creating the files.
 
+Use a date-first Lesson Title: `D Mon YYYY | Short Lesson Title`, for example `6 Oct 2026 | Everyday Words & Expressions`. Match the actual lesson date, include the year, and omit the student name unless explicitly requested. Keep the student name in the learner assignment and cover header. The cover headline can show only the topic. The older gold examples do not override this title convention.
+
 ## Step 3 — Extract candidate learning points
 
 Make a private candidate list.
@@ -105,6 +107,7 @@ Check against `LESSON_NOTE_STANDARD.md`.
 
 Specifically verify:
 - metadata labels
+- date-first title matching the lesson date
 - semantic headings
 - field labels
 - original/correct mappings

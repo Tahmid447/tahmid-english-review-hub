@@ -1,7 +1,7 @@
 # Lesson Note Quick Import Template
 
 Lesson Date: YYYY-MM-DD
-Lesson Title: Student | Short Lesson Title
+Lesson Title: D Mon YYYY | Short Lesson Title
 Short Introduction: One short sentence describing what the student practised.
 Today's Focus: One short sentence describing the most important learning goal.
 Topics: topic one, topic two, topic three

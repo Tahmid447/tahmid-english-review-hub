@@ -217,6 +217,12 @@ Use the repository's CURRENT exact Quick Import syntax.
 
 Follow the actual parser rules.
 
+Use a date-first Lesson Title in this format:
+Lesson Title: D Mon YYYY | Short Lesson Title
+Example: Lesson Title: 6 Oct 2026 | Everyday Words & Expressions
+
+Use the actual lesson date, matching Lesson Date, not the creation or publishing date. Include the year and omit ordinal suffixes. Omit the student name from the title unless I explicitly request it; keep the student in the learner assignment and cover header. The cover's large headline may show just the topic because its header already shows the date. Older reference examples do not override this title convention.
+
 In particular:
 - exact metadata labels
 - supported semantic headings only
@@ -248,6 +254,7 @@ Validate the FINAL file, not an earlier draft.
 Check:
 - correct student
 - correct date
+- date-first lesson title matching Lesson Date
 - correct lesson boundary
 - only actual lesson material
 - original sentences preserved accurately
