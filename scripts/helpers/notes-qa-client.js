@@ -15,6 +15,7 @@ export const client={
  storage:{from(){return {createSignedUrl:path=>request({op:'signed',path}),async upload(path,blob){const bytes=new Uint8Array(await blob.arrayBuffer());let binary='';for(let i=0;i<bytes.length;i+=8192)binary+=String.fromCharCode(...bytes.subarray(i,i+8192));return request({op:'upload',path,type:blob.type,bytes:btoa(binary)});},remove:paths=>request({op:'remove',paths}),async download(path){const response=await request({op:'signed',path});if(response.error)return response;return {data:await(await fetch(response.data.signedUrl)).blob(),error:null};}};}}
 };
 export const services={
+ fetchAllQueryRows:async createQuery=>{const data=[];for(let offset=0;;offset+=1000){const r=await createQuery().range(offset,offset+999);if(r.error)return r;data.push(...(r.data||[]));if((r.data||[]).length<1000)return {data,error:null};}},
  getStudentClient:()=>client,getTeacherClient:()=>client,getStudentSession:async()=>session(),getTeacherSession:async()=>session(),
  onStudentAuthChange:()=>()=>{},onTeacherAuthChange:()=>()=>{},rememberPendingUserSettings:()=>{},googleStudentAuthAvailable:async()=>false,
  getStudentProfile:async()=>{const r=await client.from('review_profiles').select('*').eq('user_id',ids[role]).single();return {profile:r.data,error:r.error};},

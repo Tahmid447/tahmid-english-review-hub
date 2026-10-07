@@ -31,7 +31,7 @@ export function mountPointReviews(root,{note,reviews=[],api,student,focus,onChan
   const draw=()=>{const current=pointReview(b,rows);article.dataset.understanding=current?.state||'unmarked';for(const button of buttons){button.setAttribute('aria-pressed',String(current?.state===button.dataset.pointState));button.disabled=!student;}host.querySelector('[data-point-reset]').hidden=!student||!current||current.state==='unmarked';if(!student)status.textContent='Student check-in preview · 生徒の確認状態';};
   const save=async state=>{
    if(!student||disposed||host.dataset.saving)return;host.dataset.saving='true';pending++;buttons.forEach(b=>b.disabled=true);host.querySelector('[data-point-reset]').disabled=true;status.textContent='Saving… · 保存中…';
-   try{const previous=rows.find(r=>r.block_id===b.id);const saved=await api.reviewPoint(note.id,b,state,previous?.version||0);if(disposed)return;const index=rows.findIndex(r=>r.block_id===b.id);if(index<0)rows.push(saved);else rows[index]=saved;draw();drawSummary();status.textContent=state==='unmarked'?'Check-in cleared · 取り消しました':'Saved · 先生にも反映されます';}
+   try{const previous=rows.find(r=>r.block_id===b.id);const saved=await api.reviewPoint(note.id,b,state,previous?.version||0);if(disposed)return;const index=rows.findIndex(r=>r.block_id===b.id);if(index<0)rows.push(saved);else rows[index]=saved;draw();drawSummary();status.textContent=state==='unmarked'?'Check-in cleared · 取り消しました':'Saved · 保存しました';}
    catch(error){if(!disposed)status.textContent=noteError(error);}
    finally{pending--;if(!disposed){delete host.dataset.saving;host.querySelector('[data-point-reset]').disabled=false;draw();}}
   };

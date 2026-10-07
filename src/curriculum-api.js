@@ -1,6 +1,7 @@
 import { normalizeCategoryAccess } from "./curriculum-access.js?v=20260911-mobile2";
 import {
   getStudentClient,
+  fetchAllQueryRows,
   getStudentSession,
   getTeacherClient,
   getTeacherSession,
@@ -152,16 +153,19 @@ export async function fetchCurriculumItems({ category, level } = {}) {
     return failure([], "invalid-level", new Error("Level must be an integer from 1 to 32."));
   }
 
-  let query = client
-    .from("review_curriculum_items")
-    .select("id,category,level,title_en,title_ja,content,icon,tags,required_plan,active,is_preview,position,updated_at")
-    .order("category", { ascending: true })
-    .order("level", { ascending: true })
-    .order("position", { ascending: true })
-    .order("id", { ascending: true });
-  if (safeCategory) query = query.eq("category", safeCategory);
-  if (level != null) query = query.eq("level", Number(level));
-  const { data, error } = await query;
+  const makeQuery = () => {
+    let query = client
+      .from("review_curriculum_items")
+      .select("id,category,level,title_en,title_ja,content,icon,tags,required_plan,active,is_preview,position,updated_at")
+      .order("category", { ascending: true })
+      .order("level", { ascending: true })
+      .order("position", { ascending: true })
+      .order("id", { ascending: true });
+    if (safeCategory) query = query.eq("category", safeCategory);
+    if (level != null) query = query.eq("level", Number(level));
+    return query;
+  };
+  const { data, error } = await fetchAllQueryRows(makeQuery);
 
   if (migrationUnavailable(error)) return unavailable([]);
   if (error) return failure([], "curriculum-items-query-failed", error);
@@ -196,16 +200,16 @@ export async function fetchCurriculumProgress() {
   if (auth.reason) return failure(fallback, auth.reason);
 
   const [progressResult, favoritesResult] = await Promise.all([
-    auth.client
+    fetchAllQueryRows(() => auth.client
       .from("review_curriculum_progress")
       .select("student_id,item_id,status,self_rating,review_count,last_reviewed_at,next_review_at,metadata,created_at,updated_at")
       .eq("student_id", auth.session.user.id)
-      .order("updated_at", { ascending: false }),
-    auth.client
+      .order("updated_at", { ascending: false }).order("item_id")),
+    fetchAllQueryRows(() => auth.client
       .from("review_curriculum_favorites")
       .select("student_id,item_id,created_at")
       .eq("student_id", auth.session.user.id)
-      .order("created_at", { ascending: false }),
+      .order("created_at", { ascending: false }).order("item_id")),
   ]);
   const error = progressResult.error || favoritesResult.error;
   if (migrationUnavailable(error)) return unavailable(fallback);
@@ -214,6 +218,16 @@ export async function fetchCurriculumProgress() {
     progress: progressResult.data || [],
     favorites: favoritesResult.data || [],
   });
+}
+
+export async function fetchPracticedCurriculum() {
+  const auth=await studentAuth();
+  if(auth.reason)return failure([],auth.reason);
+  const result=await fetchAllQueryRows(()=>auth.client.from('review_curriculum_progress')
+    .select('item_id,status,self_rating,review_count,last_reviewed_at,next_review_at,updated_at,item:review_curriculum_items(id,category,level,title_en,title_ja,content,tags,active)')
+    .eq('student_id',auth.session.user.id).order('item_id'));
+  if(result.error)return failure([],'practice-collection-query-failed',result.error);
+  return success(result.data);
 }
 
 export async function saveCurriculumProgress(itemId, { status, selfRating = null } = {}) {

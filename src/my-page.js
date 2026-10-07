@@ -1,5 +1,5 @@
 import { planFor } from './plans.js?v=20260911-mobile2';
-import { getStudentClient, getStudentProfile, getStudentMembership, saveUserSettings } from './supabase.js?v=20260911-mobile2';
+import { getStudentClient, getStudentProfile, getStudentMembership, saveUserSettings, fetchAllQueryRows } from './supabase.js?v=20260911-mobile2';
 import { initialiseMemberPreferences } from './member-preferences.js?v=20260911-mobile2';
 import { getSettings, updateSettings, onSettingsChange, escapeHTML as e } from './store.js?v=20260911-mobile2';
 import { loadStudentAccess, applyStudentFeatureVisibility, featureAllowed } from './student-visibility.js?v=20260911-mobile2';
@@ -9,12 +9,17 @@ import { personalCardMarkup, bindPersonalAudio } from './personal-cards.js?v=202
 import { buildPhraseCatalog } from './data.js?v=20260911-mobile2';
 import { createNoteApi } from './lesson-note-api.js?v=20260915-practice';
 import {mountJourney} from './note-review-view.js';
+import {mountPracticeCollection} from './practice-collection.js';
+import {PRACTICE_CATEGORIES} from './practice-collection-model.js';
 import { createSectionAwareness, learnerNextActions, nextActionsMarkup } from './learning-overview.js';
 import './study-music.js?v=20260911-mobile2';
 const $ = selector => document.querySelector(selector);
 const nextHost=document.createElement('section');nextHost.id='memberNext';nextHost.className='hub-next';nextHost.setAttribute('aria-label','Continue your learning · 次の学習');$('.member-tabs').after(nextHost);
 const journeyHost=document.createElement('section');journeyHost.hidden=true;nextHost.after(journeyHost);let journeyView;
-window.addEventListener('pagehide',()=>journeyView?.dispose());
+const practiceTab=document.createElement('button');practiceTab.type='button';practiceTab.dataset.panel='practice';practiceTab.dataset.studentFeature='show_progress';practiceTab.textContent='My practice · 学習コレクション';practiceTab.setAttribute('aria-pressed','false');$('[data-panel=favorites]').before(practiceTab);
+const practiceHost=document.createElement('section');practiceHost.id='panel-practice';practiceHost.className='member-panel';practiceHost.hidden=true;$('#panel-favorites').before(practiceHost);let practiceView;
+window.addEventListener('pagehide',event=>{if(!event.persisted){journeyView?.dispose();practiceView?.dispose();}});
+window.addEventListener('pageshow',event=>{if(event.persisted)void practiceView?.refresh();});
 for(const [selector,id] of [['.member-note-tab','noteCount'],['[data-panel=personal]','personalCount']]){const badge=document.createElement('span');badge.id=id;badge.className='hub-section-count';$(selector).append(badge);}
 const client = getStudentClient();
 let session, profile, access;
@@ -44,12 +49,14 @@ function showPanel(key) {
   document.querySelectorAll('[data-panel]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.panel===key)));
   document.querySelectorAll('.member-panel').forEach(panel=>panel.hidden=panel.id!==`panel-${key}`);
   nextHost.hidden=key!=='profile';
+  journeyHost.hidden=key!=='profile'||!journeyView;
   history.replaceState(null,'',`#${key}`);
   if(key==='favorites') void renderFavorites();
+  if(key==='practice'&&!practiceView)practiceView=mountPracticeCollection(practiceHost,{allowedCategories:Object.keys(PRACTICE_CATEGORIES).filter(c=>featureAllowed(access,`show_${c}`))});
   if(key==='personal'&&awareness)markVisiblePersonal();
 }
 document.querySelectorAll('[data-panel]').forEach(button=>button.onclick=()=>showPanel(button.dataset.panel));
-window.addEventListener('hashchange',()=>{const key=location.hash.slice(1);if(['profile','announcements','favorites','settings','personal'].includes(key))showPanel(key);});
+window.addEventListener('hashchange',()=>{const key=location.hash.slice(1);if(['profile','announcements','favorites','settings','personal','practice'].includes(key))showPanel(key);});
 document.querySelectorAll('[data-category]').forEach(button=>button.onclick=()=>{
   favoriteCategory=button.dataset.category;
   document.querySelectorAll('[data-category]').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));
@@ -57,7 +64,7 @@ document.querySelectorAll('[data-category]').forEach(button=>button.onclick=()=>
 });
 async function loadFavorites() {
   const results=await Promise.all([
-    client.from('review_curriculum_favorites').select('item_id,created_at,item:review_curriculum_items(id,category,level,title_en,title_ja)').eq('student_id',session.user.id).order('created_at',{ascending:false}),
+    fetchAllQueryRows(()=>client.from('review_curriculum_favorites').select('item_id,created_at,item:review_curriculum_items(id,category,level,title_en,title_ja)').eq('student_id',session.user.id).order('created_at',{ascending:false}).order('item_id')),
     client.from('review_saved_learning').select('lesson_id,question_key,created_at,lesson:review_lessons(id,slug,title_en,title_ja)').eq('user_id',session.user.id).order('created_at',{ascending:false}),
   ]);
   if(results.some(result=>result.error))throw new Error('Favorites could not be loaded. Please try again. · お気に入りを読み込めませんでした。もう一度お試しください。');
@@ -82,10 +89,12 @@ async function loadPhraseFavorites() {
   if(result.error)throw result.error;
   if(!result.data?.length)return [];
   // Only material requested in the phrasebook tab needs its phrase payload.
-  const catalog=await buildPhraseCatalog({audience:'all'});
+  const catalog=await buildPhraseCatalog({audience:'all'}),sourceIds=[...new Set(result.data.map(r=>r.lesson_id).filter(Boolean))];let lessons=[];
+  for(let i=0;i<sourceIds.length;i+=100){const r=await client.from('review_lessons').select('id,slug').in('id',sourceIds.slice(i,i+100));if(r.error){lessons=[];break;}lessons.push(...(r.data||[]));}
   return result.data.map(row=>{
     const phrase=catalog.find(item=>item.id===row.phrase_id);
-    return {source:'phrasebook',key:row.phrase_id,category:'phrasebook',title:phrase?.en || 'Saved expression · 保存した表現',subtitle:phrase?.jp || '',href:phrase?`/phrases?search=${encodeURIComponent(phrase.en)}&kind=${encodeURIComponent(phrase.libraryKind)}&return=%2Fmy-page%23favorites`:'/phrases',...row};
+    const lesson=lessons.find(l=>l.id===row.lesson_id);
+    return {source:'phrasebook',key:row.phrase_id,category:'phrasebook',title:phrase?.en || 'Saved expression · 保存した表現',subtitle:phrase?.jp || '',href:phrase?`/phrases?search=${encodeURIComponent(phrase.en)}&kind=${encodeURIComponent(phrase.libraryKind)}&return=%2Fmy-page%23favorites`:'/phrases',lessonHref:lesson?`/lesson/${encodeURIComponent(lesson.slug)}?return=%2Fmy-page%23favorites`:'',...row};
   });
 }
 async function renderFavorites() {
@@ -97,7 +106,7 @@ async function renderFavorites() {
     const query=$('#favoriteSearch')?.value.trim().toLowerCase() || '';
     const filtered=rows.filter(row=>`${row.title} ${row.subtitle}`.toLowerCase().includes(query));
     const cards=personalCards.filter(card=>card.category===favoriteCategory && personalSaved.has(card.id) && `${card.text_en} ${card.text_ja} ${card.teacher_note}`.toLowerCase().includes(query));
-    const list=$('#favoriteList');list.innerHTML=filtered.map(row=>`<article class="favorite-card"><p class="eyebrow">${e(categoryLabels[row.category])}</p><h3>${e(row.title)}</h3><p>${e(row.subtitle)}</p><div class="personal-card-actions">${row.href?`<a class="secondary-btn" href="${e(row.href)}">Review · 復習する →</a>`:''}<button type="button" class="quiet-btn" data-remove-key="${e(row.key)}" data-source="${row.source}">♥ Remove · 保存を解除</button></div></article>`).join('')+cards.map(card=>personalCardMarkup(card,{saved:true})).join('') || empty;
+    const list=$('#favoriteList');list.innerHTML=filtered.map(row=>`<article class="favorite-card"><p class="eyebrow">${e(categoryLabels[row.category])}</p><h3>${e(row.title)}</h3><p>${e(row.subtitle)}</p><div class="personal-card-actions">${row.href?`<a class="secondary-btn" href="${e(row.href)}">Review · 復習する →</a>`:''}${row.lessonHref?`<a class="secondary-btn" href="${e(row.lessonHref)}">Open lesson · レッスンを開く →</a>`:''}<button type="button" class="quiet-btn" data-remove-key="${e(row.key)}" data-source="${row.source}">♥ Remove · 保存を解除</button></div></article>`).join('')+cards.map(card=>personalCardMarkup(card,{saved:true})).join('') || empty;
     list.querySelectorAll('[data-remove-key]').forEach(button=>button.onclick=async()=>{
       const row=filtered.find(item=>item.key===button.dataset.removeKey && item.source===button.dataset.source);button.disabled=true;
       try {
@@ -204,15 +213,20 @@ try {
     const results=await Promise.all([getStudentProfile(),getStudentMembership(),loadStudentAccess()]);
     if(results[0].error || !results[0].profile)throw new Error('Please complete your profile on Home. · ホームでプロフィールを入力してください。');
     profile=results[0].profile;access=results[2];awareness=createSectionAwareness(session.user.id);applyStudentFeatureVisibility(access);
+    if(!Object.keys(PRACTICE_CATEGORIES).some(c=>featureAllowed(access,`show_${c}`)))practiceTab.hidden=true;
     $('#memberPlan').textContent=`${planFor(results[1].membership?.plan_tier || 'free').name} · Your learning space · あなたの学習スペース`;
     renderProfile();$('#memberWorkspace').hidden=false;$('#memberStatus').textContent='';renderPreferences();
-    showPanel(['profile','announcements','favorites','settings','personal'].includes(location.hash.slice(1))?location.hash.slice(1):'profile');
+    showPanel(['profile','announcements','favorites','settings','personal','practice'].includes(location.hash.slice(1))?location.hash.slice(1):'profile');
     void refreshOverview();
-    if(featureAllowed(access,'show_homework')&&featureAllowed(access,'show_progress')){journeyHost.hidden=false;journeyView=mountJourney(journeyHost,{api:createNoteApi(client)});}
+    if(featureAllowed(access,'show_homework')&&featureAllowed(access,'show_progress')){journeyHost.hidden=location.hash!=='#profile';journeyView=mountJourney(journeyHost,{api:createNoteApi(client)});}
     const [notices,cards,saved]=await Promise.all([featureAllowed(access,'show_announcements')?fetchStudentAnnouncements():Promise.resolve({data:[]}),client.from('review_personal_cards').select('*').eq('student_id',session.user.id).eq('active',true).order('created_at',{ascending:false}),client.from('review_personal_card_favorites').select('card_id').eq('student_id',session.user.id)]);
     sourcesLoaded=true;sourcesError=Boolean(notices.error||cards.error||saved.error);
     if(notices.error)$('#announcementList').textContent='Please reload to view announcements. · お知らせは再読み込みしてご確認ください。';else renderAnnouncements(notices.data || []);
     if(cards.error || saved.error)$('#personalList').textContent='Please reload to view your practice cards. · 復習カードは再読み込みしてご確認ください。';
-    else{personalCards=cards.data || [];personalSaved=new Set((saved.data || []).map(row=>row.card_id));renderPersonal();if(!$('#panel-favorites').hidden)void renderFavorites();}renderNext();
+    else{personalCards=cards.data || [];personalSaved=new Set((saved.data || []).map(row=>row.card_id));
+      const sourceIds=[...new Set(personalCards.map(c=>c.source_note_id).filter(Boolean))];let notes=[];
+      for(let i=0;i<sourceIds.length;i+=100){const r=await client.from('review_lesson_notes').select('id,title').in('id',sourceIds.slice(i,i+100)).eq('status','published').is('deleted_at',null);if(r.error){sourcesError=true;notes=[];break;}notes.push(...(r.data||[]));}
+      const sourceMap=new Map(notes.map(n=>[n.id,n.title]));personalCards=personalCards.map(c=>({...c,source_available:sourceMap.has(c.source_note_id),source_title:sourceMap.get(c.source_note_id)||''}));
+      renderPersonal();if(!$('#panel-favorites').hidden)void renderFavorites();}renderNext();
   }
 }catch(error){$('#memberStatus').textContent=error.message || 'Could not load My Page. Please reload. · マイページを読み込めませんでした。再読み込みしてください。';}

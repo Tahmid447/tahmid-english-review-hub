@@ -219,6 +219,7 @@ function parseRoute() {
     levelWasRequested: levelRaw !== null,
     invalidLevel: levelRaw !== null && level === null,
     itemId: String(url.searchParams.get("item") || "").trim() || null,
+    filter: ['favorites','due','learning','learning_all'].includes(url.searchParams.get('filter')) ? url.searchParams.get('filter') : 'all',
   };
 }
 
@@ -233,7 +234,9 @@ function categoryUrl(category, level = null, itemId = null) {
 }
 
 function updateRoute(category, level, { replace = false, itemId = null } = {}) {
-  const next = categoryUrl(category, level, itemId);
+  const url = new URL(categoryUrl(category, level, itemId),location.origin);
+  if(category===state.category&&state.filter!=='all')url.searchParams.set('filter',state.filter);
+  const next = `${url.pathname}${url.search}${url.hash}`;
   const current = `${window.location.pathname}${window.location.search}${window.location.hash}`;
   if (next === current) return;
   window.history[replace ? "replaceState" : "pushState"]({ category, level }, "", next);
@@ -380,7 +383,7 @@ function renderLevelGrid() {
     if (!open) button.append(element("span", { className: "lock-mark", text: "🔒", attrs: { "aria-hidden": "true" } }));
     if (open) {
       button.addEventListener("click", () => {
-        if (state.level === level) return;
+        if (state.level === level && state.filter!=='learning_all') return;
         state.level = level;
         state.filter = "all";
         state.search = "";
@@ -424,6 +427,14 @@ function renderLevelOverview() {
   track?.setAttribute("aria-valuenow", String(progress.percent));
   refs.levelProgressLabel.textContent = text(`${progress.percent}% · ${progress.completed}/${progress.total}`, `${progress.percent}%・${progress.completed}/${progress.total}`);
   refs.reviewLevelButton.disabled = !open || !itemsForLevel().length;
+  if(state.filter==='learning_all'){
+    refs.levelKicker.textContent=text('ALL OPEN LEVELS','利用可能な全レベル');
+    refs.levelTitle.textContent=text('Your learning collection','学習中のコレクション');
+    refs.levelDescription.textContent=text("Items you're learning, across every open level.",'利用可能な全レベルの学習中の項目。');
+    refs.levelProgressWrap.hidden=true;
+    refs.reviewLevelButton.disabled=!visibleLevelItems().length;
+  }
+  refs.reviewLevelButton.querySelector('strong').textContent=state.filter==='learning_all'?text('Review learning items','学習中の項目を復習'):text('Review this level','このレベルを復習');
 }
 
 function searchableText(item) {
@@ -438,12 +449,12 @@ function searchableText(item) {
 
 function visibleLevelItems() {
   const query = state.search.trim().normalize("NFKC").toLocaleLowerCase();
-  return itemsForLevel().filter((item) => {
+  return (state.filter==='learning_all'?state.items:itemsForLevel()).filter((item) => {
     if (query && !searchableText(item).includes(query)) return false;
     if (state.filter === "favorites" && !state.favorites.has(String(item.id))) return false;
     const progress = itemProgress(item.id);
     if (state.filter === "due" && !isDue(progress)) return false;
-    if (state.filter === "learning" && progress.status !== "learning") return false;
+    if (["learning","learning_all"].includes(state.filter) && progress.status !== "learning") return false;
     return true;
   });
 }
@@ -791,7 +802,7 @@ function renderItems() {
     });
     return;
   }
-  const allAtLevel = itemsForLevel();
+  const allAtLevel = state.filter==='learning_all'?state.items:itemsForLevel();
   if (!allAtLevel.length) {
     refs.resultCount.textContent = "";
     setStateView({
@@ -811,6 +822,8 @@ function renderItems() {
       state.filter = "all";
       state.search = "";
       refs.librarySearch.value = "";
+      updateRoute(state.category,state.level);
+      renderLevelOverview();
       renderItems();
     });
     setStateView({
@@ -904,9 +917,11 @@ async function loadCategory(category, route = parseRoute(), { updateUrl = false 
   state.levels = Array.isArray(apiData(levelsResult, [])) ? apiData(levelsResult, []) : [];
   state.items = Array.isArray(apiData(itemsResult, [])) ? apiData(itemsResult, []) : [];
   const available = accessibleLevels();
+  state.filter = state.progressEnabled || route?.filter==='favorites' ? route?.filter||'all' : 'all';
   const requestedLevel = route?.level;
   if (requestedLevel) state.level = requestedLevel;
   else if (!available.includes(state.level)) state.level = available[0] || null;
+  if(state.filter==='learning_all'&&!available.includes(state.level))state.level=available[0]||null;
   if ((!route?.levelWasRequested || route?.invalidLevel) && state.level) updateRoute(category, state.level, { replace: !updateUrl });
   else if (updateUrl) updateRoute(category, state.level);
   renderAll();
@@ -1206,7 +1221,7 @@ function renderReview() {
   const config = CATEGORY_CONFIG[state.category];
   const prompt = reviewPrompt(item, state.reviewMode);
   const percent = Math.round(((state.reviewIndex + 1) / state.reviewQueue.length) * 100);
-  refs.reviewKicker.textContent = text(`LEVEL ${state.level} · ${config.labelEn.toUpperCase()}`, `レベル${state.level}・${config.labelJa}`);
+  refs.reviewKicker.textContent = text(`LEVEL ${item.level} · ${config.labelEn.toUpperCase()}`, `レベル${item.level}・${config.labelJa}`);
   refs.reviewTitle.textContent = text(`${config.labelEn} review`, `${config.labelJa}の復習`);
   refs.reviewProgressBar.style.width = `${percent}%`;
   refs.reviewCounter.textContent = text(`${state.reviewIndex + 1} of ${state.reviewQueue.length}`, `${state.reviewIndex + 1}/${state.reviewQueue.length}`);
@@ -1424,6 +1439,9 @@ function bindLibraryControls() {
     const control = event.target.closest("[data-filter]");
     if (!control || control.hidden) return;
     state.filter = control.dataset.filter;
+    if(state.filter==='learning_all'&&!accessibleLevels().includes(state.level))state.level=accessibleLevels()[0]||null;
+    updateRoute(state.category,state.level);
+    renderLevelOverview();
     renderItems();
   });
   refs.reviewLevelButton.addEventListener("click", openReview);

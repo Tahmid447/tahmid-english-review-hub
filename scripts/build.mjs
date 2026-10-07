@@ -30,6 +30,7 @@ const publicSourceFiles = [
   "audio.js",
   "speech-contract.js", "speech-cache.js",
   "curriculum-audio.js",
+  "practice-collection-model.js", "practice-collection.js", "practice-collection.css",
   "curriculum-access.js",
   "phonics-visuals.js",
   "config.js",

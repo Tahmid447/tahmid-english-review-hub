@@ -1,5 +1,6 @@
 @import url('./learning-overview.css');
 @import url('./note-review.css');
+@import url('./practice-collection.css');
 .member-page { background:var(--paper); }
 .member-page *, .home-destinations * { box-sizing:border-box; }
 /* This header contains navigation rows, unlike the fixed-height quiz header. */

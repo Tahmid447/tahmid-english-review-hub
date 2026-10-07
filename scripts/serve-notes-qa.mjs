@@ -10,12 +10,13 @@ const tables=new Set(['review_lesson_notes','review_personal_cards','review_pers
 for(const row of (await db.query("select tablename from pg_tables where schemaname='public' and tablename like 'review_%'")).rows)tables.add(row.tablename);
 const exportedServices=[...fs.readFileSync(path.join(root,'src/supabase.js'),'utf8').matchAll(/^export (?:async )?(?:function|const) (\w+)/gm)].map(m=>m[1]);
 if(process.env.NOTE_QA_WORKFLOW==='1')await (await import('./helpers/seed-workflow-qa.mjs')).seedWorkflowQA(db,ids,as,images);
+if(process.env.NOTE_QA_PRACTICE==='1')await (await import('./helpers/seed-practice-qa.mjs')).seedPracticeQA(db,ids,as);
 const types={'.html':'text/html','.js':'text/javascript','.css':'text/css','.png':'image/png','.svg':'image/svg+xml','.jpg':'image/jpeg','.webp':'image/webp','.mp3':'audio/mpeg','.m4a':'audio/mp4','.woff2':'font/woff2'};
 const json=(response,data,status=200)=>{response.writeHead(status,{'Content-Type':'application/json','Cache-Control':'no-store'});response.end(JSON.stringify(data));};
 async function api(payload){
  if(!roles.has(payload.role))throw new Error('Invalid fixture identity');await as(payload.role);
  if(payload.op==='rpc'){
-  if(!/^review_(?:note_[a-z_]+|my_hub_settings|my_experience|save_experience|save_personal_card|set_curriculum_favorite)$/.test(payload.name)||Object.keys(payload.args).some(k=>!/^[a-z_]+$/.test(k)))throw new Error('Invalid fixture RPC');
+  if(!/^review_(?:note_[a-z_]+|my_hub_settings|my_experience|save_experience|save_personal_card|set_curriculum_favorite|save_curriculum_progress)$/.test(payload.name)||Object.keys(payload.args).some(k=>!/^[a-z_]+$/.test(k)))throw new Error('Invalid fixture RPC');
   const sql=`select to_jsonb(public.${payload.name}(${Object.keys(payload.args).map((k,i)=>`${k}=>$${i+1}`).join(',')})) as data`;
   return (await db.query(sql,Object.values(payload.args))).rows[0].data;
  }
@@ -35,6 +36,7 @@ async function api(payload){
   const data=(await db.query(sql,params)).rows.map(row=>({...row,...row.lesson_date?{lesson_date:new Date(row.lesson_date).toISOString().slice(0,10)}:{}}));
   if(payload.columns?.includes('assets:'))for(const n of data){n.assets=(await db.query('select id,state,uploader_role,thumbnail_path from review_lesson_note_assets where note_id=$1',[n.id])).rows;n.seen=(await db.query('select * from review_lesson_note_review_status where note_id=$1',[n.id])).rows;}
   if(payload.columns?.includes('note:'))for(const n of data)n.note=(await db.query('select title,lesson_date,student_id from review_lesson_notes where id=$1',[n.note_id])).rows[0];
+  if(payload.columns?.includes('item:review_curriculum_items'))for(const n of data)n.item=(await db.query('select * from review_curriculum_items where id=$1',[n.item_id])).rows[0]||null;
   if(payload.single&&data.length!==1)throw new Error('Note unavailable');return payload.single||payload.maybeSingle?data[0]||null:data;
  }
  if(payload.op==='upload'){
@@ -65,7 +67,7 @@ http.createServer(async(req,res)=>{
   res.writeHead(200,{'Content-Type':'text/javascript','Cache-Control':'no-store'});
   res.end(`import {services} from '/scripts/helpers/notes-qa-client.js';\n${exportedServices.map(name=>`export const ${name}=(...args)=>{if(!services.${name})throw new Error('Not implemented by local fixture: ${name}');return services.${name}(...args);};`).join('\n')}`);return;
  }
- const routes={'/':'/scripts/qa-lesson-notes.html','/my-page':'/my-page.html','/teacher':'/teacher.html'};
+ const routes={'/':'/scripts/qa-lesson-notes.html','/my-page':'/my-page.html','/teacher':'/teacher.html','/learn':'/learn.html','/words':'/learn.html','/phonics':'/learn.html'};
  const pathname=routes[url.pathname]||(url.pathname.startsWith('/my-page/notes')?'/lesson-notes.html':decodeURIComponent(url.pathname));
  const file=path.resolve(root,'.'+pathname);
  if(!file.startsWith(root+path.sep)||!fs.existsSync(file)||fs.statSync(file).isDirectory()||pathname.includes('/.')){res.writeHead(404);res.end();return;}

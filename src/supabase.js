@@ -902,7 +902,7 @@ const databaseQuestion = (row = {}) => {
 
 const QUERY_PAGE_SIZE = 1000;
 
-const fetchAllQueryRows = async (createQuery) => {
+export const fetchAllQueryRows = async (createQuery) => {
   const rows = [];
   for (let offset = 0; ; offset += QUERY_PAGE_SIZE) {
     const result = await createQuery().range(
