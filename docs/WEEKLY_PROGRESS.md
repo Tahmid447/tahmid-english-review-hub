@@ -1,9 +1,11 @@
 # Tahmid English Hub - Weekly Progress
 
-## October 7 - Learning point reviews and mobile notebook (awaiting release)
+## October 7 - Learning point reviews and mobile notebook (published)
 - Implemented on `codex/lesson-review-journey`: per-point Got it / Review again with undo, resume links, accessible lesson review near the top, My Page activity/progress chart, teacher learner filtering and point-level confidence reports.
 - iPhone notes use a contextual sheet with phrase/example/question starters, color swatches, autosave/retry and retained drafts on failures. Desktop annotations and existing practice remain intact.
-- One new forward migration is prepared and tested locally; production ledger remains at 15 entries through `20261004120000`. No production schema/data change or deployment. Main is unchanged.
+- Published runtime `5af418f43433afb98e240b2b3cdfee1e4ceb4881` (feature `16f5777`) through existing main/Cloudflare Pages, production deployment `db1298fa-c3d5-496b-afed-46a78225f70a`. Production release identity and Pages/Worker build success confirmed. Applied only additive migration `20261007025813_lesson_block_review_journey.sql`, once atomically with its ledger entry; ledger now 16 entries. No reset, existing content/settings/progress change or infrastructure change.
+- Private 52-table row/schema checkpoint verified; all original fingerprints matched after migration. After release, 51 tables matched and one auth user timestamp changed, with all 8 users and other account fields retained. Production HTTP/new assets, authenticated-role read-only summary RPCs and anonymous-denial checks passed. Existing student session renders actual My Page journey/empty Notes; 390px My Page has no overflow or captured console errors. No signed-in teacher session or physical iPhone was available; existing authenticated local UI QA is reused, not repeated.
+- Standing owner authorization is recorded in `AGENTS.md` line 10 and deployment guide: complete normal verified, data-safe releases without reconfirmation, while honoring task-specific restrictions and protected high-risk operations. Handoff updated; final docs use `[CI Skip]`.
 - Focused SQL/RLS/model checks, 68 existing practice checks, production packaging, and isolated 390/820/1280 browser checks passed. No physical-device claim and no broad test rerun. Preview and release prerequisites are recorded in `docs/WORKING_HANDOFF.md`.
 
 ## October 4 - Learning experience and previews
