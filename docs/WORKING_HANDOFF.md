@@ -1,4 +1,23 @@
-# Working handoff — October 4, 2026
+# Working handoff — October 7, 2026
+
+## October 7 - Learning point check-ins and iPhone notebook (local, ready for review)
+
+Branch: `codex/lesson-review-journey`, based on current main `cc09ceb` after documentation PR #1 was merged. This implementation is not deployed, and main is unchanged.
+
+- Teaching points (phrases, vocabulary, grammar, corrections, pronunciation, comparisons and nuance) have Got it / Review again with undo, server persistence, and Next point. The reader shows point progress and offers the existing whole-lesson Reviewed action near the top as well as at the end. Self-reported understanding never automatically completes practice or marks the whole lesson reviewed.
+- My Page has published-note totals, opened-note counts, confidence check-ins, practice completion/latest checked answers, a seven-day chart, and a direct next-step link. Chart counts each point or practice question once per day; practice retries count as interactions, not successful answers. Dates use the viewer's timezone. Aggregate totals cover all visible notes; only the next-action list is capped at 100. Deleted/archived/draft notes and stale block/question snapshots are excluded.
+- Teacher Dashboard and Insights show the same summaries with learner filtering/refresh; Lesson Notes > Student activity shows each current point's state and timestamp. Point check-ins use the existing activity log without generating a popup for every tap. Teacher previews cannot write student check-ins.
+- On phones, My Notes opens a contextual sheet from each block or the floating notebook button, preserving the existing annotation editor. Phrase/example/question starters, visual color swatches, autosave status, keyboard-height sizing and explicit save retry make it usable without desktop-style selection. Existing notes/formatting are preserved. Failed saves retain the draft and keep the sheet open; desktop/tablet inline notes remain.
+
+Pending forward migration: `20261007025813_lesson_block_review_journey.sql` adds a block-review table, protected write RPC, invoker-based summary RPC and a restricted student-read policy for their own learning activity. No existing records are reset. Uses existing note ownership/feature gates, server timestamps, optimistic versions and block snapshots. Never replay earlier migrations. Production ledger was inspected read-only: 15 entries through `20261004120000`. No production data or schema write was made. Before release, obtain current release authorization, check a sufficient recoverable checkpoint, apply only this new migration, then use the existing main/Cloudflare flow.
+
+Verification: `scripts/test-note-review-journey.mjs` passed persistence/undo, stale-write rejection, content changes, day deduplication, >100-note aggregate correctness, student/other-student/teacher/anonymous boundaries and annotation preservation. Existing `scripts/test-note-practice.mjs` passed its 68 relevant checks. Changed JS syntax and diff whitespace passed. Static production packaging/output checks cover 94 public text assets; the new JS/CSS are explicitly included in `scripts/build.mjs`.
+
+Isolated browser verification passed: actual point save/reload, phone note save/reload with bold, offline draft retention/retry, 390/820/1280 widths without horizontal overflow, short-height phone sheet, My Page/Teacher summaries, teacher filter and per-point report, no captured page errors. These are emulated viewports, not a physical iPhone/keyboard test. No full test suite, voice/audio test or production browser walkthrough was repeated.
+
+Preview: `http://127.0.0.1:4183/my-page/notes`, My Page `/my-page`, Teacher `/teacher?studio=insights&qa_role=teacher`. Synthetic learners only; server PID 5730, log `/tmp/tahmid-review-journey-preview.log`. Restart with `NOTE_QA_PORT=4183 NOTE_QA_WORKFLOW=1 node scripts/serve-notes-qa.mjs`. Browser evidence lives in `/tmp/tahmid-journey-*.png`; temporary verification scripts are outside Git. Existing rows on production remain untouched.
+
+---
 
 ## October 4 - Notification inbox, learner previews and practice appearance
 

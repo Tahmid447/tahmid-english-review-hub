@@ -2,6 +2,8 @@ import {openLearnerPreview,learnerPreviewUrl} from './learner-preview.js';
 import { mountLessonNoteStudio } from './lesson-note-studio.js?v=20260915-practice';
 import { createNoteApi } from './lesson-note-api.js?v=20260915-practice';
 import { teacherNoteActions, nextActionsMarkup } from './learning-overview.js';
+import {mountJourney} from './note-review-view.js';
+let noteJourneyView;
 import { privateRecordingPlayer, voiceFeedbackEditor, FEEDBACK_BUCKET } from './private-recordings.js?v=20260911-mobile2';
 import { displayProfileAvatar } from './profile-api.js?v=20260911-mobile2';
 import { mountPersonalCardStudio } from './personal-cards.js?v=20260911-mobile2';
@@ -4386,6 +4388,8 @@ function renderActivity() {
   ).length;
 
   const wrap = make("div", { className: "teacher-analytics" });
+  const journeyHost=make('section');wrap.append(journeyHost);
+  noteJourneyView=mountJourney(journeyHost,{api:createNoteApi(client),teacher:true,profiles:state.profiles,name:profileName});
   const heading = make("div", { className: "teacher-analytics-heading" });
   heading.append(
     make("div", { text: "Learning insights" }),
@@ -4977,6 +4981,8 @@ function renderDashboard() {
     jobs.append(card);
   });
   wrap.append(jobs,overview);
+  const journeyHost=make('section');wrap.append(journeyHost);
+  noteJourneyView=mountJourney(journeyHost,{api:createNoteApi(client),teacher:true,profiles:state.profiles,name:profileName});
   elements.panel.replaceChildren(wrap);
   void refreshDashboardNotes(notePriorities);
 }
@@ -4990,6 +4996,7 @@ function renderActiveTab() {
   if(state.tab!=='notes')for(const key of ['note','view','student','create'])route.searchParams.delete(key);
   history.replaceState(null,'',route.pathname+route.search+route.hash);
   disposeReviewEditors();
+  noteJourneyView?.dispose();noteJourneyView=null;
   refreshNoteInboxCount();
   const counter=document.querySelector('#submissionWaitingCount');
   if(counter)counter.textContent=String(teacherVisibleSubmissions().filter(item=>['submitted','in_review'].includes(item.status)).length);

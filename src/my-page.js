@@ -8,10 +8,13 @@ import { AVATAR_BUCKET, avatarPath, avatarReference, compactAvatar, displayProfi
 import { personalCardMarkup, bindPersonalAudio } from './personal-cards.js?v=20260911-mobile2';
 import { buildPhraseCatalog } from './data.js?v=20260911-mobile2';
 import { createNoteApi } from './lesson-note-api.js?v=20260915-practice';
+import {mountJourney} from './note-review-view.js';
 import { createSectionAwareness, learnerNextActions, nextActionsMarkup } from './learning-overview.js';
 import './study-music.js?v=20260911-mobile2';
 const $ = selector => document.querySelector(selector);
 const nextHost=document.createElement('section');nextHost.id='memberNext';nextHost.className='hub-next';nextHost.setAttribute('aria-label','Continue your learning · 次の学習');$('.member-tabs').after(nextHost);
+const journeyHost=document.createElement('section');journeyHost.hidden=true;nextHost.after(journeyHost);let journeyView;
+window.addEventListener('pagehide',()=>journeyView?.dispose());
 for(const [selector,id] of [['.member-note-tab','noteCount'],['[data-panel=personal]','personalCount']]){const badge=document.createElement('span');badge.id=id;badge.className='hub-section-count';$(selector).append(badge);}
 const client = getStudentClient();
 let session, profile, access;
@@ -205,6 +208,7 @@ try {
     renderProfile();$('#memberWorkspace').hidden=false;$('#memberStatus').textContent='';renderPreferences();
     showPanel(['profile','announcements','favorites','settings','personal'].includes(location.hash.slice(1))?location.hash.slice(1):'profile');
     void refreshOverview();
+    if(featureAllowed(access,'show_homework')&&featureAllowed(access,'show_progress')){journeyHost.hidden=false;journeyView=mountJourney(journeyHost,{api:createNoteApi(client)});}
     const [notices,cards,saved]=await Promise.all([featureAllowed(access,'show_announcements')?fetchStudentAnnouncements():Promise.resolve({data:[]}),client.from('review_personal_cards').select('*').eq('student_id',session.user.id).eq('active',true).order('created_at',{ascending:false}),client.from('review_personal_card_favorites').select('card_id').eq('student_id',session.user.id)]);
     sourcesLoaded=true;sourcesError=Boolean(notices.error||cards.error||saved.error);
     if(notices.error)$('#announcementList').textContent='Please reload to view announcements. · お知らせは再読み込みしてご確認ください。';else renderAnnouncements(notices.data || []);

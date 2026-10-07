@@ -1,4 +1,6 @@
 import {mountExerciseDisplay} from './exercise-display.js';
+import {mountPointReviews} from './note-review-view.js';
+import {mountMobileNotebook} from './note-mobile-notebook.js';
 import {confirmNoteAction} from './note-dialog.js?v=20260915-practice';
 import {isPractice,practiceSummary,questionId,sameQuestion} from './note-practice-model.js?v=20260915-practice';
 import {practiceMarkup,mountPractice,progressMarkup} from './note-practice-view.js?v=20260915-practice';
@@ -83,24 +85,26 @@ export function lazyPrivateImages(root,api) {
 }
 
 export function mountAnnotation(root,{value,save,label='My notes · 自分のメモ',onDirty=()=>{}}) {
- let version=value?.version||0,lastSaved=value?.body||'',format=cleanMarks(lastSaved,value?.body_format),lastFormat=JSON.stringify(format),previous=lastSaved,timer,pending=false,disposed=false,blocked=false;
+ let version=value?.version||0,lastSaved=value?.body||'',format=cleanMarks(lastSaved,value?.body_format),lastFormat=JSON.stringify(format),previous=lastSaved,timer,pending=false,task,disposed=false,blocked=false;
  root.innerHTML=`<label>${e(label)}<textarea rows="5" maxlength="6000" placeholder="What would you like to remember? · 覚えておきたいことは？">${e(lastSaved)}</textarea></label><div class="ln-format-tools" role="toolbar" aria-label="Note formatting · メモの装飾">${noteButton('<b>B</b>','data-mark="bold" aria-label="Bold selected text · 選択した文字を太字に"')}${['yellow','green','blue','pink'].map((color,i)=>noteButton(['黄','緑','青','桃'][i],`data-mark="${color}" class="ln-mark-${color}" aria-label="Highlight ${color}"`)).join('')}${noteButton('Clear · 装飾を外す','data-mark="clear"')}</div><p class="ln-status">Select words above, then choose bold or a highlight. · 文字を選び、太字や色を選んでください。</p><div class="ln-rich-preview" aria-label="Formatted note preview · メモの表示"></div>${noteStatus()}${noteButton('Save now · 今すぐ保存','data-retry-save')}`;
  const input=root.querySelector('textarea'),status=root.querySelector('[role=status]'),preview=root.querySelector('.ln-rich-preview');
  const updatePreview=()=>{preview.innerHTML=richTextMarkup(input.value,format);preview.hidden=!input.value;};
  const dirty=()=>input.value!==lastSaved||JSON.stringify(format)!==lastFormat;
- const flush=async()=>{
-  clearTimeout(timer);if(pending||disposed||!dirty()||blocked)return;
+ const flush=()=>{
+  clearTimeout(timer);if(pending)return task.then(()=>dirty()&&!blocked?flush():undefined);if(disposed||!dirty()||blocked)return Promise.resolve();
   const body=input.value,marks=cleanMarks(body,format);pending=true;status.textContent='Saving… · 保存中…';onDirty(true);
+  task=(async()=>{
   try {const saved=await save(body,version,marks);version=saved.version;lastSaved=body;lastFormat=JSON.stringify(marks);status.textContent='Saved just now · 保存しました';}
   catch(error){blocked=true;status.textContent=noteError(error);}
   finally{pending=false;onDirty(dirty());if(dirty()&&!blocked&&!disposed)timer=setTimeout(flush,400);}
+  })();return task;
  };
  const changed=()=>{clearTimeout(timer);blocked=false;status.textContent='Unsaved changes · 未保存の変更';onDirty(true);updatePreview();timer=setTimeout(flush,1000);};
  input.oninput=()=>{format=moveMarks(previous,input.value,format);previous=input.value;changed();};
  input.onblur=()=>void flush();
  root.querySelectorAll('[data-mark]').forEach(btn=>{btn.onpointerdown=event=>event.preventDefault();btn.onclick=()=>{const start=input.selectionStart,end=input.selectionEnd;if(start===end){status.textContent='Select the words to format first. · 先に文字を選択してください。';return;}format=applyMark(format,start,end,btn.dataset.mark==='clear'?null:btn.dataset.mark==='bold'?{bold:true}:{color:btn.dataset.mark});changed();input.focus();input.setSelectionRange(start,end);};});
  root.querySelector('[data-retry-save]').onclick=()=>{blocked=false;void flush();};updatePreview();
- return {dirty:()=>dirty()||pending,flush,dispose(){disposed=true;clearTimeout(timer);}};
+ return {dirty:()=>dirty()||pending,flush,append(text){input.value=[input.value.trimEnd(),text].filter(Boolean).join('\n');input.dispatchEvent(new Event('input'));input.focus();input.setSelectionRange(input.value.length,input.value.length);},dispose(){disposed=true;clearTimeout(timer);}};
 }
 
 export function openImageViewer(assets,index,api) {
@@ -159,6 +163,7 @@ export function mountNoteView(root,{detail,api,student=true,userId='',mode='supp
  root.querySelector('.ln-lesson-header').id='lesson-top';
  jumps.innerHTML=`<a href="#lesson-focus">Focus · 今日のポイント</a>${phrases?'<a href="#lesson-phrases">Phrases · 表現</a>':''}${correction?`<a href="#block-${e(correction.id)}">Corrections · 修正</a>`:''}${grammar?`<a href="#block-${e(grammar.id)}">Grammar · 文法</a>`:''}${firstPractice?`<a href="#block-${e(firstPractice.id)}">Practice · 練習</a>`:''}${hasImages?'<a href="#lesson-images">Images · 画像</a>':''}${student?'<a href="#lesson-my-notes">My notes · 自分のメモ</a>':''}<div class="ln-reading-controls">${noteButton('Open all · すべて開く','data-reading-open')}${noteButton('Close all · 閉じる','data-reading-close')}</div>`;
  root.querySelector('.ln-lesson-header').after(jumps);
+ controllers.push(mountPointReviews(root,{note:n,reviews:detail.block_reviews,api,student,focus:hash=>focusNoteTarget(root,hash)}));
  if(!student)root.querySelector('.ln-my-notes').hidden=true;
  const attempts=[...(detail.practice_attempts||[])],summary=root.querySelector('[data-practice-summary]');root.querySelector('.ln-focus').after(summary);
  const reviewBlock=()=>n.content_json.blocks.find(b=>isPractice(b)&&attempts.some(a=>a.question_id===questionId(b)&&sameQuestion(a.question_snapshot,b)&&(a.is_correct===false||a.self_check_status==='review')));
@@ -184,8 +189,10 @@ export function mountNoteView(root,{detail,api,student=true,userId='',mode='supp
   button.disabled=true;const article=button.closest('article');try{await api.savePhrase(n.id,article.dataset.blockId);button.textContent='♥ Saved to My Phrases · 保存済み';button.setAttribute('aria-pressed','true');article.querySelector('[role=status]').textContent='Find it in My Page → Favorites → Words or Phrases. · マイページのお気に入りから復習できます。';}catch(error){article.querySelector('[role=status]').textContent=noteError(error);}finally{button.disabled=button.getAttribute('aria-pressed')==='true';}
  });
  if(student&&n.allow_student_annotations) {
-  const add=(host,id)=>controllers.push(mountAnnotation(host,{value:detail.annotations.find(a=>a.block_id===id),save:(body,version,format)=>api.annotateRich(n.id,id,body,format,version)}));
+  const notebooks=[];
+  const add=(host,id)=>{const controller=mountAnnotation(host,{value:detail.annotations.find(a=>a.block_id===id),save:(body,version,format)=>api.annotateRich(n.id,id,body,format,version)});controllers.push(controller);notebooks.push({host,id,controller});};
   add(root.querySelector('[data-lesson-annotation]'),'');root.querySelectorAll('[data-annotation-host]').forEach(host=>add(host,host.closest('[data-block-id]').dataset.blockId));
+  controllers.push(mountMobileNotebook(root,{notebooks,note:n}));
  }else if(student)root.querySelector('[data-lesson-annotation]').textContent='Your teacher has turned off annotations for this lesson. · このレッスンのメモは無効になっています。';
  root.querySelectorAll('[data-suggest-edit],[data-direct-edit]').forEach(button=>button.onclick=()=>{
   const block=n.content_json.blocks.find(b=>b.id===button.closest('[data-block-id]').dataset.blockId),direct=button.hasAttribute('data-direct-edit');
@@ -222,7 +229,11 @@ export function mountNoteView(root,{detail,api,student=true,userId='',mode='supp
   if(!n.allow_student_comments)comments.querySelector('form').hidden=true;
   comments.querySelector('form').onsubmit=async event=>{event.preventDefault();const button=event.currentTarget.querySelector('button');button.disabled=true;try{if(controllers.some(c=>c.dirty())||uploadDraft())throw new Error('Save your other work first. · 回答・メモ・画像を先に保存してください。');await api.comment(n.id,event.currentTarget.querySelector('textarea').value);comments.querySelector('textarea').value='';onRefresh();}catch(error){comments.querySelector('[role=status]').textContent=noteError(error);button.disabled=false;}};
  }
- let reviewed=detail.review_status?.[0]?.reviewed_version>=n.version;const mark=root.querySelector('[data-mark-reviewed]');if(mark)mark.onclick=async()=>{mark.disabled=true;try{await api.setReviewed(n.id,!reviewed,n.version);reviewed=!reviewed;mark.textContent=reviewed?'✓ Reviewed — undo · 復習済みを取り消す':'Mark as reviewed · 復習済みにする';mark.setAttribute('aria-pressed',String(reviewed));}catch(error){mark.parentElement.querySelector('[role=status]').textContent=noteError(error);}finally{mark.disabled=false;}};
+ let reviewed=detail.review_status?.[0]?.reviewed_version>=n.version;
+ if(student){const finish=document.createElement('div');finish.className='ln-review-early';finish.innerHTML=noteButton('Mark as reviewed · 復習済みにする','data-mark-reviewed')+noteStatus();(root.querySelector('.ln-review-steps')||root.querySelector('.ln-focus')).after(finish);}
+ const marks=[...root.querySelectorAll('[data-mark-reviewed]')];
+ const drawReviewed=()=>marks.forEach(mark=>{mark.textContent=reviewed?'✓ Reviewed — undo · 復習済みを取り消す':'Mark as reviewed · 復習済みにする';mark.setAttribute('aria-pressed',String(reviewed));});drawReviewed();
+ for(const mark of marks)mark.onclick=async()=>{marks.forEach(b=>b.disabled=true);try{await api.setReviewed(n.id,!reviewed,n.version);reviewed=!reviewed;drawReviewed();mark.parentElement.querySelector('[role=status]').textContent='Saved · 保存しました';}catch(error){mark.parentElement.querySelector('[role=status]').textContent=noteError(error);}finally{marks.forEach(b=>b.disabled=false);}};
  const followHash=()=>focusNoteTarget(root,location.hash==='#lesson-review'?`#block-${reviewBlock()?.id||firstPractice?.id}`:location.hash);window.addEventListener('hashchange',followHash);
  jumps.querySelectorAll('a').forEach(link=>link.onclick=event=>{event.preventDefault();history.replaceState(null,'',link.hash);followHash();});
  jumps.querySelector('[data-reading-open]').onclick=()=>root.querySelectorAll('[data-reading-detail]').forEach(el=>el.open=true);

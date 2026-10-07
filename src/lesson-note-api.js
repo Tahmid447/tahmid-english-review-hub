@@ -29,6 +29,8 @@ export function createNoteApi(client) {
  const api={
   client,rpc,note,
   overview:({teacher=false}={})=>rpc('overview',{max_notes:30,for_teacher:teacher}),
+  journey:({teacher=false,studentId=null}={})=>rpc('journey',{for_teacher:teacher,target_student:studentId,local_timezone:Intl.DateTimeFormat().resolvedOptions().timeZone||'Asia/Tokyo'}),
+  reviewPoint:(id,block,state,version)=>rpc('review_point',{target_note:id,target_block:block.id,expected_block:block,review_state:state,expected_version:version}),
   async list({studentId,status,offset=0,limit=30}={}) {
    // List deliberately excludes the large structured document and full-resolution images.
    let q=client.from('review_lesson_notes').select('id,deleted_at,student_id,teacher_id,lesson_date,title,summary,tags,status,version,cover_asset_id,published_at,updated_at,created_at,assets:review_lesson_note_assets!review_lesson_note_assets_note_id_fkey(id,state,uploader_role,thumbnail_path),seen:review_lesson_note_review_status(viewed_version,reviewed_version)')
@@ -46,7 +48,8 @@ export function createNoteApi(client) {
     return related(table,id);
    }));
    const saved=teacher?[]:await result(client.from('review_personal_cards').select('id,source_block_id,favorites:review_personal_card_favorites!inner(card_id)').eq('student_id',data.student_id).eq('source_note_id',id).eq('active',true));
-   return {note:data,saved_phrases:saved,...Object.fromEntries(['annotations','suggestions','comments','assets','review_status','practice_attempts',...(teacher?['activity','revisions']:[])].map((key,i)=>[key,values[i]]))};
+   const block_reviews=await related('block_reviews',id);
+   return {note:data,saved_phrases:saved,block_reviews,...Object.fromEntries(['annotations','suggestions','comments','assets','review_status','practice_attempts',...(teacher?['activity','revisions']:[])].map((key,i)=>[key,values[i]]))};
   },
   save: n=>{validateNote(n);return rpc('save',{target_note:n.id,target_student:n.student_id,expected_version:n.version,payload:notePayload(n)});},
   async duplicateSource(id){

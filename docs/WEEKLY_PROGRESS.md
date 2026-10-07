@@ -1,5 +1,11 @@
 # Tahmid English Hub - Weekly Progress
 
+## October 7 - Learning point reviews and mobile notebook (awaiting release)
+- Implemented on `codex/lesson-review-journey`: per-point Got it / Review again with undo, resume links, accessible lesson review near the top, My Page activity/progress chart, teacher learner filtering and point-level confidence reports.
+- iPhone notes use a contextual sheet with phrase/example/question starters, color swatches, autosave/retry and retained drafts on failures. Desktop annotations and existing practice remain intact.
+- One new forward migration is prepared and tested locally; production ledger remains at 15 entries through `20261004120000`. No production schema/data change or deployment. Main is unchanged.
+- Focused SQL/RLS/model checks, 68 existing practice checks, production packaging, and isolated 390/820/1280 browser checks passed. No physical-device claim and no broad test rerun. Preview and release prerequisites are recorded in `docs/WORKING_HANDOFF.md`.
+
 ## October 4 - Learning experience and previews
 - Published `50ba2ff` on existing main/Cloudflare Pages, deployment `88dff703-6e00-4f1a-924d-8b7b5954f2f6`: notifications Read all (including older unread items), authenticated saved-setting learner previews with actual published note cards/images, and Desktop/Tablet-iPad/Mobile preview widths.
 - Added reversible Classic/Color/Focus practice appearance without clearing answers and a copyable six-format Quick Prompt in Quick Import. No AI-service dependency, database migration, data reset, authentication or infrastructure changes; global BGM OFF retained.
