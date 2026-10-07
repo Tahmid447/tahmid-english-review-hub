@@ -70,4 +70,4 @@ The original Netlify website remains https://tahmid-english-review-hub.netlify.a
 
 For a bad frontend update, revert the relevant Git commit on `main` and push, or use a known successful Pages deployment rollback. The old Netlify auth redirects remain for its optional historical backup. Database rollback is neither needed nor included in this frontend migration.
 
-To edit: change the file → commit and push to `main` → Cloudflare builds and publishes automatically. No ZIP upload. Future development should start from current `main`, preserve the existing Supabase project, and use its own user authorization.
+To edit: change the file → commit and push to `main` → Cloudflare builds and publishes automatically. No ZIP upload. Future development should start from current `main` and preserve the existing Supabase project. Follow the standing owner publishing instruction in `AGENTS.md`: ship requested, verified, data-safe changes through this existing flow without another approval prompt, unless the current task explicitly restricts publishing or a protected high-risk operation requires confirmation.
